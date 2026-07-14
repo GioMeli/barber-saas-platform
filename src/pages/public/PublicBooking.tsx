@@ -42,6 +42,46 @@ export default function PublicBooking() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState<any>(null);
 
+  const [customerProfileLoading, setCustomerProfileLoading] = useState(false);
+
+  useEffect(() => {
+    if (!user || !business?.id) return;
+
+    const loadCustomerProfile = async () => {
+      setCustomerProfileLoading(true);
+
+      try {
+        const { data, error } = await supabase
+          .from('customer_business_profiles')
+          .select('display_name, email, phone')
+          .eq('business_id', business.id)
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (error) throw error;
+
+        setCustomerDetails(current => ({
+          ...current,
+          name: data?.display_name || user.user_metadata?.full_name || current.name,
+          email: data?.email || user.email || current.email,
+          phone: data?.phone || current.phone,
+        }));
+      } catch (error) {
+        console.error('Unable to load customer profile:', error);
+
+        setCustomerDetails(current => ({
+          ...current,
+          name: user.user_metadata?.full_name || current.name,
+          email: user.email || current.email,
+        }));
+      } finally {
+        setCustomerProfileLoading(false);
+      }
+    };
+
+    void loadCustomerProfile();
+  }, [user?.id, business?.id]);
+
   // Total calculation
   const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
   const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
@@ -329,33 +369,157 @@ export default function PublicBooking() {
                 </div>
                 
                 <div className="space-y-6">
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="c_name">{t('booking.full_name')}</Label>
-                      <Input id="c_name" value={customerDetails.name} onChange={e => setCustomerDetails({...customerDetails, name: e.target.value})} className="px-3" required />
-                    </div>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="c_phone">{t('booking.phone')}</Label>
-                        <Input id="c_phone" type="tel" value={customerDetails.phone} onChange={e => setCustomerDetails({...customerDetails, phone: e.target.value})} className="px-3" required />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <Label htmlFor="c_email">{t('booking.email_optional')}</Label>
-                        <Input id="c_email" type="email" value={customerDetails.email} onChange={e => setCustomerDetails({...customerDetails, email: e.target.value})} className="px-3" />
-                      </div>
-                    </div>
+                  {user ? (
+                    <div className="space-y-4">
+                      <div className="rounded-lg border bg-muted/30 p-4">
+                        <div className="mb-3 flex items-center justify-between">
+                          <div>
+                            <h3 className="font-semibold">Booking as</h3>
+                            <p className="text-sm text-muted-foreground">
+                              Your saved customer details will be used for this appointment.
+                            </p>
+                          </div>
+                        </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="c_notes">{t('booking.notes_optional')}</Label>
-                      <Input id="c_notes" value={customerDetails.notes} onChange={e => setCustomerDetails({...customerDetails, notes: e.target.value})} className="px-3" />
+                        {customerProfileLoading ? (
+                          <p className="text-sm text-muted-foreground">
+                            Loading your details...
+                          </p>
+                        ) : (
+                          <div className="space-y-2 text-sm">
+                            <div>
+                              <span className="text-muted-foreground">Name: </span>
+                              <span className="font-medium">
+                                {customerDetails.name || 'Not provided'}
+                              </span>
+                            </div>
+
+                            <div>
+                              <span className="text-muted-foreground">Phone: </span>
+                              <span className="font-medium">
+                                {customerDetails.phone || 'Not provided'}
+                              </span>
+                            </div>
+
+                            <div>
+                              <span className="text-muted-foreground">Email: </span>
+                              <span className="font-medium">
+                                {customerDetails.email || 'Not provided'}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {!customerDetails.phone && (
+                        <div className="space-y-2">
+                          <Label htmlFor="c_phone">
+                            Phone number required for appointment reminders
+                          </Label>
+                          <Input
+                            id="c_phone"
+                            type="tel"
+                            value={customerDetails.phone}
+                            onChange={event =>
+                              setCustomerDetails({
+                                ...customerDetails,
+                                phone: event.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+                      )}
+
+                      <div className="space-y-2">
+                        <Label htmlFor="c_notes">{t('booking.notes_optional')}</Label>
+                        <Input
+                          id="c_notes"
+                          value={customerDetails.notes}
+                          onChange={event =>
+                            setCustomerDetails({
+                              ...customerDetails,
+                              notes: event.target.value,
+                            })
+                          }
+                        />
+                      </div>
                     </div>
-                  </div>
-                  
+                  ) : (
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="c_name">{t('booking.full_name')}</Label>
+                        <Input
+                          id="c_name"
+                          value={customerDetails.name}
+                          onChange={event =>
+                            setCustomerDetails({
+                              ...customerDetails,
+                              name: event.target.value,
+                            })
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                        <div className="space-y-2">
+                          <Label htmlFor="c_phone">{t('booking.phone')}</Label>
+                          <Input
+                            id="c_phone"
+                            type="tel"
+                            value={customerDetails.phone}
+                            onChange={event =>
+                              setCustomerDetails({
+                                ...customerDetails,
+                                phone: event.target.value,
+                              })
+                            }
+                            required
+                          />
+                        </div>
+
+                        <div className="space-y-2">
+                          <Label htmlFor="c_email">{t('booking.email_optional')}</Label>
+                          <Input
+                            id="c_email"
+                            type="email"
+                            value={customerDetails.email}
+                            onChange={event =>
+                              setCustomerDetails({
+                                ...customerDetails,
+                                email: event.target.value,
+                              })
+                            }
+                          />
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="c_notes">{t('booking.notes_optional')}</Label>
+                        <Input
+                          id="c_notes"
+                          value={customerDetails.notes}
+                          onChange={event =>
+                            setCustomerDetails({
+                              ...customerDetails,
+                              notes: event.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   <div className="pt-4">
-                    <Button className="w-full text-lg h-12" onClick={handleBook} disabled={isSubmitting}>
-                      {isSubmitting ? t('booking.confirming') : t('booking.confirm_booking')}
+                    <Button
+                      className="h-12 w-full text-lg"
+                      onClick={handleBook}
+                      disabled={isSubmitting || customerProfileLoading}
+                    >
+                      {isSubmitting
+                        ? t('booking.confirming')
+                        : t('booking.confirm_booking')}
                     </Button>
                   </div>
                 </div>

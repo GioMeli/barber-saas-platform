@@ -78,6 +78,7 @@ function App() {
         <Route path="/app/:slug" element={<PublicAppLayout />}>
           <Route index element={<BusinessHome />} />
           <Route path="book" element={<PublicBooking />} />
+          <Route path="account" element={<CustomerPortal />} />
         </Route>
 
         {/* Employee Route */}
@@ -86,16 +87,6 @@ function App() {
           element={
             <ProtectedRoute allowedRoles={['Employee', 'Manager']}>
               <EmployeeDashboard />
-            </ProtectedRoute>
-          } 
-        />
-
-        {/* Customer Route */}
-        <Route 
-          path="/my-bookings" 
-          element={
-            <ProtectedRoute allowedRoles={['Registered Customer']}>
-              <CustomerPortal />
             </ProtectedRoute>
           } 
         />
