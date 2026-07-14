@@ -19,6 +19,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/db/supabase';
 import { useAuth } from '@/hooks/useAuth';
+import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
 
 type StoreContext = {
   business: any;
@@ -542,6 +543,20 @@ export default function BusinessHome() {
               Map location has not been configured yet.
             </div>
           )}
+        </section>
+
+        <section>
+          <div className="mb-6">
+            <h2 className="text-2xl font-bold">Share This Store</h2>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Help friends and family find {business.name} and book online.
+            </p>
+          </div>
+
+          <StoreQrShareCard
+            publicUrl={`${window.location.origin}/app/${business.slug}`}
+            businessName={business.name}
+          />
         </section>
       </div>
     </div>
