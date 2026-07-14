@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useOutletContext, useNavigate, useParams } from 'react-router-dom';
+import { useOutletContext } from 'react-router-dom';
 import { supabase } from '@/db/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
@@ -7,14 +7,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { MapPin, Phone, Clock, ChevronLeft } from 'lucide-react';
-import { format, addDays, startOfToday } from 'date-fns';
+import { ChevronLeft } from 'lucide-react';
+import { format, startOfToday } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function PublicBooking() {
-  const { slug } = useParams();
-  const navigate = useNavigate();
   const { t } = useTranslation();
   const context = useOutletContext<{ business: any }>();
   const business = context?.business;
@@ -57,16 +54,28 @@ export default function PublicBooking() {
 
   const fetchServicesAndStaff = async () => {
     try {
-      // 2. Get active services & staff
       const [servRes, staffRes] = await Promise.all([
-        supabase.from('services').select('*').eq('business_id', business.id).eq('is_active', true).eq('online_booking_enabled', true),
-        supabase.from('employees').select('*').eq('business_id', business.id).eq('is_active', true)
+        supabase
+          .from('services')
+          .select('*')
+          .eq('business_id', business.id)
+          .eq('is_active', true)
+          .eq('online_booking_enabled', true),
+        supabase
+          .from('employees')
+          .select('*')
+          .eq('business_id', business.id)
+          .eq('is_active', true),
       ]);
 
-      setServices(servRes.data || []);
-      setStaff(staffRes.data || []);
+      if (servRes.error) throw servRes.error;
+      if (staffRes.error) throw staffRes.error;
+
+      setServices(servRes.data ?? []);
+      setStaff(staffRes.data ?? []);
     } catch (error) {
       console.error('Error loading booking page:', error);
+      toast.error('Unable to load services and staff. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -80,103 +89,73 @@ export default function PublicBooking() {
   }, [step, selectedDate, selectedStaff, selectedServices]);
 
   const fetchAvailableTimes = async () => {
-    if (!business || selectedServices.length === 0) return;
-    
-    // In a real implementation, we would call the RPC 'check_availability'
-    // For this prototype, we'll mock some slots based on the date
-    
-    // Simulate network delay
+    if (!business || selectedServices.length === 0 || !selectedDate) return;
+
     setAvailableSlots([]);
-    setTimeout(() => {
-      const isWeekend = new Date(selectedDate).getDay() === 0 || new Date(selectedDate).getDay() === 6;
-      if (isWeekend) {
-        setAvailableSlots(['10:00', '11:00', '13:00', '14:00']);
-      } else {
-        setAvailableSlots(['09:00', '09:30', '10:00', '11:30', '13:00', '14:30', '15:00', '16:00']);
-      }
-    }, 500);
+    setSelectedTime(null);
+
+    const { data, error } = await supabase.rpc('get_public_availability', {
+      p_business_id: business.id,
+      p_employee_id: selectedStaff,
+      p_date: selectedDate,
+      p_service_ids: selectedServices.map(service => service.id),
+    });
+
+    if (error) {
+      console.error('Availability error:', error);
+      toast.error('Unable to load available appointments. Please try again.');
+      return;
+    }
+
+    const uniqueTimes: string[] = Array.from(
+      new Set<string>(
+        (data ?? []).map((slot: any) =>
+          String(slot.available_time).slice(0, 5)
+        )
+      )
+    ).sort((a, b) => a.localeCompare(b));
+
+    setAvailableSlots(uniqueTimes);
   };
 
   const handleBook = async () => {
-    if (!customerDetails.name || !customerDetails.phone) {
+    if (!customerDetails.name.trim() || !customerDetails.phone.trim()) {
       toast.error('Name and phone are required');
       return;
     }
 
+    if (!business || !selectedDate || !selectedTime || selectedServices.length === 0) {
+      toast.error('Please complete all booking steps.');
+      return;
+    }
+
     setIsSubmitting(true);
+
     try {
-      let customerId;
-      let userId = user?.id || null;
+      const { data, error } = await supabase.rpc('secure_create_booking', {
+        p_business_id: business.id,
+        p_employee_id: selectedStaff,
+        p_service_ids: selectedServices.map(service => service.id),
+        p_local_date: selectedDate,
+        p_local_time: selectedTime,
+        p_customer_name: customerDetails.name.trim(),
+        p_customer_email: customerDetails.email.trim() || null,
+        p_customer_phone: customerDetails.phone.trim(),
+        p_notes: customerDetails.notes.trim() || null,
+      });
 
-      // 1. Create or find customer in business scope
-      if (customerDetails.email) {
-        const { data: existing } = await supabase
-          .from('customers')
-          .select('id')
-          .eq('business_id', business.id)
-          .eq('email', customerDetails.email)
-          .single();
-        
-        if (existing) {
-          customerId = existing.id;
-        }
-      }
+      if (error) throw error;
 
-      if (!customerId) {
-        const { data: newCust, error: custError } = await supabase
-          .from('customers')
-          .insert({
-            business_id: business.id,
-            user_id: userId,
-            full_name: customerDetails.name,
-            email: customerDetails.email || null,
-            phone: customerDetails.phone,
-            notes: customerDetails.notes
-          })
-          .select()
-          .single();
-          
-        if (custError) throw custError;
-        customerId = newCust.id;
-      }
-
-      // 2. Create Appointment
-      const startTimeISO = new Date(`${selectedDate}T${selectedTime}`).toISOString();
-      const endTimeISO = new Date(new Date(startTimeISO).getTime() + totalDuration * 60000).toISOString();
-
-      const { data: appt, error: apptError } = await supabase
-        .from('appointments')
-        .insert({
-          business_id: business.id,
-          customer_id: customerId,
-          employee_id: selectedStaff,
-          start_time: startTimeISO,
-          end_time: endTimeISO,
-          total_duration: totalDuration,
-          total_price: totalPrice,
-          status: 'pending',
-          notes: customerDetails.notes
-        })
-        .select()
-        .single();
-
-      if (apptError) throw apptError;
-
-      // 3. Link Multiple Services
-      const appointmentServices = selectedServices.map(s => ({
-        appointment_id: appt.id,
-        service_id: s.id,
-        price: s.price,
-        duration: s.duration
-      }));
-
-      const { error: linkError } = await supabase.from('appointment_services').insert(appointmentServices);
-      if (linkError) throw linkError;
-
-      setBookingSuccess(appt);
+      setBookingSuccess(data);
       setStep(5);
     } catch (error: any) {
-      toast.error(error.message || 'Booking failed. Please try again.');
+      const message = error?.message || 'Booking failed. Please try again.';
+      toast.error(message);
+
+      if (message.toLowerCase().includes('no longer available') || message.toLowerCase().includes('just been reserved')) {
+        setStep(3);
+        await fetchAvailableTimes();
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -393,7 +372,7 @@ export default function PublicBooking() {
                 <p className="text-muted-foreground">{t('booking.success_msg')}</p>
                 
                 <div className="bg-muted/50 p-6 rounded-lg text-left max-w-sm mx-auto space-y-2">
-                   <p><span className="text-muted-foreground">{t('booking.ref')}</span> #{bookingSuccess.id.substring(0,8).toUpperCase()}</p>
+                   <p><span className="text-muted-foreground">{t('booking.ref')}</span> #{bookingSuccess.booking_reference}</p>
                    <p><span className="text-muted-foreground">{t('booking.service')}</span> {selectedServices.map(s => s.name).join(', ')}</p>
                    <p><span className="text-muted-foreground">{t('booking.when')}</span> {format(new Date(bookingSuccess.start_time), 'PPp')}</p>
                    <p><span className="text-muted-foreground">{t('booking.where')}</span> {business.address}</p>
