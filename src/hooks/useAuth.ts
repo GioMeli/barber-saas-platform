@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/db/supabase';
-import { Session, User } from '@supabase/supabase-js';
+import type { Session, User } from '@supabase/supabase-js';
 
 export function useAuth() {
   const [session, setSession] = useState<Session | null>(null);
@@ -10,53 +10,66 @@ export function useAuth() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfileAndMemberships(session.user.id);
-      } else {
-        setLoading(false);
-      }
-    });
+    let mounted = true;
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      if (session?.user) {
-        fetchProfileAndMemberships(session.user.id);
+    const hydrate = async (nextSession: Session | null) => {
+      if (!mounted) return;
+      setSession(nextSession);
+      setUser(nextSession?.user ?? null);
+
+      if (nextSession?.user) {
+        await fetchProfileAndMemberships(nextSession.user.id);
       } else {
         setProfile(null);
         setBusinessMemberships([]);
         setLoading(false);
       }
+    };
+
+    void supabase.auth.getSession().then(({ data }) => hydrate(data.session));
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
+      void hydrate(nextSession);
     });
 
-    return () => subscription.unsubscribe();
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   const fetchProfileAndMemberships = async (userId: string) => {
+    setLoading(true);
     try {
-      const { data: profileData } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', userId)
-        .single();
-      
-      setProfile(profileData);
+      const [{ data: profileData, error: profileError }, { data: membershipsData, error: membershipsError }] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', userId).maybeSingle(),
+        supabase.from('business_members').select('*, businesses(*)').eq('user_id', userId),
+      ]);
 
-      const { data: membershipsData } = await supabase
-        .from('business_members')
-        .select('*, businesses(*)')
-        .eq('user_id', userId);
-      
-      setBusinessMemberships(membershipsData || []);
+      if (profileError) console.error('Profile load failed:', profileError);
+      if (membershipsError) console.error('Membership load failed:', membershipsError);
+
+      setProfile(profileData ?? null);
+      setBusinessMemberships(membershipsData ?? []);
     } catch (error) {
       console.error('Error fetching user data:', error);
+      setBusinessMemberships([]);
     } finally {
       setLoading(false);
     }
   };
 
-  return { session, user, profile, businessMemberships, loading };
+  const activeMembership = businessMemberships[0] ?? null;
+  const activeBusiness = activeMembership?.businesses ?? null;
+
+  return {
+    session,
+    user,
+    profile,
+    businessMemberships,
+    activeMembership,
+    activeBusiness,
+    loading,
+    refreshAuthData: user ? () => fetchProfileAndMemberships(user.id) : async () => undefined,
+  };
 }

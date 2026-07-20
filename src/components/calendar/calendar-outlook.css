@@ -1,0 +1,924 @@
+/* =========================================================
+   SALONOS — OUTLOOK-STYLE CALENDAR
+   FullCalendar presentation layer
+   ========================================================= */
+
+/* ---------------------------------------------------------
+   PAGE LAYOUT
+   --------------------------------------------------------- */
+
+.outlook-calendar-page {
+  display: flex;
+  min-height: 620px;
+  height: calc(100dvh - 88px);
+  flex-direction: column;
+  gap: 12px;
+  overflow: hidden;
+  padding: 16px;
+}
+
+/* ---------------------------------------------------------
+   TOP TOOLBAR
+   --------------------------------------------------------- */
+
+.outlook-calendar-toolbar {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.outlook-calendar-nav,
+.outlook-calendar-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.outlook-calendar-title {
+  margin-left: 8px;
+  overflow: hidden;
+  color: #0f172a;
+  font-size: 1.25rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outlook-calendar-actions select {
+  color: #0f172a;
+  font-weight: 500;
+}
+
+/* ---------------------------------------------------------
+   DESKTOP VIEW SWITCHER
+   --------------------------------------------------------- */
+
+.outlook-view-switcher {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid hsl(var(--border));
+  border-radius: 10px;
+  padding: 3px;
+  background: hsl(var(--card));
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.04);
+}
+
+.outlook-view-switcher button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 8px;
+  padding: 7px 10px;
+  background: transparent;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.outlook-view-switcher button:hover {
+  background: hsl(var(--muted) / 0.65);
+  color: #0f172a;
+}
+
+.outlook-view-switcher button.active {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  box-shadow: 0 1px 3px rgb(15 23 42 / 0.12);
+}
+
+/* Hidden on desktop; shown at smaller widths */
+.outlook-calendar-mobile-views {
+  display: none;
+}
+
+/* ---------------------------------------------------------
+   CALENDAR CONTAINER
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  border-radius: 16px;
+  background: hsl(var(--card));
+  box-shadow:
+    0 1px 2px rgb(15 23 42 / 0.04),
+    0 10px 30px rgb(15 23 42 / 0.05);
+}
+
+.outlook-calendar-shell > div,
+.outlook-calendar-shell .fc {
+  height: 100%;
+}
+
+.outlook-calendar-loading {
+  position: absolute;
+  z-index: 50;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: hsl(var(--background) / 0.72);
+  color: hsl(var(--muted-foreground));
+  font-size: 0.875rem;
+  backdrop-filter: blur(2px);
+}
+
+/* ---------------------------------------------------------
+   FULLCALENDAR BASE
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc {
+  color: #0f172a;
+  font-family: inherit;
+}
+
+.outlook-calendar-shell .fc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.outlook-calendar-shell .fc-theme-standard td,
+.outlook-calendar-shell .fc-theme-standard th,
+.outlook-calendar-shell .fc-theme-standard .fc-scrollgrid {
+  border-color: #dbe3ee;
+}
+
+.outlook-calendar-shell .fc-scrollgrid {
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+}
+
+.outlook-calendar-shell .fc-scroller {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 transparent;
+}
+
+.outlook-calendar-shell .fc-scroller::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.outlook-calendar-shell .fc-scroller::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.outlook-calendar-shell .fc-scroller::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: #94a3b8;
+  background-clip: padding-box;
+}
+
+.outlook-calendar-shell .fc-scroller::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+  background-clip: padding-box;
+}
+
+/* ---------------------------------------------------------
+   COLUMN HEADERS
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc-col-header-cell {
+  background: #f8fafc;
+}
+
+.outlook-calendar-shell .fc-col-header-cell-cushion {
+  display: block;
+  padding: 12px 6px;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+}
+
+.outlook-calendar-shell .fc-timegrid-axis {
+  background: #f8fafc;
+}
+
+.outlook-calendar-shell .fc-timegrid-axis-cushion {
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+/* All-day section */
+.outlook-calendar-shell .fc-timegrid-divider {
+  border-color: #dbe3ee;
+  background: #f8fafc;
+}
+
+.outlook-calendar-shell .fc-timegrid-all-day {
+  background: #ffffff;
+}
+
+/* ---------------------------------------------------------
+   30-MINUTE TIME GRID
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc-timegrid-slot {
+  height: 42px;
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-timegrid-slot-label {
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-timegrid-slot-label-cushion {
+  padding-right: 8px;
+  color: #475569;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.outlook-calendar-shell .fc-timegrid-slot-minor {
+  border-top-style: dashed;
+  border-top-color: #e8edf4;
+}
+
+.outlook-calendar-shell .fc-timegrid-col {
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-timegrid-col-frame {
+  min-width: 0;
+}
+
+.outlook-calendar-shell .fc-timegrid-col-events {
+  margin: 0 4px 0 2px;
+}
+
+/* Today column */
+.outlook-calendar-shell .fc-day-today {
+  background: #fffaf0 !important;
+}
+
+.outlook-calendar-shell .fc-timegrid-col.fc-day-today {
+  background: #fffaf0 !important;
+}
+
+/* Current-time indicator */
+.outlook-calendar-shell .fc-timegrid-now-indicator-line {
+  z-index: 8;
+  border-width: 1px 0 0;
+  border-color: #ef4444;
+}
+
+.outlook-calendar-shell .fc-timegrid-now-indicator-arrow {
+  border-width: 5px 0 5px 6px;
+  border-color: transparent transparent transparent #ef4444;
+}
+
+/* ---------------------------------------------------------
+   MONTH VIEW
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc-daygrid-day {
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-daygrid-day-frame {
+  min-height: 86px;
+}
+
+.outlook-calendar-shell .fc-daygrid-day-top {
+  justify-content: flex-start;
+}
+
+.outlook-calendar-shell .fc-daygrid-day-number {
+  display: inline-flex;
+  min-width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  margin: 4px;
+  padding: 0;
+  border-radius: 999px;
+  color: #0f172a;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.outlook-calendar-shell .fc-daygrid-day.fc-day-today {
+  background: #eff6ff !important;
+}
+
+.outlook-calendar-shell
+  .fc-daygrid-day.fc-day-today
+  .fc-daygrid-day-number {
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.outlook-calendar-shell .fc-day-other {
+  background: #fafafa;
+}
+
+.outlook-calendar-shell .fc-day-other .fc-daygrid-day-number {
+  color: #94a3b8;
+}
+
+.outlook-calendar-shell .fc-daygrid-day-events {
+  margin-top: 1px;
+}
+
+.outlook-calendar-shell .fc-daygrid-event {
+  margin: 2px 4px;
+}
+
+/* +X more */
+.outlook-calendar-shell .fc-daygrid-more-link {
+  display: block;
+  margin: 2px 5px 4px;
+  color: #1d4ed8;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.outlook-calendar-shell .fc-daygrid-more-link:hover {
+  text-decoration: underline;
+}
+
+/* Popover for month overflow */
+.outlook-calendar-shell .fc-popover {
+  overflow: hidden;
+  border: 1px solid #dbe3ee;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgb(15 23 42 / 0.16);
+}
+
+.outlook-calendar-shell .fc-popover-header {
+  padding: 10px 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+/* ---------------------------------------------------------
+   APPOINTMENT EVENT BASE
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc-event {
+  min-width: 0;
+  cursor: pointer;
+}
+
+.outlook-calendar-shell .salonos-event {
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-left-width: 4px;
+  border-radius: 7px;
+  padding: 3px 5px;
+  color: #111827 !important;
+  box-shadow: 0 1px 4px rgb(15 23 42 / 0.08);
+  transition:
+    filter 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.outlook-calendar-shell .salonos-event:hover {
+  z-index: 20 !important;
+  filter: brightness(0.985);
+  box-shadow: 0 5px 14px rgb(15 23 42 / 0.16);
+}
+
+.outlook-calendar-shell .salonos-event,
+.outlook-calendar-shell .salonos-event *,
+.outlook-calendar-shell .salonos-event .fc-event-main {
+  color: #111827 !important;
+}
+
+/* Hide FullCalendar's default event content spacing */
+.outlook-calendar-shell .salonos-event .fc-event-main {
+  min-width: 0;
+  padding: 0;
+}
+
+/* ---------------------------------------------------------
+   APPOINTMENT CONTENT
+   Only time and customer name are displayed.
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .salonos-event-content {
+  display: flex;
+  min-width: 0;
+  height: 100%;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+  color: #111827;
+  line-height: 1.12;
+}
+
+.outlook-calendar-shell .salonos-event-time {
+  display: block;
+  flex: 0 0 auto;
+  overflow: hidden;
+  color: #1f2937 !important;
+  font-size: 0.67rem;
+  font-weight: 800;
+  line-height: 1.05;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.outlook-calendar-shell .salonos-event-title {
+  display: block;
+  min-width: 0;
+  margin-top: 2px;
+  overflow: hidden;
+  color: #111827 !important;
+  font-size: 0.73rem;
+  font-weight: 800;
+  line-height: 1.08;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/*
+  These classes may still exist in older component code.
+  Keep them hidden so the labels contain only time + name.
+*/
+.outlook-calendar-shell .salonos-event-service,
+.outlook-calendar-shell .salonos-event-status {
+  display: none !important;
+}
+
+/* Very short FullCalendar events */
+.outlook-calendar-shell
+  .fc-timegrid-event-short
+  .salonos-event-content {
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+}
+
+.outlook-calendar-shell
+  .fc-timegrid-event-short
+  .salonos-event-time {
+  flex: 0 1 auto;
+  font-size: 0.62rem;
+}
+
+.outlook-calendar-shell
+  .fc-timegrid-event-short
+  .salonos-event-title {
+  flex: 1 1 auto;
+  margin-top: 0;
+  font-size: 0.65rem;
+}
+
+/* Extremely short events: time is prioritised */
+.outlook-calendar-shell
+  .fc-timegrid-event-short
+  .salonos-event-title:empty {
+  display: none;
+}
+
+/* Month event content */
+.outlook-calendar-shell
+  .fc-daygrid-event
+  .salonos-event-content {
+  display: block;
+  min-width: 0;
+  padding: 1px 0;
+}
+
+.outlook-calendar-shell
+  .fc-daygrid-event
+  .salonos-event-time {
+  display: inline;
+  margin-right: 4px;
+  font-size: 0.65rem;
+}
+
+.outlook-calendar-shell
+  .fc-daygrid-event
+  .salonos-event-title {
+  display: inline;
+  margin-top: 0;
+  font-size: 0.68rem;
+}
+
+/* ---------------------------------------------------------
+   STATUS COLOURS
+   Dark text remains readable on every background.
+   --------------------------------------------------------- */
+
+/* Upcoming / confirmed */
+.outlook-calendar-shell .salonos-status-confirmed,
+.outlook-calendar-shell .salonos-status-pending {
+  border-color: #93c5fd;
+  border-left-color: #2563eb;
+  background: #dbeafe;
+}
+
+/* Completed */
+.outlook-calendar-shell .salonos-status-completed {
+  border-color: #86efac;
+  border-left-color: #16a34a;
+  background: #dcfce7;
+}
+
+/* Checked in / waiting */
+.outlook-calendar-shell .salonos-status-checked_in,
+.outlook-calendar-shell .salonos-status-checked-in {
+  border-color: #fdba74;
+  border-left-color: #ea580c;
+  background: #ffedd5;
+}
+
+/* No-show */
+.outlook-calendar-shell .salonos-status-no_show,
+.outlook-calendar-shell .salonos-status-no-show {
+  border-color: #d8b4fe;
+  border-left-color: #9333ea;
+  background: #f3e8ff;
+}
+
+/* Cancelled */
+.outlook-calendar-shell .salonos-status-cancelled_by_business,
+.outlook-calendar-shell .salonos-status-cancelled_by_customer {
+  border-color: #fca5a5;
+  border-left-color: #dc2626;
+  background: #fee2e2;
+  opacity: 0.8;
+  text-decoration: line-through;
+}
+
+/* ---------------------------------------------------------
+   BUSINESS CLOSURES
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .salonos-closure-background {
+  background: rgb(239 68 68 / 0.08);
+}
+
+.outlook-calendar-shell .salonos-closure-label {
+  overflow: hidden;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  border-radius: 6px;
+  background: #fee2e2;
+  color: #7f1d1d;
+}
+
+.outlook-calendar-shell .salonos-closure-label *,
+.outlook-calendar-shell .salonos-closure-label .fc-event-main {
+  color: #7f1d1d !important;
+}
+
+.outlook-calendar-shell .salonos-closure-event-content {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+  overflow: hidden;
+  padding: 1px 3px;
+  font-size: 0.7rem;
+}
+
+.outlook-calendar-shell
+  .salonos-closure-event-content
+  span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------
+   LIST / DAILY DETAILS VIEW
+   --------------------------------------------------------- */
+
+.outlook-calendar-shell .fc-list {
+  border: 0;
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-list-day-cushion {
+  padding: 12px 14px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.outlook-calendar-shell .fc-list-event {
+  cursor: pointer;
+}
+
+.outlook-calendar-shell .fc-list-event:hover td {
+  background: #f8fafc;
+}
+
+.outlook-calendar-shell .fc-list-event-time {
+  color: #334155;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.outlook-calendar-shell .fc-list-event-title {
+  color: #111827;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.outlook-calendar-shell .fc-list-event-dot {
+  border-width: 5px;
+}
+
+/* Empty list message */
+.outlook-calendar-shell .fc-list-empty {
+  background: #ffffff;
+}
+
+.outlook-calendar-shell .fc-list-empty-cushion {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* ---------------------------------------------------------
+   TABLET
+   --------------------------------------------------------- */
+
+@media (max-width: 1180px) {
+  .outlook-calendar-page {
+    height: calc(100dvh - 76px);
+    padding: 10px;
+  }
+
+  .outlook-calendar-toolbar {
+    gap: 10px;
+  }
+
+  .outlook-calendar-actions .outlook-view-switcher {
+    display: none;
+  }
+
+  .outlook-calendar-mobile-views {
+    display: flex;
+    flex: 0 0 auto;
+    gap: 4px;
+    overflow-x: auto;
+    border: 1px solid hsl(var(--border));
+    border-radius: 12px;
+    padding: 4px;
+    background: hsl(var(--card));
+    scrollbar-width: none;
+  }
+
+  .outlook-calendar-mobile-views::-webkit-scrollbar {
+    display: none;
+  }
+
+  .outlook-calendar-mobile-views button {
+    flex: 1 0 auto;
+    min-width: 80px;
+    border: 0;
+    border-radius: 8px;
+    padding: 8px 10px;
+    background: transparent;
+    color: #475569;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .outlook-calendar-mobile-views button.active {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+}
+
+/* ---------------------------------------------------------
+   MOBILE
+   --------------------------------------------------------- */
+
+@media (max-width: 760px) {
+  .outlook-calendar-page {
+    min-height: 560px;
+    height: calc(100dvh - 66px);
+    gap: 8px;
+    overflow: hidden;
+    padding: 8px;
+  }
+
+  .outlook-calendar-toolbar {
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .outlook-calendar-nav {
+    width: 100%;
+  }
+
+  .outlook-calendar-title {
+    min-width: 0;
+    margin-left: 4px;
+    font-size: 1rem;
+  }
+
+  .outlook-calendar-actions {
+    width: 100%;
+  }
+
+  .outlook-calendar-actions select {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .outlook-calendar-actions > button {
+    flex: 0 0 auto;
+    padding-right: 12px;
+    padding-left: 12px;
+    white-space: nowrap;
+  }
+
+  .outlook-calendar-shell {
+    border-radius: 12px;
+  }
+
+  .outlook-calendar-shell .fc-scrollgrid {
+    border-radius: 12px;
+  }
+
+  .outlook-calendar-shell .fc-timegrid-slot {
+    height: 38px;
+  }
+
+  .outlook-calendar-shell .fc-timegrid-slot-label-cushion {
+    padding-right: 5px;
+    font-size: 0.65rem;
+  }
+
+  .outlook-calendar-shell .fc-col-header-cell-cushion {
+    padding: 8px 3px;
+    font-size: 0.68rem;
+  }
+
+  .outlook-calendar-shell .fc-daygrid-day-frame {
+    min-height: 72px;
+  }
+
+  .outlook-calendar-shell .fc-daygrid-day-number {
+    min-width: 25px;
+    height: 25px;
+    margin: 3px;
+    font-size: 0.7rem;
+  }
+
+  .outlook-calendar-shell .fc-daygrid-event {
+    margin: 1px 2px;
+  }
+
+  .outlook-calendar-shell .salonos-event {
+    border-left-width: 3px;
+    border-radius: 5px;
+    padding: 2px 3px;
+  }
+
+  .outlook-calendar-shell .salonos-event-time {
+    font-size: 0.61rem;
+  }
+
+  .outlook-calendar-shell .salonos-event-title {
+    font-size: 0.65rem;
+  }
+
+  .outlook-calendar-shell
+    .fc-daygrid-event
+    .salonos-event-time {
+    font-size: 0.59rem;
+  }
+
+  .outlook-calendar-shell
+    .fc-daygrid-event
+    .salonos-event-title {
+    font-size: 0.62rem;
+  }
+
+  .outlook-calendar-shell .fc-daygrid-more-link {
+    margin-right: 3px;
+    margin-left: 3px;
+    font-size: 0.64rem;
+  }
+
+  .outlook-calendar-shell
+    .fc-timegrid-event-short
+    .salonos-event-content {
+    gap: 2px;
+  }
+
+  .outlook-calendar-shell
+    .fc-timegrid-event-short
+    .salonos-event-time {
+    font-size: 0.57rem;
+  }
+
+  .outlook-calendar-shell
+    .fc-timegrid-event-short
+    .salonos-event-title {
+    font-size: 0.59rem;
+  }
+}
+
+/* ---------------------------------------------------------
+   VERY SMALL MOBILE SCREENS
+   --------------------------------------------------------- */
+
+@media (max-width: 480px) {
+  .outlook-calendar-page {
+    padding: 6px;
+  }
+
+  .outlook-calendar-nav button:first-child {
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+
+  .outlook-calendar-title {
+    font-size: 0.92rem;
+  }
+
+  .outlook-calendar-actions > button {
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 0.75rem;
+  }
+
+  .outlook-calendar-mobile-views button {
+    min-width: 72px;
+    padding: 7px 8px;
+    font-size: 0.7rem;
+  }
+
+  .outlook-calendar-shell .fc-timegrid-slot {
+    height: 36px;
+  }
+
+  .outlook-calendar-shell .fc-col-header-cell-cushion {
+    font-size: 0.62rem;
+  }
+
+  .outlook-calendar-shell .salonos-event-time {
+    font-size: 0.56rem;
+  }
+
+  .outlook-calendar-shell .salonos-event-title {
+    font-size: 0.6rem;
+  }
+}
+
+
+.salonos-break-event {
+  border: 1px solid rgb(148 163 184 / 0.8) !important;
+  border-left: 4px solid rgb(100 116 139) !important;
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgb(226 232 240 / 0.95),
+      rgb(226 232 240 / 0.95) 8px,
+      rgb(241 245 249 / 0.95) 8px,
+      rgb(241 245 249 / 0.95) 16px
+    ) !important;
+  color: rgb(51 65 85) !important;
+  cursor: default !important;
+  opacity: 0.95;
+}
+
+.salonos-break-event-content {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 4px;
+  font-size: 11px;
+  line-height: 1.15;
+}
+
+.salonos-break-event-content strong,
+.salonos-break-event-content span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
