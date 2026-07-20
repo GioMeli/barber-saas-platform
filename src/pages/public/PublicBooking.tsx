@@ -1,48 +1,103 @@
-import React, { useState, useEffect } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link, useOutletContext, useSearchParams } from 'react-router-dom';
 import { supabase } from '@/db/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { ChevronLeft } from 'lucide-react';
-import { format, startOfToday } from 'date-fns';
-import { useTranslation } from 'react-i18next';
+import {
+  AlertTriangle,
+  CalendarDays,
+  Check,
+  CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Clock3,
+  Download,
+  ExternalLink,
+  MapPin,
+  Scissors,
+  Sparkles,
+  UserRound,
+} from 'lucide-react';
+import { addDays, format, isSameDay, parseISO, startOfToday } from 'date-fns';
+
+type StoreContext = {
+  business: any;
+};
+
+const STEPS = [
+  { id: 1, label: 'Services' },
+  { id: 2, label: 'Professional' },
+  { id: 3, label: 'Date & Time' },
+  { id: 4, label: 'Your Details' },
+];
 
 export default function PublicBooking() {
-  const { t } = useTranslation();
-  const context = useOutletContext<{ business: any }>();
-  const business = context?.business;
+  const { business } = useOutletContext<StoreContext>();
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
 
   const [services, setServices] = useState<any[]>([]);
   const [staff, setStaff] = useState<any[]>([]);
+  const [closures, setClosures] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Booking Flow State
   const [step, setStep] = useState(1);
   const [selectedServices, setSelectedServices] = useState<any[]>([]);
   const [selectedStaff, setSelectedStaff] = useState<string | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string>(format(startOfToday(), 'yyyy-MM-dd'));
+  const [selectedDate, setSelectedDate] = useState(
+    format(startOfToday(), 'yyyy-MM-dd')
+  );
+  const [dateWindowStart, setDateWindowStart] = useState(startOfToday());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
-  
-  // Auth state
-  const { user } = useAuth();
-  
-  // Customer Details
+  const [availabilityLoading, setAvailabilityLoading] = useState(false);
+
   const [customerDetails, setCustomerDetails] = useState({
     name: '',
     email: user?.email || '',
     phone: '',
-    notes: ''
+    notes: '',
   });
-
+  const [customerProfileLoading, setCustomerProfileLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState<any>(null);
 
-  const [customerProfileLoading, setCustomerProfileLoading] = useState(false);
+  useEffect(() => {
+    if (business?.id) void fetchServicesAndStaff();
+  }, [business?.id]);
+
+  useEffect(() => {
+    if (services.length === 0 && staff.length === 0) return;
+
+    const requestedServiceId = searchParams.get('service');
+    const requestedStaffId = searchParams.get('staff');
+
+    if (requestedServiceId) {
+      const requestedService = services.find(
+        (service) => service.id === requestedServiceId
+      );
+
+      if (
+        requestedService &&
+        !selectedServices.some((service) => service.id === requestedService.id)
+      ) {
+        setSelectedServices([requestedService]);
+      }
+    }
+
+    if (
+      requestedStaffId &&
+      staff.some((member) => member.id === requestedStaffId)
+    ) {
+      setSelectedStaff(requestedStaffId);
+    }
+  }, [services, staff, searchParams]);
 
   useEffect(() => {
     if (!user || !business?.id) return;
@@ -60,16 +115,19 @@ export default function PublicBooking() {
 
         if (error) throw error;
 
-        setCustomerDetails(current => ({
+        setCustomerDetails((current) => ({
           ...current,
-          name: data?.display_name || user.user_metadata?.full_name || current.name,
+          name:
+            data?.display_name ||
+            user.user_metadata?.full_name ||
+            current.name,
           email: data?.email || user.email || current.email,
           phone: data?.phone || current.phone,
         }));
       } catch (error) {
         console.error('Unable to load customer profile:', error);
 
-        setCustomerDetails(current => ({
+        setCustomerDetails((current) => ({
           ...current,
           name: user.user_metadata?.full_name || current.name,
           email: user.email || current.email,
@@ -82,80 +140,150 @@ export default function PublicBooking() {
     void loadCustomerProfile();
   }, [user?.id, business?.id]);
 
-  // Total calculation
-  const totalDuration = selectedServices.reduce((sum, s) => sum + s.duration, 0);
-  const totalPrice = selectedServices.reduce((sum, s) => sum + s.price, 0);
-
   useEffect(() => {
-    if (business) {
-      fetchServicesAndStaff();
+    if (step === 3 && selectedServices.length > 0 && selectedDate) {
+      void fetchAvailableTimes();
     }
-  }, [business]);
+  }, [step, selectedDate, selectedStaff, selectedServices]);
 
   const fetchServicesAndStaff = async () => {
+    setLoading(true);
+
     try {
-      const [servRes, staffRes] = await Promise.all([
+      const [servicesResult, staffResult, closuresResult] = await Promise.all([
         supabase
           .from('services')
           .select('*')
           .eq('business_id', business.id)
           .eq('is_active', true)
-          .eq('online_booking_enabled', true),
+          .eq('online_booking_enabled', true)
+          .order('name'),
         supabase
           .from('employees')
           .select('*')
           .eq('business_id', business.id)
-          .eq('is_active', true),
+          .eq('is_active', true)
+          .order('name'),
+        supabase
+          .from('business_closures')
+          .select('*')
+          .eq('business_id', business.id)
+          .eq('is_active', true)
+          .gte('end_date', new Date().toISOString().slice(0, 10))
+          .order('start_date'),
       ]);
 
-      if (servRes.error) throw servRes.error;
-      if (staffRes.error) throw staffRes.error;
+      if (servicesResult.error) throw servicesResult.error;
+      if (staffResult.error) throw staffResult.error;
+      if (closuresResult.error) throw closuresResult.error;
 
-      setServices(servRes.data ?? []);
-      setStaff(staffRes.data ?? []);
-    } catch (error) {
-      console.error('Error loading booking page:', error);
-      toast.error('Unable to load services and staff. Please try again.');
+      setServices(servicesResult.data ?? []);
+      setStaff(staffResult.data ?? []);
+      setClosures(closuresResult.data ?? []);
+    } catch (error: any) {
+      console.error('Booking page error:', error);
+      toast.error(error.message || 'Unable to load booking options.');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    if (step === 3 && selectedServices.length > 0 && selectedDate) {
-      // Fetch available times when date changes
-      fetchAvailableTimes();
-    }
-  }, [step, selectedDate, selectedStaff, selectedServices]);
-
   const fetchAvailableTimes = async () => {
     if (!business || selectedServices.length === 0 || !selectedDate) return;
 
+    setAvailabilityLoading(true);
     setAvailableSlots([]);
     setSelectedTime(null);
 
-    const { data, error } = await supabase.rpc('get_public_availability', {
-      p_business_id: business.id,
-      p_employee_id: selectedStaff,
-      p_date: selectedDate,
-      p_service_ids: selectedServices.map(service => service.id),
-    });
+    try {
+      const { data, error } = await supabase.rpc('get_public_availability', {
+        p_business_id: business.id,
+        p_employee_id: selectedStaff,
+        p_date: selectedDate,
+        p_service_ids: selectedServices.map((service) => service.id),
+      });
 
-    if (error) {
-      console.error('Availability error:', error);
-      toast.error('Unable to load available appointments. Please try again.');
-      return;
-    }
+      if (error) throw error;
 
-    const uniqueTimes: string[] = Array.from(
-      new Set<string>(
-        (data ?? []).map((slot: any) =>
-          String(slot.available_time).slice(0, 5)
+      const times = Array.from(
+        new Set<string>(
+          (data ?? []).map((slot: any) =>
+            String(slot.available_time).slice(0, 5)
+          )
         )
-      )
-    ).sort((a, b) => a.localeCompare(b));
+      ).sort((a, b) => a.localeCompare(b));
 
-    setAvailableSlots(uniqueTimes);
+      setAvailableSlots(times);
+    } catch (error: any) {
+      toast.error(error.message || 'Unable to load available times.');
+    } finally {
+      setAvailabilityLoading(false);
+    }
+  };
+
+  const totalDuration = selectedServices.reduce(
+    (total, service) => total + Number(service.duration || 0),
+    0
+  );
+
+  const totalPrice = selectedServices.reduce(
+    (total, service) => total + Number(service.price || 0),
+    0
+  );
+
+  const visibleDates = useMemo(
+    () => Array.from({ length: 7 }, (_, index) => addDays(dateWindowStart, index)),
+    [dateWindowStart]
+  );
+
+  const estimatedEndTime = useMemo(() => {
+    if (!selectedTime || totalDuration <= 0) return null;
+
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    const date = new Date();
+    date.setHours(hours, minutes + totalDuration, 0, 0);
+
+    return format(date, 'HH:mm');
+  }, [selectedTime, totalDuration]);
+
+  const selectedProfessional = staff.find(
+    (member) => member.id === selectedStaff
+  );
+
+
+  const selectedClosure = closures.find(
+    (closure) =>
+      selectedDate >= closure.start_date && selectedDate <= closure.end_date
+  );
+
+  const groupedSlots = useMemo(() => {
+    const morning = availableSlots.filter((time) => Number(time.slice(0, 2)) < 12);
+    const afternoon = availableSlots.filter((time) => {
+      const hour = Number(time.slice(0, 2));
+      return hour >= 12 && hour < 17;
+    });
+    const evening = availableSlots.filter(
+      (time) => Number(time.slice(0, 2)) >= 17
+    );
+
+    return [
+      { label: 'Morning', slots: morning },
+      { label: 'Afternoon', slots: afternoon },
+      { label: 'Evening', slots: evening },
+    ].filter((group) => group.slots.length > 0);
+  }, [availableSlots]);
+
+  const toggleService = (service: any) => {
+    const selected = selectedServices.some((item) => item.id === service.id);
+
+    setSelectedServices((current) =>
+      selected
+        ? current.filter((item) => item.id !== service.id)
+        : [...current, service]
+    );
+
+    setSelectedStaff(null);
+    setSelectedTime(null);
   };
 
   const handleBook = async () => {
@@ -164,7 +292,7 @@ export default function PublicBooking() {
       return;
     }
 
-    if (!business || !selectedDate || !selectedTime || selectedServices.length === 0) {
+    if (!selectedDate || !selectedTime || selectedServices.length === 0) {
       toast.error('Please complete all booking steps.');
       return;
     }
@@ -175,7 +303,7 @@ export default function PublicBooking() {
       const { data, error } = await supabase.rpc('secure_create_booking', {
         p_business_id: business.id,
         p_employee_id: selectedStaff,
-        p_service_ids: selectedServices.map(service => service.id),
+        p_service_ids: selectedServices.map((service) => service.id),
         p_local_date: selectedDate,
         p_local_time: selectedTime,
         p_customer_name: customerDetails.name.trim(),
@@ -192,7 +320,10 @@ export default function PublicBooking() {
       const message = error?.message || 'Booking failed. Please try again.';
       toast.error(message);
 
-      if (message.toLowerCase().includes('no longer available') || message.toLowerCase().includes('just been reserved')) {
+      if (
+        message.toLowerCase().includes('no longer available') ||
+        message.toLowerCase().includes('just been reserved')
+      ) {
         setStep(3);
         await fetchAvailableTimes();
       }
@@ -201,358 +332,762 @@ export default function PublicBooking() {
     }
   };
 
+  const directionsUrl = useMemo(() => {
+    if (business.latitude && business.longitude) {
+      return `https://www.google.com/maps/dir/?api=1&destination=${business.latitude},${business.longitude}`;
+    }
+
+    const address = [
+      business.address_line_1,
+      business.address_line_2,
+      business.city,
+      business.district,
+      business.postal_code,
+      business.country,
+      business.address,
+    ]
+      .filter(Boolean)
+      .join(', ');
+
+    return address
+      ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(address)}`
+      : null;
+  }, [business]);
+
+  const downloadCalendarFile = () => {
+    if (!bookingSuccess?.start_time) return;
+
+    const start = new Date(bookingSuccess.start_time);
+    const end = new Date(start.getTime() + totalDuration * 60_000);
+    const toIcsDate = (value: Date) =>
+      value.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+
+    const content = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Barber SaaS//Booking//EN',
+      'BEGIN:VEVENT',
+      `UID:${bookingSuccess.booking_reference}@barber-saas`,
+      `DTSTAMP:${toIcsDate(new Date())}`,
+      `DTSTART:${toIcsDate(start)}`,
+      `DTEND:${toIcsDate(end)}`,
+      `SUMMARY:${selectedServices.map((service) => service.name).join(', ')} at ${business.name}`,
+      `DESCRIPTION:Booking reference ${bookingSuccess.booking_reference}`,
+      business.address ? `LOCATION:${String(business.address).replace(/,/g, '\\,')}` : '',
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ]
+      .filter(Boolean)
+      .join('\r\n');
+
+    const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${business.slug || 'appointment'}-${selectedDate}.ics`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    URL.revokeObjectURL(url);
+  };
+
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center">{t('common.loading')}</div>;
+    return (
+      <div className="flex min-h-[70vh] items-center justify-center">
+        <div className="text-sm text-muted-foreground">Loading booking options...</div>
+      </div>
+    );
   }
 
-  if (!business) {
-    return <div className="min-h-screen flex items-center justify-center">Business not found</div>;
+  if (step === 5 && bookingSuccess) {
+    return (
+      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+        <Card className="overflow-hidden rounded-3xl border-emerald-200 shadow-card">
+          <CardContent className="p-7 text-center sm:p-10">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+              <CheckCircle2 className="h-10 w-10" />
+            </div>
+
+            <h1 className="mt-6 text-3xl font-bold">Booking Confirmed</h1>
+            <p className="mt-3 text-muted-foreground">
+              Your appointment at {business.name} has been reserved successfully.
+            </p>
+
+            <div className="mx-auto mt-8 max-w-xl rounded-2xl border bg-muted/25 p-5 text-left">
+              <SummaryRow label="Reference" value={`#${bookingSuccess.booking_reference}`} />
+              <SummaryRow
+                label="Services"
+                value={selectedServices.map((service) => service.name).join(', ')}
+              />
+              <SummaryRow
+                label="Professional"
+                value={selectedProfessional?.name || 'Any available professional'}
+              />
+              <SummaryRow
+                label="When"
+                value={format(new Date(bookingSuccess.start_time), 'EEEE, MMMM d, yyyy · HH:mm')}
+              />
+              <SummaryRow
+                label="Total"
+                value={`€${totalPrice.toFixed(2)}`}
+              />
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <Button onClick={downloadCalendarFile}>
+                <Download className="mr-2 h-4 w-4" />
+                Add to Calendar
+              </Button>
+
+              {directionsUrl && (
+                <Button asChild variant="outline">
+                  <a href={directionsUrl} target="_blank" rel="noreferrer">
+                    <ExternalLink className="mr-2 h-4 w-4" />
+                    Get Directions
+                  </a>
+                </Button>
+              )}
+
+              {user && (
+                <Button asChild variant="outline">
+                  <Link to={`/app/${business.slug}/account`}>
+                    View My Appointments
+                  </Link>
+                </Button>
+              )}
+
+              <Button
+                variant="outline"
+                onClick={() => window.location.reload()}
+              >
+                Book Another Appointment
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
 
   return (
-    <div className="bg-background text-foreground flex flex-col items-center py-6 px-4">
-      <div className="w-full max-w-2xl space-y-6">
-        
-        {/* Business Header */}
-        {step < 5 && (
-          <div className="text-center mb-6">
-            <h2 className="text-2xl font-bold">{t('booking.select_service')}</h2>
-          </div>
-        )}
+    <div className="mx-auto max-w-7xl px-4 py-8 pb-28 sm:px-6 sm:py-10 md:pb-12">
+      <div className="mb-8">
+        <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          Online booking
+        </div>
+        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
+          Book with {business.name}
+        </h1>
+        <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
+          Choose your services, preferred professional and a real available time.
+        </p>
+      </div>
 
-        <Card className="border-border shadow-sm">
-          <CardContent className="p-6">
-            
-            {/* Step 1: Services */}
+      <div className="scrollbar-subtle mb-8 flex gap-2 overflow-x-auto pb-1">
+        {STEPS.map((item) => {
+          const active = step === item.id;
+          const completed = step > item.id;
+
+          return (
+            <div
+              key={item.id}
+              className={`flex min-w-[150px] items-center gap-3 rounded-2xl border px-4 py-3 ${
+                active
+                  ? 'border-primary bg-primary/10'
+                  : completed
+                    ? 'border-emerald-200 bg-emerald-50'
+                    : 'bg-card'
+              }`}
+            >
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold ${
+                  completed
+                    ? 'bg-emerald-500 text-white'
+                    : active
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
+                }`}
+              >
+                {completed ? <Check className="h-4 w-4" /> : item.id}
+              </div>
+              <span className="text-sm font-semibold">{item.label}</span>
+            </div>
+          );
+        })}
+      </div>
+
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <Card className="overflow-hidden rounded-3xl shadow-card">
+          <CardContent className="p-5 sm:p-7">
             {step === 1 && (
-              <div className="space-y-4">
-                <div className="grid gap-3">
-                  {services.map(service => {
-                    const isSelected = selectedServices.some(s => s.id === service.id);
+              <section className="space-y-5">
+                <StepTitle
+                  icon={<Scissors className="h-5 w-5" />}
+                  title="Choose Services"
+                  description="Select one or more services for the same appointment."
+                />
+
+                <div className="grid gap-4 md:grid-cols-2">
+                  {services.map((service) => {
+                    const selected = selectedServices.some(
+                      (item) => item.id === service.id
+                    );
+
                     return (
-                      <div 
-                        key={service.id} 
-                        className={`flex items-center justify-between p-4 border rounded-lg cursor-pointer transition-colors ${isSelected ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
-                        onClick={() => {
-                          if (isSelected) {
-                            setSelectedServices(selectedServices.filter(s => s.id !== service.id));
-                          } else {
-                            setSelectedServices([...selectedServices, service]);
-                          }
-                        }}
+                      <button
+                        key={service.id}
+                        type="button"
+                        onClick={() => toggleService(service)}
+                        className={`overflow-hidden rounded-2xl border text-left transition ${
+                          selected
+                            ? 'border-primary bg-primary/8 shadow-sm'
+                            : 'bg-card hover:border-primary/40'
+                        }`}
                       >
-                        <div>
-                          <h3 className="font-medium">{service.name}</h3>
-                          <p className="text-sm text-muted-foreground">{service.duration} {t('booking.mins')} • {service.description}</p>
+                        {service.image_url && (
+                          <img
+                            src={service.image_url}
+                            alt={service.name}
+                            className="h-36 w-full object-cover"
+                          />
+                        )}
+
+                        <div className="p-4">
+                          <div className="flex items-start justify-between gap-4">
+                            <div>
+                              <h3 className="font-bold">{service.name}</h3>
+                              <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
+                                <Clock3 className="h-3.5 w-3.5" />
+                                {service.duration} minutes
+                              </div>
+                            </div>
+
+                            <div className="text-lg font-bold">
+                              €{Number(service.price).toFixed(2)}
+                            </div>
+                          </div>
+
+                          {service.description && (
+                            <p className="mt-3 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                              {service.description}
+                            </p>
+                          )}
+
+                          <div className="mt-4 flex items-center justify-between">
+                            <Badge variant={selected ? 'default' : 'secondary'}>
+                              {selected ? 'Selected' : 'Select'}
+                            </Badge>
+                            {selected && <Check className="h-5 w-5 text-primary" />}
+                          </div>
                         </div>
-                        <div className="font-bold">${service.price.toFixed(2)}</div>
-                      </div>
+                      </button>
                     );
                   })}
                 </div>
-                {selectedServices.length > 0 && (
-                  <div className="pt-4 flex justify-between items-center border-t border-border mt-4">
-                    <div className="text-sm">
-                      <span className="font-bold">{selectedServices.length}</span> service(s) selected
-                      <div className="text-muted-foreground">{totalDuration} mins • ${totalPrice.toFixed(2)}</div>
-                    </div>
-                    <Button onClick={() => setStep(2)}>Continue</Button>
-                  </div>
-                )}
-              </div>
+
+                <div className="flex justify-end border-t pt-5">
+                  <Button
+                    disabled={selectedServices.length === 0}
+                    onClick={() => setStep(2)}
+                  >
+                    Continue to Professional
+                  </Button>
+                </div>
+              </section>
             )}
 
-            {/* Step 2: Staff */}
             {step === 2 && (
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-4">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(1)}><ChevronLeft className="w-4 h-4" /></Button>
-                  <h2 className="text-xl font-bold">{t('booking.select_professional')}</h2>
-                </div>
-                <div className="grid gap-3">
-                  <div 
-                    className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${selectedStaff === null ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
+              <section className="space-y-5">
+                <StepBack onClick={() => setStep(1)} />
+                <StepTitle
+                  icon={<UserRound className="h-5 w-5" />}
+                  title="Choose a Professional"
+                  description="Select someone specific or allow the system to assign any eligible professional."
+                />
+
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  <button
+                    type="button"
                     onClick={() => {
                       setSelectedStaff(null);
                       setStep(3);
                     }}
+                    className={`rounded-2xl border p-5 text-left transition ${
+                      selectedStaff === null
+                        ? 'border-primary bg-primary/8'
+                        : 'hover:border-primary/40'
+                    }`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mr-4">✨</div>
-                    <div className="font-medium">{t('booking.any_professional')}</div>
-                  </div>
-                  {staff.map(member => (
-                    <div 
-                      key={member.id} 
-                      className={`flex items-center p-4 border rounded-lg cursor-pointer transition-colors ${selectedStaff === member.id ? 'border-primary bg-primary/5' : 'border-border hover:border-primary/50'}`}
+                    <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                      <Sparkles className="h-7 w-7" />
+                    </div>
+                    <h3 className="mt-4 font-bold">Any Available</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      Assign the first eligible professional for your selected time.
+                    </p>
+                  </button>
+
+                  {staff.map((member) => (
+                    <button
+                      key={member.id}
+                      type="button"
                       onClick={() => {
                         setSelectedStaff(member.id);
                         setStep(3);
                       }}
+                      className={`rounded-2xl border p-5 text-left transition ${
+                        selectedStaff === member.id
+                          ? 'border-primary bg-primary/8'
+                          : 'hover:border-primary/40'
+                      }`}
                     >
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mr-4">
-                        {member.photo_url ? <img src={member.photo_url} className="rounded-full" /> : member.name.charAt(0)}
-                      </div>
-                      <div className="font-medium">{member.name}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Step 3: Date & Time */}
-            {step === 3 && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(2)}><ChevronLeft className="w-4 h-4" /></Button>
-                  <h2 className="text-xl font-bold">{t('booking.select_date_time')}</h2>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label>{t('booking.date')}</Label>
-                  <Input 
-                    type="date" 
-                    min={format(new Date(), 'yyyy-MM-dd')}
-                    value={selectedDate} 
-                    onChange={e => setSelectedDate(e.target.value)} 
-                    className="w-full px-3"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>{t('booking.available_times')}</Label>
-                  {availableSlots.length === 0 ? (
-                     <div className="p-8 text-center text-muted-foreground bg-muted/30 rounded-lg">
-                       <p>{t('booking.no_appointments')}</p>
-                       <p className="text-sm mt-2">{t('booking.choose_another_date')}</p>
-                     </div>
-                  ) : (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {availableSlots.map(time => (
-                        <Button 
-                          key={time} 
-                          variant={selectedTime === time ? 'default' : 'outline'}
-                          className="w-full"
-                          onClick={() => {
-                            setSelectedTime(time);
-                            setStep(4);
-                          }}
-                        >
-                          {time}
-                        </Button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Step 4: Details */}
-            {step === 4 && (
-              <div className="space-y-6">
-                <div className="flex items-center gap-2 mb-4">
-                  <Button variant="ghost" size="icon" onClick={() => setStep(3)}><ChevronLeft className="w-4 h-4" /></Button>
-                  <h2 className="text-xl font-bold">{t('booking.your_details')}</h2>
-                </div>
-
-                <div className="bg-muted/50 p-4 rounded-lg space-y-1 mb-6">
-                  <h3 className="font-semibold">{t('booking.summary')}</h3>
-                  <div className="space-y-1 my-2">
-                    {selectedServices.map(s => (
-                      <div key={s.id} className="flex justify-between text-sm">
-                        <span>{s.name} ({s.duration} {t('booking.mins')})</span>
-                        <span>${s.price.toFixed(2)}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <p className="text-sm border-t border-border/50 pt-2 mt-2">{format(new Date(`${selectedDate}T${selectedTime}`), 'EEEE, MMMM d, yyyy')} {t('booking.at')} {selectedTime}</p>
-                  <p className="font-medium mt-2 text-lg border-t border-border/50 pt-2">{t('booking.total')}: ${totalPrice.toFixed(2)}</p>
-                </div>
-                
-                <div className="space-y-6">
-                  {user ? (
-                    <div className="space-y-4">
-                      <div className="rounded-lg border bg-muted/30 p-4">
-                        <div className="mb-3 flex items-center justify-between">
-                          <div>
-                            <h3 className="font-semibold">Booking as</h3>
-                            <p className="text-sm text-muted-foreground">
-                              Your saved customer details will be used for this appointment.
-                            </p>
-                          </div>
-                        </div>
-
-                        {customerProfileLoading ? (
-                          <p className="text-sm text-muted-foreground">
-                            Loading your details...
-                          </p>
-                        ) : (
-                          <div className="space-y-2 text-sm">
-                            <div>
-                              <span className="text-muted-foreground">Name: </span>
-                              <span className="font-medium">
-                                {customerDetails.name || 'Not provided'}
-                              </span>
-                            </div>
-
-                            <div>
-                              <span className="text-muted-foreground">Phone: </span>
-                              <span className="font-medium">
-                                {customerDetails.phone || 'Not provided'}
-                              </span>
-                            </div>
-
-                            <div>
-                              <span className="text-muted-foreground">Email: </span>
-                              <span className="font-medium">
-                                {customerDetails.email || 'Not provided'}
-                              </span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      {!customerDetails.phone && (
-                        <div className="space-y-2">
-                          <Label htmlFor="c_phone">
-                            Phone number required for appointment reminders
-                          </Label>
-                          <Input
-                            id="c_phone"
-                            type="tel"
-                            value={customerDetails.phone}
-                            onChange={event =>
-                              setCustomerDetails({
-                                ...customerDetails,
-                                phone: event.target.value,
-                              })
-                            }
-                            required
-                          />
+                      {member.photo_url ? (
+                        <img
+                          src={member.photo_url}
+                          alt={member.name}
+                          className="h-16 w-16 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted text-xl font-bold">
+                          {member.name.charAt(0)}
                         </div>
                       )}
 
-                      <div className="space-y-2">
-                        <Label htmlFor="c_notes">{t('booking.notes_optional')}</Label>
-                        <Input
-                          id="c_notes"
-                          value={customerDetails.notes}
-                          onChange={event =>
-                            setCustomerDetails({
-                              ...customerDetails,
-                              notes: event.target.value,
-                            })
-                          }
-                        />
+                      <h3 className="mt-4 font-bold">{member.name}</h3>
+                      <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
+                        {member.bio || 'Professional team member.'}
+                      </p>
+                    </button>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {step === 3 && (
+              <section className="space-y-6">
+                <StepBack onClick={() => setStep(2)} />
+                <StepTitle
+                  icon={<CalendarDays className="h-5 w-5" />}
+                  title="Choose Date & Time"
+                  description="Only real available appointment times are displayed."
+                />
+
+                <div className="rounded-2xl border bg-muted/15 p-4">
+                  <div className="flex items-center justify-between gap-3">
+                    <div>
+                      <div className="text-sm font-semibold">Select a date</div>
+                      <div className="mt-1 text-xs text-muted-foreground">
+                        Browse real availability for the next days.
                       </div>
                     </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="c_name">{t('booking.full_name')}</Label>
-                        <Input
-                          id="c_name"
-                          value={customerDetails.name}
-                          onChange={event =>
-                            setCustomerDetails({
-                              ...customerDetails,
-                              name: event.target.value,
-                            })
-                          }
-                          required
-                        />
-                      </div>
 
-                      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="c_phone">{t('booking.phone')}</Label>
-                          <Input
-                            id="c_phone"
-                            type="tel"
-                            value={customerDetails.phone}
-                            onChange={event =>
-                              setCustomerDetails({
-                                ...customerDetails,
-                                phone: event.target.value,
-                              })
-                            }
-                            required
-                          />
-                        </div>
-
-                        <div className="space-y-2">
-                          <Label htmlFor="c_email">{t('booking.email_optional')}</Label>
-                          <Input
-                            id="c_email"
-                            type="email"
-                            value={customerDetails.email}
-                            onChange={event =>
-                              setCustomerDetails({
-                                ...customerDetails,
-                                email: event.target.value,
-                              })
-                            }
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label htmlFor="c_notes">{t('booking.notes_optional')}</Label>
-                        <Input
-                          id="c_notes"
-                          value={customerDetails.notes}
-                          onChange={event =>
-                            setCustomerDetails({
-                              ...customerDetails,
-                              notes: event.target.value,
-                            })
-                          }
-                        />
-                      </div>
+                    <div className="flex gap-2">
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        className="h-9 w-9 rounded-xl"
+                        disabled={isSameDay(dateWindowStart, startOfToday())}
+                        onClick={() =>
+                          setDateWindowStart((current) =>
+                            addDays(current, -7) < startOfToday()
+                              ? startOfToday()
+                              : addDays(current, -7)
+                          )
+                        }
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        className="h-9 w-9 rounded-xl"
+                        onClick={() =>
+                          setDateWindowStart((current) => addDays(current, 7))
+                        }
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </Button>
                     </div>
-                  )}
+                  </div>
 
-                  <div className="pt-4">
-                    <Button
-                      className="h-12 w-full text-lg"
-                      onClick={handleBook}
-                      disabled={isSubmitting || customerProfileLoading}
-                    >
-                      {isSubmitting
-                        ? t('booking.confirming')
-                        : t('booking.confirm_booking')}
-                    </Button>
+                  <div className="scrollbar-subtle mt-4 flex gap-2 overflow-x-auto pb-1">
+                    {visibleDates.map((date) => {
+                      const value = format(date, 'yyyy-MM-dd');
+                      const active = selectedDate === value;
+
+                      return (
+                        <button
+                          key={value}
+                          type="button"
+                          onClick={() => setSelectedDate(value)}
+                          className={`min-w-[82px] rounded-2xl border px-3 py-3 text-center transition ${
+                            active
+                              ? 'border-primary bg-primary text-primary-foreground shadow-sm'
+                              : 'bg-card hover:border-primary/40'
+                          }`}
+                        >
+                          <div className={`text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
+                            {format(date, 'EEE')}
+                          </div>
+                          <div className="mt-1 text-lg font-bold">
+                            {format(date, 'd')}
+                          </div>
+                          <div className={`mt-1 text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
+                            {format(date, 'MMM')}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="mt-4 max-w-xs space-y-2">
+                    <Label className="text-xs text-muted-foreground">
+                      Or choose a specific date
+                    </Label>
+                    <Input
+                      type="date"
+                      min={format(new Date(), 'yyyy-MM-dd')}
+                      className="h-10 rounded-xl"
+                      value={selectedDate}
+                      onChange={(event) => {
+                        const nextDate = event.target.value;
+                        setSelectedDate(nextDate);
+                        setDateWindowStart(parseISO(nextDate));
+                      }}
+                    />
                   </div>
                 </div>
-              </div>
+
+                {availabilityLoading ? (
+                  <div className="rounded-2xl border p-10 text-center text-sm text-muted-foreground">
+                    Loading available appointments...
+                  </div>
+                ) : selectedClosure ? (
+                  <div className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
+                    <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+                      <AlertTriangle className="h-6 w-6" />
+                    </div>
+                    <h3 className="mt-4 text-lg font-bold">Store Closed</h3>
+                    <p className="mt-2 text-sm leading-6 text-muted-foreground">
+                      {business.name} is closed on the selected date for <strong>{selectedClosure.title}</strong>.
+                      {selectedClosure.description ? ` ${selectedClosure.description}` : ''}
+                    </p>
+                    <p className="mt-2 text-sm font-semibold">
+                      Closed {formatClosureRange(selectedClosure.start_date, selectedClosure.end_date)}
+                    </p>
+                    <p className="mt-3 text-sm text-muted-foreground">Please choose another date.</p>
+                  </div>
+                ) : availableSlots.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed bg-muted/20 p-10 text-center">
+                    <CalendarDays className="mx-auto h-10 w-10 text-muted-foreground" />
+                    <h3 className="mt-4 font-bold">No available appointments</h3>
+                    <p className="mt-2 text-sm text-muted-foreground">
+                      Choose another date or professional to see more times.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    {groupedSlots.map((group) => (
+                      <div key={group.label}>
+                        <div className="mb-3 text-sm font-semibold">
+                          {group.label}
+                        </div>
+                        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 lg:grid-cols-6">
+                          {group.slots.map((time) => (
+                            <Button
+                              key={time}
+                              type="button"
+                              variant={selectedTime === time ? 'default' : 'outline'}
+                              className="h-11 rounded-xl"
+                              onClick={() => setSelectedTime(time)}
+                            >
+                              {time}
+                            </Button>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {!availabilityLoading &&
+                  !selectedClosure &&
+                  availableSlots.length > 0 && (
+                    <div className="flex justify-end border-t pt-5">
+                      <Button
+                        disabled={!selectedTime}
+                        onClick={() => setStep(4)}
+                      >
+                        Continue to Your Details
+                      </Button>
+                    </div>
+                  )}
+              </section>
             )}
 
-            {/* Step 5: Success */}
-            {step === 5 && bookingSuccess && (
-              <div className="text-center space-y-6 py-8">
-                <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
-                </div>
-                <h2 className="text-2xl font-bold">{t('booking.booking_confirmed')}</h2>
-                <p className="text-muted-foreground">{t('booking.success_msg')}</p>
-                
-                <div className="bg-muted/50 p-6 rounded-lg text-left max-w-sm mx-auto space-y-2">
-                   <p><span className="text-muted-foreground">{t('booking.ref')}</span> #{bookingSuccess.booking_reference}</p>
-                   <p><span className="text-muted-foreground">{t('booking.service')}</span> {selectedServices.map(s => s.name).join(', ')}</p>
-                   <p><span className="text-muted-foreground">{t('booking.when')}</span> {format(new Date(bookingSuccess.start_time), 'PPp')}</p>
-                   <p><span className="text-muted-foreground">{t('booking.where')}</span> {business.address}</p>
+            {step === 4 && (
+              <section className="space-y-6">
+                <StepBack onClick={() => setStep(3)} />
+                <StepTitle
+                  icon={<UserRound className="h-5 w-5" />}
+                  title="Your Details"
+                  description={
+                    user
+                      ? 'Your saved customer details will be used.'
+                      : 'Enter the contact details required for your booking.'
+                  }
+                />
+
+                {user ? (
+                  <div className="space-y-5">
+                    <div className="rounded-2xl border bg-muted/25 p-5">
+                      {customerProfileLoading ? (
+                        <p className="text-sm text-muted-foreground">
+                          Loading your details...
+                        </p>
+                      ) : (
+                        <div className="grid gap-4 sm:grid-cols-3">
+                          <Detail label="Name" value={customerDetails.name || 'Not provided'} />
+                          <Detail label="Phone" value={customerDetails.phone || 'Not provided'} />
+                          <Detail label="Email" value={customerDetails.email || 'Not provided'} />
+                        </div>
+                      )}
+                    </div>
+
+                    {!customerDetails.phone && (
+                      <div className="space-y-2">
+                        <Label>Phone number *</Label>
+                        <Input
+                          type="tel"
+                          className="h-11 rounded-xl"
+                          value={customerDetails.phone}
+                          onChange={(event) =>
+                            setCustomerDetails({
+                              ...customerDetails,
+                              phone: event.target.value,
+                            })
+                          }
+                        />
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="space-y-2 sm:col-span-2">
+                      <Label>Full Name *</Label>
+                      <Input
+                        className="h-11 rounded-xl"
+                        value={customerDetails.name}
+                        onChange={(event) =>
+                          setCustomerDetails({
+                            ...customerDetails,
+                            name: event.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Phone *</Label>
+                      <Input
+                        type="tel"
+                        className="h-11 rounded-xl"
+                        value={customerDetails.phone}
+                        onChange={(event) =>
+                          setCustomerDetails({
+                            ...customerDetails,
+                            phone: event.target.value,
+                          })
+                        }
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Email</Label>
+                      <Input
+                        type="email"
+                        className="h-11 rounded-xl"
+                        value={customerDetails.email}
+                        onChange={(event) =>
+                          setCustomerDetails({
+                            ...customerDetails,
+                            email: event.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
+                  <Label>Notes</Label>
+                  <Textarea
+                    rows={4}
+                    className="rounded-xl"
+                    placeholder="Optional notes for the store"
+                    value={customerDetails.notes}
+                    onChange={(event) =>
+                      setCustomerDetails({
+                        ...customerDetails,
+                        notes: event.target.value,
+                      })
+                    }
+                  />
                 </div>
 
-                <div className="pt-4">
-                  <Button variant="outline" className="w-full max-w-sm" onClick={() => window.location.reload()}>
-                    {t('booking.book_another')}
-                  </Button>
-                </div>
-              </div>
+                <Button
+                  className="h-12 w-full rounded-xl text-base"
+                  disabled={isSubmitting || customerProfileLoading}
+                  onClick={() => void handleBook()}
+                >
+                  {isSubmitting ? 'Confirming...' : 'Confirm Appointment'}
+                </Button>
+              </section>
             )}
-
           </CardContent>
         </Card>
+
+        <aside className="xl:sticky xl:top-24 xl:self-start">
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="p-5 sm:p-6">
+              <div className="text-sm font-semibold text-muted-foreground">
+                Booking Summary
+              </div>
+
+              <div className="mt-5 space-y-4">
+                <SummaryRow
+                  label="Services"
+                  value={
+                    selectedServices.length
+                      ? selectedServices.map((service) => service.name).join(', ')
+                      : 'Not selected'
+                  }
+                />
+                <SummaryRow
+                  label="Professional"
+                  value={selectedProfessional?.name || 'Any available'}
+                />
+                <SummaryRow
+                  label="Date"
+                  value={selectedDate || 'Not selected'}
+                />
+                <SummaryRow
+                  label="Time"
+                  value={selectedTime || 'Not selected'}
+                />
+                <SummaryRow
+                  label="Estimated Finish"
+                  value={estimatedEndTime || 'Not available'}
+                />
+                <SummaryRow
+                  label="Duration"
+                  value={`${totalDuration} minutes`}
+                />
+              </div>
+
+              <div className="mt-6 flex items-center justify-between border-t pt-5">
+                <span className="font-semibold">Total</span>
+                <span className="text-2xl font-bold">
+                  €{totalPrice.toFixed(2)}
+                </span>
+              </div>
+
+              {business.address && (
+                <div className="mt-5 flex items-start gap-2 rounded-2xl bg-muted/30 p-4 text-sm text-muted-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0" />
+                  <span>{business.address}</span>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </aside>
+      </div>
+
+      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur xl:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
+          <div className="min-w-0">
+            <div className="truncate text-xs text-muted-foreground">
+              {selectedServices.length
+                ? selectedServices.map((service) => service.name).join(', ')
+                : 'Select services to begin'}
+            </div>
+            <div className="mt-1 flex items-center gap-3">
+              <span className="font-bold">€{totalPrice.toFixed(2)}</span>
+              <span className="text-xs text-muted-foreground">
+                {totalDuration} min
+              </span>
+            </div>
+          </div>
+
+          {step < 4 ? (
+            <Badge variant="secondary" className="shrink-0">
+              Step {step} of 4
+            </Badge>
+          ) : (
+            <Badge className="shrink-0">Ready to confirm</Badge>
+          )}
+        </div>
       </div>
     </div>
   );
+}
+
+function StepTitle({
+  icon,
+  title,
+  description,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div>
+      <div className="flex items-center gap-2 text-primary">{icon}</div>
+      <h2 className="mt-2 text-2xl font-bold">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
+    </div>
+  );
+}
+
+function StepBack({ onClick }: { onClick: () => void }) {
+  return (
+    <Button variant="ghost" className="-ml-3" onClick={onClick}>
+      <ChevronLeft className="mr-2 h-4 w-4" />
+      Back
+    </Button>
+  );
+}
+
+function SummaryRow({
+  label,
+  value,
+}: {
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 border-b pb-4 last:border-0 last:pb-0">
+      <span className="text-sm text-muted-foreground">{label}</span>
+      <span className="max-w-[190px] text-right text-sm font-semibold">{value}</span>
+    </div>
+  );
+}
+
+function Detail({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <div className="text-xs text-muted-foreground">{label}</div>
+      <div className="mt-1 font-semibold">{value}</div>
+    </div>
+  );
+}
+
+function formatClosureRange(start: string, end: string) {
+  const formatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+  const startText = formatter.format(new Date(`${start}T00:00:00`));
+  const endText = formatter.format(new Date(`${end}T00:00:00`));
+  return start === end ? startText : `${startText} – ${endText}`;
 }

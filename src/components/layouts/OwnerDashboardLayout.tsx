@@ -1,25 +1,13 @@
 import React from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
-import {
-  LayoutDashboard,
-  CalendarDays,
-  Users,
-  Scissors,
-  LogOut,
-  Menu,
-  Package,
-  BarChart3,
-  CreditCard,
-  Megaphone,
-  Images,
-  Store,
-} from 'lucide-react';
+import { BarChart3, Building2, CalendarDays, CreditCard, Images, LayoutDashboard, LogOut, Megaphone, Menu, Package, Scissors, Store, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useTranslation } from 'react-i18next';
+import { IndustryThemeRoot } from '@/theme';
 
 export default function OwnerDashboardLayout() {
   const { businessMemberships, profile } = useAuth();
@@ -27,10 +15,6 @@ export default function OwnerDashboardLayout() {
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
   const business = businessMemberships[0]?.businesses;
   const { t } = useTranslation();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
 
   const navItems = [
     { icon: LayoutDashboard, label: t('dashboard.home'), path: '/dashboard' },
@@ -42,118 +26,101 @@ export default function OwnerDashboardLayout() {
     { icon: Megaphone, label: 'Posts', path: '/dashboard/posts' },
     { icon: Images, label: 'Gallery', path: '/dashboard/gallery' },
     { icon: Store, label: 'Storefront', path: '/dashboard/storefront' },
+    { icon: Building2, label: 'Business', path: '/dashboard/business' },
     { icon: BarChart3, label: t('dashboard.reports'), path: '/dashboard/reports' },
     { icon: CreditCard, label: t('dashboard.billing'), path: '/dashboard/billing' },
   ];
 
   const isActive = (path: string) =>
-    path === '/dashboard'
-      ? location.pathname === path
-      : location.pathname.startsWith(path);
+    path === '/dashboard' ? location.pathname === path : location.pathname.startsWith(path);
+
+  const handleLogout = async () => { await supabase.auth.signOut(); };
 
   const NavLinks = () => (
-    <div className="flex w-full flex-col gap-1">
-      {navItems.map((item) => (
-        <Link key={item.path} to={item.path} onClick={() => setIsMobileOpen(false)}>
-          <Button
-            variant={isActive(item.path) ? 'secondary' : 'ghost'}
-            className={`w-full justify-start ${
-              isActive(item.path)
-                ? 'bg-secondary text-foreground'
-                : 'text-muted-foreground'
-            }`}
-          >
-            <item.icon className="mr-2 h-4 w-4" />
-            {item.label}
-          </Button>
-        </Link>
-      ))}
-    </div>
+    <nav className="space-y-1.5">
+      {navItems.map((item) => {
+        const active = isActive(item.path);
+        return (
+          <Link key={item.path} to={item.path} onClick={() => setIsMobileOpen(false)}
+            className={`group flex min-h-11 items-center gap-3 rounded-xl px-3.5 text-sm font-medium transition ${
+              active
+                ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-sm'
+                : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
+            }`}>
+            <item.icon className="h-[18px] w-[18px] shrink-0" />
+            <span className="truncate">{item.label}</span>
+          </Link>
+        );
+      })}
+    </nav>
   );
 
   return (
-    <div className="flex min-h-screen w-full bg-background">
-      <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-card md:flex">
-        <div className="flex h-16 items-center border-b border-border px-6">
-          <h1 className="truncate text-lg font-bold">
-            {business?.name || 'My Business'}
-          </h1>
+    <IndustryThemeRoot industryKey={business?.industry_key}>
+    <div className="min-h-screen bg-background">
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-[272px] flex-col border-r border-sidebar-border bg-sidebar md:flex">
+        <div className="flex h-20 items-center gap-3 border-b border-sidebar-border px-5">
+          {business?.logo_url ? (
+            <img src={business.logo_url} alt={business.name} className="h-10 w-10 rounded-xl border border-white/10 object-cover" />
+          ) : (
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-sidebar-primary font-bold text-sidebar-primary-foreground">
+              {business?.name?.charAt(0) || 'B'}
+            </div>
+          )}
+          <div className="min-w-0">
+            <div className="truncate font-bold text-white">{business?.name || 'My Business'}</div>
+            <div className="text-xs text-sidebar-foreground/55">Owner workspace</div>
+          </div>
         </div>
 
-        <div className="flex-1 overflow-y-auto px-3 py-4">
-          <NavLinks />
-        </div>
+        <div className="scrollbar-subtle flex-1 overflow-y-auto px-3 py-5"><NavLinks /></div>
 
-        <div className="border-t border-border p-4">
-          <div className="mb-4 flex items-center gap-3 px-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 font-medium text-primary">
+        <div className="border-t border-sidebar-border p-4">
+          <div className="mb-3 flex items-center gap-3 rounded-xl bg-white/[0.04] p-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sidebar-primary font-semibold text-sidebar-primary-foreground">
               {profile?.full_name?.charAt(0) || 'U'}
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{profile?.full_name}</p>
-              <p className="truncate text-xs text-muted-foreground">Owner</p>
+            <div className="min-w-0">
+              <div className="truncate text-sm font-semibold text-white">{profile?.full_name || 'Owner'}</div>
+              <div className="text-xs text-sidebar-foreground/55">Business owner</div>
             </div>
           </div>
-
-          <Button
-            variant="outline"
-            className="w-full justify-start text-muted-foreground"
-            onClick={handleLogout}
-          >
-            <LogOut className="mr-2 h-4 w-4" />
-            {t('dashboard.sign_out')}
-          </Button>
-
-          <div className="mt-4 flex justify-center">
+          <div className="grid grid-cols-[1fr_auto] gap-2">
+            <Button variant="ghost" className="justify-start text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-white" onClick={handleLogout}>
+              <LogOut className="mr-2 h-4 w-4" />{t('dashboard.sign_out')}
+            </Button>
             <LanguageSwitcher />
           </div>
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-x-hidden">
-        <header className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-card px-4 md:hidden">
-          <h1 className="flex-1 truncate text-lg font-bold">
-            {business?.name || 'My Business'}
-          </h1>
-
+      <div className="min-w-0 md:pl-[272px]">
+        <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:hidden">
+          <div className="min-w-0">
+            <div className="truncate font-bold">{business?.name || 'My Business'}</div>
+            <div className="text-xs text-muted-foreground">Owner workspace</div>
+          </div>
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
-            <SheetTrigger asChild>
-              <Button variant="ghost" size="icon" className="ml-2 shrink-0">
-                <Menu className="h-6 w-6" />
-              </Button>
-            </SheetTrigger>
-
-            <SheetContent side="left" className="flex w-72 flex-col bg-card p-0">
-              <div className="flex h-16 items-center border-b border-border px-6">
-                <h2 className="text-lg font-bold">Menu</h2>
+            <SheetTrigger asChild><Button variant="outline" size="icon" className="rounded-xl"><Menu className="h-5 w-5" /></Button></SheetTrigger>
+            <SheetContent side="left" className="w-[88vw] max-w-[320px] border-0 bg-sidebar p-0">
+              <div className="flex h-20 items-center border-b border-sidebar-border px-5">
+                <div><div className="font-bold text-white">{business?.name || 'My Business'}</div><div className="text-xs text-sidebar-foreground/55">Menu</div></div>
               </div>
-
-              <div className="flex-1 overflow-y-auto px-3 py-4">
-                <NavLinks />
-              </div>
-
-              <div className="space-y-4 border-t border-border p-4">
-                <Button
-                  variant="outline"
-                  className="w-full justify-start text-muted-foreground"
-                  onClick={handleLogout}
-                >
-                  <LogOut className="mr-2 h-4 w-4" />
-                  {t('dashboard.sign_out')}
+              <div className="scrollbar-subtle h-[calc(100vh-160px)] overflow-y-auto px-3 py-5"><NavLinks /></div>
+              <div className="safe-bottom absolute inset-x-0 bottom-0 border-t border-sidebar-border bg-sidebar p-4">
+                <Button variant="ghost" className="w-full justify-start text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-white" onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />{t('dashboard.sign_out')}
                 </Button>
-
-                <div className="flex justify-center">
-                  <LanguageSwitcher />
-                </div>
               </div>
             </SheetContent>
           </Sheet>
         </header>
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main className="min-h-screen px-4 py-5 sm:px-6 sm:py-7 lg:px-8 xl:px-10">
           <Outlet />
         </main>
       </div>
     </div>
+    </IndustryThemeRoot>
   );
 }

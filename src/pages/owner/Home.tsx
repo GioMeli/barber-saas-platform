@@ -1,257 +1,557 @@
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Users, DollarSign, ArrowUpRight, Scissors, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { format, startOfDay, endOfDay, startOfMonth, endOfMonth } from 'date-fns';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  AlertTriangle,
+  ArrowRight,
+  CalendarDays,
+  CheckCircle2,
+  Copy,
+  Euro,
+  ExternalLink,
+  Scissors,
+  TrendingUp,
+  UserPlus,
+  Users,
+} from 'lucide-react';
+import {
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  format,
+  startOfDay,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns';
+import { toast } from 'sonner';
+import DailyStaffSchedule from '@/components/dashboard/DailyStaffSchedule';
+import OwnerNotificationCenter from '@/components/dashboard/OwnerNotificationCenter';
+import { BusinessHealth, TodaysAlerts } from '@/components/dashboard/OwnerDashboardInsights';
 
 export default function OwnerHome() {
   const { businessMemberships } = useAuth();
   const business = businessMemberships[0]?.businesses;
-  
+  const navigate = useNavigate();
+
   const [stats, setStats] = useState({
-    todayAppts: 0,
-    pendingAppts: 0,
-    expectedRevenue: 0,
+    todayAppointments: 0,
+    todayRevenue: 0,
+    weekAppointments: 0,
     newCustomers: 0,
-    activeServices: 0
+    activeServices: 0,
+    cancelledThisMonth: 0,
   });
-  
+
   const [todaySchedule, setTodaySchedule] = useState<any[]>([]);
+  const [staff, setStaff] = useState<any[]>([]);
+  const [closures, setClosures] = useState<any[]>([]);
+  const [staffBreaks, setStaffBreaks] = useState<any[]>([]);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (business?.id) {
-      fetchDashboardData();
-    }
+    if (business?.id) void fetchDashboardData();
   }, [business?.id]);
 
   const fetchDashboardData = async () => {
+    if (!business?.id) return;
+
+    setLoading(true);
+
+    const now = new Date();
+    const todayStart = startOfDay(now).toISOString();
+    const todayEnd = endOfDay(now).toISOString();
+    const weekStart = startOfWeek(now).toISOString();
+    const weekEnd = endOfWeek(now).toISOString();
+    const monthStart = startOfMonth(now).toISOString();
+    const monthEnd = endOfMonth(now).toISOString();
+
     try {
-      const todayStart = startOfDay(new Date()).toISOString();
-      const todayEnd = endOfDay(new Date()).toISOString();
-      const monthStart = startOfMonth(new Date()).toISOString();
-      const monthEnd = endOfMonth(new Date()).toISOString();
+      const [
+        todayResult,
+        weekResult,
+        customersResult,
+        servicesResult,
+        staffResult,
+        cancelledResult,
+        closuresResult,
+        breaksResult,
+      ] = await Promise.all([
+        supabase
+          .from('appointments')
+          .select(
+            '*, customers(full_name), employees(id, name, photo_url), appointment_services(services(name))'
+          )
+          .eq('business_id', business.id)
+          .gte('start_time', todayStart)
+          .lte('start_time', todayEnd)
+          .order('start_time'),
 
-      // Today's appointments
-      const { data: todayAppts } = await supabase
-        .from('appointments')
-        .select('*, customers(full_name), appointment_services(services(name))')
-        .eq('business_id', business.id)
-        .gte('start_time', todayStart)
-        .lte('start_time', todayEnd)
-        .neq('status', 'cancelled_by_business')
-        .neq('status', 'cancelled_by_customer')
-        .order('start_time', { ascending: true });
+        supabase
+          .from('appointments')
+          .select('id', { count: 'exact', head: true })
+          .eq('business_id', business.id)
+          .gte('start_time', weekStart)
+          .lte('start_time', weekEnd)
+          .not(
+            'status',
+            'in',
+            '("cancelled_by_business","cancelled_by_customer")'
+          ),
 
-      // New customers this month
-      const { count: newCustomers } = await supabase
-        .from('customers')
-        .select('*', { count: 'exact', head: true })
-        .eq('business_id', business.id)
-        .gte('created_at', monthStart)
-        .lte('created_at', monthEnd);
+        supabase
+          .from('customers')
+          .select('id', { count: 'exact', head: true })
+          .eq('business_id', business.id)
+          .gte('created_at', monthStart)
+          .lte('created_at', monthEnd),
 
-      // Active services
-      const { count: activeServices } = await supabase
-        .from('services')
-        .select('*', { count: 'exact', head: true })
-        .eq('business_id', business.id)
-        .eq('is_active', true);
+        supabase
+          .from('services')
+          .select('id', { count: 'exact', head: true })
+          .eq('business_id', business.id)
+          .eq('is_active', true),
 
-      const appointments = todayAppts || [];
-      const pendingCount = appointments.filter(a => a.status === 'pending').length;
-      const expectedRev = appointments.reduce((sum, a) => sum + (a.total_price || 0), 0);
+        supabase
+          .from('employees')
+          .select('id, name, photo_url')
+          .eq('business_id', business.id)
+          .eq('is_active', true)
+          .order('name'),
+
+        supabase
+          .from('appointments')
+          .select('id', { count: 'exact', head: true })
+          .eq('business_id', business.id)
+          .gte('start_time', monthStart)
+          .lte('start_time', monthEnd)
+          .in('status', [
+            'cancelled_by_business',
+            'cancelled_by_customer',
+          ]),
+
+        supabase
+          .from('business_closures')
+          .select('*')
+          .eq('business_id', business.id)
+          .eq('is_active', true)
+          .gte('end_date', format(now, 'yyyy-MM-dd'))
+          .order('start_date')
+          .limit(3),
+
+        supabase
+          .from('breaks')
+          .select(
+            'id, business_id, employee_id, day_of_week, start_time, end_time, label'
+          )
+          .eq('business_id', business.id)
+          .eq('day_of_week', now.getDay())
+          .order('start_time'),
+      ]);
+
+      if (todayResult.error) throw todayResult.error;
+      if (weekResult.error) throw weekResult.error;
+      if (customersResult.error) throw customersResult.error;
+      if (servicesResult.error) throw servicesResult.error;
+      if (staffResult.error) throw staffResult.error;
+      if (cancelledResult.error) throw cancelledResult.error;
+      if (closuresResult.error) throw closuresResult.error;
+      if (breaksResult.error) throw breaksResult.error;
+
+      const appointments = todayResult.data ?? [];
+      const activeAppointments = appointments.filter(
+        (item) =>
+          ![
+            'cancelled_by_business',
+            'cancelled_by_customer',
+          ].includes(item.status)
+      );
+
+      setTodaySchedule(appointments);
+      setStaff(staffResult.data ?? []);
+      setClosures(closuresResult.data ?? []);
+      setStaffBreaks(breaksResult.data ?? []);
 
       setStats({
-        todayAppts: appointments.length,
-        pendingAppts: pendingCount,
-        expectedRevenue: expectedRev,
-        newCustomers: newCustomers || 0,
-        activeServices: activeServices || 0
+        todayAppointments: activeAppointments.length,
+        todayRevenue: activeAppointments.reduce(
+          (sum, item) => sum + Number(item.total_price || 0),
+          0
+        ),
+        weekAppointments: weekResult.count ?? 0,
+        newCustomers: customersResult.count ?? 0,
+        activeServices: servicesResult.count ?? 0,
+        cancelledThisMonth: cancelledResult.count ?? 0,
       });
-      
-      setTodaySchedule(appointments);
-
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
+    } catch (error: any) {
+      console.error('Dashboard loading error:', error);
+      toast.error(error.message || 'Failed to load dashboard');
     } finally {
       setLoading(false);
     }
   };
 
+  const todayKey = format(new Date(), 'yyyy-MM-dd');
+
+  const activeClosure = closures.find(
+    (closure) =>
+      closure.start_date <= todayKey &&
+      closure.end_date >= todayKey
+  );
+
+  const upcomingClosure = closures.find(
+    (closure) => closure.start_date > todayKey
+  );
+
+  const nextClosure = activeClosure || upcomingClosure;
+
+  const publicUrl = business?.slug
+    ? `${window.location.origin}/app/${business.slug}`
+    : '';
+
+  const copyStoreLink = async () => {
+    if (!publicUrl) return;
+
+    await navigator.clipboard.writeText(publicUrl);
+    toast.success('Store link copied');
+  };
+
   if (!business) return null;
 
   return (
-    <div className="space-y-8 max-w-5xl mx-auto">
-      
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+    <div className="app-page">
+      <header className="app-page-header">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Dashboard</h2>
-          <p className="text-muted-foreground mt-1">Welcome back. Here's what's happening at {business.name}.</p>
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+            {format(new Date(), 'EEEE, MMMM d')}
+          </div>
+
+          <h1 className="app-page-title">
+            Good day, {business.name}
+          </h1>
+
+          <p className="app-page-description">
+            Monitor today’s operation, staff workload and upcoming
+            business activity from one workspace.
+          </p>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" asChild>
-            <Link to={`/book/${business.slug}`} target="_blank">
-              View Booking Page
+
+        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
+          <OwnerNotificationCenter
+            businessId={business.id}
+            onUnreadCountChange={setUnreadNotifications}
+          />
+
+          <Button
+            variant="outline"
+            onClick={() => void copyStoreLink()}
+          >
+            <Copy className="mr-2 h-4 w-4" />
+            Store Link
+          </Button>
+
+          <Button asChild>
+            <Link to="/dashboard/calendar">
+              <CalendarDays className="mr-2 h-4 w-4" />
+              New Appointment
             </Link>
           </Button>
-          <Button asChild>
-            <Link to="/dashboard/calendar">+ New Appointment</Link>
-          </Button>
         </div>
-      </div>
+      </header>
 
-      {/* Metrics */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Today's Appointments</CardTitle>
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.todayAppts}</div>
-            <p className="text-xs text-muted-foreground mt-1">{stats.pendingAppts} pending confirmation</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Expected Revenue</CardTitle>
-            <DollarSign className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : `$${stats.expectedRevenue.toFixed(2)}`}</div>
-            <p className="text-xs text-muted-foreground mt-1">Based on today's bookings</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">New Customers</CardTitle>
-            <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.newCustomers}</div>
-            <p className="text-xs text-muted-foreground mt-1">This month</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">Active Services</CardTitle>
-            <Scissors className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{loading ? '...' : stats.activeServices}</div>
-            <p className="text-xs text-muted-foreground mt-1">Available for booking</p>
-          </CardContent>
-        </Card>
-      </div>
+      {/* Calendar on the left, KPI cards stacked vertically on the right. */}
+      <section className="grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_350px]">
+        <Card className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl shadow-card xl:h-[625px]">
+          <CardHeader className="border-b px-5 py-4 sm:px-6">
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+              <div>
+                <CardTitle className="section-heading">
+                  Today’s schedule
+                </CardTitle>
 
-      {/* Main Content Area */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* Appointments List */}
-        <Card className="col-span-1 lg:col-span-2 h-full flex flex-col">
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Daily calendar divided into columns for each
+                  professional.
+                </p>
+              </div>
+
+              <Button asChild variant="outline" size="sm">
+                <Link to="/dashboard/calendar">
+                  Open full calendar
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
+              </Button>
+            </div>
+          </CardHeader>
+
+          <CardContent className="min-h-0 flex-1 p-0">
+            <DailyStaffSchedule
+              appointments={todaySchedule}
+              staff={staff}
+              availabilityBlocks={staffBreaks}
+              loading={loading}
+              startHour={6}
+              endHour={22}
+              onAppointmentClick={() =>
+                navigate('/dashboard/calendar')
+              }
+            />
+          </CardContent>
+        </Card>
+
+        <aside className="grid content-start gap-4 sm:grid-cols-2 xl:grid-cols-1">
+          <MetricCard
+            title="Today’s appointments"
+            value={
+              loading
+                ? '—'
+                : String(stats.todayAppointments)
+            }
+            detail={`${stats.weekAppointments} scheduled this week`}
+            icon={<CalendarDays className="h-5 w-5" />}
+          />
+
+          <MetricCard
+            title="Expected revenue"
+            value={
+              loading
+                ? '—'
+                : `€${stats.todayRevenue.toFixed(2)}`
+            }
+            detail="From today’s active bookings"
+            icon={<Euro className="h-5 w-5" />}
+          />
+
+          <MetricCard
+            title="New customers"
+            value={
+              loading ? '—' : String(stats.newCustomers)
+            }
+            detail="Added during this month"
+            icon={<UserPlus className="h-5 w-5" />}
+          />
+
+          <MetricCard
+            title="Active services"
+            value={
+              loading ? '—' : String(stats.activeServices)
+            }
+            detail={`${stats.cancelledThisMonth} cancellations this month`}
+            icon={<Scissors className="h-5 w-5" />}
+          />
+        </aside>
+      </section>
+
+      <TodaysAlerts
+        unreadNotifications={unreadNotifications}
+        activeAppointments={todaySchedule}
+        staff={staff}
+        staffBreaks={staffBreaks}
+      />
+
+      <section className="grid gap-6 xl:grid-cols-3">
+        <Card className="rounded-2xl shadow-card">
           <CardHeader>
-            <CardTitle>Today's Schedule</CardTitle>
-            <CardDescription>
-              {loading ? 'Loading...' : todaySchedule.length > 0 ? `You have ${todaySchedule.length} appointment${todaySchedule.length > 1 ? 's' : ''} today.` : 'You have no appointments scheduled for today.'}
-            </CardDescription>
+            <CardTitle className="section-heading">
+              Business pulse
+            </CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 flex flex-col">
-            {loading ? (
-              <div className="flex-1 flex items-center justify-center text-muted-foreground">Loading schedule...</div>
-            ) : todaySchedule.length > 0 ? (
-              <div className="space-y-4">
-                {todaySchedule.map(app => (
-                  <div key={app.id} className="flex items-center justify-between p-4 border border-border/50 rounded-xl bg-card hover:bg-muted/30 transition-colors">
-                    <div className="flex items-center gap-4">
-                      <div className="w-14 h-14 rounded-full bg-primary/10 flex flex-col items-center justify-center text-primary font-bold shrink-0 border border-primary/20">
-                        <span className="text-sm leading-none">{format(new Date(app.start_time), 'HH:mm')}</span>
-                      </div>
-                      <div>
-                        <div className="font-bold text-base">{app.customers?.full_name || 'Guest'}</div>
-                        <div className="text-sm text-muted-foreground mt-0.5 line-clamp-1">
-                          {app.appointment_services?.map((s: any) => s.services?.name).join(', ')} • {app.total_duration} mins
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end gap-2 shrink-0">
-                      <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold ${
-                        app.status === 'confirmed' ? 'bg-primary/20 text-primary' :
-                        app.status === 'completed' ? 'bg-green-100 text-green-800' :
-                        'bg-secondary text-secondary-foreground'
-                      }`}>
-                        {app.status}
-                      </span>
-                      <div className="text-sm font-semibold">${app.total_price?.toFixed(2)}</div>
-                    </div>
+
+          <CardContent className="space-y-5">
+            <PulseRow
+              icon={<TrendingUp className="h-4 w-4" />}
+              label="Average booking value"
+              value={
+                stats.todayAppointments
+                  ? `€${(
+                      stats.todayRevenue /
+                      stats.todayAppointments
+                    ).toFixed(2)}`
+                  : '€0.00'
+              }
+            />
+
+            <PulseRow
+              icon={<Users className="h-4 w-4" />}
+              label="Active professionals"
+              value={String(staff.length)}
+            />
+
+            <PulseRow
+              icon={<CalendarDays className="h-4 w-4" />}
+              label="Weekly appointments"
+              value={String(stats.weekAppointments)}
+            />
+          </CardContent>
+        </Card>
+
+        <Card
+          className={`rounded-2xl shadow-card ${
+            activeClosure
+              ? 'border-red-200 bg-red-50/40'
+              : ''
+          }`}
+        >
+          <CardHeader>
+            <CardTitle className="section-heading">
+              Business status
+            </CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            {nextClosure ? (
+              <div className="flex items-start gap-3">
+                <div
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                    activeClosure
+                      ? 'bg-red-100 text-red-700'
+                      : 'bg-amber-100 text-amber-700'
+                  }`}
+                >
+                  <AlertTriangle className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <div className="font-bold">
+                    {activeClosure
+                      ? 'Closed now'
+                      : 'Upcoming closure'}
                   </div>
-                ))}
+
+                  <div className="mt-1 text-sm text-muted-foreground">
+                    {nextClosure.title}
+                  </div>
+
+                  <div className="mt-2 text-xs font-semibold">
+                    {formatClosureRange(
+                      nextClosure.start_date,
+                      nextClosure.end_date
+                    )}
+                  </div>
+
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="sm"
+                    className="mt-4"
+                  >
+                    <Link to="/dashboard/business">
+                      Manage closures
+                    </Link>
+                  </Button>
+                </div>
               </div>
             ) : (
-              <div className="flex-1 flex flex-col items-center justify-center py-12 text-center">
-                <Calendar className="h-12 w-12 text-muted mb-4" />
-                <h3 className="text-lg font-medium">No appointments today</h3>
-                <p className="text-sm text-muted-foreground max-w-sm mx-auto mt-2">
-                  Share your booking link with customers or add a new appointment manually.
-                </p>
-                <div className="mt-6 flex gap-4">
-                  <Button asChild>
-                    <Link to="/dashboard/calendar">Book Appointment</Link>
-                  </Button>
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-700">
+                  <CheckCircle2 className="h-5 w-5" />
+                </div>
+
+                <div>
+                  <div className="font-bold">Open</div>
+
+                  <div className="mt-1 text-sm text-muted-foreground">
+                    No active or upcoming closures.
+                  </div>
                 </div>
               </div>
             )}
           </CardContent>
         </Card>
 
-        {/* Quick Actions / Status */}
-        <div className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Links</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Button variant="ghost" className="w-full justify-between group" asChild>
-                <Link to="/dashboard/services">
-                  <span>Manage Services</span>
-                  <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-              </Button>
-              <Button variant="ghost" className="w-full justify-between group" asChild>
-                <Link to="/dashboard/staff">
-                  <span>Manage Staff Schedule</span>
-                  <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-              </Button>
-               <Button variant="ghost" className="w-full justify-between group" asChild>
-                <Link to="/dashboard/settings">
-                  <span>Business Settings</span>
-                  <ArrowUpRight className="h-4 w-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                </Link>
-              </Button>
-            </CardContent>
-          </Card>
+        <BusinessHealth
+          activeAppointments={todaySchedule}
+          staff={staff}
+        />
+      </section>
+    </div>
+  );
+}
 
-          <Card className="bg-primary/5 border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-primary flex items-center gap-2">
-                Trial Active
-              </CardTitle>
-              <CardDescription>You are on day 1 of your 14-day Premium trial.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Button variant="default" className="w-full" asChild>
-                <Link to="/dashboard/billing">View Plans</Link>
-              </Button>
-            </CardContent>
-          </Card>
+function MetricCard({
+  title,
+  value,
+  detail,
+  icon,
+}: {
+  title: string;
+  value: string;
+  detail: string;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div className="group relative overflow-hidden rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50 via-sky-50 to-slate-100 p-5 shadow-[0_10px_30px_rgba(59,130,246,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300 hover:shadow-[0_16px_38px_rgba(59,130,246,0.16)]">
+      {/* Διακοσμητικό φόντο */}
+      <div className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full bg-blue-200/30 blur-2xl transition group-hover:bg-blue-300/40" />
+
+      <div className="relative flex items-start justify-between gap-4">
+        <div className="min-w-0">
+          <div className="text-sm font-medium text-slate-500">
+            {title}
+          </div>
+
+          <div className="mt-3 text-3xl font-bold tracking-tight text-slate-800">
+            {value}
+          </div>
         </div>
 
+        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-blue-200 bg-white/80 text-blue-600 shadow-sm backdrop-blur transition group-hover:bg-blue-600 group-hover:text-white">
+          {icon}
+        </div>
+      </div>
+
+      <div className="relative mt-5 border-t border-blue-200/60 pt-3 text-xs leading-5 text-slate-500">
+        {detail}
       </div>
     </div>
   );
+}
+
+function PulseRow({
+  icon,
+  label,
+  value,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4">
+      <div className="flex min-w-0 items-center gap-3">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-muted text-muted-foreground">
+          {icon}
+        </div>
+
+        <span className="truncate text-sm text-muted-foreground">
+          {label}
+        </span>
+      </div>
+
+      <span className="font-bold">{value}</span>
+    </div>
+  );
+}
+
+function formatClosureRange(start: string, end: string) {
+  const formatter = new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  });
+
+  const startText = formatter.format(
+    new Date(`${start}T00:00:00`)
+  );
+
+  const endText = formatter.format(
+    new Date(`${end}T00:00:00`)
+  );
+
+  return start === end
+    ? startText
+    : `${startText} – ${endText}`;
 }
