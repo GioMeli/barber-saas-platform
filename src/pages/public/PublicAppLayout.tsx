@@ -11,9 +11,15 @@ import {
   Scissors,
   UserCircle,
   X,
+  CheckCircle2,
+  Clock3,
+  History,
+  ShieldCheck,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
+import { IndustryThemeRoot } from '@/theme';
+import { getIndustryConfig } from '@/config/industries';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import {
@@ -55,6 +61,10 @@ export default function PublicAppLayout() {
     }
   }, [user, business?.id]);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const fetchBusiness = async () => {
     if (!slug) {
       setBusiness(null);
@@ -65,7 +75,6 @@ export default function PublicAppLayout() {
     setLoading(true);
 
     try {
-      // First load only the public business record.
       const { data: businessData, error: businessError } = await supabase
         .from('businesses')
         .select('*')
@@ -73,18 +82,13 @@ export default function PublicAppLayout() {
         .eq('status', 'active')
         .maybeSingle();
 
-      if (businessError) {
-        console.error('Public business query failed:', businessError);
-        throw businessError;
-      }
+      if (businessError) throw businessError;
 
       if (!businessData) {
         setBusiness(null);
-        toast.error('Business not found');
         return;
       }
 
-      // Business settings are supplementary and must not block the storefront.
       const { data: settingsData, error: settingsError } = await supabase
         .from('business_settings')
         .select('*')
@@ -92,7 +96,7 @@ export default function PublicAppLayout() {
         .maybeSingle();
 
       if (settingsError) {
-        console.warn('Public business settings could not be loaded:', settingsError);
+        console.warn('Public business settings unavailable:', settingsError);
       }
 
       setBusiness({
@@ -100,15 +104,9 @@ export default function PublicAppLayout() {
         business_settings: settingsData ?? null,
       });
     } catch (error: any) {
-      console.error('Error fetching public business:', {
-        message: error?.message,
-        code: error?.code,
-        details: error?.details,
-        hint: error?.hint,
-      });
-
+      console.error('Public business error:', error);
+      toast.error(error?.message || 'Unable to load this store');
       setBusiness(null);
-      toast.error(error?.message || 'Unable to load this business');
     } finally {
       setLoading(false);
     }
@@ -123,7 +121,6 @@ export default function PublicAppLayout() {
     });
 
     if (error) {
-      console.error('Customer membership error:', error);
       toast.error(error.message || 'Could not connect your account to this store.');
       return false;
     }
@@ -155,12 +152,11 @@ export default function PublicAppLayout() {
       if (authMode === 'signup') {
         localStorage.setItem('pendingCustomerBusinessId', business.id);
 
-        const redirectTo = `${window.location.origin}/app/${business.slug}/account`;
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
           password,
           options: {
-            emailRedirectTo: redirectTo,
+            emailRedirectTo: `${window.location.origin}/app/${business.slug}/account`,
             data: {
               full_name: name.trim(),
               role: 'Registered Customer',
@@ -174,12 +170,12 @@ export default function PublicAppLayout() {
           const joined = await joinCurrentBusiness(phone.trim() || null);
           if (!joined) return;
 
-          toast.success('Your customer account has been created.');
+          toast.success('Customer account created.');
           setAuthOpen(false);
           navigate(`/app/${business.slug}/account`);
         } else {
           toast.success(
-            'Account created. Check your email to confirm it, then return to this store.'
+            'Account created. Confirm your email, then return to this store.'
           );
           setAuthOpen(false);
         }
@@ -221,24 +217,38 @@ export default function PublicAppLayout() {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        Loading store...
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
+          <div className="mt-4 text-sm text-muted-foreground">Loading store...</div>
+        </div>
       </div>
     );
   }
 
   if (!business) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        Business not found
+      <div className="flex min-h-screen items-center justify-center bg-background px-4">
+        <div className="max-w-md text-center">
+          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
+            <Scissors className="h-7 w-7 text-muted-foreground" />
+          </div>
+          <h1 className="mt-5 text-2xl font-bold">Store not found</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            This store link is unavailable or no longer active.
+          </p>
+        </div>
       </div>
     );
   }
 
+  const industry = getIndustryConfig(business.industry_key);
+
   return (
-    <div className="min-h-screen bg-muted/20">
-      <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
+    <IndustryThemeRoot industryKey={industry.key}>
+    <div className="min-h-screen bg-background">
+      <header className="sticky top-0 z-40 border-b bg-background/95 shadow-[0_1px_0_rgba(0,0,0,0.03)] backdrop-blur-xl">
+        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link
             to={`/app/${business.slug}`}
             className="flex min-w-0 items-center gap-3"
@@ -247,11 +257,11 @@ export default function PublicAppLayout() {
               <img
                 src={business.logo_url}
                 alt={business.name}
-                className="h-10 w-10 rounded-full border object-cover"
+                className="h-11 w-11 rounded-2xl border object-cover shadow-sm"
               />
             ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-                <Scissors className="h-5 w-5" />
+              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                <span aria-hidden>{industry.icon}</span>
               </div>
             )}
 
@@ -263,7 +273,7 @@ export default function PublicAppLayout() {
             </div>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center rounded-full border bg-muted/20 p-1 shadow-sm md:flex">
             {navItems.map((item) => {
               const active =
                 location.pathname === item.to ||
@@ -271,13 +281,17 @@ export default function PublicAppLayout() {
                   location.pathname.includes('/account'));
 
               return (
-                <Button
+                <Link
                   key={item.to}
-                  asChild
-                  variant={active ? 'secondary' : 'ghost'}
+                  to={item.to}
+                  className={`rounded-full px-4 py-2 text-sm font-semibold transition ${
+                    active
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
                 >
-                  <Link to={item.to}>{item.label}</Link>
-                </Button>
+                  {item.label}
+                </Link>
               );
             })}
           </nav>
@@ -311,9 +325,9 @@ export default function PublicAppLayout() {
           </div>
 
           <Button
-            variant="ghost"
+            variant="outline"
             size="icon"
-            className="md:hidden"
+            className="rounded-xl md:hidden"
             onClick={() => setMobileMenuOpen((current) => !current)}
           >
             {mobileMenuOpen ? (
@@ -325,18 +339,16 @@ export default function PublicAppLayout() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t bg-background px-4 py-4 md:hidden">
+          <div className="border-t bg-background px-4 py-4 shadow-lg md:hidden">
             <div className="space-y-2">
               {navItems.map((item) => (
-                <Button
+                <Link
                   key={item.to}
-                  asChild
-                  variant="ghost"
-                  className="w-full justify-start"
-                  onClick={() => setMobileMenuOpen(false)}
+                  to={item.to}
+                  className="flex min-h-11 items-center rounded-xl px-3 text-sm font-semibold hover:bg-muted"
                 >
-                  <Link to={item.to}>{item.label}</Link>
-                </Button>
+                  {item.label}
+                </Link>
               ))}
 
               {!user ? (
@@ -349,11 +361,7 @@ export default function PublicAppLayout() {
                   </Button>
                 </div>
               ) : (
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={handleSignOut}
-                >
+                <Button variant="outline" className="w-full" onClick={handleSignOut}>
                   Sign Out
                 </Button>
               )}
@@ -366,112 +374,291 @@ export default function PublicAppLayout() {
         )}
       </header>
 
-      <main className="min-h-[calc(100vh-4rem)]">
+      <main className="min-h-[calc(100vh-72px)]">
         <Outlet
           context={{
             business,
+            industry,
             openCustomerSignIn: () => openAuth('signin'),
             openCustomerSignUp: () => openAuth('signup'),
           }}
         />
       </main>
 
-      <div className="fixed bottom-4 left-4 right-4 z-30 md:hidden">
-        <Button asChild className="h-12 w-full shadow-lg">
-          <Link to={`/app/${business.slug}/book`}>
-            <CalendarDays className="mr-2 h-5 w-5" />
-            Book Appointment
-          </Link>
-        </Button>
-      </div>
+      {!location.pathname.endsWith('/book') && (
+        <div className="safe-bottom fixed bottom-0 left-0 right-0 z-30 border-t bg-background/95 p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.05)] backdrop-blur md:hidden">
+          <Button asChild className="h-12 w-full rounded-xl shadow-lg">
+            <Link to={`/app/${business.slug}/book`}>
+              <CalendarDays className="mr-2 h-5 w-5" />
+              Book Appointment
+            </Link>
+          </Button>
+        </div>
+      )}
 
       <Dialog open={authOpen} onOpenChange={setAuthOpen}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>
-              {authMode === 'signin'
-                ? `Sign in to ${business.name}`
-                : `Create an account for ${business.name}`}
-            </DialogTitle>
-          </DialogHeader>
+        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-hidden rounded-3xl border-0 p-0 shadow-2xl">
+          <div className="grid max-h-[94vh] overflow-y-auto lg:grid-cols-[0.9fr_1.1fr]">
+            <section className="relative hidden overflow-hidden bg-zinc-950 p-8 text-white lg:block">
+              {business.cover_image_url && (
+                <img
+                  src={business.cover_image_url}
+                  alt={business.name}
+                  className="absolute inset-0 h-full w-full object-cover opacity-30"
+                />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-br from-black/95 via-black/80 to-black/55" />
 
-          <div className="space-y-4">
-            {authMode === 'signup' && (
-              <>
+              <div className="relative flex h-full min-h-[610px] flex-col justify-between">
+                <div>
+                  <div className="flex items-center gap-3">
+                    {business.logo_url ? (
+                      <img
+                        src={business.logo_url}
+                        alt={business.name}
+                        className="h-12 w-12 rounded-2xl border border-white/15 object-cover"
+                      />
+                    ) : (
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+                        <Scissors className="h-6 w-6" />
+                      </div>
+                    )}
+
+                    <div>
+                      <div className="font-bold">{business.name}</div>
+                      <div className="text-xs text-white/55">
+                        Customer account
+                      </div>
+                    </div>
+                  </div>
+
+                  <h2 className="mt-12 text-3xl font-bold leading-tight">
+                    Your appointments and store experience in one place.
+                  </h2>
+                  <p className="mt-4 text-sm leading-7 text-white/65">
+                    Create an optional account for faster bookings, appointment
+                    history and updates from {business.name}.
+                  </p>
+
+                  <div className="mt-8 space-y-4">
+                    <CustomerBenefit
+                      icon={<Clock3 className="h-5 w-5" />}
+                      title="Faster booking"
+                      text="Reuse your saved customer information."
+                    />
+                    <CustomerBenefit
+                      icon={<CalendarDays className="h-5 w-5" />}
+                      title="Upcoming appointments"
+                      text="See your next visits at this specific store."
+                    />
+                    <CustomerBenefit
+                      icon={<History className="h-5 w-5" />}
+                      title="Appointment history"
+                      text="Keep a clear record of previous bookings."
+                    />
+                  </div>
+                </div>
+
+                <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 text-xs leading-5 text-white/60 backdrop-blur">
+                  <ShieldCheck className="mb-2 h-5 w-5 text-primary" />
+                  Your customer account is connected to this store. Guest
+                  booking remains available without registration.
+                </div>
+              </div>
+            </section>
+
+            <section className="p-5 sm:p-8 lg:p-10">
+              <DialogHeader className="text-left">
+                <div className="mb-4 flex items-center gap-3 lg:hidden">
+                  {business.logo_url ? (
+                    <img
+                      src={business.logo_url}
+                      alt={business.name}
+                      className="h-11 w-11 rounded-2xl border object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary">
+                      <Scissors className="h-5 w-5" />
+                    </div>
+                  )}
+                  <div>
+                    <div className="font-bold">{business.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      Customer access
+                    </div>
+                  </div>
+                </div>
+
+                <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                  {authMode === 'signin'
+                    ? 'Customer sign in'
+                    : 'Customer registration'}
+                </div>
+
+                <DialogTitle className="mt-2 text-3xl">
+                  {authMode === 'signin'
+                    ? `Welcome back to ${business.name}`
+                    : `Create your ${business.name} account`}
+                </DialogTitle>
+
+                <p className="mt-3 text-sm leading-6 text-muted-foreground">
+                  {authMode === 'signin'
+                    ? 'Access your upcoming appointments, history and customer profile.'
+                    : 'Create an optional customer account for this specific store.'}
+                </p>
+              </DialogHeader>
+
+              <div className="mt-7 grid grid-cols-2 rounded-xl bg-muted p-1">
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('signin')}
+                  className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+                    authMode === 'signin'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground'
+                  }`}
+                >
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setAuthMode('signup')}
+                  className={`rounded-lg px-4 py-2.5 text-sm font-semibold transition ${
+                    authMode === 'signup'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground'
+                  }`}
+                >
+                  Create Account
+                </button>
+              </div>
+
+              <div className="mt-7 space-y-5">
+                {authMode === 'signup' && (
+                  <>
+                    <div className="space-y-2">
+                      <Label htmlFor="customer_name">Full Name</Label>
+                      <Input
+                        id="customer_name"
+                        autoComplete="name"
+                        className="h-12 rounded-xl"
+                        value={name}
+                        onChange={(event) => setName(event.target.value)}
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="customer_phone">Phone</Label>
+                      <Input
+                        id="customer_phone"
+                        type="tel"
+                        autoComplete="tel"
+                        className="h-12 rounded-xl"
+                        placeholder="+357..."
+                        value={phone}
+                        onChange={(event) => setPhone(event.target.value)}
+                      />
+                    </div>
+                  </>
+                )}
+
                 <div className="space-y-2">
-                  <Label htmlFor="customer_name">Full Name</Label>
+                  <Label htmlFor="customer_email">Email</Label>
                   <Input
-                    id="customer_name"
-                    value={name}
-                    onChange={(event) => setName(event.target.value)}
+                    id="customer_email"
+                    type="email"
+                    autoComplete="email"
+                    className="h-12 rounded-xl"
+                    placeholder="customer@example.com"
+                    value={email}
+                    onChange={(event) => setEmail(event.target.value)}
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="customer_phone">Phone</Label>
+                  <Label htmlFor="customer_password">Password</Label>
                   <Input
-                    id="customer_phone"
-                    type="tel"
-                    placeholder="+357..."
-                    value={phone}
-                    onChange={(event) => setPhone(event.target.value)}
+                    id="customer_password"
+                    type="password"
+                    autoComplete={
+                      authMode === 'signin'
+                        ? 'current-password'
+                        : 'new-password'
+                    }
+                    className="h-12 rounded-xl"
+                    value={password}
+                    onChange={(event) => setPassword(event.target.value)}
                   />
                 </div>
-              </>
-            )}
 
-            <div className="space-y-2">
-              <Label htmlFor="customer_email">Email</Label>
-              <Input
-                id="customer_email"
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-            </div>
+                {authMode === 'signup' && (
+                  <div className="rounded-2xl bg-muted/35 p-4">
+                    <div className="flex items-start gap-3">
+                      <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+                      <p className="text-xs leading-5 text-muted-foreground">
+                        This account is linked to {business.name}. It gives you
+                        appointment history and faster booking at this store.
+                      </p>
+                    </div>
+                  </div>
+                )}
 
-            <div className="space-y-2">
-              <Label htmlFor="customer_password">Password</Label>
-              <Input
-                id="customer_password"
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </div>
+                <Button
+                  className="h-12 w-full rounded-xl text-base"
+                  disabled={authLoading}
+                  onClick={handleAuth}
+                >
+                  {authLoading
+                    ? 'Please wait...'
+                    : authMode === 'signin'
+                      ? 'Sign In to My Account'
+                      : 'Create Customer Account'}
+                </Button>
 
-            <Button
-              className="w-full"
-              disabled={authLoading}
-              onClick={handleAuth}
-            >
-              {authLoading
-                ? 'Please wait...'
-                : authMode === 'signin'
-                  ? 'Sign In'
-                  : 'Create Account'}
-            </Button>
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-12 w-full rounded-xl"
+                  onClick={() => setAuthOpen(false)}
+                >
+                  <Link to={`/app/${business.slug}/book`}>
+                    Continue as Guest
+                  </Link>
+                </Button>
 
-            <Button
-              variant="ghost"
-              className="w-full"
-              onClick={() =>
-                setAuthMode((current) =>
-                  current === 'signin' ? 'signup' : 'signin'
-                )
-              }
-            >
-              {authMode === 'signin'
-                ? 'Create a customer account'
-                : 'Already have an account? Sign in'}
-            </Button>
-
-            <p className="text-center text-xs text-muted-foreground">
-              An account is optional. You can always book as a guest.
-            </p>
+                <p className="text-center text-xs leading-5 text-muted-foreground">
+                  Creating an account is optional. You can always book without
+                  registration.
+                </p>
+              </div>
+            </section>
           </div>
         </DialogContent>
       </Dialog>
+    </div>
+    </IndustryThemeRoot>
+  );
+}
+
+
+function CustomerBenefit({
+  icon,
+  title,
+  text,
+}: {
+  icon: React.ReactNode;
+  title: string;
+  text: string;
+}) {
+  return (
+    <div className="flex gap-3">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-primary">
+        {icon}
+      </div>
+      <div>
+        <div className="text-sm font-semibold">{title}</div>
+        <p className="mt-1 text-xs leading-5 text-white/55">{text}</p>
+      </div>
     </div>
   );
 }
