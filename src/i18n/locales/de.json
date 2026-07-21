@@ -70,6 +70,7 @@
     "delete": "Löschen",
     "add": "Hinzufügen",
     "loading": "Wird geladen...",
+    "saving": "Speichern…",
     "minutesShort": "Min."
   },
   "language": {
@@ -136,6 +137,405 @@
     "services": "Dienstleistungen",
     "appointment": "Termin",
     "appointments": "Termine"
+  },
+  "dashboard_home": {
+    "greeting": "Guten Tag, {{business}}",
+    "description": "Überwachen Sie den heutigen Betrieb, die Auslastung des Personals und bevorstehende Aktivitäten zentral.",
+    "store_link": "Geschäftslink",
+    "new_appointment": "Neuer Termin",
+    "store_link_copied": "Geschäftslink kopiert",
+    "errors": {
+      "load_failed": "Dashboard konnte nicht geladen werden"
+    },
+    "schedule": {
+      "title": "Heutiger Zeitplan",
+      "description": "Tageskalender mit einer Spalte für jede Fachkraft.",
+      "open_calendar": "Vollständigen Kalender öffnen",
+      "unassigned": "Nicht zugewiesen",
+      "open_column": "Offene Spalte",
+      "no_professionals": "Keine aktiven Fachkräfte",
+      "add_employee_hint": "Fügen Sie einen Mitarbeiter hinzu, um den Tageskalender anzuzeigen.",
+      "time": "Zeit",
+      "professional": "Fachkraft",
+      "break": "Pause",
+      "unavailable": "Nicht verfügbar",
+      "appointment": "Termin",
+      "guest_customer": "Gastkunde",
+      "legend": {
+        "completed": "Abgeschlossen",
+        "in_progress": "In Bearbeitung",
+        "confirmed": "Bestätigt",
+        "other": "Sonstiges",
+        "cancelled": "Storniert",
+        "break": "Pause"
+      }
+    },
+    "metrics": {
+      "today_appointments": "Heutige Termine",
+      "scheduled_this_week": "{{count}} diese Woche geplant",
+      "expected_revenue": "Erwarteter Umsatz",
+      "active_bookings_revenue": "Aus heutigen aktiven Buchungen",
+      "new_customers": "Neue Kunden",
+      "added_this_month": "Diesen Monat hinzugefügt",
+      "active_services": "Aktive Dienstleistungen",
+      "cancellations_this_month": "{{count}} Stornierungen diesen Monat"
+    },
+    "pulse": {
+      "title": "Geschäftsüberblick",
+      "average_booking_value": "Durchschnittlicher Buchungswert",
+      "active_professionals": "Aktive Fachkräfte",
+      "weekly_appointments": "Wöchentliche Termine"
+    },
+    "status": {
+      "title": "Geschäftsstatus",
+      "closed_now": "Derzeit geschlossen",
+      "upcoming_closure": "Bevorstehende Schließung",
+      "manage_closures": "Schließungen verwalten",
+      "open": "Geöffnet",
+      "no_closures": "Keine aktiven oder bevorstehenden Schließungen."
+    },
+    "alerts": {
+      "title": "Heutige Hinweise",
+      "description": "Betriebliche Punkte, die heute Ihre Aufmerksamkeit benötigen.",
+      "none_title": "Heute keine Hinweise",
+      "none_detail": "Termine, Personal und Benachrichtigungen sehen gut aus.",
+      "unread": "{{count}} ungelesene Benachrichtigungen",
+      "unread_detail": "Öffnen Sie die Glocke für neue Termine und Kunden.",
+      "unassigned": "{{count}} nicht zugewiesene Termine",
+      "unassigned_detail": "Weisen Sie vor Beginn eine Fachkraft zu.",
+      "cancelled": "{{count}} Stornierungen heute",
+      "cancelled_detail": "Prüfen Sie den Kalender und füllen Sie freie Zeiten.",
+      "without_break": "{{count}} Fachkräfte ohne Pause",
+      "without_break_detail": "Prüfen Sie den heutigen Personalplan."
+    },
+    "health": {
+      "title": "Geschäftszustand",
+      "occupancy": "Auslastung",
+      "completion_rate": "Abschlussquote",
+      "cancellations": "Stornierungen",
+      "unassigned": "Nicht zugewiesen"
+    }
+  },
+  "notifications": {
+    "title": "Benachrichtigungen",
+    "close": "Benachrichtigungen schließen",
+    "unread_count": "{{count}} ungelesen",
+    "read_all": "Alle lesen",
+    "loading": "Benachrichtigungen werden geladen...",
+    "empty_title": "Noch keine Benachrichtigungen",
+    "empty_description": "Neue Termine und Kunden erscheinen hier.",
+    "just_now": "Gerade eben",
+    "minutes_ago": "vor {{count}} Min.",
+    "hours_ago": "vor {{count}} Std.",
+    "errors": {
+      "load": "Benachrichtigungen konnten nicht geladen werden",
+      "update": "Benachrichtigung konnte nicht aktualisiert werden",
+      "mark_all": "Benachrichtigungen konnten nicht als gelesen markiert werden"
+    },
+    "types": {
+      "new_appointment": {
+        "title": "Neuer Termin",
+        "message": "Ein neuer Termin wurde Ihrem Kalender hinzugefügt."
+      },
+      "new_customer": {
+        "title": "Neuer Kunde",
+        "message": "Ein neuer Kunde wurde Ihrem Geschäft hinzugefügt."
+      }
+    }
+  },
+  "calendar": {
+    "title": "Kalender",
+    "loading": "Kalender wird geladen…",
+    "more": "+{{count}} weitere",
+    "confirmCancel": "Diesen Termin stornieren? Die Zeit wird wieder verfügbar.",
+    "resizeReason": "Adjusted from owner calendar",
+    "views": {
+      "dayGridMonth": "Monat",
+      "timeGridWeek": "Woche",
+      "timeGridDay": "Tag",
+      "listDay": "Tagesdetails"
+    },
+    "filters": {
+      "allProfessionals": "Alle Fachkräfte"
+    },
+    "labels": {
+      "appointment": "Termin",
+      "customer": "Kunde",
+      "professional": "Fachkraft",
+      "services": "Dienstleistungen",
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "dateTime": "Datum & Uhrzeit",
+      "duration": "Dauer",
+      "total": "Gesamt",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "fullName": "Vollständiger Name",
+      "notes": "Notizen",
+      "reason": "Grund",
+      "availableTimes": "Verfügbare Zeiten",
+      "unassigned": "Nicht zugewiesen",
+      "break": "Pause",
+      "closed": "Geschlossen",
+      "notProvided": "Nicht angegeben",
+      "notSelected": "Nicht ausgewählt",
+      "noReference": "Keine Referenz",
+      "noContactDetails": "Keine Kontaktdaten",
+      "bookingReference": "Buchungsreferenz"
+    },
+    "actions": {
+      "today": "Heute",
+      "selectProfessional": "Fachkraft auswählen",
+      "calculating": "Berechnung…",
+      "creating": "Wird erstellt…",
+      "saveCustomer": "Kunde speichern",
+      "createAppointment": "Termin erstellen",
+      "checkIn": "Einchecken",
+      "startService": "Dienstleistung starten",
+      "markCompleted": "Als abgeschlossen markieren",
+      "noShow": "Nicht erschienen",
+      "cancelAppointment": "Termin stornieren"
+    },
+    "newAppointment": {
+      "title": "Neuer Termin",
+      "description": "Füllen Sie die folgenden Schritte aus. Es werden nur gültige Fachkräfte und verfügbare Zeiten angezeigt."
+    },
+    "customerStep": {
+      "description": "Search an existing customer or create a new one.",
+      "searchPlaceholder": "Search by name, email or phone",
+      "noneFound": "No customers found.",
+      "createNew": "Create new customer"
+    },
+    "servicesStep": {
+      "description": "Select one or more compatible services."
+    },
+    "professionalStep": {
+      "description": "Only staff eligible for all selected services appear.",
+      "anyAvailable": "Any available",
+      "autoAssign": "Automatically assign an eligible professional",
+      "available": "Available professional"
+    },
+    "dateStep": {
+      "title": "Date & available time",
+      "description": "Only real available times are displayed.",
+      "loading": "Loading available times…",
+      "businessClosed": "Business closed",
+      "closedMessage": "{{title}}. Choose another date.",
+      "selectServicesFirst": "Select services first.",
+      "noneAvailable": "No available appointments for this selection. Choose another date or professional."
+    },
+    "reviewStep": {
+      "title": "Review",
+      "description": "Confirm the booking details before creating the appointment.",
+      "notesPlaceholder": "Optional notes for this appointment",
+      "summary": "Booking summary"
+    },
+    "delay": {
+      "title": "Create delay",
+      "description": "Delay the selected professional's active appointments from a specific time. Review every affected appointment before applying.",
+      "from": "Delay from",
+      "minutes": "Delay minutes",
+      "customMinutes": "Custom delay in minutes",
+      "reasonPlaceholder": "Optional internal reason",
+      "preview": "Preview affected appointments",
+      "affected": "Affected appointments",
+      "endsAt": "Ends {{time}}",
+      "warning": "All displayed appointments move together. If any appointment would overlap another booking, a break, or working hours, nothing will be changed.",
+      "applying": "Applying delay…",
+      "apply": "Apply {{minutes}} minute delay"
+    },
+    "details": {
+      "title": "Termindetails"
+    },
+    "units": {
+      "minutes": "{{count}} minute",
+      "minutes_plural": "{{count}} minutes"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "arrived": "Checked in",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "cancelled_by_business": "Cancelled by business",
+      "cancelled_by_customer": "Cancelled by customer",
+      "no_show": "No show"
+    },
+    "messages": {
+      "customerCreated": "Customer created",
+      "appointmentCreated": "Appointment {{reference}} created",
+      "checkedIn": "Customer checked in",
+      "serviceStarted": "Service started",
+      "completed": "Appointment marked as completed",
+      "noShow": "Appointment marked as no show",
+      "cancelled": "Appointment cancelled",
+      "confirmed": "Appointment confirmed",
+      "pending": "Appointment moved to pending",
+      "updated": "Appointment updated",
+      "movedTo": "Appointment moved to {{date}}",
+      "durationChanged": "Appointment duration changed to {{minutes}} minutes",
+      "noAffectedAppointments": "No active appointments are affected by this delay",
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+    },
+    "errors": {
+      "loadData": "Failed to load calendar data",
+      "loadCalendar": "Failed to load calendar",
+      "loadAvailability": "Failed to load available times",
+      "customerNameRequired": "Customer name is required",
+      "createCustomer": "Failed to create customer",
+      "requiredBookingDetails": "Complete all required booking details",
+      "businessClosure": "Appointments cannot be created during a business closure",
+      "createAppointment": "Failed to create appointment",
+      "updateAppointment": "Failed to update appointment",
+      "moveRestored": "The appointment could not be moved. It was restored.",
+      "resizeRestored": "The appointment duration could not be changed. It was restored.",
+      "delayRequired": "Select professional, date, start time and delay",
+      "previewDelay": "Failed to preview delay",
+      "previewFirst": "Preview the affected appointments first",
+      "applyDelay": "The delay could not be applied. No appointments were changed."
+    }
+  },
+  "customers": {
+    "eyebrow": "Kundenverwaltung",
+    "title": "Kunden",
+    "description": "Manage registered customer accounts separately from guest booking contacts.",
+    "actions": {
+      "add": "Kunde hinzufügen",
+      "edit": "Edit customer",
+      "remove": "Remove customer",
+      "save": "Kunde speichern"
+    },
+    "summary": {
+      "registeredTitle": "Registered Customers",
+      "registeredDescription": "Customers with an account",
+      "guestTitle": "Guest Contacts",
+      "guestDescription": "Customers who booked as guests",
+      "totalTitle": "Total Customers",
+      "totalDescription": "All customer records"
+    },
+    "tabs": {
+      "customers": "Kunden",
+      "records": "Kundenakten",
+      "history": "Besuchsverlauf"
+    },
+    "recordsDescription": "Open a customer to manage formulas, notes and photos.",
+    "historyDescription": "Open a customer to review previous appointments.",
+    "searchPlaceholder": "Search by name, email or phone",
+    "filters": {
+      "registered": "Registriert",
+      "guests": "Gäste",
+      "all": "Alle"
+    },
+    "table": {
+      "customer": "Customer",
+      "contact": "Contact Details",
+      "type": "Customer Type",
+      "added": "Added",
+      "actions": "Actions"
+    },
+    "states": {
+      "loading": "Kunden werden geladen…",
+      "empty": "Keine Kunden gefunden.",
+      "emptyCategory": "No customers found in this category."
+    },
+    "types": {
+      "registered": "Registriert",
+      "guest": "Gast"
+    },
+    "counts": {
+      "records": "records",
+      "visits": "visits"
+    },
+    "noContactDetails": "No contact details",
+    "noEmail": "No email",
+    "noPhone": "No phone",
+    "addedOn": "Added {{date}}",
+    "dialog": {
+      "editTitle": "Edit Customer",
+      "addTitle": "Kunde hinzufügen"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "notes": "Internal Notes",
+      "manualCustomerNote": "Customers created manually by the owner are stored as guest contacts. A customer becomes registered only after creating and linking an authentication account."
+    },
+    "validation": {
+      "nameRequired": "Name is required"
+    },
+    "confirmRemoveRegistered": "Remove this customer profile from the store? Their authentication account will not be deleted.",
+    "confirmRemoveGuest": "Remove this guest customer? Existing appointment history may prevent deletion.",
+    "toasts": {
+      "loadError": "Failed to load customers",
+      "updated": "Customer updated",
+      "added": "Customer added",
+      "saveError": "Failed to save customer",
+      "removed": "Customer removed",
+      "removeBlocked": "This customer cannot be removed because appointment history exists"
+    }
+  },
+  "customerProfile": {
+    "back": "Zurück zu Kunden",
+    "actions": {
+      "newRecord": "Neuer Eintrag",
+      "saveRecord": "Save Record"
+    },
+    "stats": {
+      "completedVisits": "Completed visits",
+      "totalSpend": "Total spend",
+      "cancellations": "Cancellations",
+      "noShows": "No shows"
+    },
+    "customerNotes": "Customer notes",
+    "noCustomerNotes": "No customer notes",
+    "tabs": {
+      "records": "Records ({{count}})",
+      "history": "Visit History ({{count}})"
+    },
+    "states": {
+      "loading": "Loading customer profile…",
+      "notFound": "Customer not found.",
+      "noRecords": "No customer records yet",
+      "noRecordsDescription": "Create the first formula, note or customer photo.",
+      "noHistory": "Kein Terminverlauf"
+    },
+    "dialog": {
+      "editTitle": "Edit Customer Record",
+      "newTitle": "New Customer Record"
+    },
+    "form": {
+      "recordType": "Record Type",
+      "title": "Title",
+      "formula": "Formula",
+      "formulaPlaceholder": "e.g. 8.13 + 7.1, 20 vol, 35 min",
+      "notes": "Notes",
+      "photo": "Photo"
+    },
+    "recordTypes": {
+      "formula": "Formula",
+      "generalNote": "General Note",
+      "allergy": "Allergy / Sensitivity",
+      "preferredStyle": "Preferred Style",
+      "product": "Product Used",
+      "consultation": "Consultation",
+      "beforeAfter": "Before / After",
+      "other": "Other"
+    },
+    "appointment": "Appointment",
+    "unassignedProfessional": "Unassigned professional",
+    "validation": {
+      "titleRequired": "Record title is required"
+    },
+    "confirmDeleteRecord": "Delete this customer record?",
+    "toasts": {
+      "loadError": "Failed to load customer profile",
+      "recordUpdated": "Record updated",
+      "recordCreated": "Record created",
+      "saveError": "Failed to save record",
+      "recordDeleted": "Record deleted",
+      "deleteError": "Failed to delete record"
+    }
   },
   "staff": {
     "eyebrow": "Teamverwaltung",
@@ -259,6 +659,84 @@
       "saveFailed": "Mitarbeiter konnte nicht gespeichert werden",
       "removed": "Mitarbeiter wurde entfernt",
       "removeFailed": "Mitarbeiter konnte nicht entfernt werden"
+    }
+  },
+  "services": {
+    "eyebrow": "Dienstleistungskatalog",
+    "title": "Dienstleistungen",
+    "description": "Preise, Dauer, Kategorien und Sichtbarkeit für Online-Buchungen verwalten.",
+    "actions": {
+      "add": "Dienstleistung hinzufügen",
+      "edit": "Dienstleistung bearbeiten",
+      "remove": "Dienstleistung entfernen",
+      "save": "Dienstleistung speichern"
+    },
+    "summary": {
+      "active": {
+        "title": "Aktive Dienstleistungen",
+        "description": "Für Ihr Team verfügbar"
+      },
+      "online": {
+        "title": "Online-Buchung",
+        "description": "Für Kunden sichtbar"
+      },
+      "averagePrice": {
+        "title": "Durchschnittspreis",
+        "description": "Über alle Dienstleistungen"
+      }
+    },
+    "search": {
+      "placeholder": "Dienstleistungen oder Kategorien suchen"
+    },
+    "filters": {
+      "allCategories": "Alle Kategorien",
+      "all": "Alle",
+      "active": "Aktiv",
+      "online": "Online",
+      "inactive": "Inaktiv"
+    },
+    "states": {
+      "loading": "Dienstleistungen werden geladen...",
+      "emptyTitle": "Keine Dienstleistungen gefunden",
+      "emptyDescription": "Passen Sie die Filter an oder erstellen Sie eine neue Dienstleistung."
+    },
+    "labels": {
+      "uncategorized": "Ohne Kategorie",
+      "durationMinutes": "{{count}} Minuten"
+    },
+    "dialog": {
+      "editTitle": "Dienstleistung bearbeiten",
+      "addTitle": "Neue Dienstleistung hinzufügen",
+      "detailsTitle": "Dienstleistungsdetails",
+      "detailsDescription": "Definieren Sie die Dienstleistung, die Kunden in der Preisliste sehen."
+    },
+    "fields": {
+      "name": "Name der Dienstleistung",
+      "price": "Preis (€)",
+      "duration": "Dauer (Minuten)",
+      "category": "Kategorie",
+      "noCategory": "Keine Kategorie",
+      "description": "Beschreibung",
+      "activeStatus": "Aktivstatus",
+      "activeHelp": "Aktive Dienstleistungen können Mitarbeitern zugewiesen werden.",
+      "onlineBooking": "Online-Buchung",
+      "onlineHelp": "Diese Dienstleistung im Buchungsablauf für Kunden anzeigen."
+    },
+    "validation": {
+      "required": "Bitte füllen Sie alle Pflichtfelder aus",
+      "price": "Geben Sie einen gültigen Preis ein",
+      "duration": "Geben Sie eine gültige Dauer in Minuten ein"
+    },
+    "messages": {
+      "loadError": "Dienstleistungen konnten nicht geladen werden",
+      "updated": "Dienstleistung aktualisiert",
+      "created": "Dienstleistung erstellt",
+      "saveError": "Dienstleistung konnte nicht gespeichert werden",
+      "removed": "Dienstleistung entfernt",
+      "deleteBlocked": "Diese Dienstleistung kann wegen vorhandener Terminhistorie nicht entfernt werden"
+    },
+    "delete": {
+      "confirm": "„{{name}}“ entfernen? Vorhandene Terminhistorie kann eine dauerhafte Löschung verhindern."
     }
   }
 }

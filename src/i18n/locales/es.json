@@ -70,6 +70,7 @@
     "delete": "Eliminar",
     "add": "Añadir",
     "loading": "Cargando...",
+    "saving": "Guardando…",
     "minutesShort": "min"
   },
   "language": {
@@ -136,6 +137,405 @@
     "services": "Servicios",
     "appointment": "Cita",
     "appointments": "Citas"
+  },
+  "dashboard_home": {
+    "greeting": "Buen día, {{business}}",
+    "description": "Supervisa la operación de hoy, la carga del personal y la próxima actividad del negocio desde un solo lugar.",
+    "store_link": "Enlace de la tienda",
+    "new_appointment": "Nueva cita",
+    "store_link_copied": "Enlace de la tienda copiado",
+    "errors": {
+      "load_failed": "No se pudo cargar el panel"
+    },
+    "schedule": {
+      "title": "Agenda de hoy",
+      "description": "Calendario diario dividido en columnas para cada profesional.",
+      "open_calendar": "Abrir calendario completo",
+      "unassigned": "Sin asignar",
+      "open_column": "Columna abierta",
+      "no_professionals": "No hay profesionales activos",
+      "add_employee_hint": "Añade un empleado para mostrar el calendario diario.",
+      "time": "Hora",
+      "professional": "Profesional",
+      "break": "Descanso",
+      "unavailable": "No disponible",
+      "appointment": "Cita",
+      "guest_customer": "Cliente invitado",
+      "legend": {
+        "completed": "Completada",
+        "in_progress": "En curso",
+        "confirmed": "Confirmada",
+        "other": "Otra",
+        "cancelled": "Cancelada",
+        "break": "Descanso"
+      }
+    },
+    "metrics": {
+      "today_appointments": "Citas de hoy",
+      "scheduled_this_week": "{{count}} programadas esta semana",
+      "expected_revenue": "Ingresos esperados",
+      "active_bookings_revenue": "De las reservas activas de hoy",
+      "new_customers": "Nuevos clientes",
+      "added_this_month": "Añadidos este mes",
+      "active_services": "Servicios activos",
+      "cancellations_this_month": "{{count}} cancelaciones este mes"
+    },
+    "pulse": {
+      "title": "Pulso del negocio",
+      "average_booking_value": "Valor medio de reserva",
+      "active_professionals": "Profesionales activos",
+      "weekly_appointments": "Citas semanales"
+    },
+    "status": {
+      "title": "Estado del negocio",
+      "closed_now": "Cerrado ahora",
+      "upcoming_closure": "Próximo cierre",
+      "manage_closures": "Gestionar cierres",
+      "open": "Abierto",
+      "no_closures": "No hay cierres activos ni próximos."
+    },
+    "alerts": {
+      "title": "Alertas de hoy",
+      "description": "Elementos operativos que requieren tu atención hoy.",
+      "none_title": "Sin alertas hoy",
+      "none_detail": "Tus citas, personal y notificaciones están en buen estado.",
+      "unread": "{{count}} notificaciones sin leer",
+      "unread_detail": "Abre la campana para revisar nuevas citas y clientes.",
+      "unassigned": "{{count}} citas sin asignar",
+      "unassigned_detail": "Asigna un profesional antes de que comience la cita.",
+      "cancelled": "{{count}} cancelaciones hoy",
+      "cancelled_detail": "Revisa el calendario y ocupa el tiempo disponible.",
+      "without_break": "{{count}} profesionales sin descanso",
+      "without_break_detail": "Revisa el horario del personal de hoy."
+    },
+    "health": {
+      "title": "Salud del negocio",
+      "occupancy": "Ocupación",
+      "completion_rate": "Tasa de finalización",
+      "cancellations": "Cancelaciones",
+      "unassigned": "Sin asignar"
+    }
+  },
+  "notifications": {
+    "title": "Notificaciones",
+    "close": "Cerrar notificaciones",
+    "unread_count": "{{count}} sin leer",
+    "read_all": "Leer todas",
+    "loading": "Cargando notificaciones...",
+    "empty_title": "Aún no hay notificaciones",
+    "empty_description": "Las nuevas citas y clientes aparecerán aquí.",
+    "just_now": "Ahora mismo",
+    "minutes_ago": "hace {{count}} min",
+    "hours_ago": "hace {{count}} h",
+    "errors": {
+      "load": "No se pudieron cargar las notificaciones",
+      "update": "No se pudo actualizar la notificación",
+      "mark_all": "No se pudieron marcar como leídas"
+    },
+    "types": {
+      "new_appointment": {
+        "title": "Nueva cita",
+        "message": "Se añadió una nueva cita a tu calendario."
+      },
+      "new_customer": {
+        "title": "Nuevo cliente",
+        "message": "Se añadió un nuevo cliente a tu negocio."
+      }
+    }
+  },
+  "calendar": {
+    "title": "Calendario",
+    "loading": "Cargando calendario…",
+    "more": "+{{count}} más",
+    "confirmCancel": "¿Cancelar esta cita? La hora volverá a estar disponible.",
+    "resizeReason": "Adjusted from owner calendar",
+    "views": {
+      "dayGridMonth": "Mes",
+      "timeGridWeek": "Semana",
+      "timeGridDay": "Día",
+      "listDay": "Detalles diarios"
+    },
+    "filters": {
+      "allProfessionals": "Todos los profesionales"
+    },
+    "labels": {
+      "appointment": "Cita",
+      "customer": "Cliente",
+      "professional": "Profesional",
+      "services": "Servicios",
+      "date": "Fecha",
+      "time": "Hora",
+      "dateTime": "Fecha y hora",
+      "duration": "Duración",
+      "total": "Total",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "fullName": "Nombre completo",
+      "notes": "Notas",
+      "reason": "Motivo",
+      "availableTimes": "Horas disponibles",
+      "unassigned": "Sin asignar",
+      "break": "Descanso",
+      "closed": "Cerrado",
+      "notProvided": "No proporcionado",
+      "notSelected": "No seleccionado",
+      "noReference": "Sin referencia",
+      "noContactDetails": "Sin datos de contacto",
+      "bookingReference": "Referencia de reserva"
+    },
+    "actions": {
+      "today": "Hoy",
+      "selectProfessional": "Seleccionar profesional",
+      "calculating": "Calculando…",
+      "creating": "Creando…",
+      "saveCustomer": "Guardar cliente",
+      "createAppointment": "Crear cita",
+      "checkIn": "Registrar llegada",
+      "startService": "Iniciar servicio",
+      "markCompleted": "Marcar completada",
+      "noShow": "No asistió",
+      "cancelAppointment": "Cancelar cita"
+    },
+    "newAppointment": {
+      "title": "Nueva cita",
+      "description": "Complete los siguientes pasos. Solo se muestran profesionales válidos y horarios disponibles."
+    },
+    "customerStep": {
+      "description": "Search an existing customer or create a new one.",
+      "searchPlaceholder": "Search by name, email or phone",
+      "noneFound": "No customers found.",
+      "createNew": "Create new customer"
+    },
+    "servicesStep": {
+      "description": "Select one or more compatible services."
+    },
+    "professionalStep": {
+      "description": "Only staff eligible for all selected services appear.",
+      "anyAvailable": "Any available",
+      "autoAssign": "Automatically assign an eligible professional",
+      "available": "Available professional"
+    },
+    "dateStep": {
+      "title": "Date & available time",
+      "description": "Only real available times are displayed.",
+      "loading": "Loading available times…",
+      "businessClosed": "Business closed",
+      "closedMessage": "{{title}}. Choose another date.",
+      "selectServicesFirst": "Select services first.",
+      "noneAvailable": "No available appointments for this selection. Choose another date or professional."
+    },
+    "reviewStep": {
+      "title": "Review",
+      "description": "Confirm the booking details before creating the appointment.",
+      "notesPlaceholder": "Optional notes for this appointment",
+      "summary": "Booking summary"
+    },
+    "delay": {
+      "title": "Create delay",
+      "description": "Delay the selected professional's active appointments from a specific time. Review every affected appointment before applying.",
+      "from": "Delay from",
+      "minutes": "Delay minutes",
+      "customMinutes": "Custom delay in minutes",
+      "reasonPlaceholder": "Optional internal reason",
+      "preview": "Preview affected appointments",
+      "affected": "Affected appointments",
+      "endsAt": "Ends {{time}}",
+      "warning": "All displayed appointments move together. If any appointment would overlap another booking, a break, or working hours, nothing will be changed.",
+      "applying": "Applying delay…",
+      "apply": "Apply {{minutes}} minute delay"
+    },
+    "details": {
+      "title": "Detalles de la cita"
+    },
+    "units": {
+      "minutes": "{{count}} minute",
+      "minutes_plural": "{{count}} minutes"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "arrived": "Checked in",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "cancelled_by_business": "Cancelled by business",
+      "cancelled_by_customer": "Cancelled by customer",
+      "no_show": "No show"
+    },
+    "messages": {
+      "customerCreated": "Customer created",
+      "appointmentCreated": "Appointment {{reference}} created",
+      "checkedIn": "Customer checked in",
+      "serviceStarted": "Service started",
+      "completed": "Appointment marked as completed",
+      "noShow": "Appointment marked as no show",
+      "cancelled": "Appointment cancelled",
+      "confirmed": "Appointment confirmed",
+      "pending": "Appointment moved to pending",
+      "updated": "Appointment updated",
+      "movedTo": "Appointment moved to {{date}}",
+      "durationChanged": "Appointment duration changed to {{minutes}} minutes",
+      "noAffectedAppointments": "No active appointments are affected by this delay",
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+    },
+    "errors": {
+      "loadData": "Failed to load calendar data",
+      "loadCalendar": "Failed to load calendar",
+      "loadAvailability": "Failed to load available times",
+      "customerNameRequired": "Customer name is required",
+      "createCustomer": "Failed to create customer",
+      "requiredBookingDetails": "Complete all required booking details",
+      "businessClosure": "Appointments cannot be created during a business closure",
+      "createAppointment": "Failed to create appointment",
+      "updateAppointment": "Failed to update appointment",
+      "moveRestored": "The appointment could not be moved. It was restored.",
+      "resizeRestored": "The appointment duration could not be changed. It was restored.",
+      "delayRequired": "Select professional, date, start time and delay",
+      "previewDelay": "Failed to preview delay",
+      "previewFirst": "Preview the affected appointments first",
+      "applyDelay": "The delay could not be applied. No appointments were changed."
+    }
+  },
+  "customers": {
+    "eyebrow": "Gestión de clientes",
+    "title": "Clientes",
+    "description": "Manage registered customer accounts separately from guest booking contacts.",
+    "actions": {
+      "add": "Añadir cliente",
+      "edit": "Edit customer",
+      "remove": "Remove customer",
+      "save": "Guardar cliente"
+    },
+    "summary": {
+      "registeredTitle": "Registered Customers",
+      "registeredDescription": "Customers with an account",
+      "guestTitle": "Guest Contacts",
+      "guestDescription": "Customers who booked as guests",
+      "totalTitle": "Total Customers",
+      "totalDescription": "All customer records"
+    },
+    "tabs": {
+      "customers": "Clientes",
+      "records": "Registros de clientes",
+      "history": "Historial de visitas"
+    },
+    "recordsDescription": "Open a customer to manage formulas, notes and photos.",
+    "historyDescription": "Open a customer to review previous appointments.",
+    "searchPlaceholder": "Search by name, email or phone",
+    "filters": {
+      "registered": "Registrado",
+      "guests": "Invitados",
+      "all": "Todos"
+    },
+    "table": {
+      "customer": "Customer",
+      "contact": "Contact Details",
+      "type": "Customer Type",
+      "added": "Added",
+      "actions": "Actions"
+    },
+    "states": {
+      "loading": "Cargando clientes…",
+      "empty": "No se encontraron clientes.",
+      "emptyCategory": "No customers found in this category."
+    },
+    "types": {
+      "registered": "Registrado",
+      "guest": "Invitado"
+    },
+    "counts": {
+      "records": "records",
+      "visits": "visits"
+    },
+    "noContactDetails": "No contact details",
+    "noEmail": "No email",
+    "noPhone": "No phone",
+    "addedOn": "Added {{date}}",
+    "dialog": {
+      "editTitle": "Edit Customer",
+      "addTitle": "Añadir cliente"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "notes": "Internal Notes",
+      "manualCustomerNote": "Customers created manually by the owner are stored as guest contacts. A customer becomes registered only after creating and linking an authentication account."
+    },
+    "validation": {
+      "nameRequired": "Name is required"
+    },
+    "confirmRemoveRegistered": "Remove this customer profile from the store? Their authentication account will not be deleted.",
+    "confirmRemoveGuest": "Remove this guest customer? Existing appointment history may prevent deletion.",
+    "toasts": {
+      "loadError": "Failed to load customers",
+      "updated": "Customer updated",
+      "added": "Customer added",
+      "saveError": "Failed to save customer",
+      "removed": "Customer removed",
+      "removeBlocked": "This customer cannot be removed because appointment history exists"
+    }
+  },
+  "customerProfile": {
+    "back": "Volver a clientes",
+    "actions": {
+      "newRecord": "Nuevo registro",
+      "saveRecord": "Save Record"
+    },
+    "stats": {
+      "completedVisits": "Completed visits",
+      "totalSpend": "Total spend",
+      "cancellations": "Cancellations",
+      "noShows": "No shows"
+    },
+    "customerNotes": "Customer notes",
+    "noCustomerNotes": "No customer notes",
+    "tabs": {
+      "records": "Records ({{count}})",
+      "history": "Visit History ({{count}})"
+    },
+    "states": {
+      "loading": "Loading customer profile…",
+      "notFound": "Customer not found.",
+      "noRecords": "No customer records yet",
+      "noRecordsDescription": "Create the first formula, note or customer photo.",
+      "noHistory": "Sin historial de citas"
+    },
+    "dialog": {
+      "editTitle": "Edit Customer Record",
+      "newTitle": "New Customer Record"
+    },
+    "form": {
+      "recordType": "Record Type",
+      "title": "Title",
+      "formula": "Formula",
+      "formulaPlaceholder": "e.g. 8.13 + 7.1, 20 vol, 35 min",
+      "notes": "Notes",
+      "photo": "Photo"
+    },
+    "recordTypes": {
+      "formula": "Formula",
+      "generalNote": "General Note",
+      "allergy": "Allergy / Sensitivity",
+      "preferredStyle": "Preferred Style",
+      "product": "Product Used",
+      "consultation": "Consultation",
+      "beforeAfter": "Before / After",
+      "other": "Other"
+    },
+    "appointment": "Appointment",
+    "unassignedProfessional": "Unassigned professional",
+    "validation": {
+      "titleRequired": "Record title is required"
+    },
+    "confirmDeleteRecord": "Delete this customer record?",
+    "toasts": {
+      "loadError": "Failed to load customer profile",
+      "recordUpdated": "Record updated",
+      "recordCreated": "Record created",
+      "saveError": "Failed to save record",
+      "recordDeleted": "Record deleted",
+      "deleteError": "Failed to delete record"
+    }
   },
   "staff": {
     "eyebrow": "Gestión del equipo",
@@ -259,6 +659,84 @@
       "saveFailed": "No se pudo guardar el miembro",
       "removed": "Miembro eliminado",
       "removeFailed": "No se pudo eliminar el miembro"
+    }
+  },
+  "services": {
+    "eyebrow": "Catálogo de servicios",
+    "title": "Servicios",
+    "description": "Gestiona precios, duración, categorías y visibilidad de reservas online.",
+    "actions": {
+      "add": "Añadir servicio",
+      "edit": "Editar servicio",
+      "remove": "Eliminar servicio",
+      "save": "Guardar servicio"
+    },
+    "summary": {
+      "active": {
+        "title": "Servicios activos",
+        "description": "Disponibles para tu equipo"
+      },
+      "online": {
+        "title": "Reserva online",
+        "description": "Visibles para los clientes"
+      },
+      "averagePrice": {
+        "title": "Precio medio",
+        "description": "En todos los servicios"
+      }
+    },
+    "search": {
+      "placeholder": "Buscar servicios o categorías"
+    },
+    "filters": {
+      "allCategories": "Todas las categorías",
+      "all": "Todos",
+      "active": "Activos",
+      "online": "Online",
+      "inactive": "Inactivos"
+    },
+    "states": {
+      "loading": "Cargando servicios...",
+      "emptyTitle": "No se encontraron servicios",
+      "emptyDescription": "Ajusta los filtros o crea un nuevo servicio."
+    },
+    "labels": {
+      "uncategorized": "Sin categoría",
+      "durationMinutes": "{{count}} minutos"
+    },
+    "dialog": {
+      "editTitle": "Editar servicio",
+      "addTitle": "Añadir nuevo servicio",
+      "detailsTitle": "Detalles del servicio",
+      "detailsDescription": "Define el servicio que los clientes verán en la lista de precios."
+    },
+    "fields": {
+      "name": "Nombre del servicio",
+      "price": "Precio (€)",
+      "duration": "Duración (minutos)",
+      "category": "Categoría",
+      "noCategory": "Sin categoría",
+      "description": "Descripción",
+      "activeStatus": "Estado activo",
+      "activeHelp": "Los servicios activos pueden asignarse al personal.",
+      "onlineBooking": "Reserva online",
+      "onlineHelp": "Mostrar este servicio en el flujo de reservas del cliente."
+    },
+    "validation": {
+      "required": "Completa todos los campos obligatorios",
+      "price": "Introduce un precio válido",
+      "duration": "Introduce una duración válida en minutos"
+    },
+    "messages": {
+      "loadError": "No se pudieron cargar los servicios",
+      "updated": "Servicio actualizado",
+      "created": "Servicio creado",
+      "saveError": "No se pudo guardar el servicio",
+      "removed": "Servicio eliminado",
+      "deleteBlocked": "Este servicio no puede eliminarse porque existe historial de citas"
+    },
+    "delete": {
+      "confirm": "¿Eliminar “{{name}}”? El historial de citas existente puede impedir la eliminación permanente."
     }
   }
 }

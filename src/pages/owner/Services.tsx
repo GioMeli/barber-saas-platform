@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
@@ -40,6 +41,7 @@ const EMPTY_FORM = {
 };
 
 export default function Services() {
+  const { t } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -84,7 +86,7 @@ export default function Services() {
       setCategories(categoriesRes.data ?? []);
     } catch (error) {
       console.error('Error fetching services:', error);
-      toast.error('Failed to load services');
+      toast.error(t('services.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -156,7 +158,7 @@ export default function Services() {
       !formData.price ||
       !formData.duration
     ) {
-      toast.error('Please fill all required fields');
+      toast.error(t('services.validation.required'));
       return;
     }
 
@@ -164,12 +166,12 @@ export default function Services() {
     const duration = Number(formData.duration);
 
     if (!Number.isFinite(price) || price < 0) {
-      toast.error('Enter a valid service price');
+      toast.error(t('services.validation.price'));
       return;
     }
 
     if (!Number.isInteger(duration) || duration <= 0) {
-      toast.error('Enter a valid duration in minutes');
+      toast.error(t('services.validation.duration'));
       return;
     }
 
@@ -196,18 +198,18 @@ export default function Services() {
           .eq('business_id', businessId);
 
         if (error) throw error;
-        toast.success('Service updated');
+        toast.success(t('services.messages.updated'));
       } else {
         const { error } = await supabase.from('services').insert(payload);
 
         if (error) throw error;
-        toast.success('Service created');
+        toast.success(t('services.messages.created'));
       }
 
       setIsDialogOpen(false);
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save service');
+      toast.error(error.message || t('services.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -215,7 +217,7 @@ export default function Services() {
 
   const handleDelete = async (service: any) => {
     const confirmed = window.confirm(
-      `Remove "${service.name}"? Existing appointment history may prevent permanent deletion.`
+      t('services.delete.confirm', { name: service.name })
     );
 
     if (!confirmed) return;
@@ -229,12 +231,12 @@ export default function Services() {
 
       if (error) throw error;
 
-      toast.success('Service removed');
+      toast.success(t('services.messages.removed'));
       await fetchData();
     } catch (error: any) {
       toast.error(
         error.message ||
-          'This service cannot be removed because appointment history exists'
+          t('services.messages.deleteBlocked')
       );
     }
   };
@@ -244,37 +246,37 @@ export default function Services() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Service catalogue
+            {t('services.eyebrow')}
           </div>
-          <h1 className="app-page-title">Services</h1>
+          <h1 className="app-page-title">{t('services.title')}</h1>
           <p className="app-page-description">
-            Manage pricing, duration, categories and online booking visibility.
+            {t('services.description')}
           </p>
         </div>
 
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Service
+          {t('services.actions.add')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
-          title="Active Services"
+          title={t('services.summary.active.title')}
           value={activeCount}
-          description="Available to your team"
+          description={t('services.summary.active.description')}
           icon={<Scissors className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Online Booking"
+          title={t('services.summary.online.title')}
           value={onlineCount}
-          description="Visible to customers"
+          description={t('services.summary.online.description')}
           icon={<Wifi className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Average Price"
+          title={t('services.summary.averagePrice.title')}
           value={`€${averagePrice.toFixed(2)}`}
-          description="Across all services"
+          description={t('services.summary.averagePrice.description')}
           icon={<Euro className="h-5 w-5" />}
         />
       </section>
@@ -286,7 +288,7 @@ export default function Services() {
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 className="h-11 rounded-xl pl-9"
-                placeholder="Search services or categories"
+                placeholder={t('services.search.placeholder')}
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -297,7 +299,7 @@ export default function Services() {
               onChange={(event) => setSelectedCategory(event.target.value)}
               className="h-11 rounded-xl border bg-card px-3 text-sm"
             >
-              <option value="all">All categories</option>
+              <option value="all">{t('services.filters.allCategories')}</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -307,10 +309,10 @@ export default function Services() {
 
             <div className="scrollbar-subtle flex gap-2 overflow-x-auto">
               {([
-                ['all', 'All'],
-                ['active', 'Active'],
-                ['online', 'Online'],
-                ['inactive', 'Inactive'],
+                ['all', t('services.filters.all')],
+                ['active', t('services.filters.active')],
+                ['online', t('services.filters.online')],
+                ['inactive', t('services.filters.inactive')],
               ] as const).map(([value, label]) => (
                 <button
                   key={value}
@@ -332,19 +334,19 @@ export default function Services() {
         <CardContent className="p-0">
           {loading ? (
             <div className="p-12 text-center text-muted-foreground">
-              Loading services...
+              {t('services.states.loading')}
             </div>
           ) : filteredServices.length === 0 ? (
             <div className="flex min-h-[320px] flex-col items-center justify-center px-6 text-center">
               <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
                 <Scissors className="h-7 w-7 text-muted-foreground" />
               </div>
-              <h3 className="mt-4 font-bold">No services found</h3>
+              <h3 className="mt-4 font-bold">{t('services.states.emptyTitle')}</h3>
               <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-                Adjust the filters or create a new service.
+                {t('services.states.emptyDescription')}
               </p>
               <Button className="mt-5" onClick={() => handleOpenDialog()}>
-                Add Service
+                {t('services.actions.add')}
               </Button>
             </div>
           ) : (
@@ -358,7 +360,7 @@ export default function Services() {
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="truncate font-semibold">{service.name}</h3>
                       <Badge variant="outline">
-                        {service.service_categories?.name || 'Uncategorized'}
+                        {service.service_categories?.name || t('services.labels.uncategorized')}
                       </Badge>
                     </div>
 
@@ -371,7 +373,7 @@ export default function Services() {
 
                   <div className="flex items-center gap-2 text-sm">
                     <Clock3 className="h-4 w-4 text-muted-foreground" />
-                    <span>{service.duration} minutes</span>
+                    <span>{t('services.labels.durationMinutes', { count: service.duration })}</span>
                   </div>
 
                   <div className="text-lg font-bold">
@@ -382,7 +384,7 @@ export default function Services() {
                     <Badge
                       variant={service.is_active ? 'default' : 'secondary'}
                     >
-                      {service.is_active ? 'Active' : 'Inactive'}
+                      {service.is_active ? t('services.filters.active') : t('services.filters.inactive')}
                     </Badge>
 
                     {service.online_booking_enabled && (
@@ -390,7 +392,7 @@ export default function Services() {
                         variant="outline"
                         className="border-blue-200 bg-blue-50 text-blue-700"
                       >
-                        Online
+                        {t('services.filters.online')}
                       </Badge>
                     )}
                   </div>
@@ -400,6 +402,7 @@ export default function Services() {
                       variant="ghost"
                       size="icon"
                       onClick={() => handleOpenDialog(service)}
+                      aria-label={t('services.actions.edit')}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -408,6 +411,7 @@ export default function Services() {
                       variant="ghost"
                       size="icon"
                       onClick={() => void handleDelete(service)}
+                      aria-label={t('services.actions.remove')}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
@@ -423,22 +427,22 @@ export default function Services() {
         <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              {editingId ? 'Edit Service' : 'Add New Service'}
+              {editingId ? t('services.dialog.editTitle') : t('services.dialog.addTitle')}
             </DialogTitle>
           </DialogHeader>
 
           <div className="space-y-7 py-4">
             <section className="space-y-4">
               <div>
-                <h3 className="font-semibold">Service Details</h3>
+                <h3 className="font-semibold">{t('services.dialog.detailsTitle')}</h3>
                 <p className="text-sm text-muted-foreground">
-                  Define the service customers will see in the price list.
+                  {t('services.dialog.detailsDescription')}
                 </p>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2 sm:col-span-2">
-                  <Label htmlFor="name">Service Name *</Label>
+                  <Label htmlFor="name">{t('services.fields.name')} *</Label>
                   <Input
                     id="name"
                     className="h-11 rounded-xl"
@@ -450,7 +454,7 @@ export default function Services() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="price">Price (€) *</Label>
+                  <Label htmlFor="price">{t('services.fields.price')} *</Label>
                   <Input
                     id="price"
                     type="number"
@@ -465,7 +469,7 @@ export default function Services() {
                 </div>
 
                 <div className="grid gap-2">
-                  <Label htmlFor="duration">Duration (minutes) *</Label>
+                  <Label htmlFor="duration">{t('services.fields.duration')} *</Label>
                   <Input
                     id="duration"
                     type="number"
@@ -483,7 +487,7 @@ export default function Services() {
                 </div>
 
                 <div className="grid gap-2 sm:col-span-2">
-                  <Label htmlFor="category">Category</Label>
+                  <Label htmlFor="category">{t('services.fields.category')}</Label>
                   <select
                     id="category"
                     className="h-11 w-full rounded-xl border bg-background px-3 text-sm"
@@ -495,7 +499,7 @@ export default function Services() {
                       })
                     }
                   >
-                    <option value="">No Category</option>
+                    <option value="">{t('services.fields.noCategory')}</option>
                     {categories.map((category) => (
                       <option key={category.id} value={category.id}>
                         {category.name}
@@ -505,7 +509,7 @@ export default function Services() {
                 </div>
 
                 <div className="grid gap-2 sm:col-span-2">
-                  <Label htmlFor="description">Description</Label>
+                  <Label htmlFor="description">{t('services.fields.description')}</Label>
                   <Textarea
                     id="description"
                     rows={4}
@@ -525,9 +529,9 @@ export default function Services() {
             <section className="space-y-3 border-t pt-6">
               <div className="flex items-center justify-between rounded-2xl border p-4">
                 <div>
-                  <Label>Active Status</Label>
+                  <Label>{t('services.fields.activeStatus')}</Label>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Active services can be assigned to staff.
+                    {t('services.fields.activeHelp')}
                   </p>
                 </div>
                 <Switch
@@ -540,9 +544,9 @@ export default function Services() {
 
               <div className="flex items-center justify-between rounded-2xl border p-4">
                 <div>
-                  <Label>Online Booking</Label>
+                  <Label>{t('services.fields.onlineBooking')}</Label>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Show this service in the customer booking flow.
+                    {t('services.fields.onlineHelp')}
                   </p>
                 </div>
                 <Switch
@@ -564,10 +568,10 @@ export default function Services() {
               disabled={saving}
               onClick={() => setIsDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button disabled={saving} onClick={() => void handleSave()}>
-              {saving ? 'Saving...' : 'Save Service'}
+              {saving ? t('common.saving') : t('services.actions.save')}
             </Button>
           </DialogFooter>
         </DialogContent>

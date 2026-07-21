@@ -70,6 +70,7 @@
     "delete": "Sil",
     "add": "Ekle",
     "loading": "Yükleniyor...",
+    "saving": "Kaydediliyor…",
     "minutesShort": "dk"
   },
   "language": {
@@ -136,6 +137,405 @@
     "services": "Hizmetler",
     "appointment": "Randevu",
     "appointments": "Randevular"
+  },
+  "dashboard_home": {
+    "greeting": "İyi günler, {{business}}",
+    "description": "Bugünkü işleyişi, personel iş yükünü ve yaklaşan faaliyetleri tek bir alandan izleyin.",
+    "store_link": "Mağaza bağlantısı",
+    "new_appointment": "Yeni randevu",
+    "store_link_copied": "Mağaza bağlantısı kopyalandı",
+    "errors": {
+      "load_failed": "Kontrol paneli yüklenemedi"
+    },
+    "schedule": {
+      "title": "Bugünün programı",
+      "description": "Her uzman için ayrı sütunlara bölünmüş günlük takvim.",
+      "open_calendar": "Tam takvimi aç",
+      "unassigned": "Atanmamış",
+      "open_column": "Açık sütun",
+      "no_professionals": "Aktif uzman yok",
+      "add_employee_hint": "Günlük personel takvimini göstermek için çalışan ekleyin.",
+      "time": "Saat",
+      "professional": "Uzman",
+      "break": "Mola",
+      "unavailable": "Uygun değil",
+      "appointment": "Randevu",
+      "guest_customer": "Misafir müşteri",
+      "legend": {
+        "completed": "Tamamlandı",
+        "in_progress": "Devam ediyor",
+        "confirmed": "Onaylandı",
+        "other": "Diğer",
+        "cancelled": "İptal edildi",
+        "break": "Mola"
+      }
+    },
+    "metrics": {
+      "today_appointments": "Bugünkü randevular",
+      "scheduled_this_week": "Bu hafta {{count}} randevu",
+      "expected_revenue": "Beklenen gelir",
+      "active_bookings_revenue": "Bugünkü aktif rezervasyonlardan",
+      "new_customers": "Yeni müşteriler",
+      "added_this_month": "Bu ay eklendi",
+      "active_services": "Aktif hizmetler",
+      "cancellations_this_month": "Bu ay {{count}} iptal"
+    },
+    "pulse": {
+      "title": "İşletme özeti",
+      "average_booking_value": "Ortalama rezervasyon değeri",
+      "active_professionals": "Aktif uzmanlar",
+      "weekly_appointments": "Haftalık randevular"
+    },
+    "status": {
+      "title": "İşletme durumu",
+      "closed_now": "Şu anda kapalı",
+      "upcoming_closure": "Yaklaşan kapanış",
+      "manage_closures": "Kapanışları yönet",
+      "open": "Açık",
+      "no_closures": "Aktif veya yaklaşan kapanış yok."
+    },
+    "alerts": {
+      "title": "Bugünün uyarıları",
+      "description": "Bugün dikkatinizi gerektiren operasyonel konular.",
+      "none_title": "Bugün uyarı yok",
+      "none_detail": "Randevular, personel ve bildirimler iyi durumda.",
+      "unread": "{{count}} okunmamış bildirim",
+      "unread_detail": "Yeni randevu ve müşteriler için zili açın.",
+      "unassigned": "{{count}} atanmamış randevu",
+      "unassigned_detail": "Randevu başlamadan önce bir uzman atayın.",
+      "cancelled": "Bugün {{count}} iptal",
+      "cancelled_detail": "Takvimi kontrol edin ve boş zamanı doldurun.",
+      "without_break": "{{count}} uzman molasız",
+      "without_break_detail": "Bugünkü personel programını kontrol edin."
+    },
+    "health": {
+      "title": "İşletme sağlığı",
+      "occupancy": "Doluluk",
+      "completion_rate": "Tamamlanma oranı",
+      "cancellations": "İptaller",
+      "unassigned": "Atanmamış"
+    }
+  },
+  "notifications": {
+    "title": "Bildirimler",
+    "close": "Bildirimleri kapat",
+    "unread_count": "{{count}} okunmamış",
+    "read_all": "Tümünü oku",
+    "loading": "Bildirimler yükleniyor...",
+    "empty_title": "Henüz bildirim yok",
+    "empty_description": "Yeni randevular ve müşteriler burada görünecek.",
+    "just_now": "Az önce",
+    "minutes_ago": "{{count}} dk önce",
+    "hours_ago": "{{count}} sa önce",
+    "errors": {
+      "load": "Bildirimler yüklenemedi",
+      "update": "Bildirim güncellenemedi",
+      "mark_all": "Bildirimler okundu olarak işaretlenemedi"
+    },
+    "types": {
+      "new_appointment": {
+        "title": "Yeni randevu",
+        "message": "Takviminize yeni bir randevu eklendi."
+      },
+      "new_customer": {
+        "title": "Yeni müşteri",
+        "message": "İşletmenize yeni bir müşteri eklendi."
+      }
+    }
+  },
+  "calendar": {
+    "title": "Takvim",
+    "loading": "Takvim yükleniyor…",
+    "more": "+{{count}} daha",
+    "confirmCancel": "Bu randevu iptal edilsin mi? Saat yeniden uygun olacaktır.",
+    "resizeReason": "Adjusted from owner calendar",
+    "views": {
+      "dayGridMonth": "Ay",
+      "timeGridWeek": "Hafta",
+      "timeGridDay": "Gün",
+      "listDay": "Günlük ayrıntılar"
+    },
+    "filters": {
+      "allProfessionals": "Tüm profesyoneller"
+    },
+    "labels": {
+      "appointment": "Randevu",
+      "customer": "Müşteri",
+      "professional": "Profesyonel",
+      "services": "Hizmetler",
+      "date": "Tarih",
+      "time": "Saat",
+      "dateTime": "Tarih ve saat",
+      "duration": "Süre",
+      "total": "Toplam",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "fullName": "Ad soyad",
+      "notes": "Notlar",
+      "reason": "Neden",
+      "availableTimes": "Uygun saatler",
+      "unassigned": "Atanmamış",
+      "break": "Mola",
+      "closed": "Kapalı",
+      "notProvided": "Belirtilmedi",
+      "notSelected": "Seçilmedi",
+      "noReference": "Referans yok",
+      "noContactDetails": "İletişim bilgisi yok",
+      "bookingReference": "Rezervasyon referansı"
+    },
+    "actions": {
+      "today": "Bugün",
+      "selectProfessional": "Profesyonel seçin",
+      "calculating": "Hesaplanıyor…",
+      "creating": "Oluşturuluyor…",
+      "saveCustomer": "Müşteriyi kaydet",
+      "createAppointment": "Randevu oluştur",
+      "checkIn": "Giriş yap",
+      "startService": "Hizmeti başlat",
+      "markCompleted": "Tamamlandı olarak işaretle",
+      "noShow": "Gelmedi",
+      "cancelAppointment": "Randevuyu iptal et"
+    },
+    "newAppointment": {
+      "title": "Yeni randevu",
+      "description": "Aşağıdaki adımları tamamlayın. Yalnızca uygun profesyoneller ve müsait saatler gösterilir."
+    },
+    "customerStep": {
+      "description": "Search an existing customer or create a new one.",
+      "searchPlaceholder": "Search by name, email or phone",
+      "noneFound": "No customers found.",
+      "createNew": "Create new customer"
+    },
+    "servicesStep": {
+      "description": "Select one or more compatible services."
+    },
+    "professionalStep": {
+      "description": "Only staff eligible for all selected services appear.",
+      "anyAvailable": "Any available",
+      "autoAssign": "Automatically assign an eligible professional",
+      "available": "Available professional"
+    },
+    "dateStep": {
+      "title": "Date & available time",
+      "description": "Only real available times are displayed.",
+      "loading": "Loading available times…",
+      "businessClosed": "Business closed",
+      "closedMessage": "{{title}}. Choose another date.",
+      "selectServicesFirst": "Select services first.",
+      "noneAvailable": "No available appointments for this selection. Choose another date or professional."
+    },
+    "reviewStep": {
+      "title": "Review",
+      "description": "Confirm the booking details before creating the appointment.",
+      "notesPlaceholder": "Optional notes for this appointment",
+      "summary": "Booking summary"
+    },
+    "delay": {
+      "title": "Create delay",
+      "description": "Delay the selected professional's active appointments from a specific time. Review every affected appointment before applying.",
+      "from": "Delay from",
+      "minutes": "Delay minutes",
+      "customMinutes": "Custom delay in minutes",
+      "reasonPlaceholder": "Optional internal reason",
+      "preview": "Preview affected appointments",
+      "affected": "Affected appointments",
+      "endsAt": "Ends {{time}}",
+      "warning": "All displayed appointments move together. If any appointment would overlap another booking, a break, or working hours, nothing will be changed.",
+      "applying": "Applying delay…",
+      "apply": "Apply {{minutes}} minute delay"
+    },
+    "details": {
+      "title": "Randevu ayrıntıları"
+    },
+    "units": {
+      "minutes": "{{count}} minute",
+      "minutes_plural": "{{count}} minutes"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "arrived": "Checked in",
+      "in_progress": "In progress",
+      "completed": "Completed",
+      "cancelled_by_business": "Cancelled by business",
+      "cancelled_by_customer": "Cancelled by customer",
+      "no_show": "No show"
+    },
+    "messages": {
+      "customerCreated": "Customer created",
+      "appointmentCreated": "Appointment {{reference}} created",
+      "checkedIn": "Customer checked in",
+      "serviceStarted": "Service started",
+      "completed": "Appointment marked as completed",
+      "noShow": "Appointment marked as no show",
+      "cancelled": "Appointment cancelled",
+      "confirmed": "Appointment confirmed",
+      "pending": "Appointment moved to pending",
+      "updated": "Appointment updated",
+      "movedTo": "Appointment moved to {{date}}",
+      "durationChanged": "Appointment duration changed to {{minutes}} minutes",
+      "noAffectedAppointments": "No active appointments are affected by this delay",
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+    },
+    "errors": {
+      "loadData": "Failed to load calendar data",
+      "loadCalendar": "Failed to load calendar",
+      "loadAvailability": "Failed to load available times",
+      "customerNameRequired": "Customer name is required",
+      "createCustomer": "Failed to create customer",
+      "requiredBookingDetails": "Complete all required booking details",
+      "businessClosure": "Appointments cannot be created during a business closure",
+      "createAppointment": "Failed to create appointment",
+      "updateAppointment": "Failed to update appointment",
+      "moveRestored": "The appointment could not be moved. It was restored.",
+      "resizeRestored": "The appointment duration could not be changed. It was restored.",
+      "delayRequired": "Select professional, date, start time and delay",
+      "previewDelay": "Failed to preview delay",
+      "previewFirst": "Preview the affected appointments first",
+      "applyDelay": "The delay could not be applied. No appointments were changed."
+    }
+  },
+  "customers": {
+    "eyebrow": "Müşteri yönetimi",
+    "title": "Müşteriler",
+    "description": "Manage registered customer accounts separately from guest booking contacts.",
+    "actions": {
+      "add": "Müşteri ekle",
+      "edit": "Edit customer",
+      "remove": "Remove customer",
+      "save": "Müşteriyi kaydet"
+    },
+    "summary": {
+      "registeredTitle": "Registered Customers",
+      "registeredDescription": "Customers with an account",
+      "guestTitle": "Guest Contacts",
+      "guestDescription": "Customers who booked as guests",
+      "totalTitle": "Total Customers",
+      "totalDescription": "All customer records"
+    },
+    "tabs": {
+      "customers": "Müşteriler",
+      "records": "Müşteri kayıtları",
+      "history": "Ziyaret geçmişi"
+    },
+    "recordsDescription": "Open a customer to manage formulas, notes and photos.",
+    "historyDescription": "Open a customer to review previous appointments.",
+    "searchPlaceholder": "Search by name, email or phone",
+    "filters": {
+      "registered": "Kayıtlı",
+      "guests": "Misafirler",
+      "all": "Tümü"
+    },
+    "table": {
+      "customer": "Customer",
+      "contact": "Contact Details",
+      "type": "Customer Type",
+      "added": "Added",
+      "actions": "Actions"
+    },
+    "states": {
+      "loading": "Müşteriler yükleniyor…",
+      "empty": "Müşteri bulunamadı.",
+      "emptyCategory": "No customers found in this category."
+    },
+    "types": {
+      "registered": "Kayıtlı",
+      "guest": "Misafir"
+    },
+    "counts": {
+      "records": "records",
+      "visits": "visits"
+    },
+    "noContactDetails": "No contact details",
+    "noEmail": "No email",
+    "noPhone": "No phone",
+    "addedOn": "Added {{date}}",
+    "dialog": {
+      "editTitle": "Edit Customer",
+      "addTitle": "Müşteri ekle"
+    },
+    "form": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "phone": "Phone",
+      "notes": "Internal Notes",
+      "manualCustomerNote": "Customers created manually by the owner are stored as guest contacts. A customer becomes registered only after creating and linking an authentication account."
+    },
+    "validation": {
+      "nameRequired": "Name is required"
+    },
+    "confirmRemoveRegistered": "Remove this customer profile from the store? Their authentication account will not be deleted.",
+    "confirmRemoveGuest": "Remove this guest customer? Existing appointment history may prevent deletion.",
+    "toasts": {
+      "loadError": "Failed to load customers",
+      "updated": "Customer updated",
+      "added": "Customer added",
+      "saveError": "Failed to save customer",
+      "removed": "Customer removed",
+      "removeBlocked": "This customer cannot be removed because appointment history exists"
+    }
+  },
+  "customerProfile": {
+    "back": "Müşterilere dön",
+    "actions": {
+      "newRecord": "Yeni kayıt",
+      "saveRecord": "Save Record"
+    },
+    "stats": {
+      "completedVisits": "Completed visits",
+      "totalSpend": "Total spend",
+      "cancellations": "Cancellations",
+      "noShows": "No shows"
+    },
+    "customerNotes": "Customer notes",
+    "noCustomerNotes": "No customer notes",
+    "tabs": {
+      "records": "Records ({{count}})",
+      "history": "Visit History ({{count}})"
+    },
+    "states": {
+      "loading": "Loading customer profile…",
+      "notFound": "Customer not found.",
+      "noRecords": "No customer records yet",
+      "noRecordsDescription": "Create the first formula, note or customer photo.",
+      "noHistory": "Randevu geçmişi yok"
+    },
+    "dialog": {
+      "editTitle": "Edit Customer Record",
+      "newTitle": "New Customer Record"
+    },
+    "form": {
+      "recordType": "Record Type",
+      "title": "Title",
+      "formula": "Formula",
+      "formulaPlaceholder": "e.g. 8.13 + 7.1, 20 vol, 35 min",
+      "notes": "Notes",
+      "photo": "Photo"
+    },
+    "recordTypes": {
+      "formula": "Formula",
+      "generalNote": "General Note",
+      "allergy": "Allergy / Sensitivity",
+      "preferredStyle": "Preferred Style",
+      "product": "Product Used",
+      "consultation": "Consultation",
+      "beforeAfter": "Before / After",
+      "other": "Other"
+    },
+    "appointment": "Appointment",
+    "unassignedProfessional": "Unassigned professional",
+    "validation": {
+      "titleRequired": "Record title is required"
+    },
+    "confirmDeleteRecord": "Delete this customer record?",
+    "toasts": {
+      "loadError": "Failed to load customer profile",
+      "recordUpdated": "Record updated",
+      "recordCreated": "Record created",
+      "saveError": "Failed to save record",
+      "recordDeleted": "Record deleted",
+      "deleteError": "Failed to delete record"
+    }
   },
   "staff": {
     "eyebrow": "Ekip yönetimi",
@@ -259,6 +659,84 @@
       "saveFailed": "Personel kaydedilemedi",
       "removed": "Personel kaldırıldı",
       "removeFailed": "Personel kaldırılamadı"
+    }
+  },
+  "services": {
+    "eyebrow": "Hizmet kataloğu",
+    "title": "Hizmetler",
+    "description": "Fiyat, süre, kategori ve çevrimiçi rezervasyon görünürlüğünü yönetin.",
+    "actions": {
+      "add": "Hizmet ekle",
+      "edit": "Hizmeti düzenle",
+      "remove": "Hizmeti kaldır",
+      "save": "Hizmeti kaydet"
+    },
+    "summary": {
+      "active": {
+        "title": "Aktif hizmetler",
+        "description": "Ekibiniz için kullanılabilir"
+      },
+      "online": {
+        "title": "Çevrimiçi rezervasyon",
+        "description": "Müşterilere görünür"
+      },
+      "averagePrice": {
+        "title": "Ortalama fiyat",
+        "description": "Tüm hizmetlerde"
+      }
+    },
+    "search": {
+      "placeholder": "Hizmet veya kategori ara"
+    },
+    "filters": {
+      "allCategories": "Tüm kategoriler",
+      "all": "Tümü",
+      "active": "Aktif",
+      "online": "Çevrimiçi",
+      "inactive": "Pasif"
+    },
+    "states": {
+      "loading": "Hizmetler yükleniyor...",
+      "emptyTitle": "Hizmet bulunamadı",
+      "emptyDescription": "Filtreleri değiştirin veya yeni bir hizmet oluşturun."
+    },
+    "labels": {
+      "uncategorized": "Kategorisiz",
+      "durationMinutes": "{{count}} dakika"
+    },
+    "dialog": {
+      "editTitle": "Hizmeti düzenle",
+      "addTitle": "Yeni hizmet ekle",
+      "detailsTitle": "Hizmet ayrıntıları",
+      "detailsDescription": "Müşterilerin fiyat listesinde göreceği hizmeti tanımlayın."
+    },
+    "fields": {
+      "name": "Hizmet adı",
+      "price": "Fiyat (€)",
+      "duration": "Süre (dakika)",
+      "category": "Kategori",
+      "noCategory": "Kategori yok",
+      "description": "Açıklama",
+      "activeStatus": "Aktif durum",
+      "activeHelp": "Aktif hizmetler personele atanabilir.",
+      "onlineBooking": "Çevrimiçi rezervasyon",
+      "onlineHelp": "Bu hizmeti müşteri rezervasyon akışında gösterin."
+    },
+    "validation": {
+      "required": "Lütfen tüm zorunlu alanları doldurun",
+      "price": "Geçerli bir hizmet fiyatı girin",
+      "duration": "Dakika cinsinden geçerli bir süre girin"
+    },
+    "messages": {
+      "loadError": "Hizmetler yüklenemedi",
+      "updated": "Hizmet güncellendi",
+      "created": "Hizmet oluşturuldu",
+      "saveError": "Hizmet kaydedilemedi",
+      "removed": "Hizmet kaldırıldı",
+      "deleteBlocked": "Randevu geçmişi bulunduğu için bu hizmet kaldırılamaz"
+    },
+    "delete": {
+      "confirm": "“{{name}}” kaldırılsın mı? Mevcut randevu geçmişi kalıcı silmeyi engelleyebilir."
     }
   }
 }
