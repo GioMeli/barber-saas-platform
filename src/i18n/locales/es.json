@@ -71,7 +71,19 @@
     "add": "Añadir",
     "loading": "Cargando...",
     "saving": "Guardando…",
-    "minutesShort": "min"
+    "minutesShort": "min",
+    "imageUploader": {
+      "fileTooLarge": "El archivo es demasiado grande; se está comprimiendo…",
+      "compressedTo": "Comprimido a {{size}} KB",
+      "uploaded": "Imagen subida correctamente",
+      "uploadFailed": "No se pudo subir la imagen",
+      "uploadedAlt": "Imagen subida",
+      "removeImage": "Eliminar imagen",
+      "clickToUpload": "Haz clic para subir una imagen",
+      "supportedFormats": "Admite JPG, PNG y WEBP (máximo 1 MB con compresión automática)",
+      "uploading": "Subiendo… {{progress}}%"
+    },
+    "back": "Atrás"
   },
   "language": {
     "label": "Idioma",
@@ -942,7 +954,9 @@
       "completedCount_other": "{{count}} completadas",
       "cancellationNoShowDetail": "{{cancellation}}% canceladas · {{noShow}}% ausencias",
       "returningCount_one": "{{count}} cliente recurrente",
-      "returningCount_other": "{{count}} clientes recurrentes"
+      "returningCount_other": "{{count}} clientes recurrentes",
+      "completedCount": "{{count}} completadas",
+      "returningCount": "{{count}} recurrentes"
     },
     "comparison": {
       "vsPreviousPeriod": "{{value}} frente al período anterior"
@@ -953,7 +967,8 @@
     },
     "counts": {
       "bookings_one": "{{count}} reserva",
-      "bookings_other": "{{count}} reservas"
+      "bookings_other": "{{count}} reservas",
+      "bookings": "{{count}} reservas"
     },
     "executive": {
       "trendTitle": "Tendencia de ingresos y demanda",
@@ -1053,7 +1068,8 @@
     },
     "chart": {
       "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} cita",
-      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} citas"
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} citas",
+      "dailyTooltip": "{{date}} · {{count}} reservas"
     },
     "csv": {
       "reportTitle": "Informe de inteligencia empresarial de Velliqo",
@@ -1081,5 +1097,419 @@
       "unassigned": "Sin asignar",
       "customer": "Cliente"
     }
+  },
+  "storefront": {
+    "owner": {
+      "eyebrow": "Presencia pública",
+      "title": "Estudio del escaparate",
+      "description": "Crea y mantén la página pública donde los clientes descubren, confían y reservan en tu negocio.",
+      "sections": {
+        "overview": "Resumen",
+        "branding": "Marca",
+        "contact": "Contacto",
+        "location": "Ubicación",
+        "sharing": "Vista previa y compartir"
+      },
+      "actions": {
+        "copyLink": "Copiar enlace",
+        "openPublicPage": "Abrir página pública",
+        "copy": "Copiar",
+        "preview": "Vista previa",
+        "openPreview": "Abrir vista previa",
+        "saveChanges": "Guardar cambios"
+      },
+      "readiness": {
+        "title": "Preparación del escaparate",
+        "description": "Completa la información esencial que los clientes esperan antes de reservar.",
+        "publicUrl": "URL pública",
+        "availableAfterCreation": "Disponible después de crear el negocio",
+        "identityDescription": "La identidad pública y página de destino de tu negocio.",
+        "businessLogo": "Logotipo del negocio",
+        "coverImage": "Imagen de portada",
+        "businessDescription": "Descripción del negocio",
+        "phoneAndEmail": "Teléfono y correo",
+        "address": "Dirección",
+        "yourLocation": "Tu ubicación",
+        "descriptionFallback": "Añade una descripción clara de tus servicios y experiencia del cliente.",
+        "complete": "Completo",
+        "needsAttention": "Requiere atención"
+      },
+      "branding": {
+        "title": "Marca e historia",
+        "description": "Crea una primera impresión reconocible y profesional.",
+        "businessLogo": "Logotipo del negocio",
+        "businessLogoHint": "Se recomienda una imagen cuadrada.",
+        "coverImage": "Imagen de portada",
+        "coverImageHint": "Se recomienda una imagen ancha y de alta calidad.",
+        "storeDescription": "Descripción de la tienda",
+        "storeDescriptionHint": "Explica qué hace que el negocio sea valioso, fiable y diferente.",
+        "descriptionPlaceholder": "Describe tu negocio, experiencia, servicios y atención al cliente.",
+        "characterCount": "{{count}} caracteres"
+      },
+      "contact": {
+        "title": "Datos de contacto",
+        "description": "Estos datos son visibles para los clientes en la página pública.",
+        "publicPhone": "Teléfono público",
+        "phoneHint": "Incluye el código de país cuando corresponda.",
+        "publicEmail": "Correo público",
+        "emailHint": "Se utiliza para el contacto con clientes."
+      },
+      "location": {
+        "title": "Ubicación e indicaciones",
+        "description": "Añade información estructurada para las indicaciones y el mapa.",
+        "displayAddress": "Dirección visible",
+        "displayAddressHint": "La dirección sencilla que se muestra públicamente.",
+        "addressLine1": "Línea de dirección 1",
+        "addressLine2": "Línea de dirección 2",
+        "city": "Ciudad",
+        "district": "Distrito / región",
+        "postalCode": "Código postal",
+        "latitude": "Latitud",
+        "longitude": "Longitud",
+        "coordinateHint": "Ejemplo: {{value}}",
+        "mapTitle": "Vista previa de la ubicación"
+      },
+      "sharing": {
+        "title": "Vista previa y compartir",
+        "description": "Abre, copia y distribuye la página pública permanente del negocio.",
+        "publicLink": "Enlace público",
+        "defaultBusinessName": "Mi negocio"
+      },
+      "status": {
+        "loading": "Cargando el editor del escaparate…",
+        "unsaved": "Hay cambios del escaparate sin guardar",
+        "saved": "Todos los cambios del escaparate están guardados",
+        "reviewReadiness": "Revisa la preparación de tu página pública.",
+        "editing": "Editando {{section}}.",
+        "saving": "Guardando…"
+      },
+      "validation": {
+        "coordinates": "La latitud y la longitud deben ser números válidos",
+        "email": "Introduce una dirección de correo pública válida"
+      },
+      "messages": {
+        "loadError": "No se pudieron cargar los datos del escaparate",
+        "saveError": "No se pudieron guardar los cambios del escaparate",
+        "updated": "Escaparate actualizado correctamente",
+        "linkCopied": "Enlace público copiado"
+      }
+    },
+    "qr": {
+      "title": "Comparte esta tienda",
+      "description": "Escanea el código QR o comparte el enlace para abrir {{business}}, ver servicios y reservar una cita.",
+      "shareText": "Ver {{business}} y reservar una cita",
+      "qrTitle": "Código QR de reservas de {{business}}",
+      "copyTitle": "Copiar enlace",
+      "share": "Compartir",
+      "download": "Descargar QR",
+      "linkCopied": "Enlace de la tienda copiado",
+      "copyError": "No se pudo copiar el enlace de la tienda",
+      "shareError": "No se pudo compartir el enlace de la tienda",
+      "downloadError": "No se pudo descargar el código QR",
+      "downloaded": "Código QR descargado"
+    },
+    "public": {
+      "navigation": {
+        "store": "Tienda",
+        "book": "Reservar",
+        "myAccount": "Mi cuenta",
+        "services": "Servicios",
+        "team": "Equipo",
+        "gallery": "Galería",
+        "products": "Productos",
+        "announcements": "Anuncios",
+        "contact": "Contacto"
+      },
+      "status": {
+        "onlineBooking": "Reserva online",
+        "temporarilyClosed": "Cerrado temporalmente",
+        "acceptingBookings": "Aceptando reservas",
+        "available": "Disponible",
+        "outOfStock": "Agotado"
+      },
+      "actions": {
+        "bookAppointment": "Reservar cita",
+        "directions": "Cómo llegar",
+        "share": "Compartir",
+        "createAccount": "Crear una cuenta",
+        "chooseAnotherDate": "Elegir otra fecha",
+        "book": "Reservar",
+        "bookWith": "Reservar con {{name}}",
+        "signIn": "Iniciar sesión",
+        "readMore": "Leer más",
+        "closeImage": "Cerrar imagen"
+      },
+      "hero": {
+        "defaultTagline": "Descubre nuestros servicios y reserva online fácilmente.",
+        "guestBookingPrefix": "La reserva como invitado está disponible.",
+        "guestBookingSuffix": "para futuras reservas más rápidas.",
+        "quickAccess": "Acceso rápido",
+        "shareText": "Reserva una cita con {{business}}"
+      },
+      "sections": {
+        "services": {
+          "title": "Servicios",
+          "description": "Explora servicios, precios y disponibilidad.",
+          "empty": "Todavía no hay servicios públicos disponibles."
+        },
+        "team": {
+          "title": "Conoce al equipo",
+          "description": "Elige a tu profesional preferido.",
+          "empty": "Los perfiles del equipo aparecerán pronto.",
+          "memberLabel": "Miembro del equipo profesional",
+          "memberFallback": "Disponible para citas online."
+        },
+        "gallery": {
+          "title": "Galería",
+          "description": "El interior de la tienda y trabajos recientes.",
+          "empty": "La galería de la tienda está vacía."
+        },
+        "products": {
+          "title": "Productos",
+          "description": "Productos profesionales disponibles en la tienda.",
+          "empty": "Todavía no se han añadido productos públicos."
+        },
+        "announcements": {
+          "title": "Anuncios",
+          "published_one": "{{count}} actualización publicada",
+          "published_other": "{{count}} actualizaciones publicadas",
+          "noPublishedUpdates": "No hay actualizaciones publicadas",
+          "empty": "Todavía no hay anuncios publicados.",
+          "latest": "Más reciente",
+          "published": "{{count}} publicadas"
+        },
+        "contact": {
+          "title": "Visita y contacto",
+          "description": "Todo lo que necesitas antes de tu visita.",
+          "mapMissing": "La ubicación del mapa aún no está configurada."
+        }
+      },
+      "footer": {
+        "tagline": "Reservas online profesionales",
+        "privacy": "Privacidad",
+        "terms": "Términos"
+      },
+      "postTypes": {
+        "announcement": "Anuncio",
+        "holiday_closure": "Cierre por festivo",
+        "promotion": "Promoción",
+        "price_update": "Actualización de precios",
+        "new_product": "Nuevo producto",
+        "new_team_member": "Nuevo miembro del equipo",
+        "general": "General"
+      },
+      "mapTitle": "Ubicación de {{business}}",
+      "loading": "Cargando tienda…",
+      "notFound": {
+        "title": "Tienda no encontrada",
+        "description": "Este enlace de tienda no está disponible o ya no está activo."
+      },
+      "auth": {
+        "customerAccount": "Cuenta de cliente",
+        "customerAccess": "Acceso de cliente",
+        "heroTitle": "Tus citas y experiencia en la tienda en un solo lugar.",
+        "heroDescription": "Crea una cuenta opcional para reservas más rápidas, historial de citas y novedades de {{business}}.",
+        "benefits": {
+          "fasterTitle": "Reserva más rápida",
+          "fasterText": "Reutiliza tus datos de cliente guardados.",
+          "upcomingTitle": "Próximas citas",
+          "upcomingText": "Consulta tus próximas visitas a esta tienda.",
+          "historyTitle": "Historial de citas",
+          "historyText": "Mantén un registro claro de reservas anteriores."
+        },
+        "privacyNote": "Tu cuenta de cliente está conectada a esta tienda. La reserva como invitado sigue disponible sin registro.",
+        "signInEyebrow": "Inicio de sesión del cliente",
+        "signUpEyebrow": "Registro de cliente",
+        "welcomeBack": "Te damos la bienvenida de nuevo a {{business}}",
+        "createBusinessAccount": "Crea tu cuenta de {{business}}",
+        "signInDescription": "Accede a próximas citas, historial y perfil de cliente.",
+        "signUpDescription": "Crea una cuenta de cliente opcional para esta tienda.",
+        "signIn": "Iniciar sesión",
+        "createAccount": "Crear cuenta",
+        "fullName": "Nombre completo",
+        "phone": "Teléfono",
+        "email": "Correo electrónico",
+        "password": "Contraseña",
+        "accountLinkNote": "Esta cuenta está vinculada a {{business}} y ofrece historial de citas y reservas más rápidas.",
+        "pleaseWait": "Espera…",
+        "signInAccount": "Iniciar sesión en mi cuenta",
+        "createCustomerAccount": "Crear cuenta de cliente",
+        "continueGuest": "Continuar como invitado",
+        "optionalNote": "Crear una cuenta es opcional. Siempre puedes reservar sin registrarte."
+      },
+      "validation": {
+        "credentialsRequired": "El correo electrónico y la contraseña son obligatorios.",
+        "fullNameRequired": "El nombre completo es obligatorio."
+      },
+      "messages": {
+        "accountCreated": "Cuenta de cliente creada.",
+        "accountCreatedConfirm": "Cuenta creada. Confirma tu correo y vuelve a esta tienda.",
+        "signedIn": "Sesión iniciada correctamente.",
+        "signedOut": "Sesión cerrada.",
+        "joinError": "No se pudo conectar tu cuenta a esta tienda.",
+        "authenticationFailed": "La autenticación ha fallado."
+      },
+      "errors": {
+        "loadStore": "No se pudo cargar esta tienda"
+      },
+      "accessibility": {
+        "openMenu": "Abrir menú de navegación",
+        "closeMenu": "Cerrar menú de navegación",
+        "signOut": "Cerrar sesión"
+      }
+    }
+  },
+  "publicBooking": {
+    "steps": {
+      "services": "Servicios",
+      "professional": "Profesional",
+      "dateTime": "Fecha y hora",
+      "details": "Tus datos"
+    },
+    "header": {
+      "eyebrow": "Reserva online",
+      "title": "Reserva con {{business}}",
+      "description": "Elige servicios, profesional preferido y una hora realmente disponible."
+    },
+    "services": {
+      "title": "Elige los servicios",
+      "description": "Selecciona uno o varios servicios para la misma cita.",
+      "select": "Seleccionar",
+      "selected": "Seleccionado",
+      "continue": "Continuar al profesional"
+    },
+    "professionals": {
+      "title": "Elige un profesional",
+      "description": "Selecciona a una persona concreta o permite que el sistema asigne a cualquier profesional apto.",
+      "anyAvailable": "Cualquier disponible",
+      "anyAvailableProfessional": "Cualquier profesional disponible",
+      "anyAvailableDescription": "Asigna al primer profesional apto para la hora seleccionada.",
+      "defaultBio": "Miembro del equipo profesional."
+    },
+    "dateTime": {
+      "title": "Elige fecha y hora",
+      "description": "Solo se muestran horas de cita realmente disponibles.",
+      "selectDate": "Selecciona una fecha",
+      "browseAvailability": "Consulta la disponibilidad real de los próximos días.",
+      "specificDate": "O elige una fecha concreta",
+      "continue": "Continuar a tus datos"
+    },
+    "timeGroups": {
+      "morning": "Mañana",
+      "afternoon": "Tarde",
+      "evening": "Noche"
+    },
+    "closure": {
+      "title": "Negocio cerrado",
+      "description": "{{business}} está cerrado en la fecha seleccionada por {{reason}}.",
+      "range": "Cerrado {{range}}",
+      "chooseAnother": "Elige otra fecha."
+    },
+    "details": {
+      "title": "Tus datos",
+      "savedDescription": "Se utilizarán tus datos de cliente guardados.",
+      "guestDescription": "Introduce los datos de contacto necesarios para la reserva.",
+      "name": "Nombre",
+      "fullNameRequired": "Nombre completo *",
+      "phone": "Teléfono",
+      "phoneRequired": "Número de teléfono *",
+      "phoneRequiredShort": "Teléfono *",
+      "email": "Correo electrónico",
+      "notes": "Notas",
+      "notesPlaceholder": "Notas opcionales para el negocio"
+    },
+    "summary": {
+      "title": "Resumen de la reserva",
+      "reference": "Referencia",
+      "services": "Servicios",
+      "professional": "Profesional",
+      "when": "Cuándo",
+      "date": "Fecha",
+      "time": "Hora",
+      "estimatedFinish": "Finalización estimada",
+      "duration": "Duración",
+      "total": "Total"
+    },
+    "confirmation": {
+      "title": "Reserva confirmada",
+      "description": "Tu cita en {{business}} se ha reservado correctamente.",
+      "addToCalendar": "Añadir al calendario",
+      "getDirections": "Cómo llegar",
+      "viewAppointments": "Ver mis citas",
+      "bookAnother": "Reservar otra cita"
+    },
+    "actions": {
+      "confirm": "Confirmar cita",
+      "confirming": "Confirmando..."
+    },
+    "states": {
+      "loadingOptions": "Cargando opciones de reserva...",
+      "loadingTimes": "Cargando citas disponibles...",
+      "loadingDetails": "Cargando tus datos...",
+      "noAppointments": "No hay citas disponibles",
+      "noAppointmentsDescription": "Elige otra fecha o profesional para ver más horas.",
+      "notSelected": "No seleccionado",
+      "notAvailable": "No disponible",
+      "notProvided": "No indicado"
+    },
+    "validation": {
+      "namePhoneRequired": "El nombre y el teléfono son obligatorios",
+      "completeSteps": "Completa todos los pasos de la reserva."
+    },
+    "messages": {
+      "loadOptionsFailed": "No se pudieron cargar las opciones de reserva.",
+      "loadTimesFailed": "No se pudieron cargar las horas disponibles.",
+      "bookingFailed": "La reserva ha fallado. Inténtalo de nuevo.",
+      "slotUnavailable": "Esa hora ya no está disponible. Elige otra."
+    },
+    "calendar": {
+      "summary": "{{services}} en {{business}}",
+      "description": "Referencia de reserva {{reference}}",
+      "fileName": "cita"
+    },
+    "mobile": {
+      "selectServices": "Selecciona servicios para empezar",
+      "step": "Paso {{step}} de {{total}}",
+      "ready": "Listo para confirmar"
+    },
+    "durationMinutes": "{{count}} minutos"
+  },
+  "ai": {
+    "ownerFallback": "Propietario",
+    "welcome": "Bienvenido, {{name}}",
+    "introduction": "Velliqo AI se está preparando para ayudar a {{business}} a comprender el rendimiento, los clientes y la planificación.",
+    "yourBusiness": "tu negocio",
+    "askVelliqo": "Preguntar a Velliqo",
+    "settings": "Configuración de AI",
+    "cards": {
+      "insights": "Información inteligente",
+      "insightsDescription": "Convierte la actividad del negocio en recomendaciones claras y prácticas.",
+      "businessHealth": "Salud del negocio",
+      "businessHealthDescription": "Comprende de un vistazo el estado operativo de tu negocio.",
+      "customerIntelligence": "Inteligencia de clientes",
+      "customerIntelligenceDescription": "Identifica patrones, oportunidades de retención y preferencias de servicios.",
+      "scheduling": "Planificación inteligente",
+      "schedulingDescription": "Detecta patrones de demanda y oportunidades para mejorar la capacidad."
+    },
+    "foundationReady": "Base preparada",
+    "nextSprint": "Próximamente",
+    "platform": "Plataforma de inteligencia Velliqo",
+    "specialists": "Agentes de AI especializados",
+    "foundationTitle": "Base de AI segura",
+    "foundationDescription": "El acceso a la AI está controlado por permisos, idioma y ámbitos de datos aprobados.",
+    "reviewSettings": "Revisar configuración de AI",
+    "settingsDescription": "Controla cómo Velliqo AI trabaja con los datos de tu negocio.",
+    "settingsSaved": "Configuración de AI guardada",
+    "enableAI": "Activar Velliqo AI",
+    "enableAIDescription": "Permite que los usuarios autorizados accedan a funciones asistidas por AI.",
+    "defaultLanguage": "Idioma predeterminado de AI",
+    "responseStyle": "Estilo de respuesta",
+    "concise": "Conciso",
+    "balanced": "Equilibrado",
+    "detailed": "Detallado",
+    "conversationHistory": "Historial de conversaciones",
+    "conversationHistoryDescription": "Conserva las conversaciones de AI para volver al trabajo anterior.",
+    "customerData": "Acceso a datos de clientes",
+    "customerDataDescription": "Permite que las funciones de AI utilicen información de clientes aprobada cuando los permisos lo permitan."
   }
 }

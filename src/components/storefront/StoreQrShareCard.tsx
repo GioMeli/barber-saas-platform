@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent } from '@/components/ui/card';
 import { Copy, Download, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 type StoreQrShareCardProps = {
   publicUrl: string;
@@ -17,12 +18,14 @@ export default function StoreQrShareCard({
   businessName,
   compact = false,
 }: StoreQrShareCardProps) {
+  const { t } = useTranslation();
+
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(publicUrl);
-      toast.success('Store link copied');
+      toast.success(t('storefront.qr.linkCopied'));
     } catch {
-      toast.error('Could not copy the store link');
+      toast.error(t('storefront.qr.copyError'));
     }
   };
 
@@ -31,7 +34,7 @@ export default function StoreQrShareCard({
       if (navigator.share) {
         await navigator.share({
           title: businessName,
-          text: `View ${businessName} and book an appointment`,
+          text: t('storefront.qr.shareText', { business: businessName }),
           url: publicUrl,
         });
         return;
@@ -40,7 +43,7 @@ export default function StoreQrShareCard({
       await copyLink();
     } catch (error: any) {
       if (error?.name !== 'AbortError') {
-        toast.error('Could not share the store link');
+        toast.error(t('storefront.qr.shareError'));
       }
     }
   };
@@ -52,7 +55,7 @@ export default function StoreQrShareCard({
 
     const svg = document.getElementById(qrId);
     if (!svg) {
-      toast.error('QR code could not be downloaded');
+      toast.error(t('storefront.qr.downloadError'));
       return;
     }
 
@@ -75,7 +78,7 @@ export default function StoreQrShareCard({
     anchor.remove();
     URL.revokeObjectURL(objectUrl);
 
-    toast.success('QR code downloaded');
+    toast.success(t('storefront.qr.downloaded'));
   };
 
   return (
@@ -96,7 +99,7 @@ export default function StoreQrShareCard({
             size={compact ? 150 : 190}
             level="H"
             includeMargin
-            title={`${businessName} booking QR code`}
+            title={t('storefront.qr.qrTitle', { business: businessName })}
           />
         </div>
 
@@ -104,11 +107,10 @@ export default function StoreQrShareCard({
           <div>
             <div className="flex items-center gap-2 font-semibold">
               <Share2 className="h-5 w-5 text-primary" />
-              Share this store
+              {t('storefront.qr.title')}
             </div>
             <p className="mt-2 text-sm text-muted-foreground">
-              Scan the QR code or share the link to open {businessName},
-              view services and book an appointment.
+              {t('storefront.qr.description', { business: businessName })}
             </p>
           </div>
 
@@ -122,7 +124,8 @@ export default function StoreQrShareCard({
               type="button"
               variant="outline"
               size="icon"
-              title="Copy link"
+              title={t('storefront.qr.copyTitle')}
+              aria-label={t('storefront.qr.copyTitle')}
               onClick={() => void copyLink()}
             >
               <Copy className="h-4 w-4" />
@@ -142,7 +145,7 @@ export default function StoreQrShareCard({
               onClick={() => void shareLink()}
             >
               <Share2 className="mr-2 h-4 w-4" />
-              Share
+              {t('storefront.qr.share')}
             </Button>
 
             <Button
@@ -151,7 +154,7 @@ export default function StoreQrShareCard({
               onClick={downloadQrCode}
             >
               <Download className="mr-2 h-4 w-4" />
-              Download QR
+              {t('storefront.qr.download')}
             </Button>
           </div>
         </div>

@@ -31,6 +31,9 @@ import {
 import { supabase } from '@/db/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import type { IndustryConfig } from '@/config/industries';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import type { TFunction } from 'i18next';
 
 type StoreContext = {
   business: any;
@@ -39,19 +42,27 @@ type StoreContext = {
   openCustomerSignUp: () => void;
 };
 
-const sectionLinks = [
-  { id: 'services', label: 'Services' },
-  { id: 'team', label: 'Team' },
-  { id: 'gallery', label: 'Gallery' },
-  { id: 'products', label: 'Products' },
-  { id: 'announcements', label: 'Announcements' },
-  { id: 'contact', label: 'Contact' },
-];
 
 export default function BusinessHome() {
-  const { business, industry, openCustomerSignIn, openCustomerSignUp } =
+  const { business, openCustomerSignIn, openCustomerSignUp } =
     useOutletContext<StoreContext>();
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
+  const sectionLinks = [
+    { id: 'services', label: t('storefront.public.navigation.services') },
+    { id: 'team', label: t('storefront.public.navigation.team') },
+    { id: 'gallery', label: t('storefront.public.navigation.gallery') },
+    { id: 'products', label: t('storefront.public.navigation.products') },
+    { id: 'announcements', label: t('storefront.public.navigation.announcements') },
+    { id: 'contact', label: t('storefront.public.navigation.contact') },
+  ];
+
+  const currencyFormatter = useMemo(
+    () => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }),
+    [locale]
+  );
 
   const [services, setServices] = useState<any[]>([]);
   const [staff, setStaff] = useState<any[]>([]);
@@ -226,7 +237,7 @@ export default function BusinessHome() {
   const shareStore = async () => {
     const shareData = {
       title: business.name,
-      text: `Book an appointment with ${business.name}`,
+      text: t('storefront.public.hero.shareText', { business: business.name }),
       url: window.location.href,
     };
 
@@ -259,7 +270,7 @@ export default function BusinessHome() {
             <div className="flex flex-wrap items-center gap-2">
               <Badge className="border-white/15 bg-white/10 text-white hover:bg-white/15">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
-                Online booking
+                {t('storefront.public.status.onlineBooking')}
               </Badge>
               <Badge
                 className={
@@ -268,7 +279,7 @@ export default function BusinessHome() {
                     : 'bg-emerald-400 text-zinc-950 hover:bg-emerald-400'
                 }
               >
-                {activeClosure ? 'Temporarily closed' : 'Accepting bookings'}
+                {activeClosure ? t('storefront.public.status.temporarilyClosed') : t('storefront.public.status.acceptingBookings')}
               </Badge>
             </div>
 
@@ -297,14 +308,14 @@ export default function BusinessHome() {
 
             <p className="mt-5 max-w-2xl text-sm leading-7 text-white/75 sm:text-base">
               {business.description ||
-                industry.labels.storefrontTagline}
+                t('storefront.public.hero.defaultTagline')}
             </p>
 
             <div className="mt-7 flex flex-wrap gap-3">
               <Button asChild size="lg" className="h-12 rounded-xl px-6">
                 <Link to={bookUrl}>
                   <CalendarDays className="mr-2 h-5 w-5" />
-                  {industry.labels.bookingCta}
+                  {t('storefront.public.actions.bookAppointment')}
                 </Link>
               </Button>
 
@@ -317,7 +328,7 @@ export default function BusinessHome() {
                 >
                   <a href={directionsUrl} target="_blank" rel="noreferrer">
                     <MapPin className="mr-2 h-4 w-4" />
-                    Directions
+                    {t('storefront.public.actions.directions')}
                   </a>
                 </Button>
               )}
@@ -330,21 +341,21 @@ export default function BusinessHome() {
                 onClick={() => void shareStore()}
               >
                 <Share2 className="mr-2 h-4 w-4" />
-                Share
+                {t('storefront.public.actions.share')}
               </Button>
             </div>
 
             {!user && (
               <div className="mt-5 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-white/65">
-                <span>Guest booking is available.</span>
+                <span>{t('storefront.public.hero.guestBookingPrefix')}</span>
                 <button
                   type="button"
                   className="font-semibold text-white underline underline-offset-4"
                   onClick={openCustomerSignUp}
                 >
-                  Create an account
+                  {t('storefront.public.actions.createAccount')}
                 </button>
-                <span>for faster future bookings.</span>
+                <span>{t('storefront.public.hero.guestBookingSuffix')}</span>
               </div>
             )}
           </div>
@@ -352,26 +363,26 @@ export default function BusinessHome() {
           <div className="hidden lg:block">
             <div className="rounded-3xl border border-white/15 bg-black/25 p-5 backdrop-blur-xl">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
-                Quick access
+                {t('storefront.public.hero.quickAccess')}
               </div>
               <div className="mt-4 grid grid-cols-2 gap-2">
                 <QuickAction
-                  label="Services"
+                  label={t('storefront.public.navigation.services')}
                   value={services.length}
                   onClick={() => scrollToSection('services')}
                 />
                 <QuickAction
-                  label={industry.labels.professionals}
+                  label={t('storefront.public.navigation.team')}
                   value={staff.length}
                   onClick={() => scrollToSection('team')}
                 />
                 <QuickAction
-                  label="Announcements"
+                  label={t('storefront.public.navigation.announcements')}
                   value={posts.length}
                   onClick={() => scrollToSection('announcements')}
                 />
                 <QuickAction
-                  label="Gallery"
+                  label={t('storefront.public.navigation.gallery')}
                   value={gallery.length}
                   onClick={() => scrollToSection('gallery')}
                 />
@@ -394,7 +405,8 @@ export default function BusinessHome() {
                   <div className="mt-0.5 text-sm text-amber-800">
                     {formatClosureRange(
                       featuredClosure.start_date,
-                      featuredClosure.end_date
+                      featuredClosure.end_date,
+                      locale
                     )}
                     {featuredClosure.description
                       ? ` · ${featuredClosure.description}`
@@ -403,7 +415,7 @@ export default function BusinessHome() {
                 </div>
               </div>
               <Button asChild size="sm" variant="outline">
-                <Link to={bookUrl}>Choose another date</Link>
+                <Link to={bookUrl}>{t('storefront.public.actions.chooseAnotherDate')}</Link>
               </Button>
             </div>
           </div>
@@ -413,7 +425,7 @@ export default function BusinessHome() {
       <nav className="sticky top-[72px] z-30 border-b bg-background/95 backdrop-blur-xl">
         <div className="scrollbar-subtle mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6">
           <Button asChild size="sm" className="shrink-0 rounded-full">
-            <Link to={bookUrl}>Book</Link>
+            <Link to={bookUrl}>{t('storefront.public.navigation.book')}</Link>
           </Button>
           {sectionLinks.map((item) => (
             <Button
@@ -434,14 +446,14 @@ export default function BusinessHome() {
         <section id="services" className="scroll-mt-32">
           <CompactHeading
             icon={<Scissors className="h-5 w-5" />}
-            title="Services"
-            description={industry.labels.serviceSectionDescription}
+            title={t('storefront.public.sections.services.title')}
+            description={t('storefront.public.sections.services.description')}
           />
 
           {loading ? (
             <LoadingRows />
           ) : services.length === 0 ? (
-            <EmptyState text="No public services are available yet." />
+            <EmptyState text={t('storefront.public.sections.services.empty')} />
           ) : (
             <Card className="overflow-hidden rounded-2xl shadow-sm">
               <CardContent className="p-0">
@@ -468,7 +480,7 @@ export default function BusinessHome() {
                           <h3 className="font-bold">{service.name}</h3>
                           <span className="flex items-center gap-1 text-xs text-muted-foreground">
                             <Clock className="h-3.5 w-3.5" />
-                            {service.duration} min
+                            {service.duration} {t('common.minutesShort')}
                           </span>
                         </div>
                         {service.description && (
@@ -480,11 +492,11 @@ export default function BusinessHome() {
 
                       <div className="flex items-center justify-between gap-4 sm:justify-end">
                         <div className="text-lg font-bold">
-                          €{Number(service.price).toFixed(2)}
+                          {currencyFormatter.format(Number(service.price))}
                         </div>
                         <Button asChild size="sm" variant="outline">
                           <Link to={`${bookUrl}?service=${service.id}`}>
-                            Book
+                            {t('storefront.public.actions.book')}
                             <ChevronRight className="ml-1 h-4 w-4" />
                           </Link>
                         </Button>
@@ -500,12 +512,12 @@ export default function BusinessHome() {
         <section id="team" className="scroll-mt-32">
           <CompactHeading
             icon={<UserRound className="h-5 w-5" />}
-            title={industry.labels.teamSectionTitle}
-            description={`Choose your preferred ${industry.labels.professional}.`}
+            title={t('storefront.public.sections.team.title')}
+            description={t('storefront.public.sections.team.description')}
           />
 
           {staff.length === 0 ? (
-            <EmptyState text="Team profiles will appear here soon." />
+            <EmptyState text={t('storefront.public.sections.team.empty')} />
           ) : (
             <div className="scrollbar-subtle flex snap-x gap-3 overflow-x-auto pb-2">
               {staff.map((member) => (
@@ -529,16 +541,16 @@ export default function BusinessHome() {
                       <div className="min-w-0">
                         <h3 className="truncate font-bold">{member.name}</h3>
                         <div className="mt-1 text-xs text-muted-foreground">
-                          Professional team member
+                          {t('storefront.public.sections.team.memberLabel')}
                         </div>
                       </div>
                     </div>
                     <p className="mt-3 line-clamp-2 min-h-10 text-sm leading-5 text-muted-foreground">
-                      {member.bio || 'Available for online appointments.'}
+                      {member.bio || t('storefront.public.sections.team.memberFallback')}
                     </p>
                     <Button asChild variant="outline" size="sm" className="mt-4 w-full">
                       <Link to={`${bookUrl}?staff=${member.id}`}>
-                        Book with {member.name.split(' ')[0]}
+                        {t('storefront.public.actions.bookWith', { name: member.name.split(' ')[0] })}
                       </Link>
                     </Button>
                   </CardContent>
@@ -551,12 +563,12 @@ export default function BusinessHome() {
         <section id="gallery" className="scroll-mt-32">
           <CompactHeading
             icon={<ImageIcon className="h-5 w-5" />}
-            title="Gallery"
-            description="Inside the store and recent work."
+            title={t('storefront.public.sections.gallery.title')}
+            description={t('storefront.public.sections.gallery.description')}
           />
 
           {gallery.length === 0 ? (
-            <EmptyState text="The store gallery is currently empty." />
+            <EmptyState text={t('storefront.public.sections.gallery.empty')} />
           ) : (
             <div className="scrollbar-subtle flex snap-x gap-3 overflow-x-auto pb-2">
               {gallery.map((image) => (
@@ -587,12 +599,12 @@ export default function BusinessHome() {
         <section id="products" className="scroll-mt-32">
           <CompactHeading
             icon={<Package className="h-5 w-5" />}
-            title="Products"
-            description="Professional products available in store."
+            title={t('storefront.public.sections.products.title')}
+            description={t('storefront.public.sections.products.description')}
           />
 
           {products.length === 0 ? (
-            <EmptyState text="No public products have been added yet." />
+            <EmptyState text={t('storefront.public.sections.products.empty')} />
           ) : (
             <div className="scrollbar-subtle flex snap-x gap-3 overflow-x-auto pb-2">
               {products.map((product) => (
@@ -615,7 +627,7 @@ export default function BusinessHome() {
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="line-clamp-2 font-bold">{product.name}</h3>
                       <span className="shrink-0 font-bold">
-                        €{Number(product.price).toFixed(2)}
+                        {currencyFormatter.format(Number(product.price))}
                       </span>
                     </div>
                     <Badge
@@ -627,8 +639,8 @@ export default function BusinessHome() {
                       }
                     >
                       {Number(product.stock_quantity) > 0
-                        ? 'Available'
-                        : 'Out of stock'}
+                        ? t('storefront.public.status.available')
+                        : t('storefront.public.status.outOfStock')}
                     </Badge>
                   </CardContent>
                 </Card>
@@ -649,13 +661,11 @@ export default function BusinessHome() {
                 <Megaphone className="h-5 w-5" />
               </div>
               <div className="min-w-0">
-                <h2 className="text-lg font-bold">Announcements</h2>
+                <h2 className="text-lg font-bold">{t('storefront.public.sections.announcements.title')}</h2>
                 <p className="truncate text-sm text-muted-foreground">
                   {posts.length > 0
-                    ? `${posts.length} published ${
-                        posts.length === 1 ? 'update' : 'updates'
-                      }`
-                    : 'No published updates'}
+                    ? t('storefront.public.sections.announcements.published', { count: posts.length })
+                    : t('storefront.public.sections.announcements.noPublishedUpdates')}
                 </p>
               </div>
             </div>
@@ -670,7 +680,7 @@ export default function BusinessHome() {
             <div className="mt-3 overflow-hidden rounded-2xl border bg-card shadow-sm">
               {posts.length === 0 ? (
                 <div className="p-7 text-center text-sm text-muted-foreground">
-                  There are no published announcements yet.
+                  {t('storefront.public.sections.announcements.empty')}
                 </div>
               ) : (
                 <div className="divide-y">
@@ -685,19 +695,14 @@ export default function BusinessHome() {
                         <div className="flex flex-wrap items-center gap-2">
                           {index === 0 && (
                             <Badge className="bg-primary/10 text-primary hover:bg-primary/10">
-                              Latest
+                              {t('storefront.public.sections.announcements.latest')}
                             </Badge>
                           )}
                           <Badge variant="outline" className="capitalize">
-                            {String(post.post_type || 'announcement').replace(
-                              /_/g,
-                              ' '
-                            )}
+                            {getPostTypeLabel(t, post.post_type)}
                           </Badge>
                           <span className="text-xs text-muted-foreground">
-                            {formatPostDate(
-                              post.published_at || post.created_at
-                            )}
+                            {formatPostDate(post.published_at || post.created_at, locale)}
                           </span>
                         </div>
                         <h3 className="mt-2 truncate font-bold">{post.title}</h3>
@@ -706,7 +711,7 @@ export default function BusinessHome() {
                         </p>
                       </div>
                       <span className="flex items-center text-sm font-semibold text-primary">
-                        Read more
+                        {t('storefront.public.actions.readMore')}
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </span>
                     </button>
@@ -725,8 +730,8 @@ export default function BusinessHome() {
             <CardContent className="p-5">
               <CompactHeading
                 icon={<MapPin className="h-5 w-5" />}
-                title="Visit & Contact"
-                description="Everything you need before your visit."
+                title={t('storefront.public.sections.contact.title')}
+                description={t('storefront.public.sections.contact.description')}
                 noMargin
               />
 
@@ -767,7 +772,7 @@ export default function BusinessHome() {
                   <Button asChild className="rounded-xl">
                     <a href={directionsUrl} target="_blank" rel="noreferrer">
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      Directions
+                      {t('storefront.public.actions.directions')}
                     </a>
                   </Button>
                 )}
@@ -777,7 +782,7 @@ export default function BusinessHome() {
                     className="rounded-xl"
                     onClick={openCustomerSignIn}
                   >
-                    Sign In
+                    {t('storefront.public.actions.signIn')}
                   </Button>
                 )}
               </div>
@@ -787,7 +792,7 @@ export default function BusinessHome() {
           {mapEmbedUrl ? (
             <div className="min-h-[280px] overflow-hidden rounded-2xl border bg-muted shadow-sm">
               <iframe
-                title={`${business.name} location`}
+                title={t('storefront.public.mapTitle', { business: business.name })}
                 src={mapEmbedUrl}
                 className="h-full min-h-[280px] w-full"
                 loading="lazy"
@@ -796,7 +801,7 @@ export default function BusinessHome() {
             </div>
           ) : (
             <div className="flex min-h-[280px] items-center justify-center rounded-2xl border bg-muted/30 p-6 text-center text-sm text-muted-foreground">
-              Map location has not been configured yet.
+              {t('storefront.public.sections.contact.mapMissing')}
             </div>
           )}
         </section>
@@ -819,17 +824,17 @@ export default function BusinessHome() {
             <div>
               <div className="text-sm font-bold">{business.name}</div>
               <div className="text-xs text-muted-foreground">
-                Professional online booking
+                {t('storefront.public.footer.tagline')}
               </div>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm">
             <Link to={bookUrl} className="font-semibold text-primary">
-              Book Appointment
+              {t('storefront.public.actions.bookAppointment')}
             </Link>
-            <span className="text-muted-foreground">Privacy</span>
-            <span className="text-muted-foreground">Terms</span>
+            <span className="text-muted-foreground">{t('storefront.public.footer.privacy')}</span>
+            <span className="text-muted-foreground">{t('storefront.public.footer.terms')}</span>
           </div>
         </div>
       </footer>
@@ -844,15 +849,10 @@ export default function BusinessHome() {
               <DialogHeader>
                 <div className="flex flex-wrap items-center gap-2">
                   <Badge variant="outline" className="capitalize">
-                    {String(
-                      selectedAnnouncement.post_type || 'announcement'
-                    ).replace(/_/g, ' ')}
+                    {getPostTypeLabel(t, selectedAnnouncement.post_type)}
                   </Badge>
                   <span className="text-xs text-muted-foreground">
-                    {formatPostDate(
-                      selectedAnnouncement.published_at ||
-                        selectedAnnouncement.created_at
-                    )}
+                    {formatPostDate(selectedAnnouncement.published_at || selectedAnnouncement.created_at, locale)}
                   </span>
                 </div>
                 <DialogTitle className="pt-2 text-2xl">
@@ -887,7 +887,7 @@ export default function BusinessHome() {
                 type="button"
                 className="absolute right-3 top-3 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-black/60 text-white"
                 onClick={() => setSelectedGalleryImage(null)}
-                aria-label="Close image"
+                aria-label={t('storefront.public.actions.closeImage')}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -984,16 +984,33 @@ function ContactRow({
   );
 }
 
-function formatPostDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function getPostTypeLabel(t: TFunction, value?: string | null) {
+  const type = value || 'announcement';
+  const supported = new Set([
+    'announcement',
+    'holiday_closure',
+    'promotion',
+    'price_update',
+    'new_product',
+    'new_team_member',
+    'general',
+  ]);
+
+  return supported.has(type)
+    ? t(`storefront.public.postTypes.${type}`)
+    : type.replace(/_/g, ' ');
+}
+
+function formatPostDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
   }).format(new Date(value));
 }
 
-function formatClosureRange(start: string, end: string) {
-  const formatter = new Intl.DateTimeFormat('en-GB', {
+function formatClosureRange(start: string, end: string, locale: string) {
+  const formatter = new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

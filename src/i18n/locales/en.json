@@ -71,7 +71,19 @@
     "add": "Add",
     "loading": "Loading...",
     "saving": "Saving…",
-    "minutesShort": "min"
+    "minutesShort": "min",
+    "imageUploader": {
+      "fileTooLarge": "File too large, compressing…",
+      "compressedTo": "Compressed to {{size}} KB",
+      "uploaded": "Image uploaded successfully",
+      "uploadFailed": "Failed to upload image",
+      "uploadedAlt": "Uploaded image",
+      "removeImage": "Remove image",
+      "clickToUpload": "Click to upload image",
+      "supportedFormats": "Supports JPG, PNG and WEBP (maximum 1 MB with automatic compression)",
+      "uploading": "Uploading… {{progress}}%"
+    },
+    "back": "Back"
   },
   "language": {
     "label": "Language",
@@ -942,7 +954,9 @@
       "completedCount_other": "{{count}} completed",
       "cancellationNoShowDetail": "{{cancellation}}% cancelled · {{noShow}}% no-show",
       "returningCount_one": "{{count}} returning customer",
-      "returningCount_other": "{{count}} returning customers"
+      "returningCount_other": "{{count}} returning customers",
+      "completedCount": "{{count}} completed",
+      "returningCount": "{{count}} returning"
     },
     "comparison": {
       "vsPreviousPeriod": "{{value}} vs previous period"
@@ -953,7 +967,8 @@
     },
     "counts": {
       "bookings_one": "{{count}} booking",
-      "bookings_other": "{{count}} bookings"
+      "bookings_other": "{{count}} bookings",
+      "bookings": "{{count}} bookings"
     },
     "executive": {
       "trendTitle": "Revenue and demand trend",
@@ -1053,7 +1068,8 @@
     },
     "chart": {
       "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} appointment",
-      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} appointments"
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} appointments",
+      "dailyTooltip": "{{date}} · {{count}} bookings"
     },
     "csv": {
       "reportTitle": "Velliqo Business Intelligence Report",
@@ -1081,5 +1097,419 @@
       "unassigned": "Unassigned",
       "customer": "Customer"
     }
+  },
+  "storefront": {
+    "owner": {
+      "eyebrow": "Public presence",
+      "title": "Storefront Studio",
+      "description": "Build and maintain the public destination customers use to discover, trust and book your business.",
+      "sections": {
+        "overview": "Overview",
+        "branding": "Branding",
+        "contact": "Contact",
+        "location": "Location",
+        "sharing": "Preview & sharing"
+      },
+      "actions": {
+        "copyLink": "Copy link",
+        "openPublicPage": "Open public page",
+        "copy": "Copy",
+        "preview": "Preview",
+        "openPreview": "Open preview",
+        "saveChanges": "Save changes"
+      },
+      "readiness": {
+        "title": "Storefront readiness",
+        "description": "Complete the essential information customers expect before booking.",
+        "publicUrl": "Public URL",
+        "availableAfterCreation": "Available after business creation",
+        "identityDescription": "Your public business identity and customer destination.",
+        "businessLogo": "Business logo",
+        "coverImage": "Cover image",
+        "businessDescription": "Business description",
+        "phoneAndEmail": "Phone and email",
+        "address": "Address",
+        "yourLocation": "Your location",
+        "descriptionFallback": "Add a clear business description to introduce your services and customer experience.",
+        "complete": "Complete",
+        "needsAttention": "Needs attention"
+      },
+      "branding": {
+        "title": "Branding and story",
+        "description": "Create a recognisable, professional first impression.",
+        "businessLogo": "Business logo",
+        "businessLogoHint": "Square image recommended.",
+        "coverImage": "Cover image",
+        "coverImageHint": "Wide, high-quality image recommended.",
+        "storeDescription": "Store description",
+        "storeDescriptionHint": "Explain what makes the business valuable, trustworthy and different.",
+        "descriptionPlaceholder": "Describe your business, expertise, services and customer experience.",
+        "characterCount": "{{count}} characters"
+      },
+      "contact": {
+        "title": "Contact details",
+        "description": "These details are visible to customers on the public page.",
+        "publicPhone": "Public phone",
+        "phoneHint": "Include the country code where relevant.",
+        "publicEmail": "Public email",
+        "emailHint": "Used for customer contact."
+      },
+      "location": {
+        "title": "Location and directions",
+        "description": "Add structured information for directions and map display.",
+        "displayAddress": "Display address",
+        "displayAddressHint": "The friendly address shown publicly.",
+        "addressLine1": "Address line 1",
+        "addressLine2": "Address line 2",
+        "city": "City",
+        "district": "District / region",
+        "postalCode": "Postal code",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordinateHint": "Example: {{value}}",
+        "mapTitle": "Store location preview"
+      },
+      "sharing": {
+        "title": "Preview and sharing",
+        "description": "Open, copy and distribute your permanent public business page.",
+        "publicLink": "Public link",
+        "defaultBusinessName": "My Business"
+      },
+      "status": {
+        "loading": "Loading storefront editor…",
+        "unsaved": "You have unsaved storefront changes",
+        "saved": "All storefront changes are saved",
+        "reviewReadiness": "Review your public readiness.",
+        "editing": "Editing {{section}}.",
+        "saving": "Saving…"
+      },
+      "validation": {
+        "coordinates": "Latitude and longitude must be valid numbers",
+        "email": "Enter a valid public email address"
+      },
+      "messages": {
+        "loadError": "Unable to load storefront details",
+        "saveError": "Unable to save storefront changes",
+        "updated": "Storefront updated successfully",
+        "linkCopied": "Public link copied"
+      }
+    },
+    "qr": {
+      "title": "Share this store",
+      "description": "Scan the QR code or share the link to open {{business}}, view services and book an appointment.",
+      "shareText": "View {{business}} and book an appointment",
+      "qrTitle": "{{business}} booking QR code",
+      "copyTitle": "Copy link",
+      "share": "Share",
+      "download": "Download QR",
+      "linkCopied": "Store link copied",
+      "copyError": "Could not copy the store link",
+      "shareError": "Could not share the store link",
+      "downloadError": "QR code could not be downloaded",
+      "downloaded": "QR code downloaded"
+    },
+    "public": {
+      "navigation": {
+        "store": "Store",
+        "book": "Book",
+        "myAccount": "My Account",
+        "services": "Services",
+        "team": "Team",
+        "gallery": "Gallery",
+        "products": "Products",
+        "announcements": "Announcements",
+        "contact": "Contact"
+      },
+      "status": {
+        "onlineBooking": "Online booking",
+        "temporarilyClosed": "Temporarily closed",
+        "acceptingBookings": "Accepting bookings",
+        "available": "Available",
+        "outOfStock": "Out of stock"
+      },
+      "actions": {
+        "bookAppointment": "Book Appointment",
+        "directions": "Directions",
+        "share": "Share",
+        "createAccount": "Create an account",
+        "chooseAnotherDate": "Choose another date",
+        "book": "Book",
+        "bookWith": "Book with {{name}}",
+        "signIn": "Sign In",
+        "readMore": "Read more",
+        "closeImage": "Close image"
+      },
+      "hero": {
+        "defaultTagline": "Discover our services and book online with ease.",
+        "guestBookingPrefix": "Guest booking is available.",
+        "guestBookingSuffix": "for faster future bookings.",
+        "quickAccess": "Quick access",
+        "shareText": "Book an appointment with {{business}}"
+      },
+      "sections": {
+        "services": {
+          "title": "Services",
+          "description": "Explore services, pricing and availability.",
+          "empty": "No public services are available yet."
+        },
+        "team": {
+          "title": "Meet the team",
+          "description": "Choose your preferred professional.",
+          "empty": "Team profiles will appear here soon.",
+          "memberLabel": "Professional team member",
+          "memberFallback": "Available for online appointments."
+        },
+        "gallery": {
+          "title": "Gallery",
+          "description": "Inside the store and recent work.",
+          "empty": "The store gallery is currently empty."
+        },
+        "products": {
+          "title": "Products",
+          "description": "Professional products available in store.",
+          "empty": "No public products have been added yet."
+        },
+        "announcements": {
+          "title": "Announcements",
+          "published_one": "{{count}} published update",
+          "published_other": "{{count}} published updates",
+          "noPublishedUpdates": "No published updates",
+          "empty": "There are no published announcements yet.",
+          "latest": "Latest",
+          "published": "{{count}} published"
+        },
+        "contact": {
+          "title": "Visit & Contact",
+          "description": "Everything you need before your visit.",
+          "mapMissing": "Map location has not been configured yet."
+        }
+      },
+      "footer": {
+        "tagline": "Professional online booking",
+        "privacy": "Privacy",
+        "terms": "Terms"
+      },
+      "postTypes": {
+        "announcement": "Announcement",
+        "holiday_closure": "Holiday Closure",
+        "promotion": "Promotion",
+        "price_update": "Price Update",
+        "new_product": "New Product",
+        "new_team_member": "New Team Member",
+        "general": "General"
+      },
+      "mapTitle": "{{business}} location",
+      "loading": "Loading store…",
+      "notFound": {
+        "title": "Store not found",
+        "description": "This store link is unavailable or no longer active."
+      },
+      "auth": {
+        "customerAccount": "Customer account",
+        "customerAccess": "Customer access",
+        "heroTitle": "Your appointments and store experience in one place.",
+        "heroDescription": "Create an optional account for faster bookings, appointment history and updates from {{business}}.",
+        "benefits": {
+          "fasterTitle": "Faster booking",
+          "fasterText": "Reuse your saved customer information.",
+          "upcomingTitle": "Upcoming appointments",
+          "upcomingText": "See your next visits at this specific store.",
+          "historyTitle": "Appointment history",
+          "historyText": "Keep a clear record of previous bookings."
+        },
+        "privacyNote": "Your customer account is connected to this store. Guest booking remains available without registration.",
+        "signInEyebrow": "Customer sign in",
+        "signUpEyebrow": "Customer registration",
+        "welcomeBack": "Welcome back to {{business}}",
+        "createBusinessAccount": "Create your {{business}} account",
+        "signInDescription": "Access your upcoming appointments, history and customer profile.",
+        "signUpDescription": "Create an optional customer account for this specific store.",
+        "signIn": "Sign In",
+        "createAccount": "Create Account",
+        "fullName": "Full Name",
+        "phone": "Phone",
+        "email": "Email",
+        "password": "Password",
+        "accountLinkNote": "This account is linked to {{business}}. It gives you appointment history and faster booking at this store.",
+        "pleaseWait": "Please wait…",
+        "signInAccount": "Sign In to My Account",
+        "createCustomerAccount": "Create Customer Account",
+        "continueGuest": "Continue as Guest",
+        "optionalNote": "Creating an account is optional. You can always book without registration."
+      },
+      "validation": {
+        "credentialsRequired": "Email and password are required.",
+        "fullNameRequired": "Full name is required."
+      },
+      "messages": {
+        "accountCreated": "Customer account created.",
+        "accountCreatedConfirm": "Account created. Confirm your email, then return to this store.",
+        "signedIn": "Signed in successfully.",
+        "signedOut": "Signed out.",
+        "joinError": "Could not connect your account to this store.",
+        "authenticationFailed": "Authentication failed."
+      },
+      "errors": {
+        "loadStore": "Unable to load this store"
+      },
+      "accessibility": {
+        "openMenu": "Open navigation menu",
+        "closeMenu": "Close navigation menu",
+        "signOut": "Sign out"
+      }
+    }
+  },
+  "publicBooking": {
+    "steps": {
+      "services": "Services",
+      "professional": "Professional",
+      "dateTime": "Date & Time",
+      "details": "Your Details"
+    },
+    "header": {
+      "eyebrow": "Online booking",
+      "title": "Book with {{business}}",
+      "description": "Choose your services, preferred professional and a real available time."
+    },
+    "services": {
+      "title": "Choose Services",
+      "description": "Select one or more services for the same appointment.",
+      "select": "Select",
+      "selected": "Selected",
+      "continue": "Continue to Professional"
+    },
+    "professionals": {
+      "title": "Choose a Professional",
+      "description": "Select someone specific or allow the system to assign any eligible professional.",
+      "anyAvailable": "Any Available",
+      "anyAvailableProfessional": "Any available professional",
+      "anyAvailableDescription": "Assign the first eligible professional for your selected time.",
+      "defaultBio": "Professional team member."
+    },
+    "dateTime": {
+      "title": "Choose Date & Time",
+      "description": "Only real available appointment times are displayed.",
+      "selectDate": "Select a date",
+      "browseAvailability": "Browse real availability for the next days.",
+      "specificDate": "Or choose a specific date",
+      "continue": "Continue to Your Details"
+    },
+    "timeGroups": {
+      "morning": "Morning",
+      "afternoon": "Afternoon",
+      "evening": "Evening"
+    },
+    "closure": {
+      "title": "Store Closed",
+      "description": "{{business}} is closed on the selected date for {{reason}}.",
+      "range": "Closed {{range}}",
+      "chooseAnother": "Please choose another date."
+    },
+    "details": {
+      "title": "Your Details",
+      "savedDescription": "Your saved customer details will be used.",
+      "guestDescription": "Enter the contact details required for your booking.",
+      "name": "Name",
+      "fullNameRequired": "Full Name *",
+      "phone": "Phone",
+      "phoneRequired": "Phone number *",
+      "phoneRequiredShort": "Phone *",
+      "email": "Email",
+      "notes": "Notes",
+      "notesPlaceholder": "Optional notes for the store"
+    },
+    "summary": {
+      "title": "Booking Summary",
+      "reference": "Reference",
+      "services": "Services",
+      "professional": "Professional",
+      "when": "When",
+      "date": "Date",
+      "time": "Time",
+      "estimatedFinish": "Estimated Finish",
+      "duration": "Duration",
+      "total": "Total"
+    },
+    "confirmation": {
+      "title": "Booking Confirmed",
+      "description": "Your appointment at {{business}} has been reserved successfully.",
+      "addToCalendar": "Add to Calendar",
+      "getDirections": "Get Directions",
+      "viewAppointments": "View My Appointments",
+      "bookAnother": "Book Another Appointment"
+    },
+    "actions": {
+      "confirm": "Confirm Appointment",
+      "confirming": "Confirming..."
+    },
+    "states": {
+      "loadingOptions": "Loading booking options...",
+      "loadingTimes": "Loading available appointments...",
+      "loadingDetails": "Loading your details...",
+      "noAppointments": "No available appointments",
+      "noAppointmentsDescription": "Choose another date or professional to see more times.",
+      "notSelected": "Not selected",
+      "notAvailable": "Not available",
+      "notProvided": "Not provided"
+    },
+    "validation": {
+      "namePhoneRequired": "Name and phone are required",
+      "completeSteps": "Please complete all booking steps."
+    },
+    "messages": {
+      "loadOptionsFailed": "Unable to load booking options.",
+      "loadTimesFailed": "Unable to load available times.",
+      "bookingFailed": "Booking failed. Please try again.",
+      "slotUnavailable": "That time is no longer available. Please choose another time."
+    },
+    "calendar": {
+      "summary": "{{services}} at {{business}}",
+      "description": "Booking reference {{reference}}",
+      "fileName": "appointment"
+    },
+    "mobile": {
+      "selectServices": "Select services to begin",
+      "step": "Step {{step}} of {{total}}",
+      "ready": "Ready to confirm"
+    },
+    "durationMinutes": "{{count}} minutes"
+  },
+  "ai": {
+    "ownerFallback": "Owner",
+    "welcome": "Welcome, {{name}}",
+    "introduction": "Velliqo AI is being prepared to help {{business}} understand performance, customers and scheduling.",
+    "yourBusiness": "your business",
+    "askVelliqo": "Ask Velliqo",
+    "settings": "AI Settings",
+    "cards": {
+      "insights": "Smart Insights",
+      "insightsDescription": "Turn business activity into clear, practical recommendations.",
+      "businessHealth": "Business Health",
+      "businessHealthDescription": "Understand the operational health of your business at a glance.",
+      "customerIntelligence": "Customer Intelligence",
+      "customerIntelligenceDescription": "Identify customer patterns, retention opportunities and service preferences.",
+      "scheduling": "Smart Scheduling",
+      "schedulingDescription": "Surface demand patterns and opportunities to improve capacity."
+    },
+    "foundationReady": "Foundation ready",
+    "nextSprint": "Coming next",
+    "platform": "Velliqo intelligence platform",
+    "specialists": "Specialist AI agents",
+    "foundationTitle": "Secure AI foundation",
+    "foundationDescription": "AI access is controlled by business permissions, language and approved data scopes.",
+    "reviewSettings": "Review AI settings",
+    "settingsDescription": "Control how Velliqo AI works with your business data.",
+    "settingsSaved": "AI settings saved",
+    "enableAI": "Enable Velliqo AI",
+    "enableAIDescription": "Allow authorised users to access AI-assisted features for this business.",
+    "defaultLanguage": "Default AI language",
+    "responseStyle": "Response style",
+    "concise": "Concise",
+    "balanced": "Balanced",
+    "detailed": "Detailed",
+    "conversationHistory": "Conversation history",
+    "conversationHistoryDescription": "Keep AI conversations so authorised users can return to previous work.",
+    "customerData": "Customer data access",
+    "customerDataDescription": "Allow AI features to use approved customer information when permissions permit."
   }
 }

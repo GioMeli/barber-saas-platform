@@ -17,13 +17,13 @@ import {
   ImageIcon,
   Link2,
   Loader2,
-  Mail,
   MapPin,
   Phone,
   Save,
   Sparkles,
 } from 'lucide-react';
 import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
+import { useTranslation } from 'react-i18next';
 
 const EMPTY_FORM = {
   description: '', logo_url: '', cover_image_url: '', phone: '', email: '',
@@ -35,6 +35,7 @@ type SectionKey = 'overview' | 'branding' | 'contact' | 'location' | 'sharing';
 
 export default function Storefront() {
   const { activeBusiness } = useAuth();
+  const { t } = useTranslation();
   const businessId = activeBusiness?.id;
   const business = activeBusiness;
   const [form, setForm] = useState(EMPTY_FORM);
@@ -63,7 +64,8 @@ export default function Storefront() {
     setLoading(true);
     const { data, error } = await supabase.from('businesses').select('*').eq('id', businessId).single();
     if (error) {
-      toast.error(error.message);
+      console.error('Storefront load error:', error);
+      toast.error(t('storefront.owner.messages.loadError'));
       setLoading(false);
       return;
     }
@@ -107,12 +109,12 @@ export default function Storefront() {
     const latitude = form.latitude.trim() ? Number(form.latitude) : null;
     const longitude = form.longitude.trim() ? Number(form.longitude) : null;
     if ((latitude !== null && Number.isNaN(latitude)) || (longitude !== null && Number.isNaN(longitude))) {
-      toast.error('Latitude and longitude must be valid numbers');
+      toast.error(t('storefront.owner.validation.coordinates'));
       setSaving(false);
       return;
     }
     if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
-      toast.error('Enter a valid public email address');
+      toast.error(t('storefront.owner.validation.email'));
       setSaving(false);
       return;
     }
@@ -136,10 +138,11 @@ export default function Storefront() {
 
     const { error } = await supabase.from('businesses').update(payload).eq('id', businessId);
     if (error) {
-      toast.error(error.message);
+      console.error('Storefront save error:', error);
+      toast.error(t('storefront.owner.messages.saveError'));
     } else {
       setInitialForm(form);
-      toast.success('Storefront updated successfully');
+      toast.success(t('storefront.owner.messages.updated'));
     }
     setSaving(false);
   };
@@ -147,21 +150,21 @@ export default function Storefront() {
   const copyPublicLink = async () => {
     if (!publicUrl) return;
     await navigator.clipboard.writeText(publicUrl);
-    toast.success('Public link copied');
+    toast.success(t('storefront.owner.messages.linkCopied'));
   };
 
   const sections: Array<{ id: SectionKey; label: string; icon: React.ReactNode }> = [
-    { id: 'overview', label: 'Overview', icon: <Sparkles className="h-4 w-4" /> },
-    { id: 'branding', label: 'Branding', icon: <ImageIcon className="h-4 w-4" /> },
-    { id: 'contact', label: 'Contact', icon: <Phone className="h-4 w-4" /> },
-    { id: 'location', label: 'Location', icon: <MapPin className="h-4 w-4" /> },
-    { id: 'sharing', label: 'Preview & sharing', icon: <Link2 className="h-4 w-4" /> },
+    { id: 'overview', label: t('storefront.owner.sections.overview'), icon: <Sparkles className="h-4 w-4" /> },
+    { id: 'branding', label: t('storefront.owner.sections.branding'), icon: <ImageIcon className="h-4 w-4" /> },
+    { id: 'contact', label: t('storefront.owner.sections.contact'), icon: <Phone className="h-4 w-4" /> },
+    { id: 'location', label: t('storefront.owner.sections.location'), icon: <MapPin className="h-4 w-4" /> },
+    { id: 'sharing', label: t('storefront.owner.sections.sharing'), icon: <Link2 className="h-4 w-4" /> },
   ];
 
   if (loading) {
     return (
       <div className="flex min-h-[60vh] items-center justify-center">
-        <div className="text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-primary" /><p className="mt-3 text-sm text-muted-foreground">Loading storefront editor…</p></div>
+        <div className="text-center"><Loader2 className="mx-auto h-7 w-7 animate-spin text-primary" /><p className="mt-3 text-sm text-muted-foreground">{t('storefront.owner.status.loading')}</p></div>
       </div>
     );
   }
@@ -170,13 +173,13 @@ export default function Storefront() {
     <div className="app-page pb-28">
       <header className="app-page-header">
         <div>
-          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">Public presence</div>
-          <h1 className="app-page-title">Storefront Studio</h1>
-          <p className="app-page-description">Build and maintain the public destination customers use to discover, trust and book your business.</p>
+          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{t('storefront.owner.eyebrow')}</div>
+          <h1 className="app-page-title">{t('storefront.owner.title')}</h1>
+          <p className="app-page-description">{t('storefront.owner.description')}</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => void copyPublicLink()} disabled={!publicUrl}><Copy className="mr-2 h-4 w-4" />Copy link</Button>
-          <Button asChild variant="outline" disabled={!publicUrl}><a href={publicUrl || '#'} target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />Open public page</a></Button>
+          <Button variant="outline" onClick={() => void copyPublicLink()} disabled={!publicUrl}><Copy className="mr-2 h-4 w-4" />{t('storefront.owner.actions.copyLink')}</Button>
+          <Button asChild variant="outline" disabled={!publicUrl}><a href={publicUrl || '#'} target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />{t('storefront.owner.actions.openPublicPage')}</a></Button>
         </div>
       </header>
 
@@ -186,8 +189,8 @@ export default function Storefront() {
           <CardContent className="p-5 sm:p-6">
             <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <div className="flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-emerald-500" /><h2 className="text-lg font-extrabold">Storefront readiness</h2></div>
-                <p className="mt-2 text-sm text-muted-foreground">Complete the essential information customers expect before booking.</p>
+                <div className="flex items-center gap-2"><CheckCircle2 className="h-5 w-5 text-emerald-500" /><h2 className="text-lg font-extrabold">{t('storefront.owner.readiness.title')}</h2></div>
+                <p className="mt-2 text-sm text-muted-foreground">{t('storefront.owner.readiness.description')}</p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="relative h-20 w-20">
@@ -204,11 +207,11 @@ export default function Storefront() {
 
         <Card className="rounded-3xl bg-slate-950 text-white shadow-card">
           <CardContent className="p-5">
-            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">Public URL</div>
-            <div className="mt-3 break-all text-sm font-semibold">{publicUrl || 'Available after business creation'}</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.16em] text-white/50">{t('storefront.owner.readiness.publicUrl')}</div>
+            <div className="mt-3 break-all text-sm font-semibold">{publicUrl || t('storefront.owner.readiness.availableAfterCreation')}</div>
             <div className="mt-4 flex gap-2">
-              <Button size="sm" variant="secondary" onClick={() => void copyPublicLink()} disabled={!publicUrl}><Copy className="mr-2 h-3.5 w-3.5" />Copy</Button>
-              <Button size="sm" variant="secondary" asChild disabled={!publicUrl}><a href={publicUrl || '#'} target="_blank" rel="noreferrer"><Eye className="mr-2 h-3.5 w-3.5" />Preview</a></Button>
+              <Button size="sm" variant="secondary" onClick={() => void copyPublicLink()} disabled={!publicUrl}><Copy className="mr-2 h-3.5 w-3.5" />{t('storefront.owner.actions.copy')}</Button>
+              <Button size="sm" variant="secondary" asChild disabled={!publicUrl}><a href={publicUrl || '#'} target="_blank" rel="noreferrer"><Eye className="mr-2 h-3.5 w-3.5" />{t('storefront.owner.actions.preview')}</a></Button>
             </div>
           </CardContent>
         </Card>
@@ -228,14 +231,14 @@ export default function Storefront() {
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Building2 className="h-6 w-6" /></div>
-                <div><h2 className="text-xl font-extrabold">{business?.name}</h2><p className="mt-1 text-sm text-muted-foreground">Your public business identity and customer destination.</p></div>
+                <div><h2 className="text-xl font-extrabold">{business?.name}</h2><p className="mt-1 text-sm text-muted-foreground">{t('storefront.owner.readiness.identityDescription')}</p></div>
               </div>
               <div className="mt-6 space-y-3">
-                <ChecklistLine label="Business logo" complete={Boolean(form.logo_url)} />
-                <ChecklistLine label="Cover image" complete={Boolean(form.cover_image_url)} />
-                <ChecklistLine label="Business description" complete={Boolean(form.description.trim())} />
-                <ChecklistLine label="Phone and email" complete={Boolean(form.phone.trim() && form.email.trim())} />
-                <ChecklistLine label="Address" complete={Boolean((form.address_line_1 || form.address).trim())} />
+                <ChecklistLine label={t('storefront.owner.readiness.businessLogo')} complete={Boolean(form.logo_url)} />
+                <ChecklistLine label={t('storefront.owner.readiness.coverImage')} complete={Boolean(form.cover_image_url)} />
+                <ChecklistLine label={t('storefront.owner.readiness.businessDescription')} complete={Boolean(form.description.trim())} />
+                <ChecklistLine label={t('storefront.owner.readiness.phoneAndEmail')} complete={Boolean(form.phone.trim() && form.email.trim())} />
+                <ChecklistLine label={t('storefront.owner.readiness.address')} complete={Boolean((form.address_line_1 || form.address).trim())} />
               </div>
             </CardContent>
           </Card>
@@ -246,10 +249,10 @@ export default function Storefront() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-5 left-5 flex items-center gap-3 text-white">
                 {form.logo_url ? <img src={form.logo_url} alt="" className="h-14 w-14 rounded-2xl border-2 border-white object-cover shadow-lg" /> : <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-xl font-bold backdrop-blur">{business?.name?.charAt(0) || 'V'}</div>}
-                <div><div className="text-lg font-extrabold">{business?.name}</div><div className="text-xs text-white/70">{form.city || 'Your location'}</div></div>
+                <div><div className="text-lg font-extrabold">{business?.name}</div><div className="text-xs text-white/70">{form.city || t('storefront.owner.readiness.yourLocation')}</div></div>
               </div>
             </div>
-            <CardContent className="p-5"><p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{form.description || 'Add a clear business description to introduce your services and customer experience.'}</p></CardContent>
+            <CardContent className="p-5"><p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{form.description || t('storefront.owner.readiness.descriptionFallback')}</p></CardContent>
           </Card>
         </section>
       )}
@@ -257,14 +260,14 @@ export default function Storefront() {
       {activeSection === 'branding' && (
         <Card className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
-            <SectionHeader icon={<ImageIcon className="h-5 w-5" />} title="Branding and story" description="Create a recognisable, professional first impression." />
+            <SectionHeader icon={<ImageIcon className="h-5 w-5" />} title={t('storefront.owner.branding.title')} description={t('storefront.owner.branding.description')} />
             <div className="grid gap-6 md:grid-cols-2">
-              <Field label="Business logo" hint="Square image recommended."><ImageUploader value={form.logo_url} onChange={(value) => update('logo_url', value)} folder={`businesses/${businessId ?? 'unknown'}/logo`} /></Field>
-              <Field label="Cover image" hint="Wide, high-quality image recommended."><ImageUploader value={form.cover_image_url} onChange={(value) => update('cover_image_url', value)} folder={`businesses/${businessId ?? 'unknown'}/cover`} /></Field>
+              <Field label={t('storefront.owner.branding.businessLogo')} hint={t('storefront.owner.branding.businessLogoHint')}><ImageUploader value={form.logo_url} onChange={(value) => update('logo_url', value)} folder={`businesses/${businessId ?? 'unknown'}/logo`} /></Field>
+              <Field label={t('storefront.owner.branding.coverImage')} hint={t('storefront.owner.branding.coverImageHint')}><ImageUploader value={form.cover_image_url} onChange={(value) => update('cover_image_url', value)} folder={`businesses/${businessId ?? 'unknown'}/cover`} /></Field>
             </div>
-            <Field label="Store description" hint="Explain what makes the business valuable, trustworthy and different.">
-              <Textarea rows={7} value={form.description} onChange={(event) => update('description', event.target.value)} placeholder="Describe your business, expertise, services and customer experience." />
-              <div className="mt-2 text-right text-xs text-muted-foreground">{form.description.length} characters</div>
+            <Field label={t('storefront.owner.branding.storeDescription')} hint={t('storefront.owner.branding.storeDescriptionHint')}>
+              <Textarea rows={7} value={form.description} onChange={(event) => update('description', event.target.value)} placeholder={t('storefront.owner.branding.descriptionPlaceholder')} />
+              <div className="mt-2 text-right text-xs text-muted-foreground">{t('storefront.owner.branding.characterCount', { count: form.description.length })}</div>
             </Field>
           </CardContent>
         </Card>
@@ -273,10 +276,10 @@ export default function Storefront() {
       {activeSection === 'contact' && (
         <Card className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
-            <SectionHeader icon={<Phone className="h-5 w-5" />} title="Contact details" description="These details are visible to customers on the public page." />
+            <SectionHeader icon={<Phone className="h-5 w-5" />} title={t('storefront.owner.contact.title')} description={t('storefront.owner.contact.description')} />
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Public phone" hint="Include country code where relevant."><Input type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} placeholder="+357..." /></Field>
-              <Field label="Public email" hint="Used for customer contact."><Input type="email" value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="hello@business.com" /></Field>
+              <Field label={t('storefront.owner.contact.publicPhone')} hint={t('storefront.owner.contact.phoneHint')}><Input type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} placeholder="+357..." /></Field>
+              <Field label={t('storefront.owner.contact.publicEmail')} hint={t('storefront.owner.contact.emailHint')}><Input type="email" value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="hello@business.com" /></Field>
             </div>
           </CardContent>
         </Card>
@@ -285,21 +288,21 @@ export default function Storefront() {
       {activeSection === 'location' && (
         <Card className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
-            <SectionHeader icon={<MapPin className="h-5 w-5" />} title="Location and directions" description="Add structured information for directions and map display." />
+            <SectionHeader icon={<MapPin className="h-5 w-5" />} title={t('storefront.owner.location.title')} description={t('storefront.owner.location.description')} />
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label="Display address" hint="The friendly address shown publicly." className="sm:col-span-2"><Input value={form.address} onChange={(event) => update('address', event.target.value)} /></Field>
-              <Field label="Address line 1"><Input value={form.address_line_1} onChange={(event) => update('address_line_1', event.target.value)} /></Field>
-              <Field label="Address line 2"><Input value={form.address_line_2} onChange={(event) => update('address_line_2', event.target.value)} /></Field>
-              <Field label="City"><Input value={form.city} onChange={(event) => update('city', event.target.value)} /></Field>
-              <Field label="District / region"><Input value={form.district} onChange={(event) => update('district', event.target.value)} /></Field>
-              <Field label="Postal code"><Input value={form.postal_code} onChange={(event) => update('postal_code', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.displayAddress')} hint={t('storefront.owner.location.displayAddressHint')} className="sm:col-span-2"><Input value={form.address} onChange={(event) => update('address', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.addressLine1')}><Input value={form.address_line_1} onChange={(event) => update('address_line_1', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.addressLine2')}><Input value={form.address_line_2} onChange={(event) => update('address_line_2', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.city')}><Input value={form.city} onChange={(event) => update('city', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.district')}><Input value={form.district} onChange={(event) => update('district', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.postalCode')}><Input value={form.postal_code} onChange={(event) => update('postal_code', event.target.value)} /></Field>
               <div />
-              <Field label="Latitude" hint="Example: 35.1856"><Input value={form.latitude} onChange={(event) => update('latitude', event.target.value)} /></Field>
-              <Field label="Longitude" hint="Example: 33.3823"><Input value={form.longitude} onChange={(event) => update('longitude', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.latitude')} hint={t('storefront.owner.location.coordinateHint', { value: '35.1856' })}><Input value={form.latitude} onChange={(event) => update('latitude', event.target.value)} /></Field>
+              <Field label={t('storefront.owner.location.longitude')} hint={t('storefront.owner.location.coordinateHint', { value: '33.3823' })}><Input value={form.longitude} onChange={(event) => update('longitude', event.target.value)} /></Field>
             </div>
             {form.latitude && form.longitude && (
               <div className="overflow-hidden rounded-2xl border">
-                <iframe title="Store location preview" src={`https://www.google.com/maps?q=${form.latitude},${form.longitude}&z=15&output=embed`} className="h-80 w-full" loading="lazy" />
+                <iframe title={t('storefront.owner.location.mapTitle')} src={`https://www.google.com/maps?q=${form.latitude},${form.longitude}&z=15&output=embed`} className="h-80 w-full" loading="lazy" />
               </div>
             )}
           </CardContent>
@@ -310,30 +313,30 @@ export default function Storefront() {
         <div className="space-y-6">
           <Card className="rounded-3xl shadow-card">
             <CardContent className="p-5 sm:p-7">
-              <SectionHeader icon={<Link2 className="h-5 w-5" />} title="Preview and sharing" description="Open, copy and distribute your permanent public business page." />
+              <SectionHeader icon={<Link2 className="h-5 w-5" />} title={t('storefront.owner.sharing.title')} description={t('storefront.owner.sharing.description')} />
               <div className="mt-6 rounded-2xl border bg-muted/25 p-4">
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Public link</div>
+                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{t('storefront.owner.sharing.publicLink')}</div>
                 <div className="mt-2 break-all font-semibold">{publicUrl}</div>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  <Button onClick={() => void copyPublicLink()}><Copy className="mr-2 h-4 w-4" />Copy link</Button>
-                  <Button variant="outline" asChild><a href={publicUrl} target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />Open preview</a></Button>
+                  <Button onClick={() => void copyPublicLink()}><Copy className="mr-2 h-4 w-4" />{t('storefront.owner.actions.copyLink')}</Button>
+                  <Button variant="outline" asChild><a href={publicUrl} target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />{t('storefront.owner.actions.openPreview')}</a></Button>
                 </div>
               </div>
             </CardContent>
           </Card>
-          <StoreQrShareCard publicUrl={publicUrl} businessName={business?.name || 'My Business'} />
+          <StoreQrShareCard publicUrl={publicUrl} businessName={business?.name || t('storefront.owner.sharing.defaultBusinessName')} />
         </div>
       )}
 
       <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 shadow-[0_-12px_30px_rgba(15,23,42,.08)] backdrop-blur md:left-[272px]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4">
           <div className="min-w-0">
-            <div className="text-sm font-semibold">{isDirty ? 'You have unsaved storefront changes' : 'All storefront changes are saved'}</div>
-            <div className="truncate text-xs text-muted-foreground">{activeSection === 'overview' ? 'Review your public readiness.' : `Editing ${sections.find((section) => section.id === activeSection)?.label}.`}</div>
+            <div className="text-sm font-semibold">{isDirty ? t('storefront.owner.status.unsaved') : t('storefront.owner.status.saved')}</div>
+            <div className="truncate text-xs text-muted-foreground">{activeSection === 'overview' ? t('storefront.owner.status.reviewReadiness') : t('storefront.owner.status.editing', { section: sections.find((section) => section.id === activeSection)?.label })}</div>
           </div>
           <Button onClick={() => void saveStorefront()} disabled={saving || !isDirty} className="shrink-0">
             {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
-            {saving ? 'Saving…' : 'Save changes'}
+            {saving ? t('storefront.owner.status.saving') : t('storefront.owner.actions.saveChanges')}
           </Button>
         </div>
       </div>
@@ -350,5 +353,6 @@ function Field({ label, hint, children, className = '' }: { label: string; hint?
 }
 
 function ChecklistLine({ label, complete }: { label: string; complete: boolean }) {
-  return <div className="flex items-center justify-between rounded-xl border p-3"><span className="text-sm font-medium">{label}</span><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${complete ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{complete ? 'Complete' : 'Needs attention'}</span></div>;
+  const { t } = useTranslation();
+  return <div className="flex items-center justify-between rounded-xl border p-3"><span className="text-sm font-medium">{label}</span><span className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${complete ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{complete ? t('storefront.owner.readiness.complete') : t('storefront.owner.readiness.needsAttention')}</span></div>;
 }
