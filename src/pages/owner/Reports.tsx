@@ -3,15 +3,14 @@ import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import {
-  Activity,
   ArrowDownRight,
   ArrowUpRight,
-  BarChart3,
   CalendarDays,
-  Clock3,
   Download,
   Euro,
   Package,
@@ -20,8 +19,6 @@ import {
   Printer,
   RefreshCw,
   Scissors,
-  Target,
-  TrendingUp,
   UserRound,
   UserRoundCheck,
   Users,
@@ -62,8 +59,6 @@ const STATUS_COLORS: Record<string, string> = {
   no_show: 'bg-slate-500',
 };
 
-const DAY_LABELS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-
 function toInclusiveRange(start: string, end: string) {
   const startDate = new Date(`${start}T00:00:00`);
   const endDate = new Date(`${end}T00:00:00`);
@@ -86,6 +81,8 @@ function previousRange(start: string, end: string) {
 export default function Reports() {
   const { activeBusiness } = useAuth();
   const businessId = activeBusiness?.id;
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
 
   const [activeTab, setActiveTab] = useState<ReportTab>('executive');
   const [loading, setLoading] = useState(true);
@@ -153,19 +150,25 @@ export default function Reports() {
       setStockMovements(stockResult.data ?? []);
     } catch (error: any) {
       console.error('Reports error:', error);
-      toast.error(error.message || 'Failed to load reports');
+      toast.error(error.message || t('reports.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
   };
 
   const analytics = useMemo(
-    () => buildAnalytics(appointments, customers, stockMovements, dateRange),
-    [appointments, customers, stockMovements, dateRange]
+    () => buildAnalytics(appointments, customers, stockMovements, dateRange, {
+      unassigned: t('reports.generic.unassigned'),
+      customer: t('reports.generic.customer'),
+    }),
+    [appointments, customers, stockMovements, dateRange, i18n.resolvedLanguage]
   );
   const previousAnalytics = useMemo(
-    () => buildAnalytics(previousAppointments, customers, [], previousRange(dateRange.start, dateRange.end)),
-    [previousAppointments, customers, dateRange]
+    () => buildAnalytics(previousAppointments, customers, [], previousRange(dateRange.start, dateRange.end), {
+      unassigned: t('reports.generic.unassigned'),
+      customer: t('reports.generic.customer'),
+    }),
+    [previousAppointments, customers, dateRange, i18n.resolvedLanguage]
   );
 
   const comparisons = useMemo(
@@ -202,40 +205,46 @@ export default function Reports() {
   };
 
   const exportCSV = () => {
+    const periodStart = formatLocalizedDate(dateRange.start, locale);
+    const periodEnd = formatLocalizedDate(dateRange.end, locale);
     const rows: Array<Array<string | number>> = [
-      ['Velliqo Business Intelligence Report'],
-      ['Business', activeBusiness?.name ?? ''],
-      ['Period', `${dateRange.start} to ${dateRange.end}`],
+      [t('reports.csv.reportTitle')],
+      [t('reports.csv.business'), activeBusiness?.name ?? ''],
+      [t('reports.csv.period'), t('reports.csv.periodRange', { start: periodStart, end: periodEnd })],
       [],
-      ['Executive metric', 'Value', 'Previous-period change'],
-      ['Revenue', analytics.totalRevenue.toFixed(2), `${comparisons.revenue.toFixed(1)}%`],
-      ['Appointments', analytics.totalAppointments, `${comparisons.appointments.toFixed(1)}%`],
-      ['Average ticket', analytics.averageTicket.toFixed(2), `${comparisons.averageTicket.toFixed(1)}%`],
-      ['Completion rate', `${analytics.completionRate.toFixed(1)}%`, `${comparisons.completion.toFixed(1)} pp`],
-      ['Cancellation rate', `${analytics.cancellationRate.toFixed(1)}%`, ''],
-      ['No-show rate', `${analytics.noShowRate.toFixed(1)}%`, ''],
-      ['Returning-customer rate', `${analytics.returningCustomerRate.toFixed(1)}%`, ''],
+      [t('reports.csv.executiveMetric'), t('reports.csv.value'), t('reports.csv.previousPeriodChange')],
+      [t('reports.metrics.revenue'), analytics.totalRevenue.toFixed(2), `${comparisons.revenue.toFixed(1)}%`],
+      [t('reports.metrics.appointments'), analytics.totalAppointments, `${comparisons.appointments.toFixed(1)}%`],
+      [t('reports.csv.averageTicket'), analytics.averageTicket.toFixed(2), `${comparisons.averageTicket.toFixed(1)}%`],
+      [t('reports.metrics.completionRate'), `${analytics.completionRate.toFixed(1)}%`, `${comparisons.completion.toFixed(1)} ${t('reports.units.percentagePoints')}`],
+      [t('reports.csv.cancellationRate'), `${analytics.cancellationRate.toFixed(1)}%`, ''],
+      [t('reports.csv.noShowRate'), `${analytics.noShowRate.toFixed(1)}%`, ''],
+      [t('reports.csv.returningCustomerRate'), `${analytics.returningCustomerRate.toFixed(1)}%`, ''],
       [],
-      ['Professional', 'Appointments', 'Completed', 'Revenue', 'Booked minutes', 'Average ticket'],
+      [t('reports.tables.professional'), t('reports.tables.appointments'), t('reports.tables.completed'), t('reports.tables.revenue'), t('reports.csv.bookedMinutes'), t('reports.tables.averageTicket')],
       ...analytics.staff.map((row: any) => [
         row.name, row.appointments, row.completed, row.revenue.toFixed(2), row.minutes, row.averageTicket.toFixed(2),
       ]),
       [],
-      ['Service', 'Bookings', 'Revenue', 'Minutes', 'Average value'],
+      [t('reports.tables.service'), t('reports.tables.bookings'), t('reports.tables.revenue'), t('reports.csv.minutes'), t('reports.tables.averageValue')],
       ...analytics.services.map((row: any) => [
         row.name, row.bookings, row.revenue.toFixed(2), row.minutes, row.averageValue.toFixed(2),
       ]),
       [],
-      ['Customer', 'Visits', 'Spend', 'Registered', 'Returning'],
+      [t('reports.tables.customer'), t('reports.tables.visits'), t('reports.csv.spend'), t('reports.csv.registered'), t('reports.csv.returning')],
       ...analytics.customerValue.map((row: any) => [
-        row.name, row.visits, row.spend.toFixed(2), row.registered ? 'Yes' : 'No', row.returning ? 'Yes' : 'No',
+        row.name,
+        row.visits,
+        row.spend.toFixed(2),
+        row.registered ? t('reports.common.yes') : t('reports.common.no'),
+        row.returning ? t('reports.common.yes') : t('reports.common.no'),
       ]),
     ];
 
     const content = rows
       .map((row) => row.map((value) => `"${String(value ?? '').replace(/"/g, '""')}"`).join(','))
       .join('\n');
-    const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+    const blob = new Blob([`\uFEFF${content}`], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement('a');
     anchor.href = url;
@@ -245,13 +254,13 @@ export default function Reports() {
   };
 
   const tabs: Array<{ id: ReportTab; label: string; icon: React.ReactNode }> = [
-    { id: 'executive', label: 'Executive', icon: <PieChart className="h-4 w-4" /> },
-    { id: 'revenue', label: 'Revenue', icon: <Euro className="h-4 w-4" /> },
-    { id: 'appointments', label: 'Appointments', icon: <CalendarDays className="h-4 w-4" /> },
-    { id: 'staff', label: 'Staff', icon: <UserRound className="h-4 w-4" /> },
-    { id: 'services', label: 'Services', icon: <Scissors className="h-4 w-4" /> },
-    { id: 'customers', label: 'Customers', icon: <Users className="h-4 w-4" /> },
-    { id: 'products', label: 'Products', icon: <Package className="h-4 w-4" /> },
+    { id: 'executive', label: t('reports.tabs.executive'), icon: <PieChart className="h-4 w-4" /> },
+    { id: 'revenue', label: t('reports.tabs.revenue'), icon: <Euro className="h-4 w-4" /> },
+    { id: 'appointments', label: t('reports.tabs.appointments'), icon: <CalendarDays className="h-4 w-4" /> },
+    { id: 'staff', label: t('reports.tabs.staff'), icon: <UserRound className="h-4 w-4" /> },
+    { id: 'services', label: t('reports.tabs.services'), icon: <Scissors className="h-4 w-4" /> },
+    { id: 'customers', label: t('reports.tabs.customers'), icon: <Users className="h-4 w-4" /> },
+    { id: 'products', label: t('reports.tabs.products'), icon: <Package className="h-4 w-4" /> },
   ];
 
   return (
@@ -259,22 +268,22 @@ export default function Reports() {
       <header className="app-page-header print:hidden">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Velliqo intelligence
+            {t('reports.eyebrow')}
           </div>
-          <h1 className="app-page-title">Business Intelligence</h1>
+          <h1 className="app-page-title">{t('reports.title')}</h1>
           <p className="app-page-description">
-            Understand revenue, demand, customer behaviour, service performance and team contribution from one reporting workspace.
+            {t('reports.description')}
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => void fetchData()}>
-            <RefreshCw className="mr-2 h-4 w-4" />Refresh
+            <RefreshCw className="mr-2 h-4 w-4" />{t('reports.actions.refresh')}
           </Button>
           <Button variant="outline" onClick={() => window.print()}>
-            <Printer className="mr-2 h-4 w-4" />Print
+            <Printer className="mr-2 h-4 w-4" />{t('reports.actions.print')}
           </Button>
           <Button onClick={exportCSV}>
-            <Download className="mr-2 h-4 w-4" />Export CSV
+            <Download className="mr-2 h-4 w-4" />{t('reports.actions.exportCsv')}
           </Button>
         </div>
       </header>
@@ -283,13 +292,13 @@ export default function Reports() {
         <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-fuchsia-400" />
         <CardContent className="p-4 sm:p-5">
           <div className="grid gap-4 xl:grid-cols-[1fr_1fr_auto] xl:items-end">
-            <DateField label="Start date" value={dateRange.start} onChange={(start) => setDateRange((current) => ({ ...current, start }))} />
-            <DateField label="End date" value={dateRange.end} onChange={(end) => setDateRange((current) => ({ ...current, end }))} />
+            <DateField label={t('reports.filters.startDate')} value={dateRange.start} onChange={(start) => setDateRange((current) => ({ ...current, start }))} />
+            <DateField label={t('reports.filters.endDate')} value={dateRange.end} onChange={(end) => setDateRange((current) => ({ ...current, end }))} />
             <div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1 xl:justify-end">
-              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('week')}>This week</Button>
-              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('month')}>This month</Button>
-              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('previous_month')}>Previous month</Button>
-              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('90_days')}>Last 90 days</Button>
+              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('week')}>{t('reports.filters.thisWeek')}</Button>
+              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('month')}>{t('reports.filters.thisMonth')}</Button>
+              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('previous_month')}>{t('reports.filters.previousMonth')}</Button>
+              <Button className="shrink-0" variant="outline" onClick={() => applyPreset('90_days')}>{t('reports.filters.last90Days')}</Button>
             </div>
           </div>
         </CardContent>
@@ -298,15 +307,42 @@ export default function Reports() {
       {loading ? (
         <div className="rounded-3xl border bg-card p-16 text-center shadow-card">
           <RefreshCw className="mx-auto h-6 w-6 animate-spin text-primary" />
-          <p className="mt-4 text-sm text-muted-foreground">Building your intelligence report…</p>
+          <p className="mt-4 text-sm text-muted-foreground">{t('reports.states.loading')}</p>
         </div>
       ) : (
         <>
           <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            <MetricCard title="Revenue" value={`€${analytics.totalRevenue.toFixed(2)}`} detail={`Average ticket €${analytics.averageTicket.toFixed(2)}`} comparison={comparisons.revenue} icon={<Euro className="h-5 w-5" />} />
-            <MetricCard title="Appointments" value={analytics.totalAppointments} detail={`${analytics.completed} completed`} comparison={comparisons.appointments} icon={<CalendarDays className="h-5 w-5" />} />
-            <MetricCard title="Completion rate" value={`${analytics.completionRate.toFixed(1)}%`} detail={`${analytics.cancellationRate.toFixed(1)}% cancelled · ${analytics.noShowRate.toFixed(1)}% no-show`} comparison={comparisons.completion} suffix=" pp" icon={<Percent className="h-5 w-5" />} />
-            <MetricCard title="Returning customers" value={`${analytics.returningCustomerRate.toFixed(1)}%`} detail={`${analytics.returningCustomers} returning customers`} icon={<UserRoundCheck className="h-5 w-5" />} />
+            <MetricCard
+              title={t('reports.metrics.revenue')}
+              value={formatCurrency(analytics.totalRevenue, locale)}
+              detail={t('reports.metrics.averageTicketDetail', { value: formatCurrency(analytics.averageTicket, locale) })}
+              comparison={comparisons.revenue}
+              icon={<Euro className="h-5 w-5" />}
+            />
+            <MetricCard
+              title={t('reports.metrics.appointments')}
+              value={analytics.totalAppointments}
+              detail={t('reports.metrics.completedCount', { count: analytics.completed })}
+              comparison={comparisons.appointments}
+              icon={<CalendarDays className="h-5 w-5" />}
+            />
+            <MetricCard
+              title={t('reports.metrics.completionRate')}
+              value={`${analytics.completionRate.toFixed(1)}%`}
+              detail={t('reports.metrics.cancellationNoShowDetail', {
+                cancellation: analytics.cancellationRate.toFixed(1),
+                noShow: analytics.noShowRate.toFixed(1),
+              })}
+              comparison={comparisons.completion}
+              suffix={` ${t('reports.units.percentagePoints')}`}
+              icon={<Percent className="h-5 w-5" />}
+            />
+            <MetricCard
+              title={t('reports.metrics.returningCustomers')}
+              value={`${analytics.returningCustomerRate.toFixed(1)}%`}
+              detail={t('reports.metrics.returningCount', { count: analytics.returningCustomers })}
+              icon={<UserRoundCheck className="h-5 w-5" />}
+            />
           </section>
 
           <div className="scrollbar-subtle sticky top-16 z-20 -mx-1 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur print:hidden md:top-0">
@@ -326,7 +362,7 @@ export default function Reports() {
             ))}
           </div>
 
-          {activeTab === 'executive' && <ExecutiveView analytics={analytics} dateRange={dateRange} />}
+          {activeTab === 'executive' && <ExecutiveView analytics={analytics} />}
           {activeTab === 'revenue' && <RevenueView analytics={analytics} />}
           {activeTab === 'appointments' && <AppointmentsView analytics={analytics} />}
           {activeTab === 'staff' && <StaffView analytics={analytics} />}
@@ -339,7 +375,13 @@ export default function Reports() {
   );
 }
 
-function buildAnalytics(appointments: Appointment[], customers: any[], stockMovements: any[], range: { start: string; end: string }) {
+function buildAnalytics(
+  appointments: Appointment[],
+  customers: any[],
+  stockMovements: any[],
+  range: { start: string; end: string },
+  labels: { unassigned: string; customer: string }
+) {
   const revenueAppointments = appointments.filter((appointment) => ACTIVE_REVENUE_STATUSES.includes(appointment.status));
   const totalRevenue = revenueAppointments.reduce((sum, appointment) => sum + Number(appointment.total_price || 0), 0);
   const totalAppointments = appointments.length;
@@ -383,7 +425,7 @@ function buildAnalytics(appointments: Appointment[], customers: any[], stockMove
     const staffId = appointment.employee_id || 'unassigned';
     const staff = staffMap.get(staffId) ?? {
       id: staffId,
-      name: appointment.employees?.name || 'Unassigned',
+      name: appointment.employees?.name || labels.unassigned,
       appointments: 0,
       completed: 0,
       cancelled: 0,
@@ -400,7 +442,7 @@ function buildAnalytics(appointments: Appointment[], customers: any[], stockMove
     if (appointment.customer_id) {
       const customer = customerMap.get(appointment.customer_id) ?? {
         id: appointment.customer_id,
-        name: appointment.customers?.full_name || 'Customer',
+        name: appointment.customers?.full_name || labels.customer,
         registered: Boolean(appointment.customers?.user_id),
         visits: 0,
         spend: 0,
@@ -509,138 +551,290 @@ function percentageChange(current: number, previous: number) {
   return ((current - previous) / Math.abs(previous)) * 100;
 }
 
-function ExecutiveView({ analytics, dateRange }: { analytics: any; dateRange: any }) {
+function ExecutiveView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+  const weekdayLabels = getWeekdayLabels(t);
+
   return (
     <div className="space-y-6">
       <section className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-        <ChartCard title="Revenue and demand trend" description="Daily revenue with appointment volume for the selected period.">
+        <ChartCard
+          title={t('reports.executive.trendTitle')}
+          description={t('reports.executive.trendDescription')}
+        >
           <DailyChart data={analytics.daily} />
         </ChartCard>
         <Card className="rounded-3xl shadow-card">
           <CardHeader>
-            <CardTitle>Operational health</CardTitle>
+            <CardTitle>{t('reports.executive.operationalHealth')}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-5">
-            <HealthLine label="Completion" value={analytics.completionRate} tone="emerald" />
-            <HealthLine label="Cancellation" value={analytics.cancellationRate} tone="rose" />
-            <HealthLine label="No-show" value={analytics.noShowRate} tone="slate" />
-            <SummaryLine label="Revenue per booked hour" value={`€${analytics.revenuePerBookedHour.toFixed(2)}`} />
-            <SummaryLine label="Booked hours" value={`${analytics.bookedHours.toFixed(1)} h`} />
-            <SummaryLine label="Unique customers" value={analytics.uniqueCustomers} />
+            <HealthLine label={t('reports.executive.completion')} value={analytics.completionRate} tone="emerald" />
+            <HealthLine label={t('reports.executive.cancellation')} value={analytics.cancellationRate} tone="rose" />
+            <HealthLine label={t('reports.executive.noShow')} value={analytics.noShowRate} tone="slate" />
+            <SummaryLine
+              label={t('reports.executive.revenuePerBookedHour')}
+              value={formatCurrency(analytics.revenuePerBookedHour, locale)}
+            />
+            <SummaryLine
+              label={t('reports.executive.bookedHours')}
+              value={t('reports.units.hoursValue', { value: analytics.bookedHours.toFixed(1) })}
+            />
+            <SummaryLine label={t('reports.executive.uniqueCustomers')} value={analytics.uniqueCustomers} />
           </CardContent>
         </Card>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <ChartCard title="Demand by weekday" description="Discover the strongest days for staffing and availability.">
+        <ChartCard
+          title={t('reports.executive.demandByWeekday')}
+          description={t('reports.executive.demandByWeekdayDescription')}
+        >
           <HorizontalBars
-            data={analytics.weekdays.map((row: any) => ({ label: DAY_LABELS[row.day], value: row.appointments, detail: `${row.appointments} bookings` }))}
+            data={analytics.weekdays.map((row: any) => ({
+              label: weekdayLabels[row.day],
+              value: row.appointments,
+              detail: t('reports.counts.bookings', { count: row.appointments }),
+            }))}
           />
         </ChartCard>
-        <ChartCard title="Peak booking hours" description="Appointment concentration by start time.">
+        <ChartCard
+          title={t('reports.executive.peakBookingHours')}
+          description={t('reports.executive.peakBookingHoursDescription')}
+        >
           <HorizontalBars
-            data={analytics.hours.map((row: any) => ({ label: `${String(row.hour).padStart(2, '0')}:00`, value: row.appointments, detail: `€${row.revenue.toFixed(0)}` }))}
+            data={analytics.hours.map((row: any) => ({
+              label: `${String(row.hour).padStart(2, '0')}:00`,
+              value: row.appointments,
+              detail: formatCurrency(row.revenue, locale, 0),
+            }))}
           />
         </ChartCard>
       </section>
 
       <section className="grid gap-6 lg:grid-cols-2">
-        <RankedTable title="Top services" icon={<Scissors className="h-5 w-5" />} columns={['Service', 'Bookings', 'Revenue', 'Avg. value']} rows={analytics.services.slice(0, 6).map((row: any) => [row.name, row.bookings, `€${row.revenue.toFixed(2)}`, `€${row.averageValue.toFixed(2)}`])} />
-        <RankedTable title="Top professionals" icon={<UserRound className="h-5 w-5" />} columns={['Professional', 'Appointments', 'Completion', 'Revenue']} rows={analytics.staff.slice(0, 6).map((row: any) => [row.name, row.appointments, `${row.completionRate.toFixed(0)}%`, `€${row.revenue.toFixed(2)}`])} />
+        <RankedTable
+          title={t('reports.executive.topServices')}
+          icon={<Scissors className="h-5 w-5" />}
+          columns={[
+            t('reports.tables.service'),
+            t('reports.tables.bookings'),
+            t('reports.tables.revenue'),
+            t('reports.tables.averageValue'),
+          ]}
+          rows={analytics.services.slice(0, 6).map((row: any) => [
+            row.name,
+            row.bookings,
+            formatCurrency(row.revenue, locale),
+            formatCurrency(row.averageValue, locale),
+          ])}
+        />
+        <RankedTable
+          title={t('reports.executive.topProfessionals')}
+          icon={<UserRound className="h-5 w-5" />}
+          columns={[
+            t('reports.tables.professional'),
+            t('reports.tables.appointments'),
+            t('reports.tables.completion'),
+            t('reports.tables.revenue'),
+          ]}
+          rows={analytics.staff.slice(0, 6).map((row: any) => [
+            row.name,
+            row.appointments,
+            `${row.completionRate.toFixed(0)}%`,
+            formatCurrency(row.revenue, locale),
+          ])}
+        />
       </section>
     </div>
   );
 }
 
 function RevenueView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <CompactMetric label="Gross scheduled revenue" value={`€${analytics.totalRevenue.toFixed(2)}`} />
-        <CompactMetric label="Average appointment value" value={`€${analytics.averageTicket.toFixed(2)}`} />
-        <CompactMetric label="Revenue / booked hour" value={`€${analytics.revenuePerBookedHour.toFixed(2)}`} />
-        <CompactMetric label="Revenue-generating services" value={analytics.services.length} />
+        <CompactMetric label={t('reports.revenue.grossScheduledRevenue')} value={formatCurrency(analytics.totalRevenue, locale)} />
+        <CompactMetric label={t('reports.revenue.averageAppointmentValue')} value={formatCurrency(analytics.averageTicket, locale)} />
+        <CompactMetric label={t('reports.revenue.revenuePerBookedHour')} value={formatCurrency(analytics.revenuePerBookedHour, locale)} />
+        <CompactMetric label={t('reports.revenue.revenueGeneratingServices')} value={analytics.services.length} />
       </section>
-      <ChartCard title="Revenue timeline" description="Revenue recognised from active and completed appointment states.">
+      <ChartCard title={t('reports.revenue.timelineTitle')} description={t('reports.revenue.timelineDescription')}>
         <DailyChart data={analytics.daily} />
       </ChartCard>
       <section className="grid gap-6 lg:grid-cols-2">
-        <RankedTable title="Revenue by professional" icon={<UserRound className="h-5 w-5" />} columns={['Professional', 'Revenue', 'Avg. ticket', 'Booked hours']} rows={analytics.staff.map((row: any) => [row.name, `€${row.revenue.toFixed(2)}`, `€${row.averageTicket.toFixed(2)}`, row.bookedHours.toFixed(1)])} />
-        <RankedTable title="Revenue by service" icon={<Scissors className="h-5 w-5" />} columns={['Service', 'Revenue', 'Bookings', 'Avg. value']} rows={analytics.services.map((row: any) => [row.name, `€${row.revenue.toFixed(2)}`, row.bookings, `€${row.averageValue.toFixed(2)}`])} />
+        <RankedTable
+          title={t('reports.revenue.byProfessional')}
+          icon={<UserRound className="h-5 w-5" />}
+          columns={[
+            t('reports.tables.professional'),
+            t('reports.tables.revenue'),
+            t('reports.tables.averageTicket'),
+            t('reports.tables.bookedHours'),
+          ]}
+          rows={analytics.staff.map((row: any) => [
+            row.name,
+            formatCurrency(row.revenue, locale),
+            formatCurrency(row.averageTicket, locale),
+            row.bookedHours.toFixed(1),
+          ])}
+        />
+        <RankedTable
+          title={t('reports.revenue.byService')}
+          icon={<Scissors className="h-5 w-5" />}
+          columns={[
+            t('reports.tables.service'),
+            t('reports.tables.revenue'),
+            t('reports.tables.bookings'),
+            t('reports.tables.averageValue'),
+          ]}
+          rows={analytics.services.map((row: any) => [
+            row.name,
+            formatCurrency(row.revenue, locale),
+            row.bookings,
+            formatCurrency(row.averageValue, locale),
+          ])}
+        />
       </section>
     </div>
   );
 }
 
 function AppointmentsView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+  const weekdayLabels = getWeekdayLabels(t);
+
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-        <CompactMetric label="Total" value={analytics.totalAppointments} />
-        <CompactMetric label="Completed" value={analytics.completed} />
-        <CompactMetric label="Cancelled" value={analytics.cancelled} />
-        <CompactMetric label="No-shows" value={analytics.noShows} />
-        <CompactMetric label="Booked hours" value={`${analytics.bookedHours.toFixed(1)} h`} />
+        <CompactMetric label={t('reports.appointments.total')} value={analytics.totalAppointments} />
+        <CompactMetric label={t('reports.appointments.completed')} value={analytics.completed} />
+        <CompactMetric label={t('reports.appointments.cancelled')} value={analytics.cancelled} />
+        <CompactMetric label={t('reports.appointments.noShows')} value={analytics.noShows} />
+        <CompactMetric
+          label={t('reports.appointments.bookedHours')}
+          value={t('reports.units.hoursValue', { value: analytics.bookedHours.toFixed(1) })}
+        />
       </section>
       <section className="grid gap-6 lg:grid-cols-2">
         <Card className="rounded-3xl shadow-card">
-          <CardHeader><CardTitle>Appointment status</CardTitle></CardHeader>
+          <CardHeader><CardTitle>{t('reports.appointments.statusTitle')}</CardTitle></CardHeader>
           <CardContent><StatusDistribution statuses={analytics.statuses} /></CardContent>
         </Card>
-        <ChartCard title="Demand by weekday" description="Booking volume across the week.">
-          <HorizontalBars data={analytics.weekdays.map((row: any) => ({ label: DAY_LABELS[row.day], value: row.appointments, detail: `€${row.revenue.toFixed(0)}` }))} />
+        <ChartCard title={t('reports.appointments.demandByWeekday')} description={t('reports.appointments.demandByWeekdayDescription')}>
+          <HorizontalBars
+            data={analytics.weekdays.map((row: any) => ({
+              label: weekdayLabels[row.day],
+              value: row.appointments,
+              detail: formatCurrency(row.revenue, locale, 0),
+            }))}
+          />
         </ChartCard>
       </section>
-      <ChartCard title="Peak appointment hours" description="Use this to optimise opening hours, breaks and staffing.">
-        <HorizontalBars data={analytics.hours.map((row: any) => ({ label: `${String(row.hour).padStart(2, '0')}:00`, value: row.appointments, detail: `${row.appointments} bookings` }))} />
+      <ChartCard title={t('reports.appointments.peakHours')} description={t('reports.appointments.peakHoursDescription')}>
+        <HorizontalBars
+          data={analytics.hours.map((row: any) => ({
+            label: `${String(row.hour).padStart(2, '0')}:00`,
+            value: row.appointments,
+            detail: t('reports.counts.bookings', { count: row.appointments }),
+          }))}
+        />
       </ChartCard>
     </div>
   );
 }
 
 function StaffView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
   return (
     <RankedTable
-      title="Professional performance"
+      title={t('reports.staff.performanceTitle')}
       icon={<UserRound className="h-5 w-5" />}
-      columns={['Professional', 'Appointments', 'Completed', 'Completion', 'Booked hours', 'Average ticket', 'Revenue']}
+      columns={[
+        t('reports.tables.professional'),
+        t('reports.tables.appointments'),
+        t('reports.tables.completed'),
+        t('reports.tables.completion'),
+        t('reports.tables.bookedHours'),
+        t('reports.tables.averageTicket'),
+        t('reports.tables.revenue'),
+      ]}
       rows={analytics.staff.map((row: any) => [
-        row.name, row.appointments, row.completed, `${row.completionRate.toFixed(1)}%`,
-        row.bookedHours.toFixed(1), `€${row.averageTicket.toFixed(2)}`, `€${row.revenue.toFixed(2)}`,
+        row.name,
+        row.appointments,
+        row.completed,
+        `${row.completionRate.toFixed(1)}%`,
+        row.bookedHours.toFixed(1),
+        formatCurrency(row.averageTicket, locale),
+        formatCurrency(row.revenue, locale),
       ])}
     />
   );
 }
 
 function ServicesView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
   return (
     <RankedTable
-      title="Service intelligence"
+      title={t('reports.services.intelligenceTitle')}
       icon={<Scissors className="h-5 w-5" />}
-      columns={['Service', 'Bookings', 'Booked hours', 'Revenue', 'Average value']}
+      columns={[
+        t('reports.tables.service'),
+        t('reports.tables.bookings'),
+        t('reports.tables.bookedHours'),
+        t('reports.tables.revenue'),
+        t('reports.tables.averageValue'),
+      ]}
       rows={analytics.services.map((row: any) => [
-        row.name, row.bookings, row.bookedHours.toFixed(1), `€${row.revenue.toFixed(2)}`, `€${row.averageValue.toFixed(2)}`,
+        row.name,
+        row.bookings,
+        row.bookedHours.toFixed(1),
+        formatCurrency(row.revenue, locale),
+        formatCurrency(row.averageValue, locale),
       ])}
     />
   );
 }
 
 function CustomersView({ analytics }: { analytics: any }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <CompactMetric label="Unique customers" value={analytics.uniqueCustomers} />
-        <CompactMetric label="Returning customers" value={analytics.returningCustomers} />
-        <CompactMetric label="Returning rate" value={`${analytics.returningCustomerRate.toFixed(1)}%`} />
-        <CompactMetric label="New this period" value={analytics.newCustomers} />
+        <CompactMetric label={t('reports.customers.unique')} value={analytics.uniqueCustomers} />
+        <CompactMetric label={t('reports.customers.returning')} value={analytics.returningCustomers} />
+        <CompactMetric label={t('reports.customers.returningRate')} value={`${analytics.returningCustomerRate.toFixed(1)}%`} />
+        <CompactMetric label={t('reports.customers.newThisPeriod')} value={analytics.newCustomers} />
       </section>
       <RankedTable
-        title="Customer value"
+        title={t('reports.customers.valueTitle')}
         icon={<Users className="h-5 w-5" />}
-        columns={['Customer', 'Account', 'Visits', 'Returning', 'Total spend', 'Average spend']}
+        columns={[
+          t('reports.tables.customer'),
+          t('reports.customers.account'),
+          t('reports.tables.visits'),
+          t('reports.tables.returning'),
+          t('reports.customers.totalSpend'),
+          t('reports.customers.averageSpend'),
+        ]}
         rows={analytics.customerValue.map((row: any) => [
-          row.name, row.registered ? 'Registered' : 'Guest', row.visits, row.returning ? 'Yes' : 'No',
-          `€${row.spend.toFixed(2)}`, `€${row.averageSpend.toFixed(2)}`,
+          row.name,
+          row.registered ? t('reports.customers.registered') : t('reports.customers.guest'),
+          row.visits,
+          row.returning ? t('reports.common.yes') : t('reports.common.no'),
+          formatCurrency(row.spend, locale),
+          formatCurrency(row.averageSpend, locale),
         ])}
       />
     </div>
@@ -648,18 +842,20 @@ function CustomersView({ analytics }: { analytics: any }) {
 }
 
 function ProductsView({ analytics }: { analytics: any }) {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6">
       <section className="grid gap-4 sm:grid-cols-2">
-        <CompactMetric label="Units sold" value={analytics.productsSold} />
-        <CompactMetric label="Products with movement" value={analytics.products.length} />
+        <CompactMetric label={t('reports.products.unitsSold')} value={analytics.productsSold} />
+        <CompactMetric label={t('reports.products.productsWithMovement')} value={analytics.products.length} />
       </section>
       <RankedTable
-        title="Product movement"
+        title={t('reports.products.movementTitle')}
         icon={<Package className="h-5 w-5" />}
-        columns={['Product', 'Units sold']}
+        columns={[t('reports.tables.product'), t('reports.products.unitsSoldColumn')]}
         rows={analytics.products.map((row: any) => [row.name, row.quantity])}
-        emptyText="No outgoing stock movement was recorded in this period."
+        emptyText={t('reports.states.noOutgoingStock')}
       />
     </div>
   );
@@ -675,6 +871,7 @@ function DateField({ label, value, onChange }: { label: string; value: string; o
 }
 
 function MetricCard({ title, value, detail, comparison, suffix = '%', icon }: any) {
+  const { t } = useTranslation();
   const positive = typeof comparison === 'number' && comparison >= 0;
   return (
     <div className="relative overflow-hidden rounded-3xl border bg-gradient-to-br from-card via-card to-primary/[0.06] p-5 shadow-card">
@@ -687,7 +884,9 @@ function MetricCard({ title, value, detail, comparison, suffix = '%', icon }: an
           {typeof comparison === 'number' && (
             <div className={`mt-3 inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold ${positive ? 'bg-emerald-50 text-emerald-700' : 'bg-rose-50 text-rose-700'}`}>
               {positive ? <ArrowUpRight className="h-3.5 w-3.5" /> : <ArrowDownRight className="h-3.5 w-3.5" />}
-              {Math.abs(comparison).toFixed(1)}{suffix} vs previous period
+              {t('reports.comparison.vsPreviousPeriod', {
+                value: `${Math.abs(comparison).toFixed(1)}${suffix}`,
+              })}
             </div>
           )}
         </div>
@@ -721,7 +920,10 @@ function ChartCard({ title, description, children }: { title: string; descriptio
 }
 
 function DailyChart({ data }: { data: any[] }) {
-  if (!data.length) return <EmptyText text="No performance data for this period." />;
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
+  if (!data.length) return <EmptyText text={t('reports.states.noPerformanceData')} />;
   const visible = data.slice(-31);
   const max = Math.max(...visible.map((row) => row.revenue), 1);
   return (
@@ -729,11 +931,24 @@ function DailyChart({ data }: { data: any[] }) {
       <div className="flex h-72 min-w-[680px] items-end gap-2 border-b pb-8">
         {visible.map((row) => {
           const height = Math.max((row.revenue / max) * 100, row.revenue > 0 ? 7 : 2);
+          const dateLabel = formatLocalizedDate(row.date, locale);
           return (
-            <div key={row.date} className="group flex min-w-[28px] flex-1 flex-col items-center justify-end" title={`${row.date}: €${row.revenue.toFixed(2)}, ${row.appointments} appointments`}>
-              <div className="mb-2 hidden rounded-lg bg-slate-950 px-2 py-1 text-[10px] text-white group-hover:block">€{row.revenue.toFixed(0)}</div>
+            <div
+              key={row.date}
+              className="group flex min-w-[28px] flex-1 flex-col items-center justify-end"
+              title={t('reports.chart.dailyTooltip', {
+                date: dateLabel,
+                revenue: formatCurrency(row.revenue, locale),
+                count: row.appointments,
+              })}
+            >
+              <div className="mb-2 hidden rounded-lg bg-slate-950 px-2 py-1 text-[10px] text-white group-hover:block">
+                {formatCurrency(row.revenue, locale, 0)}
+              </div>
               <div className="w-full max-w-10 rounded-t-lg bg-gradient-to-t from-primary to-violet-300 transition hover:brightness-95" style={{ height: `${height}%` }} />
-              <div className="absolute mt-[270px] text-[9px] text-muted-foreground">{format(new Date(`${row.date}T00:00:00`), 'dd')}</div>
+              <div className="absolute mt-[270px] text-[9px] text-muted-foreground">
+                {new Intl.DateTimeFormat(locale, { day: '2-digit' }).format(new Date(`${row.date}T00:00:00`))}
+              </div>
             </div>
           );
         })}
@@ -743,7 +958,8 @@ function DailyChart({ data }: { data: any[] }) {
 }
 
 function HorizontalBars({ data }: { data: Array<{ label: string; value: number; detail?: string }> }) {
-  if (!data.length) return <EmptyText text="No data for this period." />;
+  const { t } = useTranslation();
+  if (!data.length) return <EmptyText text={t('reports.states.noData')} />;
   const max = Math.max(...data.map((row) => row.value), 1);
   return (
     <div className="space-y-4">
@@ -777,13 +993,17 @@ function HealthLine({ label, value, tone }: { label: string; value: number; tone
 }
 
 function StatusDistribution({ statuses }: { statuses: any[] }) {
-  if (!statuses.length) return <EmptyText text="No appointment status data." />;
+  const { t } = useTranslation();
+  if (!statuses.length) return <EmptyText text={t('reports.states.noStatusData')} />;
   const max = Math.max(...statuses.map((row) => row.count), 1);
   return (
     <div className="space-y-5">
       {statuses.map((row) => (
         <div key={row.status}>
-          <div className="mb-2 flex justify-between text-sm"><span className="font-medium capitalize">{row.status.replace(/_/g, ' ')}</span><strong>{row.count}</strong></div>
+          <div className="mb-2 flex justify-between text-sm">
+            <span className="font-medium">{t(`reports.statuses.${row.status}`, { defaultValue: row.status.replace(/_/g, ' ') })}</span>
+            <strong>{row.count}</strong>
+          </div>
           <div className="h-2.5 overflow-hidden rounded-full bg-muted">
             <div className={`h-full rounded-full ${STATUS_COLORS[row.status] ?? 'bg-primary'}`} style={{ width: `${(row.count / max) * 100}%` }} />
           </div>
@@ -793,12 +1013,15 @@ function StatusDistribution({ statuses }: { statuses: any[] }) {
   );
 }
 
-function RankedTable({ title, icon, columns, rows, emptyText = 'No data available for this period.' }: any) {
+function RankedTable({ title, icon, columns, rows, emptyText }: any) {
+  const { t } = useTranslation();
+  const resolvedEmptyText = emptyText ?? t('reports.states.noDataAvailable');
+
   return (
     <Card className="overflow-hidden rounded-3xl shadow-card">
       <CardHeader><CardTitle className="flex items-center gap-2"><span className="text-primary">{icon}</span>{title}</CardTitle></CardHeader>
       <CardContent className="p-0">
-        {!rows.length ? <div className="p-8"><EmptyText text={emptyText} /></div> : (
+        {!rows.length ? <div className="p-8"><EmptyText text={resolvedEmptyText} /></div> : (
           <>
             <div className="hidden overflow-x-auto md:block">
               <table className="w-full min-w-[680px] text-sm">
@@ -842,4 +1065,33 @@ function SummaryLine({ label, value }: { label: string; value: string | number }
 
 function EmptyText({ text }: { text: string }) {
   return <p className="py-8 text-center text-sm text-muted-foreground">{text}</p>;
+}
+
+function formatCurrency(value: number, locale: string, maximumFractionDigits = 2) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: 'EUR',
+    minimumFractionDigits: maximumFractionDigits,
+    maximumFractionDigits,
+  }).format(value);
+}
+
+function formatLocalizedDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(`${value}T00:00:00`));
+}
+
+function getWeekdayLabels(t: TFunction) {
+  return [
+    t('reports.weekdays.sunday'),
+    t('reports.weekdays.monday'),
+    t('reports.weekdays.tuesday'),
+    t('reports.weekdays.wednesday'),
+    t('reports.weekdays.thursday'),
+    t('reports.weekdays.friday'),
+    t('reports.weekdays.saturday'),
+  ];
 }

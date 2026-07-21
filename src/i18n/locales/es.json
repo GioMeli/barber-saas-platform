@@ -894,5 +894,192 @@
     "delete": {
       "confirm": "¿Eliminar {{name}}? El historial de movimientos existente puede impedir la eliminación."
     }
+  },
+  "reports": {
+    "eyebrow": "Inteligencia Velliqo",
+    "title": "Inteligencia empresarial",
+    "description": "Analiza ingresos, demanda, comportamiento de clientes, rendimiento de servicios y contribución del equipo desde un único espacio de informes.",
+    "actions": {
+      "refresh": "Actualizar",
+      "print": "Imprimir",
+      "exportCsv": "Exportar CSV"
+    },
+    "filters": {
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "previousMonth": "Mes anterior",
+      "last90Days": "Últimos 90 días"
+    },
+    "states": {
+      "loading": "Creando el informe de inteligencia…",
+      "noPerformanceData": "No hay datos de rendimiento para este período.",
+      "noData": "No hay datos para este período.",
+      "noDataAvailable": "No hay datos disponibles para este período.",
+      "noStatusData": "No hay datos sobre el estado de las citas.",
+      "noOutgoingStock": "No se registraron movimientos de salida de inventario en este período."
+    },
+    "errors": {
+      "loadFailed": "No se pudieron cargar los informes"
+    },
+    "tabs": {
+      "executive": "Resumen",
+      "revenue": "Ingresos",
+      "appointments": "Citas",
+      "staff": "Personal",
+      "services": "Servicios",
+      "customers": "Clientes",
+      "products": "Productos"
+    },
+    "metrics": {
+      "revenue": "Ingresos",
+      "appointments": "Citas",
+      "completionRate": "Tasa de finalización",
+      "returningCustomers": "Clientes recurrentes",
+      "averageTicketDetail": "Valor medio {{value}}",
+      "completedCount_one": "{{count}} completada",
+      "completedCount_other": "{{count}} completadas",
+      "cancellationNoShowDetail": "{{cancellation}}% canceladas · {{noShow}}% ausencias",
+      "returningCount_one": "{{count}} cliente recurrente",
+      "returningCount_other": "{{count}} clientes recurrentes"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} frente al período anterior"
+    },
+    "units": {
+      "percentagePoints": "pp",
+      "hoursValue": "{{value}} h"
+    },
+    "counts": {
+      "bookings_one": "{{count}} reserva",
+      "bookings_other": "{{count}} reservas"
+    },
+    "executive": {
+      "trendTitle": "Tendencia de ingresos y demanda",
+      "trendDescription": "Ingresos diarios y volumen de citas para el período seleccionado.",
+      "operationalHealth": "Salud operativa",
+      "completion": "Finalización",
+      "cancellation": "Cancelación",
+      "noShow": "Ausencia",
+      "revenuePerBookedHour": "Ingresos por hora reservada",
+      "bookedHours": "Horas reservadas",
+      "uniqueCustomers": "Clientes únicos",
+      "demandByWeekday": "Demanda por día de la semana",
+      "demandByWeekdayDescription": "Identifica los días más fuertes para ajustar personal y disponibilidad.",
+      "peakBookingHours": "Horas punta de reservas",
+      "peakBookingHoursDescription": "Concentración de citas según la hora de inicio.",
+      "topServices": "Servicios principales",
+      "topProfessionals": "Profesionales principales"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Ingresos brutos programados",
+      "averageAppointmentValue": "Valor medio de cita",
+      "revenuePerBookedHour": "Ingresos / hora reservada",
+      "revenueGeneratingServices": "Servicios que generan ingresos",
+      "timelineTitle": "Evolución de ingresos",
+      "timelineDescription": "Ingresos reconocidos de citas activas y completadas.",
+      "byProfessional": "Ingresos por profesional",
+      "byService": "Ingresos por servicio"
+    },
+    "appointments": {
+      "total": "Total",
+      "completed": "Completadas",
+      "cancelled": "Canceladas",
+      "noShows": "Ausencias",
+      "bookedHours": "Horas reservadas",
+      "statusTitle": "Estado de las citas",
+      "demandByWeekday": "Demanda por día de la semana",
+      "demandByWeekdayDescription": "Volumen de reservas durante la semana.",
+      "peakHours": "Horas punta de citas",
+      "peakHoursDescription": "Utiliza estos datos para optimizar horarios, descansos y personal."
+    },
+    "staff": {
+      "performanceTitle": "Rendimiento profesional"
+    },
+    "services": {
+      "intelligenceTitle": "Análisis de servicios"
+    },
+    "customers": {
+      "unique": "Clientes únicos",
+      "returning": "Clientes recurrentes",
+      "returningRate": "Tasa de recurrencia",
+      "newThisPeriod": "Nuevos en este período",
+      "valueTitle": "Valor del cliente",
+      "account": "Cuenta",
+      "registered": "Registrado",
+      "guest": "Invitado",
+      "totalSpend": "Gasto total",
+      "averageSpend": "Gasto medio"
+    },
+    "products": {
+      "unitsSold": "Unidades vendidas",
+      "productsWithMovement": "Productos con movimiento",
+      "movementTitle": "Movimiento de productos",
+      "unitsSoldColumn": "Unidades vendidas"
+    },
+    "tables": {
+      "professional": "Profesional",
+      "appointments": "Citas",
+      "completed": "Completadas",
+      "completion": "Finalización",
+      "revenue": "Ingresos",
+      "averageTicket": "Valor medio",
+      "bookedHours": "Horas reservadas",
+      "service": "Servicio",
+      "bookings": "Reservas",
+      "averageValue": "Valor medio",
+      "customer": "Cliente",
+      "visits": "Visitas",
+      "returning": "Recurrente",
+      "product": "Producto"
+    },
+    "statuses": {
+      "confirmed": "Confirmada",
+      "completed": "Completada",
+      "in_progress": "En curso",
+      "cancelled_by_business": "Cancelada por la empresa",
+      "cancelled_by_customer": "Cancelada por el cliente",
+      "no_show": "Ausencia"
+    },
+    "weekdays": {
+      "sunday": "Domingo",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} cita",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} citas"
+    },
+    "csv": {
+      "reportTitle": "Informe de inteligencia empresarial de Velliqo",
+      "business": "Empresa",
+      "period": "Período",
+      "periodRange": "{{start}} a {{end}}",
+      "executiveMetric": "Indicador ejecutivo",
+      "value": "Valor",
+      "previousPeriodChange": "Cambio respecto al período anterior",
+      "averageTicket": "Valor medio de cita",
+      "cancellationRate": "Tasa de cancelación",
+      "noShowRate": "Tasa de ausencias",
+      "returningCustomerRate": "Tasa de clientes recurrentes",
+      "bookedMinutes": "Minutos reservados",
+      "minutes": "Minutos",
+      "spend": "Gasto",
+      "registered": "Registrado",
+      "returning": "Recurrente"
+    },
+    "common": {
+      "yes": "Sí",
+      "no": "No"
+    },
+    "generic": {
+      "unassigned": "Sin asignar",
+      "customer": "Cliente"
+    }
   }
 }

@@ -894,5 +894,192 @@
     "delete": {
       "confirm": "Να διαγραφεί το {{name}}; Το υπάρχον ιστορικό κινήσεων μπορεί να εμποδίσει τη διαγραφή."
     }
+  },
+  "reports": {
+    "eyebrow": "Αναλύσεις Velliqo",
+    "title": "Επιχειρηματική Ανάλυση",
+    "description": "Κατανοήστε τα έσοδα, τη ζήτηση, τη συμπεριφορά πελατών, την απόδοση υπηρεσιών και τη συνεισφορά της ομάδας από έναν ενιαίο χώρο αναφορών.",
+    "actions": {
+      "refresh": "Ανανέωση",
+      "print": "Εκτύπωση",
+      "exportCsv": "Εξαγωγή CSV"
+    },
+    "filters": {
+      "startDate": "Ημερομηνία έναρξης",
+      "endDate": "Ημερομηνία λήξης",
+      "thisWeek": "Αυτή η εβδομάδα",
+      "thisMonth": "Αυτός ο μήνας",
+      "previousMonth": "Προηγούμενος μήνας",
+      "last90Days": "Τελευταίες 90 ημέρες"
+    },
+    "states": {
+      "loading": "Δημιουργία της αναφοράς ανάλυσης…",
+      "noPerformanceData": "Δεν υπάρχουν δεδομένα απόδοσης για αυτή την περίοδο.",
+      "noData": "Δεν υπάρχουν δεδομένα για αυτή την περίοδο.",
+      "noDataAvailable": "Δεν υπάρχουν διαθέσιμα δεδομένα για αυτή την περίοδο.",
+      "noStatusData": "Δεν υπάρχουν δεδομένα κατάστασης ραντεβού.",
+      "noOutgoingStock": "Δεν καταγράφηκε εξερχόμενη κίνηση αποθέματος σε αυτή την περίοδο."
+    },
+    "errors": {
+      "loadFailed": "Αποτυχία φόρτωσης αναφορών"
+    },
+    "tabs": {
+      "executive": "Σύνοψη",
+      "revenue": "Έσοδα",
+      "appointments": "Ραντεβού",
+      "staff": "Προσωπικό",
+      "services": "Υπηρεσίες",
+      "customers": "Πελάτες",
+      "products": "Προϊόντα"
+    },
+    "metrics": {
+      "revenue": "Έσοδα",
+      "appointments": "Ραντεβού",
+      "completionRate": "Ποσοστό ολοκλήρωσης",
+      "returningCustomers": "Επαναλαμβανόμενοι πελάτες",
+      "averageTicketDetail": "Μέση αξία ραντεβού {{value}}",
+      "completedCount_one": "{{count}} ολοκληρωμένο",
+      "completedCount_other": "{{count}} ολοκληρωμένα",
+      "cancellationNoShowDetail": "{{cancellation}}% ακυρώσεις · {{noShow}}% μη εμφανίσεις",
+      "returningCount_one": "{{count}} επαναλαμβανόμενος πελάτης",
+      "returningCount_other": "{{count}} επαναλαμβανόμενοι πελάτες"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} έναντι προηγούμενης περιόδου"
+    },
+    "units": {
+      "percentagePoints": "π.μ.",
+      "hoursValue": "{{value}} ώρες"
+    },
+    "counts": {
+      "bookings_one": "{{count}} κράτηση",
+      "bookings_other": "{{count}} κρατήσεις"
+    },
+    "executive": {
+      "trendTitle": "Τάση εσόδων και ζήτησης",
+      "trendDescription": "Ημερήσια έσοδα και όγκος ραντεβού για την επιλεγμένη περίοδο.",
+      "operationalHealth": "Λειτουργική εικόνα",
+      "completion": "Ολοκλήρωση",
+      "cancellation": "Ακύρωση",
+      "noShow": "Μη εμφάνιση",
+      "revenuePerBookedHour": "Έσοδα ανά δεσμευμένη ώρα",
+      "bookedHours": "Δεσμευμένες ώρες",
+      "uniqueCustomers": "Μοναδικοί πελάτες",
+      "demandByWeekday": "Ζήτηση ανά ημέρα εβδομάδας",
+      "demandByWeekdayDescription": "Εντοπίστε τις ισχυρότερες ημέρες για στελέχωση και διαθεσιμότητα.",
+      "peakBookingHours": "Ώρες αιχμής κρατήσεων",
+      "peakBookingHoursDescription": "Συγκέντρωση ραντεβού ανά ώρα έναρξης.",
+      "topServices": "Κορυφαίες υπηρεσίες",
+      "topProfessionals": "Κορυφαίοι επαγγελματίες"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Μικτά προγραμματισμένα έσοδα",
+      "averageAppointmentValue": "Μέση αξία ραντεβού",
+      "revenuePerBookedHour": "Έσοδα / δεσμευμένη ώρα",
+      "revenueGeneratingServices": "Υπηρεσίες με έσοδα",
+      "timelineTitle": "Χρονογραμμή εσόδων",
+      "timelineDescription": "Έσοδα από ενεργά και ολοκληρωμένα ραντεβού.",
+      "byProfessional": "Έσοδα ανά επαγγελματία",
+      "byService": "Έσοδα ανά υπηρεσία"
+    },
+    "appointments": {
+      "total": "Σύνολο",
+      "completed": "Ολοκληρωμένα",
+      "cancelled": "Ακυρωμένα",
+      "noShows": "Μη εμφανίσεις",
+      "bookedHours": "Δεσμευμένες ώρες",
+      "statusTitle": "Κατάσταση ραντεβού",
+      "demandByWeekday": "Ζήτηση ανά ημέρα εβδομάδας",
+      "demandByWeekdayDescription": "Όγκος κρατήσεων κατά τη διάρκεια της εβδομάδας.",
+      "peakHours": "Ώρες αιχμής ραντεβού",
+      "peakHoursDescription": "Χρησιμοποιήστε τα δεδομένα για βελτιστοποίηση ωραρίου, διαλειμμάτων και στελέχωσης."
+    },
+    "staff": {
+      "performanceTitle": "Απόδοση επαγγελματιών"
+    },
+    "services": {
+      "intelligenceTitle": "Ανάλυση υπηρεσιών"
+    },
+    "customers": {
+      "unique": "Μοναδικοί πελάτες",
+      "returning": "Επαναλαμβανόμενοι πελάτες",
+      "returningRate": "Ποσοστό επανάληψης",
+      "newThisPeriod": "Νέοι αυτή την περίοδο",
+      "valueTitle": "Αξία πελατών",
+      "account": "Λογαριασμός",
+      "registered": "Εγγεγραμμένος",
+      "guest": "Επισκέπτης",
+      "totalSpend": "Συνολική δαπάνη",
+      "averageSpend": "Μέση δαπάνη"
+    },
+    "products": {
+      "unitsSold": "Μονάδες που πωλήθηκαν",
+      "productsWithMovement": "Προϊόντα με κίνηση",
+      "movementTitle": "Κίνηση προϊόντων",
+      "unitsSoldColumn": "Μονάδες πώλησης"
+    },
+    "tables": {
+      "professional": "Επαγγελματίας",
+      "appointments": "Ραντεβού",
+      "completed": "Ολοκληρωμένα",
+      "completion": "Ολοκλήρωση",
+      "revenue": "Έσοδα",
+      "averageTicket": "Μέση αξία",
+      "bookedHours": "Δεσμευμένες ώρες",
+      "service": "Υπηρεσία",
+      "bookings": "Κρατήσεις",
+      "averageValue": "Μέση αξία",
+      "customer": "Πελάτης",
+      "visits": "Επισκέψεις",
+      "returning": "Επαναλαμβανόμενος",
+      "product": "Προϊόν"
+    },
+    "statuses": {
+      "confirmed": "Επιβεβαιωμένο",
+      "completed": "Ολοκληρωμένο",
+      "in_progress": "Σε εξέλιξη",
+      "cancelled_by_business": "Ακυρώθηκε από την επιχείρηση",
+      "cancelled_by_customer": "Ακυρώθηκε από τον πελάτη",
+      "no_show": "Μη εμφάνιση"
+    },
+    "weekdays": {
+      "sunday": "Κυριακή",
+      "monday": "Δευτέρα",
+      "tuesday": "Τρίτη",
+      "wednesday": "Τετάρτη",
+      "thursday": "Πέμπτη",
+      "friday": "Παρασκευή",
+      "saturday": "Σάββατο"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} ραντεβού",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} ραντεβού"
+    },
+    "csv": {
+      "reportTitle": "Αναφορά Επιχειρηματικής Ανάλυσης Velliqo",
+      "business": "Επιχείρηση",
+      "period": "Περίοδος",
+      "periodRange": "{{start}} έως {{end}}",
+      "executiveMetric": "Βασικός δείκτης",
+      "value": "Τιμή",
+      "previousPeriodChange": "Μεταβολή από προηγούμενη περίοδο",
+      "averageTicket": "Μέση αξία ραντεβού",
+      "cancellationRate": "Ποσοστό ακυρώσεων",
+      "noShowRate": "Ποσοστό μη εμφανίσεων",
+      "returningCustomerRate": "Ποσοστό επαναλαμβανόμενων πελατών",
+      "bookedMinutes": "Δεσμευμένα λεπτά",
+      "minutes": "Λεπτά",
+      "spend": "Δαπάνη",
+      "registered": "Εγγεγραμμένος",
+      "returning": "Επαναλαμβανόμενος"
+    },
+    "common": {
+      "yes": "Ναι",
+      "no": "Όχι"
+    },
+    "generic": {
+      "unassigned": "Χωρίς ανάθεση",
+      "customer": "Πελάτης"
+    }
   }
 }

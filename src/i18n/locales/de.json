@@ -894,5 +894,192 @@
     "delete": {
       "confirm": "{{name}} löschen? Vorhandene Bestandsbewegungen können das Löschen verhindern."
     }
+  },
+  "reports": {
+    "eyebrow": "Velliqo Analysen",
+    "title": "Business Intelligence",
+    "description": "Analysieren Sie Umsatz, Nachfrage, Kundenverhalten, Serviceleistung und Teambeitrag in einem zentralen Berichtsbereich.",
+    "actions": {
+      "refresh": "Aktualisieren",
+      "print": "Drucken",
+      "exportCsv": "CSV exportieren"
+    },
+    "filters": {
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "thisWeek": "Diese Woche",
+      "thisMonth": "Dieser Monat",
+      "previousMonth": "Vorheriger Monat",
+      "last90Days": "Letzte 90 Tage"
+    },
+    "states": {
+      "loading": "Analysebericht wird erstellt…",
+      "noPerformanceData": "Für diesen Zeitraum sind keine Leistungsdaten vorhanden.",
+      "noData": "Für diesen Zeitraum sind keine Daten vorhanden.",
+      "noDataAvailable": "Für diesen Zeitraum sind keine Daten verfügbar.",
+      "noStatusData": "Keine Daten zum Terminstatus vorhanden.",
+      "noOutgoingStock": "In diesem Zeitraum wurde keine ausgehende Lagerbewegung erfasst."
+    },
+    "errors": {
+      "loadFailed": "Berichte konnten nicht geladen werden"
+    },
+    "tabs": {
+      "executive": "Übersicht",
+      "revenue": "Umsatz",
+      "appointments": "Termine",
+      "staff": "Personal",
+      "services": "Dienstleistungen",
+      "customers": "Kunden",
+      "products": "Produkte"
+    },
+    "metrics": {
+      "revenue": "Umsatz",
+      "appointments": "Termine",
+      "completionRate": "Abschlussquote",
+      "returningCustomers": "Wiederkehrende Kunden",
+      "averageTicketDetail": "Durchschnittswert {{value}}",
+      "completedCount_one": "{{count}} abgeschlossen",
+      "completedCount_other": "{{count}} abgeschlossen",
+      "cancellationNoShowDetail": "{{cancellation}}% storniert · {{noShow}}% nicht erschienen",
+      "returningCount_one": "{{count}} wiederkehrender Kunde",
+      "returningCount_other": "{{count}} wiederkehrende Kunden"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} gegenüber dem vorherigen Zeitraum"
+    },
+    "units": {
+      "percentagePoints": "PP",
+      "hoursValue": "{{value}} Std."
+    },
+    "counts": {
+      "bookings_one": "{{count}} Buchung",
+      "bookings_other": "{{count}} Buchungen"
+    },
+    "executive": {
+      "trendTitle": "Umsatz- und Nachfragetrend",
+      "trendDescription": "Täglicher Umsatz und Terminvolumen für den ausgewählten Zeitraum.",
+      "operationalHealth": "Betriebliche Kennzahlen",
+      "completion": "Abschluss",
+      "cancellation": "Stornierung",
+      "noShow": "Nicht erschienen",
+      "revenuePerBookedHour": "Umsatz pro gebuchter Stunde",
+      "bookedHours": "Gebuchte Stunden",
+      "uniqueCustomers": "Eindeutige Kunden",
+      "demandByWeekday": "Nachfrage nach Wochentag",
+      "demandByWeekdayDescription": "Ermitteln Sie die stärksten Tage für Personaleinsatz und Verfügbarkeit.",
+      "peakBookingHours": "Buchungszeiten mit höchster Auslastung",
+      "peakBookingHoursDescription": "Terminverteilung nach Startzeit.",
+      "topServices": "Top-Dienstleistungen",
+      "topProfessionals": "Top-Mitarbeiter"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Geplanter Bruttoumsatz",
+      "averageAppointmentValue": "Durchschnittlicher Terminwert",
+      "revenuePerBookedHour": "Umsatz / gebuchte Stunde",
+      "revenueGeneratingServices": "Umsatzbringende Dienstleistungen",
+      "timelineTitle": "Umsatzverlauf",
+      "timelineDescription": "Umsatz aus aktiven und abgeschlossenen Terminen.",
+      "byProfessional": "Umsatz nach Mitarbeiter",
+      "byService": "Umsatz nach Dienstleistung"
+    },
+    "appointments": {
+      "total": "Gesamt",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "noShows": "Nicht erschienen",
+      "bookedHours": "Gebuchte Stunden",
+      "statusTitle": "Terminstatus",
+      "demandByWeekday": "Nachfrage nach Wochentag",
+      "demandByWeekdayDescription": "Buchungsvolumen über die Woche.",
+      "peakHours": "Terminzeiten mit höchster Auslastung",
+      "peakHoursDescription": "Nutzen Sie diese Daten zur Optimierung von Öffnungszeiten, Pausen und Personaleinsatz."
+    },
+    "staff": {
+      "performanceTitle": "Mitarbeiterleistung"
+    },
+    "services": {
+      "intelligenceTitle": "Dienstleistungsanalyse"
+    },
+    "customers": {
+      "unique": "Eindeutige Kunden",
+      "returning": "Wiederkehrende Kunden",
+      "returningRate": "Wiederkehrquote",
+      "newThisPeriod": "Neu in diesem Zeitraum",
+      "valueTitle": "Kundenwert",
+      "account": "Konto",
+      "registered": "Registriert",
+      "guest": "Gast",
+      "totalSpend": "Gesamtausgaben",
+      "averageSpend": "Durchschnittsausgaben"
+    },
+    "products": {
+      "unitsSold": "Verkaufte Einheiten",
+      "productsWithMovement": "Produkte mit Bewegung",
+      "movementTitle": "Produktbewegung",
+      "unitsSoldColumn": "Verkaufte Einheiten"
+    },
+    "tables": {
+      "professional": "Mitarbeiter",
+      "appointments": "Termine",
+      "completed": "Abgeschlossen",
+      "completion": "Abschluss",
+      "revenue": "Umsatz",
+      "averageTicket": "Durchschnittswert",
+      "bookedHours": "Gebuchte Stunden",
+      "service": "Dienstleistung",
+      "bookings": "Buchungen",
+      "averageValue": "Durchschnittswert",
+      "customer": "Kunde",
+      "visits": "Besuche",
+      "returning": "Wiederkehrend",
+      "product": "Produkt"
+    },
+    "statuses": {
+      "confirmed": "Bestätigt",
+      "completed": "Abgeschlossen",
+      "in_progress": "In Bearbeitung",
+      "cancelled_by_business": "Vom Unternehmen storniert",
+      "cancelled_by_customer": "Vom Kunden storniert",
+      "no_show": "Nicht erschienen"
+    },
+    "weekdays": {
+      "sunday": "Sonntag",
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} Termin",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} Termine"
+    },
+    "csv": {
+      "reportTitle": "Velliqo Business-Intelligence-Bericht",
+      "business": "Unternehmen",
+      "period": "Zeitraum",
+      "periodRange": "{{start}} bis {{end}}",
+      "executiveMetric": "Kennzahl",
+      "value": "Wert",
+      "previousPeriodChange": "Änderung zum vorherigen Zeitraum",
+      "averageTicket": "Durchschnittlicher Terminwert",
+      "cancellationRate": "Stornierungsquote",
+      "noShowRate": "Nicht-Erscheinen-Quote",
+      "returningCustomerRate": "Wiederkehrende-Kunden-Quote",
+      "bookedMinutes": "Gebuchte Minuten",
+      "minutes": "Minuten",
+      "spend": "Ausgaben",
+      "registered": "Registriert",
+      "returning": "Wiederkehrend"
+    },
+    "common": {
+      "yes": "Ja",
+      "no": "Nein"
+    },
+    "generic": {
+      "unassigned": "Nicht zugewiesen",
+      "customer": "Kunde"
+    }
   }
 }

@@ -894,5 +894,192 @@
     "delete": {
       "confirm": "Delete {{name}}? Existing stock movement history may prevent deletion."
     }
+  },
+  "reports": {
+    "eyebrow": "Velliqo intelligence",
+    "title": "Business Intelligence",
+    "description": "Understand revenue, demand, customer behaviour, service performance and team contribution from one reporting workspace.",
+    "actions": {
+      "refresh": "Refresh",
+      "print": "Print",
+      "exportCsv": "Export CSV"
+    },
+    "filters": {
+      "startDate": "Start date",
+      "endDate": "End date",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "previousMonth": "Previous month",
+      "last90Days": "Last 90 days"
+    },
+    "states": {
+      "loading": "Building your intelligence report…",
+      "noPerformanceData": "No performance data for this period.",
+      "noData": "No data for this period.",
+      "noDataAvailable": "No data available for this period.",
+      "noStatusData": "No appointment status data.",
+      "noOutgoingStock": "No outgoing stock movement was recorded in this period."
+    },
+    "errors": {
+      "loadFailed": "Failed to load reports"
+    },
+    "tabs": {
+      "executive": "Executive",
+      "revenue": "Revenue",
+      "appointments": "Appointments",
+      "staff": "Staff",
+      "services": "Services",
+      "customers": "Customers",
+      "products": "Products"
+    },
+    "metrics": {
+      "revenue": "Revenue",
+      "appointments": "Appointments",
+      "completionRate": "Completion rate",
+      "returningCustomers": "Returning customers",
+      "averageTicketDetail": "Average ticket {{value}}",
+      "completedCount_one": "{{count}} completed",
+      "completedCount_other": "{{count}} completed",
+      "cancellationNoShowDetail": "{{cancellation}}% cancelled · {{noShow}}% no-show",
+      "returningCount_one": "{{count}} returning customer",
+      "returningCount_other": "{{count}} returning customers"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} vs previous period"
+    },
+    "units": {
+      "percentagePoints": "pp",
+      "hoursValue": "{{value}} h"
+    },
+    "counts": {
+      "bookings_one": "{{count}} booking",
+      "bookings_other": "{{count}} bookings"
+    },
+    "executive": {
+      "trendTitle": "Revenue and demand trend",
+      "trendDescription": "Daily revenue with appointment volume for the selected period.",
+      "operationalHealth": "Operational health",
+      "completion": "Completion",
+      "cancellation": "Cancellation",
+      "noShow": "No-show",
+      "revenuePerBookedHour": "Revenue per booked hour",
+      "bookedHours": "Booked hours",
+      "uniqueCustomers": "Unique customers",
+      "demandByWeekday": "Demand by weekday",
+      "demandByWeekdayDescription": "Discover the strongest days for staffing and availability.",
+      "peakBookingHours": "Peak booking hours",
+      "peakBookingHoursDescription": "Appointment concentration by start time.",
+      "topServices": "Top services",
+      "topProfessionals": "Top professionals"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Gross scheduled revenue",
+      "averageAppointmentValue": "Average appointment value",
+      "revenuePerBookedHour": "Revenue / booked hour",
+      "revenueGeneratingServices": "Revenue-generating services",
+      "timelineTitle": "Revenue timeline",
+      "timelineDescription": "Revenue recognised from active and completed appointment states.",
+      "byProfessional": "Revenue by professional",
+      "byService": "Revenue by service"
+    },
+    "appointments": {
+      "total": "Total",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShows": "No-shows",
+      "bookedHours": "Booked hours",
+      "statusTitle": "Appointment status",
+      "demandByWeekday": "Demand by weekday",
+      "demandByWeekdayDescription": "Booking volume across the week.",
+      "peakHours": "Peak appointment hours",
+      "peakHoursDescription": "Use this to optimise opening hours, breaks and staffing."
+    },
+    "staff": {
+      "performanceTitle": "Professional performance"
+    },
+    "services": {
+      "intelligenceTitle": "Service intelligence"
+    },
+    "customers": {
+      "unique": "Unique customers",
+      "returning": "Returning customers",
+      "returningRate": "Returning rate",
+      "newThisPeriod": "New this period",
+      "valueTitle": "Customer value",
+      "account": "Account",
+      "registered": "Registered",
+      "guest": "Guest",
+      "totalSpend": "Total spend",
+      "averageSpend": "Average spend"
+    },
+    "products": {
+      "unitsSold": "Units sold",
+      "productsWithMovement": "Products with movement",
+      "movementTitle": "Product movement",
+      "unitsSoldColumn": "Units sold"
+    },
+    "tables": {
+      "professional": "Professional",
+      "appointments": "Appointments",
+      "completed": "Completed",
+      "completion": "Completion",
+      "revenue": "Revenue",
+      "averageTicket": "Average ticket",
+      "bookedHours": "Booked hours",
+      "service": "Service",
+      "bookings": "Bookings",
+      "averageValue": "Average value",
+      "customer": "Customer",
+      "visits": "Visits",
+      "returning": "Returning",
+      "product": "Product"
+    },
+    "statuses": {
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "in_progress": "In progress",
+      "cancelled_by_business": "Cancelled by business",
+      "cancelled_by_customer": "Cancelled by customer",
+      "no_show": "No-show"
+    },
+    "weekdays": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} appointment",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} appointments"
+    },
+    "csv": {
+      "reportTitle": "Velliqo Business Intelligence Report",
+      "business": "Business",
+      "period": "Period",
+      "periodRange": "{{start}} to {{end}}",
+      "executiveMetric": "Executive metric",
+      "value": "Value",
+      "previousPeriodChange": "Previous-period change",
+      "averageTicket": "Average ticket",
+      "cancellationRate": "Cancellation rate",
+      "noShowRate": "No-show rate",
+      "returningCustomerRate": "Returning-customer rate",
+      "bookedMinutes": "Booked minutes",
+      "minutes": "Minutes",
+      "spend": "Spend",
+      "registered": "Registered",
+      "returning": "Returning"
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "generic": {
+      "unassigned": "Unassigned",
+      "customer": "Customer"
+    }
   }
 }
