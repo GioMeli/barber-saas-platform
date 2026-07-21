@@ -10,10 +10,10 @@ import { useTranslation } from 'react-i18next';
 import { IndustryThemeRoot } from '@/theme';
 
 export default function OwnerDashboardLayout() {
-  const { businessMemberships, profile } = useAuth();
+  const { activeBusiness, profile } = useAuth();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
-  const business = businessMemberships[0]?.businesses;
+  const business = activeBusiness;
   const { t } = useTranslation();
 
   const navItems = [
@@ -23,10 +23,10 @@ export default function OwnerDashboardLayout() {
     { icon: Users, label: t('dashboard.staff'), path: '/dashboard/staff' },
     { icon: Scissors, label: t('dashboard.services'), path: '/dashboard/services' },
     { icon: Package, label: t('dashboard.products'), path: '/dashboard/products' },
-    { icon: Megaphone, label: 'Posts', path: '/dashboard/posts' },
-    { icon: Images, label: 'Gallery', path: '/dashboard/gallery' },
-    { icon: Store, label: 'Storefront', path: '/dashboard/storefront' },
-    { icon: Building2, label: 'Business', path: '/dashboard/business' },
+    { icon: Megaphone, label: t('navigation.posts'), path: '/dashboard/posts' },
+    { icon: Images, label: t('navigation.gallery'), path: '/dashboard/gallery' },
+    { icon: Store, label: t('navigation.storefront'), path: '/dashboard/storefront' },
+    { icon: Building2, label: t('navigation.business'), path: '/dashboard/business' },
     { icon: BarChart3, label: t('dashboard.reports'), path: '/dashboard/reports' },
     { icon: CreditCard, label: t('dashboard.billing'), path: '/dashboard/billing' },
   ];
@@ -68,8 +68,8 @@ export default function OwnerDashboardLayout() {
             </div>
           )}
           <div className="min-w-0">
-            <div className="truncate font-bold text-white">{business?.name || 'My Business'}</div>
-            <div className="text-xs text-sidebar-foreground/55">Owner workspace</div>
+            <div className="truncate font-bold text-white">{business?.name || t('navigation.my_business')}</div>
+            <div className="text-xs text-sidebar-foreground/55">{t('navigation.owner_workspace')}</div>
           </div>
         </div>
 
@@ -81,8 +81,8 @@ export default function OwnerDashboardLayout() {
               {profile?.full_name?.charAt(0) || 'U'}
             </div>
             <div className="min-w-0">
-              <div className="truncate text-sm font-semibold text-white">{profile?.full_name || 'Owner'}</div>
-              <div className="text-xs text-sidebar-foreground/55">Business owner</div>
+              <div className="truncate text-sm font-semibold text-white">{profile?.full_name || t('navigation.business_owner')}</div>
+              <div className="text-xs text-sidebar-foreground/55">{t('navigation.business_owner')}</div>
             </div>
           </div>
           <div className="grid grid-cols-[1fr_auto] gap-2">
@@ -97,14 +97,14 @@ export default function OwnerDashboardLayout() {
       <div className="min-w-0 md:pl-[272px]">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-background/90 px-4 backdrop-blur md:hidden">
           <div className="min-w-0">
-            <div className="truncate font-bold">{business?.name || 'My Business'}</div>
-            <div className="text-xs text-muted-foreground">Owner workspace</div>
+            <div className="truncate font-bold">{business?.name || t('navigation.my_business')}</div>
+            <div className="text-xs text-muted-foreground">{t('navigation.owner_workspace')}</div>
           </div>
           <Sheet open={isMobileOpen} onOpenChange={setIsMobileOpen}>
             <SheetTrigger asChild><Button variant="outline" size="icon" className="rounded-xl"><Menu className="h-5 w-5" /></Button></SheetTrigger>
             <SheetContent side="left" className="w-[88vw] max-w-[320px] border-0 bg-sidebar p-0">
               <div className="flex h-20 items-center border-b border-sidebar-border px-5">
-                <div><div className="font-bold text-white">{business?.name || 'My Business'}</div><div className="text-xs text-sidebar-foreground/55">Menu</div></div>
+                <div><div className="font-bold text-white">{business?.name || t('navigation.my_business')}</div><div className="text-xs text-sidebar-foreground/55">{t('navigation.menu')}</div></div>
               </div>
               <div className="scrollbar-subtle h-[calc(100vh-160px)] overflow-y-auto px-3 py-5"><NavLinks /></div>
               <div className="safe-bottom absolute inset-x-0 bottom-0 border-t border-sidebar-border bg-sidebar p-4">

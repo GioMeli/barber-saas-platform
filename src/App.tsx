@@ -1,10 +1,17 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './hooks/useAuth';
 import { Toaster } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import IndustrySelection from './pages/marketing/IndustrySelection';
+import BusinessTypeSelection from './pages/marketing/BusinessTypeSelection';
+import Pricing from './pages/marketing/Pricing';
+import WhyVelliqo from './pages/marketing/WhyVelliqo';
+import Experience from './pages/marketing/Experience';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
+import CheckEmail from './pages/auth/CheckEmail';
+import EmailConfirmed from './pages/auth/EmailConfirmed';
 import PublicBooking from './pages/public/PublicBooking';
 import PublicAppLayout from './pages/public/PublicAppLayout';
 import BusinessHome from './pages/public/BusinessHome';
@@ -29,7 +36,8 @@ import Business from './pages/owner/Business';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
   const { user, profile, loading } = useAuth();
-  if (loading) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
+  const { t } = useTranslation();
+  if (loading) return <div className="flex min-h-screen items-center justify-center">{t('system.loading')}</div>;
   if (!user) return <Navigate to="/sign-in" replace />;
   if (allowedRoles && profile && !allowedRoles.includes(profile.role)) return <Navigate to="/" replace />;
   return <>{children}</>;
@@ -37,7 +45,8 @@ function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode;
 
 function RequireOnboarding({ children }: { children: React.ReactNode }) {
   const { businessMemberships, loading } = useAuth();
-  if (loading) return <div className="flex min-h-screen items-center justify-center">Loading...</div>;
+  const { t } = useTranslation();
+  if (loading) return <div className="flex min-h-screen items-center justify-center">{t('system.loading')}</div>;
   if (businessMemberships.length === 0) return <Navigate to="/onboarding" replace />;
   return <>{children}</>;
 }
@@ -48,8 +57,14 @@ function App() {
       <Toaster position="top-center" />
       <Routes>
         <Route path="/" element={<IndustrySelection />} />
+        <Route path="/business-types" element={<BusinessTypeSelection />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/why-velliqo" element={<WhyVelliqo />} />
+        <Route path="/experience" element={<Experience />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+        <Route path="/check-email" element={<CheckEmail />} />
+        <Route path="/auth/confirmed" element={<EmailConfirmed />} />
 
         <Route path="/app/:slug" element={<PublicAppLayout />}>
           <Route index element={<BusinessHome />} />

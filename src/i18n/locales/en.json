@@ -70,5 +70,70 @@
     "delete": "Delete",
     "add": "Add",
     "loading": "Loading..."
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "greek": "Greek",
+    "german": "German",
+    "spanish": "Spanish",
+    "turkish": "Turkish"
+  },
+  "navigation": {
+    "posts": "Posts",
+    "gallery": "Gallery",
+    "storefront": "Storefront",
+    "business": "Business",
+    "ai": "Velliqo AI",
+    "menu": "Menu",
+    "owner_workspace": "Owner workspace",
+    "business_owner": "Business owner",
+    "my_business": "My Business"
+  },
+  "system": {
+    "loading": "Loading...",
+    "unexpected_error": "Something went wrong. Please refresh the page and try again."
+  },
+  "auth": {
+    "confirmed": "Email confirmed successfully. You can now sign in.",
+    "signed_in": "Signed in successfully.",
+    "business_access": "Business access",
+    "business_login": "Business login",
+    "access_workspace": "Access your workspace",
+    "access_description": "Sign in once. The platform will load the business and industry connected to your account.",
+    "business_email": "Business email",
+    "password": "Password",
+    "hide_password": "Hide password",
+    "show_password": "Show password",
+    "signing_in": "Signing in...",
+    "sign_in_workspace": "Sign in to workspace",
+    "new_to_velliqo": "New to Velliqo?",
+    "choose_setup": "Choose your business setup",
+    "authorized_only": "Business owners and authorised staff only. Customers access accounts through each business’s public page.",
+    "secure_workspace": "One secure workspace for every business type",
+    "hero_title": "Manage your business from one professional platform.",
+    "hero_description": "Your account opens the correct workspace automatically—whatever service industry you operate in.",
+    "appointments": "Appointments",
+    "appointments_text": "Calendar and real availability",
+    "operations": "Operations",
+    "operations_text": "Staff and customer management",
+    "storefront": "Storefront",
+    "storefront_text": "Public booking experience",
+    "insights": "Insights",
+    "insights_text": "Clear business reporting",
+    "secure_access": "Secure business access",
+    "secure_access_text": "Each company’s customers, staff and operational records remain separated inside the platform.",
+    "membership_note": "One login page is intentionally used for every owner. Your membership determines the correct business and theme after authentication."
+  },
+  "terminology": {
+    "staff": "Staff",
+    "staff_member": "Staff member",
+    "staff_plural": "Staff",
+    "customer": "Customer",
+    "customers": "Customers",
+    "service": "Service",
+    "services": "Services",
+    "appointment": "Appointment",
+    "appointments": "Appointments"
   }
 }

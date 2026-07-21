@@ -20,6 +20,8 @@ import {
 import { getIndustryConfig, isIndustryKey } from '@/config/industries';
 import { IndustryThemeRoot } from '@/theme';
 
+const SELECTED_INDUSTRY_STORAGE_KEY = 'velliqo.selectedIndustry';
+
 export default function SignUp() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -29,8 +31,28 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const requestedIndustry = searchParams.get('industry');
-  const industryKey = isIndustryKey(requestedIndustry) ? requestedIndustry : 'hair_salon';
+  const storedIndustry = typeof window !== 'undefined'
+    ? window.localStorage.getItem(SELECTED_INDUSTRY_STORAGE_KEY)
+    : null;
+  const industryKey = isIndustryKey(requestedIndustry)
+    ? requestedIndustry
+    : isIndustryKey(storedIndustry)
+      ? storedIndustry
+      : 'hair_salon';
   const industry = getIndustryConfig(industryKey);
+
+  React.useEffect(() => {
+    window.localStorage.setItem(SELECTED_INDUSTRY_STORAGE_KEY, industry.key);
+  }, [industry.key]);
+
+  React.useEffect(() => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) return;
+    window.localStorage.setItem(
+      `${SELECTED_INDUSTRY_STORAGE_KEY}:${normalizedEmail}`,
+      industry.key
+    );
+  }, [email, industry.key]);
 
   const handleSignUp = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -40,6 +62,7 @@ export default function SignUp() {
       email: email.trim(),
       password,
       options: {
+        emailRedirectTo: `${window.location.origin}/auth/confirmed`,
         data: {
           full_name: fullName.trim(),
           role: 'Business Owner',
@@ -55,8 +78,8 @@ export default function SignUp() {
       return;
     }
 
-    toast.success('Account created. Please sign in to continue setup.');
-    navigate('/sign-in');
+    toast.success('Account created. Check your email to confirm your account.');
+    navigate(`/check-email?email=${encodeURIComponent(email.trim())}&industry=${industry.key}`);
   };
 
   return (
@@ -69,8 +92,8 @@ export default function SignUp() {
 
             <div className="relative">
               <Link to="/" className="inline-flex items-center gap-3">
-                <img src="/brand/barber-saas-logo.jpg" alt="BusinessOS" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
-                <div><div className="font-extrabold">BusinessOS</div><div className="text-[10px] uppercase tracking-[0.16em] text-white/50">Beauty business platform</div></div>
+                <img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
+                <div><div className="font-extrabold">Velliqo</div><div className="text-[10px] uppercase tracking-[0.16em] text-white/50">Book. Manage. Grow.</div></div>
               </Link>
 
               <div className="mt-8 max-w-2xl">
@@ -104,10 +127,10 @@ export default function SignUp() {
           <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-hidden lg:px-8 lg:py-4">
             <div className="w-full max-w-[500px]">
               <div className="mb-4 flex items-center justify-between lg:hidden">
-                <Link to="/" className="flex items-center gap-3"><img src="/brand/barber-saas-logo.jpg" alt="BusinessOS" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">BusinessOS</div><div className="text-xs text-muted-foreground">Owner registration</div></div></Link>
+                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">Owner registration</div></div></Link>
               </div>
 
-              <Link to="/" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:inline-flex">
+              <Link to="/business-types" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:inline-flex">
                 <ArrowLeft className="h-4 w-4" /> Change business type
               </Link>
 

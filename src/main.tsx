@@ -4,16 +4,25 @@ import App from "./App.tsx";
 import { AppWrapper } from "./components/common/PageMeta.tsx";
 import "./index.css";
 import "./i18n";
+import { useTranslation } from "react-i18next";
+import { LocalizationRoot } from "./i18n/components/LocalizationRoot";
 
 Sentry.init({
   dsn: import.meta.env['VITE_SENTRY_DSN'] as string | undefined,
   environment: import.meta.env.MODE,
 });
 
+function LocalizedErrorFallback() {
+  const { t } = useTranslation();
+  return <p className="p-6 text-center text-sm text-muted-foreground">{t('system.unexpected_error')}</p>;
+}
+
 createRoot(document.getElementById("root")!).render(
-  <Sentry.ErrorBoundary fallback={<p>应用发生错误，请刷新页面重试</p>}>
-    <AppWrapper>
-      <App />
-    </AppWrapper>
+  <Sentry.ErrorBoundary fallback={<LocalizedErrorFallback />}>
+    <LocalizationRoot>
+      <AppWrapper>
+        <App />
+      </AppWrapper>
+    </LocalizationRoot>
   </Sentry.ErrorBoundary>
 );

@@ -1,30 +1,37 @@
-import React, { useEffect } from 'react';
+import React from 'react';
+import { Languages } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { LANGUAGE_OPTIONS, normalizeLanguage, type SupportedLanguage } from '@/i18n/config';
 
-export default function LanguageSwitcher() {
-  const { i18n } = useTranslation();
+interface LanguageSwitcherProps {
+  compact?: boolean;
+  className?: string;
+}
 
-  const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    i18n.changeLanguage(e.target.value);
+export default function LanguageSwitcher({ compact = false, className = '' }: LanguageSwitcherProps) {
+  const { i18n, t } = useTranslation();
+  const currentLanguage = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
+
+  const handleLanguageChange = async (event: React.ChangeEvent<HTMLSelectElement>) => {
+    await i18n.changeLanguage(event.target.value as SupportedLanguage);
   };
 
-  useEffect(() => {
-    // Handle RTL for Arabic
-    document.documentElement.dir = i18n.language === 'ar' ? 'rtl' : 'ltr';
-    document.documentElement.lang = i18n.language;
-  }, [i18n.language]);
-
   return (
-    <select 
-      className="bg-transparent border border-border text-sm rounded-md px-2 py-1 outline-none"
-      value={i18n.language}
-      onChange={handleLanguageChange}
-    >
-      <option value="en">English</option>
-      <option value="el">Ελληνικά (Greek)</option>
-      <option value="ru">Русский (Russian)</option>
-      <option value="hi">हिन्दी (Hindi)</option>
-      <option value="ar">العربية (Arabic)</option>
-    </select>
+    <label className={`relative inline-flex items-center ${className}`}>
+      <span className="sr-only">{t('language.label')}</span>
+      {!compact && <Languages aria-hidden="true" className="pointer-events-none absolute left-2.5 h-4 w-4 text-muted-foreground" />}
+      <select
+        aria-label={t('language.label')}
+        className={`h-9 rounded-lg border border-border bg-background text-sm outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/20 ${compact ? 'w-12 px-1 text-center' : 'min-w-[142px] pl-8 pr-7'} `}
+        value={currentLanguage}
+        onChange={handleLanguageChange}
+      >
+        {LANGUAGE_OPTIONS.map((language) => (
+          <option key={language.code} value={language.code}>
+            {compact ? language.code.toUpperCase() : language.nativeLabel}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
