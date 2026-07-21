@@ -738,5 +738,348 @@
     "delete": {
       "confirm": "¿Eliminar “{{name}}”? El historial de citas existente puede impedir la eliminación permanente."
     }
+  },
+  "products": {
+    "eyebrow": "Gestión de inventario",
+    "title": "Productos e inventario",
+    "description": "Gestiona productos de venta, niveles de existencias, proveedores y el historial completo de movimientos de inventario.",
+    "actions": {
+      "add": "Añadir producto",
+      "edit": "Editar producto",
+      "removeImage": "Eliminar",
+      "save": "Guardar producto",
+      "saving": "Guardando...",
+      "adjust": "Ajustar existencias",
+      "history": "Historial de existencias",
+      "delete": "Eliminar producto",
+      "addStock": "Añadir existencias",
+      "editAlert": "Editar alerta",
+      "confirmAdjustment": "Confirmar ajuste"
+    },
+    "summary": {
+      "active": {
+        "title": "Productos activos",
+        "detail": "{{count}} productos en total"
+      },
+      "lowStock": {
+        "title": "Existencias bajas",
+        "detail": "{{count}} agotados"
+      },
+      "costValue": {
+        "title": "Valor de coste del inventario",
+        "detail": "Basado en el coste de compra"
+      },
+      "retailValue": {
+        "title": "Valor potencial de venta",
+        "detail": "Existencias actuales al precio de venta"
+      }
+    },
+    "tabs": {
+      "products": "Productos",
+      "movements": "Movimientos de inventario",
+      "alerts": "Alertas de inventario ({{count}})"
+    },
+    "search": {
+      "placeholder": "Buscar producto, SKU, marca o proveedor"
+    },
+    "filters": {
+      "allCategories": "Todas las categorías"
+    },
+    "states": {
+      "loadingInventory": "Cargando inventario...",
+      "emptyProducts": "Ningún producto coincide con los filtros seleccionados.",
+      "loadingMovements": "Cargando movimientos de inventario...",
+      "emptyMovements": "No se han registrado movimientos de inventario.",
+      "loadingAlerts": "Cargando alertas de inventario...",
+      "healthyTitle": "El inventario está en buen estado",
+      "healthyDescription": "Ningún producto activo está por debajo de su nivel mínimo de existencias."
+    },
+    "table": {
+      "product": "Producto",
+      "skuBarcode": "SKU / Código de barras",
+      "supplier": "Proveedor",
+      "cost": "Coste",
+      "retail": "Venta",
+      "stock": "Existencias",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "labels": {
+      "noSku": "Sin SKU",
+      "noBarcode": "Sin código de barras",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "uncategorized": "Sin categoría",
+      "outOfStock": "Agotado",
+      "lowStock": "{{count}} · Bajo",
+      "available": "{{count}} disponibles",
+      "minimumRequired": "Mínimo requerido: {{count}}",
+      "productFallback": "Producto",
+      "noReason": "No se indicó ningún motivo"
+    },
+    "dialog": {
+      "editTitle": "Editar producto",
+      "addTitle": "Añadir producto",
+      "image": "Imagen del producto",
+      "imageAlt": "Producto",
+      "activeTitle": "Producto activo",
+      "activeHelp": "Los productos inactivos permanecen en el historial de inventario."
+    },
+    "fields": {
+      "nameRequired": "Nombre del producto *",
+      "brand": "Marca",
+      "sku": "SKU",
+      "barcode": "Código de barras",
+      "category": "Categoría",
+      "supplier": "Proveedor",
+      "costPrice": "Precio de coste (€)",
+      "sellingPriceRequired": "Precio de venta (€) *",
+      "currentStock": "Existencias actuales",
+      "minStockAlert": "Alerta de existencias bajas en",
+      "adjustmentType": "Tipo de ajuste",
+      "exactQuantity": "Nueva cantidad exacta",
+      "quantity": "Cantidad",
+      "reasonNotes": "Motivo / Notas"
+    },
+    "helpers": {
+      "existingStock": "Utiliza el ajuste de existencias para productos existentes.",
+      "openingStock": "Las existencias iniciales crearán un movimiento inicial."
+    },
+    "adjustment": {
+      "title": "Ajustar existencias: {{name}}",
+      "purchase": "Entrada — Compra / Recepción",
+      "return": "Entrada — Devolución de cliente",
+      "sale": "Salida — Venta minorista",
+      "internalUse": "Salida — Uso interno",
+      "damage": "Salida — Daño / Pérdida",
+      "expired": "Salida — Caducado",
+      "correction": "Establecer cantidad exacta"
+    },
+    "history": {
+      "title": "Historial de existencias: {{name}}",
+      "pageTitle": "Historial de movimientos de inventario"
+    },
+    "alerts": {
+      "title": "Alertas de existencias bajas"
+    },
+    "movements": {
+      "openingStock": "Existencias iniciales",
+      "types": {
+        "purchase": "Compra",
+        "sale": "Venta",
+        "damage": "Daño",
+        "return": "Devolución",
+        "correction": "Corrección",
+        "internal_use": "Uso interno",
+        "expired": "Caducado",
+        "adjustment": "Ajuste"
+      }
+    },
+    "validation": {
+      "nameRequired": "El nombre del producto es obligatorio",
+      "numericValues": "Los precios y valores de existencias deben ser números positivos válidos",
+      "quantityPositive": "La cantidad debe ser mayor que 0",
+      "negativeStock": "Este ajuste dejaría las existencias en negativo"
+    },
+    "messages": {
+      "loadError": "No se pudo cargar el inventario",
+      "updated": "Producto actualizado",
+      "added": "Producto añadido",
+      "saveError": "No se pudo guardar el producto",
+      "adjusted": "Existencias ajustadas",
+      "adjustError": "No se pudieron ajustar las existencias",
+      "deleted": "Producto eliminado",
+      "deleteBlocked": "El producto no puede eliminarse porque existe historial de inventario"
+    },
+    "delete": {
+      "confirm": "¿Eliminar {{name}}? El historial de movimientos existente puede impedir la eliminación."
+    }
+  },
+  "reports": {
+    "eyebrow": "Inteligencia Velliqo",
+    "title": "Inteligencia empresarial",
+    "description": "Analiza ingresos, demanda, comportamiento de clientes, rendimiento de servicios y contribución del equipo desde un único espacio de informes.",
+    "actions": {
+      "refresh": "Actualizar",
+      "print": "Imprimir",
+      "exportCsv": "Exportar CSV"
+    },
+    "filters": {
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "previousMonth": "Mes anterior",
+      "last90Days": "Últimos 90 días"
+    },
+    "states": {
+      "loading": "Creando el informe de inteligencia…",
+      "noPerformanceData": "No hay datos de rendimiento para este período.",
+      "noData": "No hay datos para este período.",
+      "noDataAvailable": "No hay datos disponibles para este período.",
+      "noStatusData": "No hay datos sobre el estado de las citas.",
+      "noOutgoingStock": "No se registraron movimientos de salida de inventario en este período."
+    },
+    "errors": {
+      "loadFailed": "No se pudieron cargar los informes"
+    },
+    "tabs": {
+      "executive": "Resumen",
+      "revenue": "Ingresos",
+      "appointments": "Citas",
+      "staff": "Personal",
+      "services": "Servicios",
+      "customers": "Clientes",
+      "products": "Productos"
+    },
+    "metrics": {
+      "revenue": "Ingresos",
+      "appointments": "Citas",
+      "completionRate": "Tasa de finalización",
+      "returningCustomers": "Clientes recurrentes",
+      "averageTicketDetail": "Valor medio {{value}}",
+      "completedCount_one": "{{count}} completada",
+      "completedCount_other": "{{count}} completadas",
+      "cancellationNoShowDetail": "{{cancellation}}% canceladas · {{noShow}}% ausencias",
+      "returningCount_one": "{{count}} cliente recurrente",
+      "returningCount_other": "{{count}} clientes recurrentes"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} frente al período anterior"
+    },
+    "units": {
+      "percentagePoints": "pp",
+      "hoursValue": "{{value}} h"
+    },
+    "counts": {
+      "bookings_one": "{{count}} reserva",
+      "bookings_other": "{{count}} reservas"
+    },
+    "executive": {
+      "trendTitle": "Tendencia de ingresos y demanda",
+      "trendDescription": "Ingresos diarios y volumen de citas para el período seleccionado.",
+      "operationalHealth": "Salud operativa",
+      "completion": "Finalización",
+      "cancellation": "Cancelación",
+      "noShow": "Ausencia",
+      "revenuePerBookedHour": "Ingresos por hora reservada",
+      "bookedHours": "Horas reservadas",
+      "uniqueCustomers": "Clientes únicos",
+      "demandByWeekday": "Demanda por día de la semana",
+      "demandByWeekdayDescription": "Identifica los días más fuertes para ajustar personal y disponibilidad.",
+      "peakBookingHours": "Horas punta de reservas",
+      "peakBookingHoursDescription": "Concentración de citas según la hora de inicio.",
+      "topServices": "Servicios principales",
+      "topProfessionals": "Profesionales principales"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Ingresos brutos programados",
+      "averageAppointmentValue": "Valor medio de cita",
+      "revenuePerBookedHour": "Ingresos / hora reservada",
+      "revenueGeneratingServices": "Servicios que generan ingresos",
+      "timelineTitle": "Evolución de ingresos",
+      "timelineDescription": "Ingresos reconocidos de citas activas y completadas.",
+      "byProfessional": "Ingresos por profesional",
+      "byService": "Ingresos por servicio"
+    },
+    "appointments": {
+      "total": "Total",
+      "completed": "Completadas",
+      "cancelled": "Canceladas",
+      "noShows": "Ausencias",
+      "bookedHours": "Horas reservadas",
+      "statusTitle": "Estado de las citas",
+      "demandByWeekday": "Demanda por día de la semana",
+      "demandByWeekdayDescription": "Volumen de reservas durante la semana.",
+      "peakHours": "Horas punta de citas",
+      "peakHoursDescription": "Utiliza estos datos para optimizar horarios, descansos y personal."
+    },
+    "staff": {
+      "performanceTitle": "Rendimiento profesional"
+    },
+    "services": {
+      "intelligenceTitle": "Análisis de servicios"
+    },
+    "customers": {
+      "unique": "Clientes únicos",
+      "returning": "Clientes recurrentes",
+      "returningRate": "Tasa de recurrencia",
+      "newThisPeriod": "Nuevos en este período",
+      "valueTitle": "Valor del cliente",
+      "account": "Cuenta",
+      "registered": "Registrado",
+      "guest": "Invitado",
+      "totalSpend": "Gasto total",
+      "averageSpend": "Gasto medio"
+    },
+    "products": {
+      "unitsSold": "Unidades vendidas",
+      "productsWithMovement": "Productos con movimiento",
+      "movementTitle": "Movimiento de productos",
+      "unitsSoldColumn": "Unidades vendidas"
+    },
+    "tables": {
+      "professional": "Profesional",
+      "appointments": "Citas",
+      "completed": "Completadas",
+      "completion": "Finalización",
+      "revenue": "Ingresos",
+      "averageTicket": "Valor medio",
+      "bookedHours": "Horas reservadas",
+      "service": "Servicio",
+      "bookings": "Reservas",
+      "averageValue": "Valor medio",
+      "customer": "Cliente",
+      "visits": "Visitas",
+      "returning": "Recurrente",
+      "product": "Producto"
+    },
+    "statuses": {
+      "confirmed": "Confirmada",
+      "completed": "Completada",
+      "in_progress": "En curso",
+      "cancelled_by_business": "Cancelada por la empresa",
+      "cancelled_by_customer": "Cancelada por el cliente",
+      "no_show": "Ausencia"
+    },
+    "weekdays": {
+      "sunday": "Domingo",
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} cita",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} citas"
+    },
+    "csv": {
+      "reportTitle": "Informe de inteligencia empresarial de Velliqo",
+      "business": "Empresa",
+      "period": "Período",
+      "periodRange": "{{start}} a {{end}}",
+      "executiveMetric": "Indicador ejecutivo",
+      "value": "Valor",
+      "previousPeriodChange": "Cambio respecto al período anterior",
+      "averageTicket": "Valor medio de cita",
+      "cancellationRate": "Tasa de cancelación",
+      "noShowRate": "Tasa de ausencias",
+      "returningCustomerRate": "Tasa de clientes recurrentes",
+      "bookedMinutes": "Minutos reservados",
+      "minutes": "Minutos",
+      "spend": "Gasto",
+      "registered": "Registrado",
+      "returning": "Recurrente"
+    },
+    "common": {
+      "yes": "Sí",
+      "no": "No"
+    },
+    "generic": {
+      "unassigned": "Sin asignar",
+      "customer": "Cliente"
+    }
   }
 }

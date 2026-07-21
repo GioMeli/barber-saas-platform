@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -61,6 +63,7 @@ const EMPTY_FORM = {
 };
 
 export default function Products() {
+  const { t } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -122,7 +125,7 @@ export default function Products() {
       setMovements(movementsResult.data ?? []);
     } catch (error: any) {
       console.error('Inventory loading error:', error);
-      toast.error(error.message || 'Failed to load inventory');
+      toast.error(error.message || t('products.messages.loadError'));
     } finally {
       setLoading(false);
     }
@@ -254,7 +257,7 @@ export default function Products() {
 
   const handleSave = async () => {
     if (!businessId || !formData.name.trim()) {
-      toast.error('Product name is required');
+      toast.error(t('products.validation.nameRequired'));
       return;
     }
 
@@ -273,7 +276,7 @@ export default function Products() {
       Number.isNaN(minimumStock) ||
       minimumStock < 0
     ) {
-      toast.error('Prices and stock values must be valid positive numbers');
+      toast.error(t('products.validation.numericValues'));
       return;
     }
 
@@ -311,7 +314,7 @@ export default function Products() {
           .eq('business_id', businessId);
 
         if (error) throw error;
-        toast.success('Product updated');
+        toast.success(t('products.messages.updated'));
       } else {
         const { data, error } = await supabase
           .from('products')
@@ -334,13 +337,13 @@ export default function Products() {
           if (movementError) throw movementError;
         }
 
-        toast.success('Product added');
+        toast.success(t('products.messages.added'));
       }
 
       setIsDialogOpen(false);
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save product');
+      toast.error(error.message || t('products.messages.saveError'));
     } finally {
       setSaving(false);
     }
@@ -352,7 +355,7 @@ export default function Products() {
     const quantity = Math.floor(Number(stockAdj.quantity));
 
     if (!Number.isFinite(quantity) || quantity <= 0) {
-      toast.error('Quantity must be greater than 0');
+      toast.error(t('products.validation.quantityPositive'));
       return;
     }
 
@@ -380,7 +383,7 @@ export default function Products() {
     }
 
     if (newStock < 0) {
-      toast.error('This adjustment would make stock negative');
+      toast.error(t('products.validation.negativeStock'));
       return;
     }
 
@@ -416,11 +419,11 @@ export default function Products() {
 
       if (movementError) throw movementError;
 
-      toast.success('Stock adjusted');
+      toast.success(t('products.messages.adjusted'));
       setIsStockDialogOpen(false);
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to adjust stock');
+      toast.error(error.message || t('products.messages.adjustError'));
     } finally {
       setSaving(false);
     }
@@ -428,7 +431,7 @@ export default function Products() {
 
   const handleDelete = async (product: any) => {
     const confirmed = window.confirm(
-      `Delete ${product.name}? Existing stock movement history may prevent deletion.`
+      t('products.delete.confirm', { name: product.name })
     );
 
     if (!confirmed || !businessId) return;
@@ -442,12 +445,11 @@ export default function Products() {
 
       if (error) throw error;
 
-      toast.success('Product deleted');
+      toast.success(t('products.messages.deleted'));
       await fetchData();
     } catch (error: any) {
       toast.error(
-        error.message ||
-          'Product cannot be deleted because inventory history exists'
+        error.message || t('products.messages.deleteBlocked')
       );
     }
   };
@@ -467,50 +469,49 @@ export default function Products() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Inventory management
+            {t('products.eyebrow')}
           </div>
 
-          <h1 className="app-page-title">Products & Inventory</h1>
+          <h1 className="app-page-title">{t('products.title')}</h1>
 
           <p className="app-page-description">
-            Manage retail products, stock levels, suppliers and complete
-            inventory movement history.
+            {t('products.description')}
           </p>
         </div>
 
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Product
+          {t('products.actions.add')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          title="Active Products"
+          title={t('products.summary.active.title')}
           value={products.filter((product) => product.is_active).length}
-          detail={`${products.length} total products`}
+          detail={t('products.summary.active.detail', { count: products.length })}
           icon={<PackageCheck className="h-5 w-5" />}
         />
 
         <MetricCard
-          title="Low Stock"
+          title={t('products.summary.lowStock.title')}
           value={lowStockProducts.length}
-          detail={`${outOfStockProducts.length} out of stock`}
+          detail={t('products.summary.lowStock.detail', { count: outOfStockProducts.length })}
           icon={<TrendingDown className="h-5 w-5" />}
           alert={lowStockProducts.length > 0}
         />
 
         <MetricCard
-          title="Stock Cost Value"
+          title={t('products.summary.costValue.title')}
           value={`€${stockValue.toFixed(2)}`}
-          detail="Based on purchase cost"
+          detail={t('products.summary.costValue.detail')}
           icon={<Boxes className="h-5 w-5" />}
         />
 
         <MetricCard
-          title="Potential Retail Value"
+          title={t('products.summary.retailValue.title')}
           value={`€${retailValue.toFixed(2)}`}
-          detail="Current stock at selling price"
+          detail={t('products.summary.retailValue.detail')}
           icon={<Euro className="h-5 w-5" />}
         />
       </section>
@@ -518,19 +519,19 @@ export default function Products() {
       <div className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
         <InventoryTabButton
           active={activeTab === 'products'}
-          label="Products"
+          label={t('products.tabs.products')}
           icon={<Package className="h-4 w-4" />}
           onClick={() => setActiveTab('products')}
         />
         <InventoryTabButton
           active={activeTab === 'movements'}
-          label="Stock Movements"
+          label={t('products.tabs.movements')}
           icon={<History className="h-4 w-4" />}
           onClick={() => setActiveTab('movements')}
         />
         <InventoryTabButton
           active={activeTab === 'alerts'}
-          label={`Stock Alerts (${lowStockProducts.length})`}
+          label={t('products.tabs.alerts', { count: lowStockProducts.length })}
           icon={<AlertTriangle className="h-4 w-4" />}
           onClick={() => setActiveTab('alerts')}
         />
@@ -544,7 +545,7 @@ export default function Products() {
                 <Search className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   className="h-11 rounded-xl pl-9"
-                  placeholder="Search product, SKU, brand or supplier"
+                  placeholder={t('products.search.placeholder')}
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                 />
@@ -557,7 +558,7 @@ export default function Products() {
                 }
                 className="h-11 rounded-xl border bg-background px-3 text-sm"
               >
-                <option value="all">All categories</option>
+                <option value="all">{t('products.filters.allCategories')}</option>
                 {categories.map((category) => (
                   <option key={category} value={category}>
                     {category}
@@ -569,23 +570,23 @@ export default function Products() {
 
           <CardContent className="p-0">
             {loading ? (
-              <EmptyState text="Loading inventory..." />
+              <EmptyState text={t('products.states.loadingInventory')} />
             ) : filteredProducts.length === 0 ? (
-              <EmptyState text="No products match the selected filters." />
+              <EmptyState text={t('products.states.emptyProducts')} />
             ) : (
               <>
                 <div className="hidden overflow-x-auto lg:block">
                   <table className="w-full min-w-[980px] text-sm">
                     <thead className="bg-muted/35 text-left text-xs uppercase tracking-wide text-muted-foreground">
                       <tr>
-                        <th className="px-5 py-3 font-semibold">Product</th>
-                        <th className="px-5 py-3 font-semibold">SKU / Barcode</th>
-                        <th className="px-5 py-3 font-semibold">Supplier</th>
-                        <th className="px-5 py-3 font-semibold">Cost</th>
-                        <th className="px-5 py-3 font-semibold">Retail</th>
-                        <th className="px-5 py-3 font-semibold">Stock</th>
-                        <th className="px-5 py-3 font-semibold">Status</th>
-                        <th className="px-5 py-3 text-right font-semibold">Actions</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.product')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.skuBarcode')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.supplier')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.cost')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.retail')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.stock')}</th>
+                        <th className="px-5 py-3 font-semibold">{t('products.table.status')}</th>
+                        <th className="px-5 py-3 text-right font-semibold">{t('products.table.actions')}</th>
                       </tr>
                     </thead>
 
@@ -597,9 +598,9 @@ export default function Products() {
                           </td>
 
                           <td className="px-5 py-4 text-muted-foreground">
-                            <div>{product.sku || 'No SKU'}</div>
+                            <div>{product.sku || t('products.labels.noSku')}</div>
                             <div className="mt-1 text-xs">
-                              {product.barcode || 'No barcode'}
+                              {product.barcode || t('products.labels.noBarcode')}
                             </div>
                           </td>
 
@@ -623,7 +624,9 @@ export default function Products() {
                             <Badge
                               variant={product.is_active ? 'default' : 'secondary'}
                             >
-                              {product.is_active ? 'Active' : 'Inactive'}
+                              {product.is_active
+                                ? t('products.labels.active')
+                                : t('products.labels.inactive')}
                             </Badge>
                           </td>
 
@@ -680,19 +683,21 @@ export default function Products() {
         <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              {editingId ? 'Edit Product' : 'Add Product'}
+              {editingId
+                ? t('products.dialog.editTitle')
+                : t('products.dialog.addTitle')}
             </DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-5 py-4">
             <div className="grid gap-2">
-              <Label>Product Image</Label>
+              <Label>{t('products.dialog.image')}</Label>
 
               {formData.image_url ? (
                 <div className="group relative h-36 w-36 overflow-hidden rounded-2xl border">
                   <img
                     src={formData.image_url}
-                    alt="Product"
+                    alt={t('products.dialog.imageAlt')}
                     className="h-full w-full object-cover"
                   />
 
@@ -707,7 +712,7 @@ export default function Products() {
                         })
                       }
                     >
-                      Remove
+                      {t('products.actions.removeImage')}
                     </Button>
                   </div>
                 </div>
@@ -727,7 +732,7 @@ export default function Products() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
-                label="Product Name *"
+                label={t('products.fields.nameRequired')}
                 value={formData.name}
                 onChange={(value) =>
                   setFormData({ ...formData, name: value })
@@ -735,7 +740,7 @@ export default function Products() {
               />
 
               <Field
-                label="Brand"
+                label={t('products.fields.brand')}
                 value={formData.brand}
                 onChange={(value) =>
                   setFormData({ ...formData, brand: value })
@@ -743,7 +748,7 @@ export default function Products() {
               />
 
               <Field
-                label="SKU"
+                label={t('products.fields.sku')}
                 value={formData.sku}
                 onChange={(value) =>
                   setFormData({ ...formData, sku: value })
@@ -751,7 +756,7 @@ export default function Products() {
               />
 
               <Field
-                label="Barcode"
+                label={t('products.fields.barcode')}
                 value={formData.barcode}
                 onChange={(value) =>
                   setFormData({ ...formData, barcode: value })
@@ -759,7 +764,7 @@ export default function Products() {
               />
 
               <Field
-                label="Category"
+                label={t('products.fields.category')}
                 value={formData.category}
                 onChange={(value) =>
                   setFormData({ ...formData, category: value })
@@ -767,7 +772,7 @@ export default function Products() {
               />
 
               <Field
-                label="Supplier"
+                label={t('products.fields.supplier')}
                 value={formData.supplier_name}
                 onChange={(value) =>
                   setFormData({
@@ -780,7 +785,7 @@ export default function Products() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
-                label="Cost Price (€)"
+                label={t('products.fields.costPrice')}
                 type="number"
                 value={formData.cost_price}
                 onChange={(value) =>
@@ -792,7 +797,7 @@ export default function Products() {
               />
 
               <Field
-                label="Selling Price (€) *"
+                label={t('products.fields.sellingPriceRequired')}
                 type="number"
                 value={formData.selling_price}
                 onChange={(value) =>
@@ -804,7 +809,7 @@ export default function Products() {
               />
 
               <Field
-                label="Current Stock"
+                label={t('products.fields.currentStock')}
                 type="number"
                 disabled={Boolean(editingId)}
                 value={formData.current_stock}
@@ -816,13 +821,13 @@ export default function Products() {
                 }
                 helper={
                   editingId
-                    ? 'Use stock adjustment for existing products.'
-                    : 'Opening stock will create an initial movement.'
+                    ? t('products.helpers.existingStock')
+                    : t('products.helpers.openingStock')
                 }
               />
 
               <Field
-                label="Low Stock Alert At"
+                label={t('products.fields.minStockAlert')}
                 type="number"
                 value={formData.min_stock}
                 onChange={(value) =>
@@ -836,9 +841,9 @@ export default function Products() {
 
             <div className="flex items-center justify-between rounded-xl border bg-muted/25 p-4">
               <div>
-                <Label>Active Product</Label>
+                <Label>{t('products.dialog.activeTitle')}</Label>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Inactive products remain in inventory history.
+                  {t('products.dialog.activeHelp')}
                 </p>
               </div>
 
@@ -860,11 +865,11 @@ export default function Products() {
               disabled={saving}
               onClick={() => setIsDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
 
             <Button disabled={saving} onClick={() => void handleSave()}>
-              {saving ? 'Saving...' : 'Save Product'}
+              {saving ? t('products.actions.saving') : t('products.actions.save')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -877,13 +882,13 @@ export default function Products() {
         <DialogContent className="w-[calc(100%-1.5rem)] max-w-lg rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              Adjust Stock: {stockAdj.product_name}
+              {t('products.adjustment.title', { name: stockAdj.product_name })}
             </DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-5 py-4">
             <div className="grid gap-2">
-              <Label>Adjustment Type</Label>
+              <Label>{t('products.fields.adjustmentType')}</Label>
 
               <select
                 className="h-11 rounded-xl border bg-background px-3 text-sm"
@@ -895,21 +900,21 @@ export default function Products() {
                   })
                 }
               >
-                <option value="purchase">Stock In — Purchase / Received</option>
-                <option value="return">Stock In — Customer Return</option>
-                <option value="sale">Stock Out — Retail Sale</option>
-                <option value="internal_use">Stock Out — Internal Use</option>
-                <option value="damage">Stock Out — Damage / Loss</option>
-                <option value="expired">Stock Out — Expired</option>
-                <option value="correction">Set Exact Stock Count</option>
+                <option value="purchase">{t('products.adjustment.purchase')}</option>
+                <option value="return">{t('products.adjustment.return')}</option>
+                <option value="sale">{t('products.adjustment.sale')}</option>
+                <option value="internal_use">{t('products.adjustment.internalUse')}</option>
+                <option value="damage">{t('products.adjustment.damage')}</option>
+                <option value="expired">{t('products.adjustment.expired')}</option>
+                <option value="correction">{t('products.adjustment.correction')}</option>
               </select>
             </div>
 
             <Field
               label={
                 stockAdj.type === 'correction'
-                  ? 'New Exact Stock Quantity'
-                  : 'Quantity'
+                  ? t('products.fields.exactQuantity')
+                  : t('products.fields.quantity')
               }
               type="number"
               value={stockAdj.quantity}
@@ -922,7 +927,7 @@ export default function Products() {
             />
 
             <Field
-              label="Reason / Notes"
+              label={t('products.fields.reasonNotes')}
               value={stockAdj.reason}
               onChange={(value) =>
                 setStockAdj({
@@ -939,14 +944,16 @@ export default function Products() {
               disabled={saving}
               onClick={() => setIsStockDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
 
             <Button
               disabled={saving}
               onClick={() => void handleSaveStock()}
             >
-              {saving ? 'Saving...' : 'Confirm Adjustment'}
+              {saving
+                ? t('products.actions.saving')
+                : t('products.actions.confirmAdjustment')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -959,7 +966,7 @@ export default function Products() {
         <DialogContent className="max-h-[88vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              Stock History: {selectedProduct?.name}
+              {t('products.history.title', { name: selectedProduct?.name })}
             </DialogTitle>
           </DialogHeader>
 
@@ -1046,6 +1053,8 @@ function InventoryTabButton({
 }
 
 function ProductIdentity({ product }: { product: any }) {
+  const { t } = useTranslation();
+
   return (
     <div className="flex items-center gap-3">
       {product.image_url ? (
@@ -1064,7 +1073,7 @@ function ProductIdentity({ product }: { product: any }) {
         <div className="truncate font-semibold">{product.name}</div>
         <div className="mt-1 text-xs text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(' · ') ||
-            'Uncategorized'}
+            t('products.labels.uncategorized')}
         </div>
       </div>
     </div>
@@ -1072,13 +1081,14 @@ function ProductIdentity({ product }: { product: any }) {
 }
 
 function StockBadge({ product }: { product: any }) {
+  const { t } = useTranslation();
   const current = Number(product.current_stock || 0);
   const minimum = Number(product.min_stock || 0);
 
   if (current <= 0) {
     return (
       <Badge className="bg-red-100 text-red-700 hover:bg-red-100">
-        Out of stock
+        {t('products.labels.outOfStock')}
       </Badge>
     );
   }
@@ -1086,12 +1096,16 @@ function StockBadge({ product }: { product: any }) {
   if (current <= minimum) {
     return (
       <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">
-        {current} · Low
+        {t('products.labels.lowStock', { count: current })}
       </Badge>
     );
   }
 
-  return <Badge variant="secondary">{current} available</Badge>;
+  return (
+    <Badge variant="secondary">
+      {t('products.labels.available', { count: current })}
+    </Badge>
+  );
 }
 
 function InventoryActions({
@@ -1101,12 +1115,15 @@ function InventoryActions({
   onEdit,
   onDelete,
 }: any) {
+  const { t } = useTranslation();
+
   return (
     <div className="inline-flex gap-1">
       <Button
         variant="ghost"
         size="icon"
-        title="Adjust stock"
+        title={t('products.actions.adjust')}
+        aria-label={t('products.actions.adjust')}
         onClick={() => onAdjust(product)}
       >
         <PackagePlus className="h-4 w-4" />
@@ -1115,7 +1132,8 @@ function InventoryActions({
       <Button
         variant="ghost"
         size="icon"
-        title="Stock history"
+        title={t('products.actions.history')}
+        aria-label={t('products.actions.history')}
         onClick={() => onHistory(product)}
       >
         <History className="h-4 w-4" />
@@ -1124,7 +1142,8 @@ function InventoryActions({
       <Button
         variant="ghost"
         size="icon"
-        title="Edit product"
+        title={t('products.actions.edit')}
+        aria-label={t('products.actions.edit')}
         onClick={() => onEdit(product)}
       >
         <Edit className="h-4 w-4" />
@@ -1133,7 +1152,8 @@ function InventoryActions({
       <Button
         variant="ghost"
         size="icon"
-        title="Delete product"
+        title={t('products.actions.delete')}
+        aria-label={t('products.actions.delete')}
         onClick={() => void onDelete(product)}
       >
         <Trash2 className="h-4 w-4 text-destructive" />
@@ -1149,16 +1169,18 @@ function ProductMobileCard({
   onEdit,
   onDelete,
 }: any) {
+  const { t } = useTranslation();
+
   return (
     <Card className="overflow-hidden rounded-2xl">
       <CardContent className="p-4">
         <ProductIdentity product={product} />
 
         <div className="mt-4 grid grid-cols-2 gap-3 text-sm">
-          <InfoTile label="Retail" value={`€${Number(product.selling_price || 0).toFixed(2)}`} />
-          <InfoTile label="Stock" value={String(product.current_stock || 0)} />
-          <InfoTile label="SKU" value={product.sku || '—'} />
-          <InfoTile label="Supplier" value={product.supplier_name || '—'} />
+          <InfoTile label={t('products.table.retail')} value={`€${Number(product.selling_price || 0).toFixed(2)}`} />
+          <InfoTile label={t('products.table.stock')} value={String(product.current_stock || 0)} />
+          <InfoTile label={t('products.fields.sku')} value={product.sku || '—'} />
+          <InfoTile label={t('products.fields.supplier')} value={product.supplier_name || '—'} />
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-2">
@@ -1194,15 +1216,17 @@ function MovementHistory({
   movements: any[];
   loading: boolean;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Card className="overflow-hidden rounded-2xl shadow-card">
       <CardHeader>
-        <CardTitle>Stock Movement History</CardTitle>
+        <CardTitle>{t('products.history.pageTitle')}</CardTitle>
       </CardHeader>
 
       <CardContent className="p-0">
         {loading ? (
-          <EmptyState text="Loading stock movements..." />
+          <EmptyState text={t('products.states.loadingMovements')} />
         ) : (
           <MovementList movements={movements} />
         )}
@@ -1212,8 +1236,11 @@ function MovementHistory({
 }
 
 function MovementList({ movements }: { movements: any[] }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+
   if (movements.length === 0) {
-    return <EmptyState text="No stock movements recorded." />;
+    return <EmptyState text={t('products.states.emptyMovements')} />;
   }
 
   return (
@@ -1243,19 +1270,19 @@ function MovementList({ movements }: { movements: any[] }) {
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <div className="font-semibold">
-                  {movement.products?.name || 'Product'}
+                  {movement.products?.name || t('products.labels.productFallback')}
                 </div>
                 <Badge variant="secondary">
-                  {formatMovementType(movement.type)}
+                  {t(`products.movements.types.${movement.type || 'adjustment'}`)}
                 </Badge>
               </div>
 
               <div className="mt-1 text-sm text-muted-foreground">
-                {movement.reason || 'No reason provided'}
+                {formatMovementReason(movement.reason, t)}
               </div>
 
               <div className="mt-2 text-xs text-muted-foreground">
-                {formatDateTime(movement.created_at)}
+                {formatDateTime(movement.created_at, locale)}
               </div>
             </div>
 
@@ -1285,24 +1312,26 @@ function StockAlerts({
   onAdjust: (product: any) => void;
   onEdit: (product: any) => void;
 }) {
+  const { t } = useTranslation();
+
   return (
     <Card className="overflow-hidden rounded-2xl border-amber-200 shadow-card">
       <CardHeader className="bg-amber-50/60">
         <CardTitle className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 text-amber-700" />
-          Low Stock Alerts
+          {t('products.alerts.title')}
         </CardTitle>
       </CardHeader>
 
       <CardContent className="p-0">
         {loading ? (
-          <EmptyState text="Loading stock alerts..." />
+          <EmptyState text={t('products.states.loadingAlerts')} />
         ) : products.length === 0 ? (
           <div className="p-12 text-center">
             <PackageCheck className="mx-auto h-10 w-10 text-emerald-600" />
-            <h3 className="mt-4 font-bold">Inventory looks healthy</h3>
+            <h3 className="mt-4 font-bold">{t('products.states.healthyTitle')}</h3>
             <p className="mt-2 text-sm text-muted-foreground">
-              No active products are below their minimum stock level.
+              {t('products.states.healthyDescription')}
             </p>
           </div>
         ) : (
@@ -1317,7 +1346,7 @@ function StockAlerts({
                 <div className="flex-1">
                   <StockBadge product={product} />
                   <div className="mt-2 text-xs text-muted-foreground">
-                    Minimum required: {product.min_stock}
+                    {t('products.labels.minimumRequired', { count: product.min_stock })}
                   </div>
                 </div>
 
@@ -1327,7 +1356,7 @@ function StockAlerts({
                     onClick={() => onAdjust(product)}
                   >
                     <PackagePlus className="mr-2 h-4 w-4" />
-                    Add Stock
+                    {t('products.actions.addStock')}
                   </Button>
 
                   <Button
@@ -1335,7 +1364,7 @@ function StockAlerts({
                     size="sm"
                     onClick={() => onEdit(product)}
                   >
-                    Edit Alert
+                    {t('products.actions.editAlert')}
                   </Button>
                 </div>
               </div>
@@ -1389,15 +1418,17 @@ function EmptyState({ text }: { text: string }) {
   );
 }
 
-function formatMovementType(value: string) {
-  return String(value || 'adjustment')
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+function formatMovementReason(
+  value: string | null | undefined,
+  t: (key: string) => string
+) {
+  if (!value) return t('products.labels.noReason');
+  if (value === 'Opening stock') return t('products.movements.openingStock');
+  return value;
 }
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatDateTime(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

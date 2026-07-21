@@ -738,5 +738,348 @@
     "delete": {
       "confirm": "Remove \"{{name}}\"? Existing appointment history may prevent permanent deletion."
     }
+  },
+  "products": {
+    "eyebrow": "Inventory management",
+    "title": "Products & Inventory",
+    "description": "Manage retail products, stock levels, suppliers and complete inventory movement history.",
+    "actions": {
+      "add": "Add Product",
+      "edit": "Edit product",
+      "removeImage": "Remove",
+      "save": "Save Product",
+      "saving": "Saving...",
+      "adjust": "Adjust stock",
+      "history": "Stock history",
+      "delete": "Delete product",
+      "addStock": "Add Stock",
+      "editAlert": "Edit Alert",
+      "confirmAdjustment": "Confirm Adjustment"
+    },
+    "summary": {
+      "active": {
+        "title": "Active Products",
+        "detail": "{{count}} total products"
+      },
+      "lowStock": {
+        "title": "Low Stock",
+        "detail": "{{count}} out of stock"
+      },
+      "costValue": {
+        "title": "Stock Cost Value",
+        "detail": "Based on purchase cost"
+      },
+      "retailValue": {
+        "title": "Potential Retail Value",
+        "detail": "Current stock at selling price"
+      }
+    },
+    "tabs": {
+      "products": "Products",
+      "movements": "Stock Movements",
+      "alerts": "Stock Alerts ({{count}})"
+    },
+    "search": {
+      "placeholder": "Search product, SKU, brand or supplier"
+    },
+    "filters": {
+      "allCategories": "All categories"
+    },
+    "states": {
+      "loadingInventory": "Loading inventory...",
+      "emptyProducts": "No products match the selected filters.",
+      "loadingMovements": "Loading stock movements...",
+      "emptyMovements": "No stock movements recorded.",
+      "loadingAlerts": "Loading stock alerts...",
+      "healthyTitle": "Inventory looks healthy",
+      "healthyDescription": "No active products are below their minimum stock level."
+    },
+    "table": {
+      "product": "Product",
+      "skuBarcode": "SKU / Barcode",
+      "supplier": "Supplier",
+      "cost": "Cost",
+      "retail": "Retail",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "labels": {
+      "noSku": "No SKU",
+      "noBarcode": "No barcode",
+      "active": "Active",
+      "inactive": "Inactive",
+      "uncategorized": "Uncategorized",
+      "outOfStock": "Out of stock",
+      "lowStock": "{{count}} · Low",
+      "available": "{{count}} available",
+      "minimumRequired": "Minimum required: {{count}}",
+      "productFallback": "Product",
+      "noReason": "No reason provided"
+    },
+    "dialog": {
+      "editTitle": "Edit Product",
+      "addTitle": "Add Product",
+      "image": "Product Image",
+      "imageAlt": "Product",
+      "activeTitle": "Active Product",
+      "activeHelp": "Inactive products remain in inventory history."
+    },
+    "fields": {
+      "nameRequired": "Product Name *",
+      "brand": "Brand",
+      "sku": "SKU",
+      "barcode": "Barcode",
+      "category": "Category",
+      "supplier": "Supplier",
+      "costPrice": "Cost Price (€)",
+      "sellingPriceRequired": "Selling Price (€) *",
+      "currentStock": "Current Stock",
+      "minStockAlert": "Low Stock Alert At",
+      "adjustmentType": "Adjustment Type",
+      "exactQuantity": "New Exact Stock Quantity",
+      "quantity": "Quantity",
+      "reasonNotes": "Reason / Notes"
+    },
+    "helpers": {
+      "existingStock": "Use stock adjustment for existing products.",
+      "openingStock": "Opening stock will create an initial movement."
+    },
+    "adjustment": {
+      "title": "Adjust Stock: {{name}}",
+      "purchase": "Stock In — Purchase / Received",
+      "return": "Stock In — Customer Return",
+      "sale": "Stock Out — Retail Sale",
+      "internalUse": "Stock Out — Internal Use",
+      "damage": "Stock Out — Damage / Loss",
+      "expired": "Stock Out — Expired",
+      "correction": "Set Exact Stock Count"
+    },
+    "history": {
+      "title": "Stock History: {{name}}",
+      "pageTitle": "Stock Movement History"
+    },
+    "alerts": {
+      "title": "Low Stock Alerts"
+    },
+    "movements": {
+      "openingStock": "Opening stock",
+      "types": {
+        "purchase": "Purchase",
+        "sale": "Sale",
+        "damage": "Damage",
+        "return": "Return",
+        "correction": "Correction",
+        "internal_use": "Internal use",
+        "expired": "Expired",
+        "adjustment": "Adjustment"
+      }
+    },
+    "validation": {
+      "nameRequired": "Product name is required",
+      "numericValues": "Prices and stock values must be valid positive numbers",
+      "quantityPositive": "Quantity must be greater than 0",
+      "negativeStock": "This adjustment would make stock negative"
+    },
+    "messages": {
+      "loadError": "Failed to load inventory",
+      "updated": "Product updated",
+      "added": "Product added",
+      "saveError": "Failed to save product",
+      "adjusted": "Stock adjusted",
+      "adjustError": "Failed to adjust stock",
+      "deleted": "Product deleted",
+      "deleteBlocked": "Product cannot be deleted because inventory history exists"
+    },
+    "delete": {
+      "confirm": "Delete {{name}}? Existing stock movement history may prevent deletion."
+    }
+  },
+  "reports": {
+    "eyebrow": "Velliqo intelligence",
+    "title": "Business Intelligence",
+    "description": "Understand revenue, demand, customer behaviour, service performance and team contribution from one reporting workspace.",
+    "actions": {
+      "refresh": "Refresh",
+      "print": "Print",
+      "exportCsv": "Export CSV"
+    },
+    "filters": {
+      "startDate": "Start date",
+      "endDate": "End date",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "previousMonth": "Previous month",
+      "last90Days": "Last 90 days"
+    },
+    "states": {
+      "loading": "Building your intelligence report…",
+      "noPerformanceData": "No performance data for this period.",
+      "noData": "No data for this period.",
+      "noDataAvailable": "No data available for this period.",
+      "noStatusData": "No appointment status data.",
+      "noOutgoingStock": "No outgoing stock movement was recorded in this period."
+    },
+    "errors": {
+      "loadFailed": "Failed to load reports"
+    },
+    "tabs": {
+      "executive": "Executive",
+      "revenue": "Revenue",
+      "appointments": "Appointments",
+      "staff": "Staff",
+      "services": "Services",
+      "customers": "Customers",
+      "products": "Products"
+    },
+    "metrics": {
+      "revenue": "Revenue",
+      "appointments": "Appointments",
+      "completionRate": "Completion rate",
+      "returningCustomers": "Returning customers",
+      "averageTicketDetail": "Average ticket {{value}}",
+      "completedCount_one": "{{count}} completed",
+      "completedCount_other": "{{count}} completed",
+      "cancellationNoShowDetail": "{{cancellation}}% cancelled · {{noShow}}% no-show",
+      "returningCount_one": "{{count}} returning customer",
+      "returningCount_other": "{{count}} returning customers"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "{{value}} vs previous period"
+    },
+    "units": {
+      "percentagePoints": "pp",
+      "hoursValue": "{{value}} h"
+    },
+    "counts": {
+      "bookings_one": "{{count}} booking",
+      "bookings_other": "{{count}} bookings"
+    },
+    "executive": {
+      "trendTitle": "Revenue and demand trend",
+      "trendDescription": "Daily revenue with appointment volume for the selected period.",
+      "operationalHealth": "Operational health",
+      "completion": "Completion",
+      "cancellation": "Cancellation",
+      "noShow": "No-show",
+      "revenuePerBookedHour": "Revenue per booked hour",
+      "bookedHours": "Booked hours",
+      "uniqueCustomers": "Unique customers",
+      "demandByWeekday": "Demand by weekday",
+      "demandByWeekdayDescription": "Discover the strongest days for staffing and availability.",
+      "peakBookingHours": "Peak booking hours",
+      "peakBookingHoursDescription": "Appointment concentration by start time.",
+      "topServices": "Top services",
+      "topProfessionals": "Top professionals"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Gross scheduled revenue",
+      "averageAppointmentValue": "Average appointment value",
+      "revenuePerBookedHour": "Revenue / booked hour",
+      "revenueGeneratingServices": "Revenue-generating services",
+      "timelineTitle": "Revenue timeline",
+      "timelineDescription": "Revenue recognised from active and completed appointment states.",
+      "byProfessional": "Revenue by professional",
+      "byService": "Revenue by service"
+    },
+    "appointments": {
+      "total": "Total",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "noShows": "No-shows",
+      "bookedHours": "Booked hours",
+      "statusTitle": "Appointment status",
+      "demandByWeekday": "Demand by weekday",
+      "demandByWeekdayDescription": "Booking volume across the week.",
+      "peakHours": "Peak appointment hours",
+      "peakHoursDescription": "Use this to optimise opening hours, breaks and staffing."
+    },
+    "staff": {
+      "performanceTitle": "Professional performance"
+    },
+    "services": {
+      "intelligenceTitle": "Service intelligence"
+    },
+    "customers": {
+      "unique": "Unique customers",
+      "returning": "Returning customers",
+      "returningRate": "Returning rate",
+      "newThisPeriod": "New this period",
+      "valueTitle": "Customer value",
+      "account": "Account",
+      "registered": "Registered",
+      "guest": "Guest",
+      "totalSpend": "Total spend",
+      "averageSpend": "Average spend"
+    },
+    "products": {
+      "unitsSold": "Units sold",
+      "productsWithMovement": "Products with movement",
+      "movementTitle": "Product movement",
+      "unitsSoldColumn": "Units sold"
+    },
+    "tables": {
+      "professional": "Professional",
+      "appointments": "Appointments",
+      "completed": "Completed",
+      "completion": "Completion",
+      "revenue": "Revenue",
+      "averageTicket": "Average ticket",
+      "bookedHours": "Booked hours",
+      "service": "Service",
+      "bookings": "Bookings",
+      "averageValue": "Average value",
+      "customer": "Customer",
+      "visits": "Visits",
+      "returning": "Returning",
+      "product": "Product"
+    },
+    "statuses": {
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "in_progress": "In progress",
+      "cancelled_by_business": "Cancelled by business",
+      "cancelled_by_customer": "Cancelled by customer",
+      "no_show": "No-show"
+    },
+    "weekdays": {
+      "sunday": "Sunday",
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} appointment",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} appointments"
+    },
+    "csv": {
+      "reportTitle": "Velliqo Business Intelligence Report",
+      "business": "Business",
+      "period": "Period",
+      "periodRange": "{{start}} to {{end}}",
+      "executiveMetric": "Executive metric",
+      "value": "Value",
+      "previousPeriodChange": "Previous-period change",
+      "averageTicket": "Average ticket",
+      "cancellationRate": "Cancellation rate",
+      "noShowRate": "No-show rate",
+      "returningCustomerRate": "Returning-customer rate",
+      "bookedMinutes": "Booked minutes",
+      "minutes": "Minutes",
+      "spend": "Spend",
+      "registered": "Registered",
+      "returning": "Returning"
+    },
+    "common": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "generic": {
+      "unassigned": "Unassigned",
+      "customer": "Customer"
+    }
   }
 }

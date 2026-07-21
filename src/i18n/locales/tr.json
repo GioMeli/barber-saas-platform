@@ -738,5 +738,348 @@
     "delete": {
       "confirm": "“{{name}}” kaldırılsın mı? Mevcut randevu geçmişi kalıcı silmeyi engelleyebilir."
     }
+  },
+  "products": {
+    "eyebrow": "Envanter yönetimi",
+    "title": "Ürünler ve Envanter",
+    "description": "Perakende ürünlerini, stok seviyelerini, tedarikçileri ve tüm envanter hareket geçmişini yönetin.",
+    "actions": {
+      "add": "Ürün ekle",
+      "edit": "Ürünü düzenle",
+      "removeImage": "Kaldır",
+      "save": "Ürünü kaydet",
+      "saving": "Kaydediliyor...",
+      "adjust": "Stok ayarla",
+      "history": "Stok geçmişi",
+      "delete": "Ürünü sil",
+      "addStock": "Stok ekle",
+      "editAlert": "Uyarıyı düzenle",
+      "confirmAdjustment": "Ayarlamayı onayla"
+    },
+    "summary": {
+      "active": {
+        "title": "Aktif ürünler",
+        "detail": "Toplam {{count}} ürün"
+      },
+      "lowStock": {
+        "title": "Düşük stok",
+        "detail": "{{count}} ürün stokta yok"
+      },
+      "costValue": {
+        "title": "Stok maliyet değeri",
+        "detail": "Satın alma maliyetine göre"
+      },
+      "retailValue": {
+        "title": "Potansiyel perakende değeri",
+        "detail": "Satış fiyatıyla mevcut stok"
+      }
+    },
+    "tabs": {
+      "products": "Ürünler",
+      "movements": "Stok hareketleri",
+      "alerts": "Stok uyarıları ({{count}})"
+    },
+    "search": {
+      "placeholder": "Ürün, SKU, marka veya tedarikçi ara"
+    },
+    "filters": {
+      "allCategories": "Tüm kategoriler"
+    },
+    "states": {
+      "loadingInventory": "Envanter yükleniyor...",
+      "emptyProducts": "Seçilen filtrelerle eşleşen ürün yok.",
+      "loadingMovements": "Stok hareketleri yükleniyor...",
+      "emptyMovements": "Henüz stok hareketi kaydedilmedi.",
+      "loadingAlerts": "Stok uyarıları yükleniyor...",
+      "healthyTitle": "Envanter sağlıklı görünüyor",
+      "healthyDescription": "Hiçbir aktif ürün minimum stok seviyesinin altında değil."
+    },
+    "table": {
+      "product": "Ürün",
+      "skuBarcode": "SKU / Barkod",
+      "supplier": "Tedarikçi",
+      "cost": "Maliyet",
+      "retail": "Perakende",
+      "stock": "Stok",
+      "status": "Durum",
+      "actions": "İşlemler"
+    },
+    "labels": {
+      "noSku": "SKU yok",
+      "noBarcode": "Barkod yok",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "uncategorized": "Kategorisiz",
+      "outOfStock": "Stokta yok",
+      "lowStock": "{{count}} · Düşük",
+      "available": "{{count}} mevcut",
+      "minimumRequired": "Gerekli minimum: {{count}}",
+      "productFallback": "Ürün",
+      "noReason": "Neden belirtilmedi"
+    },
+    "dialog": {
+      "editTitle": "Ürünü düzenle",
+      "addTitle": "Ürün ekle",
+      "image": "Ürün görseli",
+      "imageAlt": "Ürün",
+      "activeTitle": "Aktif ürün",
+      "activeHelp": "Pasif ürünler envanter geçmişinde kalır."
+    },
+    "fields": {
+      "nameRequired": "Ürün adı *",
+      "brand": "Marka",
+      "sku": "SKU",
+      "barcode": "Barkod",
+      "category": "Kategori",
+      "supplier": "Tedarikçi",
+      "costPrice": "Maliyet fiyatı (€)",
+      "sellingPriceRequired": "Satış fiyatı (€) *",
+      "currentStock": "Mevcut stok",
+      "minStockAlert": "Düşük stok uyarı seviyesi",
+      "adjustmentType": "Ayarlama türü",
+      "exactQuantity": "Yeni kesin stok miktarı",
+      "quantity": "Miktar",
+      "reasonNotes": "Neden / Notlar"
+    },
+    "helpers": {
+      "existingStock": "Mevcut ürünler için stok ayarlamasını kullanın.",
+      "openingStock": "Açılış stoğu ilk stok hareketini oluşturur."
+    },
+    "adjustment": {
+      "title": "Stok ayarla: {{name}}",
+      "purchase": "Giriş — Satın alma / Teslim alma",
+      "return": "Giriş — Müşteri iadesi",
+      "sale": "Çıkış — Perakende satış",
+      "internalUse": "Çıkış — Dahili kullanım",
+      "damage": "Çıkış — Hasar / Kayıp",
+      "expired": "Çıkış — Son kullanma tarihi geçmiş",
+      "correction": "Kesin stok miktarını ayarla"
+    },
+    "history": {
+      "title": "Stok geçmişi: {{name}}",
+      "pageTitle": "Stok hareket geçmişi"
+    },
+    "alerts": {
+      "title": "Düşük stok uyarıları"
+    },
+    "movements": {
+      "openingStock": "Açılış stoğu",
+      "types": {
+        "purchase": "Satın alma",
+        "sale": "Satış",
+        "damage": "Hasar",
+        "return": "İade",
+        "correction": "Düzeltme",
+        "internal_use": "Dahili kullanım",
+        "expired": "Süresi dolmuş",
+        "adjustment": "Ayarlama"
+      }
+    },
+    "validation": {
+      "nameRequired": "Ürün adı zorunludur",
+      "numericValues": "Fiyatlar ve stok değerleri geçerli pozitif sayılar olmalıdır",
+      "quantityPositive": "Miktar 0’dan büyük olmalıdır",
+      "negativeStock": "Bu ayarlama stoğu negatife düşürür"
+    },
+    "messages": {
+      "loadError": "Envanter yüklenemedi",
+      "updated": "Ürün güncellendi",
+      "added": "Ürün eklendi",
+      "saveError": "Ürün kaydedilemedi",
+      "adjusted": "Stok ayarlandı",
+      "adjustError": "Stok ayarlanamadı",
+      "deleted": "Ürün silindi",
+      "deleteBlocked": "Envanter geçmişi bulunduğu için ürün silinemiyor"
+    },
+    "delete": {
+      "confirm": "{{name}} silinsin mi? Mevcut stok hareket geçmişi silmeyi engelleyebilir."
+    }
+  },
+  "reports": {
+    "eyebrow": "Velliqo analizleri",
+    "title": "İş Zekâsı",
+    "description": "Gelir, talep, müşteri davranışı, hizmet performansı ve ekip katkısını tek bir raporlama alanından analiz edin.",
+    "actions": {
+      "refresh": "Yenile",
+      "print": "Yazdır",
+      "exportCsv": "CSV dışa aktar"
+    },
+    "filters": {
+      "startDate": "Başlangıç tarihi",
+      "endDate": "Bitiş tarihi",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "previousMonth": "Önceki ay",
+      "last90Days": "Son 90 gün"
+    },
+    "states": {
+      "loading": "Analiz raporunuz hazırlanıyor…",
+      "noPerformanceData": "Bu dönem için performans verisi yok.",
+      "noData": "Bu dönem için veri yok.",
+      "noDataAvailable": "Bu dönem için kullanılabilir veri yok.",
+      "noStatusData": "Randevu durumu verisi yok.",
+      "noOutgoingStock": "Bu dönemde çıkış stok hareketi kaydedilmedi."
+    },
+    "errors": {
+      "loadFailed": "Raporlar yüklenemedi"
+    },
+    "tabs": {
+      "executive": "Özet",
+      "revenue": "Gelir",
+      "appointments": "Randevular",
+      "staff": "Personel",
+      "services": "Hizmetler",
+      "customers": "Müşteriler",
+      "products": "Ürünler"
+    },
+    "metrics": {
+      "revenue": "Gelir",
+      "appointments": "Randevular",
+      "completionRate": "Tamamlanma oranı",
+      "returningCustomers": "Tekrar gelen müşteriler",
+      "averageTicketDetail": "Ortalama değer {{value}}",
+      "completedCount_one": "{{count}} tamamlandı",
+      "completedCount_other": "{{count}} tamamlandı",
+      "cancellationNoShowDetail": "%{{cancellation}} iptal · %{{noShow}} gelmeme",
+      "returningCount_one": "{{count}} tekrar gelen müşteri",
+      "returningCount_other": "{{count}} tekrar gelen müşteri"
+    },
+    "comparison": {
+      "vsPreviousPeriod": "Önceki döneme göre {{value}}"
+    },
+    "units": {
+      "percentagePoints": "yp",
+      "hoursValue": "{{value}} sa."
+    },
+    "counts": {
+      "bookings_one": "{{count}} rezervasyon",
+      "bookings_other": "{{count}} rezervasyon"
+    },
+    "executive": {
+      "trendTitle": "Gelir ve talep eğilimi",
+      "trendDescription": "Seçilen dönem için günlük gelir ve randevu hacmi.",
+      "operationalHealth": "Operasyonel durum",
+      "completion": "Tamamlanma",
+      "cancellation": "İptal",
+      "noShow": "Gelmeme",
+      "revenuePerBookedHour": "Rezerve saat başına gelir",
+      "bookedHours": "Rezerve saatler",
+      "uniqueCustomers": "Benzersiz müşteriler",
+      "demandByWeekday": "Haftanın gününe göre talep",
+      "demandByWeekdayDescription": "Personel ve uygunluk planlaması için en yoğun günleri belirleyin.",
+      "peakBookingHours": "Yoğun rezervasyon saatleri",
+      "peakBookingHoursDescription": "Başlangıç saatine göre randevu yoğunluğu.",
+      "topServices": "En iyi hizmetler",
+      "topProfessionals": "En iyi profesyoneller"
+    },
+    "revenue": {
+      "grossScheduledRevenue": "Planlanan brüt gelir",
+      "averageAppointmentValue": "Ortalama randevu değeri",
+      "revenuePerBookedHour": "Gelir / rezerve saat",
+      "revenueGeneratingServices": "Gelir üreten hizmetler",
+      "timelineTitle": "Gelir zaman çizelgesi",
+      "timelineDescription": "Aktif ve tamamlanmış randevulardan tanınan gelir.",
+      "byProfessional": "Profesyonele göre gelir",
+      "byService": "Hizmete göre gelir"
+    },
+    "appointments": {
+      "total": "Toplam",
+      "completed": "Tamamlanan",
+      "cancelled": "İptal edilen",
+      "noShows": "Gelmeyenler",
+      "bookedHours": "Rezerve saatler",
+      "statusTitle": "Randevu durumu",
+      "demandByWeekday": "Haftanın gününe göre talep",
+      "demandByWeekdayDescription": "Hafta boyunca rezervasyon hacmi.",
+      "peakHours": "Yoğun randevu saatleri",
+      "peakHoursDescription": "Çalışma saatlerini, molaları ve personel planlamasını optimize etmek için kullanın."
+    },
+    "staff": {
+      "performanceTitle": "Profesyonel performansı"
+    },
+    "services": {
+      "intelligenceTitle": "Hizmet analizi"
+    },
+    "customers": {
+      "unique": "Benzersiz müşteriler",
+      "returning": "Tekrar gelen müşteriler",
+      "returningRate": "Tekrar gelme oranı",
+      "newThisPeriod": "Bu dönemde yeni",
+      "valueTitle": "Müşteri değeri",
+      "account": "Hesap",
+      "registered": "Kayıtlı",
+      "guest": "Misafir",
+      "totalSpend": "Toplam harcama",
+      "averageSpend": "Ortalama harcama"
+    },
+    "products": {
+      "unitsSold": "Satılan birim",
+      "productsWithMovement": "Hareket gören ürünler",
+      "movementTitle": "Ürün hareketi",
+      "unitsSoldColumn": "Satılan birim"
+    },
+    "tables": {
+      "professional": "Profesyonel",
+      "appointments": "Randevular",
+      "completed": "Tamamlanan",
+      "completion": "Tamamlanma",
+      "revenue": "Gelir",
+      "averageTicket": "Ortalama değer",
+      "bookedHours": "Rezerve saatler",
+      "service": "Hizmet",
+      "bookings": "Rezervasyonlar",
+      "averageValue": "Ortalama değer",
+      "customer": "Müşteri",
+      "visits": "Ziyaretler",
+      "returning": "Tekrar gelen",
+      "product": "Ürün"
+    },
+    "statuses": {
+      "confirmed": "Onaylandı",
+      "completed": "Tamamlandı",
+      "in_progress": "Devam ediyor",
+      "cancelled_by_business": "İşletme tarafından iptal edildi",
+      "cancelled_by_customer": "Müşteri tarafından iptal edildi",
+      "no_show": "Gelmedi"
+    },
+    "weekdays": {
+      "sunday": "Pazar",
+      "monday": "Pazartesi",
+      "tuesday": "Salı",
+      "wednesday": "Çarşamba",
+      "thursday": "Perşembe",
+      "friday": "Cuma",
+      "saturday": "Cumartesi"
+    },
+    "chart": {
+      "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} randevu",
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} randevu"
+    },
+    "csv": {
+      "reportTitle": "Velliqo İş Zekâsı Raporu",
+      "business": "İşletme",
+      "period": "Dönem",
+      "periodRange": "{{start}} - {{end}}",
+      "executiveMetric": "Yönetici göstergesi",
+      "value": "Değer",
+      "previousPeriodChange": "Önceki döneme göre değişim",
+      "averageTicket": "Ortalama randevu değeri",
+      "cancellationRate": "İptal oranı",
+      "noShowRate": "Gelmeme oranı",
+      "returningCustomerRate": "Tekrar gelen müşteri oranı",
+      "bookedMinutes": "Rezerve dakika",
+      "minutes": "Dakika",
+      "spend": "Harcama",
+      "registered": "Kayıtlı",
+      "returning": "Tekrar gelen"
+    },
+    "common": {
+      "yes": "Evet",
+      "no": "Hayır"
+    },
+    "generic": {
+      "unassigned": "Atanmamış",
+      "customer": "Müşteri"
+    }
   }
 }
