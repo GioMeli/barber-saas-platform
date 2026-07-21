@@ -738,5 +738,161 @@
     "delete": {
       "confirm": "Remove \"{{name}}\"? Existing appointment history may prevent permanent deletion."
     }
+  },
+  "products": {
+    "eyebrow": "Inventory management",
+    "title": "Products & Inventory",
+    "description": "Manage retail products, stock levels, suppliers and complete inventory movement history.",
+    "actions": {
+      "add": "Add Product",
+      "edit": "Edit product",
+      "removeImage": "Remove",
+      "save": "Save Product",
+      "saving": "Saving...",
+      "adjust": "Adjust stock",
+      "history": "Stock history",
+      "delete": "Delete product",
+      "addStock": "Add Stock",
+      "editAlert": "Edit Alert",
+      "confirmAdjustment": "Confirm Adjustment"
+    },
+    "summary": {
+      "active": {
+        "title": "Active Products",
+        "detail": "{{count}} total products"
+      },
+      "lowStock": {
+        "title": "Low Stock",
+        "detail": "{{count}} out of stock"
+      },
+      "costValue": {
+        "title": "Stock Cost Value",
+        "detail": "Based on purchase cost"
+      },
+      "retailValue": {
+        "title": "Potential Retail Value",
+        "detail": "Current stock at selling price"
+      }
+    },
+    "tabs": {
+      "products": "Products",
+      "movements": "Stock Movements",
+      "alerts": "Stock Alerts ({{count}})"
+    },
+    "search": {
+      "placeholder": "Search product, SKU, brand or supplier"
+    },
+    "filters": {
+      "allCategories": "All categories"
+    },
+    "states": {
+      "loadingInventory": "Loading inventory...",
+      "emptyProducts": "No products match the selected filters.",
+      "loadingMovements": "Loading stock movements...",
+      "emptyMovements": "No stock movements recorded.",
+      "loadingAlerts": "Loading stock alerts...",
+      "healthyTitle": "Inventory looks healthy",
+      "healthyDescription": "No active products are below their minimum stock level."
+    },
+    "table": {
+      "product": "Product",
+      "skuBarcode": "SKU / Barcode",
+      "supplier": "Supplier",
+      "cost": "Cost",
+      "retail": "Retail",
+      "stock": "Stock",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "labels": {
+      "noSku": "No SKU",
+      "noBarcode": "No barcode",
+      "active": "Active",
+      "inactive": "Inactive",
+      "uncategorized": "Uncategorized",
+      "outOfStock": "Out of stock",
+      "lowStock": "{{count}} · Low",
+      "available": "{{count}} available",
+      "minimumRequired": "Minimum required: {{count}}",
+      "productFallback": "Product",
+      "noReason": "No reason provided"
+    },
+    "dialog": {
+      "editTitle": "Edit Product",
+      "addTitle": "Add Product",
+      "image": "Product Image",
+      "imageAlt": "Product",
+      "activeTitle": "Active Product",
+      "activeHelp": "Inactive products remain in inventory history."
+    },
+    "fields": {
+      "nameRequired": "Product Name *",
+      "brand": "Brand",
+      "sku": "SKU",
+      "barcode": "Barcode",
+      "category": "Category",
+      "supplier": "Supplier",
+      "costPrice": "Cost Price (€)",
+      "sellingPriceRequired": "Selling Price (€) *",
+      "currentStock": "Current Stock",
+      "minStockAlert": "Low Stock Alert At",
+      "adjustmentType": "Adjustment Type",
+      "exactQuantity": "New Exact Stock Quantity",
+      "quantity": "Quantity",
+      "reasonNotes": "Reason / Notes"
+    },
+    "helpers": {
+      "existingStock": "Use stock adjustment for existing products.",
+      "openingStock": "Opening stock will create an initial movement."
+    },
+    "adjustment": {
+      "title": "Adjust Stock: {{name}}",
+      "purchase": "Stock In — Purchase / Received",
+      "return": "Stock In — Customer Return",
+      "sale": "Stock Out — Retail Sale",
+      "internalUse": "Stock Out — Internal Use",
+      "damage": "Stock Out — Damage / Loss",
+      "expired": "Stock Out — Expired",
+      "correction": "Set Exact Stock Count"
+    },
+    "history": {
+      "title": "Stock History: {{name}}",
+      "pageTitle": "Stock Movement History"
+    },
+    "alerts": {
+      "title": "Low Stock Alerts"
+    },
+    "movements": {
+      "openingStock": "Opening stock",
+      "types": {
+        "purchase": "Purchase",
+        "sale": "Sale",
+        "damage": "Damage",
+        "return": "Return",
+        "correction": "Correction",
+        "internal_use": "Internal use",
+        "expired": "Expired",
+        "adjustment": "Adjustment"
+      }
+    },
+    "validation": {
+      "nameRequired": "Product name is required",
+      "numericValues": "Prices and stock values must be valid positive numbers",
+      "quantityPositive": "Quantity must be greater than 0",
+      "negativeStock": "This adjustment would make stock negative"
+    },
+    "messages": {
+      "loadError": "Failed to load inventory",
+      "updated": "Product updated",
+      "added": "Product added",
+      "saveError": "Failed to save product",
+      "adjusted": "Stock adjusted",
+      "adjustError": "Failed to adjust stock",
+      "deleted": "Product deleted",
+      "deleteBlocked": "Product cannot be deleted because inventory history exists"
+    },
+    "delete": {
+      "confirm": "Delete {{name}}? Existing stock movement history may prevent deletion."
+    }
   }
 }

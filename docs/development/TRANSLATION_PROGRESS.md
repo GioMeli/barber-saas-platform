@@ -8,7 +8,7 @@
 | Customers | In progress | Existing localized screens should be re-audited against the current GitHub branch. |
 | Staff | Complete | Owner Staff module localized in EN, EL, DE, ES and TR. |
 | Services | Complete | Owner Services module localized in EN, EL, DE, ES and TR. |
-| Products | Pending | Next module. |
+| Products | Complete | Owner Products & Inventory module localized in EN, EL, DE, ES and TR. |
 | Reports | Pending | |
 | Storefront | Pending | |
 | Public booking | Pending | |

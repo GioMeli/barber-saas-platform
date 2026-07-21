@@ -738,5 +738,161 @@
     "delete": {
       "confirm": "“{{name}}” kaldırılsın mı? Mevcut randevu geçmişi kalıcı silmeyi engelleyebilir."
     }
+  },
+  "products": {
+    "eyebrow": "Envanter yönetimi",
+    "title": "Ürünler ve Envanter",
+    "description": "Perakende ürünlerini, stok seviyelerini, tedarikçileri ve tüm envanter hareket geçmişini yönetin.",
+    "actions": {
+      "add": "Ürün ekle",
+      "edit": "Ürünü düzenle",
+      "removeImage": "Kaldır",
+      "save": "Ürünü kaydet",
+      "saving": "Kaydediliyor...",
+      "adjust": "Stok ayarla",
+      "history": "Stok geçmişi",
+      "delete": "Ürünü sil",
+      "addStock": "Stok ekle",
+      "editAlert": "Uyarıyı düzenle",
+      "confirmAdjustment": "Ayarlamayı onayla"
+    },
+    "summary": {
+      "active": {
+        "title": "Aktif ürünler",
+        "detail": "Toplam {{count}} ürün"
+      },
+      "lowStock": {
+        "title": "Düşük stok",
+        "detail": "{{count}} ürün stokta yok"
+      },
+      "costValue": {
+        "title": "Stok maliyet değeri",
+        "detail": "Satın alma maliyetine göre"
+      },
+      "retailValue": {
+        "title": "Potansiyel perakende değeri",
+        "detail": "Satış fiyatıyla mevcut stok"
+      }
+    },
+    "tabs": {
+      "products": "Ürünler",
+      "movements": "Stok hareketleri",
+      "alerts": "Stok uyarıları ({{count}})"
+    },
+    "search": {
+      "placeholder": "Ürün, SKU, marka veya tedarikçi ara"
+    },
+    "filters": {
+      "allCategories": "Tüm kategoriler"
+    },
+    "states": {
+      "loadingInventory": "Envanter yükleniyor...",
+      "emptyProducts": "Seçilen filtrelerle eşleşen ürün yok.",
+      "loadingMovements": "Stok hareketleri yükleniyor...",
+      "emptyMovements": "Henüz stok hareketi kaydedilmedi.",
+      "loadingAlerts": "Stok uyarıları yükleniyor...",
+      "healthyTitle": "Envanter sağlıklı görünüyor",
+      "healthyDescription": "Hiçbir aktif ürün minimum stok seviyesinin altında değil."
+    },
+    "table": {
+      "product": "Ürün",
+      "skuBarcode": "SKU / Barkod",
+      "supplier": "Tedarikçi",
+      "cost": "Maliyet",
+      "retail": "Perakende",
+      "stock": "Stok",
+      "status": "Durum",
+      "actions": "İşlemler"
+    },
+    "labels": {
+      "noSku": "SKU yok",
+      "noBarcode": "Barkod yok",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "uncategorized": "Kategorisiz",
+      "outOfStock": "Stokta yok",
+      "lowStock": "{{count}} · Düşük",
+      "available": "{{count}} mevcut",
+      "minimumRequired": "Gerekli minimum: {{count}}",
+      "productFallback": "Ürün",
+      "noReason": "Neden belirtilmedi"
+    },
+    "dialog": {
+      "editTitle": "Ürünü düzenle",
+      "addTitle": "Ürün ekle",
+      "image": "Ürün görseli",
+      "imageAlt": "Ürün",
+      "activeTitle": "Aktif ürün",
+      "activeHelp": "Pasif ürünler envanter geçmişinde kalır."
+    },
+    "fields": {
+      "nameRequired": "Ürün adı *",
+      "brand": "Marka",
+      "sku": "SKU",
+      "barcode": "Barkod",
+      "category": "Kategori",
+      "supplier": "Tedarikçi",
+      "costPrice": "Maliyet fiyatı (€)",
+      "sellingPriceRequired": "Satış fiyatı (€) *",
+      "currentStock": "Mevcut stok",
+      "minStockAlert": "Düşük stok uyarı seviyesi",
+      "adjustmentType": "Ayarlama türü",
+      "exactQuantity": "Yeni kesin stok miktarı",
+      "quantity": "Miktar",
+      "reasonNotes": "Neden / Notlar"
+    },
+    "helpers": {
+      "existingStock": "Mevcut ürünler için stok ayarlamasını kullanın.",
+      "openingStock": "Açılış stoğu ilk stok hareketini oluşturur."
+    },
+    "adjustment": {
+      "title": "Stok ayarla: {{name}}",
+      "purchase": "Giriş — Satın alma / Teslim alma",
+      "return": "Giriş — Müşteri iadesi",
+      "sale": "Çıkış — Perakende satış",
+      "internalUse": "Çıkış — Dahili kullanım",
+      "damage": "Çıkış — Hasar / Kayıp",
+      "expired": "Çıkış — Son kullanma tarihi geçmiş",
+      "correction": "Kesin stok miktarını ayarla"
+    },
+    "history": {
+      "title": "Stok geçmişi: {{name}}",
+      "pageTitle": "Stok hareket geçmişi"
+    },
+    "alerts": {
+      "title": "Düşük stok uyarıları"
+    },
+    "movements": {
+      "openingStock": "Açılış stoğu",
+      "types": {
+        "purchase": "Satın alma",
+        "sale": "Satış",
+        "damage": "Hasar",
+        "return": "İade",
+        "correction": "Düzeltme",
+        "internal_use": "Dahili kullanım",
+        "expired": "Süresi dolmuş",
+        "adjustment": "Ayarlama"
+      }
+    },
+    "validation": {
+      "nameRequired": "Ürün adı zorunludur",
+      "numericValues": "Fiyatlar ve stok değerleri geçerli pozitif sayılar olmalıdır",
+      "quantityPositive": "Miktar 0’dan büyük olmalıdır",
+      "negativeStock": "Bu ayarlama stoğu negatife düşürür"
+    },
+    "messages": {
+      "loadError": "Envanter yüklenemedi",
+      "updated": "Ürün güncellendi",
+      "added": "Ürün eklendi",
+      "saveError": "Ürün kaydedilemedi",
+      "adjusted": "Stok ayarlandı",
+      "adjustError": "Stok ayarlanamadı",
+      "deleted": "Ürün silindi",
+      "deleteBlocked": "Envanter geçmişi bulunduğu için ürün silinemiyor"
+    },
+    "delete": {
+      "confirm": "{{name}} silinsin mi? Mevcut stok hareket geçmişi silmeyi engelleyebilir."
+    }
   }
 }

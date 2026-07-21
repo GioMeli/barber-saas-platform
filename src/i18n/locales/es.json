@@ -738,5 +738,161 @@
     "delete": {
       "confirm": "¿Eliminar “{{name}}”? El historial de citas existente puede impedir la eliminación permanente."
     }
+  },
+  "products": {
+    "eyebrow": "Gestión de inventario",
+    "title": "Productos e inventario",
+    "description": "Gestiona productos de venta, niveles de existencias, proveedores y el historial completo de movimientos de inventario.",
+    "actions": {
+      "add": "Añadir producto",
+      "edit": "Editar producto",
+      "removeImage": "Eliminar",
+      "save": "Guardar producto",
+      "saving": "Guardando...",
+      "adjust": "Ajustar existencias",
+      "history": "Historial de existencias",
+      "delete": "Eliminar producto",
+      "addStock": "Añadir existencias",
+      "editAlert": "Editar alerta",
+      "confirmAdjustment": "Confirmar ajuste"
+    },
+    "summary": {
+      "active": {
+        "title": "Productos activos",
+        "detail": "{{count}} productos en total"
+      },
+      "lowStock": {
+        "title": "Existencias bajas",
+        "detail": "{{count}} agotados"
+      },
+      "costValue": {
+        "title": "Valor de coste del inventario",
+        "detail": "Basado en el coste de compra"
+      },
+      "retailValue": {
+        "title": "Valor potencial de venta",
+        "detail": "Existencias actuales al precio de venta"
+      }
+    },
+    "tabs": {
+      "products": "Productos",
+      "movements": "Movimientos de inventario",
+      "alerts": "Alertas de inventario ({{count}})"
+    },
+    "search": {
+      "placeholder": "Buscar producto, SKU, marca o proveedor"
+    },
+    "filters": {
+      "allCategories": "Todas las categorías"
+    },
+    "states": {
+      "loadingInventory": "Cargando inventario...",
+      "emptyProducts": "Ningún producto coincide con los filtros seleccionados.",
+      "loadingMovements": "Cargando movimientos de inventario...",
+      "emptyMovements": "No se han registrado movimientos de inventario.",
+      "loadingAlerts": "Cargando alertas de inventario...",
+      "healthyTitle": "El inventario está en buen estado",
+      "healthyDescription": "Ningún producto activo está por debajo de su nivel mínimo de existencias."
+    },
+    "table": {
+      "product": "Producto",
+      "skuBarcode": "SKU / Código de barras",
+      "supplier": "Proveedor",
+      "cost": "Coste",
+      "retail": "Venta",
+      "stock": "Existencias",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "labels": {
+      "noSku": "Sin SKU",
+      "noBarcode": "Sin código de barras",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "uncategorized": "Sin categoría",
+      "outOfStock": "Agotado",
+      "lowStock": "{{count}} · Bajo",
+      "available": "{{count}} disponibles",
+      "minimumRequired": "Mínimo requerido: {{count}}",
+      "productFallback": "Producto",
+      "noReason": "No se indicó ningún motivo"
+    },
+    "dialog": {
+      "editTitle": "Editar producto",
+      "addTitle": "Añadir producto",
+      "image": "Imagen del producto",
+      "imageAlt": "Producto",
+      "activeTitle": "Producto activo",
+      "activeHelp": "Los productos inactivos permanecen en el historial de inventario."
+    },
+    "fields": {
+      "nameRequired": "Nombre del producto *",
+      "brand": "Marca",
+      "sku": "SKU",
+      "barcode": "Código de barras",
+      "category": "Categoría",
+      "supplier": "Proveedor",
+      "costPrice": "Precio de coste (€)",
+      "sellingPriceRequired": "Precio de venta (€) *",
+      "currentStock": "Existencias actuales",
+      "minStockAlert": "Alerta de existencias bajas en",
+      "adjustmentType": "Tipo de ajuste",
+      "exactQuantity": "Nueva cantidad exacta",
+      "quantity": "Cantidad",
+      "reasonNotes": "Motivo / Notas"
+    },
+    "helpers": {
+      "existingStock": "Utiliza el ajuste de existencias para productos existentes.",
+      "openingStock": "Las existencias iniciales crearán un movimiento inicial."
+    },
+    "adjustment": {
+      "title": "Ajustar existencias: {{name}}",
+      "purchase": "Entrada — Compra / Recepción",
+      "return": "Entrada — Devolución de cliente",
+      "sale": "Salida — Venta minorista",
+      "internalUse": "Salida — Uso interno",
+      "damage": "Salida — Daño / Pérdida",
+      "expired": "Salida — Caducado",
+      "correction": "Establecer cantidad exacta"
+    },
+    "history": {
+      "title": "Historial de existencias: {{name}}",
+      "pageTitle": "Historial de movimientos de inventario"
+    },
+    "alerts": {
+      "title": "Alertas de existencias bajas"
+    },
+    "movements": {
+      "openingStock": "Existencias iniciales",
+      "types": {
+        "purchase": "Compra",
+        "sale": "Venta",
+        "damage": "Daño",
+        "return": "Devolución",
+        "correction": "Corrección",
+        "internal_use": "Uso interno",
+        "expired": "Caducado",
+        "adjustment": "Ajuste"
+      }
+    },
+    "validation": {
+      "nameRequired": "El nombre del producto es obligatorio",
+      "numericValues": "Los precios y valores de existencias deben ser números positivos válidos",
+      "quantityPositive": "La cantidad debe ser mayor que 0",
+      "negativeStock": "Este ajuste dejaría las existencias en negativo"
+    },
+    "messages": {
+      "loadError": "No se pudo cargar el inventario",
+      "updated": "Producto actualizado",
+      "added": "Producto añadido",
+      "saveError": "No se pudo guardar el producto",
+      "adjusted": "Existencias ajustadas",
+      "adjustError": "No se pudieron ajustar las existencias",
+      "deleted": "Producto eliminado",
+      "deleteBlocked": "El producto no puede eliminarse porque existe historial de inventario"
+    },
+    "delete": {
+      "confirm": "¿Eliminar {{name}}? El historial de movimientos existente puede impedir la eliminación."
+    }
   }
 }
