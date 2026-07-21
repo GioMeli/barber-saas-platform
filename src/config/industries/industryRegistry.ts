@@ -1,169 +1,104 @@
-import type { IndustryConfig, IndustryKey } from './industry.types';
+import type { ModuleKey } from '../modules';
+import type { IndustryCategory, IndustryConfig, IndustryKey, IndustryPalette } from './industry.types';
 
-const darkLuxury = {
-  primary: '45 70% 50%',
-  primaryForeground: '222 47% 11%',
-  accent: '45 85% 94%',
-  accentForeground: '40 75% 30%',
-  ring: '45 70% 50%',
-  sidebarBackground: '222 47% 9%',
-  sidebarForeground: '214 32% 91%',
-  sidebarPrimary: '45 70% 50%',
-  sidebarPrimaryForeground: '222 47% 11%',
-  sidebarAccent: '222 34% 15%',
-  sidebarAccentForeground: '0 0% 100%',
-  sidebarBorder: '222 28% 18%',
+const palettes: Record<'purple'|'gold'|'rose'|'wellness'|'clinical'|'energy'|'blue'|'teal', IndustryPalette> = {
+  purple: { primary:'267 84% 60%',primaryForeground:'0 0% 100%',accent:'267 90% 96%',accentForeground:'267 60% 35%',ring:'267 84% 60%',sidebarBackground:'252 35% 10%',sidebarForeground:'250 25% 94%',sidebarPrimary:'267 84% 60%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'252 27% 17%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'252 22% 22%' },
+  gold: { primary:'45 70% 50%',primaryForeground:'222 47% 11%',accent:'45 85% 94%',accentForeground:'40 75% 30%',ring:'45 70% 50%',sidebarBackground:'222 47% 9%',sidebarForeground:'214 32% 91%',sidebarPrimary:'45 70% 50%',sidebarPrimaryForeground:'222 47% 11%',sidebarAccent:'222 34% 15%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'222 28% 18%' },
+  rose: { primary:'338 72% 62%',primaryForeground:'0 0% 100%',accent:'338 75% 95%',accentForeground:'338 55% 34%',ring:'338 72% 62%',sidebarBackground:'336 30% 16%',sidebarForeground:'336 24% 92%',sidebarPrimary:'338 72% 62%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'336 24% 23%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'336 20% 27%' },
+  wellness: { primary:'165 43% 42%',primaryForeground:'0 0% 100%',accent:'164 40% 93%',accentForeground:'165 45% 26%',ring:'165 43% 42%',sidebarBackground:'168 35% 13%',sidebarForeground:'160 20% 92%',sidebarPrimary:'165 43% 42%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'168 28% 20%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'168 24% 24%' },
+  clinical: { primary:'217 72% 55%',primaryForeground:'0 0% 100%',accent:'216 85% 95%',accentForeground:'217 58% 32%',ring:'217 72% 55%',sidebarBackground:'222 44% 12%',sidebarForeground:'214 32% 92%',sidebarPrimary:'217 72% 55%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'220 34% 19%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'220 29% 23%' },
+  energy: { primary:'24 90% 54%',primaryForeground:'0 0% 100%',accent:'28 100% 94%',accentForeground:'20 72% 32%',ring:'24 90% 54%',sidebarBackground:'220 24% 11%',sidebarForeground:'210 20% 92%',sidebarPrimary:'24 90% 54%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'220 20% 18%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'220 18% 22%' },
+  blue: { primary:'229 78% 58%',primaryForeground:'0 0% 100%',accent:'229 90% 96%',accentForeground:'229 60% 35%',ring:'229 78% 58%',sidebarBackground:'228 38% 11%',sidebarForeground:'225 25% 94%',sidebarPrimary:'229 78% 58%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'228 28% 18%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'228 22% 23%' },
+  teal: { primary:'184 70% 38%',primaryForeground:'0 0% 100%',accent:'184 65% 94%',accentForeground:'184 60% 27%',ring:'184 70% 38%',sidebarBackground:'188 35% 11%',sidebarForeground:'184 20% 94%',sidebarPrimary:'184 70% 38%',sidebarPrimaryForeground:'0 0% 100%',sidebarAccent:'188 28% 18%',sidebarAccentForeground:'0 0% 100%',sidebarBorder:'188 23% 23%' },
 };
 
-const roseElegant = {
-  primary: '338 72% 62%',
-  primaryForeground: '0 0% 100%',
-  accent: '338 75% 95%',
-  accentForeground: '338 55% 34%',
-  ring: '338 72% 62%',
-  sidebarBackground: '336 30% 16%',
-  sidebarForeground: '336 24% 92%',
-  sidebarPrimary: '338 72% 62%',
-  sidebarPrimaryForeground: '0 0% 100%',
-  sidebarAccent: '336 24% 23%',
-  sidebarAccentForeground: '0 0% 100%',
-  sidebarBorder: '336 20% 27%',
-};
+const core: ModuleKey[] = ['appointments','calendar','services','team','customers','storefront','reports','academy'];
+const retail: ModuleKey[] = [...core,'products','inventory','gallery','posts','payments'];
+const wellness: ModuleKey[] = [...core,'forms','resources','payments'];
+const fitness: ModuleKey[] = [...core,'memberships','classes','resources','payments'];
+const professional: ModuleKey[] = [...core,'forms','resources','payments'];
 
-const calmWellness = {
-  primary: '165 43% 42%',
-  primaryForeground: '0 0% 100%',
-  accent: '164 40% 93%',
-  accentForeground: '165 45% 26%',
-  ring: '165 43% 42%',
-  sidebarBackground: '168 35% 13%',
-  sidebarForeground: '160 20% 92%',
-  sidebarPrimary: '165 43% 42%',
-  sidebarPrimaryForeground: '0 0% 100%',
-  sidebarAccent: '168 28% 20%',
-  sidebarAccentForeground: '0 0% 100%',
-  sidebarBorder: '168 24% 24%',
-};
+type Seed = Omit<IndustryConfig,'labels'|'defaultServices'> & { professional?: string; service?: string; price?: number; duration?: number };
+function industry(seed: Seed): IndustryConfig {
+  const professionalName = seed.professional ?? 'professional';
+  const serviceName = seed.service ?? 'Consultation';
+  return {
+    ...seed,
+    labels: {
+      singular: seed.name.toLowerCase(), plural: `${seed.name.toLowerCase()} businesses`, professional: professionalName,
+      professionals: `${professionalName}s`, bookingCta: 'Book Appointment', storefrontTagline: `${seed.name} services with simple online booking.`,
+      serviceSectionDescription: 'Explore services, pricing and real-time availability.', teamSectionTitle: `Meet the ${professionalName}s`,
+    },
+    defaultServices: [{ name: serviceName, category: seed.defaultCategory, price: seed.price ?? 30, duration: seed.duration ?? 30 }],
+  };
+}
 
-const clinical = {
-  primary: '217 72% 55%',
-  primaryForeground: '0 0% 100%',
-  accent: '216 85% 95%',
-  accentForeground: '217 58% 32%',
-  ring: '217 72% 55%',
-  sidebarBackground: '222 44% 12%',
-  sidebarForeground: '214 32% 92%',
-  sidebarPrimary: '217 72% 55%',
-  sidebarPrimaryForeground: '0 0% 100%',
-  sidebarAccent: '220 34% 19%',
-  sidebarAccentForeground: '0 0% 100%',
-  sidebarBorder: '220 29% 23%',
-};
+export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
+  { key:'beauty_personal_care',name:'Beauty & Personal Care',description:'Hair, beauty, grooming, spa and aesthetics.',icon:'✨' },
+  { key:'health_wellness',name:'Health & Wellness',description:'Clinics and appointment-based care providers.',icon:'🩺' },
+  { key:'fitness',name:'Fitness & Movement',description:'Training, classes, studios and memberships.',icon:'🏋️' },
+  { key:'pet_services',name:'Pet Services',description:'Pet care, grooming, veterinary and training.',icon:'🐾' },
+  { key:'automotive',name:'Automotive Services',description:'Vehicle care, maintenance and workshop bookings.',icon:'🚗' },
+  { key:'home_services',name:'Home & Field Services',description:'Mobile teams and scheduled property services.',icon:'🏠' },
+  { key:'professional_services',name:'Professional Services',description:'Advisory, legal, finance and property services.',icon:'💼' },
+  { key:'education',name:'Education & Training',description:'Lessons, schools, instructors and class schedules.',icon:'🎓' },
+  { key:'creative_services',name:'Creative Services',description:'Studios, artists and production professionals.',icon:'🎨' },
+  { key:'events',name:'Events & Venues',description:'Planning, consultations and venue reservations.',icon:'🎉' },
+];
 
-const energetic = {
-  primary: '24 90% 54%',
-  primaryForeground: '0 0% 100%',
-  accent: '28 100% 94%',
-  accentForeground: '20 72% 32%',
-  ring: '24 90% 54%',
-  sidebarBackground: '220 24% 11%',
-  sidebarForeground: '210 20% 92%',
-  sidebarPrimary: '24 90% 54%',
-  sidebarPrimaryForeground: '0 0% 100%',
-  sidebarAccent: '220 20% 18%',
-  sidebarAccentForeground: '0 0% 100%',
-  sidebarBorder: '220 18% 22%',
-};
+const entries: Array<[IndustryKey, IndustryConfig]> = [
+  ['hair_salon', industry({key:'hair_salon',category:'beauty_personal_care',name:'Hair Salon',shortName:'Hair',description:'Hair styling, colouring and salon services.',icon:'✂️',launchEnabled:true,defaultCategory:'Hair Services',defaultModules:retail,palette:palettes.gold,professional:'stylist',service:'Haircut',price:25,duration:30})],
+  ['barber_shop', industry({key:'barber_shop',category:'beauty_personal_care',name:'Barber Shop',shortName:'Barber',description:'Cuts, grooming and barbering services.',icon:'💈',launchEnabled:true,defaultCategory:'Barber Services',defaultModules:retail,palette:palettes.gold,professional:'barber',service:'Standard Haircut',price:25,duration:30})],
+  ['beauty_studio', industry({key:'beauty_studio',category:'beauty_personal_care',name:'Beauty Studio',shortName:'Beauty',description:'Skincare, lashes and cosmetic services.',icon:'🌸',launchEnabled:true,defaultCategory:'Beauty Treatments',defaultModules:retail,palette:palettes.rose,professional:'beauty professional',service:'Facial Treatment',price:45,duration:60})],
+  ['nail_salon', industry({key:'nail_salon',category:'beauty_personal_care',name:'Nail Salon',shortName:'Nails',description:'Manicure, pedicure and nail-art services.',icon:'💅',launchEnabled:true,defaultCategory:'Nail Services',defaultModules:retail,palette:palettes.rose,professional:'nail technician',service:'Gel Manicure',price:30,duration:45})],
+  ['spa', industry({key:'spa',category:'beauty_personal_care',name:'Spa',shortName:'Spa',description:'Relaxation, body treatments and spa experiences.',icon:'🧖',launchEnabled:true,defaultCategory:'Spa Treatments',defaultModules:wellness,palette:palettes.wellness,professional:'therapist',service:'Signature Spa Treatment',price:70,duration:60})],
+  ['massage_center', industry({key:'massage_center',category:'beauty_personal_care',name:'Massage Center',shortName:'Massage',description:'Therapeutic and relaxation massage.',icon:'💆',launchEnabled:true,defaultCategory:'Massage',defaultModules:wellness,palette:palettes.wellness,professional:'massage therapist',service:'Relaxation Massage',price:50,duration:60})],
+  ['wellness_center', industry({key:'wellness_center',category:'beauty_personal_care',name:'Wellness Center',shortName:'Wellness',description:'Integrated wellness and personal care.',icon:'🌿',launchEnabled:true,defaultCategory:'Wellness Services',defaultModules:wellness,palette:palettes.wellness,professional:'wellness professional',service:'Wellness Consultation',price:40,duration:45})],
+  ['aesthetic_clinic', industry({key:'aesthetic_clinic',category:'beauty_personal_care',name:'Aesthetic Clinic',shortName:'Aesthetics',description:'Non-surgical aesthetic services.',icon:'✨',launchEnabled:true,defaultCategory:'Aesthetic Treatments',defaultModules:wellness,palette:palettes.clinical,professional:'practitioner',service:'Aesthetic Consultation',price:40,duration:30})],
+  ['tattoo_studio', industry({key:'tattoo_studio',category:'creative_services',name:'Tattoo Studio',shortName:'Tattoo',description:'Consultations, sessions and aftercare.',icon:'🖋️',launchEnabled:true,defaultCategory:'Tattoo Services',defaultModules:[...core,'gallery','forms','payments'],palette:palettes.gold,professional:'artist',service:'Tattoo Consultation',price:0,duration:30})],
+  ['physiotherapy', industry({key:'physiotherapy',category:'health_wellness',name:'Physiotherapy Practice',shortName:'Physio',description:'Assessments and rehabilitation sessions.',icon:'🦴',launchEnabled:true,defaultCategory:'Physiotherapy',defaultModules:wellness,palette:palettes.clinical,professional:'physiotherapist',service:'Initial Assessment',price:50,duration:45})],
+  ['chiropractic', industry({key:'chiropractic',category:'health_wellness',name:'Chiropractic Clinic',shortName:'Chiropractic',description:'Chiropractic consultations and care.',icon:'🩻',launchEnabled:true,defaultCategory:'Chiropractic Care',defaultModules:wellness,palette:palettes.clinical,professional:'chiropractor'})],
+  ['nutritionist', industry({key:'nutritionist',category:'health_wellness',name:'Nutrition Practice',shortName:'Nutrition',description:'Nutrition consultations and follow-ups.',icon:'🥗',launchEnabled:true,defaultCategory:'Consultations',defaultModules:professional,palette:palettes.wellness,professional:'nutritionist'})],
+  ['psychology_practice', industry({key:'psychology_practice',category:'health_wellness',name:'Psychology Practice',shortName:'Psychology',description:'Private consultations and therapy sessions.',icon:'🧠',launchEnabled:true,defaultCategory:'Sessions',defaultModules:professional,palette:palettes.teal,professional:'psychologist',service:'Therapy Session',price:60,duration:60})],
+  ['speech_therapy', industry({key:'speech_therapy',category:'health_wellness',name:'Speech Therapy Practice',shortName:'Speech Therapy',description:'Assessments and speech therapy sessions.',icon:'🗣️',launchEnabled:true,defaultCategory:'Therapy',defaultModules:professional,palette:palettes.teal,professional:'speech therapist'})],
+  ['dental_clinic', industry({key:'dental_clinic',category:'health_wellness',name:'Dental Clinic',shortName:'Dental',description:'Dental appointments and treatment scheduling.',icon:'🦷',launchEnabled:true,defaultCategory:'Dental Services',defaultModules:wellness,palette:palettes.clinical,professional:'dentist',service:'Dental Examination',price:40,duration:30})],
+  ['medical_practice', industry({key:'medical_practice',category:'health_wellness',name:'Private Medical Practice',shortName:'Medical',description:'Private consultations and clinic scheduling.',icon:'🩺',launchEnabled:true,defaultCategory:'Consultations',defaultModules:professional,palette:palettes.clinical,professional:'doctor'})],
+  ['personal_training', industry({key:'personal_training',category:'fitness',name:'Personal Training Studio',shortName:'Training',description:'Personal coaching and fitness sessions.',icon:'🏋️',launchEnabled:true,defaultCategory:'Training Sessions',defaultModules:fitness,palette:palettes.energy,professional:'trainer',service:'Personal Training Session',price:35,duration:60})],
+  ['gym_studio', industry({key:'gym_studio',category:'fitness',name:'Gym Studio',shortName:'Gym',description:'Memberships, classes and trainer sessions.',icon:'💪',launchEnabled:true,defaultCategory:'Fitness',defaultModules:fitness,palette:palettes.energy,professional:'coach',service:'Gym Induction'})],
+  ['pilates_studio', industry({key:'pilates_studio',category:'fitness',name:'Pilates Studio',shortName:'Pilates',description:'Private and group Pilates sessions.',icon:'🤸',launchEnabled:true,defaultCategory:'Pilates',defaultModules:fitness,palette:palettes.wellness,professional:'instructor',service:'Pilates Class',price:20,duration:60})],
+  ['yoga_studio', industry({key:'yoga_studio',category:'fitness',name:'Yoga Studio',shortName:'Yoga',description:'Yoga classes and private sessions.',icon:'🧘',launchEnabled:true,defaultCategory:'Yoga',defaultModules:fitness,palette:palettes.wellness,professional:'instructor',service:'Yoga Class',price:15,duration:60})],
+  ['dance_studio', industry({key:'dance_studio',category:'fitness',name:'Dance Studio',shortName:'Dance',description:'Dance lessons and class scheduling.',icon:'💃',launchEnabled:true,defaultCategory:'Dance Classes',defaultModules:fitness,palette:palettes.purple,professional:'instructor',service:'Dance Class',price:20,duration:60})],
+  ['pet_grooming', industry({key:'pet_grooming',category:'pet_services',name:'Pet Grooming',shortName:'Grooming',description:'Professional pet grooming appointments.',icon:'🐾',launchEnabled:true,defaultCategory:'Grooming Services',defaultModules:retail,palette:palettes.teal,professional:'groomer',service:'Full Groom',price:40,duration:60})],
+  ['veterinary_clinic', industry({key:'veterinary_clinic',category:'pet_services',name:'Veterinary Clinic',shortName:'Veterinary',description:'Pet consultations and clinic scheduling.',icon:'🐶',launchEnabled:true,defaultCategory:'Veterinary Services',defaultModules:professional,palette:palettes.clinical,professional:'veterinarian',service:'General Consultation',price:40,duration:30})],
+  ['dog_training', industry({key:'dog_training',category:'pet_services',name:'Dog Training',shortName:'Dog Training',description:'Private and group dog training sessions.',icon:'🦮',launchEnabled:true,defaultCategory:'Training',defaultModules:fitness,palette:palettes.teal,professional:'trainer',service:'Training Session',price:35,duration:60})],
+  ['car_wash', industry({key:'car_wash',category:'automotive',name:'Car Wash',shortName:'Car Wash',description:'Vehicle cleaning bookings.',icon:'🚿',launchEnabled:true,defaultCategory:'Car Wash Services',defaultModules:retail,palette:palettes.blue,professional:'technician',service:'Full Car Wash',price:20,duration:45})],
+  ['car_detailing', industry({key:'car_detailing',category:'automotive',name:'Car Detailing',shortName:'Detailing',description:'Professional vehicle detailing.',icon:'✨',launchEnabled:true,defaultCategory:'Detailing',defaultModules:retail,palette:palettes.blue,professional:'detailer',service:'Interior & Exterior Detail',price:80,duration:180})],
+  ['mechanic', industry({key:'mechanic',category:'automotive',name:'Mechanic Workshop',shortName:'Workshop',description:'Repairs, servicing and workshop bookings.',icon:'🔧',launchEnabled:true,defaultCategory:'Workshop Services',defaultModules:[...core,'inventory','resources','payments'],palette:palettes.blue,professional:'mechanic',service:'Vehicle Inspection',price:30,duration:45})],
+  ['tyre_shop', industry({key:'tyre_shop',category:'automotive',name:'Tyre Shop',shortName:'Tyres',description:'Tyre fitting and maintenance appointments.',icon:'🛞',launchEnabled:true,defaultCategory:'Tyre Services',defaultModules:[...core,'inventory','resources','payments'],palette:palettes.blue,professional:'technician',service:'Tyre Fitting',price:25,duration:45})],
+  ['cleaning_company', industry({key:'cleaning_company',category:'home_services',name:'Cleaning Company',shortName:'Cleaning',description:'Residential and commercial cleaning schedules.',icon:'🧹',launchEnabled:true,defaultCategory:'Cleaning Services',defaultModules:[...core,'resources','forms','payments'],palette:palettes.teal,professional:'cleaner',service:'Standard Cleaning',price:50,duration:120})],
+  ['electrician', industry({key:'electrician',category:'home_services',name:'Electrical Services',shortName:'Electrical',description:'Scheduled electrical work and site visits.',icon:'⚡',launchEnabled:true,defaultCategory:'Electrical Services',defaultModules:professional,palette:palettes.energy,professional:'electrician',service:'Site Visit',price:40,duration:60})],
+  ['plumber', industry({key:'plumber',category:'home_services',name:'Plumbing Services',shortName:'Plumbing',description:'Plumbing appointments and field jobs.',icon:'🔩',launchEnabled:true,defaultCategory:'Plumbing Services',defaultModules:professional,palette:palettes.blue,professional:'plumber',service:'Call-out Visit',price:40,duration:60})],
+  ['hvac', industry({key:'hvac',category:'home_services',name:'HVAC Services',shortName:'HVAC',description:'Heating and cooling service visits.',icon:'❄️',launchEnabled:true,defaultCategory:'HVAC Services',defaultModules:professional,palette:palettes.blue,professional:'technician',service:'System Inspection',price:50,duration:60})],
+  ['pest_control', industry({key:'pest_control',category:'home_services',name:'Pest Control',shortName:'Pest Control',description:'Inspection and treatment scheduling.',icon:'🛡️',launchEnabled:true,defaultCategory:'Pest Control',defaultModules:professional,palette:palettes.teal,professional:'technician',service:'Property Inspection',price:45,duration:60})],
+  ['law_firm', industry({key:'law_firm',category:'professional_services',name:'Law Firm',shortName:'Legal',description:'Client consultations and case appointments.',icon:'⚖️',launchEnabled:true,defaultCategory:'Legal Services',defaultModules:professional,palette:palettes.purple,professional:'lawyer',service:'Legal Consultation',price:100,duration:60})],
+  ['accounting_firm', industry({key:'accounting_firm',category:'professional_services',name:'Accounting Firm',shortName:'Accounting',description:'Accounting consultations and client meetings.',icon:'🧾',launchEnabled:true,defaultCategory:'Accounting Services',defaultModules:professional,palette:palettes.blue,professional:'accountant',service:'Accounting Consultation',price:60,duration:60})],
+  ['consultancy', industry({key:'consultancy',category:'professional_services',name:'Consultancy',shortName:'Consulting',description:'Advisory sessions and project meetings.',icon:'📈',launchEnabled:true,defaultCategory:'Consulting',defaultModules:professional,palette:palettes.purple,professional:'consultant',service:'Consultation',price:75,duration:60})],
+  ['financial_advisor', industry({key:'financial_advisor',category:'professional_services',name:'Financial Advisory',shortName:'Financial',description:'Financial consultations and review meetings.',icon:'💶',launchEnabled:true,defaultCategory:'Advisory Services',defaultModules:professional,palette:palettes.blue,professional:'advisor',service:'Financial Review',price:75,duration:60})],
+  ['real_estate', industry({key:'real_estate',category:'professional_services',name:'Real Estate Office',shortName:'Real Estate',description:'Viewings, valuations and client meetings.',icon:'🏢',launchEnabled:true,defaultCategory:'Real Estate Services',defaultModules:professional,palette:palettes.purple,professional:'agent',service:'Property Viewing',price:0,duration:45})],
+  ['tutoring', industry({key:'tutoring',category:'education',name:'Tutoring Service',shortName:'Tutoring',description:'Private and group tutoring sessions.',icon:'📚',launchEnabled:true,defaultCategory:'Lessons',defaultModules:fitness,palette:palettes.blue,professional:'tutor',service:'Private Lesson',price:25,duration:60})],
+  ['language_school', industry({key:'language_school',category:'education',name:'Language School',shortName:'Languages',description:'Language classes and private lessons.',icon:'🌍',launchEnabled:true,defaultCategory:'Language Classes',defaultModules:fitness,palette:palettes.teal,professional:'teacher',service:'Language Class',price:20,duration:60})],
+  ['music_school', industry({key:'music_school',category:'education',name:'Music School',shortName:'Music',description:'Music lessons and studio schedules.',icon:'🎵',launchEnabled:true,defaultCategory:'Music Lessons',defaultModules:fitness,palette:palettes.purple,professional:'teacher',service:'Music Lesson',price:30,duration:45})],
+  ['driving_school', industry({key:'driving_school',category:'education',name:'Driving School',shortName:'Driving',description:'Driving lessons and instructor scheduling.',icon:'🚘',launchEnabled:true,defaultCategory:'Driving Lessons',defaultModules:[...core,'resources','payments'],palette:palettes.blue,professional:'instructor',service:'Driving Lesson',price:35,duration:60})],
+  ['photography_studio', industry({key:'photography_studio',category:'creative_services',name:'Photography Studio',shortName:'Photography',description:'Photo sessions and studio bookings.',icon:'📷',launchEnabled:true,defaultCategory:'Photography',defaultModules:[...core,'gallery','resources','forms','payments'],palette:palettes.purple,professional:'photographer',service:'Photo Session',price:100,duration:90})],
+  ['videography_studio', industry({key:'videography_studio',category:'creative_services',name:'Videography Studio',shortName:'Videography',description:'Video production consultations and shoots.',icon:'🎥',launchEnabled:true,defaultCategory:'Videography',defaultModules:[...core,'gallery','resources','forms','payments'],palette:palettes.purple,professional:'videographer',service:'Production Consultation',price:0,duration:45})],
+  ['wedding_planner', industry({key:'wedding_planner',category:'events',name:'Wedding Planner',shortName:'Weddings',description:'Wedding planning consultations and milestones.',icon:'💍',launchEnabled:true,defaultCategory:'Wedding Planning',defaultModules:professional,palette:palettes.rose,professional:'planner',service:'Planning Consultation',price:50,duration:60})],
+  ['event_planner', industry({key:'event_planner',category:'events',name:'Event Planner',shortName:'Events',description:'Event consultations and project scheduling.',icon:'🎉',launchEnabled:true,defaultCategory:'Event Planning',defaultModules:professional,palette:palettes.purple,professional:'planner',service:'Event Consultation',price:50,duration:60})],
+  ['venue_booking', industry({key:'venue_booking',category:'events',name:'Venue Booking',shortName:'Venues',description:'Venue tours, reservations and event dates.',icon:'🏛️',launchEnabled:true,defaultCategory:'Venue Services',defaultModules:[...core,'resources','forms','payments'],palette:palettes.purple,professional:'coordinator',service:'Venue Tour',price:0,duration:45})],
+];
 
-export const INDUSTRY_REGISTRY: Record<IndustryKey, IndustryConfig> = {
-  hair_salon: {
-    key: 'hair_salon', name: 'Hair Salon', shortName: 'Hair', icon: '✂️', launchEnabled: true,
-    description: 'Hair styling, colouring and salon services.', defaultCategory: 'Hair Services', palette: darkLuxury,
-    labels: { singular: 'hair salon', plural: 'hair salons', professional: 'stylist', professionals: 'stylists', bookingCta: 'Book Appointment', storefrontTagline: 'Professional hair care with effortless online booking.', serviceSectionDescription: 'Hair services, transparent pricing and real-time availability.', teamSectionTitle: 'Meet the Stylists' },
-    defaultServices: [
-      { name: 'Haircut', category: 'Hair Services', price: 25, duration: 30 },
-      { name: 'Wash & Blow Dry', category: 'Hair Services', price: 30, duration: 45 },
-      { name: 'Hair Colour', category: 'Colour Services', price: 65, duration: 90 },
-    ],
-  },
-  barber_shop: {
-    key: 'barber_shop', name: 'Barber Shop', shortName: 'Barber', icon: '💈', launchEnabled: true,
-    description: 'Cuts, grooming and barbering services.', defaultCategory: 'Barber Services', palette: darkLuxury,
-    labels: { singular: 'barber shop', plural: 'barber shops', professional: 'barber', professionals: 'barbers', bookingCta: 'Book a Cut', storefrontTagline: 'Precision grooming with simple online booking.', serviceSectionDescription: 'Cuts and grooming services with clear pricing.', teamSectionTitle: 'Meet the Barbers' },
-    defaultServices: [
-      { name: 'Standard Haircut', category: 'Barber Services', price: 25, duration: 30 },
-      { name: 'Beard Trim', category: 'Barber Services', price: 15, duration: 20 },
-      { name: 'Haircut & Beard', category: 'Barber Services', price: 35, duration: 45 },
-    ],
-  },
-  beauty_studio: {
-    key: 'beauty_studio', name: 'Beauty Studio', shortName: 'Beauty', icon: '🌸', launchEnabled: true,
-    description: 'Beauty, skincare, lashes and cosmetic services.', defaultCategory: 'Beauty Treatments', palette: roseElegant,
-    labels: { singular: 'beauty studio', plural: 'beauty studios', professional: 'beauty professional', professionals: 'beauty professionals', bookingCta: 'Book Treatment', storefrontTagline: 'Personalised beauty care in an elegant setting.', serviceSectionDescription: 'Beauty treatments with transparent pricing and easy booking.', teamSectionTitle: 'Meet the Beauty Team' },
-    defaultServices: [
-      { name: 'Facial Treatment', category: 'Beauty Treatments', price: 45, duration: 60 },
-      { name: 'Lash Extensions', category: 'Lashes', price: 55, duration: 75 },
-      { name: 'Waxing', category: 'Beauty Treatments', price: 25, duration: 30 },
-    ],
-  },
-  nail_salon: {
-    key: 'nail_salon', name: 'Nail Salon', shortName: 'Nails', icon: '💅', launchEnabled: false,
-    description: 'Manicure, pedicure and nail-art services.', defaultCategory: 'Nail Services', palette: roseElegant,
-    labels: { singular: 'nail salon', plural: 'nail salons', professional: 'nail technician', professionals: 'nail technicians', bookingCta: 'Book Nails', storefrontTagline: 'Beautiful nails, professionally delivered.', serviceSectionDescription: 'Nail services with clear prices and durations.', teamSectionTitle: 'Meet the Nail Team' },
-    defaultServices: [{ name: 'Gel Manicure', category: 'Nail Services', price: 30, duration: 45 }],
-  },
-  spa: {
-    key: 'spa', name: 'Spa', shortName: 'Spa', icon: '🧖', launchEnabled: false,
-    description: 'Relaxation, body treatments and spa experiences.', defaultCategory: 'Spa Treatments', palette: calmWellness,
-    labels: { singular: 'spa', plural: 'spas', professional: 'therapist', professionals: 'therapists', bookingCta: 'Book Experience', storefrontTagline: 'Time to restore, relax and recharge.', serviceSectionDescription: 'Spa experiences designed around your wellbeing.', teamSectionTitle: 'Meet the Therapists' },
-    defaultServices: [{ name: 'Signature Spa Treatment', category: 'Spa Treatments', price: 70, duration: 60 }],
-  },
-  massage_center: {
-    key: 'massage_center', name: 'Massage Center', shortName: 'Massage', icon: '💆', launchEnabled: false,
-    description: 'Therapeutic and relaxation massage services.', defaultCategory: 'Massage', palette: calmWellness,
-    labels: { singular: 'massage center', plural: 'massage centers', professional: 'massage therapist', professionals: 'massage therapists', bookingCta: 'Book Massage', storefrontTagline: 'Professional massage tailored to your needs.', serviceSectionDescription: 'Choose the treatment and duration that suits you.', teamSectionTitle: 'Meet the Therapists' },
-    defaultServices: [{ name: 'Relaxation Massage', category: 'Massage', price: 50, duration: 60 }],
-  },
-  wellness_center: {
-    key: 'wellness_center', name: 'Wellness Center', shortName: 'Wellness', icon: '🌿', launchEnabled: false,
-    description: 'Integrated wellness and personal care services.', defaultCategory: 'Wellness Services', palette: calmWellness,
-    labels: { singular: 'wellness center', plural: 'wellness centers', professional: 'wellness professional', professionals: 'wellness professionals', bookingCta: 'Book Session', storefrontTagline: 'Wellness services built around your goals.', serviceSectionDescription: 'Explore available wellness sessions.', teamSectionTitle: 'Meet the Wellness Team' },
-    defaultServices: [{ name: 'Wellness Consultation', category: 'Wellness Services', price: 40, duration: 45 }],
-  },
-  aesthetic_clinic: {
-    key: 'aesthetic_clinic', name: 'Aesthetic Clinic', shortName: 'Aesthetics', icon: '✨', launchEnabled: false,
-    description: 'Professional non-surgical aesthetic services.', defaultCategory: 'Aesthetic Treatments', palette: clinical,
-    labels: { singular: 'aesthetic clinic', plural: 'aesthetic clinics', professional: 'practitioner', professionals: 'practitioners', bookingCta: 'Book Consultation', storefrontTagline: 'Professional aesthetic care with a personalised approach.', serviceSectionDescription: 'Treatments and consultations with transparent booking.', teamSectionTitle: 'Meet the Practitioners' },
-    defaultServices: [{ name: 'Aesthetic Consultation', category: 'Consultations', price: 40, duration: 30 }],
-  },
-  tattoo_studio: {
-    key: 'tattoo_studio', name: 'Tattoo Studio', shortName: 'Tattoo', icon: '🖋️', launchEnabled: false,
-    description: 'Tattoo consultations, sessions and aftercare.', defaultCategory: 'Tattoo Services', palette: darkLuxury,
-    labels: { singular: 'tattoo studio', plural: 'tattoo studios', professional: 'artist', professionals: 'artists', bookingCta: 'Book Consultation', storefrontTagline: 'Original work, professional artists and simple consultation booking.', serviceSectionDescription: 'Consultations and studio services.', teamSectionTitle: 'Meet the Artists' },
-    defaultServices: [{ name: 'Tattoo Consultation', category: 'Tattoo Services', price: 0, duration: 30 }],
-  },
-  pet_grooming: {
-    key: 'pet_grooming', name: 'Pet Grooming', shortName: 'Grooming', icon: '🐾', launchEnabled: false,
-    description: 'Professional pet grooming and care appointments.', defaultCategory: 'Grooming Services', palette: clinical,
-    labels: { singular: 'pet grooming business', plural: 'pet grooming businesses', professional: 'groomer', professionals: 'groomers', bookingCta: 'Book Grooming', storefrontTagline: 'Professional grooming for happy, well-cared-for pets.', serviceSectionDescription: 'Grooming packages with clear pricing.', teamSectionTitle: 'Meet the Groomers' },
-    defaultServices: [{ name: 'Full Groom', category: 'Grooming Services', price: 40, duration: 60 }],
-  },
-  personal_training: {
-    key: 'personal_training', name: 'Personal Training Studio', shortName: 'Training', icon: '🏋️', launchEnabled: false,
-    description: 'Personal coaching, fitness sessions and programmes.', defaultCategory: 'Training Sessions', palette: energetic,
-    labels: { singular: 'training studio', plural: 'training studios', professional: 'trainer', professionals: 'trainers', bookingCta: 'Book Session', storefrontTagline: 'Focused coaching, measurable progress and easy scheduling.', serviceSectionDescription: 'Choose a training session that matches your goals.', teamSectionTitle: 'Meet the Trainers' },
-    defaultServices: [{ name: 'Personal Training Session', category: 'Training Sessions', price: 35, duration: 60 }],
-  },
-};
-
+export const INDUSTRY_REGISTRY = Object.fromEntries(entries) as Record<IndustryKey, IndustryConfig>;
 export const DEFAULT_INDUSTRY_KEY: IndustryKey = 'hair_salon';
-
-export function isIndustryKey(value: unknown): value is IndustryKey {
-  return typeof value === 'string' && value in INDUSTRY_REGISTRY;
-}
-
-export function getIndustryConfig(value: unknown): IndustryConfig {
-  return isIndustryKey(value) ? INDUSTRY_REGISTRY[value] : INDUSTRY_REGISTRY[DEFAULT_INDUSTRY_KEY];
-}
-
+export function isIndustryKey(value: unknown): value is IndustryKey { return typeof value === 'string' && value in INDUSTRY_REGISTRY; }
+export function getIndustryConfig(value: unknown): IndustryConfig { return isIndustryKey(value) ? INDUSTRY_REGISTRY[value] : INDUSTRY_REGISTRY[DEFAULT_INDUSTRY_KEY]; }
 export const LAUNCH_INDUSTRIES = Object.values(INDUSTRY_REGISTRY).filter((industry) => industry.launchEnabled);
+export function getIndustriesByCategory(category: IndustryConfig['category']) { return Object.values(INDUSTRY_REGISTRY).filter((industry) => industry.category === category); }

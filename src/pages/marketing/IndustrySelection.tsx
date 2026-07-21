@@ -1,257 +1,333 @@
+import React from 'react';
 import {
   ArrowRight,
   BarChart3,
   CalendarDays,
   Check,
-  Headphones,
+  ChevronDown,
   Menu,
+  PlayCircle,
   ShieldCheck,
   Sparkles,
   Store,
   Users,
+  X,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
 const SUPPORT_EMAIL = 'support@yourdomain.com';
 
-const solutions = [
+const productBenefits = [
   {
-    key: 'hair_salon',
-    eyebrow: 'Hair & Barber',
-    title: 'Built for exceptional hair businesses.',
-    description:
-      'Run appointments, team schedules, services, customers and your branded booking experience from one polished workspace.',
-    image:
-      'https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1200&q=85',
-    imageAlt: 'Modern professional hair salon interior',
-    highlights: ['Hair salons', 'Barber shops', 'Independent professionals'],
-    cta: 'Start with Hair & Barber',
+    icon: CalendarDays,
+    title: 'Scheduling that stays clear',
+    text: 'Daily, weekly and monthly views built for real service operations.',
   },
   {
-    key: 'beauty_studio',
-    eyebrow: 'Beauty & Aesthetics',
-    title: 'A complete platform for modern beauty studios.',
-    description:
-      'Create a premium customer journey for beauty, nails, wellness and aesthetic services while keeping operations organised.',
-    image:
-      'https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?auto=format&fit=crop&w=1200&q=85',
-    imageAlt: 'Professional beauty and skincare treatment',
-    highlights: ['Beauty studios', 'Nail salons', 'Aesthetic services'],
-    cta: 'Start with Beauty',
+    icon: Users,
+    title: 'Customers and teams together',
+    text: 'Keep profiles, staff availability and service history in one workspace.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Reports you can act on',
+    text: 'Understand revenue, appointments, customer growth and performance.',
+  },
+  {
+    icon: Store,
+    title: 'A branded online presence',
+    text: 'Give customers a polished place to discover and book your services.',
   },
 ];
 
 export default function IndustrySelection() {
-  const supportHref = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(
-    'Help choosing the right business setup'
-  )}&body=${encodeURIComponent(
-    'Hello,\n\nI am interested in the platform and would like help choosing the right setup for my business.\n\nBusiness type:\nBusiness name:\nCountry:\nQuestions:\n\nThank you.'
-  )}`;
+  const [menuOpen, setMenuOpen] = React.useState(false);
+  const supportHref = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Velliqo product enquiry')}`;
 
   return (
-    <div className="min-h-screen bg-[#f7f8fb] text-slate-950">
+    <div className="min-h-screen overflow-x-hidden bg-[#f7f8fc] text-slate-950">
       <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center gap-3">
-            <img
-              src="/brand/barber-saas-logo.jpg"
-              alt="Platform logo"
-              className="h-10 w-10 rounded-xl object-cover shadow-sm"
-            />
-            <div>
-              <div className="text-sm font-extrabold tracking-tight">BusinessOS</div>
-              <div className="text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
-                Beauty business platform
-              </div>
-            </div>
-          </Link>
+        <div className="mx-auto flex h-[72px] max-w-[1440px] items-center justify-between px-4 sm:px-6 lg:px-8">
+          <VelliqoBrand />
 
-          <nav className="hidden items-center gap-7 text-sm font-semibold text-slate-600 md:flex">
-            <a href="#solutions" className="transition hover:text-slate-950">Solutions</a>
-            <a href="#platform" className="transition hover:text-slate-950">Platform</a>
-            <a href="#support" className="transition hover:text-slate-950">Support</a>
+          <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-600 lg:flex">
+            <a href="#product" className="transition hover:text-slate-950">Product</a>
+            <Link to="/experience" className="transition hover:text-slate-950">Experience</Link>
+            <Link to="/why-velliqo" className="transition hover:text-slate-950">Why Velliqo?</Link>
+            <Link to="/pricing" className="transition hover:text-slate-950">Pricing</Link>
+            <a href="#trust" className="transition hover:text-slate-950">Security</a>
+            <a href={supportHref} className="transition hover:text-slate-950">Support</a>
           </nav>
 
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" className="hidden rounded-xl sm:inline-flex">
               <Link to="/sign-in">Business login</Link>
             </Button>
-            <Button asChild className="rounded-xl px-5">
-              <a href="#solutions">Start free</a>
+            <Button asChild className="hidden rounded-xl bg-violet-600 px-5 hover:bg-violet-700 sm:inline-flex">
+              <Link to="/business-types">Start free</Link>
             </Button>
-            <Button variant="ghost" size="icon" className="md:hidden" aria-label="Open navigation">
-              <Menu className="h-5 w-5" />
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="rounded-xl lg:hidden"
+              onClick={() => setMenuOpen((current) => !current)}
+              aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
+
+        {menuOpen && (
+          <div className="border-t bg-white px-4 py-4 lg:hidden">
+            <div className="mx-auto grid max-w-[1440px] gap-2">
+              {['product', 'trust'].map((item) => (
+                <a
+                  key={item}
+                  href={`#${item}`}
+                  className="rounded-xl px-3 py-2.5 text-sm font-semibold capitalize text-slate-700 hover:bg-slate-50"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {item}
+                </a>
+              ))}
+              <div className="grid gap-2">
+                <Link to="/experience" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Experience</Link>
+                <Link to="/why-velliqo" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Why Velliqo?</Link>
+                <Link to="/pricing" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50">Pricing</Link>
+              </div>
+              <div className="mt-2 grid grid-cols-2 gap-2">
+                <Button asChild variant="outline" className="rounded-xl"><Link to="/sign-in">Login</Link></Button>
+                <Button asChild className="rounded-xl bg-violet-600 hover:bg-violet-700"><Link to="/business-types">Start free</Link></Button>
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       <main>
         <section className="relative overflow-hidden border-b border-slate-200 bg-white">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(236,72,153,0.10),transparent_28%),radial-gradient(circle_at_85%_5%,rgba(234,179,8,0.12),transparent_26%)]" />
-          <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.08fr_0.92fr] lg:px-8 lg:py-20">
-            <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 shadow-sm">
-                <Sparkles className="h-4 w-4 text-pink-500" />
-                One platform. Configured for your business.
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_15%,rgba(124,58,237,0.16),transparent_29%),radial-gradient(circle_at_88%_8%,rgba(217,70,239,0.13),transparent_26%)]" />
+          <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-violet-50/70 to-transparent" />
+
+          <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[0.91fr_1.09fr] lg:px-8 lg:py-24">
+            <div className="max-w-2xl">
+              <div className="inline-flex items-center gap-2 rounded-full border border-violet-200 bg-white/80 px-3 py-1.5 text-xs font-bold text-violet-700 shadow-sm backdrop-blur">
+                <Sparkles className="h-4 w-4" />
+                One premium workspace for service businesses
               </div>
-              <h1 className="mt-6 max-w-4xl text-4xl font-extrabold leading-[1.02] tracking-[-0.045em] text-slate-950 sm:text-5xl lg:text-6xl">
-                Run your business.
-                <span className="block text-slate-400">Not your paperwork.</span>
+              <h1 className="mt-7 text-4xl font-extrabold leading-[1.01] tracking-[-0.055em] text-slate-950 sm:text-5xl lg:text-[4.35rem]">
+                Run every part of your business with confidence.
               </h1>
-              <p className="mt-6 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
-                Appointments, staff, customers, services, products, reports and a branded online storefront—managed from one secure workspace.
+              <p className="mt-6 max-w-xl text-base leading-7 text-slate-600 sm:text-lg">
+                Velliqo brings bookings, staff, customers, services, storefronts and reporting into one coordinated platform—designed to look professional from the first click.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button asChild size="lg" className="h-12 rounded-xl px-6">
-                  <a href="#solutions">Choose your solution <ArrowRight className="ml-2 h-4 w-4" /></a>
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                <Button asChild size="lg" className="h-12 rounded-xl bg-violet-600 px-6 hover:bg-violet-700">
+                  <Link to="/business-types">Find your business type <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
-                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl px-6">
-                  <Link to="/sign-in">Business login</Link>
+                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl bg-white px-6">
+                  <Link to="/experience"><PlayCircle className="mr-2 h-4 w-4" />Explore the experience</Link>
                 </Button>
               </div>
+
               <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-500">
                 <TrustItem text="14-day free trial" />
                 <TrustItem text="No card required" />
-                <TrustItem text="Secure multi-tenant platform" />
+                <TrustItem text="Cancel anytime" />
               </div>
             </div>
 
-            <div className="relative hidden lg:block">
-              <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 p-3 shadow-[0_30px_90px_rgba(15,23,42,0.18)]">
-                <img
-                  src="https://images.unsplash.com/photo-1600948836101-f9ffda59d250?auto=format&fit=crop&w=1400&q=85"
-                  alt="Premium beauty business workspace"
-                  className="h-[420px] w-full rounded-[1.45rem] object-cover opacity-90"
-                />
-                <div className="absolute inset-x-8 bottom-7 rounded-2xl border border-white/15 bg-black/55 p-4 text-white backdrop-blur-xl">
-                  <div className="grid grid-cols-3 gap-3">
-                    <HeroMetric icon={<CalendarDays className="h-4 w-4" />} value="24/7" label="Online booking" />
-                    <HeroMetric icon={<Users className="h-4 w-4" />} value="One" label="Team workspace" />
-                    <HeroMetric icon={<BarChart3 className="h-4 w-4" />} value="Live" label="Business insights" />
-                  </div>
-                </div>
-              </div>
-            </div>
+            <HeroProductComposition />
           </div>
         </section>
 
-        <section id="solutions" className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8 lg:py-20">
-          <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <div className="text-xs font-bold uppercase tracking-[0.2em] text-pink-500">Solutions</div>
-              <h2 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-4xl">
-                Choose the setup that matches your business.
-              </h2>
-            </div>
-            <p className="max-w-xl text-sm leading-6 text-slate-600 md:text-right">
-              Every solution uses the same powerful platform, automatically configured with the right branding, terminology and starting services.
-            </p>
+        <section id="trust" className="border-b border-slate-200 bg-slate-950 text-white">
+          <div className="mx-auto grid max-w-[1440px] gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
+            <TrustFeature icon={<ShieldCheck className="h-5 w-5" />} title="Secure workspaces" text="Business data is separated by design." />
+            <TrustFeature icon={<Check className="h-5 w-5" />} title="Guided onboarding" text="Start with a setup suited to your business." />
+            <TrustFeature icon={<Users className="h-5 w-5" />} title="Built for teams" text="Coordinate owners, staff and customers." />
+            <TrustFeature icon={<BarChart3 className="h-5 w-5" />} title="Operational clarity" text="See what is happening without guesswork." />
           </div>
+        </section>
 
-          <div className="mt-9 grid gap-5 lg:grid-cols-3">
-            {solutions.map((solution) => (
-              <article key={solution.key} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-                <div className="relative h-44 overflow-hidden">
-                  <img src={solution.image} alt={solution.imageAlt} className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent" />
-                  <div className="absolute bottom-4 left-4 rounded-full border border-white/20 bg-black/35 px-3 py-1.5 text-xs font-bold text-white backdrop-blur">
-                    {solution.eyebrow}
-                  </div>
-                </div>
-                <div className="p-5">
-                  <h3 className="text-xl font-extrabold leading-tight tracking-tight">{solution.title}</h3>
-                  <p className="mt-3 min-h-[66px] text-sm leading-6 text-slate-600">{solution.description}</p>
-                  <div className="mt-4 space-y-2">
-                    {solution.highlights.map((highlight) => (
-                      <div key={highlight} className="flex items-center gap-2 text-sm font-semibold text-slate-700">
-                        <span className="flex h-5 w-5 items-center justify-center rounded-full bg-slate-100"><Check className="h-3 w-3" /></span>
-                        {highlight}
-                      </div>
-                    ))}
-                  </div>
-                  <Button asChild className="mt-5 h-11 w-full rounded-xl">
-                    <Link to={`/sign-up?industry=${solution.key}`}>{solution.cta}<ArrowRight className="ml-2 h-4 w-4" /></Link>
-                  </Button>
-                </div>
+        <section id="product" className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <SectionHeading
+            eyebrow="The Velliqo product"
+            title="A coordinated system—not a collection of disconnected tools."
+            text="Every screen is designed to work together, so the information your team enters once becomes useful across scheduling, CRM and reporting."
+          />
+
+          <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+            {productBenefits.map(({ icon: Icon, title, text }) => (
+              <article key={title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_12px_40px_rgba(15,23,42,.06)]">
+                <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><Icon className="h-5 w-5" /></div>
+                <h3 className="mt-5 text-lg font-extrabold tracking-tight">{title}</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
               </article>
             ))}
-
-            <article id="support" className="group overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 text-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
-              <div className="relative h-44 overflow-hidden">
-                <img
-                  src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=85"
-                  alt="Professional business support consultation"
-                  className="h-full w-full object-cover opacity-65 transition duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/35 to-transparent" />
-                <div className="absolute bottom-4 left-4 flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-bold backdrop-blur">
-                  <Headphones className="h-4 w-4" /> Personal support
-                </div>
-              </div>
-              <div className="p-5">
-                <h3 className="text-xl font-extrabold tracking-tight">Not sure which setup fits?</h3>
-                <p className="mt-3 min-h-[66px] text-sm leading-6 text-white/65">
-                  Tell us how your business operates and we will help you choose the right starting configuration.
-                </p>
-                <div className="mt-4 rounded-xl border border-white/10 bg-white/[0.06] p-3 text-xs leading-5 text-white/70">
-                  The button creates a reviewable email draft. Nothing is sent automatically.
-                </div>
-                <Button asChild variant="secondary" className="mt-5 h-11 w-full rounded-xl bg-white text-slate-950 hover:bg-white/90">
-                  <a href={supportHref}>Contact support <ArrowRight className="ml-2 h-4 w-4" /></a>
-                </Button>
-              </div>
-            </article>
           </div>
         </section>
 
-        <section id="platform" className="border-y border-slate-200 bg-white">
-          <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              <PlatformFeature icon={<CalendarDays className="h-5 w-5" />} title="Smart scheduling" text="Real availability, staff calendars and online booking." />
-              <PlatformFeature icon={<Store className="h-5 w-5" />} title="Branded storefront" text="A polished public page with bookings, gallery and updates." />
-              <PlatformFeature icon={<BarChart3 className="h-5 w-5" />} title="Business reporting" text="Clear revenue, customer, service and staff performance." />
-              <PlatformFeature icon={<ShieldCheck className="h-5 w-5" />} title="Secure by design" text="Each business remains isolated inside the multi-tenant platform." />
+        <section id="experience" className="overflow-hidden border-y border-slate-200 bg-white">
+          <div className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+            <SectionHeading
+              eyebrow="Responsive by design"
+              title="Professional on desktop. Practical on tablet. Clear on mobile."
+              text="Your team can move from the front desk to the treatment room or the road without losing the context of the working day."
+              centered
+            />
+            <ResponsiveShowcase />
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-[1440px] px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div className="order-2 lg:order-1">
+              <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-2 shadow-[0_25px_80px_rgba(15,23,42,.12)]">
+                <img src="/marketing/product/reports-desktop.png" alt="Velliqo reporting dashboard" className="w-full rounded-[1.55rem]" />
+              </div>
             </div>
+            <div className="order-1 lg:order-2 lg:pl-10">
+              <div className="text-xs font-extrabold uppercase tracking-[0.22em] text-violet-600">Business intelligence</div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.035em] sm:text-4xl">Make decisions from real operating data.</h2>
+              <p className="mt-5 text-base leading-7 text-slate-600">Track revenue, appointment volume, completion rates and customer growth without building spreadsheets after closing time.</p>
+              <div className="mt-7 space-y-4">
+                <FeatureLine title="Flexible reporting periods" text="Review the week, month or any custom period." />
+                <FeatureLine title="Practical performance metrics" text="See the numbers that influence staffing and growth." />
+                <FeatureLine title="Export-ready information" text="Prepare business data for further review when needed." />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-y border-slate-200 bg-[#f2efff]">
+          <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[0.78fr_1.22fr] lg:px-8 lg:py-24">
+            <div>
+              <div className="text-xs font-extrabold uppercase tracking-[0.22em] text-violet-600">A guided first experience</div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.035em] sm:text-4xl">Your workspace starts with the right structure.</h2>
+              <p className="mt-5 text-base leading-7 text-slate-600">Choose your business type first. Velliqo then prepares relevant terminology, starter services and modules before you create the workspace.</p>
+              <Button asChild size="lg" className="mt-7 h-12 rounded-xl bg-violet-600 px-6 hover:bg-violet-700">
+                <Link to="/business-types">Find your business type <ArrowRight className="ml-2 h-4 w-4" /></Link>
+              </Button>
+            </div>
+            <div className="overflow-hidden rounded-[2rem] border border-violet-200 bg-white p-3 shadow-[0_30px_90px_rgba(76,29,149,.16)]">
+              <img src="/marketing/product/onboarding-services.png" alt="Velliqo guided service setup" className="w-full rounded-[1.45rem]" />
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" className="bg-white">
+          <div className="mx-auto max-w-5xl px-4 py-16 text-center sm:px-6 lg:py-24">
+            <div className="text-xs font-extrabold uppercase tracking-[0.22em] text-violet-600">Straightforward pricing</div>
+            <h2 className="mt-4 text-3xl font-extrabold tracking-[-0.035em] sm:text-4xl">Start with the complete platform.</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-600">No complicated feature maze during your trial. Explore how Velliqo fits your operation before committing.</p>
+
+            <div className="mx-auto mt-10 max-w-lg rounded-[2rem] border border-violet-200 bg-gradient-to-b from-violet-50 to-white p-7 text-left shadow-[0_28px_80px_rgba(76,29,149,.14)] sm:p-9">
+              <div className="flex items-center justify-between gap-4"><div><div className="text-sm font-bold text-violet-700">Velliqo complete</div><div className="mt-1 text-xs text-slate-500">Introductory subscription</div></div><span className="rounded-full bg-violet-100 px-3 py-1 text-xs font-bold text-violet-700">14 days free</span></div>
+              <div className="mt-6 text-5xl font-extrabold tracking-tight">€19.99<span className="text-base font-semibold text-slate-500"> / month</span></div>
+              <div className="mt-6 space-y-3">
+                {['Scheduling and appointments', 'Customers and staff', 'Reports and insights', 'Online business presence', 'Future product improvements'].map((item) => <TrustItem key={item} text={item} />)}
+              </div>
+              <Button asChild className="mt-7 h-12 w-full rounded-xl bg-violet-600 hover:bg-violet-700"><Link to="/business-types">Start free</Link></Button>
+              <p className="mt-4 text-center text-[11px] leading-5 text-slate-500">Commercial limits and final launch terms will be clearly confirmed before payment.</p>
+            </div>
+          </div>
+        </section>
+
+        <section className="border-t border-slate-200 bg-slate-950 text-white">
+          <div className="mx-auto max-w-[1440px] px-4 py-16 text-center sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Build a calmer, more professional operation.</h2>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/60">Select your business type and begin a guided Velliqo setup.</p>
+            <Button asChild size="lg" className="mt-7 h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Find your business type <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
           </div>
         </section>
       </main>
 
-      <footer className="bg-slate-950 text-white">
-        <div className="mx-auto flex max-w-7xl flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
-          <div>
-            <div className="font-extrabold">BusinessOS</div>
-            <div className="mt-1 text-xs text-white/45">The operating platform for modern beauty businesses.</div>
-          </div>
-          <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/60">
-            <a href="#solutions" className="hover:text-white">Solutions</a>
-            <a href="#platform" className="hover:text-white">Features</a>
+      <footer className="border-t border-white/10 bg-slate-950 text-white">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+          <VelliqoBrand dark />
+          <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-white/55">
+            <a href="#product" className="hover:text-white">Product</a>
+            <Link to="/business-types" className="hover:text-white">Business types</Link>
+            <Link to="/why-velliqo" className="hover:text-white">Why Velliqo?</Link>
+            <Link to="/pricing" className="hover:text-white">Pricing</Link>
             <a href={supportHref} className="hover:text-white">Support</a>
-            <span>Privacy</span>
-            <span>Terms</span>
           </div>
-          <div className="text-xs text-white/40">© 2026 BusinessOS</div>
+          <div className="text-xs text-white/40">© 2026 Velliqo</div>
         </div>
       </footer>
     </div>
   );
 }
 
-function TrustItem({ text }: { text: string }) {
-  return <span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-500" />{text}</span>;
-}
-
-function HeroMetric({ icon, value, label }: { icon: React.ReactNode; value: string; label: string }) {
-  return <div><div className="flex items-center gap-2 text-sm font-bold">{icon}{value}</div><div className="mt-1 text-[10px] text-white/55">{label}</div></div>;
-}
-
-function PlatformFeature({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+function VelliqoBrand({ dark = false }: { dark?: boolean }) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-[#fafbfc] p-5">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 text-white">{icon}</div>
-      <h3 className="mt-4 font-extrabold">{title}</h3>
-      <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+    <Link to="/" className="flex items-center gap-3" aria-label="Velliqo home">
+      <img src="/brand/velliqo-logo.png" alt="Velliqo logo" className="h-11 w-11 rounded-xl object-contain" />
+      <div>
+        <div className={`text-base font-extrabold tracking-tight ${dark ? 'text-white' : 'text-slate-950'}`}>Velliqo</div>
+        <div className={`text-[10px] font-semibold uppercase tracking-[0.18em] ${dark ? 'text-violet-300' : 'text-violet-600'}`}>Book. Manage. Grow.</div>
+      </div>
+    </Link>
+  );
+}
+
+function TrustItem({ text }: { text: string }) {
+  return <div className="flex items-center gap-2 text-sm font-semibold text-slate-600"><span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-3 w-3" /></span>{text}</div>;
+}
+
+function TrustFeature({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) {
+  return <div className="rounded-2xl border border-white/10 bg-white/[0.05] p-5"><div className="text-violet-300">{icon}</div><h3 className="mt-3 text-sm font-bold">{title}</h3><p className="mt-1 text-xs leading-5 text-white/50">{text}</p></div>;
+}
+
+function SectionHeading({ eyebrow, title, text, centered = false }: { eyebrow: string; title: string; text: string; centered?: boolean }) {
+  return <div className={centered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}><div className="text-xs font-extrabold uppercase tracking-[0.22em] text-violet-600">{eyebrow}</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-0.035em] sm:text-4xl">{title}</h2><p className="mt-4 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">{text}</p></div>;
+}
+
+function HeroProductComposition() {
+  return (
+    <div className="relative mx-auto w-full max-w-[760px] pb-8 pt-3 lg:pb-12">
+      <div className="absolute -left-8 top-20 hidden h-40 w-40 rounded-full bg-violet-300/30 blur-3xl sm:block" />
+      <div className="absolute -right-8 bottom-10 hidden h-44 w-44 rounded-full bg-fuchsia-300/30 blur-3xl sm:block" />
+      <div className="relative overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-950 p-2 shadow-[0_35px_100px_rgba(76,29,149,.24)] sm:rounded-[2.25rem] sm:p-3">
+        <div className="flex h-7 items-center gap-1.5 px-3"><span className="h-2.5 w-2.5 rounded-full bg-rose-400"/><span className="h-2.5 w-2.5 rounded-full bg-amber-300"/><span className="h-2.5 w-2.5 rounded-full bg-emerald-400"/></div>
+        <img src="/marketing/product/dashboard-desktop.png" alt="Velliqo dashboard on desktop" className="w-full rounded-[1.2rem] border border-white/10" />
+      </div>
+      <div className="absolute -bottom-1 -left-2 hidden w-[44%] overflow-hidden rounded-[1.6rem] border-[7px] border-slate-950 bg-white shadow-[0_22px_60px_rgba(15,23,42,.25)] md:block">
+        <img src="/marketing/product/calendar-mobile.png" alt="Velliqo calendar on mobile" className="w-full" />
+      </div>
+      <div className="absolute -bottom-5 right-4 hidden w-[48%] overflow-hidden rounded-[1.5rem] border-[7px] border-slate-950 bg-white shadow-[0_22px_60px_rgba(15,23,42,.22)] xl:block">
+        <img src="/marketing/product/reports-desktop.png" alt="Velliqo reports preview" className="w-full" />
+      </div>
     </div>
   );
+}
+
+function ResponsiveShowcase() {
+  return (
+    <div className="relative mx-auto mt-14 min-h-[490px] max-w-6xl sm:min-h-[650px] lg:min-h-[720px]">
+      <div className="absolute left-1/2 top-0 w-[96%] -translate-x-1/2 overflow-hidden rounded-[1.6rem] border-[8px] border-slate-950 bg-slate-950 shadow-[0_35px_100px_rgba(15,23,42,.22)] sm:rounded-[2.1rem] sm:border-[11px] lg:w-[82%]">
+        <div className="flex h-7 items-center justify-center"><span className="h-1.5 w-16 rounded-full bg-white/20" /></div>
+        <img src="/marketing/product/calendar-workspace.png" alt="Velliqo calendar desktop layout" className="w-full rounded-b-[1rem]" />
+      </div>
+
+      <div className="absolute bottom-0 left-0 hidden w-[50%] overflow-hidden rounded-[1.7rem] border-[9px] border-slate-900 bg-white shadow-[0_28px_80px_rgba(15,23,42,.24)] md:block lg:left-[1%] lg:w-[46%]">
+        <div className="flex h-6 items-center justify-center bg-slate-900"><span className="h-1 w-10 rounded-full bg-white/30" /></div>
+        <img src="/marketing/product/today-schedule-desktop.png" alt="Velliqo schedule tablet layout" className="w-full" />
+      </div>
+
+      <div className="absolute bottom-0 right-[5%] w-[31%] min-w-[128px] overflow-hidden rounded-[2rem] border-[8px] border-slate-950 bg-white shadow-[0_28px_80px_rgba(15,23,42,.28)] sm:w-[26%] lg:right-[8%] lg:w-[22%]">
+        <div className="flex h-6 items-center justify-center bg-slate-950"><span className="h-1 w-9 rounded-full bg-white/30" /></div>
+        <img src="/marketing/product/calendar-mobile.png" alt="Velliqo mobile calendar layout" className="w-full" />
+      </div>
+    </div>
+  );
+}
+
+function FeatureLine({ title, text }: { title: string; text: string }) {
+  return <div className="flex gap-3"><span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-700"><Check className="h-3.5 w-3.5" /></span><div><div className="text-sm font-bold text-slate-900">{title}</div><p className="mt-1 text-sm leading-6 text-slate-600">{text}</p></div></div>;
 }

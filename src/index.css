@@ -8,60 +8,51 @@
 @layer base {
   :root {
     --radius: 0.875rem;
-    --background: 210 33% 98%;
+    --background: 250 33% 98%;
     --foreground: 222 47% 11%;
     --card: 0 0% 100%;
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 45 70% 50%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 215 28% 95%;
+    --primary: 267 84% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 250 28% 95%;
     --secondary-foreground: 222 47% 11%;
-    --muted: 214 32% 96%;
+    --muted: 250 25% 96%;
     --muted-foreground: 215 16% 44%;
-    --accent: 45 85% 94%;
-    --accent-foreground: 40 75% 30%;
+    --accent: 267 90% 96%;
+    --accent-foreground: 267 60% 35%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 214 27% 89%;
-    --input: 214 27% 89%;
-    --ring: 45 70% 50%;
+    --border: 250 24% 89%;
+    --input: 250 24% 89%;
+    --ring: 267 84% 60%;
     --success: 142 70% 38%;
     --warning: 38 92% 50%;
     --info: 217 91% 60%;
-    --chart-1: 45 70% 50%;
+    --chart-1: 267 84% 60%;
     --chart-2: 217 91% 60%;
     --chart-3: 142 70% 38%;
-    --chart-4: 262 83% 58%;
-    --chart-5: 0 72% 51%;
-    --sidebar-background: 222 47% 9%;
-    --sidebar-foreground: 214 32% 91%;
-    --sidebar-primary: 45 70% 50%;
-    --sidebar-primary-foreground: 222 47% 11%;
-    --sidebar-accent: 222 34% 15%;
+    --chart-4: 338 72% 62%;
+    --chart-5: 24 90% 54%;
+    --sidebar-background: 252 35% 10%;
+    --sidebar-foreground: 250 25% 94%;
+    --sidebar-primary: 267 84% 60%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 252 27% 17%;
     --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 222 28% 18%;
-    --sidebar-ring: 45 70% 50%;
-    --shadow-card: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(15,23,42,.05);
-    --shadow-hover: 0 12px 34px rgba(15,23,42,.11);
+    --sidebar-border: 252 22% 22%;
+    --sidebar-ring: 267 84% 60%;
+    --shadow-card: 0 1px 2px rgba(15,23,42,.04), 0 8px 24px rgba(76,29,149,.06);
+    --shadow-hover: 0 14px 38px rgba(76,29,149,.14);
   }
 
   * { @apply border-border; }
-
   html { scroll-behavior: smooth; }
-
-  body {
-    @apply min-h-screen bg-background text-foreground antialiased;
-    font-family: 'Montserrat', sans-serif;
-  }
-
-  h1,h2,h3,h4,h5,h6 {
-    font-family: 'Montserrat', sans-serif;
-    @apply tracking-tight;
-  }
-
+  body { @apply min-h-screen bg-background text-foreground antialiased; font-family: 'Montserrat', sans-serif; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; @apply tracking-tight; }
   button,input,textarea,select { font: inherit; }
+  ::selection { background: hsl(var(--primary) / .20); }
 }
 
 @layer components {
@@ -78,7 +69,8 @@
   .scrollbar-subtle::-webkit-scrollbar-thumb { border-radius: 9999px; background: hsl(var(--border)); }
 }
 
-/* Industry theme variables are applied by IndustryThemeRoot. */
-[data-industry] {
-  transition: background-color 180ms ease, color 180ms ease;
+[data-industry] { transition: background-color 180ms ease, color 180ms ease; }
+
+@layer components {
+  .h-13 { height: 3.25rem; }
 }
