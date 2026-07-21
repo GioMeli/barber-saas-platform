@@ -10,7 +10,7 @@
 | Services | Complete | Owner Services module localized in EN, EL, DE, ES and TR. |
 | Products | Complete | Owner Products & Inventory module localized in EN, EL, DE, ES and TR. |
 | Reports | Complete | Business Intelligence reports, filters, metrics, charts, tables, statuses and CSV export localized in EN, EL, DE, ES and TR. |
-| Storefront | Pending | |
-| Public booking | Pending | |
-| Validation and notifications | In progress | Staff module complete; global audit pending. |
+| Storefront | Complete | Owner Storefront Studio, public store home, responsive navigation, customer access modal, QR sharing and image uploader localized in EN, EL, DE, ES and TR. |
+| Public booking | Complete | Multi-service flow, staff selection, availability, closures, customer details, confirmation, calendar export and mobile summary localized in EN, EL, DE, ES and TR. |
+| Validation and notifications | In progress | Translation parity checker added; final owner, customer, marketing and email audit remains. |
 | Dynamic business content | Pending | Requires data-model design. |

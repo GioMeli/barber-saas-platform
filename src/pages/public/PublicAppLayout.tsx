@@ -22,6 +22,7 @@ import { IndustryThemeRoot } from '@/theme';
 import { getIndustryConfig } from '@/config/industries';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -36,6 +37,7 @@ export default function PublicAppLayout() {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, profile } = useAuth();
+  const { t } = useTranslation();
 
   const [business, setBusiness] = useState<any>(null);
   const [loading, setLoading] = useState(true);
@@ -105,7 +107,7 @@ export default function PublicAppLayout() {
       });
     } catch (error: any) {
       console.error('Public business error:', error);
-      toast.error(error?.message || 'Unable to load this store');
+      toast.error(t('storefront.public.errors.loadStore'));
       setBusiness(null);
     } finally {
       setLoading(false);
@@ -121,7 +123,8 @@ export default function PublicAppLayout() {
     });
 
     if (error) {
-      toast.error(error.message || 'Could not connect your account to this store.');
+      console.error('Customer store connection error:', error);
+      toast.error(t('storefront.public.messages.joinError'));
       return false;
     }
 
@@ -137,12 +140,12 @@ export default function PublicAppLayout() {
 
   const handleAuth = async () => {
     if (!email.trim() || !password) {
-      toast.error('Email and password are required.');
+      toast.error(t('storefront.public.validation.credentialsRequired'));
       return;
     }
 
     if (authMode === 'signup' && !name.trim()) {
-      toast.error('Full name is required.');
+      toast.error(t('storefront.public.validation.fullNameRequired'));
       return;
     }
 
@@ -170,13 +173,11 @@ export default function PublicAppLayout() {
           const joined = await joinCurrentBusiness(phone.trim() || null);
           if (!joined) return;
 
-          toast.success('Customer account created.');
+          toast.success(t('storefront.public.messages.accountCreated'));
           setAuthOpen(false);
           navigate(`/app/${business.slug}/account`);
         } else {
-          toast.success(
-            'Account created. Confirm your email, then return to this store.'
-          );
+          toast.success(t('storefront.public.messages.accountCreatedConfirm'));
           setAuthOpen(false);
         }
       } else {
@@ -190,12 +191,13 @@ export default function PublicAppLayout() {
         const joined = await joinCurrentBusiness(phone.trim() || null);
         if (!joined) return;
 
-        toast.success('Signed in successfully.');
+        toast.success(t('storefront.public.messages.signedIn'));
         setAuthOpen(false);
         navigate(`/app/${business.slug}/account`);
       }
     } catch (error: any) {
-      toast.error(error.message || 'Authentication failed.');
+      console.error('Customer authentication error:', error);
+      toast.error(t('storefront.public.messages.authenticationFailed'));
     } finally {
       setAuthLoading(false);
     }
@@ -203,15 +205,15 @@ export default function PublicAppLayout() {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    toast.success('Signed out.');
+    toast.success(t('storefront.public.messages.signedOut'));
     navigate(`/app/${business.slug}`);
   };
 
   const navItems = [
-    { label: 'Store', to: `/app/${business?.slug ?? slug}` },
-    { label: 'Book', to: `/app/${business?.slug ?? slug}/book` },
+    { label: t('storefront.public.navigation.store'), to: `/app/${business?.slug ?? slug}` },
+    { label: t('storefront.public.navigation.book'), to: `/app/${business?.slug ?? slug}/book` },
     ...(user
-      ? [{ label: 'My Account', to: `/app/${business?.slug ?? slug}/account` }]
+      ? [{ label: t('storefront.public.navigation.myAccount'), to: `/app/${business?.slug ?? slug}/account` }]
       : []),
   ];
 
@@ -220,7 +222,7 @@ export default function PublicAppLayout() {
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-center">
           <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-muted border-t-primary" />
-          <div className="mt-4 text-sm text-muted-foreground">Loading store...</div>
+          <div className="mt-4 text-sm text-muted-foreground">{t('storefront.public.loading')}</div>
         </div>
       </div>
     );
@@ -233,9 +235,9 @@ export default function PublicAppLayout() {
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
             <Scissors className="h-7 w-7 text-muted-foreground" />
           </div>
-          <h1 className="mt-5 text-2xl font-bold">Store not found</h1>
+          <h1 className="mt-5 text-2xl font-bold">{t('storefront.public.notFound.title')}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            This store link is unavailable or no longer active.
+            {t('storefront.public.notFound.description')}
           </p>
         </div>
       </div>
@@ -268,7 +270,7 @@ export default function PublicAppLayout() {
             <div className="min-w-0">
               <div className="truncate font-bold">{business.name}</div>
               <div className="hidden truncate text-xs text-muted-foreground sm:block">
-                {business.city || business.address || 'Online booking'}
+                {business.city || business.address || t('storefront.public.status.onlineBooking')}
               </div>
             </div>
           </Link>
@@ -303,10 +305,10 @@ export default function PublicAppLayout() {
               <>
                 <Button variant="ghost" onClick={() => openAuth('signin')}>
                   <LogIn className="mr-2 h-4 w-4" />
-                  Sign In
+                  {t('storefront.public.auth.signIn')}
                 </Button>
                 <Button onClick={() => openAuth('signup')}>
-                  Create Account
+                  {t('storefront.public.auth.createAccount')}
                 </Button>
               </>
             ) : (
@@ -314,10 +316,10 @@ export default function PublicAppLayout() {
                 <Button asChild variant="outline">
                   <Link to={`/app/${business.slug}/account`}>
                     <UserCircle className="mr-2 h-4 w-4" />
-                    {profile?.full_name || 'My Account'}
+                    {profile?.full_name || t('storefront.public.navigation.myAccount')}
                   </Link>
                 </Button>
-                <Button variant="ghost" size="icon" onClick={handleSignOut}>
+                <Button variant="ghost" size="icon" aria-label={t('storefront.public.accessibility.signOut')} title={t('storefront.public.accessibility.signOut')} onClick={handleSignOut}>
                   <LogOut className="h-4 w-4" />
                 </Button>
               </>
@@ -329,6 +331,7 @@ export default function PublicAppLayout() {
             size="icon"
             className="rounded-xl md:hidden"
             onClick={() => setMobileMenuOpen((current) => !current)}
+            aria-label={t(mobileMenuOpen ? 'storefront.public.accessibility.closeMenu' : 'storefront.public.accessibility.openMenu')}
           >
             {mobileMenuOpen ? (
               <X className="h-5 w-5" />
@@ -354,15 +357,15 @@ export default function PublicAppLayout() {
               {!user ? (
                 <div className="grid grid-cols-2 gap-2 pt-2">
                   <Button variant="outline" onClick={() => openAuth('signin')}>
-                    Sign In
+                    {t('storefront.public.auth.signIn')}
                   </Button>
                   <Button onClick={() => openAuth('signup')}>
-                    Create Account
+                    {t('storefront.public.auth.createAccount')}
                   </Button>
                 </div>
               ) : (
                 <Button variant="outline" className="w-full" onClick={handleSignOut}>
-                  Sign Out
+                  {t('storefront.public.accessibility.signOut')}
                 </Button>
               )}
 
@@ -390,7 +393,7 @@ export default function PublicAppLayout() {
           <Button asChild className="h-12 w-full rounded-xl shadow-lg">
             <Link to={`/app/${business.slug}/book`}>
               <CalendarDays className="mr-2 h-5 w-5" />
-              Book Appointment
+              {t('storefront.public.actions.bookAppointment')}
             </Link>
           </Button>
         </div>
@@ -427,42 +430,40 @@ export default function PublicAppLayout() {
                     <div>
                       <div className="font-bold">{business.name}</div>
                       <div className="text-xs text-white/55">
-                        Customer account
+                        {t('storefront.public.auth.customerAccount')}
                       </div>
                     </div>
                   </div>
 
                   <h2 className="mt-12 text-3xl font-bold leading-tight">
-                    Your appointments and store experience in one place.
+                    {t('storefront.public.auth.heroTitle')}
                   </h2>
                   <p className="mt-4 text-sm leading-7 text-white/65">
-                    Create an optional account for faster bookings, appointment
-                    history and updates from {business.name}.
+                    {t('storefront.public.auth.heroDescription', { business: business.name })}
                   </p>
 
                   <div className="mt-8 space-y-4">
                     <CustomerBenefit
                       icon={<Clock3 className="h-5 w-5" />}
-                      title="Faster booking"
-                      text="Reuse your saved customer information."
+                      title={t('storefront.public.auth.benefits.fasterTitle')}
+                      text={t('storefront.public.auth.benefits.fasterText')}
                     />
                     <CustomerBenefit
                       icon={<CalendarDays className="h-5 w-5" />}
-                      title="Upcoming appointments"
-                      text="See your next visits at this specific store."
+                      title={t('storefront.public.auth.benefits.upcomingTitle')}
+                      text={t('storefront.public.auth.benefits.upcomingText')}
                     />
                     <CustomerBenefit
                       icon={<History className="h-5 w-5" />}
-                      title="Appointment history"
-                      text="Keep a clear record of previous bookings."
+                      title={t('storefront.public.auth.benefits.historyTitle')}
+                      text={t('storefront.public.auth.benefits.historyText')}
                     />
                   </div>
                 </div>
 
                 <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 text-xs leading-5 text-white/60 backdrop-blur">
                   <ShieldCheck className="mb-2 h-5 w-5 text-primary" />
-                  Your customer account is connected to this store. Guest
-                  booking remains available without registration.
+                  {t('storefront.public.auth.privacyNote')}
                 </div>
               </div>
             </section>
@@ -484,27 +485,27 @@ export default function PublicAppLayout() {
                   <div>
                     <div className="font-bold">{business.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      Customer access
+                      {t('storefront.public.auth.customerAccess')}
                     </div>
                   </div>
                 </div>
 
                 <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
                   {authMode === 'signin'
-                    ? 'Customer sign in'
-                    : 'Customer registration'}
+                    ? t('storefront.public.auth.signInEyebrow')
+                    : t('storefront.public.auth.signUpEyebrow')}
                 </div>
 
                 <DialogTitle className="mt-2 text-3xl">
                   {authMode === 'signin'
-                    ? `Welcome back to ${business.name}`
-                    : `Create your ${business.name} account`}
+                    ? t('storefront.public.auth.welcomeBack', { business: business.name })
+                    : t('storefront.public.auth.createBusinessAccount', { business: business.name })}
                 </DialogTitle>
 
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
                   {authMode === 'signin'
-                    ? 'Access your upcoming appointments, history and customer profile.'
-                    : 'Create an optional customer account for this specific store.'}
+                    ? t('storefront.public.auth.signInDescription')
+                    : t('storefront.public.auth.signUpDescription')}
                 </p>
               </DialogHeader>
 
@@ -518,7 +519,7 @@ export default function PublicAppLayout() {
                       : 'text-muted-foreground'
                   }`}
                 >
-                  Sign In
+                  {t('storefront.public.auth.signIn')}
                 </button>
                 <button
                   type="button"
@@ -529,7 +530,7 @@ export default function PublicAppLayout() {
                       : 'text-muted-foreground'
                   }`}
                 >
-                  Create Account
+                  {t('storefront.public.auth.createAccount')}
                 </button>
               </div>
 
@@ -537,7 +538,7 @@ export default function PublicAppLayout() {
                 {authMode === 'signup' && (
                   <>
                     <div className="space-y-2">
-                      <Label htmlFor="customer_name">Full Name</Label>
+                      <Label htmlFor="customer_name">{t('storefront.public.auth.fullName')}</Label>
                       <Input
                         id="customer_name"
                         autoComplete="name"
@@ -548,7 +549,7 @@ export default function PublicAppLayout() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="customer_phone">Phone</Label>
+                      <Label htmlFor="customer_phone">{t('storefront.public.auth.phone')}</Label>
                       <Input
                         id="customer_phone"
                         type="tel"
@@ -563,7 +564,7 @@ export default function PublicAppLayout() {
                 )}
 
                 <div className="space-y-2">
-                  <Label htmlFor="customer_email">Email</Label>
+                  <Label htmlFor="customer_email">{t('storefront.public.auth.email')}</Label>
                   <Input
                     id="customer_email"
                     type="email"
@@ -576,7 +577,7 @@ export default function PublicAppLayout() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="customer_password">Password</Label>
+                  <Label htmlFor="customer_password">{t('storefront.public.auth.password')}</Label>
                   <Input
                     id="customer_password"
                     type="password"
@@ -596,8 +597,7 @@ export default function PublicAppLayout() {
                     <div className="flex items-start gap-3">
                       <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
                       <p className="text-xs leading-5 text-muted-foreground">
-                        This account is linked to {business.name}. It gives you
-                        appointment history and faster booking at this store.
+                        {t('storefront.public.auth.accountLinkNote', { business: business.name })}
                       </p>
                     </div>
                   </div>
@@ -609,10 +609,10 @@ export default function PublicAppLayout() {
                   onClick={handleAuth}
                 >
                   {authLoading
-                    ? 'Please wait...'
+                    ? t('storefront.public.auth.pleaseWait')
                     : authMode === 'signin'
-                      ? 'Sign In to My Account'
-                      : 'Create Customer Account'}
+                      ? t('storefront.public.auth.signInAccount')
+                      : t('storefront.public.auth.createCustomerAccount')}
                 </Button>
 
                 <Button
@@ -622,13 +622,12 @@ export default function PublicAppLayout() {
                   onClick={() => setAuthOpen(false)}
                 >
                   <Link to={`/app/${business.slug}/book`}>
-                    Continue as Guest
+                    {t('storefront.public.auth.continueGuest')}
                   </Link>
                 </Button>
 
                 <p className="text-center text-xs leading-5 text-muted-foreground">
-                  Creating an account is optional. You can always book without
-                  registration.
+                  {t('storefront.public.auth.optionalNote')}
                 </p>
               </div>
             </section>

@@ -71,7 +71,19 @@
     "add": "Hinzufügen",
     "loading": "Wird geladen...",
     "saving": "Speichern…",
-    "minutesShort": "Min."
+    "minutesShort": "Min.",
+    "imageUploader": {
+      "fileTooLarge": "Datei ist zu groß, sie wird komprimiert…",
+      "compressedTo": "Auf {{size}} KB komprimiert",
+      "uploaded": "Bild erfolgreich hochgeladen",
+      "uploadFailed": "Bild konnte nicht hochgeladen werden",
+      "uploadedAlt": "Hochgeladenes Bild",
+      "removeImage": "Bild entfernen",
+      "clickToUpload": "Zum Hochladen eines Bildes klicken",
+      "supportedFormats": "Unterstützt JPG, PNG und WEBP (maximal 1 MB mit automatischer Komprimierung)",
+      "uploading": "Wird hochgeladen… {{progress}}%"
+    },
+    "back": "Zurück"
   },
   "language": {
     "label": "Sprache",
@@ -942,7 +954,9 @@
       "completedCount_other": "{{count}} abgeschlossen",
       "cancellationNoShowDetail": "{{cancellation}}% storniert · {{noShow}}% nicht erschienen",
       "returningCount_one": "{{count}} wiederkehrender Kunde",
-      "returningCount_other": "{{count}} wiederkehrende Kunden"
+      "returningCount_other": "{{count}} wiederkehrende Kunden",
+      "completedCount": "{{count}} abgeschlossen",
+      "returningCount": "{{count}} wiederkehrend"
     },
     "comparison": {
       "vsPreviousPeriod": "{{value}} gegenüber dem vorherigen Zeitraum"
@@ -953,7 +967,8 @@
     },
     "counts": {
       "bookings_one": "{{count}} Buchung",
-      "bookings_other": "{{count}} Buchungen"
+      "bookings_other": "{{count}} Buchungen",
+      "bookings": "{{count}} Buchungen"
     },
     "executive": {
       "trendTitle": "Umsatz- und Nachfragetrend",
@@ -1053,7 +1068,8 @@
     },
     "chart": {
       "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} Termin",
-      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} Termine"
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} Termine",
+      "dailyTooltip": "{{date}} · {{count}} Buchungen"
     },
     "csv": {
       "reportTitle": "Velliqo Business-Intelligence-Bericht",
@@ -1081,5 +1097,419 @@
       "unassigned": "Nicht zugewiesen",
       "customer": "Kunde"
     }
+  },
+  "storefront": {
+    "owner": {
+      "eyebrow": "Öffentlicher Auftritt",
+      "title": "Storefront Studio",
+      "description": "Erstellen und pflegen Sie die öffentliche Seite, auf der Kunden Ihr Unternehmen entdecken, ihm vertrauen und Termine buchen.",
+      "sections": {
+        "overview": "Übersicht",
+        "branding": "Markenauftritt",
+        "contact": "Kontakt",
+        "location": "Standort",
+        "sharing": "Vorschau & Teilen"
+      },
+      "actions": {
+        "copyLink": "Link kopieren",
+        "openPublicPage": "Öffentliche Seite öffnen",
+        "copy": "Kopieren",
+        "preview": "Vorschau",
+        "openPreview": "Vorschau öffnen",
+        "saveChanges": "Änderungen speichern"
+      },
+      "readiness": {
+        "title": "Bereitschaft des Storefronts",
+        "description": "Vervollständigen Sie die wichtigsten Informationen, die Kunden vor der Buchung erwarten.",
+        "publicUrl": "Öffentliche URL",
+        "availableAfterCreation": "Nach Erstellung des Unternehmens verfügbar",
+        "identityDescription": "Die öffentliche Identität und Zielseite Ihres Unternehmens.",
+        "businessLogo": "Unternehmenslogo",
+        "coverImage": "Titelbild",
+        "businessDescription": "Unternehmensbeschreibung",
+        "phoneAndEmail": "Telefon und E-Mail",
+        "address": "Adresse",
+        "yourLocation": "Ihr Standort",
+        "descriptionFallback": "Fügen Sie eine klare Beschreibung Ihrer Leistungen und Kundenerfahrung hinzu.",
+        "complete": "Vollständig",
+        "needsAttention": "Handlungsbedarf"
+      },
+      "branding": {
+        "title": "Marke und Geschichte",
+        "description": "Schaffen Sie einen wiedererkennbaren, professionellen ersten Eindruck.",
+        "businessLogo": "Unternehmenslogo",
+        "businessLogoHint": "Quadratisches Bild empfohlen.",
+        "coverImage": "Titelbild",
+        "coverImageHint": "Breites, hochwertiges Bild empfohlen.",
+        "storeDescription": "Store-Beschreibung",
+        "storeDescriptionHint": "Erklären Sie, was das Unternehmen wertvoll, vertrauenswürdig und besonders macht.",
+        "descriptionPlaceholder": "Beschreiben Sie Unternehmen, Fachwissen, Leistungen und Kundenerfahrung.",
+        "characterCount": "{{count}} Zeichen"
+      },
+      "contact": {
+        "title": "Kontaktdaten",
+        "description": "Diese Angaben sind auf der öffentlichen Seite für Kunden sichtbar.",
+        "publicPhone": "Öffentliche Telefonnummer",
+        "phoneHint": "Fügen Sie gegebenenfalls die Landesvorwahl hinzu.",
+        "publicEmail": "Öffentliche E-Mail",
+        "emailHint": "Für Kundenanfragen verwendet."
+      },
+      "location": {
+        "title": "Standort und Anfahrt",
+        "description": "Fügen Sie strukturierte Angaben für Anfahrt und Kartenanzeige hinzu.",
+        "displayAddress": "Angezeigte Adresse",
+        "displayAddressHint": "Die öffentlich angezeigte, gut lesbare Adresse.",
+        "addressLine1": "Adresszeile 1",
+        "addressLine2": "Adresszeile 2",
+        "city": "Stadt",
+        "district": "Bezirk / Region",
+        "postalCode": "Postleitzahl",
+        "latitude": "Breitengrad",
+        "longitude": "Längengrad",
+        "coordinateHint": "Beispiel: {{value}}",
+        "mapTitle": "Vorschau des Store-Standorts"
+      },
+      "sharing": {
+        "title": "Vorschau und Teilen",
+        "description": "Öffnen, kopieren und teilen Sie die dauerhafte öffentliche Unternehmensseite.",
+        "publicLink": "Öffentlicher Link",
+        "defaultBusinessName": "Mein Unternehmen"
+      },
+      "status": {
+        "loading": "Storefront-Editor wird geladen…",
+        "unsaved": "Es gibt nicht gespeicherte Storefront-Änderungen",
+        "saved": "Alle Storefront-Änderungen sind gespeichert",
+        "reviewReadiness": "Prüfen Sie die Bereitschaft Ihrer öffentlichen Seite.",
+        "editing": "{{section}} wird bearbeitet.",
+        "saving": "Wird gespeichert…"
+      },
+      "validation": {
+        "coordinates": "Breiten- und Längengrad müssen gültige Zahlen sein",
+        "email": "Geben Sie eine gültige öffentliche E-Mail-Adresse ein"
+      },
+      "messages": {
+        "loadError": "Storefront-Daten konnten nicht geladen werden",
+        "saveError": "Storefront-Änderungen konnten nicht gespeichert werden",
+        "updated": "Storefront erfolgreich aktualisiert",
+        "linkCopied": "Öffentlicher Link kopiert"
+      }
+    },
+    "qr": {
+      "title": "Diesen Store teilen",
+      "description": "Scannen Sie den QR-Code oder teilen Sie den Link, um {{business}} zu öffnen, Leistungen anzusehen und einen Termin zu buchen.",
+      "shareText": "{{business}} ansehen und Termin buchen",
+      "qrTitle": "Buchungs-QR-Code für {{business}}",
+      "copyTitle": "Link kopieren",
+      "share": "Teilen",
+      "download": "QR herunterladen",
+      "linkCopied": "Store-Link kopiert",
+      "copyError": "Store-Link konnte nicht kopiert werden",
+      "shareError": "Store-Link konnte nicht geteilt werden",
+      "downloadError": "QR-Code konnte nicht heruntergeladen werden",
+      "downloaded": "QR-Code heruntergeladen"
+    },
+    "public": {
+      "navigation": {
+        "store": "Store",
+        "book": "Buchen",
+        "myAccount": "Mein Konto",
+        "services": "Leistungen",
+        "team": "Team",
+        "gallery": "Galerie",
+        "products": "Produkte",
+        "announcements": "Ankündigungen",
+        "contact": "Kontakt"
+      },
+      "status": {
+        "onlineBooking": "Online-Buchung",
+        "temporarilyClosed": "Vorübergehend geschlossen",
+        "acceptingBookings": "Buchungen möglich",
+        "available": "Verfügbar",
+        "outOfStock": "Nicht auf Lager"
+      },
+      "actions": {
+        "bookAppointment": "Termin buchen",
+        "directions": "Anfahrt",
+        "share": "Teilen",
+        "createAccount": "Konto erstellen",
+        "chooseAnotherDate": "Anderes Datum wählen",
+        "book": "Buchen",
+        "bookWith": "Bei {{name}} buchen",
+        "signIn": "Anmelden",
+        "readMore": "Mehr lesen",
+        "closeImage": "Bild schließen"
+      },
+      "hero": {
+        "defaultTagline": "Entdecken Sie unsere Leistungen und buchen Sie bequem online.",
+        "guestBookingPrefix": "Buchung als Gast ist möglich.",
+        "guestBookingSuffix": "für schnellere zukünftige Buchungen.",
+        "quickAccess": "Schnellzugriff",
+        "shareText": "Termin bei {{business}} buchen"
+      },
+      "sections": {
+        "services": {
+          "title": "Leistungen",
+          "description": "Entdecken Sie Leistungen, Preise und Verfügbarkeit.",
+          "empty": "Noch keine öffentlichen Leistungen verfügbar."
+        },
+        "team": {
+          "title": "Lernen Sie das Team kennen",
+          "description": "Wählen Sie Ihre bevorzugte Fachkraft.",
+          "empty": "Teamprofile werden bald hier angezeigt.",
+          "memberLabel": "Professionelles Teammitglied",
+          "memberFallback": "Für Online-Termine verfügbar."
+        },
+        "gallery": {
+          "title": "Galerie",
+          "description": "Einblicke in den Store und aktuelle Arbeiten.",
+          "empty": "Die Store-Galerie ist derzeit leer."
+        },
+        "products": {
+          "title": "Produkte",
+          "description": "Professionelle Produkte, die im Store erhältlich sind.",
+          "empty": "Noch keine öffentlichen Produkte hinzugefügt."
+        },
+        "announcements": {
+          "title": "Ankündigungen",
+          "published_one": "{{count}} veröffentlichte Aktualisierung",
+          "published_other": "{{count}} veröffentlichte Aktualisierungen",
+          "noPublishedUpdates": "Keine veröffentlichten Aktualisierungen",
+          "empty": "Noch keine veröffentlichten Ankündigungen.",
+          "latest": "Neueste",
+          "published": "{{count}} veröffentlicht"
+        },
+        "contact": {
+          "title": "Besuch & Kontakt",
+          "description": "Alles, was Sie vor Ihrem Besuch benötigen.",
+          "mapMissing": "Der Kartenstandort wurde noch nicht eingerichtet."
+        }
+      },
+      "footer": {
+        "tagline": "Professionelle Online-Buchung",
+        "privacy": "Datenschutz",
+        "terms": "Bedingungen"
+      },
+      "postTypes": {
+        "announcement": "Ankündigung",
+        "holiday_closure": "Feiertagsschließung",
+        "promotion": "Aktion",
+        "price_update": "Preisänderung",
+        "new_product": "Neues Produkt",
+        "new_team_member": "Neues Teammitglied",
+        "general": "Allgemein"
+      },
+      "mapTitle": "Standort von {{business}}",
+      "loading": "Store wird geladen…",
+      "notFound": {
+        "title": "Store nicht gefunden",
+        "description": "Dieser Store-Link ist nicht verfügbar oder nicht mehr aktiv."
+      },
+      "auth": {
+        "customerAccount": "Kundenkonto",
+        "customerAccess": "Kundenzugang",
+        "heroTitle": "Ihre Termine und Store-Erfahrung an einem Ort.",
+        "heroDescription": "Erstellen Sie optional ein Konto für schnellere Buchungen, Terminverlauf und Neuigkeiten von {{business}}.",
+        "benefits": {
+          "fasterTitle": "Schnellere Buchung",
+          "fasterText": "Gespeicherte Kundendaten erneut verwenden.",
+          "upcomingTitle": "Bevorstehende Termine",
+          "upcomingText": "Ihre nächsten Besuche in diesem Store anzeigen.",
+          "historyTitle": "Terminverlauf",
+          "historyText": "Frühere Buchungen übersichtlich speichern."
+        },
+        "privacyNote": "Ihr Kundenkonto ist mit diesem Store verbunden. Gastbuchungen bleiben ohne Registrierung möglich.",
+        "signInEyebrow": "Kundenanmeldung",
+        "signUpEyebrow": "Kundenregistrierung",
+        "welcomeBack": "Willkommen zurück bei {{business}}",
+        "createBusinessAccount": "Erstellen Sie Ihr {{business}}-Konto",
+        "signInDescription": "Greifen Sie auf bevorstehende Termine, Verlauf und Kundenprofil zu.",
+        "signUpDescription": "Erstellen Sie optional ein Kundenkonto für diesen Store.",
+        "signIn": "Anmelden",
+        "createAccount": "Konto erstellen",
+        "fullName": "Vollständiger Name",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "password": "Passwort",
+        "accountLinkNote": "Dieses Konto ist mit {{business}} verknüpft und ermöglicht Terminverlauf sowie schnellere Buchungen.",
+        "pleaseWait": "Bitte warten…",
+        "signInAccount": "Bei meinem Konto anmelden",
+        "createCustomerAccount": "Kundenkonto erstellen",
+        "continueGuest": "Als Gast fortfahren",
+        "optionalNote": "Ein Konto ist optional. Sie können jederzeit ohne Registrierung buchen."
+      },
+      "validation": {
+        "credentialsRequired": "E-Mail und Passwort sind erforderlich.",
+        "fullNameRequired": "Der vollständige Name ist erforderlich."
+      },
+      "messages": {
+        "accountCreated": "Kundenkonto erstellt.",
+        "accountCreatedConfirm": "Konto erstellt. Bestätigen Sie Ihre E-Mail und kehren Sie dann zu diesem Store zurück.",
+        "signedIn": "Erfolgreich angemeldet.",
+        "signedOut": "Abgemeldet.",
+        "joinError": "Ihr Konto konnte nicht mit diesem Store verbunden werden.",
+        "authenticationFailed": "Authentifizierung fehlgeschlagen."
+      },
+      "errors": {
+        "loadStore": "Dieser Store konnte nicht geladen werden"
+      },
+      "accessibility": {
+        "openMenu": "Navigationsmenü öffnen",
+        "closeMenu": "Navigationsmenü schließen",
+        "signOut": "Abmelden"
+      }
+    }
+  },
+  "publicBooking": {
+    "steps": {
+      "services": "Leistungen",
+      "professional": "Mitarbeiter",
+      "dateTime": "Datum & Uhrzeit",
+      "details": "Ihre Daten"
+    },
+    "header": {
+      "eyebrow": "Online-Buchung",
+      "title": "Bei {{business}} buchen",
+      "description": "Wählen Sie Leistungen, Ihren bevorzugten Mitarbeiter und eine tatsächlich verfügbare Uhrzeit."
+    },
+    "services": {
+      "title": "Leistungen auswählen",
+      "description": "Wählen Sie eine oder mehrere Leistungen für denselben Termin.",
+      "select": "Auswählen",
+      "selected": "Ausgewählt",
+      "continue": "Weiter zum Mitarbeiter"
+    },
+    "professionals": {
+      "title": "Mitarbeiter auswählen",
+      "description": "Wählen Sie eine bestimmte Person oder lassen Sie das System einen geeigneten Mitarbeiter zuweisen.",
+      "anyAvailable": "Beliebige Verfügbarkeit",
+      "anyAvailableProfessional": "Beliebiger verfügbarer Mitarbeiter",
+      "anyAvailableDescription": "Der erste geeignete Mitarbeiter für die ausgewählte Uhrzeit wird zugewiesen.",
+      "defaultBio": "Mitglied des professionellen Teams."
+    },
+    "dateTime": {
+      "title": "Datum und Uhrzeit auswählen",
+      "description": "Es werden nur tatsächlich verfügbare Termine angezeigt.",
+      "selectDate": "Datum auswählen",
+      "browseAvailability": "Sehen Sie die echte Verfügbarkeit der nächsten Tage.",
+      "specificDate": "Oder ein bestimmtes Datum auswählen",
+      "continue": "Weiter zu Ihren Daten"
+    },
+    "timeGroups": {
+      "morning": "Vormittag",
+      "afternoon": "Nachmittag",
+      "evening": "Abend"
+    },
+    "closure": {
+      "title": "Geschäft geschlossen",
+      "description": "{{business}} ist am ausgewählten Datum wegen {{reason}} geschlossen.",
+      "range": "Geschlossen: {{range}}",
+      "chooseAnother": "Bitte wählen Sie ein anderes Datum."
+    },
+    "details": {
+      "title": "Ihre Daten",
+      "savedDescription": "Ihre gespeicherten Kundendaten werden verwendet.",
+      "guestDescription": "Geben Sie die für Ihre Buchung erforderlichen Kontaktdaten ein.",
+      "name": "Name",
+      "fullNameRequired": "Vollständiger Name *",
+      "phone": "Telefon",
+      "phoneRequired": "Telefonnummer *",
+      "phoneRequiredShort": "Telefon *",
+      "email": "E-Mail",
+      "notes": "Notizen",
+      "notesPlaceholder": "Optionale Hinweise für das Geschäft"
+    },
+    "summary": {
+      "title": "Buchungsübersicht",
+      "reference": "Referenz",
+      "services": "Leistungen",
+      "professional": "Mitarbeiter",
+      "when": "Termin",
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "estimatedFinish": "Voraussichtliches Ende",
+      "duration": "Dauer",
+      "total": "Gesamt"
+    },
+    "confirmation": {
+      "title": "Buchung bestätigt",
+      "description": "Ihr Termin bei {{business}} wurde erfolgreich reserviert.",
+      "addToCalendar": "Zum Kalender hinzufügen",
+      "getDirections": "Route anzeigen",
+      "viewAppointments": "Meine Termine anzeigen",
+      "bookAnother": "Weiteren Termin buchen"
+    },
+    "actions": {
+      "confirm": "Termin bestätigen",
+      "confirming": "Wird bestätigt..."
+    },
+    "states": {
+      "loadingOptions": "Buchungsoptionen werden geladen...",
+      "loadingTimes": "Verfügbare Termine werden geladen...",
+      "loadingDetails": "Ihre Daten werden geladen...",
+      "noAppointments": "Keine verfügbaren Termine",
+      "noAppointmentsDescription": "Wählen Sie ein anderes Datum oder einen anderen Mitarbeiter.",
+      "notSelected": "Nicht ausgewählt",
+      "notAvailable": "Nicht verfügbar",
+      "notProvided": "Nicht angegeben"
+    },
+    "validation": {
+      "namePhoneRequired": "Name und Telefonnummer sind erforderlich",
+      "completeSteps": "Bitte schließen Sie alle Buchungsschritte ab."
+    },
+    "messages": {
+      "loadOptionsFailed": "Buchungsoptionen konnten nicht geladen werden.",
+      "loadTimesFailed": "Verfügbare Zeiten konnten nicht geladen werden.",
+      "bookingFailed": "Die Buchung ist fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "slotUnavailable": "Diese Uhrzeit ist nicht mehr verfügbar. Bitte wählen Sie eine andere."
+    },
+    "calendar": {
+      "summary": "{{services}} bei {{business}}",
+      "description": "Buchungsreferenz {{reference}}",
+      "fileName": "termin"
+    },
+    "mobile": {
+      "selectServices": "Wählen Sie Leistungen, um zu beginnen",
+      "step": "Schritt {{step}} von {{total}}",
+      "ready": "Bereit zur Bestätigung"
+    },
+    "durationMinutes": "{{count}} Minuten"
+  },
+  "ai": {
+    "ownerFallback": "Inhaber",
+    "welcome": "Willkommen, {{name}}",
+    "introduction": "Velliqo AI wird vorbereitet, um {{business}} bei der Analyse von Leistung, Kunden und Terminplanung zu unterstützen.",
+    "yourBusiness": "Ihr Unternehmen",
+    "askVelliqo": "Velliqo fragen",
+    "settings": "AI-Einstellungen",
+    "cards": {
+      "insights": "Intelligente Einblicke",
+      "insightsDescription": "Verwandeln Sie Geschäftsdaten in klare, praktische Empfehlungen.",
+      "businessHealth": "Unternehmenszustand",
+      "businessHealthDescription": "Erkennen Sie den operativen Zustand Ihres Unternehmens auf einen Blick.",
+      "customerIntelligence": "Kundenintelligenz",
+      "customerIntelligenceDescription": "Erkennen Sie Kundenmuster, Bindungschancen und Leistungspräferenzen.",
+      "scheduling": "Intelligente Planung",
+      "schedulingDescription": "Erkennen Sie Nachfragemuster und Möglichkeiten zur Kapazitätsverbesserung."
+    },
+    "foundationReady": "Grundlage bereit",
+    "nextSprint": "Demnächst",
+    "platform": "Velliqo Intelligence-Plattform",
+    "specialists": "Spezialisierte AI-Agenten",
+    "foundationTitle": "Sichere AI-Grundlage",
+    "foundationDescription": "Der AI-Zugriff wird durch Unternehmensrechte, Sprache und freigegebene Datenbereiche gesteuert.",
+    "reviewSettings": "AI-Einstellungen prüfen",
+    "settingsDescription": "Steuern Sie, wie Velliqo AI mit Ihren Unternehmensdaten arbeitet.",
+    "settingsSaved": "AI-Einstellungen gespeichert",
+    "enableAI": "Velliqo AI aktivieren",
+    "enableAIDescription": "Erlauben Sie autorisierten Benutzern den Zugriff auf AI-gestützte Funktionen.",
+    "defaultLanguage": "Standard-AI-Sprache",
+    "responseStyle": "Antwortstil",
+    "concise": "Kurz",
+    "balanced": "Ausgewogen",
+    "detailed": "Detailliert",
+    "conversationHistory": "Gesprächsverlauf",
+    "conversationHistoryDescription": "Speichern Sie AI-Gespräche, damit autorisierte Benutzer frühere Arbeit fortsetzen können.",
+    "customerData": "Zugriff auf Kundendaten",
+    "customerDataDescription": "Erlauben Sie AI-Funktionen, genehmigte Kundendaten im Rahmen der Berechtigungen zu verwenden."
   }
 }

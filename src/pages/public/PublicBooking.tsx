@@ -25,22 +25,30 @@ import {
   UserRound,
 } from 'lucide-react';
 import { addDays, format, isSameDay, parseISO, startOfToday } from 'date-fns';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 
 type StoreContext = {
   business: any;
 };
 
 const STEPS = [
-  { id: 1, label: 'Services' },
-  { id: 2, label: 'Professional' },
-  { id: 3, label: 'Date & Time' },
-  { id: 4, label: 'Your Details' },
-];
+  { id: 1, labelKey: 'publicBooking.steps.services' },
+  { id: 2, labelKey: 'publicBooking.steps.professional' },
+  { id: 3, labelKey: 'publicBooking.steps.dateTime' },
+  { id: 4, labelKey: 'publicBooking.steps.details' },
+] as const;
 
 export default function PublicBooking() {
   const { business } = useOutletContext<StoreContext>();
   const { user } = useAuth();
   const [searchParams] = useSearchParams();
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+  const currency = useMemo(
+    () => new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }),
+    [locale]
+  );
 
   const [services, setServices] = useState<any[]>([]);
   const [staff, setStaff] = useState<any[]>([]);
@@ -182,7 +190,7 @@ export default function PublicBooking() {
       setClosures(closuresResult.data ?? []);
     } catch (error: any) {
       console.error('Booking page error:', error);
-      toast.error(error.message || 'Unable to load booking options.');
+      toast.error(t('publicBooking.messages.loadOptionsFailed'));
     } finally {
       setLoading(false);
     }
@@ -215,7 +223,8 @@ export default function PublicBooking() {
 
       setAvailableSlots(times);
     } catch (error: any) {
-      toast.error(error.message || 'Unable to load available times.');
+      console.error('Availability loading error:', error);
+      toast.error(t('publicBooking.messages.loadTimesFailed'));
     } finally {
       setAvailabilityLoading(false);
     }
@@ -267,11 +276,11 @@ export default function PublicBooking() {
     );
 
     return [
-      { label: 'Morning', slots: morning },
-      { label: 'Afternoon', slots: afternoon },
-      { label: 'Evening', slots: evening },
+      { label: t('publicBooking.timeGroups.morning'), slots: morning },
+      { label: t('publicBooking.timeGroups.afternoon'), slots: afternoon },
+      { label: t('publicBooking.timeGroups.evening'), slots: evening },
     ].filter((group) => group.slots.length > 0);
-  }, [availableSlots]);
+  }, [availableSlots, t]);
 
   const toggleService = (service: any) => {
     const selected = selectedServices.some((item) => item.id === service.id);
@@ -288,12 +297,12 @@ export default function PublicBooking() {
 
   const handleBook = async () => {
     if (!customerDetails.name.trim() || !customerDetails.phone.trim()) {
-      toast.error('Name and phone are required');
+      toast.error(t('publicBooking.validation.namePhoneRequired'));
       return;
     }
 
     if (!selectedDate || !selectedTime || selectedServices.length === 0) {
-      toast.error('Please complete all booking steps.');
+      toast.error(t('publicBooking.validation.completeSteps'));
       return;
     }
 
@@ -317,13 +326,18 @@ export default function PublicBooking() {
       setBookingSuccess(data);
       setStep(5);
     } catch (error: any) {
-      const message = error?.message || 'Booking failed. Please try again.';
-      toast.error(message);
+      const rawMessage = String(error?.message || '');
+      const slotUnavailable =
+        rawMessage.toLowerCase().includes('no longer available') ||
+        rawMessage.toLowerCase().includes('just been reserved');
+      console.error('Booking creation error:', error);
+      toast.error(
+        slotUnavailable
+          ? t('publicBooking.messages.slotUnavailable')
+          : t('publicBooking.messages.bookingFailed')
+      );
 
-      if (
-        message.toLowerCase().includes('no longer available') ||
-        message.toLowerCase().includes('just been reserved')
-      ) {
+      if (slotUnavailable) {
         setStep(3);
         await fetchAvailableTimes();
       }
@@ -371,8 +385,8 @@ export default function PublicBooking() {
       `DTSTAMP:${toIcsDate(new Date())}`,
       `DTSTART:${toIcsDate(start)}`,
       `DTEND:${toIcsDate(end)}`,
-      `SUMMARY:${selectedServices.map((service) => service.name).join(', ')} at ${business.name}`,
-      `DESCRIPTION:Booking reference ${bookingSuccess.booking_reference}`,
+      `SUMMARY:${t('publicBooking.calendar.summary', { services: selectedServices.map((service) => service.name).join(', '), business: business.name })}`,
+      `DESCRIPTION:${t('publicBooking.calendar.description', { reference: bookingSuccess.booking_reference })}`, 
       business.address ? `LOCATION:${String(business.address).replace(/,/g, '\\,')}` : '',
       'END:VEVENT',
       'END:VCALENDAR',
@@ -384,7 +398,7 @@ export default function PublicBooking() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${business.slug || 'appointment'}-${selectedDate}.ics`;
+    link.download = `${business.slug || t('publicBooking.calendar.fileName')}-${selectedDate}.ics`;
     document.body.appendChild(link);
     link.click();
     link.remove();
@@ -394,7 +408,7 @@ export default function PublicBooking() {
   if (loading) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center">
-        <div className="text-sm text-muted-foreground">Loading booking options...</div>
+        <div className="text-sm text-muted-foreground">{t('publicBooking.states.loadingOptions')}</div>
       </div>
     );
   }
@@ -408,42 +422,42 @@ export default function PublicBooking() {
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
-            <h1 className="mt-6 text-3xl font-bold">Booking Confirmed</h1>
+            <h1 className="mt-6 text-3xl font-bold">{t('publicBooking.confirmation.title')}</h1>
             <p className="mt-3 text-muted-foreground">
-              Your appointment at {business.name} has been reserved successfully.
+              {t('publicBooking.confirmation.description', { business: business.name })}
             </p>
 
             <div className="mx-auto mt-8 max-w-xl rounded-2xl border bg-muted/25 p-5 text-left">
-              <SummaryRow label="Reference" value={`#${bookingSuccess.booking_reference}`} />
+              <SummaryRow label={t('publicBooking.summary.reference')} value={`#${bookingSuccess.booking_reference}`} />
               <SummaryRow
-                label="Services"
+                label={t('publicBooking.summary.services')}
                 value={selectedServices.map((service) => service.name).join(', ')}
               />
               <SummaryRow
-                label="Professional"
-                value={selectedProfessional?.name || 'Any available professional'}
+                label={t('publicBooking.summary.professional')}
+                value={selectedProfessional?.name || t('publicBooking.professionals.anyAvailableProfessional')}
               />
               <SummaryRow
-                label="When"
-                value={format(new Date(bookingSuccess.start_time), 'EEEE, MMMM d, yyyy · HH:mm')}
+                label={t('publicBooking.summary.when')}
+                value={new Intl.DateTimeFormat(locale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(new Date(bookingSuccess.start_time))}
               />
               <SummaryRow
-                label="Total"
-                value={`€${totalPrice.toFixed(2)}`}
+                label={t('publicBooking.summary.total')}
+                value={currency.format(totalPrice)}
               />
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               <Button onClick={downloadCalendarFile}>
                 <Download className="mr-2 h-4 w-4" />
-                Add to Calendar
+                {t('publicBooking.confirmation.addToCalendar')}
               </Button>
 
               {directionsUrl && (
                 <Button asChild variant="outline">
                   <a href={directionsUrl} target="_blank" rel="noreferrer">
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    Get Directions
+                    {t('publicBooking.confirmation.getDirections')}
                   </a>
                 </Button>
               )}
@@ -451,7 +465,7 @@ export default function PublicBooking() {
               {user && (
                 <Button asChild variant="outline">
                   <Link to={`/app/${business.slug}/account`}>
-                    View My Appointments
+                    {t('publicBooking.confirmation.viewAppointments')}
                   </Link>
                 </Button>
               )}
@@ -460,7 +474,7 @@ export default function PublicBooking() {
                 variant="outline"
                 onClick={() => window.location.reload()}
               >
-                Book Another Appointment
+                {t('publicBooking.confirmation.bookAnother')}
               </Button>
             </div>
           </CardContent>
@@ -473,13 +487,13 @@ export default function PublicBooking() {
     <div className="mx-auto max-w-7xl px-4 py-8 pb-28 sm:px-6 sm:py-10 md:pb-12">
       <div className="mb-8">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-          Online booking
+          {t('publicBooking.header.eyebrow')}
         </div>
         <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
-          Book with {business.name}
+          {t('publicBooking.header.title', { business: business.name })}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
-          Choose your services, preferred professional and a real available time.
+          {t('publicBooking.header.description')}
         </p>
       </div>
 
@@ -510,7 +524,7 @@ export default function PublicBooking() {
               >
                 {completed ? <Check className="h-4 w-4" /> : item.id}
               </div>
-              <span className="text-sm font-semibold">{item.label}</span>
+              <span className="text-sm font-semibold">{t(item.labelKey)}</span>
             </div>
           );
         })}
@@ -523,8 +537,8 @@ export default function PublicBooking() {
               <section className="space-y-5">
                 <StepTitle
                   icon={<Scissors className="h-5 w-5" />}
-                  title="Choose Services"
-                  description="Select one or more services for the same appointment."
+                  title={t('publicBooking.services.title')}
+                  description={t('publicBooking.services.description')}
                 />
 
                 <div className="grid gap-4 md:grid-cols-2">
@@ -558,12 +572,12 @@ export default function PublicBooking() {
                               <h3 className="font-bold">{service.name}</h3>
                               <div className="mt-1 flex items-center gap-1 text-xs text-muted-foreground">
                                 <Clock3 className="h-3.5 w-3.5" />
-                                {service.duration} minutes
+                                {t('publicBooking.durationMinutes', { count: service.duration })}
                               </div>
                             </div>
 
                             <div className="text-lg font-bold">
-                              €{Number(service.price).toFixed(2)}
+                              {currency.format(Number(service.price))}
                             </div>
                           </div>
 
@@ -575,7 +589,7 @@ export default function PublicBooking() {
 
                           <div className="mt-4 flex items-center justify-between">
                             <Badge variant={selected ? 'default' : 'secondary'}>
-                              {selected ? 'Selected' : 'Select'}
+                              {selected ? t('publicBooking.services.selected') : t('publicBooking.services.select')}
                             </Badge>
                             {selected && <Check className="h-5 w-5 text-primary" />}
                           </div>
@@ -590,7 +604,7 @@ export default function PublicBooking() {
                     disabled={selectedServices.length === 0}
                     onClick={() => setStep(2)}
                   >
-                    Continue to Professional
+                    {t('publicBooking.services.continue')}
                   </Button>
                 </div>
               </section>
@@ -601,8 +615,8 @@ export default function PublicBooking() {
                 <StepBack onClick={() => setStep(1)} />
                 <StepTitle
                   icon={<UserRound className="h-5 w-5" />}
-                  title="Choose a Professional"
-                  description="Select someone specific or allow the system to assign any eligible professional."
+                  title={t('publicBooking.professionals.title')}
+                  description={t('publicBooking.professionals.description')}
                 />
 
                 <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -621,9 +635,9 @@ export default function PublicBooking() {
                     <div className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
                       <Sparkles className="h-7 w-7" />
                     </div>
-                    <h3 className="mt-4 font-bold">Any Available</h3>
+                    <h3 className="mt-4 font-bold">{t('publicBooking.professionals.anyAvailable')}</h3>
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      Assign the first eligible professional for your selected time.
+                      {t('publicBooking.professionals.anyAvailableDescription')}
                     </p>
                   </button>
 
@@ -655,7 +669,7 @@ export default function PublicBooking() {
 
                       <h3 className="mt-4 font-bold">{member.name}</h3>
                       <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
-                        {member.bio || 'Professional team member.'}
+                        {member.bio || t('publicBooking.professionals.defaultBio')}
                       </p>
                     </button>
                   ))}
@@ -668,16 +682,16 @@ export default function PublicBooking() {
                 <StepBack onClick={() => setStep(2)} />
                 <StepTitle
                   icon={<CalendarDays className="h-5 w-5" />}
-                  title="Choose Date & Time"
-                  description="Only real available appointment times are displayed."
+                  title={t('publicBooking.dateTime.title')}
+                  description={t('publicBooking.dateTime.description')}
                 />
 
                 <div className="rounded-2xl border bg-muted/15 p-4">
                   <div className="flex items-center justify-between gap-3">
                     <div>
-                      <div className="text-sm font-semibold">Select a date</div>
+                      <div className="text-sm font-semibold">{t('publicBooking.dateTime.selectDate')}</div>
                       <div className="mt-1 text-xs text-muted-foreground">
-                        Browse real availability for the next days.
+                        {t('publicBooking.dateTime.browseAvailability')}
                       </div>
                     </div>
 
@@ -729,13 +743,13 @@ export default function PublicBooking() {
                           }`}
                         >
                           <div className={`text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
-                            {format(date, 'EEE')}
+                            {new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date)}
                           </div>
                           <div className="mt-1 text-lg font-bold">
                             {format(date, 'd')}
                           </div>
                           <div className={`mt-1 text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
-                            {format(date, 'MMM')}
+                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(date)}
                           </div>
                         </button>
                       );
@@ -744,7 +758,7 @@ export default function PublicBooking() {
 
                   <div className="mt-4 max-w-xs space-y-2">
                     <Label className="text-xs text-muted-foreground">
-                      Or choose a specific date
+                      {t('publicBooking.dateTime.specificDate')}
                     </Label>
                     <Input
                       type="date"
@@ -762,29 +776,29 @@ export default function PublicBooking() {
 
                 {availabilityLoading ? (
                   <div className="rounded-2xl border p-10 text-center text-sm text-muted-foreground">
-                    Loading available appointments...
+                    {t('publicBooking.states.loadingTimes')}
                   </div>
                 ) : selectedClosure ? (
                   <div className="rounded-2xl border border-amber-200 bg-amber-50 p-8 text-center">
                     <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
                       <AlertTriangle className="h-6 w-6" />
                     </div>
-                    <h3 className="mt-4 text-lg font-bold">Store Closed</h3>
+                    <h3 className="mt-4 text-lg font-bold">{t('publicBooking.closure.title')}</h3>
                     <p className="mt-2 text-sm leading-6 text-muted-foreground">
-                      {business.name} is closed on the selected date for <strong>{selectedClosure.title}</strong>.
+                      {t('publicBooking.closure.description', { business: business.name, reason: selectedClosure.title })}
                       {selectedClosure.description ? ` ${selectedClosure.description}` : ''}
                     </p>
                     <p className="mt-2 text-sm font-semibold">
-                      Closed {formatClosureRange(selectedClosure.start_date, selectedClosure.end_date)}
+                      {t('publicBooking.closure.range', { range: formatClosureRange(selectedClosure.start_date, selectedClosure.end_date, locale) })}
                     </p>
-                    <p className="mt-3 text-sm text-muted-foreground">Please choose another date.</p>
+                    <p className="mt-3 text-sm text-muted-foreground">{t('publicBooking.closure.chooseAnother')}</p>
                   </div>
                 ) : availableSlots.length === 0 ? (
                   <div className="rounded-2xl border border-dashed bg-muted/20 p-10 text-center">
                     <CalendarDays className="mx-auto h-10 w-10 text-muted-foreground" />
-                    <h3 className="mt-4 font-bold">No available appointments</h3>
+                    <h3 className="mt-4 font-bold">{t('publicBooking.states.noAppointments')}</h3>
                     <p className="mt-2 text-sm text-muted-foreground">
-                      Choose another date or professional to see more times.
+                      {t('publicBooking.states.noAppointmentsDescription')}
                     </p>
                   </div>
                 ) : (
@@ -820,7 +834,7 @@ export default function PublicBooking() {
                         disabled={!selectedTime}
                         onClick={() => setStep(4)}
                       >
-                        Continue to Your Details
+                        {t('publicBooking.dateTime.continue')}
                       </Button>
                     </div>
                   )}
@@ -832,11 +846,11 @@ export default function PublicBooking() {
                 <StepBack onClick={() => setStep(3)} />
                 <StepTitle
                   icon={<UserRound className="h-5 w-5" />}
-                  title="Your Details"
+                  title={t('publicBooking.details.title')}
                   description={
                     user
-                      ? 'Your saved customer details will be used.'
-                      : 'Enter the contact details required for your booking.'
+                      ? t('publicBooking.details.savedDescription')
+                      : t('publicBooking.details.guestDescription')
                   }
                 />
 
@@ -845,20 +859,20 @@ export default function PublicBooking() {
                     <div className="rounded-2xl border bg-muted/25 p-5">
                       {customerProfileLoading ? (
                         <p className="text-sm text-muted-foreground">
-                          Loading your details...
+                          {t('publicBooking.states.loadingDetails')}
                         </p>
                       ) : (
                         <div className="grid gap-4 sm:grid-cols-3">
-                          <Detail label="Name" value={customerDetails.name || 'Not provided'} />
-                          <Detail label="Phone" value={customerDetails.phone || 'Not provided'} />
-                          <Detail label="Email" value={customerDetails.email || 'Not provided'} />
+                          <Detail label={t('publicBooking.details.name')} value={customerDetails.name || t('publicBooking.states.notProvided')} />
+                          <Detail label={t('publicBooking.details.phone')} value={customerDetails.phone || t('publicBooking.states.notProvided')} />
+                          <Detail label={t('publicBooking.details.email')} value={customerDetails.email || t('publicBooking.states.notProvided')} />
                         </div>
                       )}
                     </div>
 
                     {!customerDetails.phone && (
                       <div className="space-y-2">
-                        <Label>Phone number *</Label>
+                        <Label>{t('publicBooking.details.phoneRequired')}</Label>
                         <Input
                           type="tel"
                           className="h-11 rounded-xl"
@@ -876,7 +890,7 @@ export default function PublicBooking() {
                 ) : (
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2 sm:col-span-2">
-                      <Label>Full Name *</Label>
+                      <Label>{t('publicBooking.details.fullNameRequired')}</Label>
                       <Input
                         className="h-11 rounded-xl"
                         value={customerDetails.name}
@@ -890,7 +904,7 @@ export default function PublicBooking() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Phone *</Label>
+                      <Label>{t('publicBooking.details.phoneRequiredShort')}</Label>
                       <Input
                         type="tel"
                         className="h-11 rounded-xl"
@@ -905,7 +919,7 @@ export default function PublicBooking() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Email</Label>
+                      <Label>{t('publicBooking.details.email')}</Label>
                       <Input
                         type="email"
                         className="h-11 rounded-xl"
@@ -922,11 +936,11 @@ export default function PublicBooking() {
                 )}
 
                 <div className="space-y-2">
-                  <Label>Notes</Label>
+                  <Label>{t('publicBooking.details.notes')}</Label>
                   <Textarea
                     rows={4}
                     className="rounded-xl"
-                    placeholder="Optional notes for the store"
+                    placeholder={t('publicBooking.details.notesPlaceholder')}
                     value={customerDetails.notes}
                     onChange={(event) =>
                       setCustomerDetails({
@@ -942,7 +956,7 @@ export default function PublicBooking() {
                   disabled={isSubmitting || customerProfileLoading}
                   onClick={() => void handleBook()}
                 >
-                  {isSubmitting ? 'Confirming...' : 'Confirm Appointment'}
+                  {isSubmitting ? t('publicBooking.actions.confirming') : t('publicBooking.actions.confirm')}
                 </Button>
               </section>
             )}
@@ -953,44 +967,44 @@ export default function PublicBooking() {
           <Card className="rounded-3xl shadow-card">
             <CardContent className="p-5 sm:p-6">
               <div className="text-sm font-semibold text-muted-foreground">
-                Booking Summary
+                {t('publicBooking.summary.title')}
               </div>
 
               <div className="mt-5 space-y-4">
                 <SummaryRow
-                  label="Services"
+                  label={t('publicBooking.summary.services')}
                   value={
                     selectedServices.length
                       ? selectedServices.map((service) => service.name).join(', ')
-                      : 'Not selected'
+                      : t('publicBooking.states.notSelected')
                   }
                 />
                 <SummaryRow
-                  label="Professional"
-                  value={selectedProfessional?.name || 'Any available'}
+                  label={t('publicBooking.summary.professional')}
+                  value={selectedProfessional?.name || t('publicBooking.professionals.anyAvailable')}
                 />
                 <SummaryRow
-                  label="Date"
-                  value={selectedDate || 'Not selected'}
+                  label={t('publicBooking.summary.date')}
+                  value={selectedDate ? new Intl.DateTimeFormat(locale, { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date(`${selectedDate}T00:00:00`)) : t('publicBooking.states.notSelected')}
                 />
                 <SummaryRow
-                  label="Time"
-                  value={selectedTime || 'Not selected'}
+                  label={t('publicBooking.summary.time')}
+                  value={selectedTime || t('publicBooking.states.notSelected')}
                 />
                 <SummaryRow
-                  label="Estimated Finish"
-                  value={estimatedEndTime || 'Not available'}
+                  label={t('publicBooking.summary.estimatedFinish')}
+                  value={estimatedEndTime || t('publicBooking.states.notAvailable')}
                 />
                 <SummaryRow
-                  label="Duration"
-                  value={`${totalDuration} minutes`}
+                  label={t('publicBooking.summary.duration')}
+                  value={t('publicBooking.durationMinutes', { count: totalDuration })}
                 />
               </div>
 
               <div className="mt-6 flex items-center justify-between border-t pt-5">
-                <span className="font-semibold">Total</span>
+                <span className="font-semibold">{t('publicBooking.summary.total')}</span>
                 <span className="text-2xl font-bold">
-                  €{totalPrice.toFixed(2)}
+                  {currency.format(totalPrice)}
                 </span>
               </div>
 
@@ -1011,22 +1025,22 @@ export default function PublicBooking() {
             <div className="truncate text-xs text-muted-foreground">
               {selectedServices.length
                 ? selectedServices.map((service) => service.name).join(', ')
-                : 'Select services to begin'}
+                : t('publicBooking.mobile.selectServices')}
             </div>
             <div className="mt-1 flex items-center gap-3">
-              <span className="font-bold">€{totalPrice.toFixed(2)}</span>
+              <span className="font-bold">{currency.format(totalPrice)}</span>
               <span className="text-xs text-muted-foreground">
-                {totalDuration} min
+                {t('common.minutesShort', { count: totalDuration })}
               </span>
             </div>
           </div>
 
           {step < 4 ? (
             <Badge variant="secondary" className="shrink-0">
-              Step {step} of 4
+              {t('publicBooking.mobile.step', { step, total: 4 })}
             </Badge>
           ) : (
-            <Badge className="shrink-0">Ready to confirm</Badge>
+            <Badge className="shrink-0">{t('publicBooking.mobile.ready')}</Badge>
           )}
         </div>
       </div>
@@ -1053,10 +1067,12 @@ function StepTitle({
 }
 
 function StepBack({ onClick }: { onClick: () => void }) {
+  const { t } = useTranslation();
+
   return (
     <Button variant="ghost" className="-ml-3" onClick={onClick}>
       <ChevronLeft className="mr-2 h-4 w-4" />
-      Back
+      {t('common.back')}
     </Button>
   );
 }
@@ -1085,8 +1101,8 @@ function Detail({ label, value }: { label: string; value: string }) {
   );
 }
 
-function formatClosureRange(start: string, end: string) {
-  const formatter = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+function formatClosureRange(start: string, end: string, locale: string) {
+  const formatter = new Intl.DateTimeFormat(locale, { day: '2-digit', month: 'short', year: 'numeric' });
   const startText = formatter.format(new Date(`${start}T00:00:00`));
   const endText = formatter.format(new Date(`${end}T00:00:00`));
   return start === end ? startText : `${startText} – ${endText}`;

@@ -71,7 +71,19 @@
     "add": "Ekle",
     "loading": "Yükleniyor...",
     "saving": "Kaydediliyor…",
-    "minutesShort": "dk"
+    "minutesShort": "dk",
+    "imageUploader": {
+      "fileTooLarge": "Dosya çok büyük, sıkıştırılıyor…",
+      "compressedTo": "{{size}} KB boyutuna sıkıştırıldı",
+      "uploaded": "Görsel başarıyla yüklendi",
+      "uploadFailed": "Görsel yüklenemedi",
+      "uploadedAlt": "Yüklenen görsel",
+      "removeImage": "Görseli kaldır",
+      "clickToUpload": "Görsel yüklemek için tıklayın",
+      "supportedFormats": "JPG, PNG ve WEBP desteklenir (otomatik sıkıştırma ile en fazla 1 MB)",
+      "uploading": "Yükleniyor… {{progress}}%"
+    },
+    "back": "Geri"
   },
   "language": {
     "label": "Dil",
@@ -942,7 +954,9 @@
       "completedCount_other": "{{count}} tamamlandı",
       "cancellationNoShowDetail": "%{{cancellation}} iptal · %{{noShow}} gelmeme",
       "returningCount_one": "{{count}} tekrar gelen müşteri",
-      "returningCount_other": "{{count}} tekrar gelen müşteri"
+      "returningCount_other": "{{count}} tekrar gelen müşteri",
+      "completedCount": "{{count}} tamamlandı",
+      "returningCount": "{{count}} geri dönen"
     },
     "comparison": {
       "vsPreviousPeriod": "Önceki döneme göre {{value}}"
@@ -953,7 +967,8 @@
     },
     "counts": {
       "bookings_one": "{{count}} rezervasyon",
-      "bookings_other": "{{count}} rezervasyon"
+      "bookings_other": "{{count}} rezervasyon",
+      "bookings": "{{count}} rezervasyon"
     },
     "executive": {
       "trendTitle": "Gelir ve talep eğilimi",
@@ -1053,7 +1068,8 @@
     },
     "chart": {
       "dailyTooltip_one": "{{date}}: {{revenue}}, {{count}} randevu",
-      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} randevu"
+      "dailyTooltip_other": "{{date}}: {{revenue}}, {{count}} randevu",
+      "dailyTooltip": "{{date}} · {{count}} rezervasyon"
     },
     "csv": {
       "reportTitle": "Velliqo İş Zekâsı Raporu",
@@ -1081,5 +1097,419 @@
       "unassigned": "Atanmamış",
       "customer": "Müşteri"
     }
+  },
+  "storefront": {
+    "owner": {
+      "eyebrow": "Herkese açık görünüm",
+      "title": "Vitrin Stüdyosu",
+      "description": "Müşterilerin işletmenizi keşfettiği, güvendiği ve randevu aldığı herkese açık sayfayı oluşturun ve yönetin.",
+      "sections": {
+        "overview": "Genel Bakış",
+        "branding": "Marka",
+        "contact": "İletişim",
+        "location": "Konum",
+        "sharing": "Önizleme ve paylaşım"
+      },
+      "actions": {
+        "copyLink": "Bağlantıyı kopyala",
+        "openPublicPage": "Herkese açık sayfayı aç",
+        "copy": "Kopyala",
+        "preview": "Önizleme",
+        "openPreview": "Önizlemeyi aç",
+        "saveChanges": "Değişiklikleri kaydet"
+      },
+      "readiness": {
+        "title": "Vitrin hazırlığı",
+        "description": "Müşterilerin rezervasyon öncesinde beklediği temel bilgileri tamamlayın.",
+        "publicUrl": "Herkese açık URL",
+        "availableAfterCreation": "İşletme oluşturulduktan sonra kullanılabilir",
+        "identityDescription": "İşletmenizin herkese açık kimliği ve müşteri sayfası.",
+        "businessLogo": "İşletme logosu",
+        "coverImage": "Kapak görseli",
+        "businessDescription": "İşletme açıklaması",
+        "phoneAndEmail": "Telefon ve e-posta",
+        "address": "Adres",
+        "yourLocation": "Konumunuz",
+        "descriptionFallback": "Hizmetlerinizi ve müşteri deneyimini tanıtmak için açık bir işletme açıklaması ekleyin.",
+        "complete": "Tamamlandı",
+        "needsAttention": "İlgilenilmesi gerekiyor"
+      },
+      "branding": {
+        "title": "Marka ve hikâye",
+        "description": "Akılda kalıcı ve profesyonel bir ilk izlenim oluşturun.",
+        "businessLogo": "İşletme logosu",
+        "businessLogoHint": "Kare görsel önerilir.",
+        "coverImage": "Kapak görseli",
+        "coverImageHint": "Geniş ve yüksek kaliteli görsel önerilir.",
+        "storeDescription": "Mağaza açıklaması",
+        "storeDescriptionHint": "İşletmeyi değerli, güvenilir ve farklı yapan özellikleri açıklayın.",
+        "descriptionPlaceholder": "İşletmenizi, uzmanlığınızı, hizmetlerinizi ve müşteri deneyimini açıklayın.",
+        "characterCount": "{{count}} karakter"
+      },
+      "contact": {
+        "title": "İletişim bilgileri",
+        "description": "Bu bilgiler herkese açık sayfada müşterilere gösterilir.",
+        "publicPhone": "Herkese açık telefon",
+        "phoneHint": "Gerekli olduğunda ülke kodunu ekleyin.",
+        "publicEmail": "Herkese açık e-posta",
+        "emailHint": "Müşteri iletişimi için kullanılır."
+      },
+      "location": {
+        "title": "Konum ve yol tarifi",
+        "description": "Yol tarifi ve harita görünümü için yapılandırılmış bilgiler ekleyin.",
+        "displayAddress": "Gösterilen adres",
+        "displayAddressHint": "Herkese açık olarak gösterilen anlaşılır adres.",
+        "addressLine1": "Adres satırı 1",
+        "addressLine2": "Adres satırı 2",
+        "city": "Şehir",
+        "district": "İlçe / bölge",
+        "postalCode": "Posta kodu",
+        "latitude": "Enlem",
+        "longitude": "Boylam",
+        "coordinateHint": "Örnek: {{value}}",
+        "mapTitle": "Mağaza konumu önizlemesi"
+      },
+      "sharing": {
+        "title": "Önizleme ve paylaşım",
+        "description": "Kalıcı herkese açık işletme sayfanızı açın, kopyalayın ve paylaşın.",
+        "publicLink": "Herkese açık bağlantı",
+        "defaultBusinessName": "İşletmem"
+      },
+      "status": {
+        "loading": "Vitrin düzenleyicisi yükleniyor…",
+        "unsaved": "Kaydedilmemiş vitrin değişiklikleri var",
+        "saved": "Tüm vitrin değişiklikleri kaydedildi",
+        "reviewReadiness": "Herkese açık sayfanızın hazırlığını inceleyin.",
+        "editing": "{{section}} düzenleniyor.",
+        "saving": "Kaydediliyor…"
+      },
+      "validation": {
+        "coordinates": "Enlem ve boylam geçerli sayılar olmalıdır",
+        "email": "Geçerli bir herkese açık e-posta adresi girin"
+      },
+      "messages": {
+        "loadError": "Vitrin bilgileri yüklenemedi",
+        "saveError": "Vitrin değişiklikleri kaydedilemedi",
+        "updated": "Vitrin başarıyla güncellendi",
+        "linkCopied": "Herkese açık bağlantı kopyalandı"
+      }
+    },
+    "qr": {
+      "title": "Bu mağazayı paylaş",
+      "description": "{{business}} sayfasını açmak, hizmetleri görmek ve randevu almak için QR kodunu tarayın veya bağlantıyı paylaşın.",
+      "shareText": "{{business}} sayfasını görüntüle ve randevu al",
+      "qrTitle": "{{business}} rezervasyon QR kodu",
+      "copyTitle": "Bağlantıyı kopyala",
+      "share": "Paylaş",
+      "download": "QR indir",
+      "linkCopied": "Mağaza bağlantısı kopyalandı",
+      "copyError": "Mağaza bağlantısı kopyalanamadı",
+      "shareError": "Mağaza bağlantısı paylaşılamadı",
+      "downloadError": "QR kodu indirilemedi",
+      "downloaded": "QR kodu indirildi"
+    },
+    "public": {
+      "navigation": {
+        "store": "Mağaza",
+        "book": "Rezervasyon",
+        "myAccount": "Hesabım",
+        "services": "Hizmetler",
+        "team": "Ekip",
+        "gallery": "Galeri",
+        "products": "Ürünler",
+        "announcements": "Duyurular",
+        "contact": "İletişim"
+      },
+      "status": {
+        "onlineBooking": "Online rezervasyon",
+        "temporarilyClosed": "Geçici olarak kapalı",
+        "acceptingBookings": "Rezervasyon alıyor",
+        "available": "Mevcut",
+        "outOfStock": "Stokta yok"
+      },
+      "actions": {
+        "bookAppointment": "Randevu al",
+        "directions": "Yol tarifi",
+        "share": "Paylaş",
+        "createAccount": "Hesap oluştur",
+        "chooseAnotherDate": "Başka bir tarih seç",
+        "book": "Rezervasyon",
+        "bookWith": "{{name}} ile rezervasyon",
+        "signIn": "Giriş yap",
+        "readMore": "Devamını oku",
+        "closeImage": "Görseli kapat"
+      },
+      "hero": {
+        "defaultTagline": "Hizmetlerimizi keşfedin ve kolayca online rezervasyon yapın.",
+        "guestBookingPrefix": "Misafir olarak rezervasyon yapılabilir.",
+        "guestBookingSuffix": "gelecekte daha hızlı rezervasyonlar için.",
+        "quickAccess": "Hızlı erişim",
+        "shareText": "{{business}} için randevu al"
+      },
+      "sections": {
+        "services": {
+          "title": "Hizmetler",
+          "description": "Hizmetleri, fiyatları ve uygunluğu inceleyin.",
+          "empty": "Henüz herkese açık hizmet bulunmuyor."
+        },
+        "team": {
+          "title": "Ekiple tanışın",
+          "description": "Tercih ettiğiniz uzmanı seçin.",
+          "empty": "Ekip profilleri yakında burada görünecek.",
+          "memberLabel": "Profesyonel ekip üyesi",
+          "memberFallback": "Online randevular için uygun."
+        },
+        "gallery": {
+          "title": "Galeri",
+          "description": "Mağazadan görüntüler ve son çalışmalar.",
+          "empty": "Mağaza galerisi şu anda boş."
+        },
+        "products": {
+          "title": "Ürünler",
+          "description": "Mağazada bulunan profesyonel ürünler.",
+          "empty": "Henüz herkese açık ürün eklenmedi."
+        },
+        "announcements": {
+          "title": "Duyurular",
+          "published_one": "{{count}} yayınlanmış güncelleme",
+          "published_other": "{{count}} yayınlanmış güncelleme",
+          "noPublishedUpdates": "Yayınlanmış güncelleme yok",
+          "empty": "Henüz yayınlanmış duyuru yok.",
+          "latest": "En yeni",
+          "published": "{{count}} yayınlandı"
+        },
+        "contact": {
+          "title": "Ziyaret ve İletişim",
+          "description": "Ziyaretinizden önce ihtiyaç duyduğunuz tüm bilgiler.",
+          "mapMissing": "Harita konumu henüz yapılandırılmadı."
+        }
+      },
+      "footer": {
+        "tagline": "Profesyonel online rezervasyon",
+        "privacy": "Gizlilik",
+        "terms": "Koşullar"
+      },
+      "postTypes": {
+        "announcement": "Duyuru",
+        "holiday_closure": "Tatil kapanışı",
+        "promotion": "Kampanya",
+        "price_update": "Fiyat güncellemesi",
+        "new_product": "Yeni ürün",
+        "new_team_member": "Yeni ekip üyesi",
+        "general": "Genel"
+      },
+      "mapTitle": "{{business}} konumu",
+      "loading": "Mağaza yükleniyor…",
+      "notFound": {
+        "title": "Mağaza bulunamadı",
+        "description": "Bu mağaza bağlantısı kullanılamıyor veya artık aktif değil."
+      },
+      "auth": {
+        "customerAccount": "Müşteri hesabı",
+        "customerAccess": "Müşteri erişimi",
+        "heroTitle": "Randevularınız ve mağaza deneyiminiz tek yerde.",
+        "heroDescription": "Daha hızlı rezervasyon, randevu geçmişi ve {{business}} güncellemeleri için isteğe bağlı bir hesap oluşturun.",
+        "benefits": {
+          "fasterTitle": "Daha hızlı rezervasyon",
+          "fasterText": "Kayıtlı müşteri bilgilerinizi yeniden kullanın.",
+          "upcomingTitle": "Yaklaşan randevular",
+          "upcomingText": "Bu mağazadaki sonraki ziyaretlerinizi görün.",
+          "historyTitle": "Randevu geçmişi",
+          "historyText": "Önceki rezervasyonların düzenli kaydını tutun."
+        },
+        "privacyNote": "Müşteri hesabınız bu mağazaya bağlıdır. Kayıt olmadan misafir rezervasyonu yapılabilir.",
+        "signInEyebrow": "Müşteri girişi",
+        "signUpEyebrow": "Müşteri kaydı",
+        "welcomeBack": "{{business}} mağazasına tekrar hoş geldiniz",
+        "createBusinessAccount": "{{business}} hesabınızı oluşturun",
+        "signInDescription": "Yaklaşan randevularınıza, geçmişinize ve müşteri profilinize erişin.",
+        "signUpDescription": "Bu mağaza için isteğe bağlı müşteri hesabı oluşturun.",
+        "signIn": "Giriş yap",
+        "createAccount": "Hesap oluştur",
+        "fullName": "Ad Soyad",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "password": "Şifre",
+        "accountLinkNote": "Bu hesap {{business}} ile bağlantılıdır ve randevu geçmişi ile daha hızlı rezervasyon sağlar.",
+        "pleaseWait": "Lütfen bekleyin…",
+        "signInAccount": "Hesabıma giriş yap",
+        "createCustomerAccount": "Müşteri hesabı oluştur",
+        "continueGuest": "Misafir olarak devam et",
+        "optionalNote": "Hesap oluşturmak isteğe bağlıdır. Kayıt olmadan her zaman rezervasyon yapabilirsiniz."
+      },
+      "validation": {
+        "credentialsRequired": "E-posta ve şifre gereklidir.",
+        "fullNameRequired": "Ad soyad gereklidir."
+      },
+      "messages": {
+        "accountCreated": "Müşteri hesabı oluşturuldu.",
+        "accountCreatedConfirm": "Hesap oluşturuldu. E-postanızı doğrulayın ve mağazaya geri dönün.",
+        "signedIn": "Başarıyla giriş yapıldı.",
+        "signedOut": "Çıkış yapıldı.",
+        "joinError": "Hesabınız bu mağazaya bağlanamadı.",
+        "authenticationFailed": "Kimlik doğrulama başarısız."
+      },
+      "errors": {
+        "loadStore": "Bu mağaza yüklenemedi"
+      },
+      "accessibility": {
+        "openMenu": "Gezinme menüsünü aç",
+        "closeMenu": "Gezinme menüsünü kapat",
+        "signOut": "Çıkış yap"
+      }
+    }
+  },
+  "publicBooking": {
+    "steps": {
+      "services": "Hizmetler",
+      "professional": "Uzman",
+      "dateTime": "Tarih ve Saat",
+      "details": "Bilgileriniz"
+    },
+    "header": {
+      "eyebrow": "Online rezervasyon",
+      "title": "{{business}} için rezervasyon yapın",
+      "description": "Hizmetlerinizi, tercih ettiğiniz uzmanı ve gerçekten uygun bir saati seçin."
+    },
+    "services": {
+      "title": "Hizmetleri seçin",
+      "description": "Aynı randevu için bir veya daha fazla hizmet seçin.",
+      "select": "Seç",
+      "selected": "Seçildi",
+      "continue": "Uzmana devam et"
+    },
+    "professionals": {
+      "title": "Uzman seçin",
+      "description": "Belirli bir kişiyi seçin veya sistemin uygun herhangi bir uzmanı atamasına izin verin.",
+      "anyAvailable": "Uygun herhangi biri",
+      "anyAvailableProfessional": "Uygun herhangi bir uzman",
+      "anyAvailableDescription": "Seçtiğiniz saat için ilk uygun uzman atanır.",
+      "defaultBio": "Profesyonel ekip üyesi."
+    },
+    "dateTime": {
+      "title": "Tarih ve saat seçin",
+      "description": "Yalnızca gerçekten uygun randevu saatleri gösterilir.",
+      "selectDate": "Tarih seçin",
+      "browseAvailability": "Önümüzdeki günlerin gerçek uygunluğunu görüntüleyin.",
+      "specificDate": "Veya belirli bir tarih seçin",
+      "continue": "Bilgilerinize devam edin"
+    },
+    "timeGroups": {
+      "morning": "Sabah",
+      "afternoon": "Öğleden sonra",
+      "evening": "Akşam"
+    },
+    "closure": {
+      "title": "İşletme kapalı",
+      "description": "{{business}}, seçilen tarihte {{reason}} nedeniyle kapalıdır.",
+      "range": "Kapalı: {{range}}",
+      "chooseAnother": "Lütfen başka bir tarih seçin."
+    },
+    "details": {
+      "title": "Bilgileriniz",
+      "savedDescription": "Kayıtlı müşteri bilgileriniz kullanılacaktır.",
+      "guestDescription": "Rezervasyon için gerekli iletişim bilgilerini girin.",
+      "name": "Ad",
+      "fullNameRequired": "Ad Soyad *",
+      "phone": "Telefon",
+      "phoneRequired": "Telefon numarası *",
+      "phoneRequiredShort": "Telefon *",
+      "email": "E-posta",
+      "notes": "Notlar",
+      "notesPlaceholder": "İşletme için isteğe bağlı notlar"
+    },
+    "summary": {
+      "title": "Rezervasyon özeti",
+      "reference": "Referans",
+      "services": "Hizmetler",
+      "professional": "Uzman",
+      "when": "Ne zaman",
+      "date": "Tarih",
+      "time": "Saat",
+      "estimatedFinish": "Tahmini bitiş",
+      "duration": "Süre",
+      "total": "Toplam"
+    },
+    "confirmation": {
+      "title": "Rezervasyon onaylandı",
+      "description": "{{business}} işletmesindeki randevunuz başarıyla ayrıldı.",
+      "addToCalendar": "Takvime ekle",
+      "getDirections": "Yol tarifi al",
+      "viewAppointments": "Randevularımı görüntüle",
+      "bookAnother": "Başka bir randevu al"
+    },
+    "actions": {
+      "confirm": "Randevuyu onayla",
+      "confirming": "Onaylanıyor..."
+    },
+    "states": {
+      "loadingOptions": "Rezervasyon seçenekleri yükleniyor...",
+      "loadingTimes": "Uygun randevular yükleniyor...",
+      "loadingDetails": "Bilgileriniz yükleniyor...",
+      "noAppointments": "Uygun randevu yok",
+      "noAppointmentsDescription": "Daha fazla saat görmek için başka bir tarih veya uzman seçin.",
+      "notSelected": "Seçilmedi",
+      "notAvailable": "Mevcut değil",
+      "notProvided": "Belirtilmedi"
+    },
+    "validation": {
+      "namePhoneRequired": "Ad ve telefon zorunludur",
+      "completeSteps": "Lütfen tüm rezervasyon adımlarını tamamlayın."
+    },
+    "messages": {
+      "loadOptionsFailed": "Rezervasyon seçenekleri yüklenemedi.",
+      "loadTimesFailed": "Uygun saatler yüklenemedi.",
+      "bookingFailed": "Rezervasyon başarısız oldu. Lütfen tekrar deneyin.",
+      "slotUnavailable": "Bu saat artık uygun değil. Lütfen başka bir saat seçin."
+    },
+    "calendar": {
+      "summary": "{{business}} - {{services}}",
+      "description": "Rezervasyon referansı {{reference}}",
+      "fileName": "randevu"
+    },
+    "mobile": {
+      "selectServices": "Başlamak için hizmet seçin",
+      "step": "{{total}} adımın {{step}}. adımı",
+      "ready": "Onaylamaya hazır"
+    },
+    "durationMinutes": "{{count}} dakika"
+  },
+  "ai": {
+    "ownerFallback": "İşletme sahibi",
+    "welcome": "Hoş geldiniz, {{name}}",
+    "introduction": "Velliqo AI, {{business}} için performans, müşteriler ve planlamayı anlamaya yardımcı olmak üzere hazırlanıyor.",
+    "yourBusiness": "işletmeniz",
+    "askVelliqo": "Velliqo’ya sor",
+    "settings": "AI Ayarları",
+    "cards": {
+      "insights": "Akıllı içgörüler",
+      "insightsDescription": "İşletme faaliyetlerini açık ve uygulanabilir önerilere dönüştürün.",
+      "businessHealth": "İşletme sağlığı",
+      "businessHealthDescription": "İşletmenizin operasyonel durumunu tek bakışta anlayın.",
+      "customerIntelligence": "Müşteri zekâsı",
+      "customerIntelligenceDescription": "Müşteri kalıplarını, sadakat fırsatlarını ve hizmet tercihlerini belirleyin.",
+      "scheduling": "Akıllı planlama",
+      "schedulingDescription": "Talep kalıplarını ve kapasite geliştirme fırsatlarını ortaya çıkarın."
+    },
+    "foundationReady": "Altyapı hazır",
+    "nextSprint": "Yakında",
+    "platform": "Velliqo zekâ platformu",
+    "specialists": "Uzman AI temsilcileri",
+    "foundationTitle": "Güvenli AI altyapısı",
+    "foundationDescription": "AI erişimi işletme izinleri, dil ve onaylı veri kapsamlarıyla kontrol edilir.",
+    "reviewSettings": "AI ayarlarını gözden geçir",
+    "settingsDescription": "Velliqo AI’ın işletme verilerinizle nasıl çalışacağını yönetin.",
+    "settingsSaved": "AI ayarları kaydedildi",
+    "enableAI": "Velliqo AI’ı etkinleştir",
+    "enableAIDescription": "Yetkili kullanıcıların AI destekli özelliklere erişmesine izin verin.",
+    "defaultLanguage": "Varsayılan AI dili",
+    "responseStyle": "Yanıt stili",
+    "concise": "Kısa",
+    "balanced": "Dengeli",
+    "detailed": "Ayrıntılı",
+    "conversationHistory": "Konuşma geçmişi",
+    "conversationHistoryDescription": "Yetkili kullanıcıların önceki çalışmalara dönebilmesi için AI konuşmalarını saklayın.",
+    "customerData": "Müşteri verisi erişimi",
+    "customerDataDescription": "İzinler uygun olduğunda AI özelliklerinin onaylı müşteri bilgilerini kullanmasına izin verin."
   }
 }
