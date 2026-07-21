@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
@@ -50,6 +51,7 @@ const EMPTY_FORM = {
 };
 
 export default function Customers() {
+  const { t, i18n } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -131,7 +133,7 @@ export default function Customers() {
       setVisitSpend(nextVisitSpend);
     } catch (error) {
       console.error('Error fetching customers:', error);
-      toast.error('Failed to load customers');
+      toast.error(t('customers.toasts.loadError'));
     } finally {
       setLoading(false);
     }
@@ -185,7 +187,7 @@ export default function Customers() {
 
   const handleSave = async () => {
     if (!businessId || !formData.full_name.trim()) {
-      toast.error('Name is required');
+      toast.error(t('customers.validation.nameRequired'));
       return;
     }
 
@@ -209,18 +211,18 @@ export default function Customers() {
           .eq('business_id', businessId);
 
         if (error) throw error;
-        toast.success('Customer updated');
+        toast.success(t('customers.toasts.updated'));
       } else {
         const { error } = await supabase.from('customers').insert(payload);
 
         if (error) throw error;
-        toast.success('Customer added');
+        toast.success(t('customers.toasts.added'));
       }
 
       setIsDialogOpen(false);
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save customer');
+      toast.error(error.message || t('customers.toasts.saveError'));
     } finally {
       setSaving(false);
     }
@@ -231,8 +233,8 @@ export default function Customers() {
 
     const confirmed = window.confirm(
       isRegistered
-        ? 'Remove this customer profile from the store? Their authentication account will not be deleted.'
-        : 'Remove this guest customer? Existing appointment history may prevent deletion.'
+        ? t('customers.confirmRemoveRegistered')
+        : t('customers.confirmRemoveGuest')
     );
 
     if (!confirmed) return;
@@ -246,12 +248,12 @@ export default function Customers() {
 
       if (error) throw error;
 
-      toast.success('Customer removed');
+      toast.success(t('customers.toasts.removed'));
       await fetchData();
     } catch (error: any) {
       toast.error(
         error.message ||
-          'This customer cannot be removed because appointment history exists'
+          t('customers.toasts.removeBlocked')
       );
     }
   };
@@ -263,36 +265,35 @@ export default function Customers() {
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
             Customer management
           </div>
-          <h1 className="app-page-title">Customers</h1>
+          <h1 className="app-page-title">{t('customers.title')}</h1>
           <p className="app-page-description">
-            Manage registered customer accounts separately from guest booking
-            contacts.
+            {t('customers.description')}
           </p>
         </div>
 
         <Button onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Customer
+          {t('customers.actions.add')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
-          title="Registered Customers"
+          title={t('customers.summary.registeredTitle')}
           value={registeredCount}
-          description="Customers with an account"
+          description={t('customers.summary.registeredDescription')}
           icon={<UserCheck className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Guest Contacts"
+          title={t('customers.summary.guestTitle')}
           value={guestCount}
-          description="Customers who booked as guests"
+          description={t('customers.summary.guestDescription')}
           icon={<UserRound className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Total Customers"
+          title={t('customers.summary.totalTitle')}
           value={customers.length}
-          description="All customer records"
+          description={t('customers.summary.totalDescription')}
           icon={<Users className="h-5 w-5" />}
         />
       </section>
@@ -300,19 +301,19 @@ export default function Customers() {
       <div className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
         <MainTabButton
           active={activeTab === 'customers'}
-          label="Customers"
+          label={t('customers.tabs.customers')}
           icon={<Users className="h-4 w-4" />}
           onClick={() => setActiveTab('customers')}
         />
         <MainTabButton
           active={activeTab === 'records'}
-          label="Customer Records"
+          label={t('customers.tabs.records')}
           icon={<BookOpenText className="h-4 w-4" />}
           onClick={() => setActiveTab('records')}
         />
         <MainTabButton
           active={activeTab === 'history'}
-          label="Visit History"
+          label={t('customers.tabs.history')}
           icon={<History className="h-4 w-4" />}
           onClick={() => setActiveTab('history')}
         />
@@ -325,13 +326,13 @@ export default function Customers() {
               <div>
                 <h2 className="text-lg font-bold">
                   {activeTab === 'records'
-                    ? 'Customer Records'
-                    : 'Visit History'}
+                    ? t('customers.tabs.records')
+                    : t('customers.tabs.history')}
                 </h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {activeTab === 'records'
-                    ? 'Open a customer to manage formulas, notes and photos.'
-                    : 'Open a customer to review previous appointments.'}
+                    ? t('customers.recordsDescription')
+                    : t('customers.historyDescription')}
                 </p>
               </div>
 
@@ -339,7 +340,7 @@ export default function Customers() {
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   className="h-11 rounded-xl pl-9"
-                  placeholder="Search by name, email or phone"
+                  placeholder={t('customers.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(event) => setSearchQuery(event.target.value)}
                 />
@@ -350,11 +351,11 @@ export default function Customers() {
           <CardContent className="p-0">
             {loading ? (
               <div className="p-12 text-center text-sm text-muted-foreground">
-                Loading customers...
+                {t('customers.states.loading')}
               </div>
             ) : filteredCustomers.length === 0 ? (
               <div className="p-12 text-center text-sm text-muted-foreground">
-                No customers found.
+                {t('customers.states.empty')}
               </div>
             ) : (
               <div className="divide-y">
@@ -376,7 +377,7 @@ export default function Customers() {
                         />
                       </div>
                       <div className="mt-1 text-xs text-muted-foreground">
-                        {customer.email || customer.phone || 'No contact details'}
+                        {customer.email || customer.phone || t('customers.noContactDetails')}
                       </div>
                     </div>
 
@@ -388,8 +389,8 @@ export default function Customers() {
                       </div>
                       <div className="text-xs text-muted-foreground">
                         {activeTab === 'records'
-                          ? 'records'
-                          : `visits · €${Number(
+                          ? t('customers.counts.records')
+                          : `${t('customers.counts.visits')} · €${Number(
                               visitSpend[customer.id] || 0
                             ).toFixed(2)}`}
                       </div>
@@ -409,19 +410,19 @@ export default function Customers() {
             <div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1">
               <FilterTab
                 active={activeFilter === 'registered'}
-                label="Registered"
+                label={t('customers.filters.registered')}
                 count={registeredCount}
                 onClick={() => setActiveFilter('registered')}
               />
               <FilterTab
                 active={activeFilter === 'guest'}
-                label="Guests"
+                label={t('customers.filters.guests')}
                 count={guestCount}
                 onClick={() => setActiveFilter('guest')}
               />
               <FilterTab
                 active={activeFilter === 'all'}
-                label="All"
+                label={t('customers.filters.all')}
                 count={customers.length}
                 onClick={() => setActiveFilter('all')}
               />
@@ -431,7 +432,7 @@ export default function Customers() {
               <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
               <Input
                 className="h-11 rounded-xl pl-9"
-                placeholder="Search by name, email or phone"
+                placeholder={t('customers.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
               />
@@ -445,11 +446,11 @@ export default function Customers() {
             <Table>
               <TableHeader>
                 <TableRow className="bg-muted/35">
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Contact Details</TableHead>
-                  <TableHead>Customer Type</TableHead>
-                  <TableHead>Added</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+                  <TableHead>{t('customers.table.customer')}</TableHead>
+                  <TableHead>{t('customers.table.contact')}</TableHead>
+                  <TableHead>{t('customers.table.type')}</TableHead>
+                  <TableHead>{t('customers.table.added')}</TableHead>
+                  <TableHead className="text-right">{t('customers.table.actions')}</TableHead>
                 </TableRow>
               </TableHeader>
 
@@ -460,7 +461,7 @@ export default function Customers() {
                       colSpan={5}
                       className="h-32 text-center text-muted-foreground"
                     >
-                      Loading customers...
+                      {t('customers.states.loading')}
                     </TableCell>
                   </TableRow>
                 ) : filteredCustomers.length === 0 ? (
@@ -469,7 +470,7 @@ export default function Customers() {
                       colSpan={5}
                       className="h-40 text-center text-muted-foreground"
                     >
-                      No customers found in this category.
+                      {t('customers.states.emptyCategory')}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -495,11 +496,11 @@ export default function Customers() {
                         <div className="space-y-1.5 text-sm">
                           <ContactLine
                             icon={<Mail className="h-3.5 w-3.5" />}
-                            value={customer.email || 'No email'}
+                            value={customer.email || t('customers.noEmail')}
                           />
                           <ContactLine
                             icon={<Phone className="h-3.5 w-3.5" />}
-                            value={customer.phone || 'No phone'}
+                            value={customer.phone || t('customers.noPhone')}
                           />
                         </div>
                       </TableCell>
@@ -511,14 +512,14 @@ export default function Customers() {
                       </TableCell>
 
                       <TableCell className="text-muted-foreground">
-                        {formatCustomerDate(customer.created_at)}
+                        {formatCustomerDate(customer.created_at, i18n.language)}
                       </TableCell>
 
                       <TableCell className="text-right">
                         <Button
                           variant="ghost"
                           size="icon"
-                          title="Edit customer"
+                          title={t('customers.actions.edit')}
                           onClick={() => handleOpenDialog(customer)}
                         >
                           <Edit className="h-4 w-4" />
@@ -527,7 +528,7 @@ export default function Customers() {
                         <Button
                           variant="ghost"
                           size="icon"
-                          title="Remove customer"
+                          title={t('customers.actions.remove')}
                           onClick={() => void handleDelete(customer)}
                         >
                           <Trash2 className="h-4 w-4 text-destructive" />
@@ -544,11 +545,11 @@ export default function Customers() {
           <div className="divide-y md:hidden">
             {loading ? (
               <div className="p-10 text-center text-sm text-muted-foreground">
-                Loading customers...
+                {t('customers.states.loading')}
               </div>
             ) : filteredCustomers.length === 0 ? (
               <div className="p-10 text-center text-sm text-muted-foreground">
-                No customers found in this category.
+                {t('customers.states.emptyCategory')}
               </div>
             ) : (
               filteredCustomers.map((customer) => (
@@ -588,14 +589,14 @@ export default function Customers() {
                   <div className="space-y-2 rounded-xl bg-muted/30 p-4 text-sm">
                     <ContactLine
                       icon={<Mail className="h-4 w-4" />}
-                      value={customer.email || 'No email'}
+                      value={customer.email || t('customers.noEmail')}
                     />
                     <ContactLine
                       icon={<Phone className="h-4 w-4" />}
-                      value={customer.phone || 'No phone'}
+                      value={customer.phone || t('customers.noPhone')}
                     />
                     <div className="text-xs text-muted-foreground">
-                      Added {formatCustomerDate(customer.created_at)}
+                      {t('customers.addedOn', { date: formatCustomerDate(customer.created_at, i18n.language) })}
                     </div>
                   </div>
 
@@ -617,13 +618,13 @@ export default function Customers() {
         <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              {editingId ? 'Edit Customer' : 'Add Customer'}
+              {editingId ? t('customers.dialog.editTitle') : t('customers.dialog.addTitle')}
             </DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-5 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="full_name">Full Name *</Label>
+              <Label htmlFor="full_name">{t('customers.form.fullName')} *</Label>
               <Input
                 id="full_name"
                 className="h-11 rounded-xl"
@@ -638,7 +639,7 @@ export default function Customers() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email">{t('customers.form.email')}</Label>
               <Input
                 id="email"
                 type="email"
@@ -654,7 +655,7 @@ export default function Customers() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="phone">Phone</Label>
+              <Label htmlFor="phone">{t('customers.form.phone')}</Label>
               <Input
                 id="phone"
                 type="tel"
@@ -670,7 +671,7 @@ export default function Customers() {
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="notes">Internal Notes</Label>
+              <Label htmlFor="notes">{t('customers.form.notes')}</Label>
               <Textarea
                 id="notes"
                 rows={4}
@@ -687,9 +688,7 @@ export default function Customers() {
 
             {!editingId && (
               <div className="rounded-xl border border-dashed bg-muted/25 p-4 text-sm leading-6 text-muted-foreground">
-                Customers created manually by the owner are stored as guest
-                contacts. A customer becomes registered only after creating and
-                linking an authentication account.
+                {t('customers.form.manualCustomerNote')}
               </div>
             )}
           </div>
@@ -700,10 +699,10 @@ export default function Customers() {
               disabled={saving}
               onClick={() => setIsDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button disabled={saving} onClick={() => void handleSave()}>
-              {saving ? 'Saving...' : 'Save Customer'}
+              {saving ? t('common.saving') : t('customers.actions.save')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -820,12 +819,13 @@ function CustomerAvatar({ name }: { name: string }) {
 }
 
 function CustomerTypeBadge({ registered }: { registered: boolean }) {
+  const { t } = useTranslation();
   return registered ? (
     <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
-      Registered
+      {t('customers.types.registered')}
     </Badge>
   ) : (
-    <Badge variant="secondary">Guest</Badge>
+    <Badge variant="secondary">{t('customers.types.guest')}</Badge>
   );
 }
 
@@ -844,8 +844,8 @@ function ContactLine({
   );
 }
 
-function formatCustomerDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatCustomerDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

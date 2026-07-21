@@ -69,7 +69,8 @@
     "edit": "Bearbeiten",
     "delete": "Löschen",
     "add": "Hinzufügen",
-    "loading": "Wird geladen..."
+    "loading": "Wird geladen...",
+    "minutesShort": "Min."
   },
   "language": {
     "label": "Sprache",
@@ -135,5 +136,129 @@
     "services": "Dienstleistungen",
     "appointment": "Termin",
     "appointments": "Termine"
+  },
+  "staff": {
+    "eyebrow": "Teamverwaltung",
+    "title": "Personal",
+    "description": "Verwalten Sie Mitarbeiterprofile, Dienstleistungen und die wöchentliche Verfügbarkeit.",
+    "loading": "Personal wird geladen...",
+    "confirmRemove": "{{name}} entfernen? Bestehende Termine können eine endgültige Löschung verhindern.",
+    "actions": {
+      "add": "Mitarbeiter hinzufügen",
+      "remove": "Entfernen",
+      "save": "Mitarbeiter speichern",
+      "saving": "Wird gespeichert..."
+    },
+    "summary": {
+      "total": {
+        "title": "Gesamtes Personal",
+        "description": "Alle Mitarbeiterprofile"
+      },
+      "active": {
+        "title": "Aktive Fachkräfte",
+        "description": "Können Buchungen erhalten"
+      },
+      "inactive": {
+        "title": "Inaktiv",
+        "description": "Vorübergehend nicht verfügbar"
+      }
+    },
+    "empty": {
+      "title": "Noch keine Mitarbeiter",
+      "description": "Fügen Sie die erste Fachkraft hinzu und richten Sie Dienstleistungen und Arbeitszeiten ein."
+    },
+    "status": {
+      "label": "Aktivstatus",
+      "active": "Aktiv",
+      "inactive": "Inaktiv",
+      "description": "Aktive Mitarbeiter können neue Buchungen erhalten."
+    },
+    "contact": {
+      "noEmail": "Keine E-Mail",
+      "noPhone": "Keine Telefonnummer"
+    },
+    "services": {
+      "label": "Dienstleistungen",
+      "title": "Angebotene Dienstleistungen",
+      "description": "Wählen Sie alle Dienstleistungen aus, die diese Fachkraft ausführen kann.",
+      "noneAssigned": "Keine Dienstleistungen zugewiesen",
+      "more": "+{{count}} weitere"
+    },
+    "dialog": {
+      "addTitle": "Mitarbeiter hinzufügen",
+      "editTitle": "Mitarbeiter bearbeiten",
+      "description": "Profil, Dienstleistungen und wöchentliche Verfügbarkeit konfigurieren."
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Informationen, die Kunden auf der öffentlichen Seite sehen."
+    },
+    "fields": {
+      "photo": "Foto",
+      "fullNameRequired": "Vollständiger Name *",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "biography": "Kurzbiografie",
+      "day": "Tag",
+      "start": "Beginn",
+      "end": "Ende",
+      "label": "Bezeichnung",
+      "startDate": "Startdatum",
+      "endDate": "Enddatum"
+    },
+    "schedule": {
+      "title": "Wochenplan",
+      "description": "Diese Zeiten bestimmen die verfügbaren Buchungsfenster.",
+      "open": "Geöffnet",
+      "closed": "Geschlossen",
+      "noneConfigured": "Kein Zeitplan konfiguriert",
+      "workingDaysSummary": "{{count}} Arbeitstag · {{earliest}}–{{latest}}",
+      "workingDaysSummary_other": "{{count}} Arbeitstage · {{earliest}}–{{latest}}"
+    },
+    "days": {
+      "monday": "Montag",
+      "tuesday": "Dienstag",
+      "wednesday": "Mittwoch",
+      "thursday": "Donnerstag",
+      "friday": "Freitag",
+      "saturday": "Samstag",
+      "sunday": "Sonntag"
+    },
+    "inactive": {
+      "title": "Vorübergehende Abwesenheit",
+      "description": "Für Urlaub, Freistellung oder eine andere vorübergehende Abwesenheit."
+    },
+    "breaks": {
+      "title": "Pausen (optional)",
+      "description": "Wiederkehrende Pausen hinzufügen. Diese Zeiten werden für Buchungen gesperrt.",
+      "add": "Pause hinzufügen",
+      "noneScheduled": "Keine geplanten Pausen",
+      "emptyDescription": "Pausen sind optional. Fügen Sie nur benötigte Pausen hinzu.",
+      "defaultLabel": "Pause",
+      "placeholder": "Mittagspause",
+      "removeAria": "Pause entfernen",
+      "recurringCount": "{{count}} wiederkehrende Pause",
+      "recurringCount_other": "{{count}} wiederkehrende Pausen"
+    },
+    "validation": {
+      "nameRequired": "Der Name ist erforderlich",
+      "serviceRequired": "Wählen Sie mindestens eine Dienstleistung",
+      "invalidWorkingHours": "Geben Sie gültige Arbeitszeiten für {{day}} ein",
+      "breakOnClosedDay": "An einem geschlossenen Tag kann keine Pause hinzugefügt werden",
+      "invalidBreakTime": "Geben Sie eine gültige Pausenzeit für {{day}} ein",
+      "breakOutsideHours": "Die Pause am {{day}} muss zwischen {{start}}–{{end}} liegen",
+      "breaksOverlap": "Zwei Pausen überschneiden sich am {{day}}",
+      "inactiveDateOrder": "Das Enddatum muss nach dem Startdatum liegen"
+    },
+    "messages": {
+      "loadFailed": "Personal konnte nicht geladen werden",
+      "detailsLoadFailed": "Mitarbeiterdetails konnten nicht geladen werden",
+      "recordNotCreated": "Mitarbeitereintrag wurde nicht erstellt",
+      "updated": "Mitarbeiter wurde aktualisiert",
+      "added": "Mitarbeiter wurde hinzugefügt",
+      "saveFailed": "Mitarbeiter konnte nicht gespeichert werden",
+      "removed": "Mitarbeiter wurde entfernt",
+      "removeFailed": "Mitarbeiter konnte nicht entfernt werden"
+    }
   }
 }

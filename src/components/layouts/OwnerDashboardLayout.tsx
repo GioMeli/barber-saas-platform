@@ -89,7 +89,7 @@ export default function OwnerDashboardLayout() {
             <Button variant="ghost" className="justify-start text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-white" onClick={handleLogout}>
               <LogOut className="mr-2 h-4 w-4" />{t('dashboard.sign_out')}
             </Button>
-            <LanguageSwitcher />
+            <LanguageSwitcher compact appearance="sidebar" />
           </div>
         </div>
       </aside>

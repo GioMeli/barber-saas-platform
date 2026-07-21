@@ -1,6 +1,7 @@
 import React from 'react';
 import { AlertTriangle, CheckCircle2, Target } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   unreadNotifications: number;
@@ -15,6 +16,7 @@ export function TodaysAlerts({
   staff,
   staffBreaks,
 }: Props) {
+  const { t } = useTranslation();
   const unassigned = activeAppointments.filter((item) => !item.employee_id);
   const cancelled = activeAppointments.filter((item) =>
     ['cancelled_by_business', 'cancelled_by_customer'].includes(item.status)
@@ -31,9 +33,9 @@ export function TodaysAlerts({
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <CardTitle className="section-heading">Today’s Alerts</CardTitle>
+            <CardTitle className="section-heading">{t('dashboard_home.alerts.title')}</CardTitle>
             <p className="mt-1 text-sm text-muted-foreground">
-              Operational items that need your attention today.
+              {t('dashboard_home.alerts.description')}
             </p>
           </div>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
@@ -46,40 +48,40 @@ export function TodaysAlerts({
         <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
           {!hasAlerts && (
             <AlertItem
-              title="No alerts today"
-              detail="Your appointments, staffing and notifications look healthy."
+              title={t('dashboard_home.alerts.none_title')}
+              detail={t('dashboard_home.alerts.none_detail')}
               tone="success"
             />
           )}
 
           {unreadNotifications > 0 && (
             <AlertItem
-              title={`${unreadNotifications} unread notification${unreadNotifications === 1 ? '' : 's'}`}
-              detail="Open the bell to review new appointments and customers."
+              title={t('dashboard_home.alerts.unread', { count: unreadNotifications })}
+              detail={t('dashboard_home.alerts.unread_detail')}
               tone="info"
             />
           )}
 
           {unassigned.length > 0 && (
             <AlertItem
-              title={`${unassigned.length} unassigned appointment${unassigned.length === 1 ? '' : 's'}`}
-              detail="Assign a professional before the appointment begins."
+              title={t('dashboard_home.alerts.unassigned', { count: unassigned.length })}
+              detail={t('dashboard_home.alerts.unassigned_detail')}
               tone="warning"
             />
           )}
 
           {cancelled.length > 0 && (
             <AlertItem
-              title={`${cancelled.length} cancellation${cancelled.length === 1 ? '' : 's'} today`}
-              detail="Review the calendar and refill the available time."
+              title={t('dashboard_home.alerts.cancelled', { count: cancelled.length })}
+              detail={t('dashboard_home.alerts.cancelled_detail')}
               tone="danger"
             />
           )}
 
           {staffWithoutBreak > 0 && (
             <AlertItem
-              title={`${staffWithoutBreak} professional${staffWithoutBreak === 1 ? '' : 's'} without a break`}
-              detail="Review today’s staff schedule and working pattern."
+              title={t('dashboard_home.alerts.without_break', { count: staffWithoutBreak })}
+              detail={t('dashboard_home.alerts.without_break_detail')}
               tone="warning"
             />
           )}
@@ -93,6 +95,7 @@ export function BusinessHealth({
   activeAppointments,
   staff,
 }: Pick<Props, 'activeAppointments' | 'staff'>) {
+  const { t } = useTranslation();
   const valid = activeAppointments.filter(
     (item) =>
       !['cancelled_by_business', 'cancelled_by_customer', 'no_show', 'rescheduled'].includes(
@@ -124,7 +127,7 @@ export function BusinessHealth({
     <Card className="rounded-2xl shadow-card">
       <CardHeader>
         <div className="flex items-center justify-between gap-4">
-          <CardTitle className="section-heading">Business health</CardTitle>
+          <CardTitle className="section-heading">{t('dashboard_home.health.title')}</CardTitle>
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
             <Target className="h-5 w-5" />
           </div>
@@ -132,12 +135,12 @@ export function BusinessHealth({
       </CardHeader>
 
       <CardContent className="space-y-5">
-        <HealthMetric label="Occupancy" value={`${occupancy}%`} progress={occupancy} />
-        <HealthMetric label="Completion rate" value={`${completion}%`} progress={completion} />
+        <HealthMetric label={t('dashboard_home.health.occupancy')} value={`${occupancy}%`} progress={occupancy} />
+        <HealthMetric label={t('dashboard_home.health.completion_rate')} value={`${completion}%`} progress={completion} />
 
         <div className="grid grid-cols-2 gap-3 pt-1">
-          <HealthStat label="Cancellations" value={`${cancellation}%`} />
-          <HealthStat label="Unassigned" value={String(unassigned.length)} />
+          <HealthStat label={t('dashboard_home.health.cancellations')} value={`${cancellation}%`} />
+          <HealthStat label={t('dashboard_home.health.unassigned')} value={String(unassigned.length)} />
         </div>
       </CardContent>
     </Card>

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { format, parseISO } from 'date-fns';
 import { Clock3, UserRound } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 type DailyStaffScheduleProps = {
   appointments: any[];
@@ -70,6 +71,7 @@ export default function DailyStaffSchedule({
   endHour = 22,
   onAppointmentClick,
 }: DailyStaffScheduleProps) {
+  const { t } = useTranslation();
   const columns = useMemo<ScheduleColumn[]>(() => {
     const activeStaff = staff.map((member) => ({
       id: member.id,
@@ -87,14 +89,14 @@ export default function DailyStaffSchedule({
           ...activeStaff,
           {
             id: 'unassigned',
-            name: 'Unassigned',
+            name: t('dashboard_home.schedule.unassigned'),
             photo_url: null,
-            role: 'Open column',
+            role: t('dashboard_home.schedule.open_column'),
             isUnassigned: true,
           },
         ]
       : activeStaff;
-  }, [appointments, staff]);
+  }, [appointments, staff, t]);
 
   const slots = useMemo<TimeSlot[]>(() => {
     const values: TimeSlot[] = [];
@@ -129,9 +131,9 @@ export default function DailyStaffSchedule({
         <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
           <UserRound className="h-7 w-7 text-muted-foreground" />
         </div>
-        <h3 className="mt-4 font-bold">No active professionals</h3>
+        <h3 className="mt-4 font-bold">{t('dashboard_home.schedule.no_professionals')}</h3>
         <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-          Add an employee to display the daily staff calendar.
+          {t('dashboard_home.schedule.add_employee_hint')}
         </p>
       </div>
     );
@@ -150,7 +152,7 @@ export default function DailyStaffSchedule({
             <div className="sticky left-0 z-50 flex flex-col items-center justify-center border-r-2 border-slate-300 bg-white px-2 py-3">
               <Clock3 className="h-5 w-5 text-primary" />
               <span className="mt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                Time
+                {t('dashboard_home.schedule.time')}
               </span>
             </div>
 
@@ -175,7 +177,7 @@ export default function DailyStaffSchedule({
                   {column.name}
                 </div>
                 <div className="max-w-full truncate text-[10px] text-muted-foreground">
-                  {column.role || 'Professional'}
+                  {column.role || t('dashboard_home.schedule.professional')}
                 </div>
               </div>
             ))}
@@ -278,7 +280,7 @@ export default function DailyStaffSchedule({
 
                         {placement.height >= 56 && (
                           <div className="truncate text-[10px] leading-tight opacity-75">
-                            Unavailable
+                            {t('dashboard_home.schedule.unavailable')}
                           </div>
                         )}
                       </div>
@@ -298,10 +300,10 @@ export default function DailyStaffSchedule({
                       appointment.appointment_services
                         ?.map((row: any) => row.services?.name)
                         .filter(Boolean)
-                        .join(', ') || 'Appointment';
+                        .join(', ') || t('dashboard_home.schedule.appointment');
 
                     const customerName =
-                      appointment.customers?.full_name || 'Guest customer';
+                      appointment.customers?.full_name || t('dashboard_home.schedule.guest_customer');
 
                     const status = String(appointment.status || 'default');
                     const statusClass =
@@ -357,12 +359,12 @@ export default function DailyStaffSchedule({
       </div>
 
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t bg-white px-4 py-3 text-[11px] text-muted-foreground">
-        <LegendDot className="bg-emerald-500" label="Completed" />
-        <LegendDot className="bg-blue-500" label="In progress" />
-        <LegendDot className="bg-teal-500" label="Confirmed" />
-        <LegendDot className="bg-violet-500" label="Other" />
-        <LegendDot className="bg-slate-400" label="Cancelled" />
-        <LegendDot className="bg-slate-300 ring-1 ring-slate-400" label="Break" />
+        <LegendDot className="bg-emerald-500" label={t('dashboard_home.schedule.legend.completed')} />
+        <LegendDot className="bg-blue-500" label={t('dashboard_home.schedule.legend.in_progress')} />
+        <LegendDot className="bg-teal-500" label={t('dashboard_home.schedule.legend.confirmed')} />
+        <LegendDot className="bg-violet-500" label={t('dashboard_home.schedule.legend.other')} />
+        <LegendDot className="bg-slate-400" label={t('dashboard_home.schedule.legend.cancelled')} />
+        <LegendDot className="bg-slate-300 ring-1 ring-slate-400" label={t('dashboard_home.schedule.legend.break')} />
       </div>
     </div>
   );
