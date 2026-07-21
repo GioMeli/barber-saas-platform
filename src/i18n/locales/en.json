@@ -69,7 +69,8 @@
     "edit": "Edit",
     "delete": "Delete",
     "add": "Add",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "minutesShort": "min"
   },
   "language": {
     "label": "Language",
@@ -135,5 +136,129 @@
     "services": "Services",
     "appointment": "Appointment",
     "appointments": "Appointments"
+  },
+  "staff": {
+    "eyebrow": "Team management",
+    "title": "Staff",
+    "description": "Manage employee profiles, service skills and weekly availability.",
+    "loading": "Loading staff...",
+    "confirmRemove": "Remove {{name}}? Existing appointments may prevent permanent deletion.",
+    "actions": {
+      "add": "Add Staff Member",
+      "remove": "Remove",
+      "save": "Save Staff Member",
+      "saving": "Saving..."
+    },
+    "summary": {
+      "total": {
+        "title": "Total Staff",
+        "description": "All employee profiles"
+      },
+      "active": {
+        "title": "Active Professionals",
+        "description": "Can receive bookings"
+      },
+      "inactive": {
+        "title": "Inactive",
+        "description": "Temporarily unavailable"
+      }
+    },
+    "empty": {
+      "title": "No staff members yet",
+      "description": "Add your first professional and configure services and working hours."
+    },
+    "status": {
+      "label": "Active Status",
+      "active": "Active",
+      "inactive": "Inactive",
+      "description": "Active staff can receive new bookings."
+    },
+    "contact": {
+      "noEmail": "No email",
+      "noPhone": "No phone"
+    },
+    "services": {
+      "label": "Services",
+      "title": "Services Offered",
+      "description": "Select every service this professional can perform.",
+      "noneAssigned": "No services assigned",
+      "more": "+{{count}} more"
+    },
+    "dialog": {
+      "addTitle": "Add Staff Member",
+      "editTitle": "Edit Staff Member",
+      "description": "Configure the profile, services and weekly availability."
+    },
+    "profile": {
+      "title": "Profile",
+      "description": "Information customers will see on the storefront."
+    },
+    "fields": {
+      "photo": "Photo",
+      "fullNameRequired": "Full Name *",
+      "phone": "Phone",
+      "email": "Email",
+      "biography": "Short Biography",
+      "day": "Day",
+      "start": "Start",
+      "end": "End",
+      "label": "Label",
+      "startDate": "Start Date",
+      "endDate": "End Date"
+    },
+    "schedule": {
+      "title": "Weekly Schedule",
+      "description": "These hours determine the available booking slots.",
+      "open": "Open",
+      "closed": "Closed",
+      "noneConfigured": "No schedule configured",
+      "workingDaysSummary": "{{count}} working day · {{earliest}}–{{latest}}",
+      "workingDaysSummary_other": "{{count}} working days · {{earliest}}–{{latest}}"
+    },
+    "days": {
+      "monday": "Monday",
+      "tuesday": "Tuesday",
+      "wednesday": "Wednesday",
+      "thursday": "Thursday",
+      "friday": "Friday",
+      "saturday": "Saturday",
+      "sunday": "Sunday"
+    },
+    "inactive": {
+      "title": "Temporary Inactive Period",
+      "description": "Use this for holidays, leave or another temporary absence."
+    },
+    "breaks": {
+      "title": "Breaks (Optional)",
+      "description": "Add recurring breaks. These times will be blocked from owner and public bookings.",
+      "add": "Add Break",
+      "noneScheduled": "No scheduled breaks",
+      "emptyDescription": "Breaks are optional. Add one only when this professional needs it.",
+      "defaultLabel": "Break",
+      "placeholder": "Lunch break",
+      "removeAria": "Remove break",
+      "recurringCount": "{{count}} recurring break",
+      "recurringCount_other": "{{count}} recurring breaks"
+    },
+    "validation": {
+      "nameRequired": "Name is required",
+      "serviceRequired": "Select at least one service",
+      "invalidWorkingHours": "Enter valid working hours for {{day}}",
+      "breakOnClosedDay": "A break cannot be added on a closed day",
+      "invalidBreakTime": "Enter a valid break time for {{day}}",
+      "breakOutsideHours": "{{day}} break must be inside {{start}}–{{end}}",
+      "breaksOverlap": "Two breaks overlap on {{day}}",
+      "inactiveDateOrder": "Inactive end date must be after the start date"
+    },
+    "messages": {
+      "loadFailed": "Failed to load staff members",
+      "detailsLoadFailed": "Failed to load staff details",
+      "recordNotCreated": "Employee record was not created",
+      "updated": "Staff member updated",
+      "added": "Staff member added",
+      "saveFailed": "Failed to save staff member",
+      "removed": "Staff member removed",
+      "removeFailed": "Failed to remove staff member"
+    }
   }
 }

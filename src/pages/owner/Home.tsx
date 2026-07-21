@@ -27,6 +27,8 @@ import {
   startOfWeek,
 } from 'date-fns';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import DailyStaffSchedule from '@/components/dashboard/DailyStaffSchedule';
 import OwnerNotificationCenter from '@/components/dashboard/OwnerNotificationCenter';
 import { BusinessHealth, TodaysAlerts } from '@/components/dashboard/OwnerDashboardInsights';
@@ -35,6 +37,8 @@ export default function OwnerHome() {
   const { businessMemberships } = useAuth();
   const business = businessMemberships[0]?.businesses;
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
 
   const [stats, setStats] = useState({
     todayAppointments: 0,
@@ -188,7 +192,7 @@ export default function OwnerHome() {
       });
     } catch (error: any) {
       console.error('Dashboard loading error:', error);
-      toast.error(error.message || 'Failed to load dashboard');
+      toast.error(error.message || t('dashboard_home.errors.load_failed'));
     } finally {
       setLoading(false);
     }
@@ -216,7 +220,7 @@ export default function OwnerHome() {
     if (!publicUrl) return;
 
     await navigator.clipboard.writeText(publicUrl);
-    toast.success('Store link copied');
+    toast.success(t('dashboard_home.store_link_copied'));
   };
 
   if (!business) return null;
@@ -226,16 +230,15 @@ export default function OwnerHome() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            {format(new Date(), 'EEEE, MMMM d')}
+            {new Intl.DateTimeFormat(locale, { weekday: 'long', month: 'long', day: 'numeric' }).format(new Date())}
           </div>
 
           <h1 className="app-page-title">
-            Good day, {business.name}
+            {t('dashboard_home.greeting', { business: business.name })}
           </h1>
 
           <p className="app-page-description">
-            Monitor today’s operation, staff workload and upcoming
-            business activity from one workspace.
+            {t('dashboard_home.description')}
           </p>
         </div>
 
@@ -250,13 +253,13 @@ export default function OwnerHome() {
             onClick={() => void copyStoreLink()}
           >
             <Copy className="mr-2 h-4 w-4" />
-            Store Link
+            {t('dashboard_home.store_link')}
           </Button>
 
           <Button asChild>
             <Link to="/dashboard/calendar">
               <CalendarDays className="mr-2 h-4 w-4" />
-              New Appointment
+              {t('dashboard_home.new_appointment')}
             </Link>
           </Button>
         </div>
@@ -269,18 +272,17 @@ export default function OwnerHome() {
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <CardTitle className="section-heading">
-                  Today’s schedule
+                  {t('dashboard_home.schedule.title')}
                 </CardTitle>
 
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Daily calendar divided into columns for each
-                  professional.
+                  {t('dashboard_home.schedule.description')}
                 </p>
               </div>
 
               <Button asChild variant="outline" size="sm">
                 <Link to="/dashboard/calendar">
-                  Open full calendar
+                  {t('dashboard_home.schedule.open_calendar')}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
@@ -304,42 +306,42 @@ export default function OwnerHome() {
 
         <aside className="grid content-start gap-4 sm:grid-cols-2 xl:grid-cols-1">
           <MetricCard
-            title="Today’s appointments"
+            title={t('dashboard_home.metrics.today_appointments')}
             value={
               loading
                 ? '—'
                 : String(stats.todayAppointments)
             }
-            detail={`${stats.weekAppointments} scheduled this week`}
+            detail={t('dashboard_home.metrics.scheduled_this_week', { count: stats.weekAppointments })}
             icon={<CalendarDays className="h-5 w-5" />}
           />
 
           <MetricCard
-            title="Expected revenue"
+            title={t('dashboard_home.metrics.expected_revenue')}
             value={
               loading
                 ? '—'
                 : `€${stats.todayRevenue.toFixed(2)}`
             }
-            detail="From today’s active bookings"
+            detail={t('dashboard_home.metrics.active_bookings_revenue')}
             icon={<Euro className="h-5 w-5" />}
           />
 
           <MetricCard
-            title="New customers"
+            title={t('dashboard_home.metrics.new_customers')}
             value={
               loading ? '—' : String(stats.newCustomers)
             }
-            detail="Added during this month"
+            detail={t('dashboard_home.metrics.added_this_month')}
             icon={<UserPlus className="h-5 w-5" />}
           />
 
           <MetricCard
-            title="Active services"
+            title={t('dashboard_home.metrics.active_services')}
             value={
               loading ? '—' : String(stats.activeServices)
             }
-            detail={`${stats.cancelledThisMonth} cancellations this month`}
+            detail={t('dashboard_home.metrics.cancellations_this_month', { count: stats.cancelledThisMonth })}
             icon={<Scissors className="h-5 w-5" />}
           />
         </aside>
@@ -356,14 +358,14 @@ export default function OwnerHome() {
         <Card className="rounded-2xl shadow-card">
           <CardHeader>
             <CardTitle className="section-heading">
-              Business pulse
+              {t('dashboard_home.pulse.title')}
             </CardTitle>
           </CardHeader>
 
           <CardContent className="space-y-5">
             <PulseRow
               icon={<TrendingUp className="h-4 w-4" />}
-              label="Average booking value"
+              label={t('dashboard_home.pulse.average_booking_value')}
               value={
                 stats.todayAppointments
                   ? `€${(
@@ -376,13 +378,13 @@ export default function OwnerHome() {
 
             <PulseRow
               icon={<Users className="h-4 w-4" />}
-              label="Active professionals"
+              label={t('dashboard_home.pulse.active_professionals')}
               value={String(staff.length)}
             />
 
             <PulseRow
               icon={<CalendarDays className="h-4 w-4" />}
-              label="Weekly appointments"
+              label={t('dashboard_home.pulse.weekly_appointments')}
               value={String(stats.weekAppointments)}
             />
           </CardContent>
@@ -397,7 +399,7 @@ export default function OwnerHome() {
         >
           <CardHeader>
             <CardTitle className="section-heading">
-              Business status
+              {t('dashboard_home.status.title')}
             </CardTitle>
           </CardHeader>
 
@@ -417,8 +419,8 @@ export default function OwnerHome() {
                 <div>
                   <div className="font-bold">
                     {activeClosure
-                      ? 'Closed now'
-                      : 'Upcoming closure'}
+                      ? t('dashboard_home.status.closed_now')
+                      : t('dashboard_home.status.upcoming_closure')}
                   </div>
 
                   <div className="mt-1 text-sm text-muted-foreground">
@@ -428,7 +430,8 @@ export default function OwnerHome() {
                   <div className="mt-2 text-xs font-semibold">
                     {formatClosureRange(
                       nextClosure.start_date,
-                      nextClosure.end_date
+                      nextClosure.end_date,
+                      locale
                     )}
                   </div>
 
@@ -439,7 +442,7 @@ export default function OwnerHome() {
                     className="mt-4"
                   >
                     <Link to="/dashboard/business">
-                      Manage closures
+                      {t('dashboard_home.status.manage_closures')}
                     </Link>
                   </Button>
                 </div>
@@ -451,10 +454,10 @@ export default function OwnerHome() {
                 </div>
 
                 <div>
-                  <div className="font-bold">Open</div>
+                  <div className="font-bold">{t('dashboard_home.status.open')}</div>
 
                   <div className="mt-1 text-sm text-muted-foreground">
-                    No active or upcoming closures.
+                    {t('dashboard_home.status.no_closures')}
                   </div>
                 </div>
               </div>
@@ -536,8 +539,8 @@ function PulseRow({
   );
 }
 
-function formatClosureRange(start: string, end: string) {
-  const formatter = new Intl.DateTimeFormat('en-GB', {
+function formatClosureRange(start: string, end: string, locale: string) {
+  const formatter = new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

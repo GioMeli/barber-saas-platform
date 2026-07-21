@@ -19,10 +19,13 @@ import {
 } from 'lucide-react';
 import { getIndustryConfig, isIndustryKey } from '@/config/industries';
 import { IndustryThemeRoot } from '@/theme';
+import { useTranslation } from 'react-i18next';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 const SELECTED_INDUSTRY_STORAGE_KEY = 'velliqo.selectedIndustry';
 
 export default function SignUp() {
+  const { t } = useTranslation();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [fullName, setFullName] = React.useState('');
@@ -78,13 +81,14 @@ export default function SignUp() {
       return;
     }
 
-    toast.success('Account created. Check your email to confirm your account.');
+    toast.success(t('auth.signup_success'));
     navigate(`/check-email?email=${encodeURIComponent(email.trim())}&industry=${industry.key}`);
   };
 
   return (
     <IndustryThemeRoot industryKey={industry.key}>
-      <div className="min-h-screen bg-background lg:h-screen lg:overflow-hidden">
+      <div className="relative min-h-screen bg-background lg:h-screen lg:overflow-hidden">
+        <div className="absolute right-4 top-4 z-20"><LanguageSwitcher /></div>
         <div className="grid min-h-screen lg:h-full lg:min-h-0 lg:grid-cols-[1.04fr_0.96fr]">
           <section className="relative hidden overflow-hidden bg-zinc-950 px-8 py-6 text-white lg:flex lg:flex-col lg:justify-between xl:px-12 xl:py-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.30),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.18),transparent_30%)]" />
@@ -98,20 +102,20 @@ export default function SignUp() {
 
               <div className="mt-8 max-w-2xl">
                 <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-xs font-semibold text-white/80">
-                  {industry.icon} {industry.name} setup
+                  {industry.icon} {t('auth.setup_badge', { industry: industry.name })}
                 </div>
                 <h1 className="mt-5 text-4xl font-extrabold leading-[1.05] tracking-[-0.04em] xl:text-5xl">
-                  Build a polished digital home for your business.
+                  {t('auth.signup_hero_title')}
                 </h1>
                 <p className="mt-4 max-w-xl text-sm leading-6 text-white/65 xl:text-base">
-                  Create your owner account, complete setup and launch your booking workspace in a guided process.
+                  {t('auth.signup_hero_description')}
                 </p>
 
                 <div className="mt-6 grid grid-cols-2 gap-2.5">
-                  <Benefit icon={<CalendarDays className="h-4 w-4" />} text="Professional calendar" />
-                  <Benefit icon={<Users className="h-4 w-4" />} text="Staff and customers" />
-                  <Benefit icon={<Store className="h-4 w-4" />} text="Branded storefront" />
-                  <Benefit icon={<BarChart3 className="h-4 w-4" />} text="Business reports" />
+                  <Benefit icon={<CalendarDays className="h-4 w-4" />} text={t('auth.benefit_calendar')} />
+                  <Benefit icon={<Users className="h-4 w-4" />} text={t('auth.benefit_people')} />
+                  <Benefit icon={<Store className="h-4 w-4" />} text={t('auth.benefit_storefront')} />
+                  <Benefit icon={<BarChart3 className="h-4 w-4" />} text={t('auth.benefit_reports')} />
                 </div>
               </div>
             </div>
@@ -119,7 +123,7 @@ export default function SignUp() {
             <div className="relative rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur">
               <div className="flex items-start gap-3">
                 <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
-                <div><div className="text-sm font-bold">14 days free. No card required.</div><p className="mt-1 text-xs leading-5 text-white/55">Your workspace and business data stay isolated from every other company on the platform.</p></div>
+                <div><div className="text-sm font-bold">{t('auth.free_trial_title')}</div><p className="mt-1 text-xs leading-5 text-white/55">{t('auth.free_trial_text')}</p></div>
               </div>
             </div>
           </section>
@@ -127,59 +131,59 @@ export default function SignUp() {
           <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-hidden lg:px-8 lg:py-4">
             <div className="w-full max-w-[500px]">
               <div className="mb-4 flex items-center justify-between lg:hidden">
-                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">Owner registration</div></div></Link>
+                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
               </div>
 
               <Link to="/business-types" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:inline-flex">
-                <ArrowLeft className="h-4 w-4" /> Change business type
+                <ArrowLeft className="h-4 w-4" /> {t('auth.change_business_type')}
               </Link>
 
               <div className="rounded-3xl border bg-card p-5 shadow-card sm:p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">Owner registration · {industry.shortName}</div>
-                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight">Create your business account</h2>
-                    <p className="mt-2 text-xs leading-5 text-muted-foreground">Account first. Business details and storefront setup follow next.</p>
+                    <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">{t('auth.owner_registration_industry', { industry: industry.shortName })}</div>
+                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t('auth.create_business_account')}</h2>
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground">{t('auth.account_first')}</p>
                   </div>
                   <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl sm:flex">{industry.icon}</div>
                 </div>
 
                 <div className="mt-4 grid grid-cols-3 gap-2">
-                  <ProgressStep label="Account" active />
-                  <ProgressStep label="Business" />
-                  <ProgressStep label="Launch" />
+                  <ProgressStep label={t('auth.step_account')} active />
+                  <ProgressStep label={t('auth.step_business')} />
+                  <ProgressStep label={t('auth.step_launch')} />
                 </div>
 
                 <form onSubmit={handleSignUp} className="mt-5 space-y-3.5">
-                  <Field label="Owner full name" htmlFor="fullName">
-                    <Input id="fullName" type="text" placeholder="John Doe" value={fullName} onChange={(event) => setFullName(event.target.value)} required autoComplete="name" className="h-10 rounded-xl" />
+                  <Field label={t('auth.owner_full_name')} htmlFor="fullName">
+                    <Input id="fullName" type="text" placeholder={t('auth.owner_name_placeholder')} value={fullName} onChange={(event) => setFullName(event.target.value)} required autoComplete="name" className="h-10 rounded-xl" />
                   </Field>
 
-                  <Field label="Business email" htmlFor="email">
+                  <Field label={t('auth.business_email')} htmlFor="email">
                     <Input id="email" type="email" placeholder="owner@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" className="h-10 rounded-xl" />
                   </Field>
 
-                  <Field label="Create password" htmlFor="password">
+                  <Field label={t('auth.create_password')} htmlFor="password">
                     <div className="relative">
                       <Input id="password" type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={6} autoComplete="new-password" className="h-10 rounded-xl pr-11" />
-                      <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? 'Hide password' : 'Show password'}>
+                      <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? t('auth.hide_password') : t('auth.show_password')}>
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
                   </Field>
 
-                  <Button type="submit" className="h-11 w-full rounded-xl" disabled={loading}>{loading ? 'Creating account...' : 'Create owner account'}</Button>
+                  <Button type="submit" className="h-11 w-full rounded-xl" disabled={loading}>{loading ? t('auth.creating_account') : t('auth.create_owner_account')}</Button>
                 </form>
 
                 <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-muted/40 p-3">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
-                  <p className="text-[11px] leading-4 text-muted-foreground">Creating an account starts your guided onboarding. Customer and business data remain private to your workspace.</p>
+                  <p className="text-[11px] leading-4 text-muted-foreground">{t('auth.guided_onboarding_privacy')}</p>
                 </div>
 
-                <div className="mt-4 text-center text-xs"><span className="text-muted-foreground">Already have an owner account? </span><Link to="/sign-in" className="font-bold text-primary hover:text-primary/80">Business login</Link></div>
+                <div className="mt-4 text-center text-xs"><span className="text-muted-foreground">{t('auth.already_owner')} </span><Link to="/sign-in" className="font-bold text-primary hover:text-primary/80">{t('auth.business_login')}</Link></div>
               </div>
 
-              <p className="mt-3 text-center text-[10px] leading-4 text-muted-foreground">For business owners only. Customers register through the public page of their selected business.</p>
+              <p className="mt-3 text-center text-[10px] leading-4 text-muted-foreground">{t('auth.owners_only')}</p>
             </div>
           </main>
         </div>

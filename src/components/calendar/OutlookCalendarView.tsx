@@ -1,4 +1,5 @@
 import React, { useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -14,6 +15,7 @@ import {
   EventInput,
 } from '@fullcalendar/core';
 import { addDays, format, isAfter, parseISO } from 'date-fns';
+import allLocales from '@fullcalendar/core/locales-all';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, LayoutGrid, List, Plus } from 'lucide-react';
 import './calendar-outlook.css';
@@ -44,12 +46,7 @@ type Props = {
   onCreateDelay: () => void;
 };
 
-const VIEW_LABELS: Record<CalendarView, string> = {
-  dayGridMonth: 'Month',
-  timeGridWeek: 'Week',
-  timeGridDay: 'Day',
-  listDay: 'Daily Details',
-};
+const CALENDAR_VIEWS: CalendarView[] = ['dayGridMonth', 'timeGridWeek', 'timeGridDay', 'listDay'];
 
 export default function OutlookCalendarView({
   appointments,
@@ -66,8 +63,9 @@ export default function OutlookCalendarView({
   onAppointmentResize,
   onCreateDelay,
 }: Props) {
+  const { t, i18n } = useTranslation();
   const calendarRef = useRef<FullCalendar | null>(null);
-  const [title, setTitle] = React.useState('Calendar');
+  const [title, setTitle] = React.useState(t('calendar.title'));
   const [view, setView] = React.useState<CalendarView>('timeGridWeek');
   const [activeRange, setActiveRange] = React.useState({
     start: new Date(),
@@ -108,11 +106,11 @@ export default function OutlookCalendarView({
         appointment.appointment_services
           ?.map((row: any) => row.services?.name)
           .filter(Boolean)
-          .join(', ') || 'Appointment';
+          .join(', ') || t('calendar.labels.appointment');
 
       return {
         id: appointment.id,
-        title: `${appointment.customers?.full_name || 'Customer'} · ${services}`,
+        title: `${appointment.customers?.full_name || t('calendar.labels.customer')} · ${services}`,
         start: appointment.start_time,
         end: appointment.end_time,
         classNames: ['salonos-event', `salonos-status-${status}`],
@@ -137,7 +135,7 @@ export default function OutlookCalendarView({
 
     const closureLabels = closures.map((closure) => ({
       id: `closure-label-${closure.id}`,
-      title: `Closed · ${closure.title}`,
+      title: `${t('calendar.labels.closed')} · ${closure.title}`,
       start: closure.start_date,
       end: addOneDayIso(closure.end_date),
       allDay: true,
@@ -159,7 +157,7 @@ export default function OutlookCalendarView({
 
         dates.push({
           id: `break-${item.id}-${date}`,
-          title: item.label || 'Break',
+          title: item.label || t('calendar.labels.break'),
           start: `${date}T${String(item.start_time).slice(0, 8)}`,
           end: `${date}T${String(item.end_time).slice(0, 8)}`,
           editable: false,
@@ -257,7 +255,7 @@ export default function OutlookCalendarView({
     if (arg.event.extendedProps.kind === 'closure-label') {
       return (
         <div className="salonos-closure-event-content">
-          <strong>Closed</strong>
+          <strong>{t('calendar.labels.closed')}</strong>
           <span className="truncate">
             {arg.event.extendedProps.closure.title}
           </span>
@@ -268,7 +266,7 @@ export default function OutlookCalendarView({
     if (arg.event.extendedProps.kind === 'break') {
       return (
         <div className="salonos-break-event-content">
-          <strong>{arg.event.extendedProps.breakItem.label || 'Break'}</strong>
+          <strong>{arg.event.extendedProps.breakItem.label || t('calendar.labels.break')}</strong>
           <span>{arg.timeText}</span>
         </div>
       );
@@ -277,7 +275,7 @@ export default function OutlookCalendarView({
     if (arg.event.extendedProps.kind !== 'appointment') return null;
 
     const customerName =
-      arg.event.extendedProps.appointment.customers?.full_name || 'Customer';
+      arg.event.extendedProps.appointment.customers?.full_name || t('calendar.labels.customer');
 
     return (
       <div className="salonos-event-content">
@@ -297,7 +295,7 @@ export default function OutlookCalendarView({
       <header className="outlook-calendar-toolbar">
         <div className="outlook-calendar-nav">
           <Button variant="outline" size="sm" onClick={() => api()?.today()}>
-            Today
+            {t('calendar.actions.today')}
           </Button>
           <Button variant="outline" size="icon" className="h-9 w-9" onClick={() => api()?.prev()}>
             <ChevronLeft className="h-4 w-4" />
@@ -314,15 +312,15 @@ export default function OutlookCalendarView({
             onChange={(event) => onEmployeeFilterChange(event.target.value)}
             className="h-9 min-w-[175px] rounded-lg border bg-background px-3 text-sm"
           >
-            <option value="all">All professionals</option>
+            <option value="all">{t('calendar.filters.allProfessionals')}</option>
             {staff.map((member) => (
               <option key={member.id} value={member.id}>{member.name}</option>
             ))}
-            <option value="unassigned">Unassigned</option>
+            <option value="unassigned">{t('calendar.labels.unassigned')}</option>
           </select>
 
           <div className="outlook-view-switcher">
-            {(Object.keys(VIEW_LABELS) as CalendarView[]).map((item) => (
+            {CALENDAR_VIEWS.map((item) => (
               <button
                 key={item}
                 type="button"
@@ -331,40 +329,42 @@ export default function OutlookCalendarView({
               >
                 {item === 'dayGridMonth' && <LayoutGrid className="h-4 w-4" />}
                 {item === 'listDay' && <List className="h-4 w-4" />}
-                {VIEW_LABELS[item]}
+                {t(`calendar.views.${item}`)}
               </button>
             ))}
           </div>
 
           <Button variant="outline" onClick={onCreateDelay}>
-            Create Delay
+            {t('calendar.delay.title')}
           </Button>
 
           <Button onClick={() => onNewAppointment()}>
             <Plus className="mr-2 h-4 w-4" />
-            New Appointment
+            {t('calendar.newAppointment.title')}
           </Button>
         </div>
       </header>
 
       <div className="outlook-calendar-mobile-views">
-        {(Object.keys(VIEW_LABELS) as CalendarView[]).map((item) => (
+        {CALENDAR_VIEWS.map((item) => (
           <button
             key={item}
             type="button"
             className={view === item ? 'active' : ''}
             onClick={() => changeView(item)}
           >
-            {VIEW_LABELS[item]}
+            {t(`calendar.views.${item}`)}
           </button>
         ))}
       </div>
 
       <div className="outlook-calendar-shell">
-        {loading && <div className="outlook-calendar-loading">Loading calendar...</div>}
+        {loading && <div className="outlook-calendar-loading">{t('calendar.loading')}</div>}
         <FullCalendar
           ref={calendarRef}
           plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+          locales={allLocales}
+          locale={i18n.language}
           initialView="timeGridWeek"
           headerToolbar={false}
           height="100%"
@@ -393,7 +393,7 @@ export default function OutlookCalendarView({
             api()?.changeView('listDay', arg.date);
             return 'listDay';
           }}
-          moreLinkText={(count) => `+${count} more`}
+          moreLinkText={(count) => t('calendar.more', { count })}
           eventTimeFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
           slotLabelFormat={{ hour: '2-digit', minute: '2-digit', hour12: false }}
           dayHeaderFormat={{ weekday: 'short', day: 'numeric' }}

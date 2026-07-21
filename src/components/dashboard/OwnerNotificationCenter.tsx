@@ -3,6 +3,8 @@ import { Bell, CalendarDays, CheckCheck, UserPlus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/db/supabase';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 
 type OwnerNotification = {
   id: string;
@@ -25,6 +27,8 @@ export default function OwnerNotificationCenter({
   businessId,
   onUnreadCountChange,
 }: Props) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState<OwnerNotification[]>([]);
@@ -80,7 +84,7 @@ export default function OwnerNotificationCenter({
       .limit(30);
 
     if (error) {
-      toast.error(error.message || 'Unable to load notifications');
+      toast.error(error.message || t('notifications.errors.load'));
     } else {
       setNotifications((data ?? []) as OwnerNotification[]);
     }
@@ -109,7 +113,7 @@ export default function OwnerNotificationCenter({
           item.id === id ? { ...item, is_read: false } : item
         )
       );
-      toast.error('Unable to update notification');
+      toast.error(t('notifications.errors.update'));
     }
   };
 
@@ -128,7 +132,7 @@ export default function OwnerNotificationCenter({
 
     if (error) {
       void fetchNotifications();
-      toast.error('Unable to mark notifications as read');
+      toast.error(t('notifications.errors.mark_all'));
     }
   };
 
@@ -140,7 +144,7 @@ export default function OwnerNotificationCenter({
         onClick={() => setOpen((value) => !value)}
       >
         <Bell className="mr-2 h-4 w-4" />
-        Notifications
+        {t('notifications.title')}
         {unread.length > 0 && (
           <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
             {unread.length > 99 ? '99+' : unread.length}
@@ -152,7 +156,7 @@ export default function OwnerNotificationCenter({
         <>
           <button
             type="button"
-            aria-label="Close notifications"
+            aria-label={t('notifications.close')}
             className="fixed inset-0 z-40 cursor-default"
             onClick={() => setOpen(false)}
           />
@@ -160,9 +164,9 @@ export default function OwnerNotificationCenter({
           <div className="absolute right-0 top-12 z-50 w-[min(92vw,390px)] overflow-hidden rounded-2xl border bg-card shadow-2xl">
             <div className="flex items-center justify-between border-b px-4 py-3">
               <div>
-                <div className="font-bold">Notifications</div>
+                <div className="font-bold">{t('notifications.title')}</div>
                 <div className="text-xs text-muted-foreground">
-                  {unread.length} unread
+                  {t('notifications.unread_count', { count: unread.length })}
                 </div>
               </div>
 
@@ -170,7 +174,7 @@ export default function OwnerNotificationCenter({
                 {unread.length > 0 && (
                   <Button variant="ghost" size="sm" onClick={() => void markAllRead()}>
                     <CheckCheck className="mr-1.5 h-4 w-4" />
-                    Read all
+                    {t('notifications.read_all')}
                   </Button>
                 )}
                 <Button
@@ -187,14 +191,14 @@ export default function OwnerNotificationCenter({
             <div className="max-h-[420px] overflow-y-auto">
               {loading ? (
                 <div className="px-6 py-10 text-center text-sm text-muted-foreground">
-                  Loading notifications...
+                  {t('notifications.loading')}
                 </div>
               ) : notifications.length === 0 ? (
                 <div className="px-6 py-10 text-center">
                   <Bell className="mx-auto h-8 w-8 text-muted-foreground/50" />
-                  <div className="mt-3 font-semibold">No notifications yet</div>
+                  <div className="mt-3 font-semibold">{t('notifications.empty_title')}</div>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    New appointments and customers will appear here.
+                    {t('notifications.empty_description')}
                   </p>
                 </div>
               ) : (
@@ -224,17 +228,17 @@ export default function OwnerNotificationCenter({
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center justify-between gap-2">
                         <div className="truncate text-sm font-bold">
-                          {notification.title}
+                          {t(`notifications.types.${notification.type}.title`)}
                         </div>
                         {!notification.is_read && (
                           <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
                         )}
                       </div>
                       <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                        {notification.message}
+                        {t(`notifications.types.${notification.type}.message`)}
                       </p>
                       <div className="mt-2 text-[11px] font-medium text-muted-foreground">
-                        {formatNotificationTime(notification.created_at)}
+                        {formatNotificationTime(notification.created_at, locale, t)}
                       </div>
                     </div>
                   </button>
@@ -248,20 +252,20 @@ export default function OwnerNotificationCenter({
   );
 }
 
-function formatNotificationTime(value: string) {
+function formatNotificationTime(value: string, locale: string, t: (key: string, options?: any) => string) {
   const date = new Date(value);
   const minutes = Math.max(
     0,
     Math.floor((Date.now() - date.getTime()) / 60_000)
   );
 
-  if (minutes < 1) return 'Just now';
-  if (minutes < 60) return `${minutes} min ago`;
+  if (minutes < 1) return t('notifications.just_now');
+  if (minutes < 60) return t('notifications.minutes_ago', { count: minutes });
 
   const hours = Math.floor(minutes / 60);
-  if (hours < 24) return `${hours}h ago`;
+  if (hours < 24) return t('notifications.hours_ago', { count: hours });
 
-  return new Intl.DateTimeFormat('en-GB', {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     hour: '2-digit',

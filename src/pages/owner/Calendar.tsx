@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import OutlookCalendarView from '@/components/calendar/OutlookCalendarView';
@@ -63,6 +64,7 @@ const EMPTY_CUSTOMER = {
 };
 
 export default function Calendar() {
+  const { t, i18n } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -176,7 +178,7 @@ export default function Calendar() {
       setCustomers(custRes.data ?? []);
       setEmployeeServices(employeeServicesRes.data ?? []);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to load calendar data');
+      toast.error(error.message || t('calendar.errors.loadData'));
     }
   };
 
@@ -221,7 +223,7 @@ export default function Calendar() {
       setBreaks(breaksRes.data ?? []);
     } catch (error: any) {
       console.error('Error fetching calendar range:', error);
-      toast.error(error.message || 'Failed to load calendar');
+      toast.error(error.message || t('calendar.errors.loadCalendar'));
     } finally {
       setLoading(false);
     }
@@ -269,7 +271,7 @@ export default function Calendar() {
       );
     } catch (error: any) {
       console.error('Owner availability error:', error);
-      toast.error(error.message || 'Failed to load available times');
+      toast.error(error.message || t('calendar.errors.loadAvailability'));
     } finally {
       setAvailabilityLoading(false);
     }
@@ -365,7 +367,7 @@ export default function Calendar() {
 
   const createNewCustomer = async () => {
     if (!businessId || !newCustomer.full_name.trim()) {
-      toast.error('Customer name is required');
+      toast.error(t('calendar.errors.customerNameRequired'));
       return;
     }
 
@@ -392,9 +394,9 @@ export default function Calendar() {
       setNewAppt((current) => ({ ...current, customer_id: data.id }));
       setShowNewCustomer(false);
       setNewCustomer(EMPTY_CUSTOMER);
-      toast.success('Customer created');
+      toast.success(t('calendar.messages.customerCreated'));
     } catch (error: any) {
-      toast.error(error.message || 'Failed to create customer');
+      toast.error(error.message || t('calendar.errors.createCustomer'));
     } finally {
       setCreatingCustomer(false);
     }
@@ -408,12 +410,12 @@ export default function Calendar() {
       !newAppt.date ||
       !newAppt.time
     ) {
-      toast.error('Complete all required booking details');
+      toast.error(t('calendar.errors.requiredBookingDetails'));
       return;
     }
 
     if (selectedAppointmentClosure) {
-      toast.error('Appointments cannot be created during a business closure');
+      toast.error(t('calendar.errors.businessClosure'));
       return;
     }
 
@@ -434,14 +436,14 @@ export default function Calendar() {
       if (error) throw error;
 
       toast.success(
-        `Appointment ${data?.booking_reference ? `#${data.booking_reference} ` : ''}created`
+        t('calendar.messages.appointmentCreated', { reference: data?.booking_reference ? `#${data.booking_reference}` : '' })
       );
 
       setIsNewDialogOpen(false);
       resetBookingForm();
       await fetchCalendarRange();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to create appointment');
+      toast.error(error.message || t('calendar.errors.createAppointment'));
       if (String(error.message || '').toLowerCase().includes('available')) {
         await fetchAvailability();
       }
@@ -476,28 +478,28 @@ export default function Calendar() {
       if (error) throw error;
 
       const messages: Record<string, string> = {
-        arrived: 'Customer checked in',
-        in_progress: 'Service started',
-        completed: 'Appointment marked as completed',
-        no_show: 'Appointment marked as no show',
-        cancelled_by_business: 'Appointment cancelled',
-        confirmed: 'Appointment confirmed',
-        pending: 'Appointment moved to pending',
+        arrived: t('calendar.messages.checkedIn'),
+        in_progress: t('calendar.messages.serviceStarted'),
+        completed: t('calendar.messages.completed'),
+        no_show: t('calendar.messages.noShow'),
+        cancelled_by_business: t('calendar.messages.cancelled'),
+        confirmed: t('calendar.messages.confirmed'),
+        pending: t('calendar.messages.pending'),
       };
 
-      toast.success(messages[status] || 'Appointment updated');
+      toast.success(messages[status] || t('calendar.messages.updated'));
       setDetailsOpen(false);
       await fetchCalendarRange();
       return true;
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update appointment');
+      toast.error(error.message || t('calendar.errors.updateAppointment'));
       return false;
     }
   };
 
   const cancelAppointment = async (appointmentId: string) => {
     const confirmed = window.confirm(
-      'Cancel this appointment? The time will become available again.'
+      t('calendar.confirmCancel')
     );
 
     if (!confirmed) return;
@@ -530,18 +532,14 @@ export default function Calendar() {
       if (error) throw error;
 
       toast.success(
-        `Appointment moved to ${format(
-          newStart,
-          'EEE, MMM d · HH:mm'
-        )}`
+        t('calendar.messages.movedTo', { date: new Intl.DateTimeFormat(i18n.language, { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(newStart) })
       );
 
       await fetchCalendarRange();
       return true;
     } catch (error: any) {
       toast.error(
-        error.message ||
-          'The appointment could not be moved. It was restored.'
+        error.message || t('calendar.errors.moveRestored')
       );
       return false;
     }
@@ -565,22 +563,21 @@ export default function Calendar() {
           p_business_id: businessId,
           p_appointment_id: appointment.id,
           p_new_duration_minutes: durationMinutes,
-          p_reason: 'Adjusted from owner calendar',
+          p_reason: t('calendar.resizeReason'),
         }
       );
 
       if (error) throw error;
 
       toast.success(
-        `Appointment duration changed to ${durationMinutes} minutes`
+        t('calendar.messages.durationChanged', { minutes: durationMinutes })
       );
 
       await fetchCalendarRange();
       return true;
     } catch (error: any) {
       toast.error(
-        error.message ||
-          'The appointment duration could not be changed. It was restored.'
+        error.message || t('calendar.errors.resizeRestored')
       );
       return false;
     }
@@ -610,7 +607,7 @@ export default function Calendar() {
       !delayForm.delay_from ||
       !delayForm.delay_minutes
     ) {
-      toast.error('Select professional, date, start time and delay');
+      toast.error(t('calendar.errors.delayRequired'));
       return;
     }
 
@@ -635,10 +632,10 @@ export default function Calendar() {
       setDelayPreview(rows);
 
       if (rows.length === 0) {
-        toast.info('No active appointments are affected by this delay');
+        toast.info(t('calendar.messages.noAffectedAppointments'));
       }
     } catch (error: any) {
-      toast.error(error.message || 'Failed to preview delay');
+      toast.error(error.message || t('calendar.errors.previewDelay'));
     } finally {
       setDelayPreviewLoading(false);
     }
@@ -650,7 +647,7 @@ export default function Calendar() {
       !delayForm.employee_id ||
       delayPreview.length === 0
     ) {
-      toast.error('Preview the affected appointments first');
+      toast.error(t('calendar.errors.previewFirst'));
       return;
     }
 
@@ -672,7 +669,7 @@ export default function Calendar() {
       if (error) throw error;
 
       toast.success(
-        `${data?.affected_count ?? delayPreview.length} appointments delayed by ${delayForm.delay_minutes} minutes`
+        t('calendar.messages.delayApplied', { count: data?.affected_count ?? delayPreview.length, minutes: delayForm.delay_minutes })
       );
 
       setDelayOpen(false);
@@ -680,8 +677,7 @@ export default function Calendar() {
       await fetchCalendarRange();
     } catch (error: any) {
       toast.error(
-        error.message ||
-          'The delay could not be applied. No appointments were changed.'
+        error.message || t('calendar.errors.applyDelay')
       );
     } finally {
       setDelayApplying(false);
@@ -734,15 +730,14 @@ export default function Calendar() {
               Create Delay
             </DialogTitle>
             <p className="text-sm leading-6 text-muted-foreground">
-              Delay the selected professional's active appointments from a
-              specific time. Review every affected appointment before applying.
+              {t('calendar.delay.description')}
             </p>
           </DialogHeader>
 
           <div className="space-y-6 py-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2 sm:col-span-2">
-                <Label>Professional *</Label>
+                <Label>{t('calendar.labels.professional')} *</Label>
                 <select
                   className="h-11 w-full rounded-xl border bg-background px-3 text-sm"
                   value={delayForm.employee_id}
@@ -754,7 +749,7 @@ export default function Calendar() {
                     setDelayPreview([]);
                   }}
                 >
-                  <option value="">Select professional</option>
+                  <option value="">{t('calendar.actions.selectProfessional')}</option>
                   {staff.map((member) => (
                     <option key={member.id} value={member.id}>
                       {member.name}
@@ -764,7 +759,7 @@ export default function Calendar() {
               </div>
 
               <div className="space-y-2">
-                <Label>Date *</Label>
+                <Label>{t('calendar.labels.date')} *</Label>
                 <Input
                   type="date"
                   className="h-11 rounded-xl"
@@ -780,7 +775,7 @@ export default function Calendar() {
               </div>
 
               <div className="space-y-2">
-                <Label>Delay From *</Label>
+                <Label>{t('calendar.delay.from')} *</Label>
                 <Input
                   type="time"
                   className="h-11 rounded-xl"
@@ -797,7 +792,7 @@ export default function Calendar() {
             </div>
 
             <div className="space-y-3">
-              <Label>Delay Minutes *</Label>
+              <Label>{t('calendar.delay.minutes')} *</Label>
               <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
                 {[5, 10, 15, 20, 30, 45, 60].map((minutes) => (
                   <Button
@@ -838,16 +833,16 @@ export default function Calendar() {
                   });
                   setDelayPreview([]);
                 }}
-                placeholder="Custom delay in minutes"
+                placeholder={t('calendar.delay.customMinutes')}
               />
             </div>
 
             <div className="space-y-2">
-              <Label>Reason</Label>
+              <Label>{t('calendar.labels.reason')}</Label>
               <Textarea
                 rows={3}
                 className="rounded-xl"
-                placeholder="Optional internal reason"
+                placeholder={t('calendar.delay.reasonPlaceholder')}
                 value={delayForm.reason}
                 onChange={(event) =>
                   setDelayForm({
@@ -866,14 +861,14 @@ export default function Calendar() {
               onClick={() => void previewDelay()}
             >
               {delayPreviewLoading
-                ? 'Calculating...'
-                : 'Preview Affected Appointments'}
+                ? t('calendar.actions.calculating')
+                : t('calendar.delay.preview')}
             </Button>
 
             {delayPreview.length > 0 && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h3 className="font-bold">Affected Appointments</h3>
+                  <h3 className="font-bold">{t('calendar.delay.affected')}</h3>
                   <Badge variant="secondary">{delayPreview.length}</Badge>
                 </div>
 
@@ -888,7 +883,7 @@ export default function Calendar() {
                         <div className="mt-1 text-xs text-muted-foreground">
                           {item.booking_reference
                             ? `#${item.booking_reference}`
-                            : 'No reference'}
+                            : t('calendar.labels.noReference')}
                         </div>
                       </div>
 
@@ -899,7 +894,7 @@ export default function Calendar() {
                           {format(parseISO(item.new_start_time), 'HH:mm')}
                         </div>
                         <div className="mt-1 text-xs text-muted-foreground">
-                          Ends {format(parseISO(item.new_end_time), 'HH:mm')}
+                          {t('calendar.delay.endsAt', { time: format(parseISO(item.new_end_time), 'HH:mm') })}
                         </div>
                       </div>
                     </div>
@@ -907,9 +902,7 @@ export default function Calendar() {
                 </div>
 
                 <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm leading-6 text-amber-800">
-                  All displayed appointments move together. If any appointment
-                  would overlap another booking, a break, or working hours,
-                  nothing will be changed.
+                  {t('calendar.delay.warning')}
                 </div>
               </div>
             )}
@@ -932,8 +925,8 @@ export default function Calendar() {
               onClick={() => void applyDelay()}
             >
               {delayApplying
-                ? 'Applying Delay...'
-                : `Apply ${delayForm.delay_minutes} Minute Delay`}
+                ? t('calendar.delay.applying')
+                : t('calendar.delay.apply', { minutes: delayForm.delay_minutes })}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -951,10 +944,9 @@ export default function Calendar() {
       >
         <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
-            <DialogTitle className="text-2xl">New Appointment</DialogTitle>
+            <DialogTitle className="text-2xl">{t('calendar.newAppointment.title')}</DialogTitle>
             <p className="text-sm text-muted-foreground">
-              Complete the steps below. Only valid staff and available slots are
-              shown.
+              {t('calendar.newAppointment.description')}
             </p>
           </DialogHeader>
 
@@ -962,8 +954,8 @@ export default function Calendar() {
             <section className="space-y-4">
               <StepHeader
                 number="1"
-                title="Customer"
-                description="Search an existing customer or create a new one."
+                title={t('calendar.labels.customer')}
+                description={t('calendar.customerStep.description')}
               />
 
               {!showNewCustomer ? (
@@ -972,7 +964,7 @@ export default function Calendar() {
                     <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                     <Input
                       className="h-11 rounded-xl pl-9"
-                      placeholder="Search by name, email or phone"
+                      placeholder={t('calendar.customerStep.searchPlaceholder')}
                       value={customerSearch}
                       onChange={(event) =>
                         setCustomerSearch(event.target.value)
@@ -1001,14 +993,14 @@ export default function Calendar() {
                         <div className="mt-1 text-xs text-muted-foreground">
                           {[customer.phone, customer.email]
                             .filter(Boolean)
-                            .join(' · ') || 'No contact details'}
+                            .join(' · ') || t('calendar.labels.noContactDetails')}
                         </div>
                       </button>
                     ))}
 
                     {filteredCustomers.length === 0 && (
                       <div className="p-6 text-center text-sm text-muted-foreground">
-                        No customers found.
+                        {t('calendar.customerStep.noneFound')}
                       </div>
                     )}
                   </div>
@@ -1019,14 +1011,14 @@ export default function Calendar() {
                     onClick={() => setShowNewCustomer(true)}
                   >
                     <UserPlus className="mr-2 h-4 w-4" />
-                    Create New Customer
+                    {t('calendar.customerStep.createNew')}
                   </Button>
                 </>
               ) : (
                 <div className="space-y-4 rounded-2xl border bg-muted/20 p-5">
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2 sm:col-span-2">
-                      <Label>Full Name *</Label>
+                      <Label>{t('calendar.labels.fullName')} *</Label>
                       <Input
                         className="h-11 rounded-xl"
                         value={newCustomer.full_name}
@@ -1040,7 +1032,7 @@ export default function Calendar() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Phone</Label>
+                      <Label>{t('calendar.labels.phone')}</Label>
                       <Input
                         className="h-11 rounded-xl"
                         type="tel"
@@ -1055,7 +1047,7 @@ export default function Calendar() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label>Email</Label>
+                      <Label>{t('calendar.labels.email')}</Label>
                       <Input
                         className="h-11 rounded-xl"
                         type="email"
@@ -1076,7 +1068,7 @@ export default function Calendar() {
                       disabled={creatingCustomer}
                       onClick={() => void createNewCustomer()}
                     >
-                      {creatingCustomer ? 'Creating...' : 'Save Customer'}
+                      {creatingCustomer ? t('calendar.actions.creating') : t('calendar.actions.saveCustomer')}
                     </Button>
                     <Button
                       type="button"
@@ -1093,8 +1085,8 @@ export default function Calendar() {
             <section className="space-y-4 border-t pt-7">
               <StepHeader
                 number="2"
-                title="Services"
-                description="Select one or more compatible services."
+                title={t('calendar.labels.services')}
+                description={t('calendar.servicesStep.description')}
               />
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -1126,7 +1118,7 @@ export default function Calendar() {
                         </div>
 
                         <div className="mt-1 text-xs text-muted-foreground">
-                          {service.duration} minutes
+                          {t('calendar.units.minutes', { count: service.duration })}
                         </div>
                       </div>
                     </label>
@@ -1138,8 +1130,8 @@ export default function Calendar() {
             <section className="space-y-4 border-t pt-7">
               <StepHeader
                 number="3"
-                title="Professional"
-                description="Only staff eligible for all selected services appear."
+                title={t('calendar.labels.professional')}
+                description={t('calendar.professionalStep.description')}
               />
 
               <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -1162,9 +1154,9 @@ export default function Calendar() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-full bg-muted">
                     <Users className="h-5 w-5 text-muted-foreground" />
                   </div>
-                  <div className="mt-3 font-semibold">Any Available</div>
+                  <div className="mt-3 font-semibold">{t('calendar.professionalStep.anyAvailable')}</div>
                   <div className="mt-1 text-xs text-muted-foreground">
-                    Automatically assign an eligible professional
+                    {t('calendar.professionalStep.autoAssign')}
                   </div>
                 </button>
 
@@ -1199,7 +1191,7 @@ export default function Calendar() {
 
                     <div className="mt-3 font-semibold">{member.name}</div>
                     <div className="mt-1 text-xs text-muted-foreground">
-                      Available professional
+                      {t('calendar.professionalStep.available')}
                     </div>
                   </button>
                 ))}
@@ -1209,13 +1201,13 @@ export default function Calendar() {
             <section className="space-y-4 border-t pt-7">
               <StepHeader
                 number="4"
-                title="Date & Available Time"
-                description="Only real available times are displayed."
+                title={t('calendar.dateStep.title')}
+                description={t('calendar.dateStep.description')}
               />
 
               <div className="grid gap-5 lg:grid-cols-[260px_1fr]">
                 <div className="space-y-2">
-                  <Label>Date *</Label>
+                  <Label>{t('calendar.labels.date')} *</Label>
                   <Input
                     className="h-11 rounded-xl"
                     type="date"
@@ -1232,27 +1224,26 @@ export default function Calendar() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Available Times *</Label>
+                  <Label>{t('calendar.labels.availableTimes')} *</Label>
 
                   {availabilityLoading ? (
                     <div className="rounded-2xl border p-6 text-center text-sm text-muted-foreground">
-                      Loading available times...
+                      {t('calendar.dateStep.loading')}
                     </div>
                   ) : selectedAppointmentClosure ? (
                     <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center">
-                      <div className="font-bold text-red-800">Business Closed</div>
+                      <div className="font-bold text-red-800">{t('calendar.dateStep.businessClosed')}</div>
                       <p className="mt-2 text-sm text-red-700">
-                        {selectedAppointmentClosure.title}. Choose another date.
+                        {t('calendar.dateStep.closedMessage', { title: selectedAppointmentClosure.title })}
                       </p>
                     </div>
                   ) : newAppt.service_ids.length === 0 ? (
                     <div className="rounded-2xl border border-dashed p-6 text-center text-sm text-muted-foreground">
-                      Select services first.
+                      {t('calendar.dateStep.selectServicesFirst')}
                     </div>
                   ) : uniqueAvailableTimes.length === 0 ? (
                     <div className="rounded-2xl border border-dashed p-6 text-center text-sm text-muted-foreground">
-                      No available appointments for this selection. Choose
-                      another date or professional.
+                      {t('calendar.dateStep.noneAvailable')}
                     </div>
                   ) : (
                     <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 xl:grid-cols-6">
@@ -1280,17 +1271,17 @@ export default function Calendar() {
             <section className="space-y-4 border-t pt-7">
               <StepHeader
                 number="5"
-                title="Review"
-                description="Confirm the booking details before creating the appointment."
+                title={t('calendar.reviewStep.title')}
+                description={t('calendar.reviewStep.description')}
               />
 
               <div className="grid gap-5 lg:grid-cols-[1fr_320px]">
                 <div className="space-y-2">
-                  <Label>Notes</Label>
+                  <Label>{t('calendar.labels.notes')}</Label>
                   <Textarea
                     rows={5}
                     className="rounded-xl"
-                    placeholder="Optional notes for this appointment"
+                    placeholder={t('calendar.reviewStep.notesPlaceholder')}
                     value={newAppt.notes}
                     onChange={(event) =>
                       setNewAppt((current) => ({
@@ -1302,31 +1293,31 @@ export default function Calendar() {
                 </div>
 
                 <div className="rounded-2xl border bg-muted/25 p-5">
-                  <h3 className="font-bold">Booking Summary</h3>
+                  <h3 className="font-bold">{t('calendar.reviewStep.summary')}</h3>
 
                   <div className="mt-4 space-y-4 text-sm">
                     <SummaryItem
-                      label="Customer"
-                      value={selectedCustomer?.full_name || 'Not selected'}
+                      label={t('calendar.labels.customer')}
+                      value={selectedCustomer?.full_name || t('calendar.labels.notSelected')}
                     />
                     <SummaryItem
-                      label="Professional"
+                      label={t('calendar.labels.professional')}
                       value={
                         staff.find(
                           (member) => member.id === newAppt.employee_id
-                        )?.name || 'Any available'
+                        )?.name || t('calendar.professionalStep.anyAvailable')
                       }
                     />
                     <SummaryItem
-                      label="Services"
+                      label={t('calendar.labels.services')}
                       value={
                         selectedServices
                           .map((service) => service.name)
-                          .join(', ') || 'Not selected'
+                          .join(', ') || t('calendar.labels.notSelected')
                       }
                     />
                     <SummaryItem
-                      label="Date & Time"
+                      label={t('calendar.labels.dateTime')}
                       value={
                         newAppt.time
                           ? `${newAppt.date} · ${newAppt.time}`
@@ -1334,11 +1325,11 @@ export default function Calendar() {
                       }
                     />
                     <SummaryItem
-                      label="Duration"
-                      value={`${totalDuration} minutes`}
+                      label={t('calendar.labels.duration')}
+                      value={t('calendar.units.minutes', { count: totalDuration })}
                     />
                     <SummaryItem
-                      label="Total"
+                      label={t('calendar.labels.total')}
                       value={`€${totalPrice.toFixed(2)}`}
                     />
                   </div>
@@ -1365,7 +1356,7 @@ export default function Calendar() {
               }
               onClick={() => void handleCreateAppointment()}
             >
-              {creating ? 'Creating...' : 'Create Appointment'}
+              {creating ? t('calendar.actions.creating') : t('calendar.actions.createAppointment')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -1398,6 +1389,7 @@ function AppointmentDetailsDialog({
       | 'no_show'
   ) => Promise<boolean>;
 }) {
+  const { t, i18n } = useTranslation();
   if (!appointment) return null;
 
   const start = parseISO(appointment.start_time);
@@ -1412,7 +1404,7 @@ function AppointmentDetailsDialog({
     appointment.appointment_services
       ?.map((row: any) => row.services?.name)
       .filter(Boolean)
-      .join(', ') || 'Appointment';
+      .join(', ') || t('calendar.labels.appointment');
 
   const isCancelled = [
     'cancelled_by_business',
@@ -1426,10 +1418,10 @@ function AppointmentDetailsDialog({
           <div className="flex items-start justify-between gap-4 pr-6">
             <div>
               <div className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                Appointment details
+                {t('calendar.details.title')}
               </div>
               <DialogTitle className="mt-2 text-2xl">
-                {appointment.customers?.full_name || 'Customer'}
+                {appointment.customers?.full_name || t('calendar.labels.customer')}
               </DialogTitle>
             </div>
             <StatusBadge status={derivedStatus} />
@@ -1441,22 +1433,22 @@ function AppointmentDetailsDialog({
             <div className="grid gap-4 sm:grid-cols-2">
               <Detail
                 icon={<CalendarDays className="h-4 w-4" />}
-                label="Date"
-                value={format(start, 'EEEE, MMMM d, yyyy')}
+                label={t('calendar.labels.date')}
+                value={new Intl.DateTimeFormat(i18n.language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(start)}
               />
               <Detail
                 icon={<Clock3 className="h-4 w-4" />}
-                label="Time"
+                label={t('calendar.labels.time')}
                 value={`${format(start, 'HH:mm')} – ${format(end, 'HH:mm')}`}
               />
               <Detail
                 icon={<UserRound className="h-4 w-4" />}
-                label="Professional"
-                value={appointment.employees?.name || 'Unassigned'}
+                label={t('calendar.labels.professional')}
+                value={appointment.employees?.name || t('calendar.labels.unassigned')}
               />
               <Detail
                 icon={<FileText className="h-4 w-4" />}
-                label="Services"
+                label={t('calendar.labels.services')}
                 value={services}
               />
             </div>
@@ -1466,18 +1458,18 @@ function AppointmentDetailsDialog({
             <ContactDetail
               icon={<Phone className="h-4 w-4" />}
               label="Phone"
-              value={appointment.customers?.phone || 'Not provided'}
+              value={appointment.customers?.phone || t('calendar.labels.notProvided')}
             />
             <ContactDetail
               icon={<Mail className="h-4 w-4" />}
               label="Email"
-              value={appointment.customers?.email || 'Not provided'}
+              value={appointment.customers?.email || t('calendar.labels.notProvided')}
             />
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border p-4">
-              <div className="text-xs text-muted-foreground">Booking reference</div>
+              <div className="text-xs text-muted-foreground">{t('calendar.labels.bookingReference')}</div>
               <div className="mt-1 font-semibold">
                 {appointment.booking_reference
                   ? `#${appointment.booking_reference}`
@@ -1485,7 +1477,7 @@ function AppointmentDetailsDialog({
               </div>
             </div>
             <div className="rounded-xl border p-4">
-              <div className="text-xs text-muted-foreground">Total</div>
+              <div className="text-xs text-muted-foreground">{t('calendar.labels.total')}</div>
               <div className="mt-1 text-xl font-bold">
                 €{Number(appointment.total_price || 0).toFixed(2)}
               </div>
@@ -1495,7 +1487,7 @@ function AppointmentDetailsDialog({
           {appointment.notes && (
             <div className="rounded-xl border p-4">
               <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                Notes
+                {t('calendar.labels.notes')}
               </div>
               <p className="mt-2 whitespace-pre-wrap text-sm leading-6">
                 {appointment.notes}
@@ -1515,7 +1507,7 @@ function AppointmentDetailsDialog({
                   }
                 >
                   <UserCheck className="mr-2 h-4 w-4" />
-                  Check In
+                  {t('calendar.actions.checkIn')}
                 </Button>
               )}
 
@@ -1527,7 +1519,7 @@ function AppointmentDetailsDialog({
                 }
               >
                 <PlayCircle className="mr-2 h-4 w-4" />
-                Start Service
+                {t('calendar.actions.startService')}
               </Button>
             )}
 
@@ -1537,7 +1529,7 @@ function AppointmentDetailsDialog({
               }
             >
               <CheckCircle2 className="mr-2 h-4 w-4" />
-              Mark Completed
+              {t('calendar.actions.markCompleted')}
             </Button>
 
             <Button
@@ -1548,7 +1540,7 @@ function AppointmentDetailsDialog({
               }
             >
               <UserX className="mr-2 h-4 w-4" />
-              No Show
+              {t('calendar.actions.noShow')}
             </Button>
 
             <Button
@@ -1557,7 +1549,7 @@ function AppointmentDetailsDialog({
               onClick={() => void onCancel(appointment.id)}
             >
               <XCircle className="mr-2 h-4 w-4" />
-              Cancel Appointment
+              {t('calendar.actions.cancelAppointment')}
             </Button>
           </div>
         )}
@@ -1567,12 +1559,13 @@ function AppointmentDetailsDialog({
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const label = status.replace(/_/g, ' ');
+  const { t } = useTranslation();
+  const label = t(`calendar.status.${status}`, { defaultValue: status.replace(/_/g, ' ') });
 
   if (status === 'completed') {
     return (
       <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
-        Completed
+        {t('calendar.status.completed')}
       </Badge>
     );
   }
@@ -1586,7 +1579,7 @@ function StatusBadge({ status }: { status: string }) {
   if (status === 'no_show') {
     return (
       <Badge className="bg-violet-100 text-violet-700 hover:bg-violet-100">
-        No show
+        {t('calendar.status.no_show')}
       </Badge>
     );
   }
@@ -1594,7 +1587,7 @@ function StatusBadge({ status }: { status: string }) {
   if (status === 'arrived') {
     return (
       <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">
-        Checked in
+        {t('calendar.status.arrived')}
       </Badge>
     );
   }
@@ -1602,7 +1595,7 @@ function StatusBadge({ status }: { status: string }) {
   if (status === 'in_progress') {
     return (
       <Badge className="bg-orange-100 text-orange-700 hover:bg-orange-100">
-        In progress
+        {t('calendar.status.in_progress')}
       </Badge>
     );
   }

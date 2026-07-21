@@ -69,7 +69,8 @@
     "edit": "Düzenle",
     "delete": "Sil",
     "add": "Ekle",
-    "loading": "Yükleniyor..."
+    "loading": "Yükleniyor...",
+    "minutesShort": "dk"
   },
   "language": {
     "label": "Dil",
@@ -135,5 +136,129 @@
     "services": "Hizmetler",
     "appointment": "Randevu",
     "appointments": "Randevular"
+  },
+  "staff": {
+    "eyebrow": "Ekip yönetimi",
+    "title": "Personel",
+    "description": "Çalışan profillerini, hizmet yetkinliklerini ve haftalık uygunluğu yönetin.",
+    "loading": "Personel yükleniyor...",
+    "confirmRemove": "{{name}} kaldırılsın mı? Mevcut randevular kalıcı silmeyi engelleyebilir.",
+    "actions": {
+      "add": "Personel Ekle",
+      "remove": "Kaldır",
+      "save": "Personeli Kaydet",
+      "saving": "Kaydediliyor..."
+    },
+    "summary": {
+      "total": {
+        "title": "Toplam Personel",
+        "description": "Tüm çalışan profilleri"
+      },
+      "active": {
+        "title": "Aktif Uzmanlar",
+        "description": "Rezervasyon alabilir"
+      },
+      "inactive": {
+        "title": "Pasif",
+        "description": "Geçici olarak müsait değil"
+      }
+    },
+    "empty": {
+      "title": "Henüz personel yok",
+      "description": "İlk uzmanınızı ekleyin, hizmetlerini ve çalışma saatlerini ayarlayın."
+    },
+    "status": {
+      "label": "Aktiflik Durumu",
+      "active": "Aktif",
+      "inactive": "Pasif",
+      "description": "Aktif personel yeni rezervasyon alabilir."
+    },
+    "contact": {
+      "noEmail": "E-posta yok",
+      "noPhone": "Telefon yok"
+    },
+    "services": {
+      "label": "Hizmetler",
+      "title": "Sunulan Hizmetler",
+      "description": "Bu uzmanın gerçekleştirebildiği tüm hizmetleri seçin.",
+      "noneAssigned": "Hizmet atanmamış",
+      "more": "+{{count}} daha"
+    },
+    "dialog": {
+      "addTitle": "Personel Ekle",
+      "editTitle": "Personeli Düzenle",
+      "description": "Profili, hizmetleri ve haftalık uygunluğu yapılandırın."
+    },
+    "profile": {
+      "title": "Profil",
+      "description": "Müşterilerin halka açık sayfada göreceği bilgiler."
+    },
+    "fields": {
+      "photo": "Fotoğraf",
+      "fullNameRequired": "Ad Soyad *",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "biography": "Kısa Biyografi",
+      "day": "Gün",
+      "start": "Başlangıç",
+      "end": "Bitiş",
+      "label": "Etiket",
+      "startDate": "Başlangıç Tarihi",
+      "endDate": "Bitiş Tarihi"
+    },
+    "schedule": {
+      "title": "Haftalık Çalışma Programı",
+      "description": "Bu saatler rezervasyona açık zaman aralıklarını belirler.",
+      "open": "Açık",
+      "closed": "Kapalı",
+      "noneConfigured": "Çalışma programı ayarlanmamış",
+      "workingDaysSummary": "{{count}} çalışma günü · {{earliest}}–{{latest}}",
+      "workingDaysSummary_other": "{{count}} çalışma günü · {{earliest}}–{{latest}}"
+    },
+    "days": {
+      "monday": "Pazartesi",
+      "tuesday": "Salı",
+      "wednesday": "Çarşamba",
+      "thursday": "Perşembe",
+      "friday": "Cuma",
+      "saturday": "Cumartesi",
+      "sunday": "Pazar"
+    },
+    "inactive": {
+      "title": "Geçici Pasif Dönem",
+      "description": "Tatil, izin veya başka bir geçici devamsızlık için kullanın."
+    },
+    "breaks": {
+      "title": "Molalar (isteğe bağlı)",
+      "description": "Tekrarlanan molalar ekleyin. Bu saatler rezervasyonlara kapatılır.",
+      "add": "Mola Ekle",
+      "noneScheduled": "Planlanmış mola yok",
+      "emptyDescription": "Molalar isteğe bağlıdır. Yalnızca gerektiğinde ekleyin.",
+      "defaultLabel": "Mola",
+      "placeholder": "Öğle molası",
+      "removeAria": "Molayı kaldır",
+      "recurringCount": "{{count}} tekrarlanan mola",
+      "recurringCount_other": "{{count}} tekrarlanan mola"
+    },
+    "validation": {
+      "nameRequired": "Ad zorunludur",
+      "serviceRequired": "En az bir hizmet seçin",
+      "invalidWorkingHours": "{{day}} için geçerli çalışma saatleri girin",
+      "breakOnClosedDay": "Kapalı bir güne mola eklenemez",
+      "invalidBreakTime": "{{day}} için geçerli mola saati girin",
+      "breakOutsideHours": "{{day}} molası {{start}}–{{end}} saatleri içinde olmalıdır",
+      "breaksOverlap": "{{day}} gününde iki mola çakışıyor",
+      "inactiveDateOrder": "Bitiş tarihi başlangıç tarihinden sonra olmalıdır"
+    },
+    "messages": {
+      "loadFailed": "Personel yüklenemedi",
+      "detailsLoadFailed": "Personel ayrıntıları yüklenemedi",
+      "recordNotCreated": "Çalışan kaydı oluşturulmadı",
+      "updated": "Personel güncellendi",
+      "added": "Personel eklendi",
+      "saveFailed": "Personel kaydedilemedi",
+      "removed": "Personel kaldırıldı",
+      "removeFailed": "Personel kaldırılamadı"
+    }
   }
 }

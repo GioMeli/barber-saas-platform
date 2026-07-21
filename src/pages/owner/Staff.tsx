@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,7 +34,7 @@ import {
 
 type WeeklyScheduleDay = {
   dayOfWeek: number;
-  label: string;
+  labelKey: string;
   isClosed: boolean;
   startTime: string;
   endTime: string;
@@ -48,13 +49,13 @@ type WeeklyBreak = {
 };
 
 const DEFAULT_SCHEDULE: WeeklyScheduleDay[] = [
-  { dayOfWeek: 1, label: 'Monday', isClosed: false, startTime: '09:00', endTime: '17:00' },
-  { dayOfWeek: 2, label: 'Tuesday', isClosed: false, startTime: '09:00', endTime: '17:00' },
-  { dayOfWeek: 3, label: 'Wednesday', isClosed: false, startTime: '09:00', endTime: '17:00' },
-  { dayOfWeek: 4, label: 'Thursday', isClosed: false, startTime: '09:00', endTime: '17:00' },
-  { dayOfWeek: 5, label: 'Friday', isClosed: false, startTime: '09:00', endTime: '17:00' },
-  { dayOfWeek: 6, label: 'Saturday', isClosed: false, startTime: '09:00', endTime: '14:00' },
-  { dayOfWeek: 0, label: 'Sunday', isClosed: true, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 1, labelKey: 'staff.days.monday', isClosed: false, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 2, labelKey: 'staff.days.tuesday', isClosed: false, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 3, labelKey: 'staff.days.wednesday', isClosed: false, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 4, labelKey: 'staff.days.thursday', isClosed: false, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 5, labelKey: 'staff.days.friday', isClosed: false, startTime: '09:00', endTime: '17:00' },
+  { dayOfWeek: 6, labelKey: 'staff.days.saturday', isClosed: false, startTime: '09:00', endTime: '14:00' },
+  { dayOfWeek: 0, labelKey: 'staff.days.sunday', isClosed: true, startTime: '09:00', endTime: '17:00' },
 ];
 
 const EMPTY_FORM = {
@@ -69,6 +70,7 @@ const EMPTY_FORM = {
 };
 
 export default function Staff() {
+  const { t } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -144,7 +146,7 @@ export default function Staff() {
       setStaffBreaks(breaksResult.data ?? []);
     } catch (error) {
       console.error('Error fetching staff:', error);
-      toast.error('Failed to load staff members');
+      toast.error(t('staff.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -218,7 +220,7 @@ export default function Staff() {
         (savedBreaks.data ?? []).map((item: any) => ({
           clientId: item.id,
           dayOfWeek: Number(item.day_of_week),
-          label: item.label || 'Break',
+          label: item.label || t('staff.breaks.defaultLabel'),
           startTime: String(item.start_time).slice(0, 5),
           endTime: String(item.end_time).slice(0, 5),
         }))
@@ -238,7 +240,7 @@ export default function Staff() {
         })
       );
     } catch (error: any) {
-      toast.error(error.message || 'Failed to load staff details');
+      toast.error(error.message || t('staff.messages.detailsLoadFailed'));
       return;
     }
 
@@ -273,7 +275,7 @@ export default function Staff() {
       {
         clientId: crypto.randomUUID(),
         dayOfWeek: firstOpenDay.dayOfWeek,
-        label: 'Break',
+        label: t('staff.breaks.defaultLabel'),
         startTime: '13:00',
         endTime: '13:30',
       },
@@ -301,12 +303,12 @@ export default function Staff() {
     if (!businessId) return false;
 
     if (!formData.name.trim()) {
-      toast.error('Name is required');
+      toast.error(t('staff.validation.nameRequired'));
       return false;
     }
 
     if (selectedServiceIds.length === 0) {
-      toast.error('Select at least one service');
+      toast.error(t('staff.validation.serviceRequired'));
       return false;
     }
 
@@ -319,7 +321,7 @@ export default function Staff() {
     );
 
     if (invalidDay) {
-      toast.error(`Enter valid working hours for ${invalidDay.label}`);
+      toast.error(t('staff.validation.invalidWorkingHours', { day: t(invalidDay.labelKey) }));
       return false;
     }
 
@@ -329,7 +331,7 @@ export default function Staff() {
       );
 
       if (!day || day.isClosed) {
-        toast.error('A break cannot be added on a closed day');
+        toast.error(t('staff.validation.breakOnClosedDay'));
         return false;
       }
 
@@ -338,7 +340,7 @@ export default function Staff() {
         !item.endTime ||
         item.startTime >= item.endTime
       ) {
-        toast.error(`Enter a valid break time for ${day.label}`);
+        toast.error(t('staff.validation.invalidBreakTime', { day: t(day.labelKey) }));
         return false;
       }
 
@@ -347,7 +349,7 @@ export default function Staff() {
         item.endTime > day.endTime
       ) {
         toast.error(
-          `${day.label} break must be inside ${day.startTime}–${day.endTime}`
+          t('staff.validation.breakOutsideHours', { day: t(day.labelKey), start: day.startTime, end: day.endTime })
         );
         return false;
       }
@@ -361,7 +363,7 @@ export default function Staff() {
       );
 
       if (overlaps) {
-        toast.error(`Two breaks overlap on ${day.label}`);
+        toast.error(t('staff.validation.breaksOverlap', { day: t(day.labelKey) }));
         return false;
       }
     }
@@ -371,7 +373,7 @@ export default function Staff() {
       formData.inactive_end_date &&
       formData.inactive_start_date > formData.inactive_end_date
     ) {
-      toast.error('Inactive end date must be after the start date');
+      toast.error(t('staff.validation.inactiveDateOrder'));
       return false;
     }
 
@@ -417,7 +419,7 @@ export default function Staff() {
         employeeId = data.id;
       }
 
-      if (!employeeId) throw new Error('Employee record was not created');
+      if (!employeeId) throw new Error(t('staff.messages.recordNotCreated'));
 
       const { error: deleteServicesError } = await supabase
         .from('employee_services')
@@ -478,7 +480,7 @@ export default function Staff() {
               day_of_week: item.dayOfWeek,
               start_time: item.startTime,
               end_time: item.endTime,
-              label: item.label.trim() || 'Break',
+              label: item.label.trim() || t('staff.breaks.defaultLabel'),
             }))
           );
 
@@ -486,14 +488,14 @@ export default function Staff() {
       }
 
       toast.success(
-        editingId ? 'Staff member updated' : 'Staff member added'
+        editingId ? t('staff.messages.updated') : t('staff.messages.added')
       );
 
       setIsDialogOpen(false);
       resetForm();
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save staff member');
+      toast.error(error.message || t('staff.messages.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -501,7 +503,7 @@ export default function Staff() {
 
   const handleDelete = async (member: any) => {
     const confirmed = window.confirm(
-      `Remove ${member.name}? Existing appointments may prevent permanent deletion.`
+      t('staff.confirmRemove', { name: member.name })
     );
 
     if (!confirmed) return;
@@ -515,10 +517,10 @@ export default function Staff() {
 
       if (error) throw error;
 
-      toast.success('Staff member removed');
+      toast.success(t('staff.messages.removed'));
       await fetchData();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to remove staff member');
+      toast.error(error.message || t('staff.messages.removeFailed'));
     }
   };
 
@@ -541,11 +543,9 @@ export default function Staff() {
       (item) => item.employee_id === employeeId
     );
 
-    if (memberBreaks.length === 0) return 'No scheduled breaks';
+    if (memberBreaks.length === 0) return t('staff.breaks.noneScheduled');
 
-    return `${memberBreaks.length} recurring break${
-      memberBreaks.length === 1 ? '' : 's'
-    }`;
+    return t('staff.breaks.recurringCount', { count: memberBreaks.length });
   };
 
   const getMemberScheduleSummary = (employeeId: string) => {
@@ -553,7 +553,7 @@ export default function Staff() {
       (row) => row.employee_id === employeeId && !row.is_closed
     );
 
-    if (memberHours.length === 0) return 'No schedule configured';
+    if (memberHours.length === 0) return t('staff.schedule.noneConfigured');
 
     const days = memberHours.length;
     const earliest = [...memberHours]
@@ -564,7 +564,7 @@ export default function Staff() {
       .sort()
       .slice(-1)[0];
 
-    return `${days} working day${days === 1 ? '' : 's'} · ${earliest}–${latest}`;
+    return t('staff.schedule.workingDaysSummary', { count: days, earliest, latest });
   };
 
   return (
@@ -572,56 +572,55 @@ export default function Staff() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Team management
+            {t('staff.eyebrow')}
           </div>
-          <h1 className="app-page-title">Staff</h1>
+          <h1 className="app-page-title">{t('staff.title')}</h1>
           <p className="app-page-description">
-            Manage employee profiles, service skills and weekly availability.
+            {t('staff.description')}
           </p>
         </div>
 
         <Button onClick={() => void handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Staff Member
+          {t('staff.actions.add')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
-          title="Total Staff"
+          title={t('staff.summary.total.title')}
           value={staff.length}
-          description="All employee profiles"
+          description={t('staff.summary.total.description')}
           icon={<Users className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Active Professionals"
+          title={t('staff.summary.active.title')}
           value={activeCount}
-          description="Can receive bookings"
+          description={t('staff.summary.active.description')}
           icon={<UserCheck className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Inactive"
+          title={t('staff.summary.inactive.title')}
           value={inactiveCount}
-          description="Temporarily unavailable"
+          description={t('staff.summary.inactive.description')}
           icon={<CalendarClock className="h-5 w-5" />}
         />
       </section>
 
       {loading ? (
         <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground shadow-card">
-          Loading staff...
+          {t('staff.loading')}
         </div>
       ) : staff.length === 0 ? (
         <Card className="rounded-2xl shadow-card">
           <CardContent className="flex min-h-[320px] flex-col items-center justify-center p-10 text-center">
             <Users className="h-12 w-12 text-muted-foreground" />
-            <h3 className="mt-4 font-bold">No staff members yet</h3>
+            <h3 className="mt-4 font-bold">{t('staff.empty.title')}</h3>
             <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-              Add your first professional and configure services and working
-              hours.
+              {t('staff.empty.description')}
             </p>
             <Button className="mt-5" onClick={() => void handleOpenDialog()}>
-              Add Staff Member
+              {t('staff.actions.add')}
             </Button>
           </CardContent>
         </Card>
@@ -655,7 +654,7 @@ export default function Staff() {
                       <Badge
                         variant={member.is_active ? 'default' : 'secondary'}
                       >
-                        {member.is_active ? 'Active' : 'Inactive'}
+                        {member.is_active ? t('staff.status.active') : t('staff.status.inactive')}
                       </Badge>
                     </div>
 
@@ -671,11 +670,11 @@ export default function Staff() {
                     <div className="mt-4 space-y-2 text-sm text-muted-foreground">
                       <ContactLine
                         icon={<Mail className="h-4 w-4" />}
-                        value={member.email || 'No email'}
+                        value={member.email || t('staff.contact.noEmail')}
                       />
                       <ContactLine
                         icon={<Phone className="h-4 w-4" />}
-                        value={member.phone || 'No phone'}
+                        value={member.phone || t('staff.contact.noPhone')}
                       />
                       <ContactLine
                         icon={<CalendarClock className="h-4 w-4" />}
@@ -690,12 +689,12 @@ export default function Staff() {
                     <div className="mt-5">
                       <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         <Scissors className="h-3.5 w-3.5" />
-                        Services
+                        {t('staff.services.label')}
                       </div>
 
                       <div className="flex flex-wrap gap-2">
                         {memberServices.length === 0 ? (
-                          <Badge variant="secondary">No services assigned</Badge>
+                          <Badge variant="secondary">{t('staff.services.noneAssigned')}</Badge>
                         ) : (
                           memberServices.slice(0, 4).map((service: any) => (
                             <Badge key={service.id} variant="outline">
@@ -706,7 +705,7 @@ export default function Staff() {
 
                         {memberServices.length > 4 && (
                           <Badge variant="secondary">
-                            +{memberServices.length - 4} more
+                            {t('staff.services.more', { count: memberServices.length - 4 })}
                           </Badge>
                         )}
                       </div>
@@ -719,7 +718,7 @@ export default function Staff() {
                         onClick={() => void handleOpenDialog(member)}
                       >
                         <Edit className="mr-2 h-4 w-4" />
-                        Edit
+                        {t('common.edit')}
                       </Button>
 
                       <Button
@@ -729,7 +728,7 @@ export default function Staff() {
                         onClick={() => void handleDelete(member)}
                       >
                         <Trash2 className="mr-2 h-4 w-4" />
-                        Remove
+                        {t('staff.actions.remove')}
                       </Button>
                     </div>
                   </div>
@@ -752,22 +751,22 @@ export default function Staff() {
         <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">
-              {editingId ? 'Edit Staff Member' : 'Add Staff Member'}
+              {editingId ? t('staff.dialog.editTitle') : t('staff.dialog.addTitle')}
             </DialogTitle>
             <p className="text-sm text-muted-foreground">
-              Configure the profile, services and weekly availability.
+              {t('staff.dialog.description')}
             </p>
           </DialogHeader>
 
           <div className="space-y-8 px-5 py-6 sm:px-7">
             <section className="space-y-4">
               <SectionTitle
-                title="Profile"
-                description="Information customers will see on the storefront."
+                title={t('staff.profile.title')}
+                description={t('staff.profile.description')}
               />
 
               <div className="space-y-2">
-                <Label>Photo</Label>
+                <Label>{t('staff.fields.photo')}</Label>
                 <ImageUploader
                   value={formData.photo_url}
                   onChange={(photoUrl) =>
@@ -781,7 +780,7 @@ export default function Staff() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Full Name *">
+                <Field label={t('staff.fields.fullNameRequired')}>
                   <Input
                     className="h-11 rounded-xl"
                     value={formData.name}
@@ -791,7 +790,7 @@ export default function Staff() {
                   />
                 </Field>
 
-                <Field label="Phone">
+                <Field label={t('staff.fields.phone')}>
                   <Input
                     className="h-11 rounded-xl"
                     type="tel"
@@ -803,7 +802,7 @@ export default function Staff() {
                 </Field>
 
                 <div className="sm:col-span-2">
-                  <Field label="Email">
+                  <Field label={t('staff.fields.email')}>
                     <Input
                       className="h-11 rounded-xl"
                       type="email"
@@ -816,7 +815,7 @@ export default function Staff() {
                 </div>
 
                 <div className="sm:col-span-2">
-                  <Field label="Short Biography">
+                  <Field label={t('staff.fields.biography')}>
                     <Textarea
                       rows={4}
                       className="rounded-xl"
@@ -831,9 +830,9 @@ export default function Staff() {
 
               <div className="flex items-center justify-between rounded-2xl border p-4">
                 <div>
-                  <Label>Active Status</Label>
+                  <Label>{t('staff.status.label')}</Label>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Active staff can receive new bookings.
+                    {t('staff.status.description')}
                   </p>
                 </div>
                 <Switch
@@ -847,8 +846,8 @@ export default function Staff() {
 
             <section className="space-y-4 border-t pt-7">
               <SectionTitle
-                title="Services Offered"
-                description="Select every service this professional can perform."
+                title={t('staff.services.title')}
+                description={t('staff.services.description')}
               />
 
               <div className="grid gap-3 sm:grid-cols-2">
@@ -874,7 +873,7 @@ export default function Staff() {
                       <div>
                         <div className="font-semibold">{service.name}</div>
                         <div className="mt-1 text-xs text-muted-foreground">
-                          {service.duration} min · €
+                          {service.duration} {t('common.minutesShort')} · €
                           {Number(service.price).toFixed(2)}
                         </div>
                       </div>
@@ -886,8 +885,8 @@ export default function Staff() {
 
             <section className="space-y-4 border-t pt-7">
               <SectionTitle
-                title="Weekly Schedule"
-                description="These hours determine the available booking slots."
+                title={t('staff.schedule.title')}
+                description={t('staff.schedule.description')}
               />
 
               <div className="space-y-3">
@@ -896,7 +895,7 @@ export default function Staff() {
                     key={day.dayOfWeek}
                     className="grid gap-3 rounded-2xl border p-4 sm:grid-cols-[130px_110px_1fr_1fr] sm:items-center"
                   >
-                    <div className="font-semibold">{day.label}</div>
+                    <div className="font-semibold">{t(day.labelKey)}</div>
 
                     <div className="flex items-center gap-2">
                       <Switch
@@ -908,7 +907,7 @@ export default function Staff() {
                         }
                       />
                       <span className="text-xs text-muted-foreground">
-                        {day.isClosed ? 'Closed' : 'Open'}
+                        {day.isClosed ? t('staff.schedule.closed') : t('staff.schedule.open')}
                       </span>
                     </div>
 
@@ -942,15 +941,15 @@ export default function Staff() {
 
             <section className="space-y-4 border-t pt-7">
               <SectionTitle
-                title="Temporary Inactive Period"
-                description="Use this for holidays, leave or another temporary absence."
+                title={t('staff.inactive.title')}
+                description={t('staff.inactive.description')}
               />
 
               <section className="space-y-4 border-t pt-7">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                   <SectionTitle
-                    title="Breaks (Optional)"
-                    description="Add recurring breaks. These times will be blocked from owner and public bookings."
+                    title={t('staff.breaks.title')}
+                    description={t('staff.breaks.description')}
                   />
 
                   <Button
@@ -959,7 +958,7 @@ export default function Staff() {
                     onClick={addBreak}
                   >
                     <Plus className="mr-2 h-4 w-4" />
-                    Add Break
+                    {t('staff.breaks.add')}
                   </Button>
                 </div>
 
@@ -968,11 +967,11 @@ export default function Staff() {
                     <Clock3 className="mx-auto h-8 w-8 text-muted-foreground" />
 
                     <div className="mt-3 font-semibold">
-                      No scheduled breaks
+                      {t('staff.breaks.noneScheduled')}
                     </div>
 
                     <p className="mt-1 text-sm text-muted-foreground">
-                      Breaks are optional. Add one only when this professional needs it.
+                      {t('staff.breaks.emptyDescription')}
                     </p>
                   </div>
                 ) : (
@@ -982,7 +981,7 @@ export default function Staff() {
                         key={item.clientId}
                         className="grid gap-3 rounded-2xl border p-4 sm:grid-cols-[150px_1fr_1fr_1fr_auto] sm:items-end"
                       >
-                        <Field label="Day">
+                        <Field label={t('staff.fields.day')}>
                           <select
                             className="h-11 w-full rounded-xl border bg-background px-3 text-sm"
                             value={item.dayOfWeek}
@@ -1003,13 +1002,13 @@ export default function Staff() {
                                   )?.isClosed
                                 }
                               >
-                                {day.label}
+                                {t(day.labelKey)}
                               </option>
                             ))}
                           </select>
                         </Field>
 
-                        <Field label="Start">
+                        <Field label={t('staff.fields.start')}>
                           <Input
                             type="time"
                             className="h-11 rounded-xl"
@@ -1022,7 +1021,7 @@ export default function Staff() {
                           />
                         </Field>
 
-                        <Field label="End">
+                        <Field label={t('staff.fields.end')}>
                           <Input
                             type="time"
                             className="h-11 rounded-xl"
@@ -1035,11 +1034,11 @@ export default function Staff() {
                           />
                         </Field>
 
-                        <Field label="Label">
+                        <Field label={t('staff.fields.label')}>
                           <Input
                             className="h-11 rounded-xl"
                             value={item.label}
-                            placeholder="Lunch break"
+                            placeholder={t('staff.breaks.placeholder')}
                             onChange={(event) =>
                               updateBreak(item.clientId, {
                                 label: event.target.value,
@@ -1054,7 +1053,7 @@ export default function Staff() {
                           size="icon"
                           className="h-11 w-11 text-destructive hover:text-destructive"
                           onClick={() => removeBreak(item.clientId)}
-                          aria-label="Remove break"
+                          aria-label={t('staff.breaks.removeAria')}
                         >
                           <Trash2 className="h-4 w-4" />
                         </Button>
@@ -1065,7 +1064,7 @@ export default function Staff() {
               </section>
 
               <div className="grid gap-4 sm:grid-cols-2">
-                <Field label="Start Date">
+                <Field label={t('staff.fields.startDate')}>
                   <Input
                     className="h-11 rounded-xl"
                     type="date"
@@ -1079,7 +1078,7 @@ export default function Staff() {
                   />
                 </Field>
 
-                <Field label="End Date">
+                <Field label={t('staff.fields.endDate')}>
                   <Input
                     className="h-11 rounded-xl"
                     type="date"
@@ -1102,14 +1101,14 @@ export default function Staff() {
               disabled={saving}
               onClick={() => setIsDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
 
             <Button
               disabled={saving || services.length === 0}
               onClick={() => void handleSave()}
             >
-              {saving ? 'Saving...' : 'Save Staff Member'}
+              {saving ? t('staff.actions.saving') : t('staff.actions.save')}
             </Button>
           </DialogFooter>
         </DialogContent>

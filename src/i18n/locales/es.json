@@ -69,7 +69,8 @@
     "edit": "Editar",
     "delete": "Eliminar",
     "add": "Añadir",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "minutesShort": "min"
   },
   "language": {
     "label": "Idioma",
@@ -135,5 +136,129 @@
     "services": "Servicios",
     "appointment": "Cita",
     "appointments": "Citas"
+  },
+  "staff": {
+    "eyebrow": "Gestión del equipo",
+    "title": "Personal",
+    "description": "Gestiona perfiles, servicios y disponibilidad semanal del personal.",
+    "loading": "Cargando personal...",
+    "confirmRemove": "¿Eliminar a {{name}}? Las citas existentes pueden impedir la eliminación permanente.",
+    "actions": {
+      "add": "Añadir miembro",
+      "remove": "Eliminar",
+      "save": "Guardar miembro",
+      "saving": "Guardando..."
+    },
+    "summary": {
+      "total": {
+        "title": "Personal total",
+        "description": "Todos los perfiles"
+      },
+      "active": {
+        "title": "Profesionales activos",
+        "description": "Pueden recibir reservas"
+      },
+      "inactive": {
+        "title": "Inactivos",
+        "description": "No disponibles temporalmente"
+      }
+    },
+    "empty": {
+      "title": "Todavía no hay personal",
+      "description": "Añade al primer profesional y configura sus servicios y horario."
+    },
+    "status": {
+      "label": "Estado activo",
+      "active": "Activo",
+      "inactive": "Inactivo",
+      "description": "El personal activo puede recibir nuevas reservas."
+    },
+    "contact": {
+      "noEmail": "Sin correo electrónico",
+      "noPhone": "Sin teléfono"
+    },
+    "services": {
+      "label": "Servicios",
+      "title": "Servicios ofrecidos",
+      "description": "Selecciona todos los servicios que puede realizar este profesional.",
+      "noneAssigned": "Sin servicios asignados",
+      "more": "+{{count}} más"
+    },
+    "dialog": {
+      "addTitle": "Añadir miembro del personal",
+      "editTitle": "Editar miembro del personal",
+      "description": "Configura el perfil, los servicios y la disponibilidad semanal."
+    },
+    "profile": {
+      "title": "Perfil",
+      "description": "Información que los clientes verán en la página pública."
+    },
+    "fields": {
+      "photo": "Foto",
+      "fullNameRequired": "Nombre completo *",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "biography": "Biografía breve",
+      "day": "Día",
+      "start": "Inicio",
+      "end": "Fin",
+      "label": "Etiqueta",
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin"
+    },
+    "schedule": {
+      "title": "Horario semanal",
+      "description": "Estas horas determinan los espacios disponibles para reservas.",
+      "open": "Abierto",
+      "closed": "Cerrado",
+      "noneConfigured": "No hay horario configurado",
+      "workingDaysSummary": "{{count}} día laborable · {{earliest}}–{{latest}}",
+      "workingDaysSummary_other": "{{count}} días laborables · {{earliest}}–{{latest}}"
+    },
+    "days": {
+      "monday": "Lunes",
+      "tuesday": "Martes",
+      "wednesday": "Miércoles",
+      "thursday": "Jueves",
+      "friday": "Viernes",
+      "saturday": "Sábado",
+      "sunday": "Domingo"
+    },
+    "inactive": {
+      "title": "Periodo de inactividad temporal",
+      "description": "Úsalo para vacaciones, permisos u otra ausencia temporal."
+    },
+    "breaks": {
+      "title": "Descansos (opcionales)",
+      "description": "Añade descansos recurrentes. Estas horas quedarán bloqueadas para reservas.",
+      "add": "Añadir descanso",
+      "noneScheduled": "No hay descansos programados",
+      "emptyDescription": "Los descansos son opcionales. Añade solo los necesarios.",
+      "defaultLabel": "Descanso",
+      "placeholder": "Pausa para comer",
+      "removeAria": "Eliminar descanso",
+      "recurringCount": "{{count}} descanso recurrente",
+      "recurringCount_other": "{{count}} descansos recurrentes"
+    },
+    "validation": {
+      "nameRequired": "El nombre es obligatorio",
+      "serviceRequired": "Selecciona al menos un servicio",
+      "invalidWorkingHours": "Introduce un horario válido para {{day}}",
+      "breakOnClosedDay": "No se puede añadir un descanso en un día cerrado",
+      "invalidBreakTime": "Introduce una hora de descanso válida para {{day}}",
+      "breakOutsideHours": "El descanso del {{day}} debe estar entre {{start}}–{{end}}",
+      "breaksOverlap": "Dos descansos se superponen el {{day}}",
+      "inactiveDateOrder": "La fecha de fin debe ser posterior a la fecha de inicio"
+    },
+    "messages": {
+      "loadFailed": "No se pudo cargar el personal",
+      "detailsLoadFailed": "No se pudieron cargar los detalles",
+      "recordNotCreated": "No se creó el registro del empleado",
+      "updated": "Miembro actualizado",
+      "added": "Miembro añadido",
+      "saveFailed": "No se pudo guardar el miembro",
+      "removed": "Miembro eliminado",
+      "removeFailed": "No se pudo eliminar el miembro"
+    }
   }
 }

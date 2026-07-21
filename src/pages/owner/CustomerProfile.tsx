@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Button } from '@/components/ui/button';
@@ -47,6 +48,7 @@ const EMPTY_RECORD = {
 };
 
 export default function CustomerProfile() {
+  const { t, i18n } = useTranslation();
   const { customerId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { businessMemberships } = useAuth();
@@ -109,7 +111,7 @@ export default function CustomerProfile() {
       setRecords(recordsResult.data ?? []);
       setAppointments(appointmentsResult.data ?? []);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to load customer profile');
+      toast.error(error.message || t('customerProfile.toasts.loadError'));
     } finally {
       setLoading(false);
     }
@@ -163,7 +165,7 @@ export default function CustomerProfile() {
 
   const saveRecord = async () => {
     if (!businessId || !customerId || !recordForm.title.trim()) {
-      toast.error('Record title is required');
+      toast.error(t('customerProfile.validation.titleRequired'));
       return;
     }
 
@@ -231,18 +233,18 @@ export default function CustomerProfile() {
         if (imageError) throw imageError;
       }
 
-      toast.success(editingRecord ? 'Record updated' : 'Record created');
+      toast.success(editingRecord ? t('customerProfile.toasts.recordUpdated') : t('customerProfile.toasts.recordCreated'));
       setRecordDialogOpen(false);
       await fetchProfile();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save record');
+      toast.error(error.message || t('customerProfile.toasts.saveError'));
     } finally {
       setSaving(false);
     }
   };
 
   const deleteRecord = async (record: any) => {
-    if (!window.confirm('Delete this customer record?')) return;
+    if (!window.confirm(t('customerProfile.confirmDeleteRecord'))) return;
 
     try {
       const imagePaths = (record.customer_record_images ?? [])
@@ -261,10 +263,10 @@ export default function CustomerProfile() {
 
       if (error) throw error;
 
-      toast.success('Record deleted');
+      toast.success(t('customerProfile.toasts.recordDeleted'));
       await fetchProfile();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete record');
+      toast.error(error.message || t('customerProfile.toasts.deleteError'));
     }
   };
 
@@ -272,7 +274,7 @@ export default function CustomerProfile() {
     return (
       <div className="app-page">
         <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground">
-          Loading customer profile...
+          {t('customerProfile.states.loading')}
         </div>
       </div>
     );
@@ -282,7 +284,7 @@ export default function CustomerProfile() {
     return (
       <div className="app-page">
         <div className="rounded-2xl border bg-card p-12 text-center">
-          Customer not found.
+          {t('customerProfile.states.notFound')}
         </div>
       </div>
     );
@@ -295,7 +297,7 @@ export default function CustomerProfile() {
           <Button asChild variant="ghost" className="-ml-3 mb-3">
             <Link to="/dashboard/customers">
               <ArrowLeft className="mr-2 h-4 w-4" />
-              Back to customers
+              {t('customerProfile.back')}
             </Link>
           </Button>
 
@@ -305,7 +307,7 @@ export default function CustomerProfile() {
               <h1 className="app-page-title">{customer.full_name}</h1>
               <div className="mt-2 flex flex-wrap items-center gap-2">
                 <Badge variant={customer.user_id ? 'default' : 'secondary'}>
-                  {customer.user_id ? 'Registered' : 'Guest'}
+                  {customer.user_id ? t('customers.types.registered') : t('customers.types.guest')}
                 </Badge>
                 {customer.email && (
                   <span className="text-sm text-muted-foreground">
@@ -319,36 +321,36 @@ export default function CustomerProfile() {
 
         <Button onClick={() => openRecordDialog()}>
           <Plus className="mr-2 h-4 w-4" />
-          New Record
+          {t('customerProfile.actions.newRecord')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Completed visits" value={String(totals.visits)} />
+        <StatCard label={t('customerProfile.stats.completedVisits')} value={String(totals.visits)} />
         <StatCard
-          label="Total spend"
+          label={t('customerProfile.stats.totalSpend')}
           value={`€${totals.totalSpend.toFixed(2)}`}
         />
-        <StatCard label="Cancellations" value={String(totals.cancellations)} />
-        <StatCard label="No shows" value={String(totals.noShows)} />
+        <StatCard label={t('customerProfile.stats.cancellations')} value={String(totals.cancellations)} />
+        <StatCard label={t('customerProfile.stats.noShows')} value={String(totals.noShows)} />
       </section>
 
       <Card className="rounded-2xl shadow-card">
         <CardContent className="grid gap-4 p-5 sm:grid-cols-2 lg:grid-cols-3">
           <ContactItem
             icon={<Mail className="h-4 w-4" />}
-            label="Email"
-            value={customer.email || 'No email'}
+            label={t('customers.form.email')}
+            value={customer.email || t('customers.noEmail')}
           />
           <ContactItem
             icon={<Phone className="h-4 w-4" />}
-            label="Phone"
-            value={customer.phone || 'No phone'}
+            label={t('customers.form.phone')}
+            value={customer.phone || t('customers.noPhone')}
           />
           <ContactItem
             icon={<UserRound className="h-4 w-4" />}
-            label="Customer notes"
-            value={customer.notes || 'No customer notes'}
+            label={t('customerProfile.customerNotes')}
+            value={customer.notes || t('customerProfile.noCustomerNotes')}
           />
         </CardContent>
       </Card>
@@ -356,12 +358,12 @@ export default function CustomerProfile() {
       <div className="flex gap-2 rounded-2xl border bg-card p-2 shadow-card">
         <TabButton
           active={activeTab === 'records'}
-          label={`Records (${records.length})`}
+          label={t('customerProfile.tabs.records', { count: records.length })}
           onClick={() => switchTab('records')}
         />
         <TabButton
           active={activeTab === 'history'}
-          label={`Visit History (${appointments.length})`}
+          label={t('customerProfile.tabs.history', { count: appointments.length })}
           onClick={() => switchTab('history')}
         />
       </div>
@@ -372,9 +374,9 @@ export default function CustomerProfile() {
             <Card className="col-span-2 lg:col-span-4">
               <CardContent className="p-12 text-center">
                 <Camera className="mx-auto h-9 w-9 text-muted-foreground/50" />
-                <h3 className="mt-4 font-bold">No customer records yet</h3>
+                <h3 className="mt-4 font-bold">{t('customerProfile.states.noRecords')}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">
-                  Create the first formula, note or customer photo.
+                  {t('customerProfile.states.noRecordsDescription')}
                 </p>
               </CardContent>
             </Card>
@@ -397,13 +399,13 @@ export default function CustomerProfile() {
         <DialogContent className="max-h-[92vh] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
-              {editingRecord ? 'Edit Customer Record' : 'New Customer Record'}
+              {editingRecord ? t('customerProfile.dialog.editTitle') : t('customerProfile.dialog.newTitle')}
             </DialogTitle>
           </DialogHeader>
 
           <div className="grid gap-5 py-4">
             <div className="grid gap-2">
-              <Label>Record Type</Label>
+              <Label>{t('customerProfile.form.recordType')}</Label>
               <select
                 className="h-11 rounded-xl border bg-background px-3 text-sm"
                 value={recordForm.type}
@@ -414,19 +416,19 @@ export default function CustomerProfile() {
                   })
                 }
               >
-                <option value="formula">Formula</option>
-                <option value="general_note">General Note</option>
-                <option value="allergy">Allergy / Sensitivity</option>
-                <option value="preferred_style">Preferred Style</option>
-                <option value="product">Product Used</option>
-                <option value="consultation">Consultation</option>
-                <option value="before_after">Before / After</option>
-                <option value="other">Other</option>
+                <option value="formula">{t('customerProfile.recordTypes.formula')}</option>
+                <option value="general_note">{t('customerProfile.recordTypes.generalNote')}</option>
+                <option value="allergy">{t('customerProfile.recordTypes.allergy')}</option>
+                <option value="preferred_style">{t('customerProfile.recordTypes.preferredStyle')}</option>
+                <option value="product">{t('customerProfile.recordTypes.product')}</option>
+                <option value="consultation">{t('customerProfile.recordTypes.consultation')}</option>
+                <option value="before_after">{t('customerProfile.recordTypes.beforeAfter')}</option>
+                <option value="other">{t('customerProfile.recordTypes.other')}</option>
               </select>
             </div>
 
             <div className="grid gap-2">
-              <Label>Title *</Label>
+              <Label>{t('customerProfile.form.title')} *</Label>
               <Input
                 value={recordForm.title}
                 onChange={(event) =>
@@ -440,7 +442,7 @@ export default function CustomerProfile() {
 
             {recordForm.type === 'formula' && (
               <div className="grid gap-2">
-                <Label>Formula</Label>
+                <Label>{t('customerProfile.form.formula')}</Label>
                 <Input
                   value={recordForm.formula}
                   onChange={(event) =>
@@ -449,13 +451,13 @@ export default function CustomerProfile() {
                       formula: event.target.value,
                     })
                   }
-                  placeholder="e.g. 8.13 + 7.1, 20 vol, 35 min"
+                  placeholder={t('customerProfile.form.formulaPlaceholder')}
                 />
               </div>
             )}
 
             <div className="grid gap-2">
-              <Label>Notes</Label>
+              <Label>{t('customerProfile.form.notes')}</Label>
               <Textarea
                 rows={6}
                 value={recordForm.content}
@@ -469,7 +471,7 @@ export default function CustomerProfile() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Photo</Label>
+              <Label>{t('customerProfile.form.photo')}</Label>
               <Input
                 type="file"
                 accept="image/jpeg,image/png,image/webp"
@@ -486,10 +488,10 @@ export default function CustomerProfile() {
               disabled={saving}
               onClick={() => setRecordDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button disabled={saving} onClick={() => void saveRecord()}>
-              {saving ? 'Saving...' : 'Save Record'}
+              {saving ? t('common.saving') : t('customerProfile.actions.saveRecord')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -499,6 +501,7 @@ export default function CustomerProfile() {
 }
 
 function RecordCard({ record, onEdit, onDelete }: any) {
+  const { t, i18n } = useTranslation();
   const images = record.customer_record_images ?? [];
 
   return (
@@ -510,7 +513,7 @@ function RecordCard({ record, onEdit, onDelete }: any) {
       <CardHeader className="p-3 pb-2">
         <div className="flex items-start justify-between gap-4">
           <div>
-            <Badge variant="secondary">{formatRecordType(record.type)}</Badge>
+            <Badge variant="secondary">{t(`customerProfile.recordTypes.${recordTypeKey(record.type)}`)}</Badge>
             <CardTitle className="mt-2 line-clamp-2 text-sm leading-5">
               {record.title}
             </CardTitle>
@@ -541,7 +544,7 @@ function RecordCard({ record, onEdit, onDelete }: any) {
         )}
 
         <div className="mt-3 truncate text-[10px] text-muted-foreground">
-          {formatDateTime(record.created_at)}
+          {formatDateTime(record.created_at, i18n.language)}
         </div>
       </CardContent>
     </Card>
@@ -569,12 +572,13 @@ function RecordImage({
 }
 
 function VisitHistory({ appointments }: { appointments: any[] }) {
+  const { t, i18n } = useTranslation();
   if (appointments.length === 0) {
     return (
       <Card>
         <CardContent className="p-12 text-center">
           <CalendarDays className="mx-auto h-9 w-9 text-muted-foreground/50" />
-          <h3 className="mt-4 font-bold">No appointment history</h3>
+          <h3 className="mt-4 font-bold">{t('customerProfile.states.noHistory')}</h3>
         </CardContent>
       </Card>
     );
@@ -588,7 +592,7 @@ function VisitHistory({ appointments }: { appointments: any[] }) {
             appointment.appointment_services
               ?.map((row: any) => row.services?.name)
               .filter(Boolean)
-              .join(', ') || 'Appointment';
+              .join(', ') || t('customerProfile.appointment');
 
           return (
             <div
@@ -597,12 +601,13 @@ function VisitHistory({ appointments }: { appointments: any[] }) {
             >
               <div>
                 <div className="font-bold">
-                  {formatDate(appointment.start_time)}
+                  {formatDate(appointment.start_time, i18n.language)}
                 </div>
                 <div className="mt-1 text-sm text-muted-foreground">
                   {formatTimeRange(
                     appointment.start_time,
-                    appointment.end_time
+                    appointment.end_time,
+                    i18n.language
                   )}
                 </div>
               </div>
@@ -610,7 +615,7 @@ function VisitHistory({ appointments }: { appointments: any[] }) {
               <div>
                 <div className="font-semibold">{services}</div>
                 <div className="mt-1 text-sm text-muted-foreground">
-                  {appointment.employees?.name || 'Unassigned professional'}
+                  {appointment.employees?.name || t('customerProfile.unassignedProfessional')}
                 </div>
               </div>
 
@@ -619,7 +624,7 @@ function VisitHistory({ appointments }: { appointments: any[] }) {
                   €{Number(appointment.total_price || 0).toFixed(2)}
                 </div>
                 <Badge className="mt-2" variant="secondary">
-                  {String(appointment.status || 'confirmed').replace(/_/g, ' ')}
+                  {t(`calendar.status.${appointment.status || 'confirmed'}`, { defaultValue: String(appointment.status || 'confirmed').replace(/_/g, ' ') })}
                 </Badge>
               </div>
             </div>
@@ -688,15 +693,13 @@ function TabButton({ active, label, onClick }: any) {
   );
 }
 
-function formatRecordType(value: string) {
-  return value
-    .split('_')
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-    .join(' ');
+function recordTypeKey(value: string) {
+  const map: Record<string, string> = { formula: 'formula', general_note: 'generalNote', allergy: 'allergy', preferred_style: 'preferredStyle', product: 'product', consultation: 'consultation', before_after: 'beforeAfter', other: 'other' };
+  return map[value] || 'other';
 }
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatDateTime(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -705,8 +708,8 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     weekday: 'short',
     day: '2-digit',
     month: 'short',
@@ -714,8 +717,8 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-function formatTimeRange(start: string, end?: string | null) {
-  const formatter = new Intl.DateTimeFormat('en-GB', {
+function formatTimeRange(start: string, end: string | null | undefined, locale: string) {
+  const formatter = new Intl.DateTimeFormat(locale, {
     hour: '2-digit',
     minute: '2-digit',
   });
