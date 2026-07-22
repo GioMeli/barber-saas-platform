@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
@@ -17,6 +17,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
 import { toast } from 'sonner';
 import {
   addDays,
@@ -716,7 +723,7 @@ export default function Calendar() {
         onCreateDelay={openDelayDialog}
       />
 
-      <AppointmentDetailsDialog
+      <AppointmentDetailsSheet
         appointment={selectedAppointment}
         open={detailsOpen}
         onOpenChange={setDetailsOpen}
@@ -737,7 +744,7 @@ export default function Calendar() {
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <AlertTriangle className="h-5 w-5 text-amber-600" />
-              Create Delay
+              {t('calendar.delay.title')}
             </DialogTitle>
             <p className="text-sm leading-6 text-muted-foreground">
               {t('calendar.delay.description')}
@@ -924,7 +931,7 @@ export default function Calendar() {
               disabled={delayApplying}
               onClick={() => setDelayOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               disabled={
@@ -1354,7 +1361,7 @@ export default function Calendar() {
               disabled={creating}
               onClick={() => setIsNewDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
 
             <Button
@@ -1376,7 +1383,7 @@ export default function Calendar() {
 }
 
 
-function AppointmentDetailsDialog({
+function AppointmentDetailsSheet({
   appointment,
   open,
   onOpenChange,
@@ -1421,150 +1428,229 @@ function AppointmentDetailsDialog({
     'cancelled_by_customer',
   ].includes(appointment.status);
 
+  const reference = appointment.booking_reference
+    ? `#${appointment.booking_reference}`
+    : '';
+
+  const copyReference = async () => {
+    if (!reference) return;
+
+    try {
+      await navigator.clipboard.writeText(reference);
+      toast.success(t('calendar.messages.referenceCopied'));
+    } catch {
+      toast.error(t('calendar.errors.copyReference'));
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl rounded-2xl">
-        <DialogHeader>
-          <div className="flex items-start justify-between gap-4 pr-6">
-            <div>
-              <div className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
-                {t('calendar.details.title')}
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="right"
+        className="w-full overflow-y-auto p-0 sm:max-w-lg lg:max-w-xl"
+      >
+        <div className="flex min-h-full flex-col">
+          <SheetHeader className="sticky top-0 z-20 border-b bg-background/95 px-5 py-5 pr-12 text-left backdrop-blur sm:px-6">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0">
+                <div className="text-xs font-semibold uppercase tracking-[0.16em] text-primary">
+                  {t('calendar.details.title')}
+                </div>
+                <SheetTitle className="mt-2 truncate text-2xl">
+                  {appointment.customers?.full_name ||
+                    t('calendar.labels.customer')}
+                </SheetTitle>
+                <SheetDescription className="mt-1">
+                  {reference || t('calendar.labels.noReference')}
+                </SheetDescription>
               </div>
-              <DialogTitle className="mt-2 text-2xl">
-                {appointment.customers?.full_name || t('calendar.labels.customer')}
-              </DialogTitle>
+              <StatusBadge status={derivedStatus} />
             </div>
-            <StatusBadge status={derivedStatus} />
-          </div>
-        </DialogHeader>
+          </SheetHeader>
 
-        <div className="space-y-5 py-4">
-          <div className="rounded-2xl border bg-muted/20 p-5">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Detail
-                icon={<CalendarDays className="h-4 w-4" />}
-                label={t('calendar.labels.date')}
-                value={new Intl.DateTimeFormat(i18n.language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }).format(start)}
-              />
-              <Detail
-                icon={<Clock3 className="h-4 w-4" />}
-                label={t('calendar.labels.time')}
-                value={`${format(start, 'HH:mm')} – ${format(end, 'HH:mm')}`}
-              />
-              <Detail
-                icon={<UserRound className="h-4 w-4" />}
-                label={t('calendar.labels.professional')}
-                value={appointment.employees?.name || t('calendar.labels.unassigned')}
-              />
-              <Detail
-                icon={<FileText className="h-4 w-4" />}
-                label={t('calendar.labels.services')}
-                value={services}
-              />
-            </div>
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <ContactDetail
-              icon={<Phone className="h-4 w-4" />}
-              label="Phone"
-              value={appointment.customers?.phone || t('calendar.labels.notProvided')}
-            />
-            <ContactDetail
-              icon={<Mail className="h-4 w-4" />}
-              label="Email"
-              value={appointment.customers?.email || t('calendar.labels.notProvided')}
-            />
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border p-4">
-              <div className="text-xs text-muted-foreground">{t('calendar.labels.bookingReference')}</div>
-              <div className="mt-1 font-semibold">
-                {appointment.booking_reference
-                  ? `#${appointment.booking_reference}`
-                  : '—'}
-              </div>
-            </div>
-            <div className="rounded-xl border p-4">
-              <div className="text-xs text-muted-foreground">{t('calendar.labels.total')}</div>
-              <div className="mt-1 text-xl font-bold">
-                €{Number(appointment.total_price || 0).toFixed(2)}
-              </div>
-            </div>
-          </div>
-
-          {appointment.notes && (
-            <div className="rounded-xl border p-4">
-              <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {t('calendar.labels.notes')}
-              </div>
-              <p className="mt-2 whitespace-pre-wrap text-sm leading-6">
-                {appointment.notes}
-              </p>
-            </div>
-          )}
-        </div>
-
-        {!isCancelled && appointment.status !== 'completed' && (
-          <div className="grid gap-2 border-t pt-4 sm:grid-cols-2">
-            {appointment.status !== 'arrived' &&
-              appointment.status !== 'in_progress' && (
-                <Button
-                  variant="outline"
-                  onClick={() =>
-                    void onStatusChange(appointment.id, 'arrived')
+          <div className="flex-1 space-y-5 px-5 py-5 sm:px-6">
+            <div className="rounded-2xl border bg-muted/20 p-5">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Detail
+                  icon={<CalendarDays className="h-4 w-4" />}
+                  label={t('calendar.labels.date')}
+                  value={new Intl.DateTimeFormat(i18n.language, {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  }).format(start)}
+                />
+                <Detail
+                  icon={<Clock3 className="h-4 w-4" />}
+                  label={t('calendar.labels.time')}
+                  value={`${format(start, 'HH:mm')} – ${format(end, 'HH:mm')}`}
+                />
+                <Detail
+                  icon={<UserRound className="h-4 w-4" />}
+                  label={t('calendar.labels.professional')}
+                  value={
+                    appointment.employees?.name ||
+                    t('calendar.labels.unassigned')
                   }
-                >
-                  <UserCheck className="mr-2 h-4 w-4" />
-                  {t('calendar.actions.checkIn')}
+                />
+                <Detail
+                  icon={<FileText className="h-4 w-4" />}
+                  label={t('calendar.labels.services')}
+                  value={services}
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <ContactDetail
+                icon={<Phone className="h-4 w-4" />}
+                label={t('calendar.labels.phone')}
+                value={
+                  appointment.customers?.phone ||
+                  t('calendar.labels.notProvided')
+                }
+              />
+              <ContactDetail
+                icon={<Mail className="h-4 w-4" />}
+                label={t('calendar.labels.email')}
+                value={
+                  appointment.customers?.email ||
+                  t('calendar.labels.notProvided')
+                }
+              />
+            </div>
+
+            <div className="grid gap-2 sm:grid-cols-2">
+              {appointment.customers?.phone && (
+                <Button asChild variant="outline" className="justify-start">
+                  <a href={`tel:${appointment.customers.phone}`}>
+                    <Phone className="h-4 w-4" />
+                    {t('calendar.actions.callCustomer')}
+                  </a>
                 </Button>
               )}
 
-            {appointment.status !== 'in_progress' && (
+              {appointment.customers?.email && (
+                <Button asChild variant="outline" className="justify-start">
+                  <a href={`mailto:${appointment.customers.email}`}>
+                    <Mail className="h-4 w-4" />
+                    {t('calendar.actions.emailCustomer')}
+                  </a>
+                </Button>
+              )}
+
+              {appointment.customer_id && (
+                <Button asChild variant="outline" className="justify-start">
+                  <Link
+                    to={`/dashboard/customers/${appointment.customer_id}`}
+                    onClick={() => onOpenChange(false)}
+                  >
+                    <UserRound className="h-4 w-4" />
+                    {t('calendar.actions.openCustomer')}
+                  </Link>
+                </Button>
+              )}
+
+              {reference && (
+                <Button
+                  variant="outline"
+                  className="justify-start"
+                  onClick={() => void copyReference()}
+                >
+                  <FileText className="h-4 w-4" />
+                  {t('calendar.actions.copyReference')}
+                </Button>
+              )}
+            </div>
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border p-4">
+                <div className="text-xs text-muted-foreground">
+                  {t('calendar.labels.bookingReference')}
+                </div>
+                <div className="mt-1 font-semibold">{reference || '—'}</div>
+              </div>
+              <div className="rounded-xl border p-4">
+                <div className="text-xs text-muted-foreground">
+                  {t('calendar.labels.total')}
+                </div>
+                <div className="mt-1 text-xl font-bold">
+                  €{Number(appointment.total_price || 0).toFixed(2)}
+                </div>
+              </div>
+            </div>
+
+            {appointment.notes && (
+              <div className="rounded-xl border p-4">
+                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {t('calendar.labels.notes')}
+                </div>
+                <p className="mt-2 whitespace-pre-wrap text-sm leading-6">
+                  {appointment.notes}
+                </p>
+              </div>
+            )}
+          </div>
+
+          {!isCancelled && appointment.status !== 'completed' && (
+            <div className="sticky bottom-0 z-10 grid gap-2 border-t bg-background/95 px-5 py-4 backdrop-blur sm:grid-cols-2 sm:px-6">
+              {appointment.status !== 'arrived' &&
+                appointment.status !== 'in_progress' && (
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      void onStatusChange(appointment.id, 'arrived')
+                    }
+                  >
+                    <UserCheck className="mr-2 h-4 w-4" />
+                    {t('calendar.actions.checkIn')}
+                  </Button>
+                )}
+
+              {appointment.status !== 'in_progress' && (
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    void onStatusChange(appointment.id, 'in_progress')
+                  }
+                >
+                  <PlayCircle className="mr-2 h-4 w-4" />
+                  {t('calendar.actions.startService')}
+                </Button>
+              )}
+
               <Button
-                variant="outline"
                 onClick={() =>
-                  void onStatusChange(appointment.id, 'in_progress')
+                  void onStatusChange(appointment.id, 'completed')
                 }
               >
-                <PlayCircle className="mr-2 h-4 w-4" />
-                {t('calendar.actions.startService')}
+                <CheckCircle2 className="mr-2 h-4 w-4" />
+                {t('calendar.actions.markCompleted')}
               </Button>
-            )}
 
-            <Button
-              onClick={() =>
-                void onStatusChange(appointment.id, 'completed')
-              }
-            >
-              <CheckCircle2 className="mr-2 h-4 w-4" />
-              {t('calendar.actions.markCompleted')}
-            </Button>
+              <Button
+                variant="outline"
+                className="border-violet-200 text-violet-700 hover:bg-violet-50 hover:text-violet-700"
+                onClick={() => void onStatusChange(appointment.id, 'no_show')}
+              >
+                <UserX className="mr-2 h-4 w-4" />
+                {t('calendar.actions.noShow')}
+              </Button>
 
-            <Button
-              variant="outline"
-              className="border-violet-200 text-violet-700 hover:bg-violet-50 hover:text-violet-700"
-              onClick={() =>
-                void onStatusChange(appointment.id, 'no_show')
-              }
-            >
-              <UserX className="mr-2 h-4 w-4" />
-              {t('calendar.actions.noShow')}
-            </Button>
-
-            <Button
-              variant="outline"
-              className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive sm:col-span-2"
-              onClick={() => void onCancel(appointment.id)}
-            >
-              <XCircle className="mr-2 h-4 w-4" />
-              {t('calendar.actions.cancelAppointment')}
-            </Button>
-          </div>
-        )}
-      </DialogContent>
-    </Dialog>
+              <Button
+                variant="outline"
+                className="border-destructive/30 text-destructive hover:bg-destructive/10 hover:text-destructive sm:col-span-2"
+                onClick={() => void onCancel(appointment.id)}
+              >
+                <XCircle className="mr-2 h-4 w-4" />
+                {t('calendar.actions.cancelAppointment')}
+              </Button>
+            </div>
+          )}
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

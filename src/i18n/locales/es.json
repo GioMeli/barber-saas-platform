@@ -322,10 +322,13 @@
       "dayGridMonth": "Mes",
       "timeGridWeek": "Semana",
       "timeGridDay": "Día",
-      "listDay": "Detalles diarios"
+      "listDay": "Detalles diarios",
+      "timeGridThreeDay": "3 días"
     },
     "filters": {
-      "allProfessionals": "Todos los profesionales"
+      "allProfessionals": "Todos los profesionales",
+      "professional": "Profesional",
+      "searchPlaceholder": "Buscar cliente, servicio o referencia"
     },
     "labels": {
       "appointment": "Cita",
@@ -363,7 +366,13 @@
       "startService": "Iniciar servicio",
       "markCompleted": "Marcar completada",
       "noShow": "No asistió",
-      "cancelAppointment": "Cancelar cita"
+      "cancelAppointment": "Cancelar cita",
+      "previousPeriod": "Periodo anterior",
+      "nextPeriod": "Periodo siguiente",
+      "callCustomer": "Llamar al cliente",
+      "emailCustomer": "Enviar email al cliente",
+      "openCustomer": "Abrir perfil del cliente",
+      "copyReference": "Copiar referencia de reserva"
     },
     "newAppointment": {
       "title": "Nueva cita",
@@ -444,7 +453,8 @@
       "movedTo": "Appointment moved to {{date}}",
       "durationChanged": "Appointment duration changed to {{minutes}} minutes",
       "noAffectedAppointments": "No active appointments are affected by this delay",
-      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes",
+      "referenceCopied": "Referencia de reserva copiada"
     },
     "errors": {
       "loadData": "Failed to load calendar data",
@@ -461,7 +471,27 @@
       "delayRequired": "Select professional, date, start time and delay",
       "previewDelay": "Failed to preview delay",
       "previewFirst": "Preview the affected appointments first",
-      "applyDelay": "The delay could not be applied. No appointments were changed."
+      "applyDelay": "The delay could not be applied. No appointments were changed.",
+      "copyReference": "No se pudo copiar la referencia de reserva"
+    },
+    "preferences": {
+      "title": "Herramientas del calendario",
+      "description": "Elige la vista y los filtros que mejor se adapten a tu forma de trabajar.",
+      "searchAppointments": "Buscar citas",
+      "defaultView": "Vista del calendario",
+      "showWeekends": "Mostrar fines de semana",
+      "showWeekendsDescription": "Incluir sábado y domingo en las vistas del calendario.",
+      "showAllDay": "Mostrar fila de todo el día",
+      "showAllDayDescription": "Mostrar cierres y actividades de todo el día sobre la cuadrícula horaria.",
+      "showCompleted": "Mostrar citas completadas",
+      "showCompletedDescription": "Mantener visibles las citas finalizadas en el periodo seleccionado.",
+      "showCancelled": "Mostrar citas canceladas",
+      "showCancelledDescription": "Incluir citas canceladas por el negocio o el cliente.",
+      "shortcuts": "Atajos de teclado",
+      "shortcutsDescription": "Usa el calendario más rápido sin dejar el teclado.",
+      "navigate": "Cambiar periodo",
+      "changeView": "Día / 3 días / semana",
+      "reset": "Restablecer herramientas"
     }
   },
   "customers": {

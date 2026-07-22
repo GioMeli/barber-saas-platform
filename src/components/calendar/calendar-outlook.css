@@ -8,6 +8,7 @@
    --------------------------------------------------------- */
 
 .outlook-calendar-page {
+  position: relative;
   display: flex;
   min-height: 620px;
   height: calc(100dvh - 120px);
@@ -657,6 +658,58 @@
   font-size: 0.875rem;
 }
 
+
+/* ---------------------------------------------------------
+   CALENDAR OPTIONS AND MOBILE ACTION
+   --------------------------------------------------------- */
+
+.outlook-calendar-options-button {
+  gap: 7px;
+}
+
+.outlook-calendar-mobile-fab {
+  display: none;
+}
+
+.calendar-preferences-view-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.calendar-preferences-view-grid button {
+  display: flex;
+  min-height: 70px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid hsl(var(--border));
+  border-radius: 12px;
+  padding: 12px;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.calendar-preferences-view-grid button:hover {
+  border-color: hsl(var(--primary) / 0.45);
+  background: hsl(var(--primary) / 0.06);
+}
+
+.calendar-preferences-view-grid button.active {
+  border-color: hsl(var(--primary));
+  background: hsl(var(--primary) / 0.1);
+  color: hsl(var(--primary));
+  box-shadow: 0 0 0 1px hsl(var(--primary) / 0.12);
+}
+
 /* ---------------------------------------------------------
    TABLET
    --------------------------------------------------------- */
@@ -740,6 +793,17 @@
 
   .outlook-calendar-actions {
     width: 100%;
+    justify-content: flex-end;
+  }
+
+  .outlook-calendar-professional-select,
+  .outlook-calendar-delay-button,
+  .outlook-calendar-new-button {
+    display: none;
+  }
+
+  .outlook-calendar-options-button {
+    min-width: 44px;
   }
 
   .outlook-calendar-actions select {
@@ -752,6 +816,28 @@
     padding-right: 12px;
     padding-left: 12px;
     white-space: nowrap;
+  }
+
+  .outlook-calendar-mobile-fab {
+    position: absolute;
+    z-index: 45;
+    right: 20px;
+    bottom: 20px;
+    display: inline-flex;
+    width: 52px;
+    height: 52px;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 999px;
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+    box-shadow: 0 14px 30px hsl(var(--primary) / 0.3);
+    cursor: pointer;
+  }
+
+  .outlook-calendar-mobile-fab:active {
+    transform: scale(0.97);
   }
 
   .outlook-calendar-shell {
@@ -864,6 +950,10 @@
     padding-right: 10px;
     padding-left: 10px;
     font-size: 0.75rem;
+  }
+
+  .outlook-calendar-options-label {
+    display: none;
   }
 
   .outlook-calendar-mobile-views button {

@@ -322,10 +322,13 @@
       "dayGridMonth": "Monat",
       "timeGridWeek": "Woche",
       "timeGridDay": "Tag",
-      "listDay": "Tagesdetails"
+      "listDay": "Tagesdetails",
+      "timeGridThreeDay": "3 Tage"
     },
     "filters": {
-      "allProfessionals": "Alle Fachkräfte"
+      "allProfessionals": "Alle Fachkräfte",
+      "professional": "Mitarbeiter",
+      "searchPlaceholder": "Kunde, Leistung oder Referenz suchen"
     },
     "labels": {
       "appointment": "Termin",
@@ -363,7 +366,13 @@
       "startService": "Dienstleistung starten",
       "markCompleted": "Als abgeschlossen markieren",
       "noShow": "Nicht erschienen",
-      "cancelAppointment": "Termin stornieren"
+      "cancelAppointment": "Termin stornieren",
+      "previousPeriod": "Vorheriger Zeitraum",
+      "nextPeriod": "Nächster Zeitraum",
+      "callCustomer": "Kunden anrufen",
+      "emailCustomer": "E-Mail an Kunden",
+      "openCustomer": "Kundenprofil öffnen",
+      "copyReference": "Buchungsreferenz kopieren"
     },
     "newAppointment": {
       "title": "Neuer Termin",
@@ -444,7 +453,8 @@
       "movedTo": "Appointment moved to {{date}}",
       "durationChanged": "Appointment duration changed to {{minutes}} minutes",
       "noAffectedAppointments": "No active appointments are affected by this delay",
-      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes",
+      "referenceCopied": "Buchungsreferenz kopiert"
     },
     "errors": {
       "loadData": "Failed to load calendar data",
@@ -461,7 +471,27 @@
       "delayRequired": "Select professional, date, start time and delay",
       "previewDelay": "Failed to preview delay",
       "previewFirst": "Preview the affected appointments first",
-      "applyDelay": "The delay could not be applied. No appointments were changed."
+      "applyDelay": "The delay could not be applied. No appointments were changed.",
+      "copyReference": "Die Buchungsreferenz konnte nicht kopiert werden"
+    },
+    "preferences": {
+      "title": "Kalenderwerkzeuge",
+      "description": "Wählen Sie die Ansicht und Filter passend zu Ihrer Arbeitsweise.",
+      "searchAppointments": "Termine suchen",
+      "defaultView": "Kalenderansicht",
+      "showWeekends": "Wochenenden anzeigen",
+      "showWeekendsDescription": "Samstag und Sonntag in den Kalenderansichten einblenden.",
+      "showAllDay": "Ganztägige Zeile anzeigen",
+      "showAllDayDescription": "Schließungen und ganztägige Aktivitäten über dem Zeitraster anzeigen.",
+      "showCompleted": "Abgeschlossene Termine anzeigen",
+      "showCompletedDescription": "Abgeschlossene Termine im ausgewählten Zeitraum sichtbar halten.",
+      "showCancelled": "Stornierte Termine anzeigen",
+      "showCancelledDescription": "Von Betrieb oder Kunden stornierte Termine einblenden.",
+      "shortcuts": "Tastaturkürzel",
+      "shortcutsDescription": "Den Kalender schneller ohne Maus bedienen.",
+      "navigate": "Zeitraum wechseln",
+      "changeView": "Tag / 3 Tage / Woche",
+      "reset": "Kalenderwerkzeuge zurücksetzen"
     }
   },
   "customers": {

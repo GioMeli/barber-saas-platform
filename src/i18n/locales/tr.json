@@ -322,10 +322,13 @@
       "dayGridMonth": "Ay",
       "timeGridWeek": "Hafta",
       "timeGridDay": "Gün",
-      "listDay": "Günlük ayrıntılar"
+      "listDay": "Günlük ayrıntılar",
+      "timeGridThreeDay": "3 gün"
     },
     "filters": {
-      "allProfessionals": "Tüm profesyoneller"
+      "allProfessionals": "Tüm profesyoneller",
+      "professional": "Uzman",
+      "searchPlaceholder": "Müşteri, hizmet veya referans ara"
     },
     "labels": {
       "appointment": "Randevu",
@@ -363,7 +366,13 @@
       "startService": "Hizmeti başlat",
       "markCompleted": "Tamamlandı olarak işaretle",
       "noShow": "Gelmedi",
-      "cancelAppointment": "Randevuyu iptal et"
+      "cancelAppointment": "Randevuyu iptal et",
+      "previousPeriod": "Önceki dönem",
+      "nextPeriod": "Sonraki dönem",
+      "callCustomer": "Müşteriyi ara",
+      "emailCustomer": "Müşteriye e-posta gönder",
+      "openCustomer": "Müşteri profilini aç",
+      "copyReference": "Rezervasyon referansını kopyala"
     },
     "newAppointment": {
       "title": "Yeni randevu",
@@ -444,7 +453,8 @@
       "movedTo": "Appointment moved to {{date}}",
       "durationChanged": "Appointment duration changed to {{minutes}} minutes",
       "noAffectedAppointments": "No active appointments are affected by this delay",
-      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes",
+      "referenceCopied": "Rezervasyon referansı kopyalandı"
     },
     "errors": {
       "loadData": "Failed to load calendar data",
@@ -461,7 +471,27 @@
       "delayRequired": "Select professional, date, start time and delay",
       "previewDelay": "Failed to preview delay",
       "previewFirst": "Preview the affected appointments first",
-      "applyDelay": "The delay could not be applied. No appointments were changed."
+      "applyDelay": "The delay could not be applied. No appointments were changed.",
+      "copyReference": "Rezervasyon referansı kopyalanamadı"
+    },
+    "preferences": {
+      "title": "Takvim araçları",
+      "description": "Çalışma şeklinize uygun görünüm ve filtreleri seçin.",
+      "searchAppointments": "Randevu ara",
+      "defaultView": "Takvim görünümü",
+      "showWeekends": "Hafta sonlarını göster",
+      "showWeekendsDescription": "Cumartesi ve pazarı takvim görünümlerine dahil et.",
+      "showAllDay": "Tüm gün satırını göster",
+      "showAllDayDescription": "Kapanışları ve tüm gün etkinliklerini zaman çizelgesinin üzerinde göster.",
+      "showCompleted": "Tamamlanan randevuları göster",
+      "showCompletedDescription": "Tamamlanan randevuları seçili dönemde görünür tut.",
+      "showCancelled": "İptal edilen randevuları göster",
+      "showCancelledDescription": "İşletme veya müşteri tarafından iptal edilen randevuları dahil et.",
+      "shortcuts": "Klavye kısayolları",
+      "shortcutsDescription": "Fare kullanmadan takvimi daha hızlı yönetin.",
+      "navigate": "Dönemde gezin",
+      "changeView": "Gün / 3 gün / hafta",
+      "reset": "Takvim araçlarını sıfırla"
     }
   },
   "customers": {

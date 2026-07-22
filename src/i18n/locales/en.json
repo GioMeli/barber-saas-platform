@@ -322,10 +322,13 @@
       "dayGridMonth": "Month",
       "timeGridWeek": "Week",
       "timeGridDay": "Day",
-      "listDay": "Daily details"
+      "listDay": "Daily details",
+      "timeGridThreeDay": "3 days"
     },
     "filters": {
-      "allProfessionals": "All professionals"
+      "allProfessionals": "All professionals",
+      "professional": "Professional",
+      "searchPlaceholder": "Search customer, service or reference"
     },
     "labels": {
       "appointment": "Appointment",
@@ -363,7 +366,13 @@
       "startService": "Start service",
       "markCompleted": "Mark completed",
       "noShow": "No show",
-      "cancelAppointment": "Cancel appointment"
+      "cancelAppointment": "Cancel appointment",
+      "previousPeriod": "Previous period",
+      "nextPeriod": "Next period",
+      "callCustomer": "Call customer",
+      "emailCustomer": "Email customer",
+      "openCustomer": "Open customer profile",
+      "copyReference": "Copy booking reference"
     },
     "newAppointment": {
       "title": "New appointment",
@@ -444,7 +453,8 @@
       "movedTo": "Appointment moved to {{date}}",
       "durationChanged": "Appointment duration changed to {{minutes}} minutes",
       "noAffectedAppointments": "No active appointments are affected by this delay",
-      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes"
+      "delayApplied": "{{count}} appointments delayed by {{minutes}} minutes",
+      "referenceCopied": "Booking reference copied"
     },
     "errors": {
       "loadData": "Failed to load calendar data",
@@ -461,7 +471,27 @@
       "delayRequired": "Select professional, date, start time and delay",
       "previewDelay": "Failed to preview delay",
       "previewFirst": "Preview the affected appointments first",
-      "applyDelay": "The delay could not be applied. No appointments were changed."
+      "applyDelay": "The delay could not be applied. No appointments were changed.",
+      "copyReference": "The booking reference could not be copied"
+    },
+    "preferences": {
+      "title": "Calendar tools",
+      "description": "Choose the view and filters that match the way you work.",
+      "searchAppointments": "Search appointments",
+      "defaultView": "Calendar view",
+      "showWeekends": "Show weekends",
+      "showWeekendsDescription": "Include Saturday and Sunday in calendar views.",
+      "showAllDay": "Show all-day row",
+      "showAllDayDescription": "Display closures and all-day activity above the time grid.",
+      "showCompleted": "Show completed appointments",
+      "showCompletedDescription": "Keep finished appointments visible in the selected range.",
+      "showCancelled": "Show cancelled appointments",
+      "showCancelledDescription": "Include appointments cancelled by the business or customer.",
+      "shortcuts": "Keyboard shortcuts",
+      "shortcutsDescription": "Use the calendar faster without leaving the keyboard.",
+      "navigate": "Navigate period",
+      "changeView": "Day / 3 days / week",
+      "reset": "Reset calendar tools"
     }
   },
   "customers": {
