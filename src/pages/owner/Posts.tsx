@@ -17,6 +17,8 @@ import {
 } from '@/components/ui/dialog';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import {
   CalendarClock,
   Edit,
@@ -45,6 +47,8 @@ const EMPTY_POST = {
 };
 
 export default function Posts() {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const { businessMemberships, user, profile } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
   const business = businessMemberships[0]?.businesses;
@@ -76,7 +80,7 @@ export default function Posts() {
       if (error) throw error;
       setPosts(data ?? []);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to load posts');
+      toast.error(error.message || t('posts.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -140,7 +144,7 @@ export default function Posts() {
 
   const savePost = async () => {
     if (!businessId || !form.title.trim() || !form.content.trim()) {
-      toast.error('Title and content are required');
+      toast.error(t('posts.validation.required'));
       return;
     }
 
@@ -173,11 +177,11 @@ export default function Posts() {
 
       if (result.error) throw result.error;
 
-      toast.success(editingId ? 'Post updated' : 'Post created');
+      toast.success(editingId ? t('posts.messages.updated') : t('posts.messages.created'));
       setDialogOpen(false);
       await fetchPosts();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save post');
+      toast.error(error.message || t('posts.messages.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -201,15 +205,15 @@ export default function Posts() {
 
       if (error) throw error;
 
-      toast.success(nextPublished ? 'Post published' : 'Post moved to drafts');
+      toast.success(nextPublished ? t('posts.messages.published') : t('posts.messages.movedToDrafts'));
       await fetchPosts();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update post');
+      toast.error(error.message || t('posts.messages.updateFailed'));
     }
   };
 
   const deletePost = async (post: any) => {
-    if (!window.confirm('Delete this post permanently?')) return;
+    if (!window.confirm(t('posts.delete.confirm'))) return;
 
     try {
       const { error } = await supabase
@@ -220,10 +224,10 @@ export default function Posts() {
 
       if (error) throw error;
 
-      toast.success('Post deleted');
+      toast.success(t('posts.messages.deleted'));
       await fetchPosts();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete post');
+      toast.error(error.message || t('posts.messages.deleteFailed'));
     }
   };
 
@@ -234,34 +238,33 @@ export default function Posts() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Customer communication
+            {t('posts.eyebrow')}
           </div>
-          <h1 className="app-page-title">Posts</h1>
+          <h1 className="app-page-title">{t('posts.title')}</h1>
           <p className="app-page-description">
-            Publish professional updates, offers, closures and store news in a
-            familiar social-feed format.
+            {t('posts.description')}
           </p>
         </div>
 
         <Button onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" />
-          Create Post
+          {t('posts.actions.create')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
-          title="Published"
+          title={t('posts.summary.published')}
           value={publishedCount}
           icon={<Eye className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Drafts"
+          title={t('posts.summary.drafts')}
           value={draftCount}
           icon={<Edit className="h-5 w-5" />}
         />
         <SummaryCard
-          title="Scheduled"
+          title={t('posts.summary.scheduled')}
           value={scheduledCount}
           icon={<CalendarClock className="h-5 w-5" />}
         />
@@ -281,7 +284,7 @@ export default function Posts() {
                 </div>
 
                 <div className="min-w-0 flex-1 truncate text-sm text-muted-foreground">
-                  Share an update with your customers...
+                  {t('posts.composer.placeholder')}
                 </div>
 
                 <ImageIcon className="h-5 w-5 shrink-0 text-muted-foreground" />
@@ -289,10 +292,10 @@ export default function Posts() {
 
               <div className="grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 {([
-                  ['all', 'All'],
-                  ['published', 'Published'],
-                  ['draft', 'Drafts'],
-                  ['scheduled', 'Scheduled'],
+                  ['all', 'posts.filters.all'],
+                  ['published', 'posts.filters.published'],
+                  ['draft', 'posts.filters.drafts'],
+                  ['scheduled', 'posts.filters.scheduled'],
                 ] as const).map(([value, label]) => (
                   <button
                     key={value}
@@ -304,7 +307,7 @@ export default function Posts() {
                         : 'bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground'
                     }`}
                   >
-                    {label}
+                    {t(label)}
                   </button>
                 ))}
               </div>
@@ -316,18 +319,18 @@ export default function Posts() {
           <div className="min-w-0">
             {loading ? (
               <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground shadow-card">
-                Loading posts...
+                {t('posts.states.loading')}
               </div>
             ) : filteredPosts.length === 0 ? (
               <Card className="rounded-2xl shadow-card">
                 <CardContent className="flex min-h-[280px] flex-col items-center justify-center p-10 text-center">
                   <Megaphone className="h-12 w-12 text-muted-foreground" />
-                  <h3 className="mt-4 font-bold">No posts in this category</h3>
+                  <h3 className="mt-4 font-bold">{t('posts.states.emptyTitle')}</h3>
                   <p className="mt-2 text-sm text-muted-foreground">
-                    Create a post or choose another filter.
+                    {t('posts.states.emptyDescription')}
                   </p>
                   <Button className="mt-5" onClick={openCreate}>
-                    Create Post
+                    {t('posts.actions.create')}
                   </Button>
                 </CardContent>
               </Card>
@@ -356,25 +359,23 @@ export default function Posts() {
 
                         <div className="min-w-0 flex-1">
                           <div className="truncate font-semibold">
-                            {business?.name || 'Your Business'}
+                            {business?.name || t('posts.common.yourBusiness')}
                           </div>
 
                           <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
                             <span>
-                              {formatPostDate(
-                                post.published_at || post.created_at
-                              )}
+                              {formatPostDate(post.published_at || post.created_at, locale)}
                             </span>
                             <span>·</span>
                             {post.audience === 'public' ? (
                               <span className="flex items-center gap-1">
                                 <Globe2 className="h-3 w-3" />
-                                Public
+                                {t('posts.audience.public')}
                               </span>
                             ) : (
                               <span className="flex items-center gap-1">
                                 <Users className="h-3 w-3" />
-                                Registered
+                                {t('posts.audience.registered_customers')}
                               </span>
                             )}
                           </div>
@@ -384,18 +385,18 @@ export default function Posts() {
                           variant={post.is_published ? 'default' : 'secondary'}
                           className="shrink-0"
                         >
-                          {post.is_published ? 'Published' : 'Draft'}
+                          {post.is_published ? t('posts.status.published') : t('posts.status.draft')}
                         </Badge>
                       </div>
 
                       <div className="mt-4 flex flex-wrap gap-2">
                         <Badge variant="outline" className="capitalize">
-                          {String(post.post_type).replace(/_/g, ' ')}
+                          {t(`posts.types.${post.post_type}`, { defaultValue: post.post_type })}
                         </Badge>
 
                         {post.expires_at && (
                           <Badge variant="secondary">
-                            Expires {formatPostDate(post.expires_at)}
+                            {t('posts.card.expires', { date: formatPostDate(post.expires_at, locale) })}
                           </Badge>
                         )}
                       </div>
@@ -421,7 +422,7 @@ export default function Posts() {
                             <Eye className="mr-1.5 h-4 w-4 shrink-0" />
                           )}
                           <span className="truncate">
-                            {post.is_published ? 'Unpublish' : 'Publish'}
+                            {post.is_published ? t('posts.actions.unpublish') : t('posts.actions.publish')}
                           </span>
                         </Button>
 
@@ -432,7 +433,7 @@ export default function Posts() {
                           onClick={() => openEdit(post)}
                         >
                           <Edit className="mr-1.5 h-4 w-4 shrink-0" />
-                          <span className="truncate">Edit</span>
+                          <span className="truncate">{t('common.edit')}</span>
                         </Button>
 
                         <Button
@@ -442,7 +443,7 @@ export default function Posts() {
                           onClick={() => void deletePost(post)}
                         >
                           <Trash2 className="mr-1.5 h-4 w-4 shrink-0" />
-                          <span className="truncate">Delete</span>
+                          <span className="truncate">{t('common.delete')}</span>
                         </Button>
                       </div>
                     </div>
@@ -455,23 +456,23 @@ export default function Posts() {
           <aside className="hidden xl:block">
             <Card className="sticky top-6 rounded-2xl shadow-card">
               <CardContent className="p-5">
-                <h3 className="font-bold">Publishing Guide</h3>
+                <h3 className="font-bold">{t('posts.guide.title')}</h3>
 
                 <div className="mt-4 space-y-4 text-sm text-muted-foreground">
                   <GuideLine
                     icon={<Globe2 className="h-4 w-4" />}
-                    title="Public"
-                    text="Visible to every storefront visitor."
+                    title={t('posts.guide.public.title')}
+                    text={t('posts.guide.public.description')}
                   />
                   <GuideLine
                     icon={<Lock className="h-4 w-4" />}
-                    title="Registered customers"
-                    text="Visible only inside customer accounts."
+                    title={t('posts.guide.registered.title')}
+                    text={t('posts.guide.registered.description')}
                   />
                   <GuideLine
                     icon={<CalendarClock className="h-4 w-4" />}
-                    title="Schedule & expiry"
-                    text="Control when a post appears and when it stops showing."
+                    title={t('posts.guide.schedule.title')}
+                    text={t('posts.guide.schedule.description')}
                   />
                 </div>
               </CardContent>
@@ -484,10 +485,10 @@ export default function Posts() {
         <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">
-              {editingId ? 'Edit Post' : 'Create Post'}
+              {editingId ? t('posts.dialog.editTitle') : t('posts.dialog.createTitle')}
             </DialogTitle>
             <p className="text-sm text-muted-foreground">
-              Compose the post exactly as customers will see it.
+              {t('posts.dialog.description')}
             </p>
           </DialogHeader>
 
@@ -498,19 +499,19 @@ export default function Posts() {
               </div>
               <div>
                 <div className="font-semibold">
-                  {business?.name || profile?.full_name || 'Your Business'}
+                  {business?.name || profile?.full_name || t('posts.common.yourBusiness')}
                 </div>
                 <div className="text-xs text-muted-foreground">
-                  Post author
+                  {t('posts.dialog.author')}
                 </div>
               </div>
             </div>
 
             <div className="grid gap-2">
-              <Label>Title *</Label>
+              <Label>{t('posts.fields.title')}</Label>
               <Input
                 className="h-12 rounded-xl text-base font-semibold"
-                placeholder="Add a clear headline"
+                placeholder={t('posts.fields.titlePlaceholder')}
                 value={form.title}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -522,11 +523,11 @@ export default function Posts() {
             </div>
 
             <div className="grid gap-2">
-              <Label>Post content *</Label>
+              <Label>{t('posts.fields.content')}</Label>
               <Textarea
                 rows={9}
                 className="rounded-xl text-base leading-7"
-                placeholder="What would you like to share?"
+                placeholder={t('posts.fields.contentPlaceholder')}
                 value={form.content}
                 onChange={(event) =>
                   setForm((current) => ({
@@ -538,7 +539,7 @@ export default function Posts() {
             </div>
 
             <div className="space-y-2">
-              <Label>Photo</Label>
+              <Label>{t('posts.fields.photo')}</Label>
               <ImageUploader
                 value={form.cover_image_url}
                 onChange={(value) =>
@@ -553,7 +554,7 @@ export default function Posts() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label>Post type</Label>
+                <Label>{t('posts.fields.type')}</Label>
                 <select
                   className="h-11 rounded-xl border bg-background px-3 text-sm"
                   value={form.post_type}
@@ -564,18 +565,18 @@ export default function Posts() {
                     }))
                   }
                 >
-                  <option value="announcement">Announcement</option>
-                  <option value="holiday_closure">Holiday Closure</option>
-                  <option value="promotion">Promotion</option>
-                  <option value="price_update">Price Update</option>
-                  <option value="new_product">New Product</option>
-                  <option value="new_team_member">New Team Member</option>
-                  <option value="general">General</option>
+                  <option value="announcement">{t('posts.types.announcement')}</option>
+                  <option value="holiday_closure">{t('posts.types.holiday_closure')}</option>
+                  <option value="promotion">{t('posts.types.promotion')}</option>
+                  <option value="price_update">{t('posts.types.price_update')}</option>
+                  <option value="new_product">{t('posts.types.new_product')}</option>
+                  <option value="new_team_member">{t('posts.types.new_team_member')}</option>
+                  <option value="general">{t('posts.types.general')}</option>
                 </select>
               </div>
 
               <div className="grid gap-2">
-                <Label>Audience</Label>
+                <Label>{t('posts.fields.audience')}</Label>
                 <select
                   className="h-11 rounded-xl border bg-background px-3 text-sm"
                   value={form.audience}
@@ -586,9 +587,9 @@ export default function Posts() {
                     }))
                   }
                 >
-                  <option value="public">Public</option>
+                  <option value="public">{t('posts.audience.public')}</option>
                   <option value="registered_customers">
-                    Registered Customers
+                    {t('posts.audience.registered_customers')}
                   </option>
                 </select>
               </div>
@@ -596,7 +597,7 @@ export default function Posts() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="grid gap-2">
-                <Label>Publish date</Label>
+                <Label>{t('posts.fields.publishDate')}</Label>
                 <Input
                   type="datetime-local"
                   className="h-11 rounded-xl"
@@ -611,7 +612,7 @@ export default function Posts() {
               </div>
 
               <div className="grid gap-2">
-                <Label>Expiry date</Label>
+                <Label>{t('posts.fields.expiryDate')}</Label>
                 <Input
                   type="datetime-local"
                   className="h-11 rounded-xl"
@@ -628,9 +629,9 @@ export default function Posts() {
 
             <div className="flex items-center justify-between rounded-2xl border p-4">
               <div>
-                <Label>Publish</Label>
+                <Label>{t('posts.fields.publish')}</Label>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Turn this off to keep the post as a draft.
+                  {t('posts.fields.publishHelp')}
                 </p>
               </div>
               <Switch
@@ -651,14 +652,14 @@ export default function Posts() {
               disabled={saving}
               onClick={() => setDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button disabled={saving} onClick={() => void savePost()}>
               {saving
-                ? 'Saving...'
+                ? t('common.saving')
                 : form.is_published
-                  ? 'Publish Post'
-                  : 'Save Draft'}
+                  ? t('posts.actions.publishPost')
+                  : t('posts.actions.saveDraft')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -711,8 +712,8 @@ function GuideLine({
   );
 }
 
-function formatPostDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatPostDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

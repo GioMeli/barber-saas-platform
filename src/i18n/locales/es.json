@@ -83,7 +83,9 @@
       "supportedFormats": "Admite JPG, PNG y WEBP (máximo 1 MB con compresión automática)",
       "uploading": "Subiendo… {{progress}}%"
     },
-    "back": "Atrás"
+    "back": "Atrás",
+    "copy": "Copiar",
+    "notAvailable": "No disponible"
   },
   "language": {
     "label": "Idioma",
@@ -1511,5 +1513,510 @@
     "conversationHistoryDescription": "Conserva las conversaciones de AI para volver al trabajo anterior.",
     "customerData": "Acceso a datos de clientes",
     "customerDataDescription": "Permite que las funciones de AI utilicen información de clientes aprobada cuando los permisos lo permitan."
+  },
+  "customerPortal": {
+    "auth": {
+      "title": "Cuenta de cliente",
+      "description": "Inicia sesión para ver próximas citas, historial de reservas y tu perfil en {{business}}.",
+      "signIn": "Iniciar sesión",
+      "bookAsGuest": "Reservar como invitado"
+    },
+    "hero": {
+      "eyebrow": "Cuenta de cliente",
+      "welcomeBack": "Bienvenido de nuevo,",
+      "nextVisitScheduled": "Tu próxima visita a {{business}} ya está programada.",
+      "manageDescription": "Gestiona tus reservas y perfil de cliente en {{business}}.",
+      "readyTitle": "¿Listo para tu próxima visita?",
+      "readyDescription": "Elige servicio, profesional y hora en pocos pasos."
+    },
+    "actions": {
+      "newAppointment": "Nueva cita",
+      "bookAppointment": "Reservar cita",
+      "bookAgain": "Reservar de nuevo",
+      "directions": "Cómo llegar",
+      "callStore": "Llamar al negocio",
+      "viewAll": "Ver todo",
+      "addToCalendar": "Añadir al calendario",
+      "calendar": "Calendario"
+    },
+    "metrics": {
+      "upcoming": {
+        "title": "Próximas",
+        "caption": "Citas futuras programadas"
+      },
+      "completed": {
+        "title": "Visitas completadas",
+        "caption": "Citas completadas en este negocio"
+      },
+      "totalSpent": {
+        "title": "Gasto total",
+        "caption": "Basado en citas completadas"
+      },
+      "favouriteService": "Servicio favorito",
+      "favouriteProfessional": "Profesional favorito",
+      "memberSince": "Cliente desde"
+    },
+    "quickActions": {
+      "title": "Acciones rápidas",
+      "description": "Todo lo que necesitas sin buscar en menús.",
+      "bookDescription": "Elige un servicio y una hora disponible.",
+      "repeatVisit": "Repite una visita anterior.",
+      "firstBooking": "Haz tu primera reserva.",
+      "addressUnavailable": "La dirección no está disponible.",
+      "phoneUnavailable": "El teléfono no está disponible."
+    },
+    "tabs": {
+      "overview": "Resumen",
+      "upcoming": "Próximas",
+      "history": "Historial",
+      "profile": "Perfil"
+    },
+    "activity": {
+      "title": "Actividad reciente",
+      "description": "Tus citas más recientes en este negocio."
+    },
+    "empty": {
+      "noVisitHistoryTitle": "Aún no hay historial de visitas",
+      "historyDescription": "Las citas completadas y canceladas aparecerán aquí.",
+      "noUpcomingTitle": "No hay próximas citas",
+      "noUpcomingDescription": "Tus próximas citas aparecerán aquí.",
+      "noHistoryTitle": "No hay historial de citas"
+    },
+    "experience": {
+      "title": "Tu experiencia",
+      "description": "Se están preparando nuevas herramientas para clientes.",
+      "reviews": {
+        "title": "Reseñas",
+        "description": "Valora visitas completadas y comparte comentarios."
+      },
+      "rewards": {
+        "title": "Recompensas",
+        "description": "Gana puntos y desbloquea beneficios."
+      },
+      "wallet": {
+        "title": "Cartera",
+        "description": "Consulta pagos, facturas, depósitos y reembolsos."
+      },
+      "notifications": {
+        "title": "Notificaciones",
+        "description": "Controla recordatorios y novedades de citas."
+      }
+    },
+    "profile": {
+      "customerSince": "Cliente desde",
+      "title": "Datos del perfil",
+      "description": "Estos datos se usan para reservas y recordatorios.",
+      "fullName": "Nombre completo",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "save": "Guardar perfil"
+    },
+    "appointment": {
+      "next": "Próxima cita",
+      "fallback": "Cita",
+      "withProfessional": "con {{name}}",
+      "anyProfessional": "Cualquier profesional disponible",
+      "upcoming": "Próxima cita",
+      "record": "Registro de cita",
+      "reference": "Referencia #{{reference}}",
+      "dateTime": "Fecha y hora",
+      "professional": "Profesional",
+      "location": "Ubicación",
+      "duration": "Duración",
+      "durationMinutes": "{{count}} minutos",
+      "total": "Total"
+    },
+    "status": {
+      "scheduled": "Programada",
+      "confirmed": "Confirmada",
+      "completed": "Completada",
+      "cancelled_by_customer": "Cancelada por el cliente",
+      "cancelled_by_business": "Cancelada por el negocio",
+      "checked_in": "Registrado",
+      "in_progress": "En curso",
+      "no_show": "No se presentó"
+    },
+    "calendar": {
+      "summary": "{{services}} en {{business}}",
+      "reference": "Referencia de reserva: {{reference}}"
+    },
+    "common": {
+      "notEnoughData": "No hay suficientes datos",
+      "customer": "Cliente",
+      "recently": "Recientemente",
+      "recentlyLower": "recientemente",
+      "comingSoon": "Próximamente"
+    },
+    "validation": {
+      "nameRequired": "El nombre es obligatorio"
+    },
+    "messages": {
+      "loadFailed": "No se pudo cargar la cuenta de cliente.",
+      "profileUpdated": "Perfil actualizado",
+      "profileUpdateFailed": "No se pudo actualizar el perfil",
+      "calendarExportFailed": "No se pudo crear el archivo de calendario."
+    }
+  },
+  "business": {
+    "eyebrow": "Gestión del negocio",
+    "title": "Negocio",
+    "description": "Gestiona cierres completos y anuncios opcionales para clientes de {{business}}.",
+    "common": {
+      "yourBusiness": "tu negocio",
+      "until": "hasta",
+      "announcement": "Anuncio"
+    },
+    "actions": {
+      "addClosure": "Añadir cierre",
+      "save": "Guardar cierre",
+      "edit": "Editar cierre",
+      "delete": "Eliminar cierre"
+    },
+    "summary": {
+      "active": {
+        "title": "Cierres activos",
+        "description": "Bloquean reservas actualmente"
+      },
+      "upcoming": {
+        "title": "Próximos",
+        "description": "Cierres futuros programados"
+      },
+      "announcements": {
+        "title": "Anuncios",
+        "description": "Publicaciones de cierre vinculadas"
+      }
+    },
+    "filters": {
+      "active": "Activos",
+      "upcoming": "Próximos",
+      "past": "Pasados",
+      "all": "Todos"
+    },
+    "states": {
+      "loading": "Cargando cierres...",
+      "emptyTitle": "No hay cierres en esta categoría",
+      "emptyDescription": "Añade un cierre cuando todo el negocio no esté disponible uno o varios días."
+    },
+    "status": {
+      "inactive": "Inactivo",
+      "closedNow": "Cerrado ahora",
+      "upcoming": "Próximo",
+      "past": "Pasado"
+    },
+    "dialog": {
+      "editTitle": "Editar cierre del negocio",
+      "addTitle": "Añadir cierre del negocio",
+      "description": "No habrá nuevas horas disponibles durante este período."
+    },
+    "fields": {
+      "title": "Título *",
+      "titlePlaceholder": "Vacaciones de Navidad",
+      "startDate": "Fecha de inicio *",
+      "endDate": "Fecha de fin *",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Explica por qué el negocio estará cerrado.",
+      "audience": "Público del anuncio",
+      "createAnnouncement": "Crear anuncio para clientes",
+      "createAnnouncementHelp": "Crear o actualizar automáticamente una publicación de cierre.",
+      "active": "Cierre activo",
+      "activeHelp": "Desactívalo para conservar el registro sin bloquear reservas."
+    },
+    "audience": {
+      "registered_customers": "Clientes registrados",
+      "public": "Página pública",
+      "both": "Ambos"
+    },
+    "announcement": {
+      "closedRange": "Cerrado desde {{start}} hasta {{end}}.",
+      "bookingUnavailable": "Las citas online no estarán disponibles durante este período."
+    },
+    "validation": {
+      "titleRequired": "El título del cierre es obligatorio",
+      "datesRequired": "Las fechas de inicio y fin son obligatorias",
+      "dateOrder": "La fecha de fin debe ser igual o posterior a la de inicio"
+    },
+    "delete": {
+      "confirm": "¿Eliminar “{{title}}”? La disponibilidad volverá a abrirse para estas fechas."
+    },
+    "messages": {
+      "loadFailed": "No se pudieron cargar los cierres",
+      "recordNotCreated": "No se creó el registro de cierre",
+      "updated": "Cierre actualizado",
+      "created": "Cierre creado",
+      "saveFailed": "No se pudo guardar el cierre",
+      "deleted": "Cierre eliminado",
+      "deleteFailed": "No se pudo eliminar el cierre"
+    }
+  },
+  "settings": {
+    "title": "Configuración",
+    "description": "Gestiona el perfil y las preferencias de tu negocio.",
+    "states": {
+      "loading": "Cargando configuración..."
+    },
+    "actions": {
+      "saveChanges": "Guardar cambios",
+      "removePhoto": "Eliminar foto"
+    },
+    "businessProfile": {
+      "title": "Perfil del negocio",
+      "description": "Información pública mostrada a clientes."
+    },
+    "fields": {
+      "businessName": "Nombre del negocio",
+      "bookingSlug": "Slug de la página de reservas",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "address": "Dirección",
+      "description": "Descripción",
+      "logo": "Logotipo",
+      "coverPhotos": "Fotos de portada",
+      "coverPhotosHelp": "Sube varias fotos para la galería del negocio.",
+      "photoAlt": "Foto {{index}}",
+      "mapUrl": "URL de inserción de Google Maps"
+    },
+    "bookingPreferences": {
+      "title": "Preferencias de reserva",
+      "description": "Reglas para citas online.",
+      "interval": "Intervalo de reserva (min)",
+      "minNotice": "Aviso mínimo (horas)",
+      "maxAdvance": "Antelación máxima (días)",
+      "emailReminders": "Activar recordatorios automáticos por correo"
+    },
+    "qr": {
+      "title": "Código QR y enlace de la app",
+      "description": "Comparte el enlace único de tu app con clientes.",
+      "appLink": "Enlace de tu app",
+      "help": "El código QR lleva directamente a la app del negocio para ver fotos, indicaciones y reservar."
+    },
+    "messages": {
+      "loadFailed": "No se pudo cargar la configuración",
+      "saved": "Configuración guardada correctamente",
+      "saveFailed": "No se pudo guardar la configuración",
+      "linkCopied": "¡Enlace copiado!"
+    }
+  },
+  "billing": {
+    "eyebrow": "Experiencia de suscripción",
+    "title": "Facturación",
+    "description": "Empieza con todas las funciones durante {{days}} días y continúa con un plan Profesional ilimitado.",
+    "common": {
+      "yourBusiness": "tu negocio"
+    },
+    "states": {
+      "loading": "Cargando la suscripción..."
+    },
+    "actions": {
+      "opening": "Abriendo...",
+      "manageBilling": "Gestionar facturación",
+      "openingCheckout": "Abriendo pago seguro...",
+      "continueProfessional": "Continuar con Profesional",
+      "manageSubscription": "Gestionar suscripción"
+    },
+    "plan": {
+      "freeTrialAllFeatures": "Prueba gratuita — Todas las funciones",
+      "professional": "Plan Profesional",
+      "mostPopular": "Más popular",
+      "description": "Todo lo que necesita tu negocio. Sin límites de funciones.",
+      "perMonth": "al mes",
+      "cancelThroughStripe": "Cancela cuando quieras mediante Stripe",
+      "unlimitedTitle": "Ilimitado por diseño",
+      "active": "Tu Plan Profesional está activo",
+      "freeTrial": "Prueba gratuita de {{days}} días",
+      "trialDaysRemaining": "Quedan {{count}} días de prueba"
+    },
+    "features": {
+      "appointments": "Citas ilimitadas",
+      "staff": "Perfiles de personal ilimitados",
+      "services": "Servicios ilimitados",
+      "crm": "CRM completo de clientes",
+      "customerRecords": "Fórmulas, notas y fotos de clientes",
+      "storefront": "Página pública de reservas",
+      "customerBooking": "Reservas de clientes registrados e invitados",
+      "reports": "Informes y análisis avanzados",
+      "inventory": "Gestión de productos e inventario",
+      "content": "Publicaciones, galería y anuncios",
+      "closures": "Cierres del negocio y descansos del personal",
+      "notifications": "Notificaciones del propietario",
+      "stripe": "Facturación y facturas seguras con Stripe"
+    },
+    "currentAccess": {
+      "title": "Tu acceso actual",
+      "plan": "Plan",
+      "status": "Estado",
+      "featureAccess": "Acceso a funciones",
+      "allFeatures": "Todas las funciones",
+      "usageLimits": "Límites de uso",
+      "unlimited": "Ilimitado",
+      "monthlyPrice": "Precio mensual"
+    },
+    "security": {
+      "title": "Seguro y transparente",
+      "cardDetails": "Los datos de la tarjeta los gestiona únicamente Stripe.",
+      "paymentMethod": "Actualiza el método de pago desde el portal seguro.",
+      "cancelAnytime": "Cancela cuando quieras. El acceso continúa hasta el final del período pagado."
+    },
+    "statusCard": {
+      "title": "Estado de facturación",
+      "billingCycle": "Ciclo de facturación",
+      "monthly": "Mensual",
+      "trialEnds": "Fin de la prueba",
+      "nextBillingDate": "Próxima fecha de cobro",
+      "paymentProvider": "Proveedor de pagos",
+      "autoRenewal": "Renovación automática",
+      "endsThisPeriod": "Finaliza este período",
+      "enabled": "Activada"
+    },
+    "history": {
+      "title": "Historial de pagos",
+      "description": "Las facturas y recibos pagados aparecen automáticamente tras sincronizar Stripe.",
+      "emptyTitle": "Aún no hay facturas",
+      "emptyDescription": "La primera factura aparecerá cuando comience el Plan Profesional.",
+      "invoice": "Factura",
+      "date": "Fecha",
+      "amount": "Importe",
+      "status": "Estado",
+      "documents": "Documentos",
+      "view": "Ver"
+    },
+    "trial": {
+      "fullPlatform": "Plataforma completa desbloqueada",
+      "welcome": "Bienvenido a tu prueba de {{days}} días, {{business}}",
+      "description": "Explora todas las funciones sin límites. Tus datos, equipo, clientes y reservas seguirán listos al continuar con Profesional.",
+      "remaining": "Prueba restante",
+      "days": "{{count}} días",
+      "ends": "La prueba termina el {{date}}",
+      "started": "Tu período de prueba ha comenzado"
+    },
+    "subscriptionStatus": {
+      "trialing": "En prueba",
+      "active": "Activa",
+      "past_due": "Vencida",
+      "canceled": "Cancelada",
+      "cancelled": "Cancelada",
+      "incomplete": "Incompleta",
+      "paused": "Pausada"
+    },
+    "invoiceStatus": {
+      "paid": "Pagada",
+      "open": "Abierta",
+      "draft": "Borrador",
+      "void": "Anulada",
+      "uncollectible": "Incobrable"
+    },
+    "messages": {
+      "checkoutCompleted": "El pago del Plan Profesional se completó. La suscripción se está activando.",
+      "checkoutCancelled": "El pago se canceló. Tu acceso actual no cambió.",
+      "loadFailed": "No se pudo cargar la información de facturación",
+      "checkoutUrlMissing": "No se devolvió la URL de pago",
+      "checkoutFailed": "No se pudo iniciar Stripe Checkout",
+      "portalUrlMissing": "No se devolvió la URL del portal",
+      "portalUnavailable": "El portal de facturación de Stripe aún no está conectado"
+    }
+  },
+  "posts": {
+    "eyebrow": "Comunicación con clientes",
+    "title": "Publicaciones",
+    "description": "Publica novedades, ofertas, cierres y noticias en un formato de feed familiar.",
+    "common": {
+      "yourBusiness": "Tu negocio"
+    },
+    "actions": {
+      "create": "Crear publicación",
+      "publish": "Publicar",
+      "unpublish": "Retirar publicación",
+      "publishPost": "Publicar",
+      "saveDraft": "Guardar borrador"
+    },
+    "summary": {
+      "published": "Publicadas",
+      "drafts": "Borradores",
+      "scheduled": "Programadas"
+    },
+    "composer": {
+      "placeholder": "Comparte una novedad con tus clientes..."
+    },
+    "filters": {
+      "all": "Todas",
+      "published": "Publicadas",
+      "drafts": "Borradores",
+      "scheduled": "Programadas"
+    },
+    "states": {
+      "loading": "Cargando publicaciones...",
+      "emptyTitle": "No hay publicaciones en esta categoría",
+      "emptyDescription": "Crea una publicación o elige otro filtro."
+    },
+    "status": {
+      "published": "Publicada",
+      "draft": "Borrador"
+    },
+    "audience": {
+      "public": "Público",
+      "registered_customers": "Clientes registrados"
+    },
+    "types": {
+      "announcement": "Anuncio",
+      "holiday_closure": "Cierre por vacaciones",
+      "promotion": "Promoción",
+      "price_update": "Actualización de precios",
+      "new_product": "Nuevo producto",
+      "new_team_member": "Nuevo miembro del equipo",
+      "general": "General"
+    },
+    "card": {
+      "expires": "Caduca {{date}}"
+    },
+    "guide": {
+      "title": "Guía de publicación",
+      "public": {
+        "title": "Público",
+        "description": "Visible para todos los visitantes."
+      },
+      "registered": {
+        "title": "Clientes registrados",
+        "description": "Visible solo dentro de cuentas de clientes."
+      },
+      "schedule": {
+        "title": "Programación y caducidad",
+        "description": "Controla cuándo aparece y deja de mostrarse una publicación."
+      }
+    },
+    "dialog": {
+      "editTitle": "Editar publicación",
+      "createTitle": "Crear publicación",
+      "description": "Redacta la publicación tal como la verán los clientes.",
+      "author": "Autor de la publicación"
+    },
+    "fields": {
+      "title": "Título *",
+      "titlePlaceholder": "Añade un titular claro",
+      "content": "Contenido *",
+      "contentPlaceholder": "¿Qué quieres compartir?",
+      "photo": "Foto",
+      "type": "Tipo de publicación",
+      "audience": "Público",
+      "publishDate": "Fecha de publicación",
+      "expiryDate": "Fecha de caducidad",
+      "publish": "Publicar",
+      "publishHelp": "Desactívalo para guardar como borrador."
+    },
+    "validation": {
+      "required": "El título y el contenido son obligatorios"
+    },
+    "delete": {
+      "confirm": "¿Eliminar esta publicación permanentemente?"
+    },
+    "messages": {
+      "loadFailed": "No se pudieron cargar las publicaciones",
+      "updated": "Publicación actualizada",
+      "created": "Publicación creada",
+      "saveFailed": "No se pudo guardar la publicación",
+      "published": "Publicación publicada",
+      "movedToDrafts": "Publicación movida a borradores",
+      "updateFailed": "No se pudo actualizar la publicación",
+      "deleted": "Publicación eliminada",
+      "deleteFailed": "No se pudo eliminar la publicación"
+    }
   }
 }

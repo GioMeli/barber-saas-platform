@@ -83,7 +83,9 @@
       "supportedFormats": "Supports JPG, PNG and WEBP (maximum 1 MB with automatic compression)",
       "uploading": "Uploading… {{progress}}%"
     },
-    "back": "Back"
+    "back": "Back",
+    "copy": "Copy",
+    "notAvailable": "Not available"
   },
   "language": {
     "label": "Language",
@@ -1511,5 +1513,510 @@
     "conversationHistoryDescription": "Keep AI conversations so authorised users can return to previous work.",
     "customerData": "Customer data access",
     "customerDataDescription": "Allow AI features to use approved customer information when permissions permit."
+  },
+  "customerPortal": {
+    "auth": {
+      "title": "Customer Account",
+      "description": "Sign in to view upcoming appointments, booking history, and your profile at {{business}}.",
+      "signIn": "Sign In",
+      "bookAsGuest": "Book as Guest"
+    },
+    "hero": {
+      "eyebrow": "Customer account",
+      "welcomeBack": "Welcome back,",
+      "nextVisitScheduled": "Your next visit at {{business}} is already scheduled.",
+      "manageDescription": "Manage your bookings and customer profile at {{business}}.",
+      "readyTitle": "Ready for your next visit?",
+      "readyDescription": "Choose a service, professional, and time in a few simple steps."
+    },
+    "actions": {
+      "newAppointment": "New Appointment",
+      "bookAppointment": "Book Appointment",
+      "bookAgain": "Book Again",
+      "directions": "Directions",
+      "callStore": "Call Store",
+      "viewAll": "View all",
+      "addToCalendar": "Add to Calendar",
+      "calendar": "Calendar"
+    },
+    "metrics": {
+      "upcoming": {
+        "title": "Upcoming",
+        "caption": "Scheduled future appointments"
+      },
+      "completed": {
+        "title": "Completed Visits",
+        "caption": "Appointments completed at this store"
+      },
+      "totalSpent": {
+        "title": "Total Spent",
+        "caption": "Based on completed appointments"
+      },
+      "favouriteService": "Favourite Service",
+      "favouriteProfessional": "Favourite Professional",
+      "memberSince": "Member Since"
+    },
+    "quickActions": {
+      "title": "Quick actions",
+      "description": "Everything you need, without searching through menus.",
+      "bookDescription": "Choose a service and available time.",
+      "repeatVisit": "Repeat a previous visit.",
+      "firstBooking": "Make your first booking.",
+      "addressUnavailable": "Store address is not available.",
+      "phoneUnavailable": "Phone number is not available."
+    },
+    "tabs": {
+      "overview": "Overview",
+      "upcoming": "Upcoming",
+      "history": "History",
+      "profile": "Profile"
+    },
+    "activity": {
+      "title": "Recent activity",
+      "description": "Your latest appointments at this store."
+    },
+    "empty": {
+      "noVisitHistoryTitle": "No visit history yet",
+      "historyDescription": "Completed and cancelled appointments will appear here.",
+      "noUpcomingTitle": "No upcoming appointments",
+      "noUpcomingDescription": "Your next appointments at this store will appear here.",
+      "noHistoryTitle": "No appointment history"
+    },
+    "experience": {
+      "title": "Your experience",
+      "description": "New customer tools are being prepared.",
+      "reviews": {
+        "title": "Reviews",
+        "description": "Rate completed visits and share feedback."
+      },
+      "rewards": {
+        "title": "Rewards",
+        "description": "Earn points and unlock customer benefits."
+      },
+      "wallet": {
+        "title": "Wallet",
+        "description": "View payments, invoices, deposits, and refunds."
+      },
+      "notifications": {
+        "title": "Notifications",
+        "description": "Control reminders and appointment updates."
+      }
+    },
+    "profile": {
+      "customerSince": "Customer since",
+      "title": "Profile details",
+      "description": "These details are used for bookings and reminders at this store.",
+      "fullName": "Full Name",
+      "phone": "Phone",
+      "email": "Email",
+      "save": "Save Profile"
+    },
+    "appointment": {
+      "next": "Next appointment",
+      "fallback": "Appointment",
+      "withProfessional": "with {{name}}",
+      "anyProfessional": "Any available professional",
+      "upcoming": "Upcoming appointment",
+      "record": "Appointment record",
+      "reference": "Reference #{{reference}}",
+      "dateTime": "Date & Time",
+      "professional": "Professional",
+      "location": "Location",
+      "duration": "Duration",
+      "durationMinutes": "{{count}} minutes",
+      "total": "Total"
+    },
+    "status": {
+      "scheduled": "Scheduled",
+      "confirmed": "Confirmed",
+      "completed": "Completed",
+      "cancelled_by_customer": "Cancelled by customer",
+      "cancelled_by_business": "Cancelled by business",
+      "checked_in": "Checked in",
+      "in_progress": "In progress",
+      "no_show": "No show"
+    },
+    "calendar": {
+      "summary": "{{services}} at {{business}}",
+      "reference": "Booking reference: {{reference}}"
+    },
+    "common": {
+      "notEnoughData": "Not enough data",
+      "customer": "Customer",
+      "recently": "Recently",
+      "recentlyLower": "recently",
+      "comingSoon": "Coming Soon"
+    },
+    "validation": {
+      "nameRequired": "Name is required"
+    },
+    "messages": {
+      "loadFailed": "Failed to load your customer account.",
+      "profileUpdated": "Profile updated",
+      "profileUpdateFailed": "Failed to update profile",
+      "calendarExportFailed": "Could not create the calendar file."
+    }
+  },
+  "business": {
+    "eyebrow": "Business management",
+    "title": "Business",
+    "description": "Manage whole-store closures and optional customer announcements for {{business}}.",
+    "common": {
+      "yourBusiness": "your business",
+      "until": "until",
+      "announcement": "Announcement"
+    },
+    "actions": {
+      "addClosure": "Add Closure",
+      "save": "Save Closure",
+      "edit": "Edit closure",
+      "delete": "Delete closure"
+    },
+    "summary": {
+      "active": {
+        "title": "Active Closures",
+        "description": "Currently blocking bookings"
+      },
+      "upcoming": {
+        "title": "Upcoming",
+        "description": "Scheduled future closures"
+      },
+      "announcements": {
+        "title": "Announcements",
+        "description": "Connected closure posts"
+      }
+    },
+    "filters": {
+      "active": "Active",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "all": "All"
+    },
+    "states": {
+      "loading": "Loading business closures...",
+      "emptyTitle": "No closures in this category",
+      "emptyDescription": "Add a closure when the entire store will be unavailable for one date or a longer period."
+    },
+    "status": {
+      "inactive": "Inactive",
+      "closedNow": "Closed Now",
+      "upcoming": "Upcoming",
+      "past": "Past"
+    },
+    "dialog": {
+      "editTitle": "Edit Business Closure",
+      "addTitle": "Add Business Closure",
+      "description": "No new appointment times will be available during this period."
+    },
+    "fields": {
+      "title": "Title *",
+      "titlePlaceholder": "Christmas holidays",
+      "startDate": "Start Date *",
+      "endDate": "End Date *",
+      "description": "Description",
+      "descriptionPlaceholder": "Explain why the store will be closed.",
+      "audience": "Announcement Audience",
+      "createAnnouncement": "Create Customer Announcement",
+      "createAnnouncementHelp": "Automatically create or update a holiday-closure post.",
+      "active": "Active Closure",
+      "activeHelp": "Turn this off to keep the record without blocking bookings."
+    },
+    "audience": {
+      "registered_customers": "Registered Customers",
+      "public": "Public Storefront",
+      "both": "Both"
+    },
+    "announcement": {
+      "closedRange": "Closed from {{start}} until {{end}}.",
+      "bookingUnavailable": "Online appointments will not be available during this period."
+    },
+    "validation": {
+      "titleRequired": "Closure title is required",
+      "datesRequired": "Start and end dates are required",
+      "dateOrder": "End date must be on or after start date"
+    },
+    "delete": {
+      "confirm": "Delete \"{{title}}\"? Booking availability will reopen for these dates."
+    },
+    "messages": {
+      "loadFailed": "Failed to load business closures",
+      "recordNotCreated": "Closure record was not created",
+      "updated": "Business closure updated",
+      "created": "Business closure created",
+      "saveFailed": "Failed to save business closure",
+      "deleted": "Business closure deleted",
+      "deleteFailed": "Failed to delete closure"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Manage your business profile and preferences.",
+    "states": {
+      "loading": "Loading settings..."
+    },
+    "actions": {
+      "saveChanges": "Save Changes",
+      "removePhoto": "Remove photo"
+    },
+    "businessProfile": {
+      "title": "Business Profile",
+      "description": "Public information displayed to customers."
+    },
+    "fields": {
+      "businessName": "Business Name",
+      "bookingSlug": "Booking Page Slug",
+      "phone": "Phone",
+      "email": "Email",
+      "address": "Address",
+      "description": "Description",
+      "logo": "Logo",
+      "coverPhotos": "Cover Photos",
+      "coverPhotosHelp": "Upload multiple photos for your business gallery.",
+      "photoAlt": "Photo {{index}}",
+      "mapUrl": "Google Maps Embed URL"
+    },
+    "bookingPreferences": {
+      "title": "Booking Preferences",
+      "description": "Rules for online appointments.",
+      "interval": "Booking Interval (mins)",
+      "minNotice": "Min Notice (hours)",
+      "maxAdvance": "Max Advance (days)",
+      "emailReminders": "Enable automated email reminders for customers"
+    },
+    "qr": {
+      "title": "QR Code & App Link",
+      "description": "Share your unique standalone app link with customers.",
+      "appLink": "Your App Link",
+      "help": "Customers scanning this QR code will go directly to your business app, where they can view photos, directions, and book an appointment."
+    },
+    "messages": {
+      "loadFailed": "Failed to load settings",
+      "saved": "Settings saved successfully",
+      "saveFailed": "Failed to save settings",
+      "linkCopied": "Link copied!"
+    }
+  },
+  "billing": {
+    "eyebrow": "Subscription experience",
+    "title": "Billing",
+    "description": "Start with every feature for {{days}} days, then continue with one simple unlimited Professional Plan.",
+    "common": {
+      "yourBusiness": "your business"
+    },
+    "states": {
+      "loading": "Loading your subscription experience..."
+    },
+    "actions": {
+      "opening": "Opening...",
+      "manageBilling": "Manage Billing",
+      "openingCheckout": "Opening secure checkout...",
+      "continueProfessional": "Continue with Professional",
+      "manageSubscription": "Manage Subscription"
+    },
+    "plan": {
+      "freeTrialAllFeatures": "Free Trial — All Features",
+      "professional": "Professional Plan",
+      "mostPopular": "Most Popular",
+      "description": "Everything your business needs. No feature limits.",
+      "perMonth": "per month",
+      "cancelThroughStripe": "Cancel anytime through Stripe",
+      "unlimitedTitle": "Unlimited by design",
+      "active": "Your Professional Plan is active",
+      "freeTrial": "{{days}}-Day Free Trial",
+      "trialDaysRemaining": "{{count}} trial days remaining"
+    },
+    "features": {
+      "appointments": "Unlimited appointments",
+      "staff": "Unlimited staff profiles",
+      "services": "Unlimited services",
+      "crm": "Complete customer CRM",
+      "customerRecords": "Customer formulas, notes and photos",
+      "storefront": "Public booking storefront",
+      "customerBooking": "Registered customer and guest booking",
+      "reports": "Advanced reports and analytics",
+      "inventory": "Products and inventory management",
+      "content": "Posts, gallery and announcements",
+      "closures": "Business closures and staff breaks",
+      "notifications": "Owner notifications",
+      "stripe": "Secure Stripe billing and invoices"
+    },
+    "currentAccess": {
+      "title": "Your current access",
+      "plan": "Plan",
+      "status": "Status",
+      "featureAccess": "Feature access",
+      "allFeatures": "All features",
+      "usageLimits": "Usage limits",
+      "unlimited": "Unlimited",
+      "monthlyPrice": "Monthly price"
+    },
+    "security": {
+      "title": "Secure and transparent",
+      "cardDetails": "Card details are handled only by Stripe.",
+      "paymentMethod": "Update your payment method through the secure billing portal.",
+      "cancelAnytime": "Cancel at any time. Access continues until the end of the paid period."
+    },
+    "statusCard": {
+      "title": "Billing status",
+      "billingCycle": "Billing cycle",
+      "monthly": "Monthly",
+      "trialEnds": "Trial ends",
+      "nextBillingDate": "Next billing date",
+      "paymentProvider": "Payment provider",
+      "autoRenewal": "Auto renewal",
+      "endsThisPeriod": "Ends this period",
+      "enabled": "Enabled"
+    },
+    "history": {
+      "title": "Payment History",
+      "description": "Every paid invoice and receipt appears here automatically after Stripe webhook synchronization.",
+      "emptyTitle": "No invoices available yet",
+      "emptyDescription": "Your first invoice will appear here after the Professional Plan begins.",
+      "invoice": "Invoice",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "documents": "Documents",
+      "view": "View"
+    },
+    "trial": {
+      "fullPlatform": "Full platform unlocked",
+      "welcome": "Welcome to your {{days}}-day experience, {{business}}",
+      "description": "Explore every feature without limits. Your data, staff, customers and bookings remain ready when you continue with Professional.",
+      "remaining": "Trial remaining",
+      "days": "{{count}} days",
+      "ends": "Trial ends {{date}}",
+      "started": "Your trial period has started"
+    },
+    "subscriptionStatus": {
+      "trialing": "Trialing",
+      "active": "Active",
+      "past_due": "Past due",
+      "canceled": "Cancelled",
+      "cancelled": "Cancelled",
+      "incomplete": "Incomplete",
+      "paused": "Paused"
+    },
+    "invoiceStatus": {
+      "paid": "Paid",
+      "open": "Open",
+      "draft": "Draft",
+      "void": "Void",
+      "uncollectible": "Uncollectible"
+    },
+    "messages": {
+      "checkoutCompleted": "Your Professional Plan checkout was completed. Your subscription is being activated.",
+      "checkoutCancelled": "Checkout was cancelled. Your current access has not changed.",
+      "loadFailed": "Failed to load billing information",
+      "checkoutUrlMissing": "Checkout URL was not returned",
+      "checkoutFailed": "Failed to start Stripe Checkout",
+      "portalUrlMissing": "Billing portal URL was not returned",
+      "portalUnavailable": "The Stripe billing portal is not connected yet"
+    }
+  },
+  "posts": {
+    "eyebrow": "Customer communication",
+    "title": "Posts",
+    "description": "Publish professional updates, offers, closures and store news in a familiar social-feed format.",
+    "common": {
+      "yourBusiness": "Your Business"
+    },
+    "actions": {
+      "create": "Create Post",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "publishPost": "Publish Post",
+      "saveDraft": "Save Draft"
+    },
+    "summary": {
+      "published": "Published",
+      "drafts": "Drafts",
+      "scheduled": "Scheduled"
+    },
+    "composer": {
+      "placeholder": "Share an update with your customers..."
+    },
+    "filters": {
+      "all": "All",
+      "published": "Published",
+      "drafts": "Drafts",
+      "scheduled": "Scheduled"
+    },
+    "states": {
+      "loading": "Loading posts...",
+      "emptyTitle": "No posts in this category",
+      "emptyDescription": "Create a post or choose another filter."
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft"
+    },
+    "audience": {
+      "public": "Public",
+      "registered_customers": "Registered Customers"
+    },
+    "types": {
+      "announcement": "Announcement",
+      "holiday_closure": "Holiday Closure",
+      "promotion": "Promotion",
+      "price_update": "Price Update",
+      "new_product": "New Product",
+      "new_team_member": "New Team Member",
+      "general": "General"
+    },
+    "card": {
+      "expires": "Expires {{date}}"
+    },
+    "guide": {
+      "title": "Publishing Guide",
+      "public": {
+        "title": "Public",
+        "description": "Visible to every storefront visitor."
+      },
+      "registered": {
+        "title": "Registered customers",
+        "description": "Visible only inside customer accounts."
+      },
+      "schedule": {
+        "title": "Schedule & expiry",
+        "description": "Control when a post appears and when it stops showing."
+      }
+    },
+    "dialog": {
+      "editTitle": "Edit Post",
+      "createTitle": "Create Post",
+      "description": "Compose the post exactly as customers will see it.",
+      "author": "Post author"
+    },
+    "fields": {
+      "title": "Title *",
+      "titlePlaceholder": "Add a clear headline",
+      "content": "Post content *",
+      "contentPlaceholder": "What would you like to share?",
+      "photo": "Photo",
+      "type": "Post type",
+      "audience": "Audience",
+      "publishDate": "Publish date",
+      "expiryDate": "Expiry date",
+      "publish": "Publish",
+      "publishHelp": "Turn this off to keep the post as a draft."
+    },
+    "validation": {
+      "required": "Title and content are required"
+    },
+    "delete": {
+      "confirm": "Delete this post permanently?"
+    },
+    "messages": {
+      "loadFailed": "Failed to load posts",
+      "updated": "Post updated",
+      "created": "Post created",
+      "saveFailed": "Failed to save post",
+      "published": "Post published",
+      "movedToDrafts": "Post moved to drafts",
+      "updateFailed": "Failed to update post",
+      "deleted": "Post deleted",
+      "deleteFailed": "Failed to delete post"
+    }
   }
 }

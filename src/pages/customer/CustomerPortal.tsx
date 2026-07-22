@@ -26,8 +26,9 @@ import {
   Users,
   WalletCards,
 } from 'lucide-react';
-import { format, formatDistanceToNowStrict } from 'date-fns';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import {
   ActionCard,
   DashboardGrid,
@@ -53,6 +54,8 @@ const CANCELLED_STATUSES = [
 ];
 
 export default function CustomerPortal() {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const { business, openCustomerSignIn } =
     useOutletContext<StoreContext>();
   const { user, profile, loading: authLoading } = useAuth();
@@ -142,7 +145,7 @@ export default function CustomerPortal() {
     } catch (error: any) {
       console.error('Customer portal error:', error);
       toast.error(
-        error.message || 'Failed to load your customer account.'
+        error.message || t('customerPortal.messages.loadFailed')
       );
     } finally {
       setLoading(false);
@@ -153,7 +156,7 @@ export default function CustomerPortal() {
     if (!membership?.id) return;
 
     if (!profileForm.display_name.trim()) {
-      toast.error('Name is required');
+      toast.error(t('customerPortal.validation.nameRequired'));
       return;
     }
 
@@ -173,10 +176,10 @@ export default function CustomerPortal() {
 
       if (error) throw error;
 
-      toast.success('Profile updated');
+      toast.success(t('customerPortal.messages.profileUpdated'));
       await fetchCustomerPortal();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to update profile');
+      toast.error(error.message || t('customerPortal.messages.profileUpdateFailed'));
     } finally {
       setSavingProfile(false);
     }
@@ -253,9 +256,9 @@ export default function CustomerPortal() {
 
     return (
       [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ||
-      'Not enough data'
+      t('customerPortal.common.notEnoughData')
     );
-  }, [completedAppointments]);
+  }, [completedAppointments, t]);
 
   const favouriteProfessional = useMemo(() => {
     const counts = new Map<string, number>();
@@ -267,19 +270,19 @@ export default function CustomerPortal() {
 
     return (
       [...counts.entries()].sort((a, b) => b[1] - a[1])[0]?.[0] ||
-      'Not enough data'
+      t('customerPortal.common.notEnoughData')
     );
-  }, [completedAppointments]);
+  }, [completedAppointments, t]);
 
   const customerName =
     membership?.display_name ||
     profile?.full_name ||
     user?.user_metadata?.full_name ||
-    'Customer';
+    t('customerPortal.common.customer');
 
   const memberSince = membership?.created_at
-    ? format(new Date(membership.created_at), 'MMM yyyy')
-    : 'Recently';
+    ? formatPortalDate(membership.created_at, locale, { month: 'short', year: 'numeric' })
+    : t('customerPortal.common.recently');
 
   const phoneHref = business?.phone
     ? `tel:${String(business.phone).replace(/\s+/g, '')}`
@@ -303,10 +306,9 @@ export default function CustomerPortal() {
             </div>
 
             <div>
-              <h1 className="text-3xl font-bold">Customer Account</h1>
+              <h1 className="text-3xl font-bold">{t('customerPortal.auth.title')}</h1>
               <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                Sign in to view upcoming appointments, booking history,
-                and your profile at {business.name}.
+                {t('customerPortal.auth.description', { business: business.name })}
               </p>
             </div>
 
@@ -314,7 +316,7 @@ export default function CustomerPortal() {
               className="h-11 w-full rounded-xl"
               onClick={openCustomerSignIn}
             >
-              Sign In
+              {t('customerPortal.auth.signIn')}
             </Button>
 
             <Button
@@ -323,7 +325,7 @@ export default function CustomerPortal() {
               className="h-11 w-full rounded-xl"
             >
               <Link to={`/app/${business.slug}/book`}>
-                Book as Guest
+                {t('customerPortal.auth.bookAsGuest')}
               </Link>
             </Button>
           </CardContent>
@@ -337,24 +339,24 @@ export default function CustomerPortal() {
   return (
     <PageContainer>
       <PageHero
-        eyebrow="Customer account"
+        eyebrow={t('customerPortal.hero.eyebrow')}
         title={
           <>
-            Welcome back,{' '}
+            {t('customerPortal.hero.welcomeBack')}{' '}
             <span className="text-primary">{customerName}</span>
           </>
         }
         description={
           nextAppointment
-            ? `Your next visit at ${business.name} is already scheduled.`
-            : `Manage your bookings and customer profile at ${business.name}.`
+            ? t('customerPortal.hero.nextVisitScheduled', { business: business.name })
+            : t('customerPortal.hero.manageDescription', { business: business.name })
         }
         actions={
           <>
             <Button asChild className="h-11 rounded-xl">
               <Link to={`/app/${business.slug}/book`}>
                 <CalendarDays className="mr-2 h-4 w-4" />
-                New Appointment
+                {t('customerPortal.actions.newAppointment')}
               </Link>
             </Button>
 
@@ -370,7 +372,7 @@ export default function CustomerPortal() {
                   rel="noreferrer"
                 >
                   <Navigation className="mr-2 h-4 w-4" />
-                  Directions
+                  {t('customerPortal.actions.directions')}
                 </a>
               </Button>
             )}
@@ -390,11 +392,10 @@ export default function CustomerPortal() {
               </div>
               <div>
                 <div className="font-semibold">
-                  Ready for your next visit?
+                  {t('customerPortal.hero.readyTitle')}
                 </div>
                 <div className="mt-1 text-sm leading-6 text-muted-foreground">
-                  Choose a service, professional, and time in a few
-                  simple steps.
+                  {t('customerPortal.hero.readyDescription')}
                 </div>
               </div>
             </div>
@@ -404,37 +405,37 @@ export default function CustomerPortal() {
 
       <div className="mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
         <MetricCard
-          title="Upcoming"
+          title={t('customerPortal.metrics.upcoming.title')}
           value={upcoming.length}
           icon={<CalendarDays className="h-5 w-5" />}
-          caption="Scheduled future appointments"
+          caption={t('customerPortal.metrics.upcoming.caption')}
         />
         <MetricCard
-          title="Completed Visits"
+          title={t('customerPortal.metrics.completed.title')}
           value={completedAppointments.length}
           icon={<CheckCircle2 className="h-5 w-5" />}
-          caption="Appointments completed at this store"
+          caption={t('customerPortal.metrics.completed.caption')}
         />
         <MetricCard
-          title="Total Spent"
-          value={`€${totalSpent.toFixed(2)}`}
+          title={t('customerPortal.metrics.totalSpent.title')}
+          value={formatPortalCurrency(totalSpent, locale)}
           icon={<WalletCards className="h-5 w-5" />}
-          caption="Based on completed appointments"
+          caption={t('customerPortal.metrics.totalSpent.caption')}
         />
         <MetricCard
-          title="Favourite Service"
+          title={t('customerPortal.metrics.favouriteService')}
           value={favouriteService}
           icon={<Scissors className="h-5 w-5" />}
           compact
         />
         <MetricCard
-          title="Favourite Professional"
+          title={t('customerPortal.metrics.favouriteProfessional')}
           value={favouriteProfessional}
           icon={<Users className="h-5 w-5" />}
           compact
         />
         <MetricCard
-          title="Member Since"
+          title={t('customerPortal.metrics.memberSince')}
           value={memberSince}
           icon={<UserCircle className="h-5 w-5" />}
           compact
@@ -443,33 +444,33 @@ export default function CustomerPortal() {
 
       <section className="mt-10">
         <SectionHeader
-          title="Quick actions"
-          description="Everything you need, without searching through menus."
+          title={t('customerPortal.quickActions.title')}
+          description={t('customerPortal.quickActions.description')}
         />
 
         <DashboardGrid className="mt-5 xl:grid-cols-4">
           <ActionCard
             to={`/app/${business.slug}/book`}
-            title="Book Appointment"
-            description="Choose a service and available time."
+            title={t('customerPortal.actions.bookAppointment')}
+            description={t('customerPortal.quickActions.bookDescription')}
             icon={<CalendarDays className="h-5 w-5" />}
           />
 
           <ActionCard
             to={`/app/${business.slug}/book`}
-            title="Book Again"
+            title={t('customerPortal.actions.bookAgain')}
             description={
               history.length
-                ? 'Repeat a previous visit.'
-                : 'Make your first booking.'
+                ? t('customerPortal.quickActions.repeatVisit')
+                : t('customerPortal.quickActions.firstBooking')
             }
             icon={<RotateCcw className="h-5 w-5" />}
           />
 
           <ActionCard
-            title="Directions"
+            title={t('customerPortal.actions.directions')}
             description={
-              business.address || 'Store address is not available.'
+              business.address || t('customerPortal.quickActions.addressUnavailable')
             }
             icon={<MapPin className="h-5 w-5" />}
             disabled={!directionsUrl}
@@ -485,9 +486,9 @@ export default function CustomerPortal() {
           />
 
           <ActionCard
-            title="Call Store"
+            title={t('customerPortal.actions.callStore')}
             description={
-              business.phone || 'Phone number is not available.'
+              business.phone || t('customerPortal.quickActions.phoneUnavailable')
             }
             icon={<Phone className="h-5 w-5" />}
             disabled={!phoneHref}
@@ -501,24 +502,24 @@ export default function CustomerPortal() {
       <div className="scrollbar-subtle mt-10 flex gap-2 overflow-x-auto pb-1">
         <PortalTabButton
           active={activeTab === 'overview'}
-          label="Overview"
+          label={t('customerPortal.tabs.overview')}
           onClick={() => setActiveTab('overview')}
         />
         <PortalTabButton
           active={activeTab === 'upcoming'}
-          label="Upcoming"
+          label={t('customerPortal.tabs.upcoming')}
           count={upcoming.length}
           onClick={() => setActiveTab('upcoming')}
         />
         <PortalTabButton
           active={activeTab === 'history'}
-          label="History"
+          label={t('customerPortal.tabs.history')}
           count={history.length}
           onClick={() => setActiveTab('history')}
         />
         <PortalTabButton
           active={activeTab === 'profile'}
-          label="Profile"
+          label={t('customerPortal.tabs.profile')}
           onClick={() => setActiveTab('profile')}
         />
       </div>
@@ -528,15 +529,15 @@ export default function CustomerPortal() {
           <div className="grid gap-6 lg:grid-cols-[minmax(0,1.55fr)_minmax(300px,0.85fr)]">
             <section>
               <SectionHeader
-                title="Recent activity"
-                description="Your latest appointments at this store."
+                title={t('customerPortal.activity.title')}
+                description={t('customerPortal.activity.description')}
                 action={
                   history.length > 3 ? (
                     <Button
                       variant="outline"
                       onClick={() => setActiveTab('history')}
                     >
-                      View all
+                      {t('customerPortal.actions.viewAll')}
                     </Button>
                   ) : undefined
                 }
@@ -546,12 +547,12 @@ export default function CustomerPortal() {
                 {history.length === 0 ? (
                   <EmptyState
                     icon={<History className="h-8 w-8" />}
-                    title="No visit history yet"
-                    description="Completed and cancelled appointments will appear here."
+                    title={t('customerPortal.empty.noVisitHistoryTitle')}
+                    description={t('customerPortal.empty.historyDescription')}
                     action={
                       <Button asChild>
                         <Link to={`/app/${business.slug}/book`}>
-                          Book Appointment
+                          {t('customerPortal.actions.bookAppointment')}
                         </Link>
                       </Button>
                     }
@@ -572,30 +573,30 @@ export default function CustomerPortal() {
 
             <section>
               <SectionHeader
-                title="Your experience"
-                description="New customer tools are being prepared."
+                title={t('customerPortal.experience.title')}
+                description={t('customerPortal.experience.description')}
               />
 
               <div className="mt-5 space-y-3">
                 <ComingSoonCard
                   icon={<Star className="h-5 w-5" />}
-                  title="Reviews"
-                  description="Rate completed visits and share feedback."
+                  title={t('customerPortal.experience.reviews.title')}
+                  description={t('customerPortal.experience.reviews.description')}
                 />
                 <ComingSoonCard
                   icon={<Gift className="h-5 w-5" />}
-                  title="Rewards"
-                  description="Earn points and unlock customer benefits."
+                  title={t('customerPortal.experience.rewards.title')}
+                  description={t('customerPortal.experience.rewards.description')}
                 />
                 <ComingSoonCard
                   icon={<CreditCard className="h-5 w-5" />}
-                  title="Wallet"
-                  description="View payments, invoices, deposits, and refunds."
+                  title={t('customerPortal.experience.wallet.title')}
+                  description={t('customerPortal.experience.wallet.description')}
                 />
                 <ComingSoonCard
                   icon={<Bell className="h-5 w-5" />}
-                  title="Notifications"
-                  description="Control reminders and appointment updates."
+                  title={t('customerPortal.experience.notifications.title')}
+                  description={t('customerPortal.experience.notifications.description')}
                 />
               </div>
             </section>
@@ -606,8 +607,8 @@ export default function CustomerPortal() {
           (upcoming.length === 0 ? (
             <EmptyState
               icon={<CalendarDays className="h-8 w-8" />}
-              title="No upcoming appointments"
-              description="Your next appointments at this store will appear here."
+              title={t('customerPortal.empty.noUpcomingTitle')}
+              description={t('customerPortal.empty.noUpcomingDescription')}
               action={
                 <Button asChild>
                   <Link to={`/app/${business.slug}/book`}>
@@ -633,8 +634,8 @@ export default function CustomerPortal() {
           (history.length === 0 ? (
             <EmptyState
               icon={<History className="h-8 w-8" />}
-              title="No appointment history"
-              description="Completed and cancelled appointments will appear here."
+              title={t('customerPortal.empty.noHistoryTitle')}
+              description={t('customerPortal.empty.historyDescription')}
               action={
                 <Button asChild>
                   <Link to={`/app/${business.slug}/book`}>
@@ -677,6 +678,8 @@ function NextAppointmentPanel({
   appointment: any;
   business: any;
 }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const services = Array.isArray(appointment.services)
     ? appointment.services
     : [];
@@ -692,26 +695,24 @@ function NextAppointmentPanel({
       <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <StatBadge>Next appointment</StatBadge>
+            <StatBadge>{t('customerPortal.appointment.next')}</StatBadge>
             <StatBadge tone="success">
-              {formatDistanceToNowStrict(startTime, {
-                addSuffix: true,
-              })}
+              {formatPortalRelativeTime(startTime, locale)}
             </StatBadge>
           </div>
 
           <div className="mt-4 text-2xl font-bold">
-            {format(startTime, 'EEEE, MMMM d')}
+            {formatPortalDate(startTime, locale, { weekday: 'long', month: 'long', day: 'numeric' })}
           </div>
           <div className="mt-1 text-lg font-semibold text-primary">
-            {format(startTime, 'HH:mm')}
+            {formatPortalTime(startTime, locale)}
           </div>
 
           <div className="mt-3 text-sm text-muted-foreground">
             {services.map((service: any) => service.name).join(', ') ||
-              'Appointment'}
+              t('customerPortal.appointment.fallback')}
             {appointment.employee_name
-              ? ` with ${appointment.employee_name}`
+              ? t('customerPortal.appointment.withProfessional', { name: appointment.employee_name })
               : ''}
           </div>
         </div>
@@ -719,10 +720,10 @@ function NextAppointmentPanel({
         <div className="flex flex-wrap gap-2">
           <Button
             variant="outline"
-            onClick={() => downloadAppointmentIcs(appointment, business)}
+            onClick={() => downloadAppointmentIcs(appointment, business, t)}
           >
             <CalendarDays className="mr-2 h-4 w-4" />
-            Add to Calendar
+            {t('customerPortal.actions.addToCalendar')}
           </Button>
 
           {directionsUrl && (
@@ -733,7 +734,7 @@ function NextAppointmentPanel({
                 rel="noreferrer"
               >
                 <Navigation className="mr-2 h-4 w-4" />
-                Directions
+                {t('customerPortal.actions.directions')}
               </a>
             </Button>
           )}
@@ -768,6 +769,8 @@ function ProfilePanel({
   savingProfile: boolean;
   saveProfile: () => Promise<void>;
 }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const initials = customerName
     .split(/\s+/)
     .filter(Boolean)
@@ -787,13 +790,10 @@ function ProfilePanel({
             <div>
               <h2 className="text-2xl font-bold">{customerName}</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Customer since{' '}
+                {t('customerPortal.profile.customerSince')}{' '}
                 {membership?.created_at
-                  ? format(
-                      new Date(membership.created_at),
-                      'MMMM yyyy'
-                    )
-                  : 'recently'}
+                  ? formatPortalDate(membership.created_at, locale, { month: 'long', year: 'numeric' })
+                  : t('customerPortal.common.recentlyLower')}
               </p>
             </div>
           </div>
@@ -801,13 +801,13 @@ function ProfilePanel({
 
         <div className="p-6 sm:p-8">
           <SectionHeader
-            title="Profile details"
-            description="These details are used for bookings and reminders at this store."
+            title={t('customerPortal.profile.title')}
+            description={t('customerPortal.profile.description')}
           />
 
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             <div className="space-y-2 sm:col-span-2">
-              <Label>Full Name</Label>
+              <Label>{t('customerPortal.profile.fullName')}</Label>
               <div className="relative">
                 <UserCircle className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -824,7 +824,7 @@ function ProfilePanel({
             </div>
 
             <div className="space-y-2">
-              <Label>Phone</Label>
+              <Label>{t('customerPortal.profile.phone')}</Label>
               <div className="relative">
                 <Phone className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -842,7 +842,7 @@ function ProfilePanel({
             </div>
 
             <div className="space-y-2">
-              <Label>Email</Label>
+              <Label>{t('customerPortal.profile.email')}</Label>
               <div className="relative">
                 <Mail className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
@@ -865,7 +865,7 @@ function ProfilePanel({
               disabled={savingProfile}
               onClick={() => void saveProfile()}
             >
-              {savingProfile ? 'Saving...' : 'Save Profile'}
+              {savingProfile ? t('common.saving') : t('customerPortal.profile.save')}
             </Button>
           </div>
         </div>
@@ -881,6 +881,8 @@ function TimelineAppointment({
   appointment: any;
   business: any;
 }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const services = Array.isArray(appointment.services)
     ? appointment.services
     : [];
@@ -896,19 +898,16 @@ function TimelineAppointment({
           <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
             <div>
               <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                {format(
-                  new Date(appointment.start_time),
-                  'MMMM d, yyyy · HH:mm'
-                )}
+                {formatPortalDateTime(appointment.start_time, locale)}
               </div>
               <div className="mt-1 font-bold">
                 {services.map((service: any) => service.name).join(', ') ||
-                  'Appointment'}
+                  t('customerPortal.appointment.fallback')}
               </div>
               <div className="mt-1 text-sm text-muted-foreground">
                 {appointment.employee_name ||
-                  'Any available professional'}{' '}
-                · €{Number(appointment.total_price || 0).toFixed(2)}
+                  t('customerPortal.appointment.anyProfessional')}{' '}
+                · {formatPortalCurrency(Number(appointment.total_price || 0), locale)}
               </div>
             </div>
 
@@ -919,7 +918,7 @@ function TimelineAppointment({
             <Button asChild size="sm" variant="outline">
               <Link to={`/app/${business.slug}/book`}>
                 <RotateCcw className="mr-2 h-4 w-4" />
-                Book Again
+                {t('customerPortal.actions.bookAgain')}
               </Link>
             </Button>
           </div>
@@ -938,6 +937,7 @@ function ComingSoonCard({
   title: string;
   description: string;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="rounded-2xl border bg-card p-4 shadow-sm">
       <div className="flex items-start gap-4">
@@ -948,7 +948,7 @@ function ComingSoonCard({
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-center gap-2">
             <div className="font-semibold">{title}</div>
-            <StatBadge tone="coming-soon">Coming Soon</StatBadge>
+            <StatBadge tone="coming-soon">{t('customerPortal.common.comingSoon')}</StatBadge>
           </div>
           <div className="mt-1 text-xs leading-5 text-muted-foreground">
             {description}
@@ -968,6 +968,8 @@ function AppointmentCard({
   business: any;
   upcoming?: boolean;
 }) {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const services = Array.isArray(appointment.services)
     ? appointment.services
     : [];
@@ -988,15 +990,15 @@ function AppointmentCard({
           <div>
             <div className="text-xs font-semibold uppercase tracking-wide text-primary">
               {upcoming
-                ? 'Upcoming appointment'
-                : 'Appointment record'}
+                ? t('customerPortal.appointment.upcoming')
+                : t('customerPortal.appointment.record')}
             </div>
             <h3 className="mt-2 text-lg font-bold">
               {services.map((service: any) => service.name).join(', ') ||
-                'Appointment'}
+                t('customerPortal.appointment.fallback')}
             </h3>
             <div className="mt-1 text-xs text-muted-foreground">
-              Reference #{appointment.booking_reference}
+              {t('customerPortal.appointment.reference', { reference: appointment.booking_reference })}
             </div>
           </div>
 
@@ -1016,42 +1018,39 @@ function AppointmentCard({
         <div className="grid gap-5 p-5 sm:grid-cols-2 sm:p-6">
           <InfoLine
             icon={<Clock className="h-4 w-4" />}
-            label="Date & Time"
-            value={format(
-              new Date(appointment.start_time),
-              'EEEE, MMMM d, yyyy · HH:mm'
-            )}
+            label={t('customerPortal.appointment.dateTime')}
+            value={formatPortalDateTime(appointment.start_time, locale, true)}
           />
 
           <InfoLine
             icon={<Scissors className="h-4 w-4" />}
-            label="Professional"
+            label={t('customerPortal.appointment.professional')}
             value={
               appointment.employee_name ||
-              'Any available professional'
+              t('customerPortal.appointment.anyProfessional')
             }
           />
 
           {business.address && (
             <InfoLine
               icon={<MapPin className="h-4 w-4" />}
-              label="Location"
+              label={t('customerPortal.appointment.location')}
               value={business.address}
             />
           )}
 
           <InfoLine
             icon={<CalendarDays className="h-4 w-4" />}
-            label="Duration"
-            value={`${appointment.total_duration} minutes`}
+            label={t('customerPortal.appointment.duration')}
+            value={t('customerPortal.appointment.durationMinutes', { count: appointment.total_duration })}
           />
         </div>
 
         <div className="flex flex-col gap-4 border-t p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div>
-            <div className="text-xs text-muted-foreground">Total</div>
+            <div className="text-xs text-muted-foreground">{t('customerPortal.appointment.total')}</div>
             <div className="text-xl font-bold">
-              €{Number(appointment.total_price).toFixed(2)}
+              {formatPortalCurrency(Number(appointment.total_price), locale)}
             </div>
           </div>
 
@@ -1060,11 +1059,11 @@ function AppointmentCard({
               <Button
                 variant="outline"
                 onClick={() =>
-                  downloadAppointmentIcs(appointment, business)
+                  downloadAppointmentIcs(appointment, business, t)
                 }
               >
                 <CalendarDays className="mr-2 h-4 w-4" />
-                Calendar
+                {t('customerPortal.actions.calendar')}
               </Button>
             )}
 
@@ -1076,7 +1075,7 @@ function AppointmentCard({
                   rel="noreferrer"
                 >
                   <Navigation className="mr-2 h-4 w-4" />
-                  Directions
+                  {t('customerPortal.actions.directions')}
                 </a>
               </Button>
             )}
@@ -1085,7 +1084,7 @@ function AppointmentCard({
               <Button asChild variant="outline">
                 <Link to={`/app/${business.slug}/book`}>
                   <RotateCcw className="mr-2 h-4 w-4" />
-                  Book Again
+                  {t('customerPortal.actions.bookAgain')}
                 </Link>
               </Button>
             )}
@@ -1117,6 +1116,7 @@ function InfoLine({
 }
 
 function StatusBadge({ status }: { status: string }) {
+  const { t } = useTranslation();
   const normalized = String(status || '').toLowerCase();
 
   const tone =
@@ -1130,7 +1130,7 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <StatBadge tone={tone}>
-      {String(status || 'scheduled').replace(/_/g, ' ')}
+      {t(`customerPortal.status.${normalized || 'scheduled'}`, { defaultValue: t('customerPortal.status.scheduled') })}
     </StatBadge>
   );
 }
@@ -1170,7 +1170,39 @@ function PortalTabButton({
   );
 }
 
-function downloadAppointmentIcs(appointment: any, business: any) {
+function formatPortalDate(value: string | Date, locale: string, options: Intl.DateTimeFormatOptions) {
+  return new Intl.DateTimeFormat(locale, options).format(new Date(value));
+}
+
+function formatPortalTime(value: string | Date, locale: string) {
+  return new Intl.DateTimeFormat(locale, { hour: '2-digit', minute: '2-digit' }).format(new Date(value));
+}
+
+function formatPortalDateTime(value: string | Date, locale: string, includeWeekday = false) {
+  return new Intl.DateTimeFormat(locale, {
+    ...(includeWeekday ? { weekday: 'long' as const } : {}),
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(value));
+}
+
+function formatPortalCurrency(value: number, locale: string) {
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
+}
+
+function formatPortalRelativeTime(value: Date, locale: string) {
+  const differenceMs = value.getTime() - Date.now();
+  const absolute = Math.abs(differenceMs);
+  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
+  if (absolute >= 86_400_000) return formatter.format(Math.round(differenceMs / 86_400_000), 'day');
+  if (absolute >= 3_600_000) return formatter.format(Math.round(differenceMs / 3_600_000), 'hour');
+  return formatter.format(Math.round(differenceMs / 60_000), 'minute');
+}
+
+function downloadAppointmentIcs(appointment: any, business: any, t: (key: string, options?: any) => string) {
   try {
     const start = new Date(appointment.start_time);
     const duration = Number(appointment.total_duration || 30);
@@ -1180,7 +1212,7 @@ function downloadAppointmentIcs(appointment: any, business: any) {
           .map((service: any) => service.name)
           .filter(Boolean)
           .join(', ')
-      : 'Appointment';
+      : t('customerPortal.appointment.fallback');
 
     const formatIcsDate = (date: Date) =>
       date
@@ -1208,11 +1240,9 @@ function downloadAppointmentIcs(appointment: any, business: any) {
       `DTSTAMP:${formatIcsDate(new Date())}`,
       `DTSTART:${formatIcsDate(start)}`,
       `DTEND:${formatIcsDate(end)}`,
-      `SUMMARY:${escapeIcs(`${services} at ${business.name}`)}`,
+      `SUMMARY:${escapeIcs(t('customerPortal.calendar.summary', { services, business: business.name }))}`,
       `DESCRIPTION:${escapeIcs(
-        `Booking reference: ${
-          appointment.booking_reference || ''
-        }`
+        t('customerPortal.calendar.reference', { reference: appointment.booking_reference || '' })
       )}`,
       `LOCATION:${escapeIcs(business.address || '')}`,
       'END:VEVENT',
@@ -1234,6 +1264,6 @@ function downloadAppointmentIcs(appointment: any, business: any) {
     URL.revokeObjectURL(url);
   } catch (error) {
     console.error('Calendar export error:', error);
-    toast.error('Could not create the calendar file.');
+    toast.error(t('customerPortal.messages.calendarExportFailed'));
   }
 }

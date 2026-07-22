@@ -16,6 +16,8 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import {
   Building2,
   CalendarDays,
@@ -38,6 +40,8 @@ const EMPTY_FORM = {
 };
 
 export default function Business() {
+  const { t, i18n } = useTranslation();
+  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const { businessMemberships, user } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
   const business = businessMemberships[0]?.businesses;
@@ -70,7 +74,7 @@ export default function Business() {
       if (error) throw error;
       setClosures(data ?? []);
     } catch (error: any) {
-      toast.error(error.message || 'Failed to load business closures');
+      toast.error(error.message || t('business.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -128,17 +132,17 @@ export default function Business() {
 
   const validateForm = () => {
     if (!form.title.trim()) {
-      toast.error('Closure title is required');
+      toast.error(t('business.validation.titleRequired'));
       return false;
     }
 
     if (!form.start_date || !form.end_date) {
-      toast.error('Start and end dates are required');
+      toast.error(t('business.validation.datesRequired'));
       return false;
     }
 
     if (form.end_date < form.start_date) {
-      toast.error('End date must be on or after start date');
+      toast.error(t('business.validation.dateOrder'));
       return false;
     }
 
@@ -169,10 +173,8 @@ export default function Business() {
     const title = form.title.trim();
     const content = [
       form.description.trim(),
-      `Closed from ${formatDate(form.start_date)} until ${formatDate(
-        form.end_date
-      )}.`,
-      `Online appointments will not be available during this period.`,
+      t('business.announcement.closedRange', { start: formatBusinessDate(form.start_date, locale), end: formatBusinessDate(form.end_date, locale) }),
+      t('business.announcement.bookingUnavailable'),
     ]
       .filter(Boolean)
       .join('\n\n');
@@ -262,7 +264,7 @@ export default function Business() {
       }
 
       if (!closureId) {
-        throw new Error('Closure record was not created');
+        throw new Error(t('business.messages.recordNotCreated'));
       }
 
       const linkedPostId = await createOrUpdateAnnouncement(
@@ -283,14 +285,14 @@ export default function Business() {
 
       toast.success(
         editingId
-          ? 'Business closure updated'
-          : 'Business closure created'
+          ? t('business.messages.updated')
+          : t('business.messages.created')
       );
 
       setDialogOpen(false);
       await fetchClosures();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save business closure');
+      toast.error(error.message || t('business.messages.saveFailed'));
     } finally {
       setSaving(false);
     }
@@ -299,7 +301,7 @@ export default function Business() {
   const handleDelete = async (closure: any) => {
     if (
       !window.confirm(
-        `Delete "${closure.title}"? Booking availability will reopen for these dates.`
+        t('business.delete.confirm', { title: closure.title })
       )
     ) {
       return;
@@ -324,10 +326,10 @@ export default function Business() {
 
       if (error) throw error;
 
-      toast.success('Business closure deleted');
+      toast.success(t('business.messages.deleted'));
       await fetchClosures();
     } catch (error: any) {
-      toast.error(error.message || 'Failed to delete closure');
+      toast.error(error.message || t('business.messages.deleteFailed'));
     }
   };
 
@@ -336,41 +338,40 @@ export default function Business() {
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            Business management
+            {t('business.eyebrow')}
           </div>
-          <h1 className="app-page-title">Business</h1>
+          <h1 className="app-page-title">{t('business.title')}</h1>
           <p className="app-page-description">
-            Manage whole-store closures and optional customer
-            announcements for {business?.name || 'your business'}.
+            {t('business.description', { business: business?.name || t('business.common.yourBusiness') })}
           </p>
         </div>
 
         <Button onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" />
-          Add Closure
+          {t('business.actions.addClosure')}
         </Button>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
-          title="Active Closures"
+          title={t('business.summary.active.title')}
           value={activeClosures.length}
           icon={<Building2 className="h-5 w-5" />}
-          description="Currently blocking bookings"
+          description={t('business.summary.active.description')}
         />
         <SummaryCard
-          title="Upcoming"
+          title={t('business.summary.upcoming.title')}
           value={upcomingClosures.length}
           icon={<CalendarDays className="h-5 w-5" />}
-          description="Scheduled future closures"
+          description={t('business.summary.upcoming.description')}
         />
         <SummaryCard
-          title="Announcements"
+          title={t('business.summary.announcements.title')}
           value={
             closures.filter((closure) => closure.linked_post_id).length
           }
           icon={<Megaphone className="h-5 w-5" />}
-          description="Connected closure posts"
+          description={t('business.summary.announcements.description')}
         />
       </section>
 
@@ -379,25 +380,25 @@ export default function Business() {
           <div className="scrollbar-subtle flex gap-2 overflow-x-auto">
             <FilterButton
               active={activeFilter === 'active'}
-              label="Active"
+              label={t('business.filters.active')}
               count={activeClosures.length}
               onClick={() => setActiveFilter('active')}
             />
             <FilterButton
               active={activeFilter === 'upcoming'}
-              label="Upcoming"
+              label={t('business.filters.upcoming')}
               count={upcomingClosures.length}
               onClick={() => setActiveFilter('upcoming')}
             />
             <FilterButton
               active={activeFilter === 'past'}
-              label="Past"
+              label={t('business.filters.past')}
               count={pastClosures.length}
               onClick={() => setActiveFilter('past')}
             />
             <FilterButton
               active={activeFilter === 'all'}
-              label="All"
+              label={t('business.filters.all')}
               count={closures.length}
               onClick={() => setActiveFilter('all')}
             />
@@ -407,20 +408,19 @@ export default function Business() {
         <CardContent className="p-0">
           {loading ? (
             <div className="p-12 text-center text-muted-foreground">
-              Loading business closures...
+              {t('business.states.loading')}
             </div>
           ) : filteredClosures.length === 0 ? (
             <div className="flex min-h-[320px] flex-col items-center justify-center p-10 text-center">
               <Building2 className="h-12 w-12 text-muted-foreground" />
               <h3 className="mt-4 font-bold">
-                No closures in this category
+                {t('business.states.emptyTitle')}
               </h3>
               <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
-                Add a closure when the entire store will be unavailable
-                for one date or a longer period.
+                {t('business.states.emptyDescription')}
               </p>
               <Button className="mt-5" onClick={openCreate}>
-                Add Closure
+                {t('business.actions.addClosure')}
               </Button>
             </div>
           ) : (
@@ -445,26 +445,26 @@ export default function Business() {
 
                   <div className="rounded-xl bg-muted/30 p-3 text-sm">
                     <div className="font-semibold">
-                      {formatDate(closure.start_date)}
+                      {formatBusinessDate(closure.start_date, locale)}
                     </div>
                     <div className="my-1 text-xs text-muted-foreground">
-                      until
+                      {t('business.common.until')}
                     </div>
                     <div className="font-semibold">
-                      {formatDate(closure.end_date)}
+                      {formatBusinessDate(closure.end_date, locale)}
                     </div>
                   </div>
 
                   <div className="flex flex-wrap gap-2">
                     <Badge variant="outline" className="capitalize">
-                      {String(closure.audience).replace(/_/g, ' ')}
+                      {t(`business.audience.${closure.audience}`, { defaultValue: t('business.audience.registered_customers') })}
                     </Badge>
                     {closure.linked_post_id && (
                       <Badge
                         variant="secondary"
                         className="bg-blue-50 text-blue-700"
                       >
-                        Announcement
+                        {t('business.common.announcement')}
                       </Badge>
                     )}
                   </div>
@@ -474,6 +474,7 @@ export default function Business() {
                       variant="ghost"
                       size="icon"
                       onClick={() => openEdit(closure)}
+                      aria-label={t('business.actions.edit')}
                     >
                       <Edit className="h-4 w-4" />
                     </Button>
@@ -481,6 +482,7 @@ export default function Business() {
                       variant="ghost"
                       size="icon"
                       onClick={() => void handleDelete(closure)}
+                      aria-label={t('business.actions.delete')}
                     >
                       <Trash2 className="h-4 w-4 text-destructive" />
                     </Button>
@@ -496,20 +498,19 @@ export default function Business() {
         <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
-              {editingId ? 'Edit Business Closure' : 'Add Business Closure'}
+              {editingId ? t('business.dialog.editTitle') : t('business.dialog.addTitle')}
             </DialogTitle>
             <p className="text-sm leading-6 text-muted-foreground">
-              No new appointment times will be available during this
-              period.
+              {t('business.dialog.description')}
             </p>
           </DialogHeader>
 
           <div className="space-y-6 py-4">
             <div className="space-y-2">
-              <Label>Title *</Label>
+              <Label>{t('business.fields.title')}</Label>
               <Input
                 className="h-11 rounded-xl"
-                placeholder="Christmas holidays"
+                placeholder={t('business.fields.titlePlaceholder')}
                 value={form.title}
                 onChange={(event) =>
                   setForm({ ...form, title: event.target.value })
@@ -519,7 +520,7 @@ export default function Business() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div className="space-y-2">
-                <Label>Start Date *</Label>
+                <Label>{t('business.fields.startDate')}</Label>
                 <Input
                   type="date"
                   className="h-11 rounded-xl"
@@ -539,7 +540,7 @@ export default function Business() {
               </div>
 
               <div className="space-y-2">
-                <Label>End Date *</Label>
+                <Label>{t('business.fields.endDate')}</Label>
                 <Input
                   type="date"
                   min={form.start_date || undefined}
@@ -556,11 +557,11 @@ export default function Business() {
             </div>
 
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label>{t('business.fields.description')}</Label>
               <Textarea
                 rows={5}
                 className="rounded-xl"
-                placeholder="Explain why the store will be closed."
+                placeholder={t('business.fields.descriptionPlaceholder')}
                 value={form.description}
                 onChange={(event) =>
                   setForm({
@@ -572,7 +573,7 @@ export default function Business() {
             </div>
 
             <div className="space-y-2">
-              <Label>Announcement Audience</Label>
+              <Label>{t('business.fields.audience')}</Label>
               <select
                 className="h-11 w-full rounded-xl border bg-background px-3 text-sm"
                 value={form.audience}
@@ -584,18 +585,18 @@ export default function Business() {
                 }
               >
                 <option value="registered_customers">
-                  Registered Customers
+                  {t('business.audience.registered_customers')}
                 </option>
-                <option value="public">Public Storefront</option>
-                <option value="both">Both</option>
+                <option value="public">{t('business.audience.public')}</option>
+                <option value="both">{t('business.audience.both')}</option>
               </select>
             </div>
 
             <div className="flex items-center justify-between rounded-2xl border p-4">
               <div>
-                <Label>Create Customer Announcement</Label>
+                <Label>{t('business.fields.createAnnouncement')}</Label>
                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                  Automatically create or update a holiday-closure post.
+                  {t('business.fields.createAnnouncementHelp')}
                 </p>
               </div>
               <Switch
@@ -611,10 +612,9 @@ export default function Business() {
 
             <div className="flex items-center justify-between rounded-2xl border p-4">
               <div>
-                <Label>Active Closure</Label>
+                <Label>{t('business.fields.active')}</Label>
                 <p className="mt-1 text-sm leading-6 text-muted-foreground">
-                  Turn this off to keep the record without blocking
-                  bookings.
+                  {t('business.fields.activeHelp')}
                 </p>
               </div>
               <Switch
@@ -632,10 +632,10 @@ export default function Business() {
               disabled={saving}
               onClick={() => setDialogOpen(false)}
             >
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button disabled={saving} onClick={() => void handleSave()}>
-              {saving ? 'Saving...' : 'Save Closure'}
+              {saving ? t('common.saving') : t('business.actions.save')}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -713,8 +713,9 @@ function ClosureStatus({
   closure: any;
   today: string;
 }) {
+  const { t } = useTranslation();
   if (!closure.is_active) {
-    return <Badge variant="secondary">Inactive</Badge>;
+    return <Badge variant="secondary">{t('business.status.inactive')}</Badge>;
   }
 
   if (
@@ -723,7 +724,7 @@ function ClosureStatus({
   ) {
     return (
       <Badge className="bg-red-100 text-red-700 hover:bg-red-100">
-        Closed Now
+        {t('business.status.closedNow')}
       </Badge>
     );
   }
@@ -731,16 +732,16 @@ function ClosureStatus({
   if (closure.start_date > today) {
     return (
       <Badge className="bg-amber-100 text-amber-700 hover:bg-amber-100">
-        Upcoming
+        {t('business.status.upcoming')}
       </Badge>
     );
   }
 
-  return <Badge variant="secondary">Past</Badge>;
+  return <Badge variant="secondary">{t('business.status.past')}</Badge>;
 }
 
-function formatDate(value: string) {
-  return new Intl.DateTimeFormat('en-GB', {
+function formatBusinessDate(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     day: '2-digit',
     month: 'short',
     year: 'numeric',

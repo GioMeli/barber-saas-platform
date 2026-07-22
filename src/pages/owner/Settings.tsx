@@ -10,8 +10,10 @@ import { toast } from 'sonner';
 import { QRCodeSVG } from 'qrcode.react';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { X } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function Settings() {
+  const { t } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -80,7 +82,7 @@ export default function Settings() {
       
     } catch (error) {
       console.error('Error fetching settings:', error);
-      toast.error('Failed to load settings');
+      toast.error(t('settings.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -115,36 +117,36 @@ export default function Settings() {
       if (bizError.error) throw bizError.error;
       if (settingsError.error) throw settingsError.error;
 
-      toast.success('Settings saved successfully');
+      toast.success(t('settings.messages.saved'));
     } catch (error: any) {
-      toast.error(error.message || 'Failed to save settings');
+      toast.error(error.message || t('settings.messages.saveFailed'));
     } finally {
       setSaving(false);
     }
   };
 
-  if (loading) return <div>Loading settings...</div>;
+  if (loading) return <div>{t('settings.states.loading')}</div>;
 
   return (
     <div className="space-y-6 max-w-3xl mx-auto pb-12">
       <div>
-        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground text-sm">Manage your business profile and preferences.</p>
+        <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
+        <p className="text-muted-foreground text-sm">{t('settings.description')}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Business Profile</CardTitle>
-          <CardDescription>Public information displayed to customers.</CardDescription>
+          <CardTitle>{t('settings.businessProfile.title')}</CardTitle>
+          <CardDescription>{t('settings.businessProfile.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="biz_name">Business Name</Label>
+              <Label htmlFor="biz_name">{t('settings.fields.businessName')}</Label>
               <Input id="biz_name" value={businessData.name} onChange={(e) => setBusinessData({...businessData, name: e.target.value})} className="px-3" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="biz_slug">Booking Page Slug</Label>
+              <Label htmlFor="biz_slug">{t('settings.fields.bookingSlug')}</Label>
               <Input id="biz_slug" value={businessData.slug} onChange={(e) => setBusinessData({...businessData, slug: e.target.value})} className="px-3" />
               <p className="text-xs text-muted-foreground">/book/{businessData.slug}</p>
             </div>
@@ -152,27 +154,27 @@ export default function Settings() {
           
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="biz_phone">Phone</Label>
+              <Label htmlFor="biz_phone">{t('settings.fields.phone')}</Label>
               <Input id="biz_phone" value={businessData.phone} onChange={(e) => setBusinessData({...businessData, phone: e.target.value})} className="px-3" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="biz_email">Email</Label>
+              <Label htmlFor="biz_email">{t('settings.fields.email')}</Label>
               <Input id="biz_email" type="email" value={businessData.email} onChange={(e) => setBusinessData({...businessData, email: e.target.value})} className="px-3" />
             </div>
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="biz_address">Address</Label>
+            <Label htmlFor="biz_address">{t('settings.fields.address')}</Label>
             <Input id="biz_address" value={businessData.address} onChange={(e) => setBusinessData({...businessData, address: e.target.value})} className="px-3" />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="biz_desc">Description</Label>
+            <Label htmlFor="biz_desc">{t('settings.fields.description')}</Label>
             <Textarea id="biz_desc" value={businessData.description} onChange={(e) => setBusinessData({...businessData, description: e.target.value})} className="px-3" />
           </div>
 
           <div className="grid gap-2">
-            <Label>Logo</Label>
+            <Label>{t('settings.fields.logo')}</Label>
             <ImageUploader 
               value={businessData.logo_url} 
               onChange={url => setBusinessData({...businessData, logo_url: url})} 
@@ -181,15 +183,16 @@ export default function Settings() {
           </div>
 
           <div className="grid gap-2">
-            <Label>Cover Photos</Label>
+            <Label>{t('settings.fields.coverPhotos')}</Label>
             <div className="flex flex-wrap gap-4">
               {businessData.photos.map((photo, index) => (
                 <div key={index} className="relative w-24 h-24 border rounded-md overflow-hidden bg-muted">
-                  <img src={photo} alt={`Photo ${index + 1}`} className="w-full h-full object-cover" />
+                  <img src={photo} alt={t('settings.fields.photoAlt', { index: index + 1 })} className="w-full h-full object-cover" />
                   <Button
                     variant="destructive"
                     size="icon"
                     className="absolute top-1 right-1 w-6 h-6 rounded-full"
+                    aria-label={t('settings.actions.removePhoto')}
                     onClick={() => {
                       const newPhotos = [...businessData.photos];
                       newPhotos.splice(index, 1);
@@ -212,11 +215,11 @@ export default function Settings() {
                 />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground mt-1">Upload multiple photos for your business gallery.</p>
+            <p className="text-xs text-muted-foreground mt-1">{t('settings.fields.coverPhotosHelp')}</p>
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="biz_map">Google Maps Embed URL</Label>
+            <Label htmlFor="biz_map">{t('settings.fields.mapUrl')}</Label>
             <Input id="biz_map" placeholder="https://www.google.com/maps/embed?..." value={businessData.map_url} onChange={(e) => setBusinessData({...businessData, map_url: e.target.value})} className="px-3" />
           </div>
         </CardContent>
@@ -224,21 +227,21 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Booking Preferences</CardTitle>
-          <CardDescription>Rules for online appointments.</CardDescription>
+          <CardTitle>{t('settings.bookingPreferences.title')}</CardTitle>
+          <CardDescription>{t('settings.bookingPreferences.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div className="grid gap-2">
-              <Label htmlFor="b_interval">Booking Interval (mins)</Label>
+              <Label htmlFor="b_interval">{t('settings.bookingPreferences.interval')}</Label>
               <Input id="b_interval" type="number" value={settingsData.booking_interval} onChange={(e) => setSettingsData({...settingsData, booking_interval: parseInt(e.target.value)})} className="px-3" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="b_min">Min Notice (hours)</Label>
+              <Label htmlFor="b_min">{t('settings.bookingPreferences.minNotice')}</Label>
               <Input id="b_min" type="number" value={settingsData.min_booking_notice} onChange={(e) => setSettingsData({...settingsData, min_booking_notice: parseInt(e.target.value)})} className="px-3" />
             </div>
             <div className="grid gap-2">
-              <Label htmlFor="b_max">Max Advance (days)</Label>
+              <Label htmlFor="b_max">{t('settings.bookingPreferences.maxAdvance')}</Label>
               <Input id="b_max" type="number" value={settingsData.max_booking_period} onChange={(e) => setSettingsData({...settingsData, max_booking_period: parseInt(e.target.value)})} className="px-3" />
             </div>
           </div>
@@ -251,15 +254,15 @@ export default function Settings() {
               onChange={(e) => setSettingsData({...settingsData, email_reminders_enabled: e.target.checked})}
               className="h-4 w-4 rounded border-gray-300"
             />
-            <Label htmlFor="email_rem" className="font-normal">Enable automated email reminders for customers</Label>
+            <Label htmlFor="email_rem" className="font-normal">{t('settings.bookingPreferences.emailReminders')}</Label>
           </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>QR Code & App Link</CardTitle>
-          <CardDescription>Share your unique standalone app link with customers.</CardDescription>
+          <CardTitle>{t('settings.qr.title')}</CardTitle>
+          <CardDescription>{t('settings.qr.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4 flex flex-col items-center sm:flex-row sm:items-start sm:gap-6">
           <div className="bg-white p-4 rounded-lg border border-border shadow-sm inline-block">
@@ -267,17 +270,17 @@ export default function Settings() {
           </div>
           <div className="space-y-4 text-center sm:text-left flex-1 mt-4 sm:mt-0">
             <div>
-              <Label>Your App Link</Label>
+              <Label>{t('settings.qr.appLink')}</Label>
               <div className="flex items-center gap-2 mt-1">
                 <Input readOnly value={`${window.location.origin}/app/${businessData.slug}`} className="px-3 bg-muted/50" />
                 <Button variant="secondary" onClick={() => {
                   navigator.clipboard.writeText(`${window.location.origin}/app/${businessData.slug}`);
-                  toast.success('Link copied!');
-                }}>Copy</Button>
+                  toast.success(t('settings.messages.linkCopied'));
+                }}>{t('common.copy')}</Button>
               </div>
             </div>
             <p className="text-sm text-muted-foreground">
-              Customers scanning this QR code will be redirected straight to your isolated business app, allowing them to view photos, maps, and book an appointment with you directly.
+              {t('settings.qr.help')}
             </p>
           </div>
         </CardContent>
@@ -285,7 +288,7 @@ export default function Settings() {
 
       <div className="flex justify-end pt-4">
         <Button onClick={handleSave} disabled={saving}>
-          {saving ? 'Saving...' : 'Save Changes'}
+          {saving ? t('common.saving') : t('settings.actions.saveChanges')}
         </Button>
       </div>
     </div>
