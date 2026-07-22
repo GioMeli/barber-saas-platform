@@ -12,5 +12,9 @@
 | Reports | Complete | Business Intelligence reports, filters, metrics, charts, tables, statuses and CSV export localized in EN, EL, DE, ES and TR. |
 | Storefront | Complete | Owner Storefront Studio, public store home, responsive navigation, customer access modal, QR sharing and image uploader localized in EN, EL, DE, ES and TR. |
 | Public booking | Complete | Multi-service flow, staff selection, availability, closures, customer details, confirmation, calendar export and mobile summary localized in EN, EL, DE, ES and TR. |
+| Customer portal | Complete | Overview, appointments, profile, quick actions, metrics, statuses, calendar export and locale-aware dates/currency localized in EN, EL, DE, ES and TR. |
+| Business / Settings | Complete | Closures, announcements, business profile, booking preferences, QR sharing, validation and notifications localized in EN, EL, DE, ES and TR. |
+| Billing / subscriptions | Complete | Trial, Professional plan, subscription status, Stripe actions, invoices, billing history and locale-aware dates/currency localized in EN, EL, DE, ES and TR. |
+| Posts / announcements | Complete | Feed, filters, composer, post types, audiences, publishing workflow, scheduling, expiry, validation and notifications localized in EN, EL, DE, ES and TR. |
 | Validation and notifications | In progress | Translation parity checker added; final owner, customer, marketing and email audit remains. |
 | Dynamic business content | Pending | Requires data-model design. |

@@ -83,7 +83,9 @@
       "supportedFormats": "JPG, PNG ve WEBP desteklenir (otomatik sıkıştırma ile en fazla 1 MB)",
       "uploading": "Yükleniyor… {{progress}}%"
     },
-    "back": "Geri"
+    "back": "Geri",
+    "copy": "Kopyala",
+    "notAvailable": "Kullanılamıyor"
   },
   "language": {
     "label": "Dil",
@@ -1511,5 +1513,510 @@
     "conversationHistoryDescription": "Yetkili kullanıcıların önceki çalışmalara dönebilmesi için AI konuşmalarını saklayın.",
     "customerData": "Müşteri verisi erişimi",
     "customerDataDescription": "İzinler uygun olduğunda AI özelliklerinin onaylı müşteri bilgilerini kullanmasına izin verin."
+  },
+  "customerPortal": {
+    "auth": {
+      "title": "Müşteri Hesabı",
+      "description": "Yaklaşan randevuları, rezervasyon geçmişini ve {{business}} profilinizi görmek için giriş yapın.",
+      "signIn": "Giriş Yap",
+      "bookAsGuest": "Misafir Olarak Rezervasyon"
+    },
+    "hero": {
+      "eyebrow": "Müşteri hesabı",
+      "welcomeBack": "Tekrar hoş geldiniz,",
+      "nextVisitScheduled": "{{business}} için sonraki ziyaretiniz planlandı.",
+      "manageDescription": "{{business}} rezervasyonlarınızı ve müşteri profilinizi yönetin.",
+      "readyTitle": "Sonraki ziyaretinize hazır mısınız?",
+      "readyDescription": "Hizmet, uzman ve saati birkaç adımda seçin."
+    },
+    "actions": {
+      "newAppointment": "Yeni Randevu",
+      "bookAppointment": "Randevu Al",
+      "bookAgain": "Tekrar Rezervasyon",
+      "directions": "Yol Tarifi",
+      "callStore": "İşletmeyi Ara",
+      "viewAll": "Tümünü Gör",
+      "addToCalendar": "Takvime Ekle",
+      "calendar": "Takvim"
+    },
+    "metrics": {
+      "upcoming": {
+        "title": "Yaklaşan",
+        "caption": "Planlanmış gelecek randevular"
+      },
+      "completed": {
+        "title": "Tamamlanan Ziyaretler",
+        "caption": "Bu işletmede tamamlanan randevular"
+      },
+      "totalSpent": {
+        "title": "Toplam Harcama",
+        "caption": "Tamamlanan randevulara göre"
+      },
+      "favouriteService": "Favori Hizmet",
+      "favouriteProfessional": "Favori Uzman",
+      "memberSince": "Üyelik Başlangıcı"
+    },
+    "quickActions": {
+      "title": "Hızlı işlemler",
+      "description": "Menülerde aramadan ihtiyacınız olan her şey.",
+      "bookDescription": "Hizmet ve uygun saat seçin.",
+      "repeatVisit": "Önceki bir ziyareti tekrarlayın.",
+      "firstBooking": "İlk rezervasyonunuzu yapın.",
+      "addressUnavailable": "İşletme adresi mevcut değil.",
+      "phoneUnavailable": "Telefon numarası mevcut değil."
+    },
+    "tabs": {
+      "overview": "Genel Bakış",
+      "upcoming": "Yaklaşan",
+      "history": "Geçmiş",
+      "profile": "Profil"
+    },
+    "activity": {
+      "title": "Son etkinlik",
+      "description": "Bu işletmedeki son randevularınız."
+    },
+    "empty": {
+      "noVisitHistoryTitle": "Henüz ziyaret geçmişi yok",
+      "historyDescription": "Tamamlanan ve iptal edilen randevular burada görünür.",
+      "noUpcomingTitle": "Yaklaşan randevu yok",
+      "noUpcomingDescription": "Sonraki randevularınız burada görünür.",
+      "noHistoryTitle": "Randevu geçmişi yok"
+    },
+    "experience": {
+      "title": "Deneyiminiz",
+      "description": "Yeni müşteri araçları hazırlanıyor.",
+      "reviews": {
+        "title": "Değerlendirmeler",
+        "description": "Tamamlanan ziyaretleri değerlendirin ve geri bildirim verin."
+      },
+      "rewards": {
+        "title": "Ödüller",
+        "description": "Puan kazanın ve müşteri avantajlarını açın."
+      },
+      "wallet": {
+        "title": "Cüzdan",
+        "description": "Ödemeleri, faturaları, depozitoları ve iadeleri görün."
+      },
+      "notifications": {
+        "title": "Bildirimler",
+        "description": "Hatırlatmaları ve randevu güncellemelerini yönetin."
+      }
+    },
+    "profile": {
+      "customerSince": "Müşteri olma tarihi",
+      "title": "Profil bilgileri",
+      "description": "Bu bilgiler rezervasyonlar ve hatırlatmalar için kullanılır.",
+      "fullName": "Ad Soyad",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "save": "Profili Kaydet"
+    },
+    "appointment": {
+      "next": "Sonraki randevu",
+      "fallback": "Randevu",
+      "withProfessional": "{{name}} ile",
+      "anyProfessional": "Uygun herhangi bir uzman",
+      "upcoming": "Yaklaşan randevu",
+      "record": "Randevu kaydı",
+      "reference": "Referans #{{reference}}",
+      "dateTime": "Tarih ve Saat",
+      "professional": "Uzman",
+      "location": "Konum",
+      "duration": "Süre",
+      "durationMinutes": "{{count}} dakika",
+      "total": "Toplam"
+    },
+    "status": {
+      "scheduled": "Planlandı",
+      "confirmed": "Onaylandı",
+      "completed": "Tamamlandı",
+      "cancelled_by_customer": "Müşteri tarafından iptal edildi",
+      "cancelled_by_business": "İşletme tarafından iptal edildi",
+      "checked_in": "Giriş yapıldı",
+      "in_progress": "Devam ediyor",
+      "no_show": "Gelmedi"
+    },
+    "calendar": {
+      "summary": "{{business}} - {{services}}",
+      "reference": "Rezervasyon referansı: {{reference}}"
+    },
+    "common": {
+      "notEnoughData": "Yeterli veri yok",
+      "customer": "Müşteri",
+      "recently": "Yakın zamanda",
+      "recentlyLower": "yakın zamanda",
+      "comingSoon": "Yakında"
+    },
+    "validation": {
+      "nameRequired": "Ad zorunludur"
+    },
+    "messages": {
+      "loadFailed": "Müşteri hesabı yüklenemedi.",
+      "profileUpdated": "Profil güncellendi",
+      "profileUpdateFailed": "Profil güncellenemedi",
+      "calendarExportFailed": "Takvim dosyası oluşturulamadı."
+    }
+  },
+  "business": {
+    "eyebrow": "İşletme yönetimi",
+    "title": "İşletme",
+    "description": "{{business}} için tam işletme kapanışlarını ve isteğe bağlı müşteri duyurularını yönetin.",
+    "common": {
+      "yourBusiness": "işletmeniz",
+      "until": "bitiş",
+      "announcement": "Duyuru"
+    },
+    "actions": {
+      "addClosure": "Kapanış Ekle",
+      "save": "Kapanışı Kaydet",
+      "edit": "Kapanışı düzenle",
+      "delete": "Kapanışı sil"
+    },
+    "summary": {
+      "active": {
+        "title": "Aktif Kapanışlar",
+        "description": "Şu anda rezervasyonları engelliyor"
+      },
+      "upcoming": {
+        "title": "Yaklaşan",
+        "description": "Planlanmış kapanışlar"
+      },
+      "announcements": {
+        "title": "Duyurular",
+        "description": "Bağlı kapanış gönderileri"
+      }
+    },
+    "filters": {
+      "active": "Aktif",
+      "upcoming": "Yaklaşan",
+      "past": "Geçmiş",
+      "all": "Tümü"
+    },
+    "states": {
+      "loading": "İşletme kapanışları yükleniyor...",
+      "emptyTitle": "Bu kategoride kapanış yok",
+      "emptyDescription": "Tüm işletmenin bir veya daha fazla gün kullanılamayacağı zaman kapanış ekleyin."
+    },
+    "status": {
+      "inactive": "Pasif",
+      "closedNow": "Şu Anda Kapalı",
+      "upcoming": "Yaklaşan",
+      "past": "Geçmiş"
+    },
+    "dialog": {
+      "editTitle": "İşletme Kapanışını Düzenle",
+      "addTitle": "İşletme Kapanışı Ekle",
+      "description": "Bu dönemde yeni randevu saatleri kullanılamaz."
+    },
+    "fields": {
+      "title": "Başlık *",
+      "titlePlaceholder": "Yılbaşı tatili",
+      "startDate": "Başlangıç Tarihi *",
+      "endDate": "Bitiş Tarihi *",
+      "description": "Açıklama",
+      "descriptionPlaceholder": "İşletmenin neden kapalı olacağını açıklayın.",
+      "audience": "Duyuru Hedefi",
+      "createAnnouncement": "Müşteri Duyurusu Oluştur",
+      "createAnnouncementHelp": "Tatil kapanışı gönderisini otomatik oluşturun veya güncelleyin.",
+      "active": "Aktif Kapanış",
+      "activeHelp": "Kaydı rezervasyonları engellemeden saklamak için kapatın."
+    },
+    "audience": {
+      "registered_customers": "Kayıtlı Müşteriler",
+      "public": "Herkese Açık Mağaza",
+      "both": "Her İkisi"
+    },
+    "announcement": {
+      "closedRange": "{{start}} ile {{end}} arasında kapalı.",
+      "bookingUnavailable": "Bu dönemde çevrimiçi randevular kullanılamaz."
+    },
+    "validation": {
+      "titleRequired": "Kapanış başlığı zorunludur",
+      "datesRequired": "Başlangıç ve bitiş tarihleri zorunludur",
+      "dateOrder": "Bitiş tarihi başlangıç tarihinden önce olamaz"
+    },
+    "delete": {
+      "confirm": "“{{title}}” silinsin mi? Bu tarihler için rezervasyonlar yeniden açılır."
+    },
+    "messages": {
+      "loadFailed": "Kapanışlar yüklenemedi",
+      "recordNotCreated": "Kapanış kaydı oluşturulamadı",
+      "updated": "Kapanış güncellendi",
+      "created": "Kapanış oluşturuldu",
+      "saveFailed": "Kapanış kaydedilemedi",
+      "deleted": "Kapanış silindi",
+      "deleteFailed": "Kapanış silinemedi"
+    }
+  },
+  "settings": {
+    "title": "Ayarlar",
+    "description": "İşletme profilinizi ve tercihlerinizi yönetin.",
+    "states": {
+      "loading": "Ayarlar yükleniyor..."
+    },
+    "actions": {
+      "saveChanges": "Değişiklikleri Kaydet",
+      "removePhoto": "Fotoğrafı kaldır"
+    },
+    "businessProfile": {
+      "title": "İşletme Profili",
+      "description": "Müşterilere gösterilen herkese açık bilgiler."
+    },
+    "fields": {
+      "businessName": "İşletme Adı",
+      "bookingSlug": "Rezervasyon Sayfası Slug",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "address": "Adres",
+      "description": "Açıklama",
+      "logo": "Logo",
+      "coverPhotos": "Kapak Fotoğrafları",
+      "coverPhotosHelp": "İşletme galerisi için birden fazla fotoğraf yükleyin.",
+      "photoAlt": "Fotoğraf {{index}}",
+      "mapUrl": "Google Maps Yerleştirme URL’si"
+    },
+    "bookingPreferences": {
+      "title": "Rezervasyon Tercihleri",
+      "description": "Çevrimiçi randevu kuralları.",
+      "interval": "Rezervasyon Aralığı (dk)",
+      "minNotice": "Minimum Bildirim (saat)",
+      "maxAdvance": "Maksimum İleri Tarih (gün)",
+      "emailReminders": "Otomatik e-posta hatırlatmalarını etkinleştir"
+    },
+    "qr": {
+      "title": "QR Kod ve Uygulama Bağlantısı",
+      "description": "Benzersiz uygulama bağlantınızı müşterilerle paylaşın.",
+      "appLink": "Uygulama Bağlantınız",
+      "help": "QR kod müşterileri fotoğraflar, yol tarifi ve rezervasyon için doğrudan işletme uygulamanıza yönlendirir."
+    },
+    "messages": {
+      "loadFailed": "Ayarlar yüklenemedi",
+      "saved": "Ayarlar başarıyla kaydedildi",
+      "saveFailed": "Ayarlar kaydedilemedi",
+      "linkCopied": "Bağlantı kopyalandı!"
+    }
+  },
+  "billing": {
+    "eyebrow": "Abonelik deneyimi",
+    "title": "Faturalandırma",
+    "description": "Tüm özellikleri {{days}} gün deneyin, ardından sınırsız Profesyonel Plan ile devam edin.",
+    "common": {
+      "yourBusiness": "işletmeniz"
+    },
+    "states": {
+      "loading": "Abonelik bilgileri yükleniyor..."
+    },
+    "actions": {
+      "opening": "Açılıyor...",
+      "manageBilling": "Faturalandırmayı Yönet",
+      "openingCheckout": "Güvenli ödeme açılıyor...",
+      "continueProfessional": "Profesyonel ile Devam Et",
+      "manageSubscription": "Aboneliği Yönet"
+    },
+    "plan": {
+      "freeTrialAllFeatures": "Ücretsiz Deneme — Tüm Özellikler",
+      "professional": "Profesyonel Plan",
+      "mostPopular": "En Popüler",
+      "description": "İşletmenizin ihtiyaç duyduğu her şey. Özellik sınırı yok.",
+      "perMonth": "aylık",
+      "cancelThroughStripe": "Stripe üzerinden istediğiniz zaman iptal",
+      "unlimitedTitle": "Sınırsız tasarım",
+      "active": "Profesyonel Planınız aktif",
+      "freeTrial": "{{days}} Gün Ücretsiz Deneme",
+      "trialDaysRemaining": "{{count}} deneme günü kaldı"
+    },
+    "features": {
+      "appointments": "Sınırsız randevu",
+      "staff": "Sınırsız personel profili",
+      "services": "Sınırsız hizmet",
+      "crm": "Eksiksiz müşteri CRM’i",
+      "customerRecords": "Müşteri formülleri, notları ve fotoğrafları",
+      "storefront": "Herkese açık rezervasyon sayfası",
+      "customerBooking": "Kayıtlı müşteri ve misafir rezervasyonu",
+      "reports": "Gelişmiş raporlar ve analizler",
+      "inventory": "Ürün ve stok yönetimi",
+      "content": "Gönderiler, galeri ve duyurular",
+      "closures": "İşletme kapanışları ve personel molaları",
+      "notifications": "İşletme sahibi bildirimleri",
+      "stripe": "Güvenli Stripe faturalandırma ve faturalar"
+    },
+    "currentAccess": {
+      "title": "Mevcut erişiminiz",
+      "plan": "Plan",
+      "status": "Durum",
+      "featureAccess": "Özellik erişimi",
+      "allFeatures": "Tüm özellikler",
+      "usageLimits": "Kullanım sınırları",
+      "unlimited": "Sınırsız",
+      "monthlyPrice": "Aylık fiyat"
+    },
+    "security": {
+      "title": "Güvenli ve şeffaf",
+      "cardDetails": "Kart bilgileri yalnızca Stripe tarafından işlenir.",
+      "paymentMethod": "Ödeme yönteminizi güvenli faturalandırma portalından güncelleyin.",
+      "cancelAnytime": "İstediğiniz zaman iptal edin. Erişim ücretli dönemin sonuna kadar sürer."
+    },
+    "statusCard": {
+      "title": "Faturalandırma durumu",
+      "billingCycle": "Faturalandırma dönemi",
+      "monthly": "Aylık",
+      "trialEnds": "Deneme bitişi",
+      "nextBillingDate": "Sonraki fatura tarihi",
+      "paymentProvider": "Ödeme sağlayıcısı",
+      "autoRenewal": "Otomatik yenileme",
+      "endsThisPeriod": "Bu dönem sonunda biter",
+      "enabled": "Etkin"
+    },
+    "history": {
+      "title": "Ödeme Geçmişi",
+      "description": "Ödenen faturalar ve makbuzlar Stripe senkronizasyonundan sonra otomatik görünür.",
+      "emptyTitle": "Henüz fatura yok",
+      "emptyDescription": "İlk faturanız Profesyonel Plan başladıktan sonra görünür.",
+      "invoice": "Fatura",
+      "date": "Tarih",
+      "amount": "Tutar",
+      "status": "Durum",
+      "documents": "Belgeler",
+      "view": "Görüntüle"
+    },
+    "trial": {
+      "fullPlatform": "Tüm platform özellikleri açık",
+      "welcome": "{{days}} günlük deneyiminize hoş geldiniz, {{business}}",
+      "description": "Tüm özellikleri sınırsız keşfedin. Verileriniz, personeliniz, müşterileriniz ve rezervasyonlarınız hazır kalır.",
+      "remaining": "Kalan deneme",
+      "days": "{{count}} gün",
+      "ends": "Deneme {{date}} tarihinde biter",
+      "started": "Deneme süreniz başladı"
+    },
+    "subscriptionStatus": {
+      "trialing": "Deneme",
+      "active": "Aktif",
+      "past_due": "Gecikmiş",
+      "canceled": "İptal edildi",
+      "cancelled": "İptal edildi",
+      "incomplete": "Eksik",
+      "paused": "Duraklatıldı"
+    },
+    "invoiceStatus": {
+      "paid": "Ödendi",
+      "open": "Açık",
+      "draft": "Taslak",
+      "void": "Geçersiz",
+      "uncollectible": "Tahsil edilemiyor"
+    },
+    "messages": {
+      "checkoutCompleted": "Profesyonel Plan ödemesi tamamlandı. Aboneliğiniz etkinleştiriliyor.",
+      "checkoutCancelled": "Ödeme iptal edildi. Mevcut erişiminiz değişmedi.",
+      "loadFailed": "Faturalandırma bilgileri yüklenemedi",
+      "checkoutUrlMissing": "Ödeme URL’si döndürülmedi",
+      "checkoutFailed": "Stripe Checkout başlatılamadı",
+      "portalUrlMissing": "Faturalandırma portalı URL’si döndürülmedi",
+      "portalUnavailable": "Stripe faturalandırma portalı henüz bağlı değil"
+    }
+  },
+  "posts": {
+    "eyebrow": "Müşteri iletişimi",
+    "title": "Gönderiler",
+    "description": "Güncellemeleri, kampanyaları, kapanışları ve işletme haberlerini tanıdık bir akışta yayınlayın.",
+    "common": {
+      "yourBusiness": "İşletmeniz"
+    },
+    "actions": {
+      "create": "Gönderi Oluştur",
+      "publish": "Yayınla",
+      "unpublish": "Yayından Kaldır",
+      "publishPost": "Gönderiyi Yayınla",
+      "saveDraft": "Taslak Olarak Kaydet"
+    },
+    "summary": {
+      "published": "Yayınlanan",
+      "drafts": "Taslaklar",
+      "scheduled": "Planlanan"
+    },
+    "composer": {
+      "placeholder": "Müşterilerinizle bir güncelleme paylaşın..."
+    },
+    "filters": {
+      "all": "Tümü",
+      "published": "Yayınlanan",
+      "drafts": "Taslaklar",
+      "scheduled": "Planlanan"
+    },
+    "states": {
+      "loading": "Gönderiler yükleniyor...",
+      "emptyTitle": "Bu kategoride gönderi yok",
+      "emptyDescription": "Bir gönderi oluşturun veya başka filtre seçin."
+    },
+    "status": {
+      "published": "Yayınlandı",
+      "draft": "Taslak"
+    },
+    "audience": {
+      "public": "Herkese Açık",
+      "registered_customers": "Kayıtlı Müşteriler"
+    },
+    "types": {
+      "announcement": "Duyuru",
+      "holiday_closure": "Tatil Kapanışı",
+      "promotion": "Kampanya",
+      "price_update": "Fiyat Güncellemesi",
+      "new_product": "Yeni Ürün",
+      "new_team_member": "Yeni Ekip Üyesi",
+      "general": "Genel"
+    },
+    "card": {
+      "expires": "Bitiş {{date}}"
+    },
+    "guide": {
+      "title": "Yayınlama Rehberi",
+      "public": {
+        "title": "Herkese Açık",
+        "description": "Tüm mağaza ziyaretçileri görebilir."
+      },
+      "registered": {
+        "title": "Kayıtlı müşteriler",
+        "description": "Yalnızca müşteri hesaplarında görünür."
+      },
+      "schedule": {
+        "title": "Planlama ve bitiş",
+        "description": "Gönderinin ne zaman görünüp sona ereceğini kontrol edin."
+      }
+    },
+    "dialog": {
+      "editTitle": "Gönderiyi Düzenle",
+      "createTitle": "Gönderi Oluştur",
+      "description": "Gönderiyi müşterilerin göreceği şekilde hazırlayın.",
+      "author": "Gönderi yazarı"
+    },
+    "fields": {
+      "title": "Başlık *",
+      "titlePlaceholder": "Açık bir başlık ekleyin",
+      "content": "Gönderi içeriği *",
+      "contentPlaceholder": "Ne paylaşmak istersiniz?",
+      "photo": "Fotoğraf",
+      "type": "Gönderi türü",
+      "audience": "Hedef kitle",
+      "publishDate": "Yayın tarihi",
+      "expiryDate": "Bitiş tarihi",
+      "publish": "Yayınla",
+      "publishHelp": "Gönderiyi taslak olarak tutmak için kapatın."
+    },
+    "validation": {
+      "required": "Başlık ve içerik zorunludur"
+    },
+    "delete": {
+      "confirm": "Bu gönderi kalıcı olarak silinsin mi?"
+    },
+    "messages": {
+      "loadFailed": "Gönderiler yüklenemedi",
+      "updated": "Gönderi güncellendi",
+      "created": "Gönderi oluşturuldu",
+      "saveFailed": "Gönderi kaydedilemedi",
+      "published": "Gönderi yayınlandı",
+      "movedToDrafts": "Gönderi taslaklara taşındı",
+      "updateFailed": "Gönderi güncellenemedi",
+      "deleted": "Gönderi silindi",
+      "deleteFailed": "Gönderi silinemedi"
+    }
   }
 }
