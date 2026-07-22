@@ -128,19 +128,19 @@ export default function Settings() {
   if (loading) return <div>{t('settings.states.loading')}</div>;
 
   return (
-    <div className="space-y-6 max-w-3xl mx-auto pb-12">
+    <div className="app-page max-w-4xl pb-12">
       <div>
         <h2 className="text-2xl font-bold tracking-tight">{t('settings.title')}</h2>
         <p className="text-muted-foreground text-sm">{t('settings.description')}</p>
       </div>
 
-      <Card>
+      <Card className="rounded-2xl shadow-card">
         <CardHeader>
           <CardTitle>{t('settings.businessProfile.title')}</CardTitle>
           <CardDescription>{t('settings.businessProfile.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="biz_name">{t('settings.fields.businessName')}</Label>
               <Input id="biz_name" value={businessData.name} onChange={(e) => setBusinessData({...businessData, name: e.target.value})} className="px-3" />
@@ -152,7 +152,7 @@ export default function Settings() {
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
               <Label htmlFor="biz_phone">{t('settings.fields.phone')}</Label>
               <Input id="biz_phone" value={businessData.phone} onChange={(e) => setBusinessData({...businessData, phone: e.target.value})} className="px-3" />
@@ -225,13 +225,13 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="rounded-2xl shadow-card">
         <CardHeader>
           <CardTitle>{t('settings.bookingPreferences.title')}</CardTitle>
           <CardDescription>{t('settings.bookingPreferences.description')}</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid gap-4 sm:grid-cols-3">
             <div className="grid gap-2">
               <Label htmlFor="b_interval">{t('settings.bookingPreferences.interval')}</Label>
               <Input id="b_interval" type="number" value={settingsData.booking_interval} onChange={(e) => setSettingsData({...settingsData, booking_interval: parseInt(e.target.value)})} className="px-3" />
@@ -259,7 +259,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="rounded-2xl shadow-card">
         <CardHeader>
           <CardTitle>{t('settings.qr.title')}</CardTitle>
           <CardDescription>{t('settings.qr.description')}</CardDescription>

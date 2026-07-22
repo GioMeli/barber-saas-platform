@@ -8,7 +8,8 @@
     "preview": "vite preview",
     "lint": "biome lint ./src",
     "typecheck": "tsc --noEmit",
-    "translations:check": "node scripts/check-translations.mjs"
+    "translations:check": "node scripts/check-translations.mjs",
+    "ui:check": "node scripts/check-owner-shell.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

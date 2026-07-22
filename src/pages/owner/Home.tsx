@@ -30,7 +30,6 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import DailyStaffSchedule from '@/components/dashboard/DailyStaffSchedule';
-import OwnerNotificationCenter from '@/components/dashboard/OwnerNotificationCenter';
 import { BusinessHealth, TodaysAlerts } from '@/components/dashboard/OwnerDashboardInsights';
 
 export default function OwnerHome() {
@@ -83,6 +82,7 @@ export default function OwnerHome() {
         cancelledResult,
         closuresResult,
         breaksResult,
+        notificationsResult,
       ] = await Promise.all([
         supabase
           .from('appointments')
@@ -154,6 +154,13 @@ export default function OwnerHome() {
           .eq('business_id', business.id)
           .eq('day_of_week', now.getDay())
           .order('start_time'),
+
+        supabase
+          .from('notifications')
+          .select('id', { count: 'exact', head: true })
+          .eq('business_id', business.id)
+          .eq('is_read', false)
+          .in('type', ['new_appointment', 'new_customer']),
       ]);
 
       if (todayResult.error) throw todayResult.error;
@@ -164,6 +171,7 @@ export default function OwnerHome() {
       if (cancelledResult.error) throw cancelledResult.error;
       if (closuresResult.error) throw closuresResult.error;
       if (breaksResult.error) throw breaksResult.error;
+      if (notificationsResult.error) throw notificationsResult.error;
 
       const appointments = todayResult.data ?? [];
       const activeAppointments = appointments.filter(
@@ -178,6 +186,7 @@ export default function OwnerHome() {
       setStaff(staffResult.data ?? []);
       setClosures(closuresResult.data ?? []);
       setStaffBreaks(breaksResult.data ?? []);
+      setUnreadNotifications(notificationsResult.count ?? 0);
 
       setStats({
         todayAppointments: activeAppointments.length,
@@ -226,7 +235,7 @@ export default function OwnerHome() {
   if (!business) return null;
 
   return (
-    <div className="app-page">
+    <div className="app-page lg:-mt-4 lg:!space-y-4">
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
@@ -243,11 +252,6 @@ export default function OwnerHome() {
         </div>
 
         <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
-          <OwnerNotificationCenter
-            businessId={business.id}
-            onUnreadCountChange={setUnreadNotifications}
-          />
-
           <Button
             variant="outline"
             onClick={() => void copyStoreLink()}
@@ -265,8 +269,8 @@ export default function OwnerHome() {
         </div>
       </header>
 
-      {/* Calendar on the left, KPI cards stacked vertically on the right. */}
-      <section className="grid min-w-0 items-start gap-6 xl:grid-cols-[minmax(0,1fr)_320px] 2xl:grid-cols-[minmax(0,1fr)_350px]">
+      {/* Keep the schedule full-width so businesses with larger teams can see more staff columns. */}
+      <section className="grid min-w-0 gap-4">
         <Card className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl shadow-card xl:h-[625px]">
           <CardHeader className="border-b px-5 py-4 sm:px-6">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
@@ -304,7 +308,7 @@ export default function OwnerHome() {
           </CardContent>
         </Card>
 
-        <aside className="grid content-start gap-4 sm:grid-cols-2 xl:grid-cols-1">
+        <aside className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <MetricCard
             title={t('dashboard_home.metrics.today_appointments')}
             value={

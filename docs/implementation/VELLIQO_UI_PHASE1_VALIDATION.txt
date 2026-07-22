@@ -1,0 +1,70 @@
+VELLIQO UI PHASE 1 — VALIDATION REPORT
+Date: 2026-07-22
+Baseline: user-provided last verified working project archive
+
+IMPLEMENTED
+- Responsive owner application shell using existing Velliqo industry/theme tokens.
+- Desktop two-column navigation grid.
+- Mobile menu button with left-side drawer navigation.
+- Responsive top bar with current page title and business context.
+- Global command palette with Ctrl/Cmd+K.
+- Quick Add flow; appointment action opens the existing Calendar appointment dialog.
+- Notifications moved to a right-side sheet drawer.
+- Velliqo AI and Settings routes exposed through the owner shell.
+- Calendar viewport offsets adapted to the new top bar.
+- Translation coverage extended for EN, EL, DE, ES and TR.
+- Existing missing static translation references corrected across the five supported locale files.
+
+AUTOMATED CHECKS PASSED
+1. npm run ui:check
+   - Two-column desktop/mobile navigation
+   - Mobile drawer
+   - Top bar wiring
+   - AI and Settings routes
+   - Calendar quick-create action
+   - Velliqo branding
+   - Required 5-locale key coverage
+
+2. npm run typecheck
+   - TypeScript completed with no errors.
+
+3. npm run translations:check
+   - 1509 translation keys across 5 supported languages.
+   - 1343 static source references checked.
+   - 20 files contain dynamic t(...) calls requiring normal runtime review; these are not parity errors.
+
+NOT EXECUTED SUCCESSFULLY IN THIS ENVIRONMENT
+- npm run build: local Vite executable was unavailable because dependencies could not be installed; outbound npm registry access was unavailable.
+- npm run lint: local Biome executable was unavailable for the same dependency/environment reason.
+
+These two commands must be executed after npm install in the user's normal repository environment before merge/deployment.
+
+PROTECTED SCOPE
+- No Supabase migrations added or changed.
+- No database schema or RLS changes.
+- No authentication page replacement.
+- No useAuth implementation replacement.
+- No booking conflict, availability or persistence logic replacement.
+- No destructive route removal.
+
+FILES IN PATCH: 20
+- package.json
+- public/brand/velliqo-mark.png
+- scripts/check-owner-shell.mjs
+- src/App.tsx
+- src/components/calendar/calendar-outlook.css
+- src/components/dashboard/OwnerNotificationCenter.tsx
+- src/components/layouts/OwnerDashboardLayout.tsx
+- src/components/layouts/owner-shell/OwnerCommandPalette.tsx
+- src/components/layouts/owner-shell/OwnerQuickAdd.tsx
+- src/components/layouts/owner-shell/OwnerSidebar.tsx
+- src/components/layouts/owner-shell/OwnerTopBar.tsx
+- src/components/layouts/owner-shell/navigation.ts
+- src/i18n/locales/de.json
+- src/i18n/locales/el.json
+- src/i18n/locales/en.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- src/pages/owner/Calendar.tsx
+- src/pages/owner/Home.tsx
+- src/pages/owner/Settings.tsx

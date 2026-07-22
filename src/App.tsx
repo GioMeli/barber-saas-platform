@@ -33,6 +33,9 @@ import Posts from './pages/owner/Posts';
 import Gallery from './pages/owner/Gallery';
 import Storefront from './pages/owner/Storefront';
 import Business from './pages/owner/Business';
+import Settings from './pages/owner/Settings';
+import AIHub from './pages/owner/ai/AIHub';
+import AISettings from './pages/owner/ai/AISettings';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
   const { user, profile, loading } = useAuth();
@@ -90,6 +93,9 @@ function App() {
           <Route path="business" element={<Business />} />
           <Route path="billing" element={<Billing />} />
           <Route path="reports" element={<Reports />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="ai" element={<AIHub />} />
+          <Route path="ai/settings" element={<AISettings />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

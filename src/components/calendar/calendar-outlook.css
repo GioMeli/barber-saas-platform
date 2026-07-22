@@ -10,7 +10,7 @@
 .outlook-calendar-page {
   display: flex;
   min-height: 620px;
-  height: calc(100dvh - 88px);
+  height: calc(100dvh - 120px);
   flex-direction: column;
   gap: 12px;
   overflow: hidden;
@@ -663,7 +663,7 @@
 
 @media (max-width: 1180px) {
   .outlook-calendar-page {
-    height: calc(100dvh - 76px);
+    height: calc(100dvh - 120px);
     padding: 10px;
   }
 
@@ -717,7 +717,7 @@
 @media (max-width: 760px) {
   .outlook-calendar-page {
     min-height: 560px;
-    height: calc(100dvh - 66px);
+    height: calc(100dvh - 104px);
     gap: 8px;
     overflow: hidden;
     padding: 8px;

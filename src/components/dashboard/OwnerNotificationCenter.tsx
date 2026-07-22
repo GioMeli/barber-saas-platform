@@ -1,10 +1,12 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Bell, CalendarDays, CheckCheck, UserPlus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/db/supabase';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import { cn } from '@/lib/utils';
 
 type OwnerNotification = {
   id: string;
@@ -21,11 +23,13 @@ type OwnerNotification = {
 type Props = {
   businessId: string;
   onUnreadCountChange?: (count: number) => void;
+  variant?: 'default' | 'icon';
 };
 
 export default function OwnerNotificationCenter({
   businessId,
   onUnreadCountChange,
+  variant = 'default',
 }: Props) {
   const { t, i18n } = useTranslation();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
@@ -137,118 +141,125 @@ export default function OwnerNotificationCenter({
   };
 
   return (
-    <div className="relative">
-      <Button
-        variant="outline"
-        className="relative w-full sm:w-auto"
-        onClick={() => setOpen((value) => !value)}
-      >
-        <Bell className="mr-2 h-4 w-4" />
-        {t('notifications.title')}
-        {unread.length > 0 && (
-          <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
-            {unread.length > 99 ? '99+' : unread.length}
-          </span>
-        )}
-      </Button>
-
-      {open && (
-        <>
-          <button
-            type="button"
-            aria-label={t('notifications.close')}
-            className="fixed inset-0 z-40 cursor-default"
-            onClick={() => setOpen(false)}
-          />
-
-          <div className="absolute right-0 top-12 z-50 w-[min(92vw,390px)] overflow-hidden rounded-2xl border bg-card shadow-2xl">
-            <div className="flex items-center justify-between border-b px-4 py-3">
-              <div>
-                <div className="font-bold">{t('notifications.title')}</div>
-                <div className="text-xs text-muted-foreground">
-                  {t('notifications.unread_count', { count: unread.length })}
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1">
-                {unread.length > 0 && (
-                  <Button variant="ghost" size="sm" onClick={() => void markAllRead()}>
-                    <CheckCheck className="mr-1.5 h-4 w-4" />
-                    {t('notifications.read_all')}
-                  </Button>
-                )}
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8"
-                  onClick={() => setOpen(false)}
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-
-            <div className="max-h-[420px] overflow-y-auto">
-              {loading ? (
-                <div className="px-6 py-10 text-center text-sm text-muted-foreground">
-                  {t('notifications.loading')}
-                </div>
-              ) : notifications.length === 0 ? (
-                <div className="px-6 py-10 text-center">
-                  <Bell className="mx-auto h-8 w-8 text-muted-foreground/50" />
-                  <div className="mt-3 font-semibold">{t('notifications.empty_title')}</div>
-                  <p className="mt-1 text-sm text-muted-foreground">
-                    {t('notifications.empty_description')}
-                  </p>
-                </div>
-              ) : (
-                notifications.map((notification) => (
-                  <button
-                    key={notification.id}
-                    type="button"
-                    onClick={() => void markRead(notification.id)}
-                    className={`flex w-full gap-3 border-b px-4 py-4 text-left transition last:border-b-0 hover:bg-muted/50 ${
-                      notification.is_read ? 'bg-card' : 'bg-primary/[0.06]'
-                    }`}
-                  >
-                    <div
-                      className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-                        notification.type === 'new_appointment'
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'bg-emerald-100 text-emerald-700'
-                      }`}
-                    >
-                      {notification.type === 'new_appointment' ? (
-                        <CalendarDays className="h-4 w-4" />
-                      ) : (
-                        <UserPlus className="h-4 w-4" />
-                      )}
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-2">
-                        <div className="truncate text-sm font-bold">
-                          {t(`notifications.types.${notification.type}.title`)}
-                        </div>
-                        {!notification.is_read && (
-                          <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
-                        )}
-                      </div>
-                      <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                        {t(`notifications.types.${notification.type}.message`)}
-                      </p>
-                      <div className="mt-2 text-[11px] font-medium text-muted-foreground">
-                        {formatNotificationTime(notification.created_at, locale, t)}
-                      </div>
-                    </div>
-                  </button>
-                ))
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button
+          variant="outline"
+          size={variant === 'icon' ? 'icon' : 'default'}
+          aria-label={t('notifications.title')}
+          className={cn(
+            'relative rounded-xl',
+            variant === 'default' && 'w-full sm:w-auto',
+            variant === 'icon' && 'h-10 w-10 bg-card/80 shadow-sm',
+          )}
+        >
+          <Bell className={cn('h-4 w-4', variant === 'default' && 'mr-2')} />
+          {variant === 'default' && t('notifications.title')}
+          {unread.length > 0 && (
+            <span
+              className={cn(
+                'inline-flex min-w-5 items-center justify-center rounded-full bg-red-600 px-1.5 py-0.5 text-[10px] font-bold text-white',
+                variant === 'default' ? 'ml-2' : 'absolute -right-1.5 -top-1.5 border-2 border-background',
               )}
+            >
+              {unread.length > 99 ? '99+' : unread.length}
+            </span>
+          )}
+        </Button>
+      </SheetTrigger>
+
+      <SheetContent
+        side="right"
+        className="flex w-[94vw] max-w-[420px] flex-col gap-0 p-0 sm:max-w-[420px] [&>button]:hidden"
+      >
+        <div className="flex items-center justify-between border-b px-5 py-4">
+          <div>
+            <div className="font-extrabold">{t('notifications.title')}</div>
+            <div className="mt-0.5 text-xs text-muted-foreground">
+              {t('notifications.unread_count', { count: unread.length })}
             </div>
           </div>
-        </>
-      )}
-    </div>
+
+          <div className="flex items-center gap-1">
+            {unread.length > 0 && (
+              <Button variant="ghost" size="sm" onClick={() => void markAllRead()}>
+                <CheckCheck className="mr-1.5 h-4 w-4" />
+                {t('notifications.read_all')}
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-9 w-9 rounded-xl"
+              aria-label={t('notifications.close')}
+              onClick={() => setOpen(false)}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+
+        <div className="scrollbar-subtle min-h-0 flex-1 overflow-y-auto">
+          {loading ? (
+            <div className="px-6 py-12 text-center text-sm text-muted-foreground">
+              {t('notifications.loading')}
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="px-6 py-12 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-muted text-muted-foreground">
+                <Bell className="h-6 w-6" />
+              </div>
+              <div className="mt-4 font-semibold">{t('notifications.empty_title')}</div>
+              <p className="mt-1 text-sm leading-6 text-muted-foreground">
+                {t('notifications.empty_description')}
+              </p>
+            </div>
+          ) : (
+            notifications.map((notification) => (
+              <button
+                key={notification.id}
+                type="button"
+                onClick={() => void markRead(notification.id)}
+                className={`flex w-full gap-3 border-b px-5 py-4 text-left transition last:border-b-0 hover:bg-muted/50 ${
+                  notification.is_read ? 'bg-card' : 'bg-primary/[0.06]'
+                }`}
+              >
+                <div
+                  className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+                    notification.type === 'new_appointment'
+                      ? 'bg-blue-100 text-blue-700'
+                      : 'bg-emerald-100 text-emerald-700'
+                  }`}
+                >
+                  {notification.type === 'new_appointment' ? (
+                    <CalendarDays className="h-4 w-4" />
+                  ) : (
+                    <UserPlus className="h-4 w-4" />
+                  )}
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="truncate text-sm font-bold">
+                      {t(`notifications.types.${notification.type}.title`)}
+                    </div>
+                    {!notification.is_read && (
+                      <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
+                    )}
+                  </div>
+                  <p className="mt-1 text-sm leading-5 text-muted-foreground">
+                    {t(`notifications.types.${notification.type}.message`)}
+                  </p>
+                  <div className="mt-2 text-[11px] font-medium text-muted-foreground">
+                    {formatNotificationTime(notification.created_at, locale, t)}
+                  </div>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
+      </SheetContent>
+    </Sheet>
   );
 }
 

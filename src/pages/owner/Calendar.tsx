@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
@@ -65,6 +66,7 @@ const EMPTY_CUSTOMER = {
 
 export default function Calendar() {
   const { t, i18n } = useTranslation();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
 
@@ -295,6 +297,14 @@ export default function Calendar() {
     }));
     setIsNewDialogOpen(true);
   };
+
+  const requestedAction = searchParams.get('action');
+
+  useEffect(() => {
+    if (requestedAction !== 'new') return;
+    openNewAppointment();
+    setSearchParams({}, { replace: true });
+  }, [requestedAction, setSearchParams]);
 
   const filteredCustomers = useMemo(() => {
     const query = customerSearch.trim().toLowerCase();
@@ -686,7 +696,7 @@ export default function Calendar() {
 
 
   return (
-    <div className="calendar-page-outlook-host">
+    <div className="calendar-page-outlook-host lg:-mb-6 lg:-mt-6">
       <OutlookCalendarView
         appointments={appointments}
         closures={closures}
