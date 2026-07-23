@@ -34,7 +34,8 @@
     "settings": "Configuración",
     "billing": "Facturación",
     "sign_out": "Cerrar sesión",
-    "sales": "Ventas"
+    "sales": "Ventas",
+    "finance": "Finanzas"
   },
   "booking": {
     "select_service": "Seleccionar servicio",
@@ -123,7 +124,8 @@
       "staff": "Abrir equipo",
       "service": "Abrir servicios",
       "post": "Crear actualización",
-      "sale": "Nueva venta"
+      "sale": "Nueva venta",
+      "expense": "Nuevo gasto"
     }
   },
   "system": {
@@ -1122,7 +1124,8 @@
       "staff": "Personal",
       "services": "Servicios",
       "customers": "Clientes",
-      "products": "Productos"
+      "products": "Productos",
+      "finance": "Inteligencia financiera"
     },
     "metrics": {
       "revenue": "Ingresos",
@@ -2416,6 +2419,179 @@
       "voided": "Venta anulada y stock restaurado",
       "voidError": "No se pudo anular la venta",
       "popupBlocked": "Permite ventanas emergentes para imprimir el recibo"
+    }
+  },
+  "finance": {
+    "eyebrow": "Operación financiera",
+    "title": "Finanzas e Inteligencia de Rentabilidad",
+    "description": "Comprende ingresos reales, márgenes, costes y gastos a partir de transacciones completadas.",
+    "actions": {
+      "refresh": "Actualizar",
+      "export": "Exportar CSV",
+      "addExpense": "Añadir gasto",
+      "cancel": "Cancelar",
+      "saving": "Guardando…",
+      "saveExpense": "Guardar gasto",
+      "edit": "Editar",
+      "delete": "Eliminar"
+    },
+    "filters": {
+      "startDate": "Fecha de inicio",
+      "endDate": "Fecha de fin",
+      "thisWeek": "Esta semana",
+      "thisMonth": "Este mes",
+      "previousMonth": "Mes anterior",
+      "last90Days": "Últimos 90 días"
+    },
+    "views": {
+      "overview": "Resumen",
+      "expenses": "Gastos"
+    },
+    "metrics": {
+      "collectedRevenue": "Ingresos cobrados",
+      "netSales": "Ventas netas",
+      "grossProfit": "Beneficio bruto",
+      "operatingProfit": "Beneficio operativo",
+      "averageTicket": "Ticket medio",
+      "costOfGoods": "Coste de ventas",
+      "taxCollected": "Impuestos cobrados",
+      "pendingExpenses": "Gastos pendientes",
+      "paidExpenses": "Gastos pagados",
+      "tipsCollected": "Propinas cobradas",
+      "grossMargin": "Margen bruto",
+      "transactionsDetail": "{{count}} transacciones completadas",
+      "discountsDetail": "{{value}} en descuentos",
+      "marginDetail": "{{value}}% de margen bruto",
+      "expensesDetail": "{{value}} en gastos pagados"
+    },
+    "insights": {
+      "label": "Indicador financiero Velliqo",
+      "transactionBased": "Basado en transacciones de caja completadas",
+      "positiveTitle": "El negocio opera con beneficio en este periodo.",
+      "negativeTitle": "Los costes operativos superan el beneficio bruto en este periodo.",
+      "positiveDescription": "El beneficio operativo estimado es {{profit}}, con un margen bruto del {{margin}}%.",
+      "negativeDescription": "La pérdida operativa actual es {{profit}}. Revisa gastos, precios y costes de productos.",
+      "largestExpense": "Mayor categoría de gasto",
+      "leadingPayment": "Método de pago principal"
+    },
+    "charts": {
+      "performanceTitle": "Tendencia de ingresos, gastos y beneficio",
+      "performanceDescription": "Rendimiento diario de ventas completadas y gastos pagados.",
+      "revenue": "Ingresos",
+      "expenses": "Gastos",
+      "profit": "Beneficio",
+      "paymentTitle": "Distribución de pagos",
+      "paymentDescription": "Cómo pagaron los clientes en el periodo seleccionado.",
+      "itemMixTitle": "Mezcla de ventas",
+      "itemMixDescription": "Distribución de ingresos entre servicios, productos y artículos personalizados.",
+      "expenseCategoryTitle": "Categorías de gastos",
+      "expenseCategoryDescription": "Dónde se gastó el dinero operativo."
+    },
+    "rankings": {
+      "services": "Servicios principales",
+      "products": "Productos principales",
+      "staff": "Rendimiento de ventas del equipo"
+    },
+    "common": {
+      "noData": "Sin datos",
+      "transactionsShort": "{{count}} transacciones",
+      "entriesShort": "{{count}} registros",
+      "quantityShort": "Cant. {{value}}",
+      "profitShort": "{{value}} de beneficio",
+      "noDescription": "Sin descripción"
+    },
+    "paymentMethods": {
+      "cash": "Efectivo",
+      "card": "Tarjeta",
+      "bank_transfer": "Transferencia bancaria",
+      "online": "En línea",
+      "gift_card": "Tarjeta regalo",
+      "other": "Otro"
+    },
+    "itemTypes": {
+      "service": "Servicios",
+      "product": "Productos",
+      "custom": "Artículos personalizados"
+    },
+    "states": {
+      "loading": "Cargando inteligencia financiera…",
+      "unavailableTitle": "La inteligencia financiera aún no está disponible",
+      "migrationRequired": "Aplica la migración 00032_finance_intelligence.sql y actualiza la página.",
+      "noTransactionData": "No hay transacciones completadas en este periodo.",
+      "noPaymentData": "No hay pagos completados en este periodo.",
+      "noItemData": "No hay artículos vendidos en este periodo.",
+      "noExpenseData": "No hay gastos pagados en este periodo.",
+      "noServiceSales": "Aún no hay ventas de servicios.",
+      "noProductSales": "Aún no hay ventas de productos.",
+      "noStaffSales": "Aún no hay datos de ventas del equipo.",
+      "noExpensesTitle": "No se encontraron gastos",
+      "noExpensesDescription": "Añade el primer gasto o ajusta los filtros."
+    },
+    "expenses": {
+      "title": "Registro de gastos",
+      "description": "Descripción",
+      "searchPlaceholder": "Buscar categoría, proveedor o descripción…",
+      "statusFilter": "Filtro de estado de gastos",
+      "allStatuses": "Todos los estados",
+      "date": "Fecha",
+      "category": "Categoría",
+      "expense": "Gasto",
+      "supplier": "Proveedor",
+      "supplierPlaceholder": "Proveedor o beneficiario",
+      "descriptionPlaceholder": "¿Para qué fue este gasto?",
+      "amount": "Importe total",
+      "tax": "Importe de impuestos",
+      "status": "Estado",
+      "paymentMethod": "Método de pago",
+      "receiptUrl": "URL del recibo",
+      "actions": "Acciones",
+      "receipt": "Recibo",
+      "openReceipt": "Abrir recibo"
+    },
+    "statuses": {
+      "paid": "Pagado",
+      "pending": "Pendiente",
+      "cancelled": "Cancelado"
+    },
+    "dialog": {
+      "createTitle": "Añadir gasto empresarial",
+      "editTitle": "Editar gasto empresarial",
+      "description": "Registra costes operativos para mantener precisos los análisis de rentabilidad y caja."
+    },
+    "errors": {
+      "requiredExpenseFields": "Se requieren categoría, fecha e importe válido.",
+      "invalidTax": "El impuesto debe ser cero o mayor.",
+      "saveFailed": "No se pudo guardar el gasto.",
+      "deleteFailed": "No se pudo eliminar el gasto."
+    },
+    "messages": {
+      "expenseCreated": "Gasto creado.",
+      "expenseUpdated": "Gasto actualizado.",
+      "expenseDeleted": "Gasto eliminado."
+    },
+    "confirmations": {
+      "deleteExpense": "¿Eliminar este gasto permanentemente?"
+    },
+    "export": {
+      "title": "Informe financiero Velliqo",
+      "business": "Negocio",
+      "period": "Periodo",
+      "metric": "Métrica",
+      "value": "Valor"
+    },
+    "categories": {
+      "rent": "Alquiler",
+      "payroll": "Nómina",
+      "utilities": "Servicios públicos",
+      "inventory": "Inventario",
+      "marketing": "Marketing",
+      "software": "Software",
+      "insurance": "Seguro",
+      "maintenance": "Mantenimiento",
+      "professional_services": "Servicios profesionales",
+      "training": "Formación",
+      "travel": "Viajes",
+      "other": "Otro"
     }
   }
 }

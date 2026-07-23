@@ -34,7 +34,8 @@
     "settings": "Ayarlar",
     "billing": "Faturalandırma",
     "sign_out": "Çıkış yap",
-    "sales": "Satışlar"
+    "sales": "Satışlar",
+    "finance": "Finans"
   },
   "booking": {
     "select_service": "Hizmet seçin",
@@ -123,7 +124,8 @@
       "staff": "Ekibi aç",
       "service": "Hizmetleri aç",
       "post": "Güncelleme oluştur",
-      "sale": "Yeni satış"
+      "sale": "Yeni satış",
+      "expense": "Yeni gider"
     }
   },
   "system": {
@@ -1122,7 +1124,8 @@
       "staff": "Personel",
       "services": "Hizmetler",
       "customers": "Müşteriler",
-      "products": "Ürünler"
+      "products": "Ürünler",
+      "finance": "Finansal analiz"
     },
     "metrics": {
       "revenue": "Gelir",
@@ -2416,6 +2419,179 @@
       "voided": "Satış iptal edildi ve ürün stoğu geri yüklendi",
       "voidError": "Satış iptal edilemedi",
       "popupBlocked": "Fişi yazdırmak için açılır pencerelere izin verin"
+    }
+  },
+  "finance": {
+    "eyebrow": "Finansal operasyon",
+    "title": "Finans ve Kârlılık Analizi",
+    "description": "Tamamlanan işlemlerden gerçek tahsilatı, marjları, maliyetleri ve giderleri anlayın.",
+    "actions": {
+      "refresh": "Yenile",
+      "export": "CSV dışa aktar",
+      "addExpense": "Gider ekle",
+      "cancel": "İptal",
+      "saving": "Kaydediliyor…",
+      "saveExpense": "Gideri kaydet",
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "filters": {
+      "startDate": "Başlangıç tarihi",
+      "endDate": "Bitiş tarihi",
+      "thisWeek": "Bu hafta",
+      "thisMonth": "Bu ay",
+      "previousMonth": "Önceki ay",
+      "last90Days": "Son 90 gün"
+    },
+    "views": {
+      "overview": "Genel bakış",
+      "expenses": "Giderler"
+    },
+    "metrics": {
+      "collectedRevenue": "Tahsil edilen gelir",
+      "netSales": "Net satışlar",
+      "grossProfit": "Brüt kâr",
+      "operatingProfit": "Faaliyet kârı",
+      "averageTicket": "Ortalama işlem",
+      "costOfGoods": "Satılan mal maliyeti",
+      "taxCollected": "Tahsil edilen vergi",
+      "pendingExpenses": "Bekleyen giderler",
+      "paidExpenses": "Ödenen giderler",
+      "tipsCollected": "Bahşişler",
+      "grossMargin": "Brüt marj",
+      "transactionsDetail": "{{count}} tamamlanan işlem",
+      "discountsDetail": "{{value}} indirim",
+      "marginDetail": "%{{value}} brüt marj",
+      "expensesDetail": "{{value}} ödenen gider"
+    },
+    "insights": {
+      "label": "Velliqo finansal içgörüsü",
+      "transactionBased": "Tamamlanan ödeme işlemlerine dayanır",
+      "positiveTitle": "İşletme bu dönemde kârlı çalışıyor.",
+      "negativeTitle": "Bu dönemde faaliyet maliyetleri brüt kârın üzerinde.",
+      "positiveDescription": "Tahmini faaliyet kârı {{profit}}, brüt marj %{{margin}}.",
+      "negativeDescription": "Mevcut faaliyet zararı {{profit}}. Giderleri, fiyatları ve ürün maliyetlerini inceleyin.",
+      "largestExpense": "En büyük gider kategorisi",
+      "leadingPayment": "Önde gelen ödeme yöntemi"
+    },
+    "charts": {
+      "performanceTitle": "Gelir, gider ve kâr eğilimi",
+      "performanceDescription": "Tamamlanan satışlar ve ödenen giderlerden günlük performans.",
+      "revenue": "Gelir",
+      "expenses": "Giderler",
+      "profit": "Kâr",
+      "paymentTitle": "Ödeme dağılımı",
+      "paymentDescription": "Seçilen dönemde müşterilerin ödeme yöntemleri.",
+      "itemMixTitle": "Satış karması",
+      "itemMixDescription": "Hizmet, ürün ve özel kalem gelir dağılımı.",
+      "expenseCategoryTitle": "Gider kategorileri",
+      "expenseCategoryDescription": "İşletme parasının nereye harcandığı."
+    },
+    "rankings": {
+      "services": "En iyi hizmetler",
+      "products": "En iyi ürünler",
+      "staff": "Ekip satış performansı"
+    },
+    "common": {
+      "noData": "Veri yok",
+      "transactionsShort": "{{count}} işlem",
+      "entriesShort": "{{count}} kayıt",
+      "quantityShort": "Adet {{value}}",
+      "profitShort": "{{value}} kâr",
+      "noDescription": "Açıklama yok"
+    },
+    "paymentMethods": {
+      "cash": "Nakit",
+      "card": "Kart",
+      "bank_transfer": "Banka havalesi",
+      "online": "Çevrim içi",
+      "gift_card": "Hediye kartı",
+      "other": "Diğer"
+    },
+    "itemTypes": {
+      "service": "Hizmetler",
+      "product": "Ürünler",
+      "custom": "Özel kalemler"
+    },
+    "states": {
+      "loading": "Finansal analiz yükleniyor…",
+      "unavailableTitle": "Finansal analiz henüz kullanılamıyor",
+      "migrationRequired": "00032_finance_intelligence.sql migration dosyasını uygulayın ve sayfayı yenileyin.",
+      "noTransactionData": "Bu dönemde tamamlanan işlem yok.",
+      "noPaymentData": "Bu dönemde tamamlanan ödeme yok.",
+      "noItemData": "Bu dönemde satılan kalem yok.",
+      "noExpenseData": "Bu dönemde ödenmiş gider yok.",
+      "noServiceSales": "Henüz hizmet satışı yok.",
+      "noProductSales": "Henüz ürün satışı yok.",
+      "noStaffSales": "Henüz ekip satış verisi yok.",
+      "noExpensesTitle": "Gider bulunamadı",
+      "noExpensesDescription": "İlk gideri ekleyin veya filtreleri değiştirin."
+    },
+    "expenses": {
+      "title": "Gider kaydı",
+      "description": "Açıklama",
+      "searchPlaceholder": "Kategori, tedarikçi veya açıklama ara…",
+      "statusFilter": "Gider durumu filtresi",
+      "allStatuses": "Tüm durumlar",
+      "date": "Tarih",
+      "category": "Kategori",
+      "expense": "Gider",
+      "supplier": "Tedarikçi",
+      "supplierPlaceholder": "Tedarikçi veya alacaklı",
+      "descriptionPlaceholder": "Bu gider ne içindi?",
+      "amount": "Toplam tutar",
+      "tax": "Vergi tutarı",
+      "status": "Durum",
+      "paymentMethod": "Ödeme yöntemi",
+      "receiptUrl": "Makbuz URL",
+      "actions": "İşlemler",
+      "receipt": "Makbuz",
+      "openReceipt": "Makbuzu aç"
+    },
+    "statuses": {
+      "paid": "Ödendi",
+      "pending": "Bekliyor",
+      "cancelled": "İptal edildi"
+    },
+    "dialog": {
+      "createTitle": "İşletme gideri ekle",
+      "editTitle": "İşletme giderini düzenle",
+      "description": "Kârlılık ve nakit akışı analizlerinin doğru kalması için işletme maliyetlerini kaydedin."
+    },
+    "errors": {
+      "requiredExpenseFields": "Kategori, tarih ve geçerli tutar gereklidir.",
+      "invalidTax": "Vergi tutarı sıfır veya daha büyük olmalıdır.",
+      "saveFailed": "Gider kaydedilemedi.",
+      "deleteFailed": "Gider silinemedi."
+    },
+    "messages": {
+      "expenseCreated": "Gider oluşturuldu.",
+      "expenseUpdated": "Gider güncellendi.",
+      "expenseDeleted": "Gider silindi."
+    },
+    "confirmations": {
+      "deleteExpense": "Bu gider kalıcı olarak silinsin mi?"
+    },
+    "export": {
+      "title": "Velliqo finans raporu",
+      "business": "İşletme",
+      "period": "Dönem",
+      "metric": "Gösterge",
+      "value": "Değer"
+    },
+    "categories": {
+      "rent": "Kira",
+      "payroll": "Maaş",
+      "utilities": "Faturalar",
+      "inventory": "Stok",
+      "marketing": "Pazarlama",
+      "software": "Yazılım",
+      "insurance": "Sigorta",
+      "maintenance": "Bakım",
+      "professional_services": "Profesyonel hizmetler",
+      "training": "Eğitim",
+      "travel": "Seyahat",
+      "other": "Diğer"
     }
   }
 }

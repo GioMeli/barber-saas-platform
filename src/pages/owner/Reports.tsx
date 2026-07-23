@@ -7,6 +7,8 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import { useFinanceIntelligence } from '@/hooks/useFinanceIntelligence';
+import FinanceOverview from '@/components/finance/FinanceOverview';
 import {
   ArrowDownRight,
   ArrowUpRight,
@@ -22,6 +24,7 @@ import {
   UserRound,
   UserRoundCheck,
   Users,
+  WalletCards,
 } from 'lucide-react';
 import {
   differenceInCalendarDays,
@@ -38,6 +41,7 @@ import {
 
 type ReportTab =
   | 'executive'
+  | 'finance'
   | 'revenue'
   | 'appointments'
   | 'staff'
@@ -94,6 +98,12 @@ export default function Reports() {
   const [previousAppointments, setPreviousAppointments] = useState<Appointment[]>([]);
   const [customers, setCustomers] = useState<any[]>([]);
   const [stockMovements, setStockMovements] = useState<any[]>([]);
+  const {
+    data: financeData,
+    loading: financeLoading,
+    error: financeError,
+    refresh: refreshFinance,
+  } = useFinanceIntelligence(businessId, dateRange.start, dateRange.end);
 
   useEffect(() => {
     if (businessId) void fetchData();
@@ -220,6 +230,17 @@ export default function Reports() {
       [t('reports.csv.cancellationRate'), `${analytics.cancellationRate.toFixed(1)}%`, ''],
       [t('reports.csv.noShowRate'), `${analytics.noShowRate.toFixed(1)}%`, ''],
       [t('reports.csv.returningCustomerRate'), `${analytics.returningCustomerRate.toFixed(1)}%`, ''],
+      ...(financeData ? [
+        [],
+        [t('reports.tabs.finance')],
+        [t('finance.metrics.collectedRevenue'), financeData.summary.collectedRevenue.toFixed(2)],
+        [t('finance.metrics.netSales'), financeData.summary.netSales.toFixed(2)],
+        [t('finance.metrics.grossProfit'), financeData.summary.grossProfit.toFixed(2)],
+        [t('finance.metrics.paidExpenses'), financeData.summary.paidExpenses.toFixed(2)],
+        [t('finance.metrics.operatingProfit'), financeData.summary.operatingProfit.toFixed(2)],
+        [t('finance.metrics.taxCollected'), financeData.summary.taxCollected.toFixed(2)],
+        [t('finance.metrics.grossMargin'), `${financeData.summary.grossMargin.toFixed(2)}%`],
+      ] : []),
       [],
       [t('reports.tables.professional'), t('reports.tables.appointments'), t('reports.tables.completed'), t('reports.tables.revenue'), t('reports.csv.bookedMinutes'), t('reports.tables.averageTicket')],
       ...analytics.staff.map((row: any) => [
@@ -255,6 +276,7 @@ export default function Reports() {
 
   const tabs: Array<{ id: ReportTab; label: string; icon: React.ReactNode }> = [
     { id: 'executive', label: t('reports.tabs.executive'), icon: <PieChart className="h-4 w-4" /> },
+    { id: 'finance', label: t('reports.tabs.finance'), icon: <WalletCards className="h-4 w-4" /> },
     { id: 'revenue', label: t('reports.tabs.revenue'), icon: <Euro className="h-4 w-4" /> },
     { id: 'appointments', label: t('reports.tabs.appointments'), icon: <CalendarDays className="h-4 w-4" /> },
     { id: 'staff', label: t('reports.tabs.staff'), icon: <UserRound className="h-4 w-4" /> },
@@ -276,7 +298,7 @@ export default function Reports() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" onClick={() => void fetchData()}>
+          <Button variant="outline" onClick={() => { void fetchData(); void refreshFinance(); }}>
             <RefreshCw className="mr-2 h-4 w-4" />{t('reports.actions.refresh')}
           </Button>
           <Button variant="outline" onClick={() => window.print()}>
@@ -363,6 +385,23 @@ export default function Reports() {
           </div>
 
           {activeTab === 'executive' && <ExecutiveView analytics={analytics} />}
+          {activeTab === 'finance' && (
+            financeLoading ? (
+              <div className="rounded-3xl border bg-card p-16 text-center shadow-card">
+                <RefreshCw className="mx-auto h-6 w-6 animate-spin text-primary" />
+                <p className="mt-4 text-sm text-muted-foreground">{t('finance.states.loading')}</p>
+              </div>
+            ) : financeData ? (
+              <FinanceOverview data={financeData} compact />
+            ) : (
+              <Card className="rounded-3xl border-destructive/20 bg-destructive/5">
+                <CardContent className="p-6">
+                  <h3 className="font-bold text-destructive">{t('finance.states.unavailableTitle')}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{financeError || t('finance.states.migrationRequired')}</p>
+                </CardContent>
+              </Card>
+            )
+          )}
           {activeTab === 'revenue' && <RevenueView analytics={analytics} />}
           {activeTab === 'appointments' && <AppointmentsView analytics={analytics} />}
           {activeTab === 'staff' && <StaffView analytics={analytics} />}

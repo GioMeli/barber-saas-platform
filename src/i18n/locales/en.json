@@ -34,7 +34,8 @@
     "settings": "Settings",
     "billing": "Billing",
     "sign_out": "Sign Out",
-    "sales": "Sales"
+    "sales": "Sales",
+    "finance": "Finance"
   },
   "booking": {
     "select_service": "Select a Service",
@@ -123,7 +124,8 @@
       "staff": "Open staff",
       "service": "Open services",
       "post": "Create an update",
-      "sale": "New sale"
+      "sale": "New sale",
+      "expense": "New expense"
     }
   },
   "system": {
@@ -1122,7 +1124,8 @@
       "staff": "Staff",
       "services": "Services",
       "customers": "Customers",
-      "products": "Products"
+      "products": "Products",
+      "finance": "Finance intelligence"
     },
     "metrics": {
       "revenue": "Revenue",
@@ -2416,6 +2419,179 @@
       "voided": "Sale voided and product stock restored",
       "voidError": "Failed to void the sale",
       "popupBlocked": "Allow pop-ups to print the receipt"
+    }
+  },
+  "finance": {
+    "eyebrow": "Financial operations",
+    "title": "Finance & Profit Intelligence",
+    "description": "Understand collected revenue, margins, costs and expenses from real completed transactions.",
+    "actions": {
+      "refresh": "Refresh",
+      "export": "Export CSV",
+      "addExpense": "Add expense",
+      "cancel": "Cancel",
+      "saving": "Saving…",
+      "saveExpense": "Save expense",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "filters": {
+      "startDate": "Start date",
+      "endDate": "End date",
+      "thisWeek": "This week",
+      "thisMonth": "This month",
+      "previousMonth": "Previous month",
+      "last90Days": "Last 90 days"
+    },
+    "views": {
+      "overview": "Overview",
+      "expenses": "Expenses"
+    },
+    "metrics": {
+      "collectedRevenue": "Collected revenue",
+      "netSales": "Net sales",
+      "grossProfit": "Gross profit",
+      "operatingProfit": "Operating profit",
+      "averageTicket": "Average ticket",
+      "costOfGoods": "Cost of goods",
+      "taxCollected": "Tax collected",
+      "pendingExpenses": "Pending expenses",
+      "paidExpenses": "Paid expenses",
+      "tipsCollected": "Tips collected",
+      "grossMargin": "Gross margin",
+      "transactionsDetail": "{{count}} completed transactions",
+      "discountsDetail": "{{value}} discounts applied",
+      "marginDetail": "{{value}}% gross margin",
+      "expensesDetail": "{{value}} paid expenses"
+    },
+    "insights": {
+      "label": "Velliqo financial insight",
+      "transactionBased": "Based on completed checkout transactions",
+      "positiveTitle": "The business is operating profitably in this period.",
+      "negativeTitle": "Operating costs are above gross profit in this period.",
+      "positiveDescription": "Estimated operating profit is {{profit}}, with a gross margin of {{margin}}%.",
+      "negativeDescription": "The current operating loss is {{profit}}. Review expenses, pricing and product costs.",
+      "largestExpense": "Largest expense category",
+      "leadingPayment": "Leading payment method"
+    },
+    "charts": {
+      "performanceTitle": "Revenue, expenses and profit trend",
+      "performanceDescription": "Daily performance calculated from completed sales and paid expenses.",
+      "revenue": "Revenue",
+      "expenses": "Expenses",
+      "profit": "Profit",
+      "paymentTitle": "Payment mix",
+      "paymentDescription": "How customers paid during the selected period.",
+      "itemMixTitle": "Sales mix",
+      "itemMixDescription": "Revenue split between services, products and custom items.",
+      "expenseCategoryTitle": "Expense categories",
+      "expenseCategoryDescription": "Where operating money was spent."
+    },
+    "rankings": {
+      "services": "Top services",
+      "products": "Top products",
+      "staff": "Team sales performance"
+    },
+    "common": {
+      "noData": "No data",
+      "transactionsShort": "{{count}} transactions",
+      "entriesShort": "{{count}} entries",
+      "quantityShort": "Qty {{value}}",
+      "profitShort": "{{value}} profit",
+      "noDescription": "No description"
+    },
+    "paymentMethods": {
+      "cash": "Cash",
+      "card": "Card",
+      "bank_transfer": "Bank transfer",
+      "online": "Online",
+      "gift_card": "Gift card",
+      "other": "Other"
+    },
+    "itemTypes": {
+      "service": "Services",
+      "product": "Products",
+      "custom": "Custom items"
+    },
+    "states": {
+      "loading": "Loading financial intelligence…",
+      "unavailableTitle": "Finance intelligence is not available yet",
+      "migrationRequired": "Apply migration 00032_finance_intelligence.sql, then refresh this page.",
+      "noTransactionData": "No completed transaction data for this period.",
+      "noPaymentData": "No completed payments for this period.",
+      "noItemData": "No sold items for this period.",
+      "noExpenseData": "No paid expenses for this period.",
+      "noServiceSales": "No service sales yet.",
+      "noProductSales": "No product sales yet.",
+      "noStaffSales": "No team sales data yet.",
+      "noExpensesTitle": "No expenses found",
+      "noExpensesDescription": "Add the first expense or adjust the selected filters."
+    },
+    "expenses": {
+      "title": "Expense register",
+      "description": "Description",
+      "searchPlaceholder": "Search category, supplier or description…",
+      "statusFilter": "Expense status filter",
+      "allStatuses": "All statuses",
+      "date": "Date",
+      "category": "Category",
+      "expense": "Expense",
+      "supplier": "Supplier",
+      "supplierPlaceholder": "Supplier or payee",
+      "descriptionPlaceholder": "What was this expense for?",
+      "amount": "Total amount",
+      "tax": "Tax amount",
+      "status": "Status",
+      "paymentMethod": "Payment method",
+      "receiptUrl": "Receipt URL",
+      "actions": "Actions",
+      "receipt": "Receipt",
+      "openReceipt": "Open receipt"
+    },
+    "statuses": {
+      "paid": "Paid",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "dialog": {
+      "createTitle": "Add business expense",
+      "editTitle": "Edit business expense",
+      "description": "Record operating costs so profitability and cash-flow insights stay accurate."
+    },
+    "errors": {
+      "requiredExpenseFields": "Category, date and a valid amount are required.",
+      "invalidTax": "Tax amount must be zero or greater.",
+      "saveFailed": "Failed to save expense.",
+      "deleteFailed": "Failed to delete expense."
+    },
+    "messages": {
+      "expenseCreated": "Expense created.",
+      "expenseUpdated": "Expense updated.",
+      "expenseDeleted": "Expense deleted."
+    },
+    "confirmations": {
+      "deleteExpense": "Delete this expense permanently?"
+    },
+    "export": {
+      "title": "Velliqo finance report",
+      "business": "Business",
+      "period": "Period",
+      "metric": "Metric",
+      "value": "Value"
+    },
+    "categories": {
+      "rent": "Rent",
+      "payroll": "Payroll",
+      "utilities": "Utilities",
+      "inventory": "Inventory",
+      "marketing": "Marketing",
+      "software": "Software",
+      "insurance": "Insurance",
+      "maintenance": "Maintenance",
+      "professional_services": "Professional services",
+      "training": "Training",
+      "travel": "Travel",
+      "other": "Other"
     }
   }
 }

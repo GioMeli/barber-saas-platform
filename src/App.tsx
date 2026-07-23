@@ -30,6 +30,7 @@ import Reports from './pages/owner/Reports';
 import Billing from './pages/owner/Billing';
 import Products from './pages/owner/Products';
 import Sales from './pages/owner/Sales';
+import Finance from './pages/owner/Finance';
 import Posts from './pages/owner/Posts';
 import Gallery from './pages/owner/Gallery';
 import Storefront from './pages/owner/Storefront';
@@ -89,6 +90,7 @@ function App() {
           <Route path="customers/:customerId" element={<CustomerProfile />} />
           <Route path="products" element={<Products />} />
           <Route path="sales" element={<Sales />} />
+          <Route path="finance" element={<Finance />} />
           <Route path="posts" element={<Posts />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="storefront" element={<Storefront />} />

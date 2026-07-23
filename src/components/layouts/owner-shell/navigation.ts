@@ -5,6 +5,7 @@ import {
   Building2,
   CalendarDays,
   CreditCard,
+  WalletCards,
   Images,
   LayoutDashboard,
   Megaphone,
@@ -46,6 +47,13 @@ export const OWNER_NAVIGATION_ITEMS: OwnerNavigationItem[] = [
     path: '/dashboard/sales',
     icon: ShoppingCart,
     keywords: ['sales', 'checkout', 'pos', 'payments', 'receipts'],
+  },
+  {
+    key: 'finance',
+    labelKey: 'dashboard.finance',
+    path: '/dashboard/finance',
+    icon: WalletCards,
+    keywords: ['finance', 'expenses', 'profit', 'cash flow', 'tax'],
   },
   {
     key: 'customers',

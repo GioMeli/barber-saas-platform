@@ -34,7 +34,8 @@
     "settings": "Ρυθμίσεις",
     "billing": "Χρέωση",
     "sign_out": "Αποσύνδεση",
-    "sales": "Πωλήσεις"
+    "sales": "Πωλήσεις",
+    "finance": "Οικονομικά"
   },
   "booking": {
     "select_service": "Επιλέξτε Υπηρεσία",
@@ -123,7 +124,8 @@
       "staff": "Άνοιγμα προσωπικού",
       "service": "Άνοιγμα υπηρεσιών",
       "post": "Δημιουργία ενημέρωσης",
-      "sale": "Νέα πώληση"
+      "sale": "Νέα πώληση",
+      "expense": "Νέο έξοδο"
     }
   },
   "system": {
@@ -1122,7 +1124,8 @@
       "staff": "Προσωπικό",
       "services": "Υπηρεσίες",
       "customers": "Πελάτες",
-      "products": "Προϊόντα"
+      "products": "Προϊόντα",
+      "finance": "Οικονομική ευφυΐα"
     },
     "metrics": {
       "revenue": "Έσοδα",
@@ -2416,6 +2419,179 @@
       "voided": "Η πώληση ακυρώθηκε και το απόθεμα επανήλθε",
       "voidError": "Αποτυχία ακύρωσης της πώλησης",
       "popupBlocked": "Επιτρέψτε τα αναδυόμενα παράθυρα για εκτύπωση της απόδειξης"
+    }
+  },
+  "finance": {
+    "eyebrow": "Οικονομική λειτουργία",
+    "title": "Οικονομικά & Ευφυΐα Κερδοφορίας",
+    "description": "Κατανόησε τα πραγματικά έσοδα, τα περιθώρια, το κόστος και τα έξοδα από ολοκληρωμένες συναλλαγές.",
+    "actions": {
+      "refresh": "Ανανέωση",
+      "export": "Εξαγωγή CSV",
+      "addExpense": "Προσθήκη εξόδου",
+      "cancel": "Ακύρωση",
+      "saving": "Αποθήκευση…",
+      "saveExpense": "Αποθήκευση εξόδου",
+      "edit": "Επεξεργασία",
+      "delete": "Διαγραφή"
+    },
+    "filters": {
+      "startDate": "Ημερομηνία έναρξης",
+      "endDate": "Ημερομηνία λήξης",
+      "thisWeek": "Αυτή η εβδομάδα",
+      "thisMonth": "Αυτός ο μήνας",
+      "previousMonth": "Προηγούμενος μήνας",
+      "last90Days": "Τελευταίες 90 ημέρες"
+    },
+    "views": {
+      "overview": "Επισκόπηση",
+      "expenses": "Έξοδα"
+    },
+    "metrics": {
+      "collectedRevenue": "Εισπραχθέντα έσοδα",
+      "netSales": "Καθαρές πωλήσεις",
+      "grossProfit": "Μικτό κέρδος",
+      "operatingProfit": "Λειτουργικό κέρδος",
+      "averageTicket": "Μέση συναλλαγή",
+      "costOfGoods": "Κόστος πωληθέντων",
+      "taxCollected": "Εισπραχθείς φόρος",
+      "pendingExpenses": "Εκκρεμή έξοδα",
+      "paidExpenses": "Πληρωμένα έξοδα",
+      "tipsCollected": "Φιλοδωρήματα",
+      "grossMargin": "Μικτό περιθώριο",
+      "transactionsDetail": "{{count}} ολοκληρωμένες συναλλαγές",
+      "discountsDetail": "{{value}} εκπτώσεις",
+      "marginDetail": "{{value}}% μικτό περιθώριο",
+      "expensesDetail": "{{value}} πληρωμένα έξοδα"
+    },
+    "insights": {
+      "label": "Οικονομική ένδειξη Velliqo",
+      "transactionBased": "Βασίζεται σε ολοκληρωμένες συναλλαγές checkout",
+      "positiveTitle": "Η επιχείρηση λειτουργεί κερδοφόρα σε αυτή την περίοδο.",
+      "negativeTitle": "Τα λειτουργικά κόστη υπερβαίνουν το μικτό κέρδος σε αυτή την περίοδο.",
+      "positiveDescription": "Το εκτιμώμενο λειτουργικό κέρδος είναι {{profit}}, με μικτό περιθώριο {{margin}}%.",
+      "negativeDescription": "Η τρέχουσα λειτουργική ζημιά είναι {{profit}}. Έλεγξε έξοδα, τιμές και κόστος προϊόντων.",
+      "largestExpense": "Μεγαλύτερη κατηγορία εξόδων",
+      "leadingPayment": "Κυρίαρχος τρόπος πληρωμής"
+    },
+    "charts": {
+      "performanceTitle": "Τάση εσόδων, εξόδων και κέρδους",
+      "performanceDescription": "Ημερήσια απόδοση από ολοκληρωμένες πωλήσεις και πληρωμένα έξοδα.",
+      "revenue": "Έσοδα",
+      "expenses": "Έξοδα",
+      "profit": "Κέρδος",
+      "paymentTitle": "Κατανομή πληρωμών",
+      "paymentDescription": "Πώς πλήρωσαν οι πελάτες στην επιλεγμένη περίοδο.",
+      "itemMixTitle": "Μείγμα πωλήσεων",
+      "itemMixDescription": "Κατανομή εσόδων σε υπηρεσίες, προϊόντα και προσαρμοσμένα είδη.",
+      "expenseCategoryTitle": "Κατηγορίες εξόδων",
+      "expenseCategoryDescription": "Πού δαπανήθηκαν τα λειτουργικά χρήματα."
+    },
+    "rankings": {
+      "services": "Κορυφαίες υπηρεσίες",
+      "products": "Κορυφαία προϊόντα",
+      "staff": "Απόδοση πωλήσεων ομάδας"
+    },
+    "common": {
+      "noData": "Χωρίς δεδομένα",
+      "transactionsShort": "{{count}} συναλλαγές",
+      "entriesShort": "{{count}} εγγραφές",
+      "quantityShort": "Ποσ. {{value}}",
+      "profitShort": "{{value}} κέρδος",
+      "noDescription": "Χωρίς περιγραφή"
+    },
+    "paymentMethods": {
+      "cash": "Μετρητά",
+      "card": "Κάρτα",
+      "bank_transfer": "Τραπεζική μεταφορά",
+      "online": "Ηλεκτρονικά",
+      "gift_card": "Δωροκάρτα",
+      "other": "Άλλο"
+    },
+    "itemTypes": {
+      "service": "Υπηρεσίες",
+      "product": "Προϊόντα",
+      "custom": "Προσαρμοσμένα είδη"
+    },
+    "states": {
+      "loading": "Φόρτωση οικονομικής ευφυΐας…",
+      "unavailableTitle": "Η οικονομική ευφυΐα δεν είναι ακόμη διαθέσιμη",
+      "migrationRequired": "Εφάρμοσε τη migration 00032_finance_intelligence.sql και ανανέωσε τη σελίδα.",
+      "noTransactionData": "Δεν υπάρχουν ολοκληρωμένες συναλλαγές για αυτή την περίοδο.",
+      "noPaymentData": "Δεν υπάρχουν ολοκληρωμένες πληρωμές για αυτή την περίοδο.",
+      "noItemData": "Δεν υπάρχουν πωλημένα είδη για αυτή την περίοδο.",
+      "noExpenseData": "Δεν υπάρχουν πληρωμένα έξοδα για αυτή την περίοδο.",
+      "noServiceSales": "Δεν υπάρχουν ακόμη πωλήσεις υπηρεσιών.",
+      "noProductSales": "Δεν υπάρχουν ακόμη πωλήσεις προϊόντων.",
+      "noStaffSales": "Δεν υπάρχουν ακόμη δεδομένα πωλήσεων ομάδας.",
+      "noExpensesTitle": "Δεν βρέθηκαν έξοδα",
+      "noExpensesDescription": "Πρόσθεσε το πρώτο έξοδο ή άλλαξε τα επιλεγμένα φίλτρα."
+    },
+    "expenses": {
+      "title": "Μητρώο εξόδων",
+      "description": "Περιγραφή",
+      "searchPlaceholder": "Αναζήτηση κατηγορίας, προμηθευτή ή περιγραφής…",
+      "statusFilter": "Φίλτρο κατάστασης εξόδων",
+      "allStatuses": "Όλες οι καταστάσεις",
+      "date": "Ημερομηνία",
+      "category": "Κατηγορία",
+      "expense": "Έξοδο",
+      "supplier": "Προμηθευτής",
+      "supplierPlaceholder": "Προμηθευτής ή δικαιούχος",
+      "descriptionPlaceholder": "Σε τι αφορούσε αυτό το έξοδο;",
+      "amount": "Συνολικό ποσό",
+      "tax": "Ποσό φόρου",
+      "status": "Κατάσταση",
+      "paymentMethod": "Τρόπος πληρωμής",
+      "receiptUrl": "URL απόδειξης",
+      "actions": "Ενέργειες",
+      "receipt": "Απόδειξη",
+      "openReceipt": "Άνοιγμα απόδειξης"
+    },
+    "statuses": {
+      "paid": "Πληρωμένο",
+      "pending": "Εκκρεμές",
+      "cancelled": "Ακυρωμένο"
+    },
+    "dialog": {
+      "createTitle": "Προσθήκη επιχειρηματικού εξόδου",
+      "editTitle": "Επεξεργασία επιχειρηματικού εξόδου",
+      "description": "Κατέγραψε τα λειτουργικά κόστη ώστε η κερδοφορία και οι ταμειακές ενδείξεις να παραμένουν ακριβείς."
+    },
+    "errors": {
+      "requiredExpenseFields": "Απαιτούνται κατηγορία, ημερομηνία και έγκυρο ποσό.",
+      "invalidTax": "Το ποσό φόρου πρέπει να είναι μηδέν ή μεγαλύτερο.",
+      "saveFailed": "Η αποθήκευση του εξόδου απέτυχε.",
+      "deleteFailed": "Η διαγραφή του εξόδου απέτυχε."
+    },
+    "messages": {
+      "expenseCreated": "Το έξοδο δημιουργήθηκε.",
+      "expenseUpdated": "Το έξοδο ενημερώθηκε.",
+      "expenseDeleted": "Το έξοδο διαγράφηκε."
+    },
+    "confirmations": {
+      "deleteExpense": "Να διαγραφεί οριστικά αυτό το έξοδο;"
+    },
+    "export": {
+      "title": "Οικονομική αναφορά Velliqo",
+      "business": "Επιχείρηση",
+      "period": "Περίοδος",
+      "metric": "Δείκτης",
+      "value": "Τιμή"
+    },
+    "categories": {
+      "rent": "Ενοίκιο",
+      "payroll": "Μισθοδοσία",
+      "utilities": "Λογαριασμοί",
+      "inventory": "Απόθεμα",
+      "marketing": "Μάρκετινγκ",
+      "software": "Λογισμικό",
+      "insurance": "Ασφάλιση",
+      "maintenance": "Συντήρηση",
+      "professional_services": "Επαγγελματικές υπηρεσίες",
+      "training": "Εκπαίδευση",
+      "travel": "Ταξίδια",
+      "other": "Άλλο"
     }
   }
 }

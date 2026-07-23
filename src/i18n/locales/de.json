@@ -34,7 +34,8 @@
     "settings": "Einstellungen",
     "billing": "Abrechnung",
     "sign_out": "Abmelden",
-    "sales": "Verkauf"
+    "sales": "Verkauf",
+    "finance": "Finanzen"
   },
   "booking": {
     "select_service": "Dienstleistung auswählen",
@@ -123,7 +124,8 @@
       "staff": "Team öffnen",
       "service": "Dienstleistungen öffnen",
       "post": "Update erstellen",
-      "sale": "Neuer Verkauf"
+      "sale": "Neuer Verkauf",
+      "expense": "Neue Ausgabe"
     }
   },
   "system": {
@@ -1122,7 +1124,8 @@
       "staff": "Personal",
       "services": "Dienstleistungen",
       "customers": "Kunden",
-      "products": "Produkte"
+      "products": "Produkte",
+      "finance": "Finanzanalyse"
     },
     "metrics": {
       "revenue": "Umsatz",
@@ -2416,6 +2419,179 @@
       "voided": "Verkauf storniert und Produktbestand wiederhergestellt",
       "voidError": "Verkauf konnte nicht storniert werden",
       "popupBlocked": "Pop-ups zum Drucken des Belegs zulassen"
+    }
+  },
+  "finance": {
+    "eyebrow": "Finanzbetrieb",
+    "title": "Finanzen & Gewinnanalyse",
+    "description": "Analysieren Sie echte Einnahmen, Margen, Kosten und Ausgaben aus abgeschlossenen Transaktionen.",
+    "actions": {
+      "refresh": "Aktualisieren",
+      "export": "CSV exportieren",
+      "addExpense": "Ausgabe hinzufügen",
+      "cancel": "Abbrechen",
+      "saving": "Wird gespeichert…",
+      "saveExpense": "Ausgabe speichern",
+      "edit": "Bearbeiten",
+      "delete": "Löschen"
+    },
+    "filters": {
+      "startDate": "Startdatum",
+      "endDate": "Enddatum",
+      "thisWeek": "Diese Woche",
+      "thisMonth": "Dieser Monat",
+      "previousMonth": "Vorheriger Monat",
+      "last90Days": "Letzte 90 Tage"
+    },
+    "views": {
+      "overview": "Übersicht",
+      "expenses": "Ausgaben"
+    },
+    "metrics": {
+      "collectedRevenue": "Eingenommener Umsatz",
+      "netSales": "Nettoumsatz",
+      "grossProfit": "Bruttogewinn",
+      "operatingProfit": "Betriebsgewinn",
+      "averageTicket": "Durchschnittsbon",
+      "costOfGoods": "Wareneinsatz",
+      "taxCollected": "Eingenommene Steuer",
+      "pendingExpenses": "Offene Ausgaben",
+      "paidExpenses": "Bezahlte Ausgaben",
+      "tipsCollected": "Trinkgeld",
+      "grossMargin": "Bruttomarge",
+      "transactionsDetail": "{{count}} abgeschlossene Transaktionen",
+      "discountsDetail": "{{value}} gewährte Rabatte",
+      "marginDetail": "{{value}}% Bruttomarge",
+      "expensesDetail": "{{value}} bezahlte Ausgaben"
+    },
+    "insights": {
+      "label": "Velliqo Finanzhinweis",
+      "transactionBased": "Basierend auf abgeschlossenen Checkout-Transaktionen",
+      "positiveTitle": "Das Unternehmen arbeitet in diesem Zeitraum profitabel.",
+      "negativeTitle": "Die Betriebskosten liegen in diesem Zeitraum über dem Bruttogewinn.",
+      "positiveDescription": "Der geschätzte Betriebsgewinn beträgt {{profit}} bei einer Bruttomarge von {{margin}}%.",
+      "negativeDescription": "Der aktuelle Betriebsverlust beträgt {{profit}}. Prüfen Sie Ausgaben, Preise und Produktkosten.",
+      "largestExpense": "Größte Ausgabenkategorie",
+      "leadingPayment": "Häufigste Zahlungsart"
+    },
+    "charts": {
+      "performanceTitle": "Umsatz-, Ausgaben- und Gewinntrend",
+      "performanceDescription": "Tägliche Leistung aus abgeschlossenen Verkäufen und bezahlten Ausgaben.",
+      "revenue": "Umsatz",
+      "expenses": "Ausgaben",
+      "profit": "Gewinn",
+      "paymentTitle": "Zahlungsmix",
+      "paymentDescription": "Zahlungsarten im ausgewählten Zeitraum.",
+      "itemMixTitle": "Verkaufsmix",
+      "itemMixDescription": "Umsatzanteile von Dienstleistungen, Produkten und freien Positionen.",
+      "expenseCategoryTitle": "Ausgabenkategorien",
+      "expenseCategoryDescription": "Verteilung der Betriebsausgaben."
+    },
+    "rankings": {
+      "services": "Top-Dienstleistungen",
+      "products": "Top-Produkte",
+      "staff": "Team-Verkaufsleistung"
+    },
+    "common": {
+      "noData": "Keine Daten",
+      "transactionsShort": "{{count}} Transaktionen",
+      "entriesShort": "{{count}} Einträge",
+      "quantityShort": "Menge {{value}}",
+      "profitShort": "{{value}} Gewinn",
+      "noDescription": "Keine Beschreibung"
+    },
+    "paymentMethods": {
+      "cash": "Bar",
+      "card": "Karte",
+      "bank_transfer": "Banküberweisung",
+      "online": "Online",
+      "gift_card": "Geschenkkarte",
+      "other": "Sonstige"
+    },
+    "itemTypes": {
+      "service": "Dienstleistungen",
+      "product": "Produkte",
+      "custom": "Freie Positionen"
+    },
+    "states": {
+      "loading": "Finanzanalyse wird geladen…",
+      "unavailableTitle": "Finanzanalyse ist noch nicht verfügbar",
+      "migrationRequired": "Führen Sie die Migration 00032_finance_intelligence.sql aus und aktualisieren Sie die Seite.",
+      "noTransactionData": "Keine abgeschlossenen Transaktionen in diesem Zeitraum.",
+      "noPaymentData": "Keine abgeschlossenen Zahlungen in diesem Zeitraum.",
+      "noItemData": "Keine verkauften Positionen in diesem Zeitraum.",
+      "noExpenseData": "Keine bezahlten Ausgaben in diesem Zeitraum.",
+      "noServiceSales": "Noch keine Dienstleistungsverkäufe.",
+      "noProductSales": "Noch keine Produktverkäufe.",
+      "noStaffSales": "Noch keine Team-Verkaufsdaten.",
+      "noExpensesTitle": "Keine Ausgaben gefunden",
+      "noExpensesDescription": "Fügen Sie die erste Ausgabe hinzu oder ändern Sie die Filter."
+    },
+    "expenses": {
+      "title": "Ausgabenregister",
+      "description": "Beschreibung",
+      "searchPlaceholder": "Kategorie, Lieferant oder Beschreibung suchen…",
+      "statusFilter": "Ausgabenstatus filtern",
+      "allStatuses": "Alle Status",
+      "date": "Datum",
+      "category": "Kategorie",
+      "expense": "Ausgabe",
+      "supplier": "Lieferant",
+      "supplierPlaceholder": "Lieferant oder Zahlungsempfänger",
+      "descriptionPlaceholder": "Wofür war diese Ausgabe?",
+      "amount": "Gesamtbetrag",
+      "tax": "Steuerbetrag",
+      "status": "Status",
+      "paymentMethod": "Zahlungsart",
+      "receiptUrl": "Beleg-URL",
+      "actions": "Aktionen",
+      "receipt": "Beleg",
+      "openReceipt": "Beleg öffnen"
+    },
+    "statuses": {
+      "paid": "Bezahlt",
+      "pending": "Offen",
+      "cancelled": "Storniert"
+    },
+    "dialog": {
+      "createTitle": "Betriebsausgabe hinzufügen",
+      "editTitle": "Betriebsausgabe bearbeiten",
+      "description": "Erfassen Sie Betriebskosten für genaue Gewinn- und Liquiditätsanalysen."
+    },
+    "errors": {
+      "requiredExpenseFields": "Kategorie, Datum und ein gültiger Betrag sind erforderlich.",
+      "invalidTax": "Der Steuerbetrag muss null oder größer sein.",
+      "saveFailed": "Ausgabe konnte nicht gespeichert werden.",
+      "deleteFailed": "Ausgabe konnte nicht gelöscht werden."
+    },
+    "messages": {
+      "expenseCreated": "Ausgabe erstellt.",
+      "expenseUpdated": "Ausgabe aktualisiert.",
+      "expenseDeleted": "Ausgabe gelöscht."
+    },
+    "confirmations": {
+      "deleteExpense": "Diese Ausgabe dauerhaft löschen?"
+    },
+    "export": {
+      "title": "Velliqo Finanzbericht",
+      "business": "Unternehmen",
+      "period": "Zeitraum",
+      "metric": "Kennzahl",
+      "value": "Wert"
+    },
+    "categories": {
+      "rent": "Miete",
+      "payroll": "Lohnabrechnung",
+      "utilities": "Nebenkosten",
+      "inventory": "Warenbestand",
+      "marketing": "Marketing",
+      "software": "Software",
+      "insurance": "Versicherung",
+      "maintenance": "Wartung",
+      "professional_services": "Professionelle Dienstleistungen",
+      "training": "Schulung",
+      "travel": "Reisen",
+      "other": "Sonstige"
     }
   }
 }
