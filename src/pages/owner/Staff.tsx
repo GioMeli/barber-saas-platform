@@ -20,17 +20,31 @@ import { ImageUploader } from '@/components/ui/image-uploader';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
+  BarChart3,
   CalendarClock,
+  CalendarDays,
   Clock3,
   Edit,
   Mail,
   Phone,
   Plus,
   Scissors,
+  Search,
   Trash2,
   UserCheck,
   Users,
 } from 'lucide-react';
+
+
+type StaffStatusFilter = 'all' | 'active' | 'inactive';
+type StaffSort = 'name' | 'bookings' | 'revenue' | 'services';
+
+type StaffPerformance = {
+  bookings: number;
+  completed: number;
+  revenue: number;
+  upcoming: number;
+};
 
 type WeeklyScheduleDay = {
   dayOfWeek: number;
@@ -79,6 +93,10 @@ export default function Staff() {
   const [employeeServices, setEmployeeServices] = useState<any[]>([]);
   const [workingHours, setWorkingHours] = useState<any[]>([]);
   const [staffBreaks, setStaffBreaks] = useState<any[]>([]);
+  const [appointments, setAppointments] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState<StaffStatusFilter>('all');
+  const [sortBy, setSortBy] = useState<StaffSort>('name');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -106,6 +124,7 @@ export default function Staff() {
         employeeServicesResult,
         hoursResult,
         breaksResult,
+        appointmentsResult,
       ] = await Promise.all([
           supabase
             .from('employees')
@@ -131,6 +150,12 @@ export default function Staff() {
             .eq('business_id', businessId)
             .order('day_of_week')
             .order('start_time'),
+          supabase
+            .from('appointments')
+            .select('employee_id, total_price, status, start_time')
+            .eq('business_id', businessId)
+            .gte('start_time', monthStartIso())
+            .lt('start_time', nextMonthStartIso()),
         ]);
 
       if (staffResult.error) throw staffResult.error;
@@ -138,12 +163,14 @@ export default function Staff() {
       if (employeeServicesResult.error) throw employeeServicesResult.error;
       if (hoursResult.error) throw hoursResult.error;
       if (breaksResult.error) throw breaksResult.error;
+      if (appointmentsResult.error) throw appointmentsResult.error;
 
       setStaff(staffResult.data ?? []);
       setServices(servicesResult.data ?? []);
       setEmployeeServices(employeeServicesResult.data ?? []);
       setWorkingHours(hoursResult.data ?? []);
       setStaffBreaks(breaksResult.data ?? []);
+      setAppointments(appointmentsResult.data ?? []);
     } catch (error) {
       console.error('Error fetching staff:', error);
       toast.error(t('staff.messages.loadFailed'));
@@ -567,6 +594,102 @@ export default function Staff() {
     return t('staff.schedule.workingDaysSummary', { count: days, earliest, latest });
   };
 
+
+  const performanceByStaff = useMemo(() => {
+    const now = Date.now();
+    const result: Record<string, StaffPerformance> = {};
+
+    for (const member of staff) {
+      result[member.id] = {
+        bookings: 0,
+        completed: 0,
+        revenue: 0,
+        upcoming: 0,
+      };
+    }
+
+    for (const appointment of appointments) {
+      const employeeId = appointment.employee_id;
+      if (!employeeId || !result[employeeId]) continue;
+
+      if (
+        !['cancelled_by_business', 'cancelled_by_customer', 'no_show'].includes(
+          appointment.status
+        )
+      ) {
+        result[employeeId].bookings += 1;
+      }
+
+      if (appointment.status === 'completed') {
+        result[employeeId].completed += 1;
+        result[employeeId].revenue += Number(appointment.total_price || 0);
+      }
+
+      if (
+        new Date(appointment.start_time).getTime() > now &&
+        !['cancelled_by_business', 'cancelled_by_customer', 'no_show'].includes(
+          appointment.status
+        )
+      ) {
+        result[employeeId].upcoming += 1;
+      }
+    }
+
+    return result;
+  }, [appointments, staff]);
+
+  const teamTotals = useMemo(() => {
+    const values = Object.values(performanceByStaff);
+    const coveredServices = new Set(employeeServices.map((row) => row.service_id));
+
+    return {
+      bookings: values.reduce((sum, item) => sum + item.bookings, 0),
+      completed: values.reduce((sum, item) => sum + item.completed, 0),
+      revenue: values.reduce((sum, item) => sum + item.revenue, 0),
+      coveredServices: coveredServices.size,
+    };
+  }, [employeeServices, performanceByStaff]);
+
+  const filteredStaff = useMemo(() => {
+    const query = searchQuery.trim().toLowerCase();
+
+    const next = staff.filter((member) => {
+      const matchesStatus =
+        statusFilter === 'all' ||
+        (statusFilter === 'active' && member.is_active) ||
+        (statusFilter === 'inactive' && !member.is_active);
+
+      if (!matchesStatus) return false;
+      if (!query) return true;
+
+      return [member.name, member.email, member.phone, member.bio]
+        .filter(Boolean)
+        .some((value) => String(value).toLowerCase().includes(query));
+    });
+
+    return [...next].sort((a, b) => {
+      if (sortBy === 'bookings') {
+        return (
+          (performanceByStaff[b.id]?.bookings || 0) -
+          (performanceByStaff[a.id]?.bookings || 0)
+        );
+      }
+
+      if (sortBy === 'revenue') {
+        return (
+          (performanceByStaff[b.id]?.revenue || 0) -
+          (performanceByStaff[a.id]?.revenue || 0)
+        );
+      }
+
+      if (sortBy === 'services') {
+        return getMemberServices(b.id).length - getMemberServices(a.id).length;
+      }
+
+      return String(a.name).localeCompare(String(b.name));
+    });
+  }, [performanceByStaff, searchQuery, sortBy, staff, statusFilter]);
+
   return (
     <div className="app-page">
       <header className="app-page-header">
@@ -586,26 +709,80 @@ export default function Staff() {
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
-          title={t('staff.summary.total.title')}
-          value={staff.length}
-          description={t('staff.summary.total.description')}
-          icon={<Users className="h-5 w-5" />}
-        />
-        <SummaryCard
-          title={t('staff.summary.active.title')}
+          title={t('staff.workspace.summary.activeTeam')}
           value={activeCount}
-          description={t('staff.summary.active.description')}
+          description={t('staff.workspace.summary.activeTeamDescription', {
+            total: staff.length,
+            inactive: inactiveCount,
+          })}
           icon={<UserCheck className="h-5 w-5" />}
         />
         <SummaryCard
-          title={t('staff.summary.inactive.title')}
-          value={inactiveCount}
-          description={t('staff.summary.inactive.description')}
-          icon={<CalendarClock className="h-5 w-5" />}
+          title={t('staff.workspace.summary.monthBookings')}
+          value={teamTotals.bookings}
+          description={t('staff.workspace.summary.monthBookingsDescription')}
+          icon={<CalendarDays className="h-5 w-5" />}
+        />
+        <SummaryCard
+          title={t('staff.workspace.summary.completed')}
+          value={teamTotals.completed}
+          description={t('staff.workspace.summary.completedDescription', {
+            revenue: formatCurrency(teamTotals.revenue),
+          })}
+          icon={<BarChart3 className="h-5 w-5" />}
+        />
+        <SummaryCard
+          title={t('staff.workspace.summary.serviceCoverage')}
+          value={teamTotals.coveredServices}
+          description={t('staff.workspace.summary.serviceCoverageDescription', {
+            total: services.length,
+          })}
+          icon={<Scissors className="h-5 w-5" />}
         />
       </section>
+
+      <Card className="rounded-2xl shadow-card">
+        <CardContent className="p-3 sm:p-4">
+          <div className="grid gap-3 lg:grid-cols-[minmax(260px,1fr)_180px_190px]">
+            <div className="relative">
+              <Search className="absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                className="h-11 rounded-xl pl-9"
+                placeholder={t('staff.workspace.searchPlaceholder')}
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+              />
+            </div>
+
+            <select
+              className="h-11 rounded-xl border bg-background px-3 text-sm"
+              value={statusFilter}
+              onChange={(event) =>
+                setStatusFilter(event.target.value as StaffStatusFilter)
+              }
+              aria-label={t('staff.workspace.filters.status')}
+            >
+              <option value="all">{t('staff.workspace.filters.all')}</option>
+              <option value="active">{t('staff.status.active')}</option>
+              <option value="inactive">{t('staff.status.inactive')}</option>
+            </select>
+
+            <select
+              className="h-11 rounded-xl border bg-background px-3 text-sm"
+              value={sortBy}
+              onChange={(event) => setSortBy(event.target.value as StaffSort)}
+              aria-label={t('staff.workspace.sort.label')}
+            >
+              <option value="name">{t('staff.workspace.sort.name')}</option>
+              <option value="bookings">{t('staff.workspace.sort.bookings')}</option>
+              <option value="revenue">{t('staff.workspace.sort.revenue')}</option>
+              <option value="services">{t('staff.workspace.sort.services')}</option>
+            </select>
+          </div>
+        </CardContent>
+      </Card>
 
       {loading ? (
         <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground shadow-card">
@@ -625,9 +802,18 @@ export default function Staff() {
           </CardContent>
         </Card>
       ) : (
-        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {staff.map((member) => {
+        <>
+          {filteredStaff.length === 0 ? (
+            <Card className="rounded-2xl shadow-card">
+              <CardContent className="p-12 text-center text-sm text-muted-foreground">
+                {t('staff.workspace.emptyFiltered')}
+              </CardContent>
+            </Card>
+          ) : (
+          <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          {filteredStaff.map((member) => {
             const memberServices = getMemberServices(member.id);
+            const performance = performanceByStaff[member.id] ?? { bookings: 0, completed: 0, revenue: 0, upcoming: 0 };
 
             return (
               <Card
@@ -686,6 +872,30 @@ export default function Staff() {
                       />
                     </div>
 
+                    <div className="mt-5 grid grid-cols-3 gap-2 rounded-2xl bg-muted/30 p-3 text-center">
+                      <StaffMetric
+                        label={t('staff.workspace.metrics.bookings')}
+                        value={String(performance.bookings)}
+                      />
+                      <StaffMetric
+                        label={t('staff.workspace.metrics.completed')}
+                        value={String(performance.completed)}
+                      />
+                      <StaffMetric
+                        label={t('staff.workspace.metrics.revenue')}
+                        value={formatCurrency(performance.revenue)}
+                      />
+                    </div>
+
+                    {performance.upcoming > 0 && (
+                      <div className="mt-3 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/5 px-3 py-2 text-xs font-semibold text-primary">
+                        <CalendarClock className="h-4 w-4" />
+                        {t('staff.workspace.metrics.upcoming', {
+                          count: performance.upcoming,
+                        })}
+                      </div>
+                    )}
+
                     <div className="mt-5">
                       <div className="mb-2 flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                         <Scissors className="h-3.5 w-3.5" />
@@ -737,6 +947,8 @@ export default function Staff() {
             );
           })}
         </section>
+          )}
+        </>
       )}
 
       <Dialog
@@ -1124,7 +1336,7 @@ function SummaryCard({
   icon,
 }: {
   title: string;
-  value: number;
+  value: number | string;
   description: string;
   icon: React.ReactNode;
 }) {
@@ -1146,6 +1358,36 @@ function SummaryCard({
       </div>
     </div>
   );
+}
+
+
+function StaffMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0">
+      <div className="truncate text-sm font-bold">{value}</div>
+      <div className="mt-1 truncate text-[10px] uppercase tracking-wide text-muted-foreground">
+        {label}
+      </div>
+    </div>
+  );
+}
+
+function formatCurrency(value: number) {
+  return new Intl.NumberFormat(undefined, {
+    style: 'currency',
+    currency: 'EUR',
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function monthStartIso() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 1).toISOString();
+}
+
+function nextMonthStartIso() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth() + 1, 1).toISOString();
 }
 
 function ContactLine({

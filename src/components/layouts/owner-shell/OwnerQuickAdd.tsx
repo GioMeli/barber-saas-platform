@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { CalendarPlus, Megaphone, Plus, Scissors, UserPlus, UsersRound } from 'lucide-react';
+import { CalendarPlus, Megaphone, Plus, Scissors, ShoppingCart, UserPlus, UsersRound } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,6 +24,12 @@ const QUICK_ACTIONS: QuickAction[] = [
     labelKey: 'navigation.quick_actions.appointment',
     path: '/dashboard/calendar?action=new',
     icon: CalendarPlus,
+  },
+  {
+    key: 'sale',
+    labelKey: 'navigation.quick_actions.sale',
+    path: '/dashboard/sales?action=new',
+    icon: ShoppingCart,
   },
   {
     key: 'customer',

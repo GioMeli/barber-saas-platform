@@ -33,7 +33,8 @@
     "reports": "Raporlar",
     "settings": "Ayarlar",
     "billing": "Faturalandırma",
-    "sign_out": "Çıkış yap"
+    "sign_out": "Çıkış yap",
+    "sales": "Satışlar"
   },
   "booking": {
     "select_service": "Hizmet seçin",
@@ -121,7 +122,8 @@
       "customer": "Müşterileri aç",
       "staff": "Ekibi aç",
       "service": "Hizmetleri aç",
-      "post": "Güncelleme oluştur"
+      "post": "Güncelleme oluştur",
+      "sale": "Yeni satış"
     }
   },
   "system": {
@@ -572,6 +574,66 @@
       "saveError": "Failed to save customer",
       "removed": "Customer removed",
       "removeBlocked": "This customer cannot be removed because appointment history exists"
+    },
+    "crm": {
+      "eyebrow": "Müşteri zekâsı",
+      "description": "Tüm müşteri ilişkilerini, ziyaret sıklığını ve gelir katkısını tek bir CRM çalışma alanından anlayın.",
+      "summary": {
+        "total": "Toplam müşteri",
+        "totalDescription": "{{registered}} kayıtlı · {{guests}} misafir",
+        "active": "Aktif müşteriler",
+        "activeDescription": "Son 90 gün içinde ziyaret eden veya randevu alanlar",
+        "atRisk": "Risk altındaki müşteriler",
+        "atRiskDescription": "Yeniden iletişim kurulması gereken eski aktif müşteriler",
+        "vip": "VIP müşteriler",
+        "vipDescription": "En yüksek değere sahip sadık müşterileriniz",
+        "revenue": "Toplam müşteri geliri",
+        "revenueDescription": "Tamamlanan randevulara bağlı gelir"
+      },
+      "segments": {
+        "all": "Tüm müşteriler",
+        "active": "Aktif",
+        "atRisk": "Risk altında",
+        "vip": "VIP",
+        "new": "Yeni"
+      },
+      "searchPlaceholder": "Ad, e-posta, telefon veya notlarda ara",
+      "sort": {
+        "label": "Müşterileri sırala",
+        "recent": "Son eklenenler",
+        "name": "Ad A–Z",
+        "lastVisit": "Son ziyaret",
+        "visits": "En çok ziyaret",
+        "spend": "En yüksek değer"
+      },
+      "states": {
+        "noMatches": "Seçilen arama ve segmente uygun müşteri bulunamadı."
+      },
+      "table": {
+        "relationship": "İlişki",
+        "lastVisit": "Son ziyaret",
+        "visits": "Ziyaretler",
+        "lifetimeValue": "Toplam değer",
+        "records": "Kayıtlar"
+      },
+      "noProfileNotes": "Henüz dahili not yok",
+      "neverVisited": "Henüz tamamlanan ziyaret yok",
+      "nextVisit": "Sonraki {{date}}",
+      "noShows": "{{count}} gelmeme",
+      "noShows_other": "{{count}} gelmeme",
+      "actions": {
+        "call": "Müşteriyi ara",
+        "email": "Müşteriye e-posta gönder",
+        "openProfile": "Müşteri profilini aç"
+      },
+      "lastVisitMobile": "Son ziyaret: {{date}}",
+      "health": {
+        "vip": "VIP",
+        "atRisk": "Risk altında",
+        "active": "Aktif",
+        "new": "Yeni",
+        "dormant": "Pasif"
+      }
     }
   },
   "customerProfile": {
@@ -758,6 +820,37 @@
       "saveFailed": "Personel kaydedilemedi",
       "removed": "Personel kaldırıldı",
       "removeFailed": "Personel kaldırılamadı"
+    },
+    "workspace": {
+      "summary": {
+        "activeTeam": "Aktif ekip",
+        "activeTeamDescription": "{{total}} profil · {{inactive}} pasif",
+        "monthBookings": "Aylık randevular",
+        "monthBookingsDescription": "Bu ay atanan randevular",
+        "completed": "Tamamlanan hizmetler",
+        "completedDescription": "Bu ay €{{revenue}} gelir",
+        "serviceCoverage": "Hizmet kapsamı",
+        "serviceCoverageDescription": "Ekip {{total}} aktif hizmeti kapsıyor"
+      },
+      "searchPlaceholder": "Ad, e-posta veya telefonla ekip üyesi ara",
+      "filters": {
+        "status": "Ekip durumunu filtrele",
+        "all": "Tüm ekip üyeleri"
+      },
+      "sort": {
+        "label": "Ekibi sırala",
+        "name": "Ad A–Z",
+        "bookings": "En çok randevu",
+        "revenue": "En yüksek gelir",
+        "services": "En çok hizmet"
+      },
+      "emptyFiltered": "Seçilen arama ve duruma uygun ekip üyesi bulunamadı.",
+      "metrics": {
+        "bookings": "Randevular",
+        "completed": "Tamamlanan",
+        "revenue": "Gelir",
+        "upcoming": "{{count}} yaklaşan"
+      }
     }
   },
   "services": {
@@ -2102,6 +2195,227 @@
       "updateFailed": "Gönderi güncellenemedi",
       "deleted": "Gönderi silindi",
       "deleteFailed": "Gönderi silinemedi"
+    }
+  },
+  "staffPortal": {
+    "messages": {
+      "loadFailed": "Personel çalışma alanı yüklenemedi",
+      "statusUpdated": "Randevu durumu güncellendi",
+      "statusFailed": "Randevu durumu güncellenemedi"
+    },
+    "states": {
+      "loading": "Çalışma alanınız yükleniyor…",
+      "noProfileTitle": "Personel profili bağlı değil",
+      "noProfileDescription": "Bu hesap aktif bir personel profiline bağlı değil. İşletme sahibinden erişiminizi kontrol etmesini isteyin."
+    },
+    "actions": {
+      "signOut": "Çıkış yap",
+      "refresh": "Programı yenile",
+      "callBusiness": "İşletmeyi ara",
+      "directions": "Yol tarifi",
+      "callClient": "Müşteriyi ara",
+      "emailClient": "Müşteriye e-posta"
+    },
+    "header": {
+      "subtitle": "Personel çalışma alanı"
+    },
+    "hero": {
+      "greeting": "İyi günler, {{name}}",
+      "description": "Önümüzdeki yedi gün için canlı programınız, yaklaşan müşterileriniz ve hizmet ilerlemeniz."
+    },
+    "stats": {
+      "today": "Bugünkü randevular",
+      "completed": "Bugün tamamlanan",
+      "remaining": "Bugün kalan",
+      "bookedTime": "Rezerve süre",
+      "minutes": "{{count}} dk",
+      "hours": "{{count}} sa",
+      "hours_other": "{{count}} sa",
+      "hoursMinutes": "{{hours}} sa {{minutes}} dk"
+    },
+    "next": {
+      "title": "Sonraki randevu"
+    },
+    "today": {
+      "title": "Bugünün programı",
+      "emptyTitle": "Programınız boş",
+      "emptyDescription": "Bugün size atanmış randevu yok."
+    },
+    "upcoming": {
+      "title": "Önümüzdeki 7 gün",
+      "emptyTitle": "Yaklaşan randevu yok",
+      "emptyDescription": "Yeni atanan randevular burada otomatik olarak görünecek."
+    },
+    "appointment": {
+      "duration": "{{minutes}} dakika",
+      "walkIn": "Kayıtsız müşteri",
+      "updateStatus": "Durumu güncelle"
+    },
+    "status": {
+      "pending": "Bekliyor",
+      "confirmed": "Onaylandı",
+      "arrived": "Geldi",
+      "inProgress": "Hizmette",
+      "completed": "Tamamlandı",
+      "noShow": "Gelmedi"
+    }
+  },
+  "sales": {
+    "eyebrow": "Satış noktası",
+    "title": "Satış ve Ödeme",
+    "description": "Randevuları tahsil edin, hizmet ve ürün satın, ödemeleri kaydedin ve tek bir çalışma alanından profesyonel fişler oluşturun.",
+    "actions": {
+      "refresh": "Yenile",
+      "newSale": "Yeni satış",
+      "clear": "Temizle",
+      "add": "Ekle",
+      "unavailable": "Kullanılamıyor",
+      "processing": "Satış işleniyor...",
+      "completeSale": "Satışı tamamla · {{amount}}",
+      "view": "Görüntüle",
+      "cancel": "İptal",
+      "voidSale": "Satışı iptal et",
+      "print": "Fişi yazdır"
+    },
+    "migration": {
+      "title": "Satış veritabanı güncellemesi gerekli",
+      "description": "İşlem kaydetmeden önce Supabase üzerinde 00031_sales_checkout_foundation.sql geçişini uygulayın."
+    },
+    "metrics": {
+      "todayRevenue": "Bugünkü gelir",
+      "completedSales": "{{count}} tamamlanan satış",
+      "todayTransactions": "Bugünkü işlemler",
+      "voidedCount": "{{count}} iptal",
+      "averageTicket": "Ortalama fiş",
+      "completedOnly": "Yalnızca tamamlanan işlemler",
+      "unpaidAppointments": "Ödenmemiş randevular",
+      "readyForCheckout": "Tahsilata hazır"
+    },
+    "tabs": {
+      "checkout": "Ödeme",
+      "transactions": "İşlemler"
+    },
+    "catalog": {
+      "title": "Satışa ekle",
+      "description": "Bir randevudan başlayın veya hizmet, ürün ve özel kalemlerle doğrudan satış oluşturun.",
+      "search": "Katalogda ara...",
+      "appointments": "Randevular",
+      "services": "Hizmetler",
+      "products": "Ürünler",
+      "custom": "Özel kalem",
+      "serviceFallback": "Hizmet",
+      "appointment": "Randevu",
+      "durationMinutes": "{{minutes}} dk",
+      "stockAvailable": "Stokta {{count}}"
+    },
+    "cart": {
+      "title": "Mevcut satış",
+      "items": "{{count}} kalem",
+      "emptyTitle": "Sepet boş",
+      "emptyDescription": "Ödemeye başlamak için randevu, hizmet veya ürün seçin.",
+      "subtotal": "Ara toplam",
+      "discount": "İndirim",
+      "taxRate": "Vergi",
+      "tip": "Bahşiş",
+      "tax": "Vergi tutarı",
+      "total": "Toplam"
+    },
+    "fields": {
+      "customer": "Müşteri",
+      "walkIn": "Randevusuz müşteri",
+      "professional": "Uzman",
+      "unassigned": "Atanmamış",
+      "paymentMethod": "Ödeme yöntemi",
+      "paymentReference": "Ödeme referansı",
+      "paymentReferencePlaceholder": "Terminal, havale veya harici ödeme referansı",
+      "notes": "Satış notları",
+      "notesPlaceholder": "Bu işlem için dahili not"
+    },
+    "paymentMethods": {
+      "cash": "Nakit",
+      "card": "Kart",
+      "bank_transfer": "Banka havalesi",
+      "online": "Çevrimiçi ödeme",
+      "gift_card": "Hediye kartı",
+      "other": "Diğer"
+    },
+    "transactions": {
+      "title": "İşlem geçmişi",
+      "description": "Fişleri, ödeme yöntemlerini ve iptal edilen işlemleri eksiksiz denetim kaydıyla inceleyin.",
+      "search": "Fiş veya müşteri ara...",
+      "receipt": "Fiş",
+      "date": "Tarih",
+      "customer": "Müşteri",
+      "payment": "Ödeme",
+      "status": "Durum",
+      "total": "Toplam",
+      "actions": "İşlemler"
+    },
+    "status": {
+      "all": "Tüm durumlar",
+      "completed": "Tamamlandı",
+      "voided": "İptal edildi",
+      "partially_refunded": "Kısmen iade",
+      "refunded": "İade edildi"
+    },
+    "receipt": {
+      "walkIn": "Randevusuz müşteri",
+      "item": "Kalem",
+      "qty": "Adet",
+      "amount": "Tutar",
+      "customer": "Müşteri",
+      "professional": "Uzman",
+      "payment": "Ödeme"
+    },
+    "void": {
+      "title": "İşlemi iptal et",
+      "warning": "{{receipt}} numaralı fişi iptal etmek ürün stoklarını geri yükler ve bağlı randevuyu ödenmemiş duruma getirir.",
+      "reason": "Neden",
+      "reasonPlaceholder": "Bu satışın neden iptal edildiğini açıklayın",
+      "voidedLabel": "İptal nedeni"
+    },
+    "custom": {
+      "title": "Özel satış kalemi",
+      "description": "Henüz hizmet veya ürün olarak listelenmeyen bir ücret ekleyin.",
+      "name": "Kalem adı",
+      "namePlaceholder": "örn. özel hizmet veya ücret",
+      "price": "Fiyat",
+      "add": "Özel kalem ekle"
+    },
+    "states": {
+      "loading": "Satış alanı yükleniyor...",
+      "noTransactions": "İşlem bulunamadı",
+      "noTransactionsDescription": "Tamamlanan satışlar fiş ve ödeme ayrıntılarıyla burada görünür.",
+      "empty": {
+        "appointments": {
+          "title": "Ödenmemiş randevu yok",
+          "description": "Tüm uygun randevular ödenmiş veya aramanızla eşleşmiyor."
+        },
+        "services": {
+          "title": "Hizmet bulunamadı",
+          "description": "Aramanızla eşleşen aktif hizmet yok."
+        },
+        "products": {
+          "title": "Ürün bulunamadı",
+          "description": "Aramanızla eşleşen aktif perakende ürünü yok."
+        }
+      }
+    },
+    "messages": {
+      "loadError": "Satış alanı yüklenemedi",
+      "outOfStock": "Bu ürün stokta yok",
+      "stockLimit": "Seçilen miktar mevcut stoğu aşıyor",
+      "customItemInvalid": "Geçerli bir kalem adı ve fiyat girin",
+      "appointmentAdded": "Randevu ödemeye eklendi",
+      "emptyCart": "Satışı tamamlamadan önce en az bir kalem ekleyin",
+      "migrationRequired": "Ödeme almadan önce satış geçişini uygulayın",
+      "totalInvalid": "Satış toplamı sıfırdan büyük olmalıdır",
+      "completed": "Satış tamamlandı. Fiş {{receipt}}",
+      "checkoutError": "Satış tamamlanamadı",
+      "voidReasonRequired": "Satışı iptal etmek için neden gerekli",
+      "voided": "Satış iptal edildi ve ürün stoğu geri yüklendi",
+      "voidError": "Satış iptal edilemedi",
+      "popupBlocked": "Fişi yazdırmak için açılır pencerelere izin verin"
     }
   }
 }

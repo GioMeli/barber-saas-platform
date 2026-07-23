@@ -10,6 +10,7 @@ import {
   Megaphone,
   Package,
   Scissors,
+  ShoppingCart,
   Settings2,
   Sparkles,
   Store,
@@ -38,6 +39,13 @@ export const OWNER_NAVIGATION_ITEMS: OwnerNavigationItem[] = [
     path: '/dashboard/calendar',
     icon: CalendarDays,
     keywords: ['calendar', 'appointments', 'schedule', 'booking'],
+  },
+  {
+    key: 'sales',
+    labelKey: 'dashboard.sales',
+    path: '/dashboard/sales',
+    icon: ShoppingCart,
+    keywords: ['sales', 'checkout', 'pos', 'payments', 'receipts'],
   },
   {
     key: 'customers',

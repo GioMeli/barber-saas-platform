@@ -33,7 +33,8 @@
     "reports": "Berichte",
     "settings": "Einstellungen",
     "billing": "Abrechnung",
-    "sign_out": "Abmelden"
+    "sign_out": "Abmelden",
+    "sales": "Verkauf"
   },
   "booking": {
     "select_service": "Dienstleistung auswählen",
@@ -121,7 +122,8 @@
       "customer": "Kunden öffnen",
       "staff": "Team öffnen",
       "service": "Dienstleistungen öffnen",
-      "post": "Update erstellen"
+      "post": "Update erstellen",
+      "sale": "Neuer Verkauf"
     }
   },
   "system": {
@@ -572,6 +574,66 @@
       "saveError": "Failed to save customer",
       "removed": "Customer removed",
       "removeBlocked": "This customer cannot be removed because appointment history exists"
+    },
+    "crm": {
+      "eyebrow": "Kundenintelligenz",
+      "description": "Verstehen Sie jede Kundenbeziehung, Besuchsfrequenz und Umsatzwirkung in einem zentralen CRM-Arbeitsbereich.",
+      "summary": {
+        "total": "Kunden insgesamt",
+        "totalDescription": "{{registered}} registriert · {{guests}} Gäste",
+        "active": "Aktive Kunden",
+        "activeDescription": "Besuch oder Buchung innerhalb der letzten 90 Tage",
+        "atRisk": "Gefährdete Kunden",
+        "atRiskDescription": "Früher aktive Kunden, die erneut angesprochen werden sollten",
+        "vip": "VIP-Kunden",
+        "vipDescription": "Ihre wertvollsten Stammkunden",
+        "revenue": "Kundenumsatz gesamt",
+        "revenueDescription": "Umsatz aus abgeschlossenen Terminen"
+      },
+      "segments": {
+        "all": "Alle Kunden",
+        "active": "Aktiv",
+        "atRisk": "Gefährdet",
+        "vip": "VIP",
+        "new": "Neu"
+      },
+      "searchPlaceholder": "Nach Name, E-Mail, Telefon oder Notizen suchen",
+      "sort": {
+        "label": "Kunden sortieren",
+        "recent": "Zuletzt hinzugefügt",
+        "name": "Name A–Z",
+        "lastVisit": "Letzter Besuch",
+        "visits": "Meiste Besuche",
+        "spend": "Höchster Wert"
+      },
+      "states": {
+        "noMatches": "Keine Kunden entsprechen der Suche und dem gewählten Segment."
+      },
+      "table": {
+        "relationship": "Beziehung",
+        "lastVisit": "Letzter Besuch",
+        "visits": "Besuche",
+        "lifetimeValue": "Gesamtwert",
+        "records": "Datensätze"
+      },
+      "noProfileNotes": "Noch keine internen Notizen",
+      "neverVisited": "Noch keine abgeschlossenen Besuche",
+      "nextVisit": "Nächster Termin {{date}}",
+      "noShows": "{{count}} Nichterscheinen",
+      "noShows_other": "{{count}} Nichterscheinen",
+      "actions": {
+        "call": "Kunden anrufen",
+        "email": "E-Mail an Kunden",
+        "openProfile": "Kundenprofil öffnen"
+      },
+      "lastVisitMobile": "Letzter Besuch: {{date}}",
+      "health": {
+        "vip": "VIP",
+        "atRisk": "Gefährdet",
+        "active": "Aktiv",
+        "new": "Neu",
+        "dormant": "Inaktiv"
+      }
     }
   },
   "customerProfile": {
@@ -758,6 +820,37 @@
       "saveFailed": "Mitarbeiter konnte nicht gespeichert werden",
       "removed": "Mitarbeiter wurde entfernt",
       "removeFailed": "Mitarbeiter konnte nicht entfernt werden"
+    },
+    "workspace": {
+      "summary": {
+        "activeTeam": "Aktives Team",
+        "activeTeamDescription": "{{total}} Profile · {{inactive}} inaktiv",
+        "monthBookings": "Buchungen im Monat",
+        "monthBookingsDescription": "Diesen Monat zugewiesene Termine",
+        "completed": "Abgeschlossene Leistungen",
+        "completedDescription": "€{{revenue}} Umsatz in diesem Monat",
+        "serviceCoverage": "Leistungsabdeckung",
+        "serviceCoverageDescription": "{{total}} aktive Leistungen werden vom Team abgedeckt"
+      },
+      "searchPlaceholder": "Teammitglied nach Name, E-Mail oder Telefon suchen",
+      "filters": {
+        "status": "Teamstatus filtern",
+        "all": "Alle Teammitglieder"
+      },
+      "sort": {
+        "label": "Team sortieren",
+        "name": "Name A–Z",
+        "bookings": "Meiste Buchungen",
+        "revenue": "Höchster Umsatz",
+        "services": "Meiste Leistungen"
+      },
+      "emptyFiltered": "Keine Teammitglieder entsprechen der Suche und dem Status.",
+      "metrics": {
+        "bookings": "Buchungen",
+        "completed": "Abgeschlossen",
+        "revenue": "Umsatz",
+        "upcoming": "{{count}} bevorstehend"
+      }
     }
   },
   "services": {
@@ -2102,6 +2195,227 @@
       "updateFailed": "Beitrag konnte nicht aktualisiert werden",
       "deleted": "Beitrag gelöscht",
       "deleteFailed": "Beitrag konnte nicht gelöscht werden"
+    }
+  },
+  "staffPortal": {
+    "messages": {
+      "loadFailed": "Mitarbeiterbereich konnte nicht geladen werden",
+      "statusUpdated": "Terminstatus aktualisiert",
+      "statusFailed": "Terminstatus konnte nicht aktualisiert werden"
+    },
+    "states": {
+      "loading": "Arbeitsbereich wird geladen…",
+      "noProfileTitle": "Mitarbeiterprofil nicht verbunden",
+      "noProfileDescription": "Dieses Konto ist keinem aktiven Mitarbeiterprofil zugeordnet. Bitten Sie den Inhaber, Ihren Zugang zu prüfen."
+    },
+    "actions": {
+      "signOut": "Abmelden",
+      "refresh": "Zeitplan aktualisieren",
+      "callBusiness": "Betrieb anrufen",
+      "directions": "Route",
+      "callClient": "Kunden anrufen",
+      "emailClient": "E-Mail an Kunden"
+    },
+    "header": {
+      "subtitle": "Mitarbeiterbereich"
+    },
+    "hero": {
+      "greeting": "Guten Tag, {{name}}",
+      "description": "Ihr Live-Zeitplan, kommende Kunden und Leistungsfortschritt für die nächsten sieben Tage."
+    },
+    "stats": {
+      "today": "Heutige Termine",
+      "completed": "Heute abgeschlossen",
+      "remaining": "Heute verbleibend",
+      "bookedTime": "Gebuchte Zeit",
+      "minutes": "{{count}} Min.",
+      "hours": "{{count}} Std.",
+      "hours_other": "{{count}} Std.",
+      "hoursMinutes": "{{hours}} Std. {{minutes}} Min."
+    },
+    "next": {
+      "title": "Nächster Termin"
+    },
+    "today": {
+      "title": "Heutiger Zeitplan",
+      "emptyTitle": "Ihr Zeitplan ist frei",
+      "emptyDescription": "Heute sind Ihnen keine Termine zugewiesen."
+    },
+    "upcoming": {
+      "title": "Nächste 7 Tage",
+      "emptyTitle": "Keine anstehenden Termine",
+      "emptyDescription": "Neu zugewiesene Termine erscheinen automatisch hier."
+    },
+    "appointment": {
+      "duration": "{{minutes}} Minuten",
+      "walkIn": "Laufkundschaft",
+      "updateStatus": "Status aktualisieren"
+    },
+    "status": {
+      "pending": "Ausstehend",
+      "confirmed": "Bestätigt",
+      "arrived": "Eingetroffen",
+      "inProgress": "In Behandlung",
+      "completed": "Abgeschlossen",
+      "noShow": "Nicht erschienen"
+    }
+  },
+  "sales": {
+    "eyebrow": "Kasse",
+    "title": "Verkauf & Checkout",
+    "description": "Termine abrechnen, Dienstleistungen und Produkte verkaufen, Zahlungen erfassen und professionelle Belege aus einem Arbeitsbereich ausstellen.",
+    "actions": {
+      "refresh": "Aktualisieren",
+      "newSale": "Neuer Verkauf",
+      "clear": "Leeren",
+      "add": "Hinzufügen",
+      "unavailable": "Nicht verfügbar",
+      "processing": "Verkauf wird verarbeitet...",
+      "completeSale": "Verkauf abschließen · {{amount}}",
+      "view": "Anzeigen",
+      "cancel": "Abbrechen",
+      "voidSale": "Verkauf stornieren",
+      "print": "Beleg drucken"
+    },
+    "migration": {
+      "title": "Datenbankaktualisierung für Verkäufe erforderlich",
+      "description": "Wenden Sie die Migration 00031_sales_checkout_foundation.sql in Supabase an, bevor Transaktionen erfasst werden."
+    },
+    "metrics": {
+      "todayRevenue": "Heutiger Umsatz",
+      "completedSales": "{{count}} abgeschlossene Verkäufe",
+      "todayTransactions": "Heutige Transaktionen",
+      "voidedCount": "{{count}} storniert",
+      "averageTicket": "Durchschnittsbon",
+      "completedOnly": "Nur abgeschlossene Transaktionen",
+      "unpaidAppointments": "Unbezahlte Termine",
+      "readyForCheckout": "Bereit zur Abrechnung"
+    },
+    "tabs": {
+      "checkout": "Kasse",
+      "transactions": "Transaktionen"
+    },
+    "catalog": {
+      "title": "Zum Verkauf hinzufügen",
+      "description": "Starten Sie mit einem Termin oder erstellen Sie einen Direktverkauf mit Dienstleistungen, Produkten und individuellen Positionen.",
+      "search": "Katalog durchsuchen...",
+      "appointments": "Termine",
+      "services": "Dienstleistungen",
+      "products": "Produkte",
+      "custom": "Individuelle Position",
+      "serviceFallback": "Dienstleistung",
+      "appointment": "Termin",
+      "durationMinutes": "{{minutes}} Min.",
+      "stockAvailable": "{{count}} auf Lager"
+    },
+    "cart": {
+      "title": "Aktueller Verkauf",
+      "items": "{{count}} Positionen",
+      "emptyTitle": "Der Warenkorb ist leer",
+      "emptyDescription": "Wählen Sie einen Termin, eine Dienstleistung oder ein Produkt aus.",
+      "subtotal": "Zwischensumme",
+      "discount": "Rabatt",
+      "taxRate": "Steuer",
+      "tip": "Trinkgeld",
+      "tax": "Steuerbetrag",
+      "total": "Gesamt"
+    },
+    "fields": {
+      "customer": "Kunde",
+      "walkIn": "Laufkundschaft",
+      "professional": "Mitarbeiter",
+      "unassigned": "Nicht zugewiesen",
+      "paymentMethod": "Zahlungsart",
+      "paymentReference": "Zahlungsreferenz",
+      "paymentReferencePlaceholder": "Terminal-, Überweisungs- oder externe Referenz",
+      "notes": "Verkaufsnotizen",
+      "notesPlaceholder": "Interne Notiz zu dieser Transaktion"
+    },
+    "paymentMethods": {
+      "cash": "Bar",
+      "card": "Karte",
+      "bank_transfer": "Banküberweisung",
+      "online": "Online-Zahlung",
+      "gift_card": "Geschenkkarte",
+      "other": "Sonstige"
+    },
+    "transactions": {
+      "title": "Transaktionsverlauf",
+      "description": "Belege, Zahlungsarten und stornierte Transaktionen mit vollständigem Prüfpfad einsehen.",
+      "search": "Beleg oder Kunde suchen...",
+      "receipt": "Beleg",
+      "date": "Datum",
+      "customer": "Kunde",
+      "payment": "Zahlung",
+      "status": "Status",
+      "total": "Gesamt",
+      "actions": "Aktionen"
+    },
+    "status": {
+      "all": "Alle Status",
+      "completed": "Abgeschlossen",
+      "voided": "Storniert",
+      "partially_refunded": "Teilweise erstattet",
+      "refunded": "Erstattet"
+    },
+    "receipt": {
+      "walkIn": "Laufkundschaft",
+      "item": "Position",
+      "qty": "Menge",
+      "amount": "Betrag",
+      "customer": "Kunde",
+      "professional": "Mitarbeiter",
+      "payment": "Zahlung"
+    },
+    "void": {
+      "title": "Transaktion stornieren",
+      "warning": "Beim Stornieren von Beleg {{receipt}} wird der Produktbestand wiederhergestellt und der verknüpfte Termin als unbezahlt markiert.",
+      "reason": "Grund",
+      "reasonPlaceholder": "Grund für die Stornierung eingeben",
+      "voidedLabel": "Stornierungsgrund"
+    },
+    "custom": {
+      "title": "Individuelle Verkaufsposition",
+      "description": "Fügen Sie eine Gebühr hinzu, die noch nicht als Dienstleistung oder Produkt hinterlegt ist.",
+      "name": "Bezeichnung",
+      "namePlaceholder": "z. B. Sonderleistung oder Gebühr",
+      "price": "Preis",
+      "add": "Position hinzufügen"
+    },
+    "states": {
+      "loading": "Verkaufsbereich wird geladen...",
+      "noTransactions": "Keine Transaktionen gefunden",
+      "noTransactionsDescription": "Abgeschlossene Verkäufe erscheinen hier mit Beleg- und Zahlungsdetails.",
+      "empty": {
+        "appointments": {
+          "title": "Keine unbezahlten Termine",
+          "description": "Alle verfügbaren Termine sind bezahlt oder entsprechen nicht der Suche."
+        },
+        "services": {
+          "title": "Keine Dienstleistungen gefunden",
+          "description": "Keine aktive Dienstleistung entspricht der Suche."
+        },
+        "products": {
+          "title": "Keine Produkte gefunden",
+          "description": "Kein aktives Verkaufsprodukt entspricht der Suche."
+        }
+      }
+    },
+    "messages": {
+      "loadError": "Verkaufsbereich konnte nicht geladen werden",
+      "outOfStock": "Dieses Produkt ist nicht vorrätig",
+      "stockLimit": "Die gewählte Menge übersteigt den verfügbaren Bestand",
+      "customItemInvalid": "Gültige Bezeichnung und Preis eingeben",
+      "appointmentAdded": "Termin zur Kasse hinzugefügt",
+      "emptyCart": "Fügen Sie mindestens eine Position hinzu",
+      "migrationRequired": "Wenden Sie vor der Abrechnung die Verkaufsmigration an",
+      "totalInvalid": "Der Gesamtbetrag muss größer als null sein",
+      "completed": "Verkauf abgeschlossen. Beleg {{receipt}}",
+      "checkoutError": "Verkauf konnte nicht abgeschlossen werden",
+      "voidReasonRequired": "Für die Stornierung ist ein Grund erforderlich",
+      "voided": "Verkauf storniert und Produktbestand wiederhergestellt",
+      "voidError": "Verkauf konnte nicht storniert werden",
+      "popupBlocked": "Pop-ups zum Drucken des Belegs zulassen"
     }
   }
 }

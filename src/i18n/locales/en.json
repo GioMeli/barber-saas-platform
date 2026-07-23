@@ -33,7 +33,8 @@
     "reports": "Reports",
     "settings": "Settings",
     "billing": "Billing",
-    "sign_out": "Sign Out"
+    "sign_out": "Sign Out",
+    "sales": "Sales"
   },
   "booking": {
     "select_service": "Select a Service",
@@ -121,7 +122,8 @@
       "customer": "Open customers",
       "staff": "Open staff",
       "service": "Open services",
-      "post": "Create an update"
+      "post": "Create an update",
+      "sale": "New sale"
     }
   },
   "system": {
@@ -572,6 +574,66 @@
       "saveError": "Failed to save customer",
       "removed": "Customer removed",
       "removeBlocked": "This customer cannot be removed because appointment history exists"
+    },
+    "crm": {
+      "eyebrow": "Customer intelligence",
+      "description": "Understand every customer relationship, visit pattern and revenue contribution from one CRM workspace.",
+      "summary": {
+        "total": "Total customers",
+        "totalDescription": "{{registered}} registered · {{guests}} guests",
+        "active": "Active customers",
+        "activeDescription": "Visited or booked within the last 90 days",
+        "atRisk": "At-risk customers",
+        "atRiskDescription": "Previously active customers who may need re-engagement",
+        "vip": "VIP customers",
+        "vipDescription": "Your highest-value repeat customers",
+        "revenue": "Lifetime revenue",
+        "revenueDescription": "Revenue connected to completed appointments"
+      },
+      "segments": {
+        "all": "All customers",
+        "active": "Active",
+        "atRisk": "At risk",
+        "vip": "VIP",
+        "new": "New"
+      },
+      "searchPlaceholder": "Search customer name, email, phone or notes",
+      "sort": {
+        "label": "Sort customers",
+        "recent": "Recently added",
+        "name": "Name A–Z",
+        "lastVisit": "Last visit",
+        "visits": "Most visits",
+        "spend": "Highest value"
+      },
+      "states": {
+        "noMatches": "No customers match the selected search and segment."
+      },
+      "table": {
+        "relationship": "Relationship",
+        "lastVisit": "Last visit",
+        "visits": "Visits",
+        "lifetimeValue": "Lifetime value",
+        "records": "Records"
+      },
+      "noProfileNotes": "No internal notes yet",
+      "neverVisited": "No completed visits yet",
+      "nextVisit": "Next {{date}}",
+      "noShows": "{{count}} no-show",
+      "noShows_other": "{{count}} no-shows",
+      "actions": {
+        "call": "Call customer",
+        "email": "Email customer",
+        "openProfile": "Open customer profile"
+      },
+      "lastVisitMobile": "Last visit: {{date}}",
+      "health": {
+        "vip": "VIP",
+        "atRisk": "At risk",
+        "active": "Active",
+        "new": "New",
+        "dormant": "Dormant"
+      }
     }
   },
   "customerProfile": {
@@ -758,6 +820,37 @@
       "saveFailed": "Failed to save staff member",
       "removed": "Staff member removed",
       "removeFailed": "Failed to remove staff member"
+    },
+    "workspace": {
+      "summary": {
+        "activeTeam": "Active team",
+        "activeTeamDescription": "{{total}} profiles · {{inactive}} inactive",
+        "monthBookings": "Monthly bookings",
+        "monthBookingsDescription": "Appointments assigned this month",
+        "completed": "Completed services",
+        "completedDescription": "€{{revenue}} generated this month",
+        "serviceCoverage": "Service coverage",
+        "serviceCoverageDescription": "{{total}} active services covered by the team"
+      },
+      "searchPlaceholder": "Search team member by name, email or phone",
+      "filters": {
+        "status": "Filter team status",
+        "all": "All team members"
+      },
+      "sort": {
+        "label": "Sort team",
+        "name": "Name A–Z",
+        "bookings": "Most bookings",
+        "revenue": "Highest revenue",
+        "services": "Most services"
+      },
+      "emptyFiltered": "No team members match the selected search and status.",
+      "metrics": {
+        "bookings": "Bookings",
+        "completed": "Completed",
+        "revenue": "Revenue",
+        "upcoming": "{{count}} upcoming"
+      }
     }
   },
   "services": {
@@ -2102,6 +2195,227 @@
       "updateFailed": "Failed to update post",
       "deleted": "Post deleted",
       "deleteFailed": "Failed to delete post"
+    }
+  },
+  "staffPortal": {
+    "messages": {
+      "loadFailed": "Failed to load your staff workspace",
+      "statusUpdated": "Appointment status updated",
+      "statusFailed": "Failed to update appointment status"
+    },
+    "states": {
+      "loading": "Loading your workspace…",
+      "noProfileTitle": "Staff profile not connected",
+      "noProfileDescription": "This account is not linked to an active staff profile. Ask the business owner to review your access."
+    },
+    "actions": {
+      "signOut": "Sign out",
+      "refresh": "Refresh schedule",
+      "callBusiness": "Call business",
+      "directions": "Directions",
+      "callClient": "Call client",
+      "emailClient": "Email client"
+    },
+    "header": {
+      "subtitle": "Staff workspace"
+    },
+    "hero": {
+      "greeting": "Good day, {{name}}",
+      "description": "Your live schedule, upcoming clients and service progress for the next seven days."
+    },
+    "stats": {
+      "today": "Today’s appointments",
+      "completed": "Completed today",
+      "remaining": "Remaining today",
+      "bookedTime": "Booked time",
+      "minutes": "{{count}} min",
+      "hours": "{{count}} hr",
+      "hours_other": "{{count}} hrs",
+      "hoursMinutes": "{{hours}} hr {{minutes}} min"
+    },
+    "next": {
+      "title": "Next appointment"
+    },
+    "today": {
+      "title": "Today’s schedule",
+      "emptyTitle": "Your schedule is clear",
+      "emptyDescription": "No appointments are assigned to you today."
+    },
+    "upcoming": {
+      "title": "Next 7 days",
+      "emptyTitle": "No upcoming appointments",
+      "emptyDescription": "New assigned appointments will appear here automatically."
+    },
+    "appointment": {
+      "duration": "{{minutes}} minutes",
+      "walkIn": "Walk-in customer",
+      "updateStatus": "Update status"
+    },
+    "status": {
+      "pending": "Pending",
+      "confirmed": "Confirmed",
+      "arrived": "Arrived",
+      "inProgress": "In service",
+      "completed": "Completed",
+      "noShow": "No-show"
+    }
+  },
+  "sales": {
+    "eyebrow": "Point of sale",
+    "title": "Sales & Checkout",
+    "description": "Complete appointments, sell services and products, record payments and issue professional receipts from one workspace.",
+    "actions": {
+      "refresh": "Refresh",
+      "newSale": "New sale",
+      "clear": "Clear",
+      "add": "Add",
+      "unavailable": "Unavailable",
+      "processing": "Processing sale...",
+      "completeSale": "Complete sale · {{amount}}",
+      "view": "View",
+      "cancel": "Cancel",
+      "voidSale": "Void sale",
+      "print": "Print receipt"
+    },
+    "migration": {
+      "title": "Sales database update required",
+      "description": "Apply migration 00031_sales_checkout_foundation.sql in Supabase before recording transactions."
+    },
+    "metrics": {
+      "todayRevenue": "Today's revenue",
+      "completedSales": "{{count}} completed sales",
+      "todayTransactions": "Today's transactions",
+      "voidedCount": "{{count}} voided",
+      "averageTicket": "Average ticket",
+      "completedOnly": "Completed transactions only",
+      "unpaidAppointments": "Unpaid appointments",
+      "readyForCheckout": "Ready for checkout"
+    },
+    "tabs": {
+      "checkout": "Checkout",
+      "transactions": "Transactions"
+    },
+    "catalog": {
+      "title": "Add to sale",
+      "description": "Start from an appointment or build a walk-in sale with services, products and custom items.",
+      "search": "Search catalogue...",
+      "appointments": "Appointments",
+      "services": "Services",
+      "products": "Products",
+      "custom": "Custom item",
+      "serviceFallback": "Service",
+      "appointment": "Appointment",
+      "durationMinutes": "{{minutes}} min",
+      "stockAvailable": "{{count}} in stock"
+    },
+    "cart": {
+      "title": "Current sale",
+      "items": "{{count}} items",
+      "emptyTitle": "Your cart is empty",
+      "emptyDescription": "Select an appointment, service or product to start checkout.",
+      "subtotal": "Subtotal",
+      "discount": "Discount",
+      "taxRate": "Tax",
+      "tip": "Tip",
+      "tax": "Tax amount",
+      "total": "Total"
+    },
+    "fields": {
+      "customer": "Customer",
+      "walkIn": "Walk-in customer",
+      "professional": "Professional",
+      "unassigned": "Unassigned",
+      "paymentMethod": "Payment method",
+      "paymentReference": "Payment reference",
+      "paymentReferencePlaceholder": "Terminal, transfer or external reference",
+      "notes": "Sale notes",
+      "notesPlaceholder": "Internal note for this transaction"
+    },
+    "paymentMethods": {
+      "cash": "Cash",
+      "card": "Card",
+      "bank_transfer": "Bank transfer",
+      "online": "Online payment",
+      "gift_card": "Gift card",
+      "other": "Other"
+    },
+    "transactions": {
+      "title": "Transaction history",
+      "description": "Review receipts, payment methods and voided transactions with a complete audit trail.",
+      "search": "Search receipt or customer...",
+      "receipt": "Receipt",
+      "date": "Date",
+      "customer": "Customer",
+      "payment": "Payment",
+      "status": "Status",
+      "total": "Total",
+      "actions": "Actions"
+    },
+    "status": {
+      "all": "All statuses",
+      "completed": "Completed",
+      "voided": "Voided",
+      "partially_refunded": "Partially refunded",
+      "refunded": "Refunded"
+    },
+    "receipt": {
+      "walkIn": "Walk-in customer",
+      "item": "Item",
+      "qty": "Qty",
+      "amount": "Amount",
+      "customer": "Customer",
+      "professional": "Professional",
+      "payment": "Payment"
+    },
+    "void": {
+      "title": "Void transaction",
+      "warning": "Voiding receipt {{receipt}} will restore product stock and return the linked appointment to unpaid.",
+      "reason": "Reason",
+      "reasonPlaceholder": "Explain why this sale is being voided",
+      "voidedLabel": "Void reason"
+    },
+    "custom": {
+      "title": "Custom sale item",
+      "description": "Add a charge that is not currently listed as a service or product.",
+      "name": "Item name",
+      "namePlaceholder": "e.g. Special service or fee",
+      "price": "Price",
+      "add": "Add custom item"
+    },
+    "states": {
+      "loading": "Loading sales workspace...",
+      "noTransactions": "No transactions found",
+      "noTransactionsDescription": "Completed sales will appear here with their receipt and payment details.",
+      "empty": {
+        "appointments": {
+          "title": "No unpaid appointments",
+          "description": "All available appointments are already paid or do not match your search."
+        },
+        "services": {
+          "title": "No services found",
+          "description": "No active services match your search."
+        },
+        "products": {
+          "title": "No products found",
+          "description": "No active retail products match your search."
+        }
+      }
+    },
+    "messages": {
+      "loadError": "Failed to load the sales workspace",
+      "outOfStock": "This product is out of stock",
+      "stockLimit": "The selected quantity exceeds available stock",
+      "customItemInvalid": "Enter a valid item name and price",
+      "appointmentAdded": "Appointment added to checkout",
+      "emptyCart": "Add at least one item before completing the sale",
+      "migrationRequired": "Apply the sales database migration before checkout",
+      "totalInvalid": "Sale total must be greater than zero",
+      "completed": "Sale completed. Receipt {{receipt}}",
+      "checkoutError": "Failed to complete the sale",
+      "voidReasonRequired": "A reason is required to void a sale",
+      "voided": "Sale voided and product stock restored",
+      "voidError": "Failed to void the sale",
+      "popupBlocked": "Allow pop-ups to print the receipt"
     }
   }
 }

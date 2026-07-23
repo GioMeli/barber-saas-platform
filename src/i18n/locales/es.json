@@ -33,7 +33,8 @@
     "reports": "Informes",
     "settings": "Configuración",
     "billing": "Facturación",
-    "sign_out": "Cerrar sesión"
+    "sign_out": "Cerrar sesión",
+    "sales": "Ventas"
   },
   "booking": {
     "select_service": "Seleccionar servicio",
@@ -121,7 +122,8 @@
       "customer": "Abrir clientes",
       "staff": "Abrir equipo",
       "service": "Abrir servicios",
-      "post": "Crear actualización"
+      "post": "Crear actualización",
+      "sale": "Nueva venta"
     }
   },
   "system": {
@@ -572,6 +574,66 @@
       "saveError": "Failed to save customer",
       "removed": "Customer removed",
       "removeBlocked": "This customer cannot be removed because appointment history exists"
+    },
+    "crm": {
+      "eyebrow": "Inteligencia de clientes",
+      "description": "Comprende cada relación, frecuencia de visita y contribución a los ingresos desde un único espacio CRM.",
+      "summary": {
+        "total": "Total de clientes",
+        "totalDescription": "{{registered}} registrados · {{guests}} invitados",
+        "active": "Clientes activos",
+        "activeDescription": "Visitaron o reservaron en los últimos 90 días",
+        "atRisk": "Clientes en riesgo",
+        "atRiskDescription": "Clientes anteriormente activos que conviene recuperar",
+        "vip": "Clientes VIP",
+        "vipDescription": "Tus clientes recurrentes de mayor valor",
+        "revenue": "Ingresos históricos",
+        "revenueDescription": "Ingresos vinculados a citas completadas"
+      },
+      "segments": {
+        "all": "Todos los clientes",
+        "active": "Activos",
+        "atRisk": "En riesgo",
+        "vip": "VIP",
+        "new": "Nuevos"
+      },
+      "searchPlaceholder": "Buscar por nombre, email, teléfono o notas",
+      "sort": {
+        "label": "Ordenar clientes",
+        "recent": "Añadidos recientemente",
+        "name": "Nombre A–Z",
+        "lastVisit": "Última visita",
+        "visits": "Más visitas",
+        "spend": "Mayor valor"
+      },
+      "states": {
+        "noMatches": "Ningún cliente coincide con la búsqueda y el segmento seleccionados."
+      },
+      "table": {
+        "relationship": "Relación",
+        "lastVisit": "Última visita",
+        "visits": "Visitas",
+        "lifetimeValue": "Valor histórico",
+        "records": "Registros"
+      },
+      "noProfileNotes": "Aún no hay notas internas",
+      "neverVisited": "Aún no hay visitas completadas",
+      "nextVisit": "Próxima {{date}}",
+      "noShows": "{{count}} ausencia",
+      "noShows_other": "{{count}} ausencias",
+      "actions": {
+        "call": "Llamar al cliente",
+        "email": "Enviar email al cliente",
+        "openProfile": "Abrir perfil del cliente"
+      },
+      "lastVisitMobile": "Última visita: {{date}}",
+      "health": {
+        "vip": "VIP",
+        "atRisk": "En riesgo",
+        "active": "Activo",
+        "new": "Nuevo",
+        "dormant": "Inactivo"
+      }
     }
   },
   "customerProfile": {
@@ -758,6 +820,37 @@
       "saveFailed": "No se pudo guardar el miembro",
       "removed": "Miembro eliminado",
       "removeFailed": "No se pudo eliminar el miembro"
+    },
+    "workspace": {
+      "summary": {
+        "activeTeam": "Equipo activo",
+        "activeTeamDescription": "{{total}} perfiles · {{inactive}} inactivos",
+        "monthBookings": "Reservas del mes",
+        "monthBookingsDescription": "Citas asignadas este mes",
+        "completed": "Servicios completados",
+        "completedDescription": "€{{revenue}} generados este mes",
+        "serviceCoverage": "Cobertura de servicios",
+        "serviceCoverageDescription": "El equipo cubre {{total}} servicios activos"
+      },
+      "searchPlaceholder": "Buscar miembro por nombre, email o teléfono",
+      "filters": {
+        "status": "Filtrar estado del equipo",
+        "all": "Todo el equipo"
+      },
+      "sort": {
+        "label": "Ordenar equipo",
+        "name": "Nombre A–Z",
+        "bookings": "Más reservas",
+        "revenue": "Mayores ingresos",
+        "services": "Más servicios"
+      },
+      "emptyFiltered": "Ningún miembro coincide con la búsqueda y el estado seleccionados.",
+      "metrics": {
+        "bookings": "Reservas",
+        "completed": "Completadas",
+        "revenue": "Ingresos",
+        "upcoming": "{{count}} próximas"
+      }
     }
   },
   "services": {
@@ -2102,6 +2195,227 @@
       "updateFailed": "No se pudo actualizar la publicación",
       "deleted": "Publicación eliminada",
       "deleteFailed": "No se pudo eliminar la publicación"
+    }
+  },
+  "staffPortal": {
+    "messages": {
+      "loadFailed": "No se pudo cargar el espacio del personal",
+      "statusUpdated": "Estado de la cita actualizado",
+      "statusFailed": "No se pudo actualizar el estado"
+    },
+    "states": {
+      "loading": "Cargando tu espacio…",
+      "noProfileTitle": "Perfil de personal no conectado",
+      "noProfileDescription": "Esta cuenta no está vinculada a un perfil de personal activo. Pide al propietario que revise tu acceso."
+    },
+    "actions": {
+      "signOut": "Cerrar sesión",
+      "refresh": "Actualizar agenda",
+      "callBusiness": "Llamar al negocio",
+      "directions": "Cómo llegar",
+      "callClient": "Llamar al cliente",
+      "emailClient": "Email al cliente"
+    },
+    "header": {
+      "subtitle": "Espacio del personal"
+    },
+    "hero": {
+      "greeting": "Buen día, {{name}}",
+      "description": "Tu agenda en vivo, próximos clientes y progreso de servicios para los próximos siete días."
+    },
+    "stats": {
+      "today": "Citas de hoy",
+      "completed": "Completadas hoy",
+      "remaining": "Pendientes hoy",
+      "bookedTime": "Tiempo reservado",
+      "minutes": "{{count}} min",
+      "hours": "{{count}} h",
+      "hours_other": "{{count}} h",
+      "hoursMinutes": "{{hours}} h {{minutes}} min"
+    },
+    "next": {
+      "title": "Próxima cita"
+    },
+    "today": {
+      "title": "Agenda de hoy",
+      "emptyTitle": "Tu agenda está libre",
+      "emptyDescription": "No tienes citas asignadas para hoy."
+    },
+    "upcoming": {
+      "title": "Próximos 7 días",
+      "emptyTitle": "No hay próximas citas",
+      "emptyDescription": "Las nuevas citas asignadas aparecerán aquí automáticamente."
+    },
+    "appointment": {
+      "duration": "{{minutes}} minutos",
+      "walkIn": "Cliente sin registro",
+      "updateStatus": "Actualizar estado"
+    },
+    "status": {
+      "pending": "Pendiente",
+      "confirmed": "Confirmada",
+      "arrived": "Ha llegado",
+      "inProgress": "En servicio",
+      "completed": "Completada",
+      "noShow": "No se presentó"
+    }
+  },
+  "sales": {
+    "eyebrow": "Punto de venta",
+    "title": "Ventas y cobro",
+    "description": "Cobra citas, vende servicios y productos, registra pagos y emite recibos profesionales desde un único espacio.",
+    "actions": {
+      "refresh": "Actualizar",
+      "newSale": "Nueva venta",
+      "clear": "Vaciar",
+      "add": "Añadir",
+      "unavailable": "No disponible",
+      "processing": "Procesando venta...",
+      "completeSale": "Completar venta · {{amount}}",
+      "view": "Ver",
+      "cancel": "Cancelar",
+      "voidSale": "Anular venta",
+      "print": "Imprimir recibo"
+    },
+    "migration": {
+      "title": "Se requiere actualizar la base de datos de ventas",
+      "description": "Aplica la migración 00031_sales_checkout_foundation.sql en Supabase antes de registrar transacciones."
+    },
+    "metrics": {
+      "todayRevenue": "Ingresos de hoy",
+      "completedSales": "{{count}} ventas completadas",
+      "todayTransactions": "Transacciones de hoy",
+      "voidedCount": "{{count}} anuladas",
+      "averageTicket": "Ticket medio",
+      "completedOnly": "Solo transacciones completadas",
+      "unpaidAppointments": "Citas sin pagar",
+      "readyForCheckout": "Listas para cobrar"
+    },
+    "tabs": {
+      "checkout": "Cobro",
+      "transactions": "Transacciones"
+    },
+    "catalog": {
+      "title": "Añadir a la venta",
+      "description": "Empieza desde una cita o crea una venta directa con servicios, productos y cargos personalizados.",
+      "search": "Buscar en el catálogo...",
+      "appointments": "Citas",
+      "services": "Servicios",
+      "products": "Productos",
+      "custom": "Artículo personalizado",
+      "serviceFallback": "Servicio",
+      "appointment": "Cita",
+      "durationMinutes": "{{minutes}} min",
+      "stockAvailable": "{{count}} en stock"
+    },
+    "cart": {
+      "title": "Venta actual",
+      "items": "{{count}} artículos",
+      "emptyTitle": "El carrito está vacío",
+      "emptyDescription": "Selecciona una cita, servicio o producto para comenzar.",
+      "subtotal": "Subtotal",
+      "discount": "Descuento",
+      "taxRate": "Impuesto",
+      "tip": "Propina",
+      "tax": "Importe del impuesto",
+      "total": "Total"
+    },
+    "fields": {
+      "customer": "Cliente",
+      "walkIn": "Cliente sin cita",
+      "professional": "Profesional",
+      "unassigned": "Sin asignar",
+      "paymentMethod": "Método de pago",
+      "paymentReference": "Referencia de pago",
+      "paymentReferencePlaceholder": "Referencia de terminal, transferencia o pago externo",
+      "notes": "Notas de venta",
+      "notesPlaceholder": "Nota interna para esta transacción"
+    },
+    "paymentMethods": {
+      "cash": "Efectivo",
+      "card": "Tarjeta",
+      "bank_transfer": "Transferencia bancaria",
+      "online": "Pago en línea",
+      "gift_card": "Tarjeta regalo",
+      "other": "Otro"
+    },
+    "transactions": {
+      "title": "Historial de transacciones",
+      "description": "Revisa recibos, métodos de pago y transacciones anuladas con una auditoría completa.",
+      "search": "Buscar recibo o cliente...",
+      "receipt": "Recibo",
+      "date": "Fecha",
+      "customer": "Cliente",
+      "payment": "Pago",
+      "status": "Estado",
+      "total": "Total",
+      "actions": "Acciones"
+    },
+    "status": {
+      "all": "Todos los estados",
+      "completed": "Completada",
+      "voided": "Anulada",
+      "partially_refunded": "Reembolso parcial",
+      "refunded": "Reembolsada"
+    },
+    "receipt": {
+      "walkIn": "Cliente sin cita",
+      "item": "Artículo",
+      "qty": "Cant.",
+      "amount": "Importe",
+      "customer": "Cliente",
+      "professional": "Profesional",
+      "payment": "Pago"
+    },
+    "void": {
+      "title": "Anular transacción",
+      "warning": "Al anular el recibo {{receipt}} se restaurará el stock y la cita vinculada volverá a estar sin pagar.",
+      "reason": "Motivo",
+      "reasonPlaceholder": "Explica por qué se anula esta venta",
+      "voidedLabel": "Motivo de anulación"
+    },
+    "custom": {
+      "title": "Artículo personalizado",
+      "description": "Añade un cargo que todavía no figura como servicio o producto.",
+      "name": "Nombre del artículo",
+      "namePlaceholder": "p. ej., servicio especial o cargo",
+      "price": "Precio",
+      "add": "Añadir artículo"
+    },
+    "states": {
+      "loading": "Cargando espacio de ventas...",
+      "noTransactions": "No se encontraron transacciones",
+      "noTransactionsDescription": "Las ventas completadas aparecerán aquí con su recibo y detalles de pago.",
+      "empty": {
+        "appointments": {
+          "title": "No hay citas sin pagar",
+          "description": "Todas las citas disponibles están pagadas o no coinciden con la búsqueda."
+        },
+        "services": {
+          "title": "No se encontraron servicios",
+          "description": "Ningún servicio activo coincide con la búsqueda."
+        },
+        "products": {
+          "title": "No se encontraron productos",
+          "description": "Ningún producto activo coincide con la búsqueda."
+        }
+      }
+    },
+    "messages": {
+      "loadError": "No se pudo cargar el espacio de ventas",
+      "outOfStock": "Este producto está agotado",
+      "stockLimit": "La cantidad seleccionada supera el stock disponible",
+      "customItemInvalid": "Introduce un nombre y precio válidos",
+      "appointmentAdded": "Cita añadida al cobro",
+      "emptyCart": "Añade al menos un artículo antes de completar la venta",
+      "migrationRequired": "Aplica la migración de ventas antes de cobrar",
+      "totalInvalid": "El total de la venta debe ser mayor que cero",
+      "completed": "Venta completada. Recibo {{receipt}}",
+      "checkoutError": "No se pudo completar la venta",
+      "voidReasonRequired": "Se requiere un motivo para anular la venta",
+      "voided": "Venta anulada y stock restaurado",
+      "voidError": "No se pudo anular la venta",
+      "popupBlocked": "Permite ventanas emergentes para imprimir el recibo"
     }
   }
 }
