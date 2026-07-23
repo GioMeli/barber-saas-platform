@@ -2920,5 +2920,24 @@
       "submitted": "Your review was submitted for moderation.",
       "submitFailed": "Could not submit the review."
     }
+  },
+  "pwa": {
+    "title": "Velliqo app",
+    "description": "Install, connection and update status",
+    "offlineBanner": "You are offline. Live business data will resume when the connection returns.",
+    "online": "Online and synchronized",
+    "onlineDescription": "Live appointments, customers and transactions are available.",
+    "offline": "Offline mode",
+    "offlineDescription": "The app shell remains available, but live records require a connection.",
+    "installed": "Installed on this device",
+    "installedDescription": "Velliqo opens in its own app window from your device.",
+    "browserMode": "Running in the browser",
+    "browserModeDescription": "Install Velliqo for faster access and an app-like workspace.",
+    "install": "Install Velliqo",
+    "updateNow": "Update and reload",
+    "readyDescription": "Velliqo is ready. Installation availability depends on your browser and device.",
+    "privacyNote": "Sensitive appointments, customer records and payment data are never stored in the offline cache.",
+    "close": "Close",
+    "iosInstall": "On iPhone or iPad, open the browser Share menu and choose “Add to Home Screen”."
   }
 }

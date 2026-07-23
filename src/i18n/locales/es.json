@@ -2920,5 +2920,24 @@
       "submitted": "Tu reseña se envió para moderación.",
       "submitFailed": "No se pudo enviar la reseña."
     }
+  },
+  "pwa": {
+    "title": "Aplicación Velliqo",
+    "description": "Instalación, conexión y actualizaciones",
+    "offlineBanner": "Estás sin conexión. Los datos en vivo volverán cuando se restablezca la conexión.",
+    "online": "En línea y sincronizado",
+    "onlineDescription": "Las citas, clientes y transacciones en vivo están disponibles.",
+    "offline": "Modo sin conexión",
+    "offlineDescription": "La interfaz permanece disponible, pero los registros en vivo necesitan conexión.",
+    "installed": "Instalado en este dispositivo",
+    "installedDescription": "Velliqo se abre en su propia ventana de aplicación desde el dispositivo.",
+    "browserMode": "Abierto en el navegador",
+    "browserModeDescription": "Instala Velliqo para acceder más rápido y trabajar como en una aplicación.",
+    "install": "Instalar Velliqo",
+    "updateNow": "Actualizar y recargar",
+    "readyDescription": "Velliqo está listo. La instalación depende del navegador y del dispositivo.",
+    "privacyNote": "Las citas, los datos de clientes y la información de pagos nunca se guardan en la caché sin conexión.",
+    "close": "Cerrar",
+    "iosInstall": "En iPhone o iPad, abre el menú Compartir del navegador y elige “Añadir a pantalla de inicio”."
   }
 }

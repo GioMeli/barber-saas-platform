@@ -6,6 +6,7 @@ import "./index.css";
 import "./i18n";
 import { useTranslation } from "react-i18next";
 import { LocalizationRoot } from "./i18n/components/LocalizationRoot";
+import { registerVelliqoServiceWorker } from "./pwa/registerServiceWorker";
 
 Sentry.init({
   dsn: import.meta.env['VITE_SENTRY_DSN'] as string | undefined,
@@ -26,3 +27,5 @@ createRoot(document.getElementById("root")!).render(
     </LocalizationRoot>
   </Sentry.ErrorBoundary>
 );
+
+registerVelliqoServiceWorker();

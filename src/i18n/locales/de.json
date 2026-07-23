@@ -2920,5 +2920,24 @@
       "submitted": "Ihre Bewertung wurde zur Moderation eingereicht.",
       "submitFailed": "Die Bewertung konnte nicht gesendet werden."
     }
+  },
+  "pwa": {
+    "title": "Velliqo App",
+    "description": "Installation, Verbindung und Updates",
+    "offlineBanner": "Sie sind offline. Live-Geschäftsdaten werden nach Wiederherstellung der Verbindung fortgesetzt.",
+    "online": "Online und synchronisiert",
+    "onlineDescription": "Live-Termine, Kunden und Transaktionen sind verfügbar.",
+    "offline": "Offline-Modus",
+    "offlineDescription": "Die App-Oberfläche bleibt verfügbar, Live-Daten benötigen jedoch eine Verbindung.",
+    "installed": "Auf diesem Gerät installiert",
+    "installedDescription": "Velliqo öffnet sich über Ihr Gerät in einem eigenen App-Fenster.",
+    "browserMode": "Im Browser geöffnet",
+    "browserModeDescription": "Installieren Sie Velliqo für schnelleren Zugriff und ein App-ähnliches Arbeitsumfeld.",
+    "install": "Velliqo installieren",
+    "updateNow": "Aktualisieren und neu laden",
+    "readyDescription": "Velliqo ist bereit. Die Installationsoption hängt von Browser und Gerät ab.",
+    "privacyNote": "Sensible Termine, Kundendaten und Zahlungsinformationen werden niemals im Offline-Cache gespeichert.",
+    "close": "Schließen",
+    "iosInstall": "Öffnen Sie auf iPhone oder iPad das Teilen-Menü des Browsers und wählen Sie „Zum Home-Bildschirm“."
   }
 }

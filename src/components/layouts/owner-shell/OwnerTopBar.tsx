@@ -7,6 +7,7 @@ import OwnerNotificationCenter from '@/components/dashboard/OwnerNotificationCen
 import OwnerCommandPalette from './OwnerCommandPalette';
 import OwnerQuickAdd from './OwnerQuickAdd';
 import { findOwnerNavigationItem } from './navigation';
+import PWAStatusCenter from '@/components/pwa/PWAStatusCenter';
 
 type OwnerTopBarProps = {
   businessId?: string | null;
@@ -53,6 +54,8 @@ export default function OwnerTopBar({
         {businessId && (
           <OwnerNotificationCenter businessId={businessId} variant="icon" />
         )}
+
+        <PWAStatusCenter />
 
         <Button
           asChild

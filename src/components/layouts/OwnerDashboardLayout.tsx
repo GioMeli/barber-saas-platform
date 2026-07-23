@@ -6,6 +6,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { IndustryThemeRoot } from '@/theme';
 import OwnerSidebar from './owner-shell/OwnerSidebar';
 import OwnerTopBar from './owner-shell/OwnerTopBar';
+import ConnectivityBanner from '@/components/pwa/ConnectivityBanner';
 
 export default function OwnerDashboardLayout() {
   const { activeBusiness, profile } = useAuth();
@@ -47,6 +48,8 @@ export default function OwnerDashboardLayout() {
             businessName={activeBusiness?.name}
             onOpenMobileMenu={() => setIsMobileOpen(true)}
           />
+
+          <ConnectivityBanner />
 
           <main className="min-h-[calc(100vh-72px)] min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-7 xl:px-8">
             <Outlet />

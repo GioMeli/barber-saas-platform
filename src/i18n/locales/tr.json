@@ -2920,5 +2920,24 @@
       "submitted": "Yorumunuz moderasyona gönderildi.",
       "submitFailed": "Yorum gönderilemedi."
     }
+  },
+  "pwa": {
+    "title": "Velliqo uygulaması",
+    "description": "Kurulum, bağlantı ve güncelleme durumu",
+    "offlineBanner": "Çevrimdışısınız. Canlı işletme verileri bağlantı geri geldiğinde devam edecektir.",
+    "online": "Çevrimiçi ve senkronize",
+    "onlineDescription": "Canlı randevular, müşteriler ve işlemler kullanılabilir.",
+    "offline": "Çevrimdışı mod",
+    "offlineDescription": "Uygulama kabuğu kullanılabilir kalır, ancak canlı kayıtlar bağlantı gerektirir.",
+    "installed": "Bu cihaza yüklendi",
+    "installedDescription": "Velliqo cihazınızdan ayrı bir uygulama penceresinde açılır.",
+    "browserMode": "Tarayıcıda çalışıyor",
+    "browserModeDescription": "Daha hızlı erişim ve uygulama benzeri çalışma alanı için Velliqo’yu yükleyin.",
+    "install": "Velliqo’yu yükle",
+    "updateNow": "Güncelle ve yeniden yükle",
+    "readyDescription": "Velliqo hazır. Yükleme seçeneği tarayıcınıza ve cihazınıza bağlıdır.",
+    "privacyNote": "Hassas randevular, müşteri kayıtları ve ödeme verileri çevrimdışı önbellekte asla saklanmaz.",
+    "close": "Kapat",
+    "iosInstall": "iPhone veya iPad’de tarayıcının Paylaş menüsünü açın ve “Ana Ekrana Ekle” seçeneğini seçin."
   }
 }
