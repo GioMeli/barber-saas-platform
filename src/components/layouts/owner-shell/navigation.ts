@@ -9,6 +9,7 @@ import {
   Images,
   LayoutDashboard,
   Megaphone,
+  RadioTower,
   Package,
   Scissors,
   ShoppingCart,
@@ -84,11 +85,18 @@ export const OWNER_NAVIGATION_ITEMS: OwnerNavigationItem[] = [
     keywords: ['products', 'inventory', 'retail'],
   },
   {
+    key: 'marketing',
+    labelKey: 'navigation.marketing',
+    path: '/dashboard/marketing',
+    icon: RadioTower,
+    keywords: ['marketing', 'campaigns', 'automations', 'reviews', 'audiences'],
+  },
+  {
     key: 'posts',
     labelKey: 'navigation.posts',
     path: '/dashboard/posts',
     icon: Megaphone,
-    keywords: ['posts', 'announcements', 'marketing'],
+    keywords: ['posts', 'announcements', 'updates'],
   },
   {
     key: 'gallery',

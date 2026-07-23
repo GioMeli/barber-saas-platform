@@ -10,7 +10,9 @@
     "typecheck": "tsc --noEmit",
     "translations:check": "node scripts/check-translations.mjs",
     "ui:check": "node scripts/check-owner-shell.mjs",
-    "sales:check": "node scripts/check-sales-checkout.mjs"
+    "sales:check": "node scripts/check-sales-checkout.mjs",
+    "finance:check": "node scripts/check-finance-intelligence.mjs",
+    "marketing:check": "node scripts/check-marketing-experience.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

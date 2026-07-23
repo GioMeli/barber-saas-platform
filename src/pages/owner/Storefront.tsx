@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
 import { ImageUploader } from '@/components/ui/image-uploader';
 import { toast } from 'sonner';
 import {
@@ -21,6 +22,9 @@ import {
   Phone,
   Save,
   Sparkles,
+  Globe2,
+  Search,
+  Share2,
 } from 'lucide-react';
 import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
 import { useTranslation } from 'react-i18next';
@@ -31,7 +35,13 @@ const EMPTY_FORM = {
   postal_code: '', latitude: '', longitude: '',
 };
 
-type SectionKey = 'overview' | 'branding' | 'contact' | 'location' | 'sharing';
+const EMPTY_PRESENCE = {
+  seo_title: '', seo_description: '', instagram_url: '', facebook_url: '',
+  tiktok_url: '', website_url: '', booking_cta_label: '',
+  show_team: true, show_products: true, show_gallery: true, show_reviews: true,
+};
+
+type SectionKey = 'overview' | 'branding' | 'contact' | 'location' | 'online' | 'sharing';
 
 export default function Storefront() {
   const { activeBusiness } = useAuth();
@@ -40,6 +50,8 @@ export default function Storefront() {
   const business = activeBusiness;
   const [form, setForm] = useState(EMPTY_FORM);
   const [initialForm, setInitialForm] = useState(EMPTY_FORM);
+  const [presenceForm, setPresenceForm] = useState(EMPTY_PRESENCE);
+  const [initialPresenceForm, setInitialPresenceForm] = useState(EMPTY_PRESENCE);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<SectionKey>('overview');
@@ -50,25 +62,29 @@ export default function Storefront() {
 
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => {
-      if (JSON.stringify(form) !== JSON.stringify(initialForm)) {
+      if (JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm)) {
         event.preventDefault();
         event.returnValue = '';
       }
     };
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
-  }, [form, initialForm]);
+  }, [form, initialForm, presenceForm, initialPresenceForm]);
 
   const loadBusiness = async () => {
     if (!businessId) return;
     setLoading(true);
-    const { data, error } = await supabase.from('businesses').select('*').eq('id', businessId).single();
-    if (error) {
-      console.error('Storefront load error:', error);
+    const [businessResult, presenceResult] = await Promise.all([
+      supabase.from('businesses').select('*').eq('id', businessId).single(),
+      supabase.from('business_online_presence').select('*').eq('business_id', businessId).maybeSingle(),
+    ]);
+    if (businessResult.error) {
+      console.error('Storefront load error:', businessResult.error);
       toast.error(t('storefront.owner.messages.loadError'));
       setLoading(false);
       return;
     }
+    const data = businessResult.data;
     const next = {
       description: data.description ?? '', logo_url: data.logo_url ?? '',
       cover_image_url: data.cover_image_url ?? '', phone: data.phone ?? '',
@@ -79,8 +95,23 @@ export default function Storefront() {
       latitude: data.latitude != null ? String(data.latitude) : '',
       longitude: data.longitude != null ? String(data.longitude) : '',
     };
+    const presence = presenceResult.data ? {
+      seo_title: presenceResult.data.seo_title ?? '',
+      seo_description: presenceResult.data.seo_description ?? '',
+      instagram_url: presenceResult.data.instagram_url ?? '',
+      facebook_url: presenceResult.data.facebook_url ?? '',
+      tiktok_url: presenceResult.data.tiktok_url ?? '',
+      website_url: presenceResult.data.website_url ?? '',
+      booking_cta_label: presenceResult.data.booking_cta_label ?? '',
+      show_team: presenceResult.data.show_team !== false,
+      show_products: presenceResult.data.show_products !== false,
+      show_gallery: presenceResult.data.show_gallery !== false,
+      show_reviews: presenceResult.data.show_reviews !== false,
+    } : { ...EMPTY_PRESENCE };
     setForm(next);
     setInitialForm(next);
+    setPresenceForm(presence);
+    setInitialPresenceForm(presence);
     setLoading(false);
   };
 
@@ -89,7 +120,7 @@ export default function Storefront() {
     [business?.slug]
   );
 
-  const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm);
+  const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm);
   const completedFields = useMemo(() => {
     const important = [
       form.logo_url, form.cover_image_url, form.description, form.phone,
@@ -101,6 +132,8 @@ export default function Storefront() {
 
   const update = (key: keyof typeof form, value: string) =>
     setForm((current) => ({ ...current, [key]: value }));
+  const updatePresence = <K extends keyof typeof presenceForm>(key: K, value: (typeof presenceForm)[K]) =>
+    setPresenceForm((current) => ({ ...current, [key]: value }));
 
   const saveStorefront = async () => {
     if (!businessId) return;
@@ -136,12 +169,30 @@ export default function Storefront() {
       updated_at: new Date().toISOString(),
     };
 
-    const { error } = await supabase.from('businesses').update(payload).eq('id', businessId);
-    if (error) {
-      console.error('Storefront save error:', error);
+    const [businessResult, presenceResult] = await Promise.all([
+      supabase.from('businesses').update(payload).eq('id', businessId),
+      supabase.from('business_online_presence').upsert({
+        business_id: businessId,
+        seo_title: presenceForm.seo_title.trim() || null,
+        seo_description: presenceForm.seo_description.trim() || null,
+        instagram_url: presenceForm.instagram_url.trim() || null,
+        facebook_url: presenceForm.facebook_url.trim() || null,
+        tiktok_url: presenceForm.tiktok_url.trim() || null,
+        website_url: presenceForm.website_url.trim() || null,
+        booking_cta_label: presenceForm.booking_cta_label.trim() || null,
+        show_team: presenceForm.show_team,
+        show_products: presenceForm.show_products,
+        show_gallery: presenceForm.show_gallery,
+        show_reviews: presenceForm.show_reviews,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'business_id' }),
+    ]);
+    if (businessResult.error || presenceResult.error) {
+      console.error('Storefront save error:', businessResult.error || presenceResult.error);
       toast.error(t('storefront.owner.messages.saveError'));
     } else {
       setInitialForm(form);
+      setInitialPresenceForm(presenceForm);
       toast.success(t('storefront.owner.messages.updated'));
     }
     setSaving(false);
@@ -158,6 +209,7 @@ export default function Storefront() {
     { id: 'branding', label: t('storefront.owner.sections.branding'), icon: <ImageIcon className="h-4 w-4" /> },
     { id: 'contact', label: t('storefront.owner.sections.contact'), icon: <Phone className="h-4 w-4" /> },
     { id: 'location', label: t('storefront.owner.sections.location'), icon: <MapPin className="h-4 w-4" /> },
+    { id: 'online', label: t('storefront.owner.sections.online'), icon: <Globe2 className="h-4 w-4" /> },
     { id: 'sharing', label: t('storefront.owner.sections.sharing'), icon: <Link2 className="h-4 w-4" /> },
   ];
 
@@ -309,6 +361,44 @@ export default function Storefront() {
         </Card>
       )}
 
+
+      {activeSection === 'online' && (
+        <div className="space-y-6">
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="space-y-7 p-5 sm:p-7">
+              <SectionHeader icon={<Search className="h-5 w-5" />} title={t('storefront.owner.online.title')} description={t('storefront.owner.online.description')} />
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label={t('storefront.owner.online.seoTitle')} hint={t('storefront.owner.online.seoTitleHint')} className="sm:col-span-2"><Input value={presenceForm.seo_title} onChange={(event) => updatePresence('seo_title', event.target.value)} placeholder={business?.name || ''} /></Field>
+                <Field label={t('storefront.owner.online.seoDescription')} hint={t('storefront.owner.online.seoDescriptionHint')} className="sm:col-span-2"><Textarea rows={4} value={presenceForm.seo_description} onChange={(event) => updatePresence('seo_description', event.target.value)} /></Field>
+                <Field label={t('storefront.owner.online.bookingCta')} hint={t('storefront.owner.online.bookingCtaHint')} className="sm:col-span-2"><Input value={presenceForm.booking_cta_label} onChange={(event) => updatePresence('booking_cta_label', event.target.value)} placeholder={t('storefront.public.actions.bookAppointment')} /></Field>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="space-y-7 p-5 sm:p-7">
+              <SectionHeader icon={<Share2 className="h-5 w-5" />} title={t('storefront.owner.online.socialTitle')} description={t('storefront.owner.online.socialDescription')} />
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label="Instagram"><Input type="url" value={presenceForm.instagram_url} onChange={(event) => updatePresence('instagram_url', event.target.value)} placeholder="https://instagram.com/..." /></Field>
+                <Field label="Facebook"><Input type="url" value={presenceForm.facebook_url} onChange={(event) => updatePresence('facebook_url', event.target.value)} placeholder="https://facebook.com/..." /></Field>
+                <Field label="TikTok"><Input type="url" value={presenceForm.tiktok_url} onChange={(event) => updatePresence('tiktok_url', event.target.value)} placeholder="https://tiktok.com/@..." /></Field>
+                <Field label={t('storefront.owner.online.website')}><Input type="url" value={presenceForm.website_url} onChange={(event) => updatePresence('website_url', event.target.value)} placeholder="https://..." /></Field>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="space-y-5 p-5 sm:p-7">
+              <SectionHeader icon={<Eye className="h-5 w-5" />} title={t('storefront.owner.online.visibilityTitle')} description={t('storefront.owner.online.visibilityDescription')} />
+              <VisibilityToggle label={t('storefront.owner.online.showTeam')} checked={presenceForm.show_team} onChange={(checked) => updatePresence('show_team', checked)} />
+              <VisibilityToggle label={t('storefront.owner.online.showProducts')} checked={presenceForm.show_products} onChange={(checked) => updatePresence('show_products', checked)} />
+              <VisibilityToggle label={t('storefront.owner.online.showGallery')} checked={presenceForm.show_gallery} onChange={(checked) => updatePresence('show_gallery', checked)} />
+              <VisibilityToggle label={t('storefront.owner.online.showReviews')} checked={presenceForm.show_reviews} onChange={(checked) => updatePresence('show_reviews', checked)} />
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {activeSection === 'sharing' && (
         <div className="space-y-6">
           <Card className="rounded-3xl shadow-card">
@@ -350,6 +440,11 @@ function SectionHeader({ icon, title, description }: { icon: React.ReactNode; ti
 
 function Field({ label, hint, children, className = '' }: { label: string; hint?: string; children: React.ReactNode; className?: string }) {
   return <div className={`space-y-2 ${className}`}><div><Label className="font-semibold">{label}</Label>{hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}</div>{children}</div>;
+}
+
+
+function VisibilityToggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (checked: boolean) => void }) {
+  return <div className="flex items-center justify-between gap-4 rounded-2xl border p-4"><span className="text-sm font-semibold">{label}</span><Switch checked={checked} onCheckedChange={onChange} /></div>;
 }
 
 function ChecklistLine({ label, complete }: { label: string; complete: boolean }) {

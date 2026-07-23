@@ -125,8 +125,10 @@
       "service": "Hizmetleri aç",
       "post": "Güncelleme oluştur",
       "sale": "Yeni satış",
-      "expense": "Yeni gider"
-    }
+      "expense": "Yeni gider",
+      "campaign": "Yeni kampanya"
+    },
+    "marketing": "Pazarlama"
   },
   "system": {
     "loading": "Yükleniyor...",
@@ -1291,7 +1293,8 @@
         "branding": "Marka",
         "contact": "İletişim",
         "location": "Konum",
-        "sharing": "Önizleme ve paylaşım"
+        "sharing": "Önizleme ve paylaşım",
+        "online": "Çevrimiçi görünürlük"
       },
       "actions": {
         "copyLink": "Bağlantıyı kopyala",
@@ -1375,6 +1378,25 @@
         "saveError": "Vitrin değişiklikleri kaydedilemedi",
         "updated": "Vitrin başarıyla güncellendi",
         "linkCopied": "Herkese açık bağlantı kopyalandı"
+      },
+      "online": {
+        "title": "Arama ve rezervasyon görünümü",
+        "description": "Herkese açık sayfanın aramalarda nasıl göründüğünü ve müşterilerin rezervasyona nasıl yönlendirildiğini kontrol edin.",
+        "seoTitle": "SEO sayfa başlığı",
+        "seoTitleHint": "İşletme adını ve konumu içeren açık bir başlık kullanın.",
+        "seoDescription": "SEO açıklaması",
+        "seoDescriptionHint": "Hizmetleri ve müşteri deneyimini kısa ve net şekilde açıklayın.",
+        "bookingCta": "Rezervasyon düğmesi metni",
+        "bookingCtaHint": "Ana rezervasyon düğmesi için isteğe bağlı özel eylem çağrısı.",
+        "socialTitle": "Sosyal bağlantılar",
+        "socialDescription": "Herkese açık sayfayı işletmenin resmi kanallarıyla bağlayın.",
+        "website": "Web sitesi",
+        "visibilityTitle": "Herkese açık bölüm görünürlüğü",
+        "visibilityDescription": "Vitrinde hangi içerik modüllerinin görüneceğini seçin.",
+        "showTeam": "Ekibi göster",
+        "showProducts": "Ürünleri göster",
+        "showGallery": "Galeriyi göster",
+        "showReviews": "Yorumları göster"
       }
     },
     "qr": {
@@ -1401,7 +1423,8 @@
         "gallery": "Galeri",
         "products": "Ürünler",
         "announcements": "Duyurular",
-        "contact": "İletişim"
+        "contact": "İletişim",
+        "reviews": "Yorumlar"
       },
       "status": {
         "onlineBooking": "Online rezervasyon",
@@ -1464,7 +1487,18 @@
         "contact": {
           "title": "Ziyaret ve İletişim",
           "description": "Ziyaretinizden önce ihtiyaç duyduğunuz tüm bilgiler.",
-          "mapMissing": "Harita konumu henüz yapılandırılmadı."
+          "mapMissing": "Harita konumu henüz yapılandırılmadı.",
+          "website": "Web sitesi"
+        },
+        "reviews": {
+          "title": "Doğrulanmış yorumlar",
+          "description": "Doğrulanmış randevulardan gelen son deneyimler.",
+          "empty": "Henüz yayımlanmış yorum yok.",
+          "defaultTitle": "Müşteri deneyimi",
+          "noComment": "Yazılı yorum yok.",
+          "verifiedCustomer": "Doğrulanmış müşteri",
+          "ownerResponse": "İşletme yanıtı",
+          "viewAll": "Tüm yorumları görüntüle"
         }
       },
       "footer": {
@@ -2592,6 +2626,299 @@
       "training": "Eğitim",
       "travel": "Seyahat",
       "other": "Diğer"
+    }
+  },
+  "marketing": {
+    "eyebrow": "Büyüme çalışma alanı",
+    "title": "Pazarlama Merkezi",
+    "description": "Kampanyalar oluşturun, müşteri yolculuklarını etkinleştirin, yorumları yönetin ve tüm büyüme faaliyetlerini işletme verilerinize bağlayın.",
+    "actions": {
+      "newCampaign": "Yeni kampanya",
+      "openCampaigns": "Kampanyaları aç",
+      "manageReviews": "Yorumları yönet",
+      "createFirstCampaign": "İlk kampanyayı oluştur",
+      "saveCampaign": "Kampanyayı kaydet",
+      "pause": "Duraklat",
+      "resume": "Devam ettir"
+    },
+    "tabs": {
+      "overview": "Genel bakış",
+      "campaigns": "Kampanyalar",
+      "automations": "Otomasyonlar",
+      "reviews": "Yorumlar"
+    },
+    "metrics": {
+      "reachableCustomers": "Ulaşılabilir müşteriler",
+      "activeAutomations": "Etkin otomasyonlar",
+      "averageRating": "Ortalama puan",
+      "publishedReviews": "{{count}} yayımlanmış yorum",
+      "attributedRevenue": "İlişkilendirilen gelir"
+    },
+    "audience": {
+      "title": "Kitle zekâsı",
+      "description": "Randevular, harcama ve hesap etkinliğinden hesaplanan canlı müşteri segmentleri."
+    },
+    "segments": {
+      "all": "Tüm müşteriler",
+      "active": "Etkin",
+      "at_risk": "Risk altında",
+      "vip": "VIP",
+      "new": "Yeni müşteriler",
+      "registered": "Kayıtlı",
+      "guests": "Misafirler"
+    },
+    "segmentDescriptions": {
+      "all": "Bu işletmedeki tüm müşteri kayıtları.",
+      "active": "Son 60 gün içinde ziyaret etti.",
+      "at_risk": "Son ziyaret 61–180 gün önceydi.",
+      "vip": "Yüksek değerli veya sık gelen müşteriler.",
+      "new": "Son 30 gün içinde oluşturuldu.",
+      "registered": "Velliqo hesabı olan müşteriler.",
+      "guests": "Hesap oluşturmadan rezervasyon yapan müşteriler."
+    },
+    "commandCenter": {
+      "title": "Büyüme komuta merkezi",
+      "description": "Şu anda dikkat gerektiren işlemler.",
+      "scheduled": "{{count}} kampanya planlandı",
+      "publishedPosts": "{{count}} herkese açık güncelleme yayında",
+      "pendingReviews": "{{count}} yorum moderasyon bekliyor",
+      "atRisk": "{{count}} müşteri risk altında"
+    },
+    "onlinePresence": {
+      "title": "Bağlantılı çevrimiçi görünürlük",
+      "description": "Kampanyalarınız, içerikleriniz, vitrininiz ve itibarınız tek bir sistem olarak çalışır.",
+      "posts": "Gönderiler ve duyurular",
+      "postsDescription": "Teklifleri, kapanışları ve güncellemeleri herkese açık sayfanızda yayımlayın.",
+      "storefront": "Herkese açık vitrin",
+      "storefrontDescription": "Marka, SEO, bağlantılar ve bölüm görünürlüğünü yönetin.",
+      "reputation": "Yorumlar ve itibar",
+      "reputationDescription": "Doğrulanmış yorumları yönetin ve işletme adına yanıtlayın."
+    },
+    "campaigns": {
+      "title": "Kampanya çalışma alanı",
+      "description": "Gerçek müşteri segmentlerinden hedefli kampanya taslakları ve zamanlamaları oluşturun.",
+      "emptyTitle": "Henüz kampanya yok",
+      "emptyDescription": "İlk kampanyanızı oluşturun; taslak olarak kaydedin veya gönderim için planlayın.",
+      "recipients": "{{count}} alıcı",
+      "schedule": "Zamanlama",
+      "notScheduled": "Planlanmadı",
+      "performance": "Performans",
+      "conversions": "dönüşüm"
+    },
+    "channels": {
+      "email": "E-posta",
+      "sms": "SMS",
+      "in_app": "Uygulama içi"
+    },
+    "statuses": {
+      "draft": "Taslak",
+      "scheduled": "Planlandı",
+      "paused": "Duraklatıldı",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    },
+    "objectives": {
+      "announcement": "Duyuru",
+      "promotion": "Promosyon",
+      "win_back": "Geri kazanım",
+      "birthday": "Doğum günü",
+      "review_request": "Yorum isteği",
+      "last_minute": "Son dakika uygunluğu",
+      "custom": "Özel"
+    },
+    "fields": {
+      "campaignName": "Kampanya adı",
+      "channel": "Kanal",
+      "objective": "Amaç",
+      "audience": "Kitle segmenti",
+      "subject": "E-posta konusu",
+      "message": "Mesaj",
+      "scheduleCampaign": "Kampanyayı planla",
+      "scheduleHint": "Güvenilir bir sağlayıcı bağlandıktan sonra gönderim çalışanı bu kampanyayı seçilen zamanda işleyecektir.",
+      "consentHint": "Alıcı tahmini yalnızca pazarlama izni vermiş ve seçilen kanalı etkinleştirmiş müşterileri içerir."
+    },
+    "dialog": {
+      "newCampaign": "Kampanya oluştur",
+      "editCampaign": "Kampanyayı düzenle"
+    },
+    "validation": {
+      "campaignRequired": "Kampanya adı ve mesaj zorunludur.",
+      "subjectRequired": "E-posta konusu zorunludur.",
+      "scheduleRequired": "Gönderim tarihi ve saati seçin."
+    },
+    "messages": {
+      "loadFailed": "Pazarlama çalışma alanı yüklenemedi.",
+      "campaignCreated": "Kampanya oluşturuldu.",
+      "campaignUpdated": "Kampanya güncellendi.",
+      "campaignSaveFailed": "Kampanya kaydedilemedi.",
+      "statusUpdated": "Kampanya durumu güncellendi.",
+      "automationEnabled": "Otomasyon etkinleştirildi.",
+      "automationDisabled": "Otomasyon devre dışı bırakıldı.",
+      "reviewUpdated": "Yorum güncellendi.",
+      "reviewUpdateFailed": "Yorum güncellenemedi."
+    },
+    "status": {
+      "loading": "Pazarlama zekâsı yükleniyor…"
+    },
+    "automations": {
+      "delay": "Tetikleme gecikmesi: {{hours}} saat",
+      "providerNotice": "Otomasyonlar Velliqo içinde güvenli biçimde yapılandırılır. E-posta/SMS gönderimi yalnızca güvenilir bir sağlayıcı veya worker bağlandıktan sonra başlar; tarayıcı hiçbir zaman doğrudan toplu mesaj göndermez.",
+      "birthday": {
+        "title": "Doğum günü yolculuğu",
+        "description": "Müşterinin doğum günü döneminde kişisel bir teklif gönderin.",
+        "template": "Doğum gününüz kutlu olsun! Sizi bekleyen özel bir hediyemiz var."
+      },
+      "win_back": {
+        "title": "Geri kazanım yolculuğu",
+        "description": "Yakın zamanda ziyaret etmeyen müşterilerle yeniden bağlantı kurun.",
+        "template": "Sizi özledik. Sonraki ziyaretinizi ayırtın ve geri dönüş teklifinden yararlanın."
+      },
+      "review_request": {
+        "title": "Yorum isteği",
+        "description": "Tamamlanan bir randevudan sonra müşteriden doğrulanmış bir yorum isteyin.",
+        "template": "Ziyaretiniz için teşekkür ederiz. Görüşlerinizi paylaşmanız bizi mutlu eder."
+      },
+      "no_show_recovery": {
+        "title": "Gelmemeye yönelik takip",
+        "description": "Kaçırılan randevudan sonra saygılı biçimde iletişime geçin.",
+        "template": "Randevunuza gelemediğinizi fark ettik. Yeniden planlama konusunda size yardımcı olalım."
+      },
+      "last_minute_availability": {
+        "title": "Son dakika uygunluğu",
+        "description": "Bir randevu aralığı boşaldığında uygun müşterilere ulaşın.",
+        "template": "Son dakika randevu aralığı açıldı. Yer dolmadan rezervasyon yapın."
+      }
+    },
+    "reviews": {
+      "title": "Yorum moderasyonu",
+      "description": "Doğrulanmış randevu yorumlarını yayımlayın, uygunsuz içeriği gizleyin ve işletme adına yanıtlayın.",
+      "emptyTitle": "Henüz yorum yok",
+      "emptyDescription": "Doğrulanmış müşteri yorumları tamamlanan randevulardan sonra burada görünür.",
+      "customer": "Müşteri",
+      "noComment": "Yazılı yorum yok.",
+      "manageTitle": "Yorumu yönet",
+      "ownerResponse": "İşletme sahibi yanıtı",
+      "responsePlaceholder": "Profesyonel bir herkese açık yanıt yazın…",
+      "hide": "Gizle",
+      "keepPending": "Beklemede tut",
+      "publish": "Yayımla"
+    },
+    "reviewStatuses": {
+      "pending": "Beklemede",
+      "published": "Yayımlandı",
+      "hidden": "Gizlendi"
+    }
+  },
+  "gallery": {
+    "eyebrow": "Çevrimiçi portföy",
+    "title": "Galeri",
+    "description": "Son çalışmalarınızı, mekân fotoğraflarını ve ürün görsellerini herkese açık vitrininiz için düzenleyin.",
+    "searchPlaceholder": "Galeride ara…",
+    "actions": {
+      "add": "Görsel ekle",
+      "addFirst": "İlk görseli ekle",
+      "save": "Görseli kaydet",
+      "moveUp": "Görseli yukarı taşı",
+      "moveDown": "Görseli aşağı taşı",
+      "toggleVisibility": "Görünürlüğü değiştir"
+    },
+    "summary": {
+      "total": "Toplam görsel",
+      "public": "Herkese açık görseller",
+      "private": "Özel görseller"
+    },
+    "filters": {
+      "all": "Tümü",
+      "public": "Herkese açık",
+      "private": "Özel"
+    },
+    "status": {
+      "loading": "Galeri yükleniyor…"
+    },
+    "empty": {
+      "title": "Galeri boş",
+      "description": "İşletmeyi profesyonel biçimde sunmak için yüksek kaliteli görseller ekleyin.",
+      "filteredTitle": "Eşleşen görsel yok",
+      "filteredDescription": "Aramayı veya görünürlük filtresini değiştirin."
+    },
+    "visibility": {
+      "public": "Herkese açık",
+      "private": "Özel"
+    },
+    "untitled": "Başlıksız görsel",
+    "imageFallback": "Galeri görseli",
+    "dialog": {
+      "add": "Görsel ekle",
+      "edit": "Görseli düzenle"
+    },
+    "fields": {
+      "image": "Görsel",
+      "title": "Başlık",
+      "caption": "Açıklama",
+      "altText": "Alternatif metin",
+      "altPlaceholder": "Erişilebilirlik için görseli açıklayın",
+      "order": "Görüntüleme sırası",
+      "public": "Herkese açık görsel",
+      "publicDescription": "Herkese açık görseller vitrinde görünür."
+    },
+    "validation": {
+      "imageRequired": "Önce bir görsel yükleyin."
+    },
+    "delete": {
+      "confirm": "Bu görsel galeriden kaldırılsın mı?"
+    },
+    "messages": {
+      "added": "Görsel eklendi.",
+      "updated": "Görsel güncellendi.",
+      "removed": "Görsel kaldırıldı.",
+      "hidden": "Görsel vitrinden gizlendi.",
+      "published": "Görsel vitrinde yayımlandı."
+    }
+  },
+  "customerReviews": {
+    "verifiedBadge": "Doğrulanmış randevu yorumları",
+    "title": "Yorumlar",
+    "description": "{{business}} müşterilerinin doğrulanmış deneyimlerini okuyun.",
+    "verifiedExplanation": "Yalnızca tamamlanmış randevusu olan müşteriler yorum gönderebilir.",
+    "reviewCount": "{{count}} yorum",
+    "bookAppointment": "Randevu al",
+    "shareExperience": "Deneyiminizi paylaşın",
+    "shareDescription": "Doğrulanmış bir yorum yazmak veya güncellemek için tamamlanmış bir randevu seçin.",
+    "signInRequired": "Tamamlanmış bir randevuya yorum yapmak için giriş yapın.",
+    "signIn": "Giriş yap",
+    "noEligibleAppointments": "Şu anda yorum yapılabilecek tamamlanmış randevu yok.",
+    "appointment": "Randevu",
+    "writeReview": "Yorum yaz",
+    "communityTitle": "Müşteri deneyimleri",
+    "communityDescription": "Doğrulanmış randevulardan yayımlanan yorumlar.",
+    "emptyTitle": "Henüz yayımlanmış yorum yok",
+    "emptyDescription": "Doğrulanmış bir deneyim paylaşan ilk müşteri olun.",
+    "defaultReviewTitle": "Müşteri deneyimi",
+    "noComment": "Yazılı yorum yok.",
+    "verifiedCustomer": "Doğrulanmış müşteri",
+    "ownerResponse": "İşletme yanıtı",
+    "status": {
+      "loading": "Yorumlar yükleniyor…"
+    },
+    "statuses": {
+      "pending": "İnceleme bekliyor",
+      "published": "Yayımlandı",
+      "hidden": "Gizlendi"
+    },
+    "dialog": {
+      "title": "Yorum yaz",
+      "rating": "Puan",
+      "reviewTitle": "Yorum başlığı",
+      "titlePlaceholder": "Deneyiminizi özetleyin",
+      "comment": "Deneyiminiz",
+      "commentPlaceholder": "Öne çıkan noktaları başkalarıyla paylaşın…",
+      "moderationNote": "Yorumlar moderasyona gönderilir. İşletme yanıt verebilir ancak puanınızı veya metninizi değiştiremez.",
+      "submit": "Yorumu gönder"
+    },
+    "messages": {
+      "loadFailed": "Yorumlar yüklenemedi.",
+      "submitted": "Yorumunuz moderasyona gönderildi.",
+      "submitFailed": "Yorum gönderilemedi."
     }
   }
 }

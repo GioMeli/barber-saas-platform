@@ -17,6 +17,7 @@ import PublicAppLayout from './pages/public/PublicAppLayout';
 import BusinessHome from './pages/public/BusinessHome';
 import EmployeeDashboard from './pages/staff/EmployeeDashboard';
 import CustomerPortal from './pages/customer/CustomerPortal';
+import CustomerReviews from './pages/public/CustomerReviews';
 import PlatformAdmin from './pages/admin/PlatformAdmin';
 import OnboardingWizard from './pages/onboarding/OnboardingWizard';
 import OwnerDashboardLayout from './components/layouts/OwnerDashboardLayout';
@@ -32,6 +33,7 @@ import Products from './pages/owner/Products';
 import Sales from './pages/owner/Sales';
 import Finance from './pages/owner/Finance';
 import Posts from './pages/owner/Posts';
+import Marketing from './pages/owner/Marketing';
 import Gallery from './pages/owner/Gallery';
 import Storefront from './pages/owner/Storefront';
 import Business from './pages/owner/Business';
@@ -75,6 +77,7 @@ function App() {
           <Route index element={<BusinessHome />} />
           <Route path="book" element={<PublicBooking />} />
           <Route path="account" element={<CustomerPortal />} />
+          <Route path="reviews" element={<CustomerReviews />} />
         </Route>
 
         <Route path="/staff-portal" element={<ProtectedRoute allowedRoles={['Employee', 'Manager']}><EmployeeDashboard /></ProtectedRoute>} />
@@ -91,6 +94,7 @@ function App() {
           <Route path="products" element={<Products />} />
           <Route path="sales" element={<Sales />} />
           <Route path="finance" element={<Finance />} />
+          <Route path="marketing" element={<Marketing />} />
           <Route path="posts" element={<Posts />} />
           <Route path="gallery" element={<Gallery />} />
           <Route path="storefront" element={<Storefront />} />

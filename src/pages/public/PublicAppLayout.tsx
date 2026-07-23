@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router-
 import { supabase } from '@/db/supabase';
 import { toast } from 'sonner';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import PageMeta from '@/components/common/PageMeta';
 import {
   CalendarDays,
   LogIn,
@@ -91,19 +92,30 @@ export default function PublicAppLayout() {
         return;
       }
 
-      const { data: settingsData, error: settingsError } = await supabase
-        .from('business_settings')
-        .select('*')
-        .eq('business_id', businessData.id)
-        .maybeSingle();
+      const [settingsResult, onlinePresenceResult] = await Promise.all([
+        supabase
+          .from('business_settings')
+          .select('*')
+          .eq('business_id', businessData.id)
+          .maybeSingle(),
+        supabase
+          .from('business_online_presence')
+          .select('*')
+          .eq('business_id', businessData.id)
+          .maybeSingle(),
+      ]);
 
-      if (settingsError) {
-        console.warn('Public business settings unavailable:', settingsError);
+      if (settingsResult.error) {
+        console.warn('Public business settings unavailable:', settingsResult.error);
+      }
+      if (onlinePresenceResult.error) {
+        console.warn('Public online presence unavailable:', onlinePresenceResult.error);
       }
 
       setBusiness({
         ...businessData,
-        business_settings: settingsData ?? null,
+        business_settings: settingsResult.data ?? null,
+        online_presence: onlinePresenceResult.data ?? null,
       });
     } catch (error: any) {
       console.error('Public business error:', error);
@@ -212,6 +224,9 @@ export default function PublicAppLayout() {
   const navItems = [
     { label: t('storefront.public.navigation.store'), to: `/app/${business?.slug ?? slug}` },
     { label: t('storefront.public.navigation.book'), to: `/app/${business?.slug ?? slug}/book` },
+    ...(business?.online_presence?.show_reviews === false
+      ? []
+      : [{ label: t('storefront.public.navigation.reviews'), to: `/app/${business?.slug ?? slug}/reviews` }]),
     ...(user
       ? [{ label: t('storefront.public.navigation.myAccount'), to: `/app/${business?.slug ?? slug}/account` }]
       : []),
@@ -249,6 +264,10 @@ export default function PublicAppLayout() {
   return (
     <IndustryThemeRoot industryKey={industry.key}>
     <div className="min-h-screen bg-background">
+      <PageMeta
+        title={business.online_presence?.seo_title || `${business.name} | Velliqo`}
+        description={business.online_presence?.seo_description || business.description || t('storefront.public.hero.defaultTagline')}
+      />
       <header className="sticky top-0 z-40 border-b bg-background/95 shadow-[0_1px_0_rgba(0,0,0,0.03)] backdrop-blur-xl">
         <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6">
           <Link

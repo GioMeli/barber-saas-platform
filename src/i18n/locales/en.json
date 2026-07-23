@@ -125,8 +125,10 @@
       "service": "Open services",
       "post": "Create an update",
       "sale": "New sale",
-      "expense": "New expense"
-    }
+      "expense": "New expense",
+      "campaign": "New campaign"
+    },
+    "marketing": "Marketing"
   },
   "system": {
     "loading": "Loading...",
@@ -1291,7 +1293,8 @@
         "branding": "Branding",
         "contact": "Contact",
         "location": "Location",
-        "sharing": "Preview & sharing"
+        "sharing": "Preview & sharing",
+        "online": "Online presence"
       },
       "actions": {
         "copyLink": "Copy link",
@@ -1375,6 +1378,25 @@
         "saveError": "Unable to save storefront changes",
         "updated": "Storefront updated successfully",
         "linkCopied": "Public link copied"
+      },
+      "online": {
+        "title": "Search and booking presentation",
+        "description": "Control how the public page appears in search and how customers are invited to book.",
+        "seoTitle": "SEO page title",
+        "seoTitleHint": "Use a clear title containing the business name and location.",
+        "seoDescription": "SEO description",
+        "seoDescriptionHint": "Write a concise description of the services and customer experience.",
+        "bookingCta": "Booking button label",
+        "bookingCtaHint": "Optional custom call-to-action for the main booking button.",
+        "socialTitle": "Social links",
+        "socialDescription": "Connect the public page with the business’s official channels.",
+        "website": "Website",
+        "visibilityTitle": "Public section visibility",
+        "visibilityDescription": "Choose which content modules are visible on the storefront.",
+        "showTeam": "Show team",
+        "showProducts": "Show products",
+        "showGallery": "Show gallery",
+        "showReviews": "Show reviews"
       }
     },
     "qr": {
@@ -1401,7 +1423,8 @@
         "gallery": "Gallery",
         "products": "Products",
         "announcements": "Announcements",
-        "contact": "Contact"
+        "contact": "Contact",
+        "reviews": "Reviews"
       },
       "status": {
         "onlineBooking": "Online booking",
@@ -1464,7 +1487,18 @@
         "contact": {
           "title": "Visit & Contact",
           "description": "Everything you need before your visit.",
-          "mapMissing": "Map location has not been configured yet."
+          "mapMissing": "Map location has not been configured yet.",
+          "website": "Website"
+        },
+        "reviews": {
+          "title": "Verified reviews",
+          "description": "Recent experiences from verified appointments.",
+          "empty": "No published reviews yet.",
+          "defaultTitle": "Customer experience",
+          "noComment": "No written comment.",
+          "verifiedCustomer": "Verified customer",
+          "ownerResponse": "Business response",
+          "viewAll": "View all reviews"
         }
       },
       "footer": {
@@ -2592,6 +2626,299 @@
       "training": "Training",
       "travel": "Travel",
       "other": "Other"
+    }
+  },
+  "marketing": {
+    "eyebrow": "Growth workspace",
+    "title": "Marketing Center",
+    "description": "Build campaigns, activate customer journeys, manage reviews and connect every growth activity to your business data.",
+    "actions": {
+      "newCampaign": "New campaign",
+      "openCampaigns": "Open campaigns",
+      "manageReviews": "Manage reviews",
+      "createFirstCampaign": "Create first campaign",
+      "saveCampaign": "Save campaign",
+      "pause": "Pause",
+      "resume": "Resume"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "campaigns": "Campaigns",
+      "automations": "Automations",
+      "reviews": "Reviews"
+    },
+    "metrics": {
+      "reachableCustomers": "Reachable customers",
+      "activeAutomations": "Active automations",
+      "averageRating": "Average rating",
+      "publishedReviews": "{{count}} published reviews",
+      "attributedRevenue": "Attributed revenue"
+    },
+    "audience": {
+      "title": "Audience intelligence",
+      "description": "Live customer segments calculated from appointments, spend and account activity."
+    },
+    "segments": {
+      "all": "All customers",
+      "active": "Active",
+      "at_risk": "At risk",
+      "vip": "VIP",
+      "new": "New customers",
+      "registered": "Registered",
+      "guests": "Guests"
+    },
+    "segmentDescriptions": {
+      "all": "Every customer record in this business.",
+      "active": "Visited within the last 60 days.",
+      "at_risk": "Last visit was 61–180 days ago.",
+      "vip": "High value or frequent customers.",
+      "new": "Created during the last 30 days.",
+      "registered": "Customers with a Velliqo account.",
+      "guests": "Customers who booked without an account."
+    },
+    "commandCenter": {
+      "title": "Growth command center",
+      "description": "The actions that need attention now.",
+      "scheduled": "{{count}} campaigns are scheduled",
+      "publishedPosts": "{{count}} public updates are live",
+      "pendingReviews": "{{count}} reviews await moderation",
+      "atRisk": "{{count}} customers are at risk"
+    },
+    "onlinePresence": {
+      "title": "Connected online presence",
+      "description": "Your campaigns, content, storefront and reputation work as one system.",
+      "posts": "Posts & announcements",
+      "postsDescription": "Publish offers, closures and updates to your public page.",
+      "storefront": "Public storefront",
+      "storefrontDescription": "Control branding, SEO, links and section visibility.",
+      "reputation": "Reviews & reputation",
+      "reputationDescription": "Moderate verified reviews and respond as the business."
+    },
+    "campaigns": {
+      "title": "Campaign workspace",
+      "description": "Create targeted campaign drafts and schedules from real customer segments.",
+      "emptyTitle": "No campaigns yet",
+      "emptyDescription": "Create your first campaign and save it as a draft or schedule it for delivery.",
+      "recipients": "{{count}} recipients",
+      "schedule": "Schedule",
+      "notScheduled": "Not scheduled",
+      "performance": "Performance",
+      "conversions": "conversions"
+    },
+    "channels": {
+      "email": "Email",
+      "sms": "SMS",
+      "in_app": "In-app"
+    },
+    "statuses": {
+      "draft": "Draft",
+      "scheduled": "Scheduled",
+      "paused": "Paused",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "objectives": {
+      "announcement": "Announcement",
+      "promotion": "Promotion",
+      "win_back": "Win-back",
+      "birthday": "Birthday",
+      "review_request": "Review request",
+      "last_minute": "Last-minute availability",
+      "custom": "Custom"
+    },
+    "fields": {
+      "campaignName": "Campaign name",
+      "channel": "Channel",
+      "objective": "Objective",
+      "audience": "Audience segment",
+      "subject": "Email subject",
+      "message": "Message",
+      "scheduleCampaign": "Schedule campaign",
+      "scheduleHint": "The delivery worker will process this campaign at the selected time after a provider is connected.",
+      "consentHint": "Recipient estimates include only customers who have given marketing consent and enabled the selected channel."
+    },
+    "dialog": {
+      "newCampaign": "Create campaign",
+      "editCampaign": "Edit campaign"
+    },
+    "validation": {
+      "campaignRequired": "Campaign name and message are required.",
+      "subjectRequired": "An email subject is required.",
+      "scheduleRequired": "Select a delivery date and time."
+    },
+    "messages": {
+      "loadFailed": "Could not load the marketing workspace.",
+      "campaignCreated": "Campaign created.",
+      "campaignUpdated": "Campaign updated.",
+      "campaignSaveFailed": "Could not save the campaign.",
+      "statusUpdated": "Campaign status updated.",
+      "automationEnabled": "Automation enabled.",
+      "automationDisabled": "Automation disabled.",
+      "reviewUpdated": "Review updated.",
+      "reviewUpdateFailed": "Could not update the review."
+    },
+    "status": {
+      "loading": "Loading marketing intelligence…"
+    },
+    "automations": {
+      "delay": "Trigger delay: {{hours}} hours",
+      "providerNotice": "Automations are safely configured in Velliqo. Email/SMS delivery starts only after a trusted provider or worker is connected; the browser never sends bulk messages directly.",
+      "birthday": {
+        "title": "Birthday journey",
+        "description": "Send a personal offer around the customer’s birthday.",
+        "template": "Happy birthday! We have a special gift waiting for you."
+      },
+      "win_back": {
+        "title": "Win-back journey",
+        "description": "Reconnect with customers who have not visited recently.",
+        "template": "We miss you. Book your next visit and enjoy a welcome-back offer."
+      },
+      "review_request": {
+        "title": "Review request",
+        "description": "Ask customers for a verified review after a completed appointment.",
+        "template": "Thank you for visiting. We would value your review."
+      },
+      "no_show_recovery": {
+        "title": "No-show recovery",
+        "description": "Follow up respectfully after a missed appointment.",
+        "template": "We noticed you could not make your appointment. Let us help you reschedule."
+      },
+      "last_minute_availability": {
+        "title": "Last-minute availability",
+        "description": "Reach relevant customers when an appointment slot opens.",
+        "template": "A last-minute appointment is now available. Book while the slot is open."
+      }
+    },
+    "reviews": {
+      "title": "Review moderation",
+      "description": "Publish verified appointment reviews, hide unsuitable content and respond as the business.",
+      "emptyTitle": "No reviews yet",
+      "emptyDescription": "Verified customer reviews will appear here after completed appointments.",
+      "customer": "Customer",
+      "noComment": "No written comment.",
+      "manageTitle": "Manage review",
+      "ownerResponse": "Owner response",
+      "responsePlaceholder": "Write a professional public response…",
+      "hide": "Hide",
+      "keepPending": "Keep pending",
+      "publish": "Publish"
+    },
+    "reviewStatuses": {
+      "pending": "Pending",
+      "published": "Published",
+      "hidden": "Hidden"
+    }
+  },
+  "gallery": {
+    "eyebrow": "Online portfolio",
+    "title": "Gallery",
+    "description": "Curate recent work, venue photos and product imagery for your public storefront.",
+    "searchPlaceholder": "Search gallery…",
+    "actions": {
+      "add": "Add image",
+      "addFirst": "Add first image",
+      "save": "Save image",
+      "moveUp": "Move image up",
+      "moveDown": "Move image down",
+      "toggleVisibility": "Change visibility"
+    },
+    "summary": {
+      "total": "Total images",
+      "public": "Public images",
+      "private": "Private images"
+    },
+    "filters": {
+      "all": "All",
+      "public": "Public",
+      "private": "Private"
+    },
+    "status": {
+      "loading": "Loading gallery…"
+    },
+    "empty": {
+      "title": "Gallery is empty",
+      "description": "Add high-quality images to present the business professionally.",
+      "filteredTitle": "No matching images",
+      "filteredDescription": "Change the search or visibility filter."
+    },
+    "visibility": {
+      "public": "Public",
+      "private": "Private"
+    },
+    "untitled": "Untitled image",
+    "imageFallback": "Gallery image",
+    "dialog": {
+      "add": "Add image",
+      "edit": "Edit image"
+    },
+    "fields": {
+      "image": "Image",
+      "title": "Title",
+      "caption": "Caption",
+      "altText": "Alternative text",
+      "altPlaceholder": "Describe the image for accessibility",
+      "order": "Display order",
+      "public": "Public image",
+      "publicDescription": "Public images appear on the storefront."
+    },
+    "validation": {
+      "imageRequired": "Upload an image first."
+    },
+    "delete": {
+      "confirm": "Remove this image from the gallery?"
+    },
+    "messages": {
+      "added": "Image added.",
+      "updated": "Image updated.",
+      "removed": "Image removed.",
+      "hidden": "Image hidden from the storefront.",
+      "published": "Image published on the storefront."
+    }
+  },
+  "customerReviews": {
+    "verifiedBadge": "Verified appointment reviews",
+    "title": "Reviews",
+    "description": "Read verified experiences from customers of {{business}}.",
+    "verifiedExplanation": "Only customers with a completed appointment can submit a review.",
+    "reviewCount": "{{count}} reviews",
+    "bookAppointment": "Book appointment",
+    "shareExperience": "Share your experience",
+    "shareDescription": "Select a completed appointment to write or update a verified review.",
+    "signInRequired": "Sign in to review a completed appointment.",
+    "signIn": "Sign in",
+    "noEligibleAppointments": "No completed appointments are currently available for review.",
+    "appointment": "Appointment",
+    "writeReview": "Write review",
+    "communityTitle": "Customer experiences",
+    "communityDescription": "Published reviews from verified appointments.",
+    "emptyTitle": "No published reviews yet",
+    "emptyDescription": "Be the first customer to share a verified experience.",
+    "defaultReviewTitle": "Customer experience",
+    "noComment": "No written comment.",
+    "verifiedCustomer": "Verified customer",
+    "ownerResponse": "Response from the business",
+    "status": {
+      "loading": "Loading reviews…"
+    },
+    "statuses": {
+      "pending": "Pending review",
+      "published": "Published",
+      "hidden": "Hidden"
+    },
+    "dialog": {
+      "title": "Write a review",
+      "rating": "Rating",
+      "reviewTitle": "Review title",
+      "titlePlaceholder": "Summarize your experience",
+      "comment": "Your experience",
+      "commentPlaceholder": "Tell others what stood out…",
+      "moderationNote": "Reviews are submitted for moderation. The business can respond but cannot change your rating or text.",
+      "submit": "Submit review"
+    },
+    "messages": {
+      "loadFailed": "Could not load reviews.",
+      "submitted": "Your review was submitted for moderation.",
+      "submitFailed": "Could not submit the review."
     }
   }
 }

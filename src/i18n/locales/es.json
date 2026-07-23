@@ -125,8 +125,10 @@
       "service": "Abrir servicios",
       "post": "Crear actualización",
       "sale": "Nueva venta",
-      "expense": "Nuevo gasto"
-    }
+      "expense": "Nuevo gasto",
+      "campaign": "Nueva campaña"
+    },
+    "marketing": "Marketing"
   },
   "system": {
     "loading": "Cargando...",
@@ -1291,7 +1293,8 @@
         "branding": "Marca",
         "contact": "Contacto",
         "location": "Ubicación",
-        "sharing": "Vista previa y compartir"
+        "sharing": "Vista previa y compartir",
+        "online": "Presencia online"
       },
       "actions": {
         "copyLink": "Copiar enlace",
@@ -1375,6 +1378,25 @@
         "saveError": "No se pudieron guardar los cambios del escaparate",
         "updated": "Escaparate actualizado correctamente",
         "linkCopied": "Enlace público copiado"
+      },
+      "online": {
+        "title": "Presentación en búsquedas y reservas",
+        "description": "Controla cómo aparece la página pública en las búsquedas y cómo se invita a los clientes a reservar.",
+        "seoTitle": "Título SEO de la página",
+        "seoTitleHint": "Utiliza un título claro que incluya el nombre y la ubicación del negocio.",
+        "seoDescription": "Descripción SEO",
+        "seoDescriptionHint": "Escribe una descripción breve de los servicios y de la experiencia del cliente.",
+        "bookingCta": "Texto del botón de reserva",
+        "bookingCtaHint": "Llamada a la acción personalizada opcional para el botón principal de reserva.",
+        "socialTitle": "Enlaces sociales",
+        "socialDescription": "Conecta la página pública con los canales oficiales del negocio.",
+        "website": "Sitio web",
+        "visibilityTitle": "Visibilidad de secciones públicas",
+        "visibilityDescription": "Elige qué módulos de contenido aparecen en el escaparate.",
+        "showTeam": "Mostrar equipo",
+        "showProducts": "Mostrar productos",
+        "showGallery": "Mostrar galería",
+        "showReviews": "Mostrar reseñas"
       }
     },
     "qr": {
@@ -1401,7 +1423,8 @@
         "gallery": "Galería",
         "products": "Productos",
         "announcements": "Anuncios",
-        "contact": "Contacto"
+        "contact": "Contacto",
+        "reviews": "Reseñas"
       },
       "status": {
         "onlineBooking": "Reserva online",
@@ -1464,7 +1487,18 @@
         "contact": {
           "title": "Visita y contacto",
           "description": "Todo lo que necesitas antes de tu visita.",
-          "mapMissing": "La ubicación del mapa aún no está configurada."
+          "mapMissing": "La ubicación del mapa aún no está configurada.",
+          "website": "Sitio web"
+        },
+        "reviews": {
+          "title": "Reseñas verificadas",
+          "description": "Experiencias recientes procedentes de citas verificadas.",
+          "empty": "Aún no hay reseñas publicadas.",
+          "defaultTitle": "Experiencia del cliente",
+          "noComment": "Sin comentario escrito.",
+          "verifiedCustomer": "Cliente verificado",
+          "ownerResponse": "Respuesta del negocio",
+          "viewAll": "Ver todas las reseñas"
         }
       },
       "footer": {
@@ -2592,6 +2626,299 @@
       "training": "Formación",
       "travel": "Viajes",
       "other": "Otro"
+    }
+  },
+  "marketing": {
+    "eyebrow": "Espacio de crecimiento",
+    "title": "Centro de Marketing",
+    "description": "Crea campañas, activa recorridos de clientes, gestiona reseñas y conecta cada acción de crecimiento con los datos del negocio.",
+    "actions": {
+      "newCampaign": "Nueva campaña",
+      "openCampaigns": "Abrir campañas",
+      "manageReviews": "Gestionar reseñas",
+      "createFirstCampaign": "Crear primera campaña",
+      "saveCampaign": "Guardar campaña",
+      "pause": "Pausar",
+      "resume": "Reanudar"
+    },
+    "tabs": {
+      "overview": "Resumen",
+      "campaigns": "Campañas",
+      "automations": "Automatizaciones",
+      "reviews": "Reseñas"
+    },
+    "metrics": {
+      "reachableCustomers": "Clientes alcanzables",
+      "activeAutomations": "Automatizaciones activas",
+      "averageRating": "Valoración media",
+      "publishedReviews": "{{count}} reseñas publicadas",
+      "attributedRevenue": "Ingresos atribuidos"
+    },
+    "audience": {
+      "title": "Inteligencia de audiencias",
+      "description": "Segmentos de clientes en tiempo real calculados a partir de citas, gasto y actividad de la cuenta."
+    },
+    "segments": {
+      "all": "Todos los clientes",
+      "active": "Activos",
+      "at_risk": "En riesgo",
+      "vip": "VIP",
+      "new": "Clientes nuevos",
+      "registered": "Registrados",
+      "guests": "Invitados"
+    },
+    "segmentDescriptions": {
+      "all": "Todos los registros de clientes de este negocio.",
+      "active": "Visitaron en los últimos 60 días.",
+      "at_risk": "La última visita fue hace 61–180 días.",
+      "vip": "Clientes de alto valor o frecuentes.",
+      "new": "Creados durante los últimos 30 días.",
+      "registered": "Clientes con una cuenta de Velliqo.",
+      "guests": "Clientes que reservaron sin una cuenta."
+    },
+    "commandCenter": {
+      "title": "Centro de mando de crecimiento",
+      "description": "Las acciones que requieren atención ahora.",
+      "scheduled": "Hay {{count}} campañas programadas",
+      "publishedPosts": "Hay {{count}} actualizaciones públicas activas",
+      "pendingReviews": "{{count}} reseñas esperan moderación",
+      "atRisk": "{{count}} clientes están en riesgo"
+    },
+    "onlinePresence": {
+      "title": "Presencia online conectada",
+      "description": "Tus campañas, contenidos, escaparate y reputación funcionan como un único sistema.",
+      "posts": "Publicaciones y anuncios",
+      "postsDescription": "Publica ofertas, cierres y novedades en tu página pública.",
+      "storefront": "Escaparate público",
+      "storefrontDescription": "Controla la marca, el SEO, los enlaces y la visibilidad de las secciones.",
+      "reputation": "Reseñas y reputación",
+      "reputationDescription": "Modera reseñas verificadas y responde en nombre del negocio."
+    },
+    "campaigns": {
+      "title": "Espacio de campañas",
+      "description": "Crea borradores y programaciones dirigidas a segmentos reales de clientes.",
+      "emptyTitle": "Aún no hay campañas",
+      "emptyDescription": "Crea tu primera campaña y guárdala como borrador o prográmala para su envío.",
+      "recipients": "{{count}} destinatarios",
+      "schedule": "Programación",
+      "notScheduled": "Sin programar",
+      "performance": "Rendimiento",
+      "conversions": "conversiones"
+    },
+    "channels": {
+      "email": "Correo electrónico",
+      "sms": "SMS",
+      "in_app": "En la aplicación"
+    },
+    "statuses": {
+      "draft": "Borrador",
+      "scheduled": "Programada",
+      "paused": "Pausada",
+      "completed": "Completada",
+      "cancelled": "Cancelada"
+    },
+    "objectives": {
+      "announcement": "Anuncio",
+      "promotion": "Promoción",
+      "win_back": "Recuperación",
+      "birthday": "Cumpleaños",
+      "review_request": "Solicitud de reseña",
+      "last_minute": "Disponibilidad de última hora",
+      "custom": "Personalizado"
+    },
+    "fields": {
+      "campaignName": "Nombre de la campaña",
+      "channel": "Canal",
+      "objective": "Objetivo",
+      "audience": "Segmento de audiencia",
+      "subject": "Asunto del correo",
+      "message": "Mensaje",
+      "scheduleCampaign": "Programar campaña",
+      "scheduleHint": "El servicio de envío procesará esta campaña a la hora seleccionada cuando se conecte un proveedor.",
+      "consentHint": "La estimación de destinatarios incluye solo a clientes que han dado su consentimiento de marketing y tienen habilitado el canal seleccionado."
+    },
+    "dialog": {
+      "newCampaign": "Crear campaña",
+      "editCampaign": "Editar campaña"
+    },
+    "validation": {
+      "campaignRequired": "El nombre y el mensaje de la campaña son obligatorios.",
+      "subjectRequired": "El asunto del correo es obligatorio.",
+      "scheduleRequired": "Selecciona una fecha y hora de envío."
+    },
+    "messages": {
+      "loadFailed": "No se pudo cargar el espacio de marketing.",
+      "campaignCreated": "Campaña creada.",
+      "campaignUpdated": "Campaña actualizada.",
+      "campaignSaveFailed": "No se pudo guardar la campaña.",
+      "statusUpdated": "Estado de la campaña actualizado.",
+      "automationEnabled": "Automatización activada.",
+      "automationDisabled": "Automatización desactivada.",
+      "reviewUpdated": "Reseña actualizada.",
+      "reviewUpdateFailed": "No se pudo actualizar la reseña."
+    },
+    "status": {
+      "loading": "Cargando inteligencia de marketing…"
+    },
+    "automations": {
+      "delay": "Retraso de activación: {{hours}} horas",
+      "providerNotice": "Las automatizaciones se configuran de forma segura en Velliqo. El envío de correo/SMS comienza únicamente después de conectar un proveedor o proceso de confianza; el navegador nunca envía mensajes masivos directamente.",
+      "birthday": {
+        "title": "Recorrido de cumpleaños",
+        "description": "Envía una oferta personal cerca del cumpleaños del cliente.",
+        "template": "¡Feliz cumpleaños! Tenemos un regalo especial esperándote."
+      },
+      "win_back": {
+        "title": "Recorrido de recuperación",
+        "description": "Vuelve a conectar con clientes que no han visitado recientemente.",
+        "template": "Te echamos de menos. Reserva tu próxima visita y disfruta de una oferta de bienvenida."
+      },
+      "review_request": {
+        "title": "Solicitud de reseña",
+        "description": "Pide una reseña verificada después de una cita completada.",
+        "template": "Gracias por tu visita. Nos encantaría conocer tu opinión."
+      },
+      "no_show_recovery": {
+        "title": "Recuperación de ausencias",
+        "description": "Realiza un seguimiento respetuoso tras una cita perdida.",
+        "template": "Hemos visto que no pudiste acudir a tu cita. Permítenos ayudarte a reprogramarla."
+      },
+      "last_minute_availability": {
+        "title": "Disponibilidad de última hora",
+        "description": "Contacta con clientes relevantes cuando queda libre una cita.",
+        "template": "Acaba de quedar disponible una cita de última hora. Reserva mientras el horario siga libre."
+      }
+    },
+    "reviews": {
+      "title": "Moderación de reseñas",
+      "description": "Publica reseñas de citas verificadas, oculta contenido inadecuado y responde como negocio.",
+      "emptyTitle": "Aún no hay reseñas",
+      "emptyDescription": "Las reseñas verificadas aparecerán aquí después de citas completadas.",
+      "customer": "Cliente",
+      "noComment": "Sin comentario escrito.",
+      "manageTitle": "Gestionar reseña",
+      "ownerResponse": "Respuesta del propietario",
+      "responsePlaceholder": "Escribe una respuesta pública profesional…",
+      "hide": "Ocultar",
+      "keepPending": "Mantener pendiente",
+      "publish": "Publicar"
+    },
+    "reviewStatuses": {
+      "pending": "Pendiente",
+      "published": "Publicada",
+      "hidden": "Oculta"
+    }
+  },
+  "gallery": {
+    "eyebrow": "Portafolio online",
+    "title": "Galería",
+    "description": "Organiza trabajos recientes, fotos del local e imágenes de productos para tu escaparate público.",
+    "searchPlaceholder": "Buscar en la galería…",
+    "actions": {
+      "add": "Añadir imagen",
+      "addFirst": "Añadir primera imagen",
+      "save": "Guardar imagen",
+      "moveUp": "Mover imagen arriba",
+      "moveDown": "Mover imagen abajo",
+      "toggleVisibility": "Cambiar visibilidad"
+    },
+    "summary": {
+      "total": "Imágenes totales",
+      "public": "Imágenes públicas",
+      "private": "Imágenes privadas"
+    },
+    "filters": {
+      "all": "Todas",
+      "public": "Públicas",
+      "private": "Privadas"
+    },
+    "status": {
+      "loading": "Cargando galería…"
+    },
+    "empty": {
+      "title": "La galería está vacía",
+      "description": "Añade imágenes de alta calidad para presentar el negocio de forma profesional.",
+      "filteredTitle": "No hay imágenes coincidentes",
+      "filteredDescription": "Cambia la búsqueda o el filtro de visibilidad."
+    },
+    "visibility": {
+      "public": "Pública",
+      "private": "Privada"
+    },
+    "untitled": "Imagen sin título",
+    "imageFallback": "Imagen de galería",
+    "dialog": {
+      "add": "Añadir imagen",
+      "edit": "Editar imagen"
+    },
+    "fields": {
+      "image": "Imagen",
+      "title": "Título",
+      "caption": "Pie de foto",
+      "altText": "Texto alternativo",
+      "altPlaceholder": "Describe la imagen para mejorar la accesibilidad",
+      "order": "Orden de visualización",
+      "public": "Imagen pública",
+      "publicDescription": "Las imágenes públicas aparecen en el escaparate."
+    },
+    "validation": {
+      "imageRequired": "Primero debes subir una imagen."
+    },
+    "delete": {
+      "confirm": "¿Eliminar esta imagen de la galería?"
+    },
+    "messages": {
+      "added": "Imagen añadida.",
+      "updated": "Imagen actualizada.",
+      "removed": "Imagen eliminada.",
+      "hidden": "Imagen ocultada del escaparate.",
+      "published": "Imagen publicada en el escaparate."
+    }
+  },
+  "customerReviews": {
+    "verifiedBadge": "Reseñas de citas verificadas",
+    "title": "Reseñas",
+    "description": "Lee experiencias verificadas de clientes de {{business}}.",
+    "verifiedExplanation": "Solo los clientes con una cita completada pueden enviar una reseña.",
+    "reviewCount": "{{count}} reseñas",
+    "bookAppointment": "Reservar cita",
+    "shareExperience": "Comparte tu experiencia",
+    "shareDescription": "Selecciona una cita completada para escribir o actualizar una reseña verificada.",
+    "signInRequired": "Inicia sesión para valorar una cita completada.",
+    "signIn": "Iniciar sesión",
+    "noEligibleAppointments": "Actualmente no hay citas completadas disponibles para reseñar.",
+    "appointment": "Cita",
+    "writeReview": "Escribir reseña",
+    "communityTitle": "Experiencias de clientes",
+    "communityDescription": "Reseñas publicadas procedentes de citas verificadas.",
+    "emptyTitle": "Aún no hay reseñas publicadas",
+    "emptyDescription": "Sé el primer cliente en compartir una experiencia verificada.",
+    "defaultReviewTitle": "Experiencia del cliente",
+    "noComment": "Sin comentario escrito.",
+    "verifiedCustomer": "Cliente verificado",
+    "ownerResponse": "Respuesta del negocio",
+    "status": {
+      "loading": "Cargando reseñas…"
+    },
+    "statuses": {
+      "pending": "Pendiente de revisión",
+      "published": "Publicada",
+      "hidden": "Oculta"
+    },
+    "dialog": {
+      "title": "Escribir una reseña",
+      "rating": "Valoración",
+      "reviewTitle": "Título de la reseña",
+      "titlePlaceholder": "Resume tu experiencia",
+      "comment": "Tu experiencia",
+      "commentPlaceholder": "Cuenta a otros qué fue lo más destacado…",
+      "moderationNote": "Las reseñas se envían para moderación. El negocio puede responder, pero no puede cambiar tu valoración ni tu texto.",
+      "submit": "Enviar reseña"
+    },
+    "messages": {
+      "loadFailed": "No se pudieron cargar las reseñas.",
+      "submitted": "Tu reseña se envió para moderación.",
+      "submitFailed": "No se pudo enviar la reseña."
     }
   }
 }

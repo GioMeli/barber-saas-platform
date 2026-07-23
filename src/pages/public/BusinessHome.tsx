@@ -16,6 +16,11 @@ import {
   Scissors,
   Share2,
   Sparkles,
+  Star,
+  Instagram,
+  Facebook,
+  Music2,
+  Globe2,
   UserRound,
   X,
 } from 'lucide-react';
@@ -50,11 +55,13 @@ export default function BusinessHome() {
   const { t, i18n } = useTranslation();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
 
+  const presence = business.online_presence ?? {};
   const sectionLinks = [
     { id: 'services', label: t('storefront.public.navigation.services') },
-    { id: 'team', label: t('storefront.public.navigation.team') },
-    { id: 'gallery', label: t('storefront.public.navigation.gallery') },
-    { id: 'products', label: t('storefront.public.navigation.products') },
+    ...(presence.show_team === false ? [] : [{ id: 'team', label: t('storefront.public.navigation.team') }]),
+    ...(presence.show_gallery === false ? [] : [{ id: 'gallery', label: t('storefront.public.navigation.gallery') }]),
+    ...(presence.show_products === false ? [] : [{ id: 'products', label: t('storefront.public.navigation.products') }]),
+    ...(presence.show_reviews === false ? [] : [{ id: 'reviews', label: t('storefront.public.navigation.reviews') }]),
     { id: 'announcements', label: t('storefront.public.navigation.announcements') },
     { id: 'contact', label: t('storefront.public.navigation.contact') },
   ];
@@ -70,6 +77,7 @@ export default function BusinessHome() {
   const [posts, setPosts] = useState<any[]>([]);
   const [gallery, setGallery] = useState<any[]>([]);
   const [closures, setClosures] = useState<any[]>([]);
+  const [reviews, setReviews] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
   const [announcementsOpen, setAnnouncementsOpen] = useState(false);
@@ -131,6 +139,8 @@ export default function BusinessHome() {
         .gte('end_date', new Date().toISOString().slice(0, 10))
         .order('start_date')
         .limit(3),
+      supabase
+        .rpc('get_public_business_reviews', { p_business_id: business.id }),
     ]);
 
     const [
@@ -140,6 +150,7 @@ export default function BusinessHome() {
       postsResult,
       galleryResult,
       closuresResult,
+      reviewsResult,
     ] = results;
 
     setServices(
@@ -170,6 +181,11 @@ export default function BusinessHome() {
     setClosures(
       closuresResult.status === 'fulfilled' && !closuresResult.value.error
         ? closuresResult.value.data ?? []
+        : []
+    );
+    setReviews(
+      reviewsResult.status === 'fulfilled' && !reviewsResult.value.error
+        ? (reviewsResult.value.data ?? []).slice(0, 6)
         : []
     );
 
@@ -315,7 +331,7 @@ export default function BusinessHome() {
               <Button asChild size="lg" className="h-12 rounded-xl px-6">
                 <Link to={bookUrl}>
                   <CalendarDays className="mr-2 h-5 w-5" />
-                  {t('storefront.public.actions.bookAppointment')}
+                  {presence.booking_cta_label || t('storefront.public.actions.bookAppointment')}
                 </Link>
               </Button>
 
@@ -371,21 +387,25 @@ export default function BusinessHome() {
                   value={services.length}
                   onClick={() => scrollToSection('services')}
                 />
-                <QuickAction
-                  label={t('storefront.public.navigation.team')}
-                  value={staff.length}
-                  onClick={() => scrollToSection('team')}
-                />
+                {presence.show_team !== false && (
+                  <QuickAction
+                    label={t('storefront.public.navigation.team')}
+                    value={staff.length}
+                    onClick={() => scrollToSection('team')}
+                  />
+                )}
                 <QuickAction
                   label={t('storefront.public.navigation.announcements')}
                   value={posts.length}
                   onClick={() => scrollToSection('announcements')}
                 />
-                <QuickAction
-                  label={t('storefront.public.navigation.gallery')}
-                  value={gallery.length}
-                  onClick={() => scrollToSection('gallery')}
-                />
+                {presence.show_gallery !== false && (
+                  <QuickAction
+                    label={t('storefront.public.navigation.gallery')}
+                    value={gallery.length}
+                    onClick={() => scrollToSection('gallery')}
+                  />
+                )}
               </div>
             </div>
           </div>
@@ -509,6 +529,7 @@ export default function BusinessHome() {
           )}
         </section>
 
+        {presence.show_team !== false && (
         <section id="team" className="scroll-mt-32">
           <CompactHeading
             icon={<UserRound className="h-5 w-5" />}
@@ -559,7 +580,9 @@ export default function BusinessHome() {
             </div>
           )}
         </section>
+        )}
 
+        {presence.show_gallery !== false && (
         <section id="gallery" className="scroll-mt-32">
           <CompactHeading
             icon={<ImageIcon className="h-5 w-5" />}
@@ -595,7 +618,9 @@ export default function BusinessHome() {
             </div>
           )}
         </section>
+        )}
 
+        {presence.show_products !== false && (
         <section id="products" className="scroll-mt-32">
           <CompactHeading
             icon={<Package className="h-5 w-5" />}
@@ -648,6 +673,46 @@ export default function BusinessHome() {
             </div>
           )}
         </section>
+        )}
+
+        {presence.show_reviews !== false && (
+        <section id="reviews" className="scroll-mt-32">
+          <CompactHeading
+            icon={<Star className="h-5 w-5" />}
+            title={t('storefront.public.sections.reviews.title')}
+            description={t('storefront.public.sections.reviews.description')}
+          />
+          {reviews.length === 0 ? (
+            <EmptyState text={t('storefront.public.sections.reviews.empty')} />
+          ) : (
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {reviews.slice(0, 3).map((review) => (
+                <Card key={review.id} className="rounded-2xl shadow-sm">
+                  <CardContent className="p-5">
+                    <div className="flex gap-0.5 text-amber-500">
+                      {Array.from({ length: 5 }).map((_, index) => (
+                        <Star key={index} className={`h-4 w-4 ${index < review.rating ? 'fill-current' : 'text-muted'}`} />
+                      ))}
+                    </div>
+                    <h3 className="mt-4 font-bold">{review.title || t('storefront.public.sections.reviews.defaultTitle')}</h3>
+                    <p className="mt-2 line-clamp-4 text-sm leading-6 text-muted-foreground">{review.comment || t('storefront.public.sections.reviews.noComment')}</p>
+                    <div className="mt-4 border-t pt-4 text-sm font-semibold">{review.customer_display_name || t('storefront.public.sections.reviews.verifiedCustomer')}</div>
+                    {review.owner_response && (
+                      <div className="mt-4 rounded-xl bg-primary/[0.06] p-3 text-sm">
+                        <div className="text-xs font-bold uppercase tracking-wide text-primary">{t('storefront.public.sections.reviews.ownerResponse')}</div>
+                        <p className="mt-1 leading-5">{review.owner_response}</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )}
+          <Button asChild variant="outline" className="mt-4 rounded-xl">
+            <Link to={`/app/${business.slug}/reviews`}>{t('storefront.public.sections.reviews.viewAll')}</Link>
+          </Button>
+        </section>
+        )}
 
         <section id="announcements" className="scroll-mt-32">
           <button
@@ -766,6 +831,15 @@ export default function BusinessHome() {
                   />
                 )}
               </div>
+
+              {(presence.instagram_url || presence.facebook_url || presence.tiktok_url || presence.website_url) && (
+                <div className="mt-5 flex flex-wrap gap-2">
+                  {presence.instagram_url && <SocialLink href={presence.instagram_url} label="Instagram" icon={<Instagram className="h-4 w-4" />} />}
+                  {presence.facebook_url && <SocialLink href={presence.facebook_url} label="Facebook" icon={<Facebook className="h-4 w-4" />} />}
+                  {presence.tiktok_url && <SocialLink href={presence.tiktok_url} label="TikTok" icon={<Music2 className="h-4 w-4" />} />}
+                  {presence.website_url && <SocialLink href={presence.website_url} label={t('storefront.public.sections.contact.website')} icon={<Globe2 className="h-4 w-4" />} />}
+                </div>
+              )}
 
               <div className="mt-4 grid gap-2 sm:grid-cols-2">
                 {directionsUrl && (
@@ -967,6 +1041,10 @@ function LoadingRows() {
       ))}
     </div>
   );
+}
+
+function SocialLink({ href, label, icon }: { href: string; label: string; icon: React.ReactNode }) {
+  return <Button asChild size="sm" variant="outline" className="rounded-full"><a href={href} target="_blank" rel="noreferrer">{icon}<span className="ml-2">{label}</span></a></Button>;
 }
 
 function ContactRow({

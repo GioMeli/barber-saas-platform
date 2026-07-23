@@ -125,8 +125,10 @@
       "service": "Dienstleistungen öffnen",
       "post": "Update erstellen",
       "sale": "Neuer Verkauf",
-      "expense": "Neue Ausgabe"
-    }
+      "expense": "Neue Ausgabe",
+      "campaign": "Neue Kampagne"
+    },
+    "marketing": "Marketing"
   },
   "system": {
     "loading": "Wird geladen...",
@@ -1291,7 +1293,8 @@
         "branding": "Markenauftritt",
         "contact": "Kontakt",
         "location": "Standort",
-        "sharing": "Vorschau & Teilen"
+        "sharing": "Vorschau & Teilen",
+        "online": "Online-Präsenz"
       },
       "actions": {
         "copyLink": "Link kopieren",
@@ -1375,6 +1378,25 @@
         "saveError": "Storefront-Änderungen konnten nicht gespeichert werden",
         "updated": "Storefront erfolgreich aktualisiert",
         "linkCopied": "Öffentlicher Link kopiert"
+      },
+      "online": {
+        "title": "Darstellung in Suche und Buchung",
+        "description": "Steuern Sie, wie die öffentliche Seite in Suchergebnissen erscheint und wie Kunden zur Buchung eingeladen werden.",
+        "seoTitle": "SEO-Seitentitel",
+        "seoTitleHint": "Verwenden Sie einen klaren Titel mit Unternehmensname und Standort.",
+        "seoDescription": "SEO-Beschreibung",
+        "seoDescriptionHint": "Beschreiben Sie Dienstleistungen und Kundenerlebnis kurz und prägnant.",
+        "bookingCta": "Beschriftung der Buchungsschaltfläche",
+        "bookingCtaHint": "Optionale individuelle Handlungsaufforderung für die wichtigste Buchungsschaltfläche.",
+        "socialTitle": "Social-Media-Links",
+        "socialDescription": "Verbinden Sie die öffentliche Seite mit den offiziellen Kanälen des Unternehmens.",
+        "website": "Website",
+        "visibilityTitle": "Sichtbarkeit öffentlicher Bereiche",
+        "visibilityDescription": "Wählen Sie, welche Inhaltsbereiche im Storefront sichtbar sind.",
+        "showTeam": "Team anzeigen",
+        "showProducts": "Produkte anzeigen",
+        "showGallery": "Galerie anzeigen",
+        "showReviews": "Bewertungen anzeigen"
       }
     },
     "qr": {
@@ -1401,7 +1423,8 @@
         "gallery": "Galerie",
         "products": "Produkte",
         "announcements": "Ankündigungen",
-        "contact": "Kontakt"
+        "contact": "Kontakt",
+        "reviews": "Bewertungen"
       },
       "status": {
         "onlineBooking": "Online-Buchung",
@@ -1464,7 +1487,18 @@
         "contact": {
           "title": "Besuch & Kontakt",
           "description": "Alles, was Sie vor Ihrem Besuch benötigen.",
-          "mapMissing": "Der Kartenstandort wurde noch nicht eingerichtet."
+          "mapMissing": "Der Kartenstandort wurde noch nicht eingerichtet.",
+          "website": "Website"
+        },
+        "reviews": {
+          "title": "Verifizierte Bewertungen",
+          "description": "Aktuelle Erfahrungen aus verifizierten Terminen.",
+          "empty": "Noch keine veröffentlichten Bewertungen.",
+          "defaultTitle": "Kundenerlebnis",
+          "noComment": "Kein schriftlicher Kommentar.",
+          "verifiedCustomer": "Verifizierter Kunde",
+          "ownerResponse": "Antwort des Unternehmens",
+          "viewAll": "Alle Bewertungen anzeigen"
         }
       },
       "footer": {
@@ -2592,6 +2626,299 @@
       "training": "Schulung",
       "travel": "Reisen",
       "other": "Sonstige"
+    }
+  },
+  "marketing": {
+    "eyebrow": "Wachstumsbereich",
+    "title": "Marketing-Center",
+    "description": "Erstellen Sie Kampagnen, aktivieren Sie Customer Journeys, verwalten Sie Bewertungen und verknüpfen Sie alle Wachstumsaktivitäten mit Ihren Geschäftsdaten.",
+    "actions": {
+      "newCampaign": "Neue Kampagne",
+      "openCampaigns": "Kampagnen öffnen",
+      "manageReviews": "Bewertungen verwalten",
+      "createFirstCampaign": "Erste Kampagne erstellen",
+      "saveCampaign": "Kampagne speichern",
+      "pause": "Pausieren",
+      "resume": "Fortsetzen"
+    },
+    "tabs": {
+      "overview": "Übersicht",
+      "campaigns": "Kampagnen",
+      "automations": "Automatisierungen",
+      "reviews": "Bewertungen"
+    },
+    "metrics": {
+      "reachableCustomers": "Erreichbare Kunden",
+      "activeAutomations": "Aktive Automatisierungen",
+      "averageRating": "Durchschnittliche Bewertung",
+      "publishedReviews": "{{count}} veröffentlichte Bewertungen",
+      "attributedRevenue": "Zugeordneter Umsatz"
+    },
+    "audience": {
+      "title": "Zielgruppen-Intelligenz",
+      "description": "Live-Kundensegmente auf Basis von Terminen, Ausgaben und Kontoaktivität."
+    },
+    "segments": {
+      "all": "Alle Kunden",
+      "active": "Aktiv",
+      "at_risk": "Gefährdet",
+      "vip": "VIP",
+      "new": "Neue Kunden",
+      "registered": "Registriert",
+      "guests": "Gäste"
+    },
+    "segmentDescriptions": {
+      "all": "Jeder Kundendatensatz dieses Unternehmens.",
+      "active": "Besuch innerhalb der letzten 60 Tage.",
+      "at_risk": "Letzter Besuch vor 61–180 Tagen.",
+      "vip": "Kunden mit hohem Wert oder hoher Besuchshäufigkeit.",
+      "new": "In den letzten 30 Tagen angelegt.",
+      "registered": "Kunden mit einem Velliqo-Konto.",
+      "guests": "Kunden, die ohne Konto gebucht haben."
+    },
+    "commandCenter": {
+      "title": "Wachstums-Kommandozentrale",
+      "description": "Maßnahmen, die jetzt Aufmerksamkeit benötigen.",
+      "scheduled": "{{count}} Kampagnen sind geplant",
+      "publishedPosts": "{{count}} öffentliche Updates sind live",
+      "pendingReviews": "{{count}} Bewertungen warten auf Moderation",
+      "atRisk": "{{count}} Kunden sind gefährdet"
+    },
+    "onlinePresence": {
+      "title": "Vernetzte Online-Präsenz",
+      "description": "Kampagnen, Inhalte, Storefront und Reputation arbeiten als ein System zusammen.",
+      "posts": "Beiträge und Ankündigungen",
+      "postsDescription": "Veröffentlichen Sie Angebote, Schließungen und Updates auf Ihrer öffentlichen Seite.",
+      "storefront": "Öffentlicher Storefront",
+      "storefrontDescription": "Steuern Sie Branding, SEO, Links und die Sichtbarkeit von Bereichen.",
+      "reputation": "Bewertungen und Reputation",
+      "reputationDescription": "Moderieren Sie verifizierte Bewertungen und antworten Sie im Namen des Unternehmens."
+    },
+    "campaigns": {
+      "title": "Kampagnen-Arbeitsbereich",
+      "description": "Erstellen Sie zielgerichtete Kampagnenentwürfe und Zeitpläne aus echten Kundensegmenten.",
+      "emptyTitle": "Noch keine Kampagnen",
+      "emptyDescription": "Erstellen Sie Ihre erste Kampagne und speichern Sie sie als Entwurf oder planen Sie die Zustellung.",
+      "recipients": "{{count}} Empfänger",
+      "schedule": "Zeitplan",
+      "notScheduled": "Nicht geplant",
+      "performance": "Leistung",
+      "conversions": "Konversionen"
+    },
+    "channels": {
+      "email": "E-Mail",
+      "sms": "SMS",
+      "in_app": "In-App"
+    },
+    "statuses": {
+      "draft": "Entwurf",
+      "scheduled": "Geplant",
+      "paused": "Pausiert",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert"
+    },
+    "objectives": {
+      "announcement": "Ankündigung",
+      "promotion": "Aktion",
+      "win_back": "Rückgewinnung",
+      "birthday": "Geburtstag",
+      "review_request": "Bewertungsanfrage",
+      "last_minute": "Kurzfristige Verfügbarkeit",
+      "custom": "Individuell"
+    },
+    "fields": {
+      "campaignName": "Kampagnenname",
+      "channel": "Kanal",
+      "objective": "Ziel",
+      "audience": "Zielgruppensegment",
+      "subject": "E-Mail-Betreff",
+      "message": "Nachricht",
+      "scheduleCampaign": "Kampagne planen",
+      "scheduleHint": "Der Zustellungsdienst verarbeitet diese Kampagne zum gewählten Zeitpunkt, sobald ein Anbieter verbunden ist.",
+      "consentHint": "Die Empfängerschätzung berücksichtigt nur Kunden, die der Marketingkommunikation zugestimmt und den gewählten Kanal aktiviert haben."
+    },
+    "dialog": {
+      "newCampaign": "Kampagne erstellen",
+      "editCampaign": "Kampagne bearbeiten"
+    },
+    "validation": {
+      "campaignRequired": "Kampagnenname und Nachricht sind erforderlich.",
+      "subjectRequired": "Ein E-Mail-Betreff ist erforderlich.",
+      "scheduleRequired": "Wählen Sie Datum und Uhrzeit der Zustellung."
+    },
+    "messages": {
+      "loadFailed": "Der Marketing-Arbeitsbereich konnte nicht geladen werden.",
+      "campaignCreated": "Kampagne erstellt.",
+      "campaignUpdated": "Kampagne aktualisiert.",
+      "campaignSaveFailed": "Die Kampagne konnte nicht gespeichert werden.",
+      "statusUpdated": "Kampagnenstatus aktualisiert.",
+      "automationEnabled": "Automatisierung aktiviert.",
+      "automationDisabled": "Automatisierung deaktiviert.",
+      "reviewUpdated": "Bewertung aktualisiert.",
+      "reviewUpdateFailed": "Die Bewertung konnte nicht aktualisiert werden."
+    },
+    "status": {
+      "loading": "Marketing-Intelligenz wird geladen…"
+    },
+    "automations": {
+      "delay": "Auslöseverzögerung: {{hours}} Stunden",
+      "providerNotice": "Automatisierungen werden in Velliqo sicher konfiguriert. Der E-Mail-/SMS-Versand beginnt erst, nachdem ein vertrauenswürdiger Anbieter oder Worker verbunden wurde; der Browser versendet niemals direkt Massennachrichten.",
+      "birthday": {
+        "title": "Geburtstags-Journey",
+        "description": "Senden Sie rund um den Geburtstag des Kunden ein persönliches Angebot.",
+        "template": "Alles Gute zum Geburtstag! Ein besonderes Geschenk wartet auf Sie."
+      },
+      "win_back": {
+        "title": "Rückgewinnungs-Journey",
+        "description": "Nehmen Sie erneut Kontakt zu Kunden auf, die länger nicht zu Besuch waren.",
+        "template": "Wir vermissen Sie. Buchen Sie Ihren nächsten Besuch und sichern Sie sich ein Willkommens-zurück-Angebot."
+      },
+      "review_request": {
+        "title": "Bewertungsanfrage",
+        "description": "Bitten Sie Kunden nach einem abgeschlossenen Termin um eine verifizierte Bewertung.",
+        "template": "Vielen Dank für Ihren Besuch. Wir würden uns über Ihre Bewertung freuen."
+      },
+      "no_show_recovery": {
+        "title": "No-Show-Nachverfolgung",
+        "description": "Kontaktieren Sie Kunden nach einem versäumten Termin respektvoll.",
+        "template": "Wir haben bemerkt, dass Sie Ihren Termin nicht wahrnehmen konnten. Gern helfen wir Ihnen bei einer neuen Terminvereinbarung."
+      },
+      "last_minute_availability": {
+        "title": "Kurzfristige Verfügbarkeit",
+        "description": "Erreichen Sie passende Kunden, wenn kurzfristig ein Termin frei wird.",
+        "template": "Kurzfristig ist ein Termin verfügbar. Buchen Sie, solange der Zeitraum noch frei ist."
+      }
+    },
+    "reviews": {
+      "title": "Bewertungsmoderation",
+      "description": "Veröffentlichen Sie verifizierte Terminbewertungen, blenden Sie ungeeignete Inhalte aus und antworten Sie als Unternehmen.",
+      "emptyTitle": "Noch keine Bewertungen",
+      "emptyDescription": "Verifizierte Kundenbewertungen erscheinen hier nach abgeschlossenen Terminen.",
+      "customer": "Kunde",
+      "noComment": "Kein schriftlicher Kommentar.",
+      "manageTitle": "Bewertung verwalten",
+      "ownerResponse": "Antwort des Inhabers",
+      "responsePlaceholder": "Schreiben Sie eine professionelle öffentliche Antwort…",
+      "hide": "Ausblenden",
+      "keepPending": "Ausstehend lassen",
+      "publish": "Veröffentlichen"
+    },
+    "reviewStatuses": {
+      "pending": "Ausstehend",
+      "published": "Veröffentlicht",
+      "hidden": "Ausgeblendet"
+    }
+  },
+  "gallery": {
+    "eyebrow": "Online-Portfolio",
+    "title": "Galerie",
+    "description": "Präsentieren Sie aktuelle Arbeiten, Räumlichkeiten und Produktbilder professionell in Ihrem öffentlichen Storefront.",
+    "searchPlaceholder": "Galerie durchsuchen…",
+    "actions": {
+      "add": "Bild hinzufügen",
+      "addFirst": "Erstes Bild hinzufügen",
+      "save": "Bild speichern",
+      "moveUp": "Bild nach oben verschieben",
+      "moveDown": "Bild nach unten verschieben",
+      "toggleVisibility": "Sichtbarkeit ändern"
+    },
+    "summary": {
+      "total": "Bilder insgesamt",
+      "public": "Öffentliche Bilder",
+      "private": "Private Bilder"
+    },
+    "filters": {
+      "all": "Alle",
+      "public": "Öffentlich",
+      "private": "Privat"
+    },
+    "status": {
+      "loading": "Galerie wird geladen…"
+    },
+    "empty": {
+      "title": "Die Galerie ist leer",
+      "description": "Fügen Sie hochwertige Bilder hinzu, um das Unternehmen professionell zu präsentieren.",
+      "filteredTitle": "Keine passenden Bilder",
+      "filteredDescription": "Ändern Sie die Suche oder den Sichtbarkeitsfilter."
+    },
+    "visibility": {
+      "public": "Öffentlich",
+      "private": "Privat"
+    },
+    "untitled": "Bild ohne Titel",
+    "imageFallback": "Galeriebild",
+    "dialog": {
+      "add": "Bild hinzufügen",
+      "edit": "Bild bearbeiten"
+    },
+    "fields": {
+      "image": "Bild",
+      "title": "Titel",
+      "caption": "Bildunterschrift",
+      "altText": "Alternativtext",
+      "altPlaceholder": "Beschreiben Sie das Bild für Barrierefreiheit",
+      "order": "Anzeigereihenfolge",
+      "public": "Öffentliches Bild",
+      "publicDescription": "Öffentliche Bilder erscheinen im Storefront."
+    },
+    "validation": {
+      "imageRequired": "Laden Sie zuerst ein Bild hoch."
+    },
+    "delete": {
+      "confirm": "Dieses Bild aus der Galerie entfernen?"
+    },
+    "messages": {
+      "added": "Bild hinzugefügt.",
+      "updated": "Bild aktualisiert.",
+      "removed": "Bild entfernt.",
+      "hidden": "Bild im Storefront ausgeblendet.",
+      "published": "Bild im Storefront veröffentlicht."
+    }
+  },
+  "customerReviews": {
+    "verifiedBadge": "Verifizierte Terminbewertungen",
+    "title": "Bewertungen",
+    "description": "Lesen Sie verifizierte Erfahrungen von Kunden von {{business}}.",
+    "verifiedExplanation": "Nur Kunden mit einem abgeschlossenen Termin können eine Bewertung abgeben.",
+    "reviewCount": "{{count}} Bewertungen",
+    "bookAppointment": "Termin buchen",
+    "shareExperience": "Teilen Sie Ihre Erfahrung",
+    "shareDescription": "Wählen Sie einen abgeschlossenen Termin, um eine verifizierte Bewertung zu schreiben oder zu aktualisieren.",
+    "signInRequired": "Melden Sie sich an, um einen abgeschlossenen Termin zu bewerten.",
+    "signIn": "Anmelden",
+    "noEligibleAppointments": "Derzeit stehen keine abgeschlossenen Termine zur Bewertung zur Verfügung.",
+    "appointment": "Termin",
+    "writeReview": "Bewertung schreiben",
+    "communityTitle": "Kundenerfahrungen",
+    "communityDescription": "Veröffentlichte Bewertungen aus verifizierten Terminen.",
+    "emptyTitle": "Noch keine veröffentlichten Bewertungen",
+    "emptyDescription": "Seien Sie der erste Kunde, der eine verifizierte Erfahrung teilt.",
+    "defaultReviewTitle": "Kundenerlebnis",
+    "noComment": "Kein schriftlicher Kommentar.",
+    "verifiedCustomer": "Verifizierter Kunde",
+    "ownerResponse": "Antwort des Unternehmens",
+    "status": {
+      "loading": "Bewertungen werden geladen…"
+    },
+    "statuses": {
+      "pending": "Prüfung ausstehend",
+      "published": "Veröffentlicht",
+      "hidden": "Ausgeblendet"
+    },
+    "dialog": {
+      "title": "Bewertung schreiben",
+      "rating": "Bewertung",
+      "reviewTitle": "Bewertungstitel",
+      "titlePlaceholder": "Fassen Sie Ihre Erfahrung zusammen",
+      "comment": "Ihre Erfahrung",
+      "commentPlaceholder": "Erzählen Sie anderen, was besonders positiv auffiel…",
+      "moderationNote": "Bewertungen werden zur Moderation eingereicht. Das Unternehmen kann antworten, aber Ihre Bewertung oder Ihren Text nicht ändern.",
+      "submit": "Bewertung absenden"
+    },
+    "messages": {
+      "loadFailed": "Bewertungen konnten nicht geladen werden.",
+      "submitted": "Ihre Bewertung wurde zur Moderation eingereicht.",
+      "submitFailed": "Die Bewertung konnte nicht gesendet werden."
     }
   }
 }
