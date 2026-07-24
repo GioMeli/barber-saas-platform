@@ -418,3 +418,15 @@ verify_jwt = false
 
 [functions.process_appointment_notifications]
 verify_jwt = false
+
+[functions.process_marketing_deliveries]
+verify_jwt = false
+
+[functions.marketing-unsubscribe]
+verify_jwt = false
+
+[functions.resend-marketing-webhook]
+verify_jwt = false
+
+[functions.twilio-marketing-webhook]
+verify_jwt = false

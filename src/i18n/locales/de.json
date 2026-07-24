@@ -87,7 +87,8 @@
     },
     "back": "Zurück",
     "copy": "Kopieren",
-    "notAvailable": "Nicht verfügbar"
+    "notAvailable": "Nicht verfügbar",
+    "refresh": "Aktualisieren"
   },
   "language": {
     "label": "Sprache",
@@ -1784,7 +1785,8 @@
       "overview": "Übersicht",
       "upcoming": "Bevorstehend",
       "history": "Verlauf",
-      "profile": "Profil"
+      "profile": "Profil",
+      "notifications": "Benachrichtigungen"
     },
     "activity": {
       "title": "Letzte Aktivitäten",
@@ -1824,7 +1826,8 @@
       "fullName": "Vollständiger Name",
       "phone": "Telefon",
       "email": "E-Mail",
-      "save": "Profil speichern"
+      "save": "Profil speichern",
+      "birthDate": "Geburtsdatum"
     },
     "appointment": {
       "next": "Nächster Termin",
@@ -1870,6 +1873,21 @@
       "profileUpdated": "Profil aktualisiert",
       "profileUpdateFailed": "Profil konnte nicht aktualisiert werden",
       "calendarExportFailed": "Kalenderdatei konnte nicht erstellt werden."
+    },
+    "preferences": {
+      "title": "Marketing-Einstellungen",
+      "description": "Wählen Sie, ob dieses Unternehmen Ihnen Werbenachrichten senden darf. Die Einwilligung kann jederzeit widerrufen werden.",
+      "email": "Marketing-E-Mail",
+      "emailDescription": "Angebote und Updates per E-Mail erhalten.",
+      "sms": "Marketing-SMS",
+      "smsDescription": "Angebote und Updates per SMS erhalten."
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "description": "Nachrichten und Angebote in Ihrem Kundenkonto.",
+      "emptyTitle": "Keine Benachrichtigungen",
+      "emptyDescription": "Neue Nachrichten dieses Unternehmens erscheinen hier.",
+      "message": "Unternehmensnachricht"
     }
   },
   "business": {
@@ -2645,7 +2663,8 @@
       "overview": "Übersicht",
       "campaigns": "Kampagnen",
       "automations": "Automatisierungen",
-      "reviews": "Bewertungen"
+      "reviews": "Bewertungen",
+      "delivery": "Zustellung"
     },
     "metrics": {
       "reachableCustomers": "Erreichbare Kunden",
@@ -2715,7 +2734,9 @@
       "scheduled": "Geplant",
       "paused": "Pausiert",
       "completed": "Abgeschlossen",
-      "cancelled": "Storniert"
+      "cancelled": "Storniert",
+      "processing": "In Bearbeitung",
+      "failed": "Fehlgeschlagen"
     },
     "objectives": {
       "announcement": "Ankündigung",
@@ -2766,28 +2787,34 @@
       "birthday": {
         "title": "Geburtstags-Journey",
         "description": "Senden Sie rund um den Geburtstag des Kunden ein persönliches Angebot.",
-        "template": "Alles Gute zum Geburtstag! Ein besonderes Geschenk wartet auf Sie."
+        "template": "Alles Gute zum Geburtstag! Ein besonderes Geschenk wartet auf Sie.",
+        "subject": "Geburtstagsgrüße von {{business_name}}"
       },
       "win_back": {
         "title": "Rückgewinnungs-Journey",
         "description": "Nehmen Sie erneut Kontakt zu Kunden auf, die länger nicht zu Besuch waren.",
-        "template": "Wir vermissen Sie. Buchen Sie Ihren nächsten Besuch und sichern Sie sich ein Willkommens-zurück-Angebot."
+        "template": "Wir vermissen Sie. Buchen Sie Ihren nächsten Besuch und sichern Sie sich ein Willkommens-zurück-Angebot.",
+        "subject": "Wir würden uns freuen, Sie wiederzusehen"
       },
       "review_request": {
         "title": "Bewertungsanfrage",
         "description": "Bitten Sie Kunden nach einem abgeschlossenen Termin um eine verifizierte Bewertung.",
-        "template": "Vielen Dank für Ihren Besuch. Wir würden uns über Ihre Bewertung freuen."
+        "template": "Vielen Dank für Ihren Besuch. Wir würden uns über Ihre Bewertung freuen.",
+        "subject": "Wie war Ihr letzter Besuch?"
       },
       "no_show_recovery": {
         "title": "No-Show-Nachverfolgung",
         "description": "Kontaktieren Sie Kunden nach einem versäumten Termin respektvoll.",
-        "template": "Wir haben bemerkt, dass Sie Ihren Termin nicht wahrnehmen konnten. Gern helfen wir Ihnen bei einer neuen Terminvereinbarung."
+        "template": "Wir haben bemerkt, dass Sie Ihren Termin nicht wahrnehmen konnten. Gern helfen wir Ihnen bei einer neuen Terminvereinbarung.",
+        "subject": "Wir helfen Ihnen gern bei der Umbuchung"
       },
       "last_minute_availability": {
         "title": "Kurzfristige Verfügbarkeit",
         "description": "Erreichen Sie passende Kunden, wenn kurzfristig ein Termin frei wird.",
-        "template": "Kurzfristig ist ein Termin verfügbar. Buchen Sie, solange der Zeitraum noch frei ist."
-      }
+        "template": "Kurzfristig ist ein Termin verfügbar. Buchen Sie, solange der Zeitraum noch frei ist.",
+        "subject": "Ein kurzfristiger Termin ist verfügbar"
+      },
+      "manualOnly": "Diese Automation benötigt einen konkreten freien Kalenderslot und bleibt eine manuelle Kampagne, bis der Verfügbarkeits-Trigger aktiviert ist."
     },
     "reviews": {
       "title": "Bewertungsmoderation",
@@ -2939,5 +2966,82 @@
     "privacyNote": "Sensible Termine, Kundendaten und Zahlungsinformationen werden niemals im Offline-Cache gespeichert.",
     "close": "Schließen",
     "iosInstall": "Öffnen Sie auf iPhone oder iPad das Teilen-Menü des Browsers und wählen Sie „Zum Home-Bildschirm“."
+  },
+  "marketingDelivery": {
+    "metrics": {
+      "queued": "In Warteschlange",
+      "successful": "Gesendet / simuliert",
+      "delivered": "Zugestellt",
+      "failed": "Fehlgeschlagen"
+    },
+    "settings": {
+      "title": "Zustellungssteuerung",
+      "description": "Steuern Sie, wie Kampagnen und Automatisierungen verarbeitet werden. Die Zustellung ist standardmäßig deaktiviert.",
+      "mode": "Zustellungsmodus",
+      "liveWarning": "Im Live-Modus werden Nachrichten an echte Kunden gesendet. Prüfen Sie Anbieter, Einwilligungen und Testergebnisse vor der Aktivierung.",
+      "emailLimit": "Tägliches E-Mail-Limit",
+      "smsLimit": "Tägliches SMS-Limit",
+      "fromName": "Absendername",
+      "replyTo": "Antwort-E-Mail"
+    },
+    "modes": {
+      "disabled": "Deaktiviert",
+      "test": "Testmodus",
+      "live": "Live-Modus"
+    },
+    "channels": {
+      "email": "E-Mail-Zustellung",
+      "emailDescription": "Marketing-E-Mails nur an Kunden mit Einwilligung senden.",
+      "sms": "SMS-Zustellung",
+      "smsDescription": "SMS nur an Kunden mit Einwilligung senden.",
+      "inApp": "In-App-Postfach",
+      "inAppDescription": "Nachrichten im angemeldeten Kundenportal zustellen."
+    },
+    "actions": {
+      "saveSettings": "Zustellungseinstellungen speichern",
+      "queueNow": "Jetzt einreihen"
+    },
+    "runs": {
+      "title": "Zustellungsläufe",
+      "description": "Jede Kampagne oder Automatisierung erstellt einen nachvollziehbaren Lauf.",
+      "empty": "Noch keine Zustellungsläufe vorhanden.",
+      "campaign": "Kampagnenlauf",
+      "automation": "Automatisierungslauf",
+      "recipients": "Empfänger",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "failed": "Fehlgeschlagen"
+    },
+    "log": {
+      "title": "Aktuelles Zustellungsprotokoll",
+      "description": "Empfänger, Kanal, Anbieter, Versuche und Fehler prüfen.",
+      "empty": "Noch keine Zustellungsversuche aufgezeichnet.",
+      "customer": "Kunde",
+      "attempts": "{{count}} Versuch"
+    },
+    "statuses": {
+      "preparing": "Vorbereitung",
+      "queued": "In Warteschlange",
+      "processing": "In Bearbeitung",
+      "completed": "Abgeschlossen",
+      "partial": "Teilweise abgeschlossen",
+      "failed": "Fehlgeschlagen",
+      "cancelled": "Storniert",
+      "sent": "Gesendet",
+      "delivered": "Zugestellt",
+      "simulated": "Simuliert",
+      "skipped": "Übersprungen",
+      "bounced": "Zurückgewiesen",
+      "complained": "Spam-Beschwerde",
+      "undelivered": "Nicht zugestellt"
+    },
+    "messages": {
+      "loadFailed": "Das Zustellungszentrum konnte nicht geladen werden.",
+      "settingsSaved": "Zustellungseinstellungen gespeichert.",
+      "settingsSaveFailed": "Zustellungseinstellungen konnten nicht gespeichert werden.",
+      "campaignQueued": "Kampagne wurde sicher zur Zustellung eingereiht.",
+      "campaignQueueFailed": "Kampagne konnte nicht eingereiht werden.",
+      "confirmLive": "Live-Versand aktivieren und Velliqo erlauben, echte berechtigte Kunden zu kontaktieren?"
+    }
   }
 }

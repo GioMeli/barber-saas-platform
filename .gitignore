@@ -50,3 +50,6 @@ Thumbs.db
 *.tmp
 *.temp
 *.local
+
+# Local Velliqo patch rollback snapshots
+.velliqo-backups/

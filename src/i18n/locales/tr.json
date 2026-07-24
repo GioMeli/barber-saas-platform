@@ -87,7 +87,8 @@
     },
     "back": "Geri",
     "copy": "Kopyala",
-    "notAvailable": "Kullanılamıyor"
+    "notAvailable": "Kullanılamıyor",
+    "refresh": "Yenile"
   },
   "language": {
     "label": "Dil",
@@ -1784,7 +1785,8 @@
       "overview": "Genel Bakış",
       "upcoming": "Yaklaşan",
       "history": "Geçmiş",
-      "profile": "Profil"
+      "profile": "Profil",
+      "notifications": "Bildirimler"
     },
     "activity": {
       "title": "Son etkinlik",
@@ -1824,7 +1826,8 @@
       "fullName": "Ad Soyad",
       "phone": "Telefon",
       "email": "E-posta",
-      "save": "Profili Kaydet"
+      "save": "Profili Kaydet",
+      "birthDate": "Doğum tarihi"
     },
     "appointment": {
       "next": "Sonraki randevu",
@@ -1870,6 +1873,21 @@
       "profileUpdated": "Profil güncellendi",
       "profileUpdateFailed": "Profil güncellenemedi",
       "calendarExportFailed": "Takvim dosyası oluşturulamadı."
+    },
+    "preferences": {
+      "title": "Pazarlama tercihleri",
+      "description": "Bu işletmenin size tanıtım mesajları gönderip gönderemeyeceğini seçin. İzninizi istediğiniz zaman geri çekebilirsiniz.",
+      "email": "Pazarlama e-postası",
+      "emailDescription": "Teklif ve güncellemeleri e-postayla alın.",
+      "sms": "Pazarlama SMS",
+      "smsDescription": "Teklif ve güncellemeleri SMS ile alın."
+    },
+    "notifications": {
+      "title": "Bildirimler",
+      "description": "Müşteri hesabınızdaki mesajlar ve teklifler.",
+      "emptyTitle": "Bildirim yok",
+      "emptyDescription": "Bu işletmeden gelen yeni mesajlar burada görünecek.",
+      "message": "İşletme mesajı"
     }
   },
   "business": {
@@ -2645,7 +2663,8 @@
       "overview": "Genel bakış",
       "campaigns": "Kampanyalar",
       "automations": "Otomasyonlar",
-      "reviews": "Yorumlar"
+      "reviews": "Yorumlar",
+      "delivery": "Teslimat"
     },
     "metrics": {
       "reachableCustomers": "Ulaşılabilir müşteriler",
@@ -2715,7 +2734,9 @@
       "scheduled": "Planlandı",
       "paused": "Duraklatıldı",
       "completed": "Tamamlandı",
-      "cancelled": "İptal edildi"
+      "cancelled": "İptal edildi",
+      "processing": "İşleniyor",
+      "failed": "Başarısız"
     },
     "objectives": {
       "announcement": "Duyuru",
@@ -2766,28 +2787,34 @@
       "birthday": {
         "title": "Doğum günü yolculuğu",
         "description": "Müşterinin doğum günü döneminde kişisel bir teklif gönderin.",
-        "template": "Doğum gününüz kutlu olsun! Sizi bekleyen özel bir hediyemiz var."
+        "template": "Doğum gününüz kutlu olsun! Sizi bekleyen özel bir hediyemiz var.",
+        "subject": "{{business_name}} tarafından doğum günü mesajı"
       },
       "win_back": {
         "title": "Geri kazanım yolculuğu",
         "description": "Yakın zamanda ziyaret etmeyen müşterilerle yeniden bağlantı kurun.",
-        "template": "Sizi özledik. Sonraki ziyaretinizi ayırtın ve geri dönüş teklifinden yararlanın."
+        "template": "Sizi özledik. Sonraki ziyaretinizi ayırtın ve geri dönüş teklifinden yararlanın.",
+        "subject": "Sizi yeniden görmek isteriz"
       },
       "review_request": {
         "title": "Yorum isteği",
         "description": "Tamamlanan bir randevudan sonra müşteriden doğrulanmış bir yorum isteyin.",
-        "template": "Ziyaretiniz için teşekkür ederiz. Görüşlerinizi paylaşmanız bizi mutlu eder."
+        "template": "Ziyaretiniz için teşekkür ederiz. Görüşlerinizi paylaşmanız bizi mutlu eder.",
+        "subject": "Son ziyaretiniz nasıldı?"
       },
       "no_show_recovery": {
         "title": "Gelmemeye yönelik takip",
         "description": "Kaçırılan randevudan sonra saygılı biçimde iletişime geçin.",
-        "template": "Randevunuza gelemediğinizi fark ettik. Yeniden planlama konusunda size yardımcı olalım."
+        "template": "Randevunuza gelemediğinizi fark ettik. Yeniden planlama konusunda size yardımcı olalım.",
+        "subject": "Yeniden planlamanıza yardımcı olalım"
       },
       "last_minute_availability": {
         "title": "Son dakika uygunluğu",
         "description": "Bir randevu aralığı boşaldığında uygun müşterilere ulaşın.",
-        "template": "Son dakika randevu aralığı açıldı. Yer dolmadan rezervasyon yapın."
-      }
+        "template": "Son dakika randevu aralığı açıldı. Yer dolmadan rezervasyon yapın.",
+        "subject": "Son dakika randevu saati müsait"
+      },
+      "manualOnly": "Bu otomasyon belirli bir boş takvim aralığı gerektirir ve uygunluk tetikleyicisi etkinleştirilene kadar manuel kampanya olarak kalır."
     },
     "reviews": {
       "title": "Yorum moderasyonu",
@@ -2939,5 +2966,82 @@
     "privacyNote": "Hassas randevular, müşteri kayıtları ve ödeme verileri çevrimdışı önbellekte asla saklanmaz.",
     "close": "Kapat",
     "iosInstall": "iPhone veya iPad’de tarayıcının Paylaş menüsünü açın ve “Ana Ekrana Ekle” seçeneğini seçin."
+  },
+  "marketingDelivery": {
+    "metrics": {
+      "queued": "Kuyrukta",
+      "successful": "Gönderildi / simüle edildi",
+      "delivered": "Teslim edildi",
+      "failed": "Başarısız"
+    },
+    "settings": {
+      "title": "Teslimat kontrolleri",
+      "description": "Kampanya ve otomasyonların nasıl işlendiğini yönetin. Teslimat varsayılan olarak kapalıdır.",
+      "mode": "Teslimat modu",
+      "liveWarning": "Canlı mod gerçek müşterilere mesaj gönderir. Etkinleştirmeden önce sağlayıcıları, izinleri ve test sonuçlarını doğrulayın.",
+      "emailLimit": "Günlük e-posta limiti",
+      "smsLimit": "Günlük SMS limiti",
+      "fromName": "Gönderen adı",
+      "replyTo": "Yanıt e-postası"
+    },
+    "modes": {
+      "disabled": "Devre dışı",
+      "test": "Test modu",
+      "live": "Canlı mod"
+    },
+    "channels": {
+      "email": "E-posta teslimatı",
+      "emailDescription": "Yalnızca izin veren müşterilere pazarlama e-postası gönderin.",
+      "sms": "SMS teslimatı",
+      "smsDescription": "Yalnızca izin veren müşterilere SMS gönderin.",
+      "inApp": "Uygulama içi gelen kutusu",
+      "inAppDescription": "Mesajları müşteri portalı içinde teslim edin."
+    },
+    "actions": {
+      "saveSettings": "Teslimat ayarlarını kaydet",
+      "queueNow": "Şimdi kuyruğa al"
+    },
+    "runs": {
+      "title": "Teslimat çalışmaları",
+      "description": "Her kampanya veya otomasyon denetlenebilir bir çalışma oluşturur.",
+      "empty": "Henüz teslimat çalışması yok.",
+      "campaign": "Kampanya çalışması",
+      "automation": "Otomasyon çalışması",
+      "recipients": "Alıcılar",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "failed": "Başarısız"
+    },
+    "log": {
+      "title": "Son teslimat günlüğü",
+      "description": "Alıcı, kanal, sağlayıcı, denemeler ve hataları inceleyin.",
+      "empty": "Henüz teslimat denemesi kaydedilmedi.",
+      "customer": "Müşteri",
+      "attempts": "{{count}} deneme"
+    },
+    "statuses": {
+      "preparing": "Hazırlanıyor",
+      "queued": "Kuyrukta",
+      "processing": "İşleniyor",
+      "completed": "Tamamlandı",
+      "partial": "Kısmen tamamlandı",
+      "failed": "Başarısız",
+      "cancelled": "İptal edildi",
+      "sent": "Gönderildi",
+      "delivered": "Teslim edildi",
+      "simulated": "Simüle edildi",
+      "skipped": "Atlandı",
+      "bounced": "Geri döndü",
+      "complained": "Spam şikâyeti",
+      "undelivered": "Teslim edilemedi"
+    },
+    "messages": {
+      "loadFailed": "Teslimat merkezi yüklenemedi.",
+      "settingsSaved": "Teslimat ayarları kaydedildi.",
+      "settingsSaveFailed": "Teslimat ayarları kaydedilemedi.",
+      "campaignQueued": "Kampanya güvenli teslimat için kuyruğa alındı.",
+      "campaignQueueFailed": "Kampanya kuyruğa alınamadı.",
+      "confirmLive": "Canlı gönderim etkinleştirilsin ve Velliqo uygun gerçek müşterilerle iletişim kursun mu?"
+    }
   }
 }

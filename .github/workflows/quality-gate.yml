@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
       - name: Pin npm
@@ -47,6 +47,7 @@ jobs:
           npm run sales:check
           npm run finance:check
           npm run marketing:check
+          npm run delivery:check
 
       - name: TypeScript
         run: npm run typecheck

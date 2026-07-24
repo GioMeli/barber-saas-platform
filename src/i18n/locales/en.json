@@ -87,7 +87,8 @@
     },
     "back": "Back",
     "copy": "Copy",
-    "notAvailable": "Not available"
+    "notAvailable": "Not available",
+    "refresh": "Refresh"
   },
   "language": {
     "label": "Language",
@@ -1784,7 +1785,8 @@
       "overview": "Overview",
       "upcoming": "Upcoming",
       "history": "History",
-      "profile": "Profile"
+      "profile": "Profile",
+      "notifications": "Notifications"
     },
     "activity": {
       "title": "Recent activity",
@@ -1824,7 +1826,8 @@
       "fullName": "Full Name",
       "phone": "Phone",
       "email": "Email",
-      "save": "Save Profile"
+      "save": "Save Profile",
+      "birthDate": "Date of birth"
     },
     "appointment": {
       "next": "Next appointment",
@@ -1870,6 +1873,21 @@
       "profileUpdated": "Profile updated",
       "profileUpdateFailed": "Failed to update profile",
       "calendarExportFailed": "Could not create the calendar file."
+    },
+    "preferences": {
+      "title": "Marketing preferences",
+      "description": "Choose whether this business may send you promotional messages. You can change or withdraw consent at any time.",
+      "email": "Marketing email",
+      "emailDescription": "Receive offers and business updates by email.",
+      "sms": "Marketing SMS",
+      "smsDescription": "Receive offers and business updates by SMS."
+    },
+    "notifications": {
+      "title": "Notifications",
+      "description": "Messages and offers delivered inside your customer account.",
+      "emptyTitle": "No notifications",
+      "emptyDescription": "New messages from this business will appear here.",
+      "message": "Business message"
     }
   },
   "business": {
@@ -2645,7 +2663,8 @@
       "overview": "Overview",
       "campaigns": "Campaigns",
       "automations": "Automations",
-      "reviews": "Reviews"
+      "reviews": "Reviews",
+      "delivery": "Delivery"
     },
     "metrics": {
       "reachableCustomers": "Reachable customers",
@@ -2715,7 +2734,9 @@
       "scheduled": "Scheduled",
       "paused": "Paused",
       "completed": "Completed",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "processing": "Processing",
+      "failed": "Failed"
     },
     "objectives": {
       "announcement": "Announcement",
@@ -2766,28 +2787,34 @@
       "birthday": {
         "title": "Birthday journey",
         "description": "Send a personal offer around the customer’s birthday.",
-        "template": "Happy birthday! We have a special gift waiting for you."
+        "template": "Happy birthday! We have a special gift waiting for you.",
+        "subject": "A birthday message from {{business_name}}"
       },
       "win_back": {
         "title": "Win-back journey",
         "description": "Reconnect with customers who have not visited recently.",
-        "template": "We miss you. Book your next visit and enjoy a welcome-back offer."
+        "template": "We miss you. Book your next visit and enjoy a welcome-back offer.",
+        "subject": "We would love to see you again"
       },
       "review_request": {
         "title": "Review request",
         "description": "Ask customers for a verified review after a completed appointment.",
-        "template": "Thank you for visiting. We would value your review."
+        "template": "Thank you for visiting. We would value your review.",
+        "subject": "How was your recent visit?"
       },
       "no_show_recovery": {
         "title": "No-show recovery",
         "description": "Follow up respectfully after a missed appointment.",
-        "template": "We noticed you could not make your appointment. Let us help you reschedule."
+        "template": "We noticed you could not make your appointment. Let us help you reschedule.",
+        "subject": "Let us help you reschedule"
       },
       "last_minute_availability": {
         "title": "Last-minute availability",
         "description": "Reach relevant customers when an appointment slot opens.",
-        "template": "A last-minute appointment is now available. Book while the slot is open."
-      }
+        "template": "A last-minute appointment is now available. Book while the slot is open.",
+        "subject": "A last-minute appointment is available"
+      },
+      "manualOnly": "This automation needs a specific open calendar slot and remains a manual campaign until the availability trigger is enabled."
     },
     "reviews": {
       "title": "Review moderation",
@@ -2939,5 +2966,82 @@
     "privacyNote": "Sensitive appointments, customer records and payment data are never stored in the offline cache.",
     "close": "Close",
     "iosInstall": "On iPhone or iPad, open the browser Share menu and choose “Add to Home Screen”."
+  },
+  "marketingDelivery": {
+    "metrics": {
+      "queued": "Queued",
+      "successful": "Sent / simulated",
+      "delivered": "Delivered",
+      "failed": "Failed"
+    },
+    "settings": {
+      "title": "Delivery controls",
+      "description": "Control how campaigns and automations are processed. New businesses start with delivery disabled.",
+      "mode": "Delivery mode",
+      "liveWarning": "Live mode sends messages to real customers. Confirm provider secrets, consent rules and test results before enabling it.",
+      "emailLimit": "Daily email limit",
+      "smsLimit": "Daily SMS limit",
+      "fromName": "Sender name",
+      "replyTo": "Reply-to email"
+    },
+    "modes": {
+      "disabled": "Disabled",
+      "test": "Test mode",
+      "live": "Live mode"
+    },
+    "channels": {
+      "email": "Email delivery",
+      "emailDescription": "Send consented marketing email through the configured provider.",
+      "sms": "SMS delivery",
+      "smsDescription": "Send consented SMS messages through the configured provider.",
+      "inApp": "In-app inbox",
+      "inAppDescription": "Deliver messages inside the signed-in customer portal."
+    },
+    "actions": {
+      "saveSettings": "Save delivery settings",
+      "queueNow": "Queue now"
+    },
+    "runs": {
+      "title": "Delivery runs",
+      "description": "Each campaign or automation creates an auditable delivery run.",
+      "empty": "No delivery runs have been created yet.",
+      "campaign": "Campaign run",
+      "automation": "Automation run",
+      "recipients": "Recipients",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "failed": "Failed"
+    },
+    "log": {
+      "title": "Recent delivery log",
+      "description": "Review destination, channel, provider, attempts and failure details.",
+      "empty": "No delivery attempts have been recorded yet.",
+      "customer": "Customer",
+      "attempts": "{{count}} attempt"
+    },
+    "statuses": {
+      "preparing": "Preparing",
+      "queued": "Queued",
+      "processing": "Processing",
+      "completed": "Completed",
+      "partial": "Partially completed",
+      "failed": "Failed",
+      "cancelled": "Cancelled",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "simulated": "Simulated",
+      "skipped": "Skipped",
+      "bounced": "Bounced",
+      "complained": "Spam complaint",
+      "undelivered": "Undelivered"
+    },
+    "messages": {
+      "loadFailed": "Unable to load the delivery center.",
+      "settingsSaved": "Delivery settings saved.",
+      "settingsSaveFailed": "Unable to save delivery settings.",
+      "campaignQueued": "Campaign queued for secure delivery.",
+      "campaignQueueFailed": "Unable to queue this campaign.",
+      "confirmLive": "Enable live delivery and allow Velliqo to contact real eligible customers?"
+    }
   }
 }

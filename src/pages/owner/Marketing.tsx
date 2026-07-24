@@ -48,9 +48,10 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import { MarketingDeliveryCenter } from '@/components/marketing/MarketingDeliveryCenter';
 
-type MarketingTab = 'overview' | 'campaigns' | 'automations' | 'reviews';
-type CampaignStatus = 'draft' | 'scheduled' | 'paused' | 'completed' | 'cancelled';
+type MarketingTab = 'overview' | 'campaigns' | 'automations' | 'delivery' | 'reviews';
+type CampaignStatus = 'draft' | 'scheduled' | 'paused' | 'processing' | 'completed' | 'failed' | 'cancelled';
 type CampaignSegment = 'all' | 'active' | 'at_risk' | 'vip' | 'new' | 'registered' | 'guests';
 type CampaignChannel = 'email' | 'sms' | 'in_app';
 type CampaignObjective = 'announcement' | 'promotion' | 'win_back' | 'birthday' | 'review_request' | 'last_minute' | 'custom';
@@ -81,11 +82,11 @@ const EMPTY_CAMPAIGN = {
 };
 
 const AUTOMATION_DEFINITIONS = [
-  { key: 'birthday', icon: Sparkles, delayHours: 9 * 24 },
-  { key: 'win_back', icon: RefreshCcw, delayHours: 60 * 24 },
-  { key: 'review_request', icon: Star, delayHours: 24 },
-  { key: 'no_show_recovery', icon: CalendarClock, delayHours: 4 },
-  { key: 'last_minute_availability', icon: Clock3, delayHours: 2 },
+  { key: 'birthday', icon: Sparkles, delayHours: 9 * 24, deliveryReady: true },
+  { key: 'win_back', icon: RefreshCcw, delayHours: 60 * 24, deliveryReady: true },
+  { key: 'review_request', icon: Star, delayHours: 24, deliveryReady: true },
+  { key: 'no_show_recovery', icon: CalendarClock, delayHours: 4, deliveryReady: true },
+  { key: 'last_minute_availability', icon: Clock3, delayHours: 2, deliveryReady: false },
 ] as const;
 
 export default function Marketing() {
@@ -110,6 +111,7 @@ export default function Marketing() {
   const [reviewSaving, setReviewSaving] = useState(false);
   const [selectedReview, setSelectedReview] = useState<any | null>(null);
   const [reviewResponse, setReviewResponse] = useState('');
+  const [queueingCampaignId, setQueueingCampaignId] = useState<string | null>(null);
 
   useEffect(() => {
     if (businessId) void loadMarketingWorkspace();
@@ -386,8 +388,32 @@ export default function Marketing() {
     await loadMarketingWorkspace();
   };
 
+  const queueCampaignNow = async (campaign: any) => {
+    if (!businessId) return;
+    setQueueingCampaignId(campaign.id);
+
+    try {
+      const { error } = await supabase.rpc('owner_queue_marketing_campaign', {
+        p_campaign_id: campaign.id,
+      });
+      if (error) throw error;
+
+      toast.success(t('marketingDelivery.messages.campaignQueued'));
+      setActiveTab('delivery');
+      await loadMarketingWorkspace();
+    } catch (error: any) {
+      toast.error(error.message || t('marketingDelivery.messages.campaignQueueFailed'));
+    } finally {
+      setQueueingCampaignId(null);
+    }
+  };
+
   const toggleAutomation = async (definition: (typeof AUTOMATION_DEFINITIONS)[number], enabled: boolean) => {
     if (!businessId) return;
+    if (enabled && !definition.deliveryReady) {
+      toast.info(t('marketing.automations.manualOnly'));
+      return;
+    }
     const existing = automations.find((automation) => automation.automation_key === definition.key);
     const payload = {
       business_id: businessId,
@@ -395,6 +421,7 @@ export default function Marketing() {
       channel: existing?.channel ?? 'email',
       is_enabled: enabled,
       delay_hours: existing?.delay_hours ?? definition.delayHours,
+      subject_template: existing?.subject_template || t(`marketing.automations.${definition.key}.subject`),
       message_template: existing?.message_template || t(`marketing.automations.${definition.key}.template`),
       created_by: user?.id ?? null,
       updated_at: new Date().toISOString(),
@@ -476,10 +503,11 @@ export default function Marketing() {
       </section>
 
       <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as MarketingTab)} className="mt-6">
-        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-muted/50 p-1 lg:grid-cols-4">
+        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-muted/50 p-1 md:grid-cols-3 xl:grid-cols-5">
           <TabsTrigger value="overview" className="rounded-xl py-2.5">{t('marketing.tabs.overview')}</TabsTrigger>
           <TabsTrigger value="campaigns" className="rounded-xl py-2.5">{t('marketing.tabs.campaigns')}</TabsTrigger>
           <TabsTrigger value="automations" className="rounded-xl py-2.5">{t('marketing.tabs.automations')}</TabsTrigger>
+          <TabsTrigger value="delivery" className="rounded-xl py-2.5">{t('marketing.tabs.delivery')}</TabsTrigger>
           <TabsTrigger value="reviews" className="rounded-xl py-2.5">
             {t('marketing.tabs.reviews')}
             {pendingReviews > 0 && <Badge className="ml-2 h-5 min-w-5 justify-center px-1.5">{pendingReviews}</Badge>}
@@ -582,6 +610,16 @@ export default function Marketing() {
                         ) : campaign.status === 'paused' ? (
                           <Button size="sm" variant="outline" onClick={() => void updateCampaignStatus(campaign, 'scheduled')}><CalendarClock className="mr-1.5 h-4 w-4" />{t('marketing.actions.resume')}</Button>
                         ) : null}
+                        {['draft', 'paused'].includes(campaign.status) && (
+                          <Button
+                            size="sm"
+                            onClick={() => void queueCampaignNow(campaign)}
+                            disabled={queueingCampaignId === campaign.id}
+                          >
+                            {queueingCampaignId === campaign.id ? <RefreshCcw className="mr-1.5 h-4 w-4 animate-spin" /> : <Send className="mr-1.5 h-4 w-4" />}
+                            {t('marketingDelivery.actions.queueNow')}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -608,11 +646,11 @@ export default function Marketing() {
                           <p className="mt-1 text-sm leading-6 text-muted-foreground">{t(`marketing.automations.${definition.key}.description`)}</p>
                         </div>
                       </div>
-                      <Switch checked={enabled} onCheckedChange={(checked) => void toggleAutomation(definition, checked)} />
+                      <Switch checked={enabled} disabled={!definition.deliveryReady} onCheckedChange={(checked) => void toggleAutomation(definition, checked)} />
                     </div>
                     <div className="mt-5 flex flex-wrap items-center gap-2 rounded-2xl bg-muted/35 p-3 text-xs text-muted-foreground">
                       <Badge variant="outline">{t(`marketing.channels.${automation?.channel ?? 'email'}`)}</Badge>
-                      <span>{t('marketing.automations.delay', { hours: automation?.delay_hours ?? definition.delayHours })}</span>
+                      <span>{definition.deliveryReady ? t('marketing.automations.delay', { hours: automation?.delay_hours ?? definition.delayHours }) : t('marketing.automations.manualOnly')}</span>
                     </div>
                   </CardContent>
                 </Card>
@@ -625,6 +663,10 @@ export default function Marketing() {
               <p className="text-sm leading-6 text-amber-950 dark:text-amber-100">{t('marketing.automations.providerNotice')}</p>
             </CardContent>
           </Card>
+        </TabsContent>
+
+        <TabsContent value="delivery" className="mt-6">
+          <MarketingDeliveryCenter />
         </TabsContent>
 
         <TabsContent value="reviews" className="mt-6">

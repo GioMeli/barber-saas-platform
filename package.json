@@ -13,7 +13,8 @@
     "sales:check": "node scripts/check-sales-checkout.mjs",
     "finance:check": "node scripts/check-finance-intelligence.mjs",
     "marketing:check": "node scripts/check-marketing-experience.mjs",
-    "production:check": "node scripts/check-production-readiness.mjs"
+    "production:check": "node scripts/check-production-readiness.mjs",
+    "delivery:check": "node scripts/check-marketing-delivery-engine.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

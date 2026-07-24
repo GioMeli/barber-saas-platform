@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import {
   Bell,
   CalendarDays,
@@ -46,7 +47,7 @@ type StoreContext = {
   openCustomerSignIn: () => void;
 };
 
-type PortalTab = 'overview' | 'upcoming' | 'history' | 'profile';
+type PortalTab = 'overview' | 'upcoming' | 'history' | 'notifications' | 'profile';
 
 const CANCELLED_STATUSES = [
   'cancelled_by_customer',
@@ -62,6 +63,7 @@ export default function CustomerPortal() {
 
   const [membership, setMembership] = useState<any>(null);
   const [appointments, setAppointments] = useState<any[]>([]);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<PortalTab>('overview');
   const [loading, setLoading] = useState(true);
   const [savingProfile, setSavingProfile] = useState(false);
@@ -70,10 +72,36 @@ export default function CustomerPortal() {
     display_name: '',
     phone: '',
     email: '',
+    birth_date: '',
+    marketing_consent: false,
+    email_notifications_enabled: true,
+    sms_notifications_enabled: true,
   });
 
   useEffect(() => {
     if (user && business?.id) void fetchCustomerPortal();
+  }, [user?.id, business?.id]);
+
+  useEffect(() => {
+    if (!user?.id || !business?.id) return;
+
+    const channel = supabase
+      .channel(`customer-notifications-${user.id}-${business.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'customer_notifications',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => void loadCustomerNotifications(),
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
   }, [user?.id, business?.id]);
 
   useEffect(() => {
@@ -133,6 +161,10 @@ export default function CustomerPortal() {
           '',
         phone: resolvedMembership?.phone || '',
         email: resolvedMembership?.email || user?.email || '',
+        birth_date: resolvedMembership?.birth_date || '',
+        marketing_consent: resolvedMembership?.marketing_consent === true,
+        email_notifications_enabled: resolvedMembership?.email_notifications_enabled !== false,
+        sms_notifications_enabled: resolvedMembership?.sms_notifications_enabled !== false,
       });
 
       const { data: appointmentData, error: appointmentsError } =
@@ -142,6 +174,7 @@ export default function CustomerPortal() {
 
       if (appointmentsError) throw appointmentsError;
       setAppointments(appointmentData ?? []);
+      await loadCustomerNotifications();
     } catch (error: any) {
       console.error('Customer portal error:', error);
       toast.error(
@@ -149,6 +182,39 @@ export default function CustomerPortal() {
       );
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadCustomerNotifications = async () => {
+    if (!user?.id || !business?.id) return;
+
+    const { data, error } = await supabase
+      .from('customer_notifications')
+      .select('*')
+      .eq('business_id', business.id)
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) {
+      console.error('Customer notifications error:', error);
+      return;
+    }
+
+    setNotifications(data || []);
+  };
+
+  const markNotificationRead = async (notification: any) => {
+    if (notification.is_read) return;
+
+    const { error } = await supabase
+      .from('customer_notifications')
+      .update({ is_read: true, read_at: new Date().toISOString() })
+      .eq('id', notification.id)
+      .eq('user_id', user?.id);
+
+    if (!error) {
+      setNotifications((current) => current.map((item) => item.id === notification.id ? { ...item, is_read: true } : item));
     }
   };
 
@@ -169,6 +235,13 @@ export default function CustomerPortal() {
           display_name: profileForm.display_name.trim(),
           phone: profileForm.phone.trim() || null,
           email: profileForm.email.trim().toLowerCase() || null,
+          birth_date: profileForm.birth_date || null,
+          marketing_consent: profileForm.marketing_consent,
+          email_notifications_enabled: profileForm.email_notifications_enabled,
+          sms_notifications_enabled: profileForm.sms_notifications_enabled,
+          marketing_consent_updated_at: new Date().toISOString(),
+          email_unsubscribed_at: profileForm.email_notifications_enabled ? null : new Date().toISOString(),
+          sms_unsubscribed_at: profileForm.sms_notifications_enabled ? null : new Date().toISOString(),
         })
         .eq('id', membership.id)
         .eq('business_id', business.id)
@@ -518,6 +591,12 @@ export default function CustomerPortal() {
           onClick={() => setActiveTab('history')}
         />
         <PortalTabButton
+          active={activeTab === 'notifications'}
+          label={t('customerPortal.tabs.notifications')}
+          count={notifications.filter((item) => !item.is_read).length}
+          onClick={() => setActiveTab('notifications')}
+        />
+        <PortalTabButton
           active={activeTab === 'profile'}
           label={t('customerPortal.tabs.profile')}
           onClick={() => setActiveTab('profile')}
@@ -593,11 +672,22 @@ export default function CustomerPortal() {
                   title={t('customerPortal.experience.wallet.title')}
                   description={t('customerPortal.experience.wallet.description')}
                 />
-                <ComingSoonCard
-                  icon={<Bell className="h-5 w-5" />}
-                  title={t('customerPortal.experience.notifications.title')}
-                  description={t('customerPortal.experience.notifications.description')}
-                />
+                <button
+                  type="button"
+                  onClick={() => setActiveTab('notifications')}
+                  className="flex w-full items-start gap-3 rounded-2xl border bg-card p-4 text-left transition hover:border-primary/30 hover:bg-primary/[0.03]"
+                >
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Bell className="h-5 w-5" /></div>
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="font-semibold">{t('customerPortal.experience.notifications.title')}</div>
+                      {notifications.some((item) => !item.is_read) && (
+                        <StatBadge>{notifications.filter((item) => !item.is_read).length}</StatBadge>
+                      )}
+                    </div>
+                    <div className="mt-1 text-sm leading-6 text-muted-foreground">{t('customerPortal.experience.notifications.description')}</div>
+                  </div>
+                </button>
               </div>
             </section>
           </div>
@@ -655,6 +745,14 @@ export default function CustomerPortal() {
               ))}
             </div>
           ))}
+
+        {activeTab === 'notifications' && (
+          <CustomerNotificationsPanel
+            notifications={notifications}
+            markRead={markNotificationRead}
+            locale={locale}
+          />
+        )}
 
         {activeTab === 'profile' && (
           <ProfilePanel
@@ -758,12 +856,20 @@ function ProfilePanel({
     display_name: string;
     phone: string;
     email: string;
+    birth_date: string;
+    marketing_consent: boolean;
+    email_notifications_enabled: boolean;
+    sms_notifications_enabled: boolean;
   };
   setProfileForm: React.Dispatch<
     React.SetStateAction<{
       display_name: string;
       phone: string;
       email: string;
+      birth_date: string;
+      marketing_consent: boolean;
+      email_notifications_enabled: boolean;
+      sms_notifications_enabled: boolean;
     }>
   >;
   savingProfile: boolean;
@@ -858,6 +964,46 @@ function ProfilePanel({
                 />
               </div>
             </div>
+
+            <div className="space-y-2 sm:col-span-2">
+              <Label>{t('customerPortal.profile.birthDate')}</Label>
+              <Input
+                type="date"
+                className="h-11 rounded-xl"
+                value={profileForm.birth_date}
+                onChange={(event) => setProfileForm((current) => ({ ...current, birth_date: event.target.value }))}
+              />
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl border p-5">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <div className="font-bold">{t('customerPortal.preferences.title')}</div>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">{t('customerPortal.preferences.description')}</p>
+              </div>
+              <Switch
+                checked={profileForm.marketing_consent}
+                onCheckedChange={(checked) => setProfileForm((current) => ({ ...current, marketing_consent: checked }))}
+              />
+            </div>
+
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <PreferenceToggle
+                title={t('customerPortal.preferences.email')}
+                description={t('customerPortal.preferences.emailDescription')}
+                checked={profileForm.email_notifications_enabled}
+                disabled={!profileForm.marketing_consent}
+                onChange={(checked) => setProfileForm((current) => ({ ...current, email_notifications_enabled: checked }))}
+              />
+              <PreferenceToggle
+                title={t('customerPortal.preferences.sms')}
+                description={t('customerPortal.preferences.smsDescription')}
+                checked={profileForm.sms_notifications_enabled}
+                disabled={!profileForm.marketing_consent}
+                onChange={(checked) => setProfileForm((current) => ({ ...current, sms_notifications_enabled: checked }))}
+              />
+            </div>
           </div>
 
           <div className="mt-6 flex justify-end">
@@ -871,6 +1017,89 @@ function ProfilePanel({
         </div>
       </CardContent>
     </Card>
+  );
+}
+
+function CustomerNotificationsPanel({
+  notifications,
+  markRead,
+  locale,
+}: {
+  notifications: any[];
+  markRead: (notification: any) => Promise<void>;
+  locale: string;
+}) {
+  const { t } = useTranslation();
+
+  if (notifications.length === 0) {
+    return (
+      <EmptyState
+        icon={<Bell className="h-8 w-8" />}
+        title={t('customerPortal.notifications.emptyTitle')}
+        description={t('customerPortal.notifications.emptyDescription')}
+      />
+    );
+  }
+
+  return (
+    <Card className="overflow-hidden rounded-3xl shadow-card">
+      <CardContent className="p-0">
+        <div className="border-b p-5 sm:p-6">
+          <SectionHeader
+            title={t('customerPortal.notifications.title')}
+            description={t('customerPortal.notifications.description')}
+          />
+        </div>
+        <div className="divide-y">
+          {notifications.map((notification) => (
+            <button
+              key={notification.id}
+              type="button"
+              onClick={() => void markRead(notification)}
+              className={`flex w-full gap-4 p-5 text-left transition hover:bg-muted/30 ${notification.is_read ? 'bg-card' : 'bg-primary/[0.04]'}`}
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
+                <Bell className="h-5 w-5" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="font-bold">{notification.title || t('customerPortal.notifications.message')}</div>
+                  {!notification.is_read && <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-primary" />}
+                </div>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">{notification.message}</p>
+                <div className="mt-2 text-xs text-muted-foreground">
+                  {new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(notification.created_at))}
+                </div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PreferenceToggle({
+  title,
+  description,
+  checked,
+  disabled,
+  onChange,
+}: {
+  title: string;
+  description: string;
+  checked: boolean;
+  disabled?: boolean;
+  onChange: (checked: boolean) => void;
+}) {
+  return (
+    <div className="flex items-center justify-between gap-4 rounded-2xl bg-muted/30 p-4">
+      <div>
+        <div className="font-semibold">{title}</div>
+        <div className="mt-1 text-xs leading-5 text-muted-foreground">{description}</div>
+      </div>
+      <Switch checked={checked} disabled={disabled} onCheckedChange={onChange} />
+    </div>
   );
 }
 

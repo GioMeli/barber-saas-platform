@@ -87,7 +87,8 @@
     },
     "back": "Atrás",
     "copy": "Copiar",
-    "notAvailable": "No disponible"
+    "notAvailable": "No disponible",
+    "refresh": "Actualizar"
   },
   "language": {
     "label": "Idioma",
@@ -1784,7 +1785,8 @@
       "overview": "Resumen",
       "upcoming": "Próximas",
       "history": "Historial",
-      "profile": "Perfil"
+      "profile": "Perfil",
+      "notifications": "Notificaciones"
     },
     "activity": {
       "title": "Actividad reciente",
@@ -1824,7 +1826,8 @@
       "fullName": "Nombre completo",
       "phone": "Teléfono",
       "email": "Correo electrónico",
-      "save": "Guardar perfil"
+      "save": "Guardar perfil",
+      "birthDate": "Fecha de nacimiento"
     },
     "appointment": {
       "next": "Próxima cita",
@@ -1870,6 +1873,21 @@
       "profileUpdated": "Perfil actualizado",
       "profileUpdateFailed": "No se pudo actualizar el perfil",
       "calendarExportFailed": "No se pudo crear el archivo de calendario."
+    },
+    "preferences": {
+      "title": "Preferencias de marketing",
+      "description": "Elige si este negocio puede enviarte mensajes promocionales. Puedes retirar el consentimiento en cualquier momento.",
+      "email": "Email de marketing",
+      "emailDescription": "Recibir ofertas y novedades por email.",
+      "sms": "SMS de marketing",
+      "smsDescription": "Recibir ofertas y novedades por SMS."
+    },
+    "notifications": {
+      "title": "Notificaciones",
+      "description": "Mensajes y ofertas dentro de tu cuenta de cliente.",
+      "emptyTitle": "No hay notificaciones",
+      "emptyDescription": "Los nuevos mensajes de este negocio aparecerán aquí.",
+      "message": "Mensaje del negocio"
     }
   },
   "business": {
@@ -2645,7 +2663,8 @@
       "overview": "Resumen",
       "campaigns": "Campañas",
       "automations": "Automatizaciones",
-      "reviews": "Reseñas"
+      "reviews": "Reseñas",
+      "delivery": "Entregas"
     },
     "metrics": {
       "reachableCustomers": "Clientes alcanzables",
@@ -2715,7 +2734,9 @@
       "scheduled": "Programada",
       "paused": "Pausada",
       "completed": "Completada",
-      "cancelled": "Cancelada"
+      "cancelled": "Cancelada",
+      "processing": "Procesando",
+      "failed": "Fallida"
     },
     "objectives": {
       "announcement": "Anuncio",
@@ -2766,28 +2787,34 @@
       "birthday": {
         "title": "Recorrido de cumpleaños",
         "description": "Envía una oferta personal cerca del cumpleaños del cliente.",
-        "template": "¡Feliz cumpleaños! Tenemos un regalo especial esperándote."
+        "template": "¡Feliz cumpleaños! Tenemos un regalo especial esperándote.",
+        "subject": "Felicitación de cumpleaños de {{business_name}}"
       },
       "win_back": {
         "title": "Recorrido de recuperación",
         "description": "Vuelve a conectar con clientes que no han visitado recientemente.",
-        "template": "Te echamos de menos. Reserva tu próxima visita y disfruta de una oferta de bienvenida."
+        "template": "Te echamos de menos. Reserva tu próxima visita y disfruta de una oferta de bienvenida.",
+        "subject": "Nos encantaría volver a verte"
       },
       "review_request": {
         "title": "Solicitud de reseña",
         "description": "Pide una reseña verificada después de una cita completada.",
-        "template": "Gracias por tu visita. Nos encantaría conocer tu opinión."
+        "template": "Gracias por tu visita. Nos encantaría conocer tu opinión.",
+        "subject": "¿Cómo fue tu visita reciente?"
       },
       "no_show_recovery": {
         "title": "Recuperación de ausencias",
         "description": "Realiza un seguimiento respetuoso tras una cita perdida.",
-        "template": "Hemos visto que no pudiste acudir a tu cita. Permítenos ayudarte a reprogramarla."
+        "template": "Hemos visto que no pudiste acudir a tu cita. Permítenos ayudarte a reprogramarla.",
+        "subject": "Permítenos ayudarte a reprogramar"
       },
       "last_minute_availability": {
         "title": "Disponibilidad de última hora",
         "description": "Contacta con clientes relevantes cuando queda libre una cita.",
-        "template": "Acaba de quedar disponible una cita de última hora. Reserva mientras el horario siga libre."
-      }
+        "template": "Acaba de quedar disponible una cita de última hora. Reserva mientras el horario siga libre.",
+        "subject": "Hay una cita de última hora disponible"
+      },
+      "manualOnly": "Esta automatización necesita un hueco concreto en el calendario y seguirá siendo una campaña manual hasta activar el disparador de disponibilidad."
     },
     "reviews": {
       "title": "Moderación de reseñas",
@@ -2939,5 +2966,82 @@
     "privacyNote": "Las citas, los datos de clientes y la información de pagos nunca se guardan en la caché sin conexión.",
     "close": "Cerrar",
     "iosInstall": "En iPhone o iPad, abre el menú Compartir del navegador y elige “Añadir a pantalla de inicio”."
+  },
+  "marketingDelivery": {
+    "metrics": {
+      "queued": "En cola",
+      "successful": "Enviados / simulados",
+      "delivered": "Entregados",
+      "failed": "Fallidos"
+    },
+    "settings": {
+      "title": "Controles de entrega",
+      "description": "Controla cómo se procesan las campañas y automatizaciones. La entrega está desactivada por defecto.",
+      "mode": "Modo de entrega",
+      "liveWarning": "El modo en vivo envía mensajes a clientes reales. Confirma proveedores, consentimiento y pruebas antes de activarlo.",
+      "emailLimit": "Límite diario de email",
+      "smsLimit": "Límite diario de SMS",
+      "fromName": "Nombre del remitente",
+      "replyTo": "Email de respuesta"
+    },
+    "modes": {
+      "disabled": "Desactivado",
+      "test": "Modo de prueba",
+      "live": "Modo en vivo"
+    },
+    "channels": {
+      "email": "Entrega por email",
+      "emailDescription": "Enviar email de marketing solo a clientes con consentimiento.",
+      "sms": "Entrega por SMS",
+      "smsDescription": "Enviar SMS solo a clientes con consentimiento.",
+      "inApp": "Bandeja interna",
+      "inAppDescription": "Entregar mensajes dentro del portal del cliente."
+    },
+    "actions": {
+      "saveSettings": "Guardar ajustes de entrega",
+      "queueNow": "Poner en cola ahora"
+    },
+    "runs": {
+      "title": "Ejecuciones de entrega",
+      "description": "Cada campaña o automatización crea una ejecución auditable.",
+      "empty": "Aún no hay ejecuciones de entrega.",
+      "campaign": "Ejecución de campaña",
+      "automation": "Ejecución de automatización",
+      "recipients": "Destinatarios",
+      "sent": "Enviados",
+      "delivered": "Entregados",
+      "failed": "Fallidos"
+    },
+    "log": {
+      "title": "Registro reciente de entregas",
+      "description": "Revisa destinatario, canal, proveedor, intentos y errores.",
+      "empty": "Aún no hay intentos de entrega registrados.",
+      "customer": "Cliente",
+      "attempts": "{{count}} intento"
+    },
+    "statuses": {
+      "preparing": "Preparando",
+      "queued": "En cola",
+      "processing": "Procesando",
+      "completed": "Completado",
+      "partial": "Parcialmente completado",
+      "failed": "Fallido",
+      "cancelled": "Cancelado",
+      "sent": "Enviado",
+      "delivered": "Entregado",
+      "simulated": "Simulado",
+      "skipped": "Omitido",
+      "bounced": "Rebotado",
+      "complained": "Queja de spam",
+      "undelivered": "No entregado"
+    },
+    "messages": {
+      "loadFailed": "No se pudo cargar el centro de entregas.",
+      "settingsSaved": "Ajustes de entrega guardados.",
+      "settingsSaveFailed": "No se pudieron guardar los ajustes.",
+      "campaignQueued": "Campaña puesta en cola de forma segura.",
+      "campaignQueueFailed": "No se pudo poner la campaña en cola.",
+      "confirmLive": "¿Activar el envío en vivo y permitir que Velliqo contacte a clientes reales elegibles?"
+    }
   }
 }
