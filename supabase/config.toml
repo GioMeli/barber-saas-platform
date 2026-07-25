@@ -433,3 +433,6 @@ verify_jwt = false
 
 [functions.velliqo-ai-manager]
 verify_jwt = true
+
+[functions.process-ai-manager-automations]
+verify_jwt = false

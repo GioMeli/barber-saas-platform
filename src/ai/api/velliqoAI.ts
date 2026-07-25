@@ -5,6 +5,10 @@ import type {
   VelliqoAIActionExecutionResult,
   VelliqoAIBusinessSnapshot,
   VelliqoAIFunctionResult,
+  VelliqoAIManagerAlert,
+  VelliqoAIManagerAlertStatus,
+  VelliqoAIManagerBriefing,
+  VelliqoAIProactiveRefreshResult,
 } from '@/ai/core/types';
 
 export async function askVelliqoAI(input: {
@@ -75,4 +79,74 @@ export async function rejectVelliqoAIAction(input: {
 
   if (error) throw new Error(error.message || 'Failed to cancel the Velliqo AI action');
   return data as VelliqoAIActionExecutionResult;
+}
+
+
+export async function loadLatestAIManagerBriefing(
+  businessId: string,
+): Promise<VelliqoAIManagerBriefing | null> {
+  const { data, error } = await supabase
+    .from('ai_manager_briefings')
+    .select('*')
+    .eq('business_id', businessId)
+    .order('briefing_date', { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message || 'Failed to load the Velliqo AI manager briefing');
+  return (data as VelliqoAIManagerBriefing | null) || null;
+}
+
+export async function loadAIManagerAlerts(
+  businessId: string,
+): Promise<VelliqoAIManagerAlert[]> {
+  const { data, error } = await supabase
+    .from('ai_manager_alerts')
+    .select('*')
+    .eq('business_id', businessId)
+    .in('status', ['new', 'reviewed'])
+    .order('last_seen_at', { ascending: false })
+    .limit(20);
+
+  if (error) throw new Error(error.message || 'Failed to load proactive Velliqo alerts');
+  return (data || []) as VelliqoAIManagerAlert[];
+}
+
+export async function refreshAIManagerBriefing(
+  businessId: string,
+): Promise<VelliqoAIProactiveRefreshResult> {
+  const { data, error } = await supabase.functions.invoke('process-ai-manager-automations', {
+    body: { businessId, force: true, source: 'owner_refresh' },
+  });
+
+  if (error) {
+    const context = (error as any)?.context;
+    let message = error.message || 'Failed to refresh the Velliqo AI manager briefing';
+    try {
+      if (context instanceof Response) {
+        const payload = await context.clone().json();
+        message = payload?.error || message;
+      }
+    } catch {
+      // Preserve the function invocation error.
+    }
+    throw new Error(message);
+  }
+
+  if (data?.error) throw new Error(data.error);
+  return data as VelliqoAIProactiveRefreshResult;
+}
+
+export async function updateAIManagerAlertStatus(input: {
+  businessId: string;
+  alertId: string;
+  status: VelliqoAIManagerAlertStatus;
+}): Promise<void> {
+  const { error } = await supabase
+    .from('ai_manager_alerts')
+    .update({ status: input.status, updated_at: new Date().toISOString() })
+    .eq('business_id', input.businessId)
+    .eq('id', input.alertId);
+
+  if (error) throw new Error(error.message || 'Failed to update the Velliqo AI alert');
 }

@@ -206,6 +206,67 @@ export interface VelliqoAIFunctionResult {
   pendingAction?: VelliqoAIActionRequest | null;
 }
 
+
+export type VelliqoAIManagerAlertStatus = 'new' | 'reviewed' | 'dismissed' | 'resolved';
+
+export interface VelliqoAIManagerPriority {
+  category: AIInsightCategory;
+  severity: AIInsightSeverity;
+  title: string;
+  explanation: string;
+  next_step: string;
+}
+
+export interface VelliqoAIManagerBriefing {
+  id: string;
+  business_id: string;
+  briefing_date: string;
+  language: AILanguage;
+  title: string;
+  summary: string;
+  business_health_score: number;
+  priorities: VelliqoAIManagerPriority[];
+  recommended_prompts: string[];
+  provider: 'openai' | 'velliqo_free';
+  model?: string | null;
+  input_tokens: number;
+  output_tokens: number;
+  estimated_cost: number;
+  generated_at: string;
+  updated_at: string;
+}
+
+export interface VelliqoAIManagerAlert {
+  id: string;
+  business_id: string;
+  category: AIInsightCategory;
+  severity: AIInsightSeverity;
+  title: string;
+  summary: string;
+  evidence: Record<string, unknown>;
+  recommendation: string;
+  suggested_prompt?: string | null;
+  destination_path?: string | null;
+  status: VelliqoAIManagerAlertStatus;
+  dedupe_key: string;
+  detected_at: string;
+  last_seen_at: string;
+  expires_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VelliqoAIProactiveRefreshResult {
+  status: 'completed' | 'skipped' | 'failed';
+  briefing_id?: string;
+  local_date?: string;
+  provider?: 'openai' | 'velliqo_free';
+  alerts?: number;
+  health_score?: number;
+  reason?: string;
+  error?: string;
+}
+
 export interface VelliqoAIBusinessSnapshot {
   generatedAt: string;
   period: {

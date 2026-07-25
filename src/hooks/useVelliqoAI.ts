@@ -3,14 +3,22 @@ import { supabase } from '@/db/supabase';
 import {
   askVelliqoAI,
   executeVelliqoAIAction,
+  loadAIManagerAlerts,
+  loadLatestAIManagerBriefing,
   loadVelliqoAISnapshot,
+  refreshAIManagerBriefing,
   rejectVelliqoAIAction,
+  updateAIManagerAlertStatus,
   type AIAgentKey,
   type AILanguage,
   type VelliqoAIActionExecutionResult,
   type VelliqoAIBusinessSnapshot,
   type VelliqoAIConversation,
   type VelliqoAIMessage,
+  type VelliqoAIManagerAlert,
+  type VelliqoAIManagerAlertStatus,
+  type VelliqoAIManagerBriefing,
+  type VelliqoAIProactiveRefreshResult,
 } from '@/ai';
 
 export function useVelliqoAI(input: {
@@ -23,8 +31,12 @@ export function useVelliqoAI(input: {
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<VelliqoAIMessage[]>([]);
   const [snapshot, setSnapshot] = useState<VelliqoAIBusinessSnapshot | null>(null);
+  const [briefing, setBriefing] = useState<VelliqoAIManagerBriefing | null>(null);
+  const [alerts, setAlerts] = useState<VelliqoAIManagerAlert[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [loadingSnapshot, setLoadingSnapshot] = useState(false);
+  const [loadingProactive, setLoadingProactive] = useState(false);
+  const [refreshingBriefing, setRefreshingBriefing] = useState(false);
   const [sending, setSending] = useState(false);
   const [actionBusyId, setActionBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -64,6 +76,62 @@ export function useVelliqoAI(input: {
       setError(snapshotError instanceof Error ? snapshotError.message : String(snapshotError));
     } finally {
       setLoadingSnapshot(false);
+    }
+  }, [businessId]);
+
+  const refreshProactive = useCallback(async () => {
+    if (!businessId) {
+      setBriefing(null);
+      setAlerts([]);
+      return;
+    }
+
+    setLoadingProactive(true);
+    try {
+      const [latestBriefing, activeAlerts] = await Promise.all([
+        loadLatestAIManagerBriefing(businessId),
+        loadAIManagerAlerts(businessId),
+      ]);
+      setBriefing(latestBriefing);
+      setAlerts(activeAlerts);
+      setError(null);
+    } catch (proactiveError) {
+      setError(proactiveError instanceof Error ? proactiveError.message : String(proactiveError));
+    } finally {
+      setLoadingProactive(false);
+    }
+  }, [businessId]);
+
+  const generateBriefing = useCallback(async (): Promise<VelliqoAIProactiveRefreshResult | null> => {
+    if (!businessId || refreshingBriefing) return null;
+
+    setRefreshingBriefing(true);
+    setError(null);
+    try {
+      const result = await refreshAIManagerBriefing(businessId);
+      await refreshProactive();
+      return result;
+    } catch (briefingError) {
+      setError(briefingError instanceof Error ? briefingError.message : String(briefingError));
+      return null;
+    } finally {
+      setRefreshingBriefing(false);
+    }
+  }, [businessId, refreshProactive, refreshingBriefing]);
+
+  const setAlertStatus = useCallback(async (
+    alertId: string,
+    status: VelliqoAIManagerAlertStatus,
+  ) => {
+    if (!businessId) return false;
+    try {
+      await updateAIManagerAlertStatus({ businessId, alertId, status });
+      setAlerts((current) => current.filter((alert) => alert.id !== alertId));
+      setError(null);
+      return true;
+    } catch (alertError) {
+      setError(alertError instanceof Error ? alertError.message : String(alertError));
+      return false;
     }
   }, [businessId]);
 
@@ -241,20 +309,28 @@ export function useVelliqoAI(input: {
   useEffect(() => {
     void refreshConversations();
     void refreshSnapshot();
-  }, [refreshConversations, refreshSnapshot]);
+    void refreshProactive();
+  }, [refreshConversations, refreshProactive, refreshSnapshot]);
 
   return {
     conversations,
     activeConversationId,
     messages,
     snapshot,
+    briefing,
+    alerts,
     loadingHistory,
     loadingSnapshot,
+    loadingProactive,
+    refreshingBriefing,
     sending,
     actionBusyId,
     error,
     refreshConversations,
     refreshSnapshot,
+    refreshProactive,
+    generateBriefing,
+    setAlertStatus,
     openConversation,
     startNewConversation,
     sendMessage,

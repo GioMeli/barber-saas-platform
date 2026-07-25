@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Bell, CalendarDays, CheckCheck, UserPlus, X } from 'lucide-react';
+import { Bell, Bot, CalendarDays, CheckCheck, Sparkles, UserPlus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/db/supabase';
@@ -14,7 +14,7 @@ type OwnerNotification = {
   user_id: string;
   title: string;
   message: string;
-  type: 'new_appointment' | 'new_customer';
+  type: 'new_appointment' | 'new_customer' | 'ai_briefing' | 'ai_alert';
   is_read: boolean;
   created_at: string;
   metadata?: Record<string, unknown> | null;
@@ -83,7 +83,7 @@ export default function OwnerNotificationCenter({
       .from('notifications')
       .select('id, business_id, user_id, title, message, type, is_read, created_at, metadata')
       .eq('business_id', businessId)
-      .in('type', ['new_appointment', 'new_customer'])
+      .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert'])
       .order('created_at', { ascending: false })
       .limit(30);
 
@@ -228,27 +228,39 @@ export default function OwnerNotificationCenter({
                   className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
                     notification.type === 'new_appointment'
                       ? 'bg-blue-100 text-blue-700'
-                      : 'bg-emerald-100 text-emerald-700'
+                      : notification.type === 'new_customer'
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : notification.type === 'ai_alert'
+                          ? 'bg-amber-100 text-amber-700'
+                          : 'bg-violet-100 text-violet-700'
                   }`}
                 >
                   {notification.type === 'new_appointment' ? (
                     <CalendarDays className="h-4 w-4" />
-                  ) : (
+                  ) : notification.type === 'new_customer' ? (
                     <UserPlus className="h-4 w-4" />
+                  ) : notification.type === 'ai_alert' ? (
+                    <Sparkles className="h-4 w-4" />
+                  ) : (
+                    <Bot className="h-4 w-4" />
                   )}
                 </div>
 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <div className="truncate text-sm font-bold">
-                      {t(`notifications.types.${notification.type}.title`)}
+                      {notification.type.startsWith('ai_')
+                        ? notification.title
+                        : t(`notifications.types.${notification.type}.title`)}
                     </div>
                     {!notification.is_read && (
                       <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
                     )}
                   </div>
                   <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                    {t(`notifications.types.${notification.type}.message`)}
+                    {notification.type.startsWith('ai_')
+                      ? notification.message
+                      : t(`notifications.types.${notification.type}.message`)}
                   </p>
                   <div className="mt-2 text-[11px] font-medium text-muted-foreground">
                     {formatNotificationTime(notification.created_at, locale, t)}

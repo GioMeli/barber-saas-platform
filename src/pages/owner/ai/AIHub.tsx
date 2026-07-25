@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
+  ArrowUpRight,
+  BellRing,
   Bot,
   CheckCircle2,
   Clock3,
   CalendarDays,
   ChevronRight,
   CircleDollarSign,
+  Eye,
+  Gauge,
   History,
   Lightbulb,
   Loader2,
@@ -26,6 +30,7 @@ import {
   Trash2,
   UserPlus,
   Users,
+  X,
   XCircle,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -36,6 +41,8 @@ import {
   type AIAgentKey,
   type VelliqoAIActionRequest,
   type VelliqoAIActionType,
+  type VelliqoAIManagerAlert,
+  type VelliqoAIManagerBriefing,
   type VelliqoAIMessage,
 } from '@/ai';
 import { Card, CardContent } from '@/components/ui/card';
@@ -107,6 +114,25 @@ export default function AIHub() {
     if (!result?.success) return;
     setDraft(t('ai.manager.actions.changePrompt', { summary: action.summary }));
     window.setTimeout(() => document.getElementById('velliqo-ai-composer')?.focus(), 0);
+  };
+
+  const refreshBriefing = async () => {
+    const result = await ai.generateBriefing();
+    if (result?.status === 'completed') toast.success(t('ai.manager.proactive.refreshSuccess'));
+    else if (result?.status === 'skipped') toast.info(t('ai.manager.proactive.alreadyCurrent'));
+  };
+
+  const discussBriefing = (prompt?: string | null) => {
+    const message = prompt?.trim() || t('ai.manager.proactive.discussPrompt');
+    setAgent('business_coach');
+    setDraft(message);
+    window.setTimeout(() => document.getElementById('velliqo-ai-composer')?.focus(), 0);
+  };
+
+  const dismissAlert = async (alertId: string) => {
+    if (await ai.setAlertStatus(alertId, 'dismissed')) {
+      toast.success(t('ai.manager.proactive.alertDismissed'));
+    }
   };
 
   const currency = activeBusiness?.currency || ai.snapshot?.business?.currency || 'EUR';
@@ -198,6 +224,23 @@ export default function AIHub() {
           <AlertDescription>{ai.error}</AlertDescription>
         </Alert>
       )}
+
+      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,.75fr)]">
+        <AIManagerBriefingPanel
+          briefing={ai.briefing}
+          loading={ai.loadingProactive}
+          refreshing={ai.refreshingBriefing}
+          language={language}
+          onRefresh={() => void refreshBriefing()}
+          onDiscuss={discussBriefing}
+        />
+        <AIProactiveAlertPanel
+          alerts={ai.alerts}
+          loading={ai.loadingProactive}
+          onDiscuss={(alert) => discussBriefing(alert.suggested_prompt)}
+          onDismiss={(alert) => void dismissAlert(alert.id)}
+        />
+      </section>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {ai.loadingSnapshot
@@ -377,6 +420,185 @@ export default function AIHub() {
         </Card>
       </section>
     </div>
+  );
+}
+
+function AIManagerBriefingPanel({
+  briefing,
+  loading,
+  refreshing,
+  language,
+  onRefresh,
+  onDiscuss,
+}: {
+  briefing: VelliqoAIManagerBriefing | null;
+  loading: boolean;
+  refreshing: boolean;
+  language: string;
+  onRefresh: () => void;
+  onDiscuss: (prompt?: string | null) => void;
+}) {
+  const { t } = useTranslation();
+
+  if (loading && !briefing) {
+    return (
+      <Card className="rounded-3xl shadow-card">
+        <CardContent className="space-y-4 p-6">
+          <Skeleton className="h-6 w-52" />
+          <Skeleton className="h-20 w-full rounded-2xl" />
+          <Skeleton className="h-10 w-44" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  return (
+    <Card className="overflow-hidden rounded-3xl border-violet-200/70 shadow-card">
+      <CardContent className="p-0">
+        <div className="flex flex-col gap-4 border-b bg-gradient-to-r from-violet-50 to-amber-50/60 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="flex gap-3">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-600 text-white shadow-sm">
+              <Gauge className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="text-xs font-semibold uppercase tracking-[.15em] text-violet-700">
+                {t('ai.manager.proactive.dailyBriefing')}
+              </div>
+              <h2 className="mt-1 text-lg font-extrabold">
+                {briefing?.title || t('ai.manager.proactive.noBriefingTitle')}
+              </h2>
+              {briefing ? (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t('ai.manager.proactive.generatedAt', { value: formatDate(briefing.generated_at, language) })}
+                </p>
+              ) : null}
+            </div>
+          </div>
+          <Button variant="outline" onClick={onRefresh} disabled={refreshing}>
+            {refreshing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <RefreshCw className="mr-2 h-4 w-4" />}
+            {refreshing ? t('ai.manager.proactive.refreshing') : t('ai.manager.proactive.refresh')}
+          </Button>
+        </div>
+
+        <div className="p-5 sm:p-6">
+          {briefing ? (
+            <>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <p className="max-w-3xl text-sm leading-7 text-muted-foreground">{briefing.summary}</p>
+                <div className="shrink-0 rounded-2xl border bg-muted/20 px-4 py-3 text-center">
+                  <div className="text-xs font-semibold text-muted-foreground">{t('ai.manager.proactive.healthScore')}</div>
+                  <div className="mt-1 text-2xl font-extrabold">{briefing.business_health_score}/100</div>
+                </div>
+              </div>
+
+              {briefing.priorities?.length ? (
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  {briefing.priorities.slice(0, 4).map((priority, index) => (
+                    <div key={`${priority.category}-${index}`} className="rounded-2xl border bg-muted/10 p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-sm font-bold">{priority.title}</div>
+                        <Badge variant="outline">{t(`ai.manager.severity.${priority.severity}`)}</Badge>
+                      </div>
+                      <p className="mt-2 text-xs leading-5 text-muted-foreground">{priority.explanation}</p>
+                      <p className="mt-3 text-xs font-medium leading-5">{priority.next_step}</p>
+                    </div>
+                  ))}
+                </div>
+              ) : null}
+
+              <div className="mt-5 flex flex-wrap gap-2">
+                <Button onClick={() => onDiscuss(briefing.recommended_prompts?.[0])}>
+                  <MessageSquareText className="mr-2 h-4 w-4" />{t('ai.manager.proactive.discuss')}
+                </Button>
+                {briefing.recommended_prompts?.slice(1, 3).map((prompt) => (
+                  <Button key={prompt} variant="outline" onClick={() => onDiscuss(prompt)}>
+                    {prompt}
+                  </Button>
+                ))}
+              </div>
+            </>
+          ) : (
+            <div className="flex flex-col items-start gap-4 rounded-2xl border border-dashed p-5">
+              <p className="text-sm leading-6 text-muted-foreground">{t('ai.manager.proactive.noBriefingDescription')}</p>
+              <Button onClick={onRefresh} disabled={refreshing}>
+                {refreshing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Sparkles className="mr-2 h-4 w-4" />}
+                {t('ai.manager.proactive.generateNow')}
+              </Button>
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function AIProactiveAlertPanel({
+  alerts,
+  loading,
+  onDiscuss,
+  onDismiss,
+}: {
+  alerts: VelliqoAIManagerAlert[];
+  loading: boolean;
+  onDiscuss: (alert: VelliqoAIManagerAlert) => void;
+  onDismiss: (alert: VelliqoAIManagerAlert) => void;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <Card className="rounded-3xl shadow-card">
+      <CardContent className="p-5 sm:p-6">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-amber-100 text-amber-700">
+              <BellRing className="h-5 w-5" />
+            </div>
+            <div>
+              <div className="font-extrabold">{t('ai.manager.proactive.alertsTitle')}</div>
+              <div className="text-xs text-muted-foreground">{t('ai.manager.proactive.alertsDescription')}</div>
+            </div>
+          </div>
+          <Badge variant="outline">{alerts.length}</Badge>
+        </div>
+
+        <div className="mt-5 space-y-3">
+          {loading && !alerts.length ? (
+            <><Skeleton className="h-24 rounded-2xl" /><Skeleton className="h-24 rounded-2xl" /></>
+          ) : alerts.length ? alerts.slice(0, 5).map((alert) => (
+            <div key={alert.id} className="rounded-2xl border p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="font-bold">{alert.title}</div>
+                    <Badge variant="outline">{t(`ai.manager.severity.${alert.severity}`)}</Badge>
+                  </div>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{alert.summary}</p>
+                </div>
+                <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0" onClick={() => onDismiss(alert)} aria-label={t('ai.manager.proactive.dismiss')}>
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <Button size="sm" variant="outline" onClick={() => onDiscuss(alert)}>
+                  <Eye className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.proactive.analyse')}
+                </Button>
+                {alert.destination_path ? (
+                  <Button size="sm" variant="ghost" asChild>
+                    <Link to={alert.destination_path}>
+                      {t('ai.manager.proactive.openArea')}<ArrowUpRight className="ml-1.5 h-3.5 w-3.5" />
+                    </Link>
+                  </Button>
+                ) : null}
+              </div>
+            </div>
+          )) : (
+            <div className="rounded-2xl border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
+              {t('ai.manager.proactive.noAlerts')}
+            </div>
+          )}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
 

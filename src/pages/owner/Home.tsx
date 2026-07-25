@@ -160,7 +160,7 @@ export default function OwnerHome() {
           .select('id', { count: 'exact', head: true })
           .eq('business_id', business.id)
           .eq('is_read', false)
-          .in('type', ['new_appointment', 'new_customer']),
+          .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert']),
       ]);
 
       if (todayResult.error) throw todayResult.error;
