@@ -1730,9 +1730,9 @@
     "customerData": "Customer data access",
     "customerDataDescription": "Allow AI features to use approved customer information when permissions permit.",
     "manager": {
-      "readOnly": "Read-only intelligence",
+      "readOnly": "Confirmation-based actions",
       "welcome": "Your business command centre, {{name}}",
-      "introduction": "Velliqo AI analyses tenant-isolated live data from {{business}} and turns it into grounded recommendations without an external AI provider or per-message AI charge.",
+      "introduction": "Velliqo AI analyses live data from {{business}}, holds a natural management conversation and can prepare secure business actions for your confirmation.",
       "errorTitle": "Velliqo AI could not complete the request",
       "history": "History",
       "conversations": "Conversations",
@@ -1746,7 +1746,7 @@
       "emptyDescription": "Start with a daily briefing or ask a specific question about finance, customers, scheduling, staff, services, inventory or marketing.",
       "thinking": "Velliqo is analysing your business data…",
       "placeholder": "Ask Velliqo about your business…",
-      "aggregateDataNotice": "Uses tenant-isolated aggregate business data",
+      "aggregateDataNotice": "Tenant-isolated data; business changes require confirmation",
       "send": "Send",
       "healthScore": "Health score: {{value}}/100",
       "suggestedActions": "Recommended places to review",
@@ -1778,10 +1778,46 @@
         "critical": "Critical"
       },
       "zeroExternalCost": "Usage-controlled AI",
-      "privateEngine": "Private Velliqo intelligence engine",
-      "privateEngineDescription": "Natural conversation uses the OpenAI API with Velliqo limits and usage tracking. Only aggregate business metrics are sent; customer names and contacts are excluded. Deterministic Velliqo Insights remains available as a fallback, and this phase remains read-only.",
+      "privateEngine": "Secure Velliqo AI operations engine",
+      "privateEngineDescription": "Natural conversation uses the OpenAI API with Velliqo usage limits. Customer information is included only when you explicitly enable it. Business changes are never executed from model text: Velliqo prepares a validated action, shows a preview and requires an Owner or Manager confirmation.",
       "proactiveInsights": "Proactive insights",
-      "proactiveInsightsDescription": "Allow Velliqo to surface data-driven risks and opportunities while you use the business manager."
+      "proactiveInsightsDescription": "Allow Velliqo to surface data-driven risks and opportunities while you use the business manager.",
+      "actionEngineBadge": "Secure Action Engine",
+      "writeActions": "Allow secure AI actions",
+      "writeActionsDescription": "Allow Velliqo to prepare customer, appointment, campaign-draft and post-draft actions. Every action remains pending until an Owner or Manager confirms it.",
+      "customerDataActionDescription": "Allow the AI manager to use customer names and contact details only for customer matching and appointment operations. This information may be sent to the configured AI provider.",
+      "actionSettingsWarning": "Keep these controls disabled until you are ready to test real business changes. Campaigns and posts are created as drafts only.",
+      "actions": {
+        "prepared": "Action prepared for confirmation",
+        "confirm": "Confirm and execute",
+        "change": "Change",
+        "cancel": "Cancel",
+        "executing": "Executing securely…",
+        "executed": "Action completed",
+        "rejected": "Action cancelled",
+        "failed": "Action failed",
+        "reviewNotice": "Review every field before confirming. Velliqo will validate permissions and availability again at execution time.",
+        "expiresSoon": "The confirmation expires after 30 minutes.",
+        "completedToast": "The Velliqo action was completed successfully.",
+        "cancelledToast": "The pending Velliqo action was cancelled.",
+        "failedToast": "The action could not be completed.",
+        "changePrompt": "Change this pending action: {{summary}}. The previous proposal has been cancelled. ",
+        "status": {
+          "pending": "Pending confirmation",
+          "approved": "Approved",
+          "executed": "Executed",
+          "rejected": "Cancelled",
+          "failed": "Failed"
+        },
+        "types": {
+          "create_customer": "Create customer",
+          "create_appointment": "Create appointment",
+          "reschedule_appointment": "Reschedule appointment",
+          "cancel_appointment": "Cancel appointment",
+          "create_campaign_draft": "Create campaign draft",
+          "create_post_draft": "Create post draft"
+        }
+      }
     }
   },
   "customerPortal": {

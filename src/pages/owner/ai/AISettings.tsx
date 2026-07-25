@@ -8,8 +8,18 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from 'sonner';
-import { CircleDollarSign, Database, Loader2, Save, ShieldCheck, Sparkles } from 'lucide-react';
+import {
+  AlertTriangle,
+  Bot,
+  Database,
+  Loader2,
+  Save,
+  ShieldCheck,
+  Sparkles,
+  UserRoundCog,
+} from 'lucide-react';
 import { SUPPORTED_AI_LANGUAGES, normalizeLanguage, type AILanguage } from '@/ai';
 
 type SettingsState = {
@@ -18,6 +28,8 @@ type SettingsState = {
   retain_history: boolean;
   response_style: string;
   proactive_insights: boolean;
+  allow_customer_data: boolean;
+  allow_write_actions: boolean;
 };
 
 export default function AISettings() {
@@ -31,6 +43,8 @@ export default function AISettings() {
     retain_history: true,
     response_style: 'balanced',
     proactive_insights: true,
+    allow_customer_data: false,
+    allow_write_actions: false,
   });
 
   React.useEffect(() => {
@@ -38,7 +52,7 @@ export default function AISettings() {
     void (async () => {
       const { data, error } = await supabase
         .from('ai_settings')
-        .select('enabled, default_language, retain_history, response_style, proactive_insights')
+        .select('enabled, default_language, retain_history, response_style, proactive_insights, allow_customer_data, allow_write_actions')
         .eq('business_id', activeBusiness.id)
         .maybeSingle();
 
@@ -50,6 +64,8 @@ export default function AISettings() {
           retain_history: data.retain_history,
           response_style: data.response_style,
           proactive_insights: data.proactive_insights,
+          allow_customer_data: Boolean(data.allow_customer_data),
+          allow_write_actions: Boolean(data.allow_write_actions),
         });
       }
       setLoading(false);
@@ -62,8 +78,6 @@ export default function AISettings() {
     const { error } = await supabase.from('ai_settings').upsert({
       business_id: activeBusiness.id,
       ...settings,
-      allow_customer_data: false,
-      allow_write_actions: false,
       updated_at: new Date().toISOString(),
     }, { onConflict: 'business_id' });
     setSaving(false);
@@ -81,8 +95,8 @@ export default function AISettings() {
         <div>
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="text-xs font-semibold uppercase tracking-[.18em] text-primary">Velliqo AI</span>
-            <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-800">
-              <CircleDollarSign className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.zeroExternalCost')}
+            <Badge variant="outline" className="border-violet-200 bg-violet-50 text-violet-800">
+              <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.actionEngineBadge')}
             </Badge>
           </div>
           <h1 className="app-page-title">{t('ai.settings')}</h1>
@@ -156,14 +170,42 @@ export default function AISettings() {
             />
           </SettingRow>
 
-          <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950">
+          <SettingRow
+            icon={<UserRoundCog className="h-5 w-5" />}
+            title={t('ai.customerData')}
+            description={t('ai.manager.customerDataActionDescription')}
+          >
+            <Switch
+              checked={settings.allow_customer_data}
+              onCheckedChange={(allow_customer_data) => setSettings((current) => ({ ...current, allow_customer_data }))}
+            />
+          </SettingRow>
+
+          <SettingRow
+            icon={<Bot className="h-5 w-5" />}
+            title={t('ai.manager.writeActions')}
+            description={t('ai.manager.writeActionsDescription')}
+          >
+            <Switch
+              checked={settings.allow_write_actions}
+              onCheckedChange={(allow_write_actions) => setSettings((current) => ({ ...current, allow_write_actions }))}
+            />
+          </SettingRow>
+
+          <Alert className="rounded-2xl border-amber-200 bg-amber-50 text-amber-950">
+            <AlertTriangle className="h-4 w-4 text-amber-700" />
+            <AlertTitle>{t('ai.manager.actionEngineBadge')}</AlertTitle>
+            <AlertDescription>{t('ai.manager.actionSettingsWarning')}</AlertDescription>
+          </Alert>
+
+          <div className="rounded-2xl border border-violet-200 bg-violet-50 p-5 text-violet-950">
             <div className="flex gap-3">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/70 text-emerald-700">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/70 text-violet-700">
                 <Database className="h-5 w-5" />
               </div>
               <div>
                 <div className="font-bold">{t('ai.manager.privateEngine')}</div>
-                <p className="mt-1 text-sm leading-6 text-emerald-900/75">{t('ai.manager.privateEngineDescription')}</p>
+                <p className="mt-1 text-sm leading-6 text-violet-900/75">{t('ai.manager.privateEngineDescription')}</p>
               </div>
             </div>
           </div>

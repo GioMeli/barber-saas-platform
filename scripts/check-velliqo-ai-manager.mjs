@@ -17,7 +17,8 @@ function requireText(content, needle, label) {
   if (!content.includes(needle)) errors.push(`${label}: missing ${needle}`);
 }
 
-const migration = read('supabase/migrations/00036_velliqo_ai_manager_foundation.sql');
+const foundationMigration = read('supabase/migrations/00036_velliqo_ai_manager_foundation.sql');
+const actionMigration = read('supabase/migrations/00037_velliqo_ai_secure_action_engine.sql');
 const edge = read('supabase/functions/velliqo-ai-manager/index.ts');
 const hub = read('src/pages/owner/ai/AIHub.tsx');
 const settings = read('src/pages/owner/ai/AISettings.tsx');
@@ -27,38 +28,52 @@ const pkg = JSON.parse(read('package.json') || '{}');
 const workflow = read('.github/workflows/quality-gate.yml');
 const config = read('supabase/config.toml');
 
-requireText(migration, 'get_ai_business_snapshot', 'Migration');
-requireText(migration, 'public.has_business_access(p_business_id)', 'Migration tenant isolation');
-requireText(migration, 'containsCustomerNames', 'Migration privacy metadata');
-requireText(migration, 'alter table public.ai_insights enable row level security', 'AI insight RLS');
-requireText(migration, 'grant execute on function public.get_ai_business_snapshot', 'Snapshot grants');
+requireText(foundationMigration, 'get_ai_business_snapshot', 'Foundation migration');
+requireText(foundationMigration, 'public.has_business_access(p_business_id)', 'Foundation tenant isolation');
+requireText(foundationMigration, 'containsCustomerNames', 'Foundation privacy metadata');
+requireText(foundationMigration, 'alter table public.ai_insights enable row level security', 'AI insight RLS');
+requireText(foundationMigration, 'grant execute on function public.get_ai_business_snapshot', 'Snapshot grants');
+
+requireText(actionMigration, 'execute_ai_action_request', 'Action execution RPC');
+requireText(actionMigration, 'reject_ai_action_request', 'Action rejection RPC');
+requireText(actionMigration, "status = 'executed'", 'Idempotent action status');
+requireText(actionMigration, 'for update', 'Action row locking');
+requireText(actionMigration, 'allow_write_actions', 'Write-action setting enforcement');
+requireText(actionMigration, 'owner_create_appointment', 'Secure appointment reuse');
+requireText(actionMigration, 'owner_reschedule_appointment', 'Secure reschedule reuse');
+requireText(actionMigration, 'owner_update_appointment_status', 'Secure cancellation reuse');
+requireText(actionMigration, 'ai_action_executed', 'Action audit trail');
+requireText(actionMigration, 'revoke insert, update, delete', 'Direct browser write lockdown');
 
 requireText(edge, 'userClient.auth.getUser()', 'Edge authentication');
 requireText(edge, ".from('business_members')", 'Edge membership validation');
 requireText(edge, 'get_ai_business_snapshot', 'Grounded snapshot');
 requireText(edge, 'daily_request_limit', 'Rate limit');
-requireText(edge, "ENGINE_NAME = 'velliqo-insights-v1'", 'Free intelligence engine');
 requireText(edge, "Deno.env.get('OPENAI_API_KEY')", 'OpenAI secret configuration');
-requireText(edge, "OPENAI_MODEL", 'Configurable OpenAI model');
-requireText(edge, "/responses", 'OpenAI Responses API');
-requireText(edge, "store: false", 'OpenAI response storage disabled');
-requireText(edge, "provider = 'openai'", 'External provider audit');
+requireText(edge, '/responses', 'OpenAI Responses API');
+requireText(edge, 'store: false', 'OpenAI response storage disabled');
+requireText(edge, 'loadOperationalCatalog', 'Operational action catalogue');
+requireText(edge, 'preparePendingAction', 'Pending action preparation');
+requireText(edge, 'create_campaign_draft', 'Campaign draft action');
+requireText(edge, 'create_post_draft', 'Post draft action');
+requireText(edge, 'pending_action', 'Action metadata');
+requireText(edge, 'idempotencyKey', 'Action idempotency');
 requireText(edge, 'estimateOpenAICost', 'Usage cost estimation');
-requireText(edge, 'classifyTopic', 'Natural-language topic routing');
 requireText(edge, 'calculateHealthScore', 'Business health scoring');
-requireText(edge, 'buildInsights', 'Deterministic insight engine');
-requireText(edge, 'read_only: true', 'Read-only response metadata');
+requireText(edge, 'buildInsights', 'Deterministic fallback');
 
 requireText(hub, 'useVelliqoAI', 'AI Hub integration');
+requireText(hub, 'AIActionConfirmationCard', 'Action confirmation UI');
+requireText(hub, 'onExecuteAction', 'Action execution UI');
+requireText(hub, 'onCancelAction', 'Action cancellation UI');
 requireText(hub, 'velliqo-ai-composer', 'AI composer');
-requireText(hub, 'suggested_actions', 'Read-only recommendations');
-requireText(hub, 'zeroExternalCost', 'AI usage disclosure');
-requireText(hub, 'onAskQuestion', 'Interactive follow-up prompts');
-requireText(settings, 'privateEngineDescription', 'Private engine settings disclosure');
-requireText(settings, 'allow_customer_data: false', 'Aggregate-only customer privacy');
-requireText(settings, 'allow_write_actions: false', 'Read-only settings enforcement');
-requireText(api, "supabase.functions.invoke('velliqo-ai-manager'", 'AI function invocation');
-requireText(hook, "from('ai_conversations')", 'Conversation history');
+requireText(settings, 'allow_customer_data', 'Customer-data consent setting');
+requireText(settings, 'allow_write_actions', 'Write-action setting');
+requireText(settings, 'actionSettingsWarning', 'Action safety warning');
+requireText(api, 'execute_ai_action_request', 'Action execution API');
+requireText(api, 'reject_ai_action_request', 'Action rejection API');
+requireText(hook, 'executeAction', 'Action execution hook');
+requireText(hook, 'actionBusyId', 'Duplicate action UI protection');
 requireText(config, '[functions.velliqo-ai-manager]', 'Function config');
 requireText(config, 'verify_jwt = true', 'Function JWT verification');
 
@@ -74,10 +89,12 @@ for (const locale of ['en', 'el', 'de', 'es', 'tr']) {
     if (
       !data.ai?.manager?.welcome ||
       !data.ai?.manager?.prompts?.dailyBriefing ||
-      !data.ai?.manager?.zeroExternalCost ||
-      !data.ai?.manager?.privateEngineDescription
+      !data.ai?.manager?.privateEngineDescription ||
+      !data.ai?.manager?.writeActions ||
+      !data.ai?.manager?.actions?.confirm ||
+      !data.ai?.manager?.actions?.types?.create_appointment
     ) {
-      errors.push(`${relative}: missing free Velliqo AI Manager translations`);
+      errors.push(`${relative}: missing Velliqo AI Action Engine translations`);
     }
   } catch (error) {
     errors.push(`${relative}: invalid JSON (${error.message})`);
@@ -91,4 +108,4 @@ if (errors.length) {
 }
 
 console.log('Velliqo AI Manager validation passed.');
-console.log('Validated: JWT auth, tenant isolation, aggregate-only snapshot, OpenAI Responses API, deterministic fallback, cost tracking, structured insights, read-only recommendations, rate limits, conversation history, UI and 5 locales.');
+console.log('Validated: JWT auth, tenant isolation, OpenAI conversation, deterministic fallback, usage tracking, secure action preparation, confirmation RPCs, role checks, idempotency, audit logs, customer/appointment/campaign/post actions, UI and 5 locales.');

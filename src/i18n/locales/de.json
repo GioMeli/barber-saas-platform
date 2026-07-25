@@ -1730,9 +1730,9 @@
     "customerData": "Zugriff auf Kundendaten",
     "customerDataDescription": "Erlauben Sie AI-Funktionen, genehmigte Kundendaten im Rahmen der Berechtigungen zu verwenden.",
     "manager": {
-      "readOnly": "Schreibgeschützte Intelligenz",
+      "readOnly": "Aktionen mit Bestätigung",
       "welcome": "Ihre Unternehmenszentrale, {{name}}",
-      "introduction": "Velliqo AI analysiert mandantenisolierte Live-Daten von {{business}} und erstellt fundierte Empfehlungen ohne externen AI-Anbieter oder Kosten pro Nachricht.",
+      "introduction": "Velliqo AI analysiert Live-Daten von {{business}}, führt natürliche Managementgespräche und bereitet sichere Geschäftsaktionen zur Bestätigung vor.",
       "errorTitle": "Velliqo AI konnte die Anfrage nicht abschließen",
       "history": "Verlauf",
       "conversations": "Gespräche",
@@ -1746,7 +1746,7 @@
       "emptyDescription": "Beginnen Sie mit einem Tagesbriefing oder fragen Sie zu Finanzen, Kunden, Planung, Team, Leistungen, Bestand oder Marketing.",
       "thinking": "Velliqo analysiert Ihre Unternehmensdaten…",
       "placeholder": "Fragen Sie Velliqo zu Ihrem Unternehmen…",
-      "aggregateDataNotice": "Verwendet mandantenisolierte aggregierte Unternehmensdaten",
+      "aggregateDataNotice": "Mandantenisolierte Daten; Änderungen erfordern Bestätigung",
       "send": "Senden",
       "healthScore": "Gesundheitswert: {{value}}/100",
       "suggestedActions": "Empfohlene Bereiche zur Prüfung",
@@ -1777,11 +1777,47 @@
         "warning": "Warnung",
         "critical": "Kritisch"
       },
-      "zeroExternalCost": "AI mit kontrollierter Nutzung",
-      "privateEngine": "Private Velliqo Intelligence Engine",
-      "privateEngineDescription": "Natürliche Gespräche verwenden die OpenAI API mit Velliqo-Limits und Nutzungsprotokollierung. Es werden nur aggregierte Geschäftskennzahlen gesendet; Kundennamen und Kontaktdaten bleiben ausgeschlossen. Deterministische Velliqo Insights bleiben als Fallback verfügbar, und diese Phase bleibt schreibgeschützt.",
+      "zeroExternalCost": "Nutzungskontrollierte AI",
+      "privateEngine": "Sichere Velliqo-AI-Aktionsengine",
+      "privateEngineDescription": "Natürliche Gespräche nutzen die OpenAI API mit Velliqo-Nutzungslimits. Kundendaten werden nur nach ausdrücklicher Freigabe verwendet. Änderungen werden nie direkt aus Modelltext ausgeführt: Velliqo erstellt eine validierte Vorschau und verlangt die Bestätigung eines Owners oder Managers.",
       "proactiveInsights": "Proaktive Insights",
-      "proactiveInsightsDescription": "Velliqo darf datenbasierte Risiken und Chancen während der Nutzung des Business Managers hervorheben."
+      "proactiveInsightsDescription": "Velliqo darf datenbasierte Risiken und Chancen während der Nutzung des Business Managers hervorheben.",
+      "actionEngineBadge": "Sichere Aktionsengine",
+      "writeActions": "Sichere AI-Aktionen zulassen",
+      "writeActionsDescription": "Velliqo darf Kunden-, Termin-, Kampagnenentwurf- und Beitragsentwurf-Aktionen vorbereiten. Jede Aktion wartet auf die Bestätigung durch Owner oder Manager.",
+      "customerDataActionDescription": "Der AI-Manager darf Kundennamen und Kontaktdaten nur für Kundenabgleich und Terminoperationen verwenden. Diese Informationen können an den konfigurierten AI-Anbieter gesendet werden.",
+      "actionSettingsWarning": "Lassen Sie diese Optionen deaktiviert, bis Sie reale Änderungen testen möchten. Kampagnen und Beiträge werden nur als Entwurf erstellt.",
+      "actions": {
+        "prepared": "Aktion zur Bestätigung vorbereitet",
+        "confirm": "Bestätigen und ausführen",
+        "change": "Ändern",
+        "cancel": "Abbrechen",
+        "executing": "Sichere Ausführung…",
+        "executed": "Aktion abgeschlossen",
+        "rejected": "Aktion abgebrochen",
+        "failed": "Aktion fehlgeschlagen",
+        "reviewNotice": "Prüfen Sie alle Felder. Berechtigungen und Verfügbarkeit werden bei der Ausführung erneut validiert.",
+        "expiresSoon": "Die Bestätigung läuft nach 30 Minuten ab.",
+        "completedToast": "Die Velliqo-Aktion wurde erfolgreich abgeschlossen.",
+        "cancelledToast": "Die ausstehende Velliqo-Aktion wurde abgebrochen.",
+        "failedToast": "Die Aktion konnte nicht abgeschlossen werden.",
+        "changePrompt": "Ändere diese ausstehende Aktion: {{summary}}. Der vorherige Vorschlag wurde abgebrochen. ",
+        "status": {
+          "pending": "Bestätigung ausstehend",
+          "approved": "Genehmigt",
+          "executed": "Ausgeführt",
+          "rejected": "Abgebrochen",
+          "failed": "Fehlgeschlagen"
+        },
+        "types": {
+          "create_customer": "Kunde erstellen",
+          "create_appointment": "Termin erstellen",
+          "reschedule_appointment": "Termin verschieben",
+          "cancel_appointment": "Termin stornieren",
+          "create_campaign_draft": "Kampagnenentwurf erstellen",
+          "create_post_draft": "Beitragsentwurf erstellen"
+        }
+      }
     }
   },
   "customerPortal": {

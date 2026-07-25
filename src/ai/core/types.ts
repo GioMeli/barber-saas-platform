@@ -41,6 +41,62 @@ export type AIInsightCategory =
 
 export type AIInsightSeverity = 'info' | 'opportunity' | 'warning' | 'critical';
 
+export type VelliqoAIActionType =
+  | 'create_customer'
+  | 'create_appointment'
+  | 'reschedule_appointment'
+  | 'cancel_appointment'
+  | 'create_campaign_draft'
+  | 'create_post_draft';
+
+export type VelliqoAIActionStatus =
+  | 'pending'
+  | 'approved'
+  | 'rejected'
+  | 'executed'
+  | 'failed';
+
+export interface VelliqoAIActionPreviewItem {
+  label: string;
+  value: string;
+}
+
+export interface VelliqoAIActionRequest {
+  id: string;
+  business_id: string;
+  conversation_id?: string | null;
+  source_message_id?: string | null;
+  message_id?: string | null;
+  requested_by: string;
+  agent_key: AIAgentKey;
+  action_type: VelliqoAIActionType;
+  title: string;
+  summary: string;
+  risk_level: 'low' | 'medium' | 'high';
+  payload: Record<string, unknown>;
+  preview: {
+    items?: VelliqoAIActionPreviewItem[];
+    warning?: string | null;
+    destinationPath?: string | null;
+  };
+  status: VelliqoAIActionStatus;
+  execution_result?: Record<string, unknown> | null;
+  error_message?: string | null;
+  expires_at?: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface VelliqoAIActionExecutionResult {
+  success: boolean;
+  status: VelliqoAIActionStatus;
+  action_id: string;
+  action_type?: VelliqoAIActionType;
+  result?: Record<string, unknown>;
+  error?: string;
+  idempotent_replay?: boolean;
+}
+
 export type AISuggestedActionType =
   | 'open_calendar'
   | 'open_finance'
@@ -131,6 +187,7 @@ export interface VelliqoAIMessage {
     provider?: string;
     external_ai?: boolean;
     estimated_cost?: number;
+    pending_action?: VelliqoAIActionRequest | null;
     [key: string]: unknown;
   } | null;
   created_at: string;
@@ -145,7 +202,8 @@ export interface VelliqoAIFunctionResult {
   provider: 'openai' | 'velliqo_free';
   usage: { inputTokens: number; outputTokens: number };
   estimatedCost: number;
-  readOnly: true;
+  readOnly: boolean;
+  pendingAction?: VelliqoAIActionRequest | null;
 }
 
 export interface VelliqoAIBusinessSnapshot {

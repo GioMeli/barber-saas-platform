@@ -2,6 +2,7 @@ import { supabase } from '@/db/supabase';
 import type {
   AIAgentKey,
   AILanguage,
+  VelliqoAIActionExecutionResult,
   VelliqoAIBusinessSnapshot,
   VelliqoAIFunctionResult,
 } from '@/ai/core/types';
@@ -48,4 +49,30 @@ export async function loadVelliqoAISnapshot(
 
   if (error) throw new Error(error.message || 'Failed to load Velliqo AI business snapshot');
   return data as VelliqoAIBusinessSnapshot;
+}
+
+export async function executeVelliqoAIAction(input: {
+  businessId: string;
+  actionId: string;
+}): Promise<VelliqoAIActionExecutionResult> {
+  const { data, error } = await (supabase as any).rpc('execute_ai_action_request', {
+    p_business_id: input.businessId,
+    p_action_id: input.actionId,
+  });
+
+  if (error) throw new Error(error.message || 'Failed to execute the Velliqo AI action');
+  return data as VelliqoAIActionExecutionResult;
+}
+
+export async function rejectVelliqoAIAction(input: {
+  businessId: string;
+  actionId: string;
+}): Promise<VelliqoAIActionExecutionResult> {
+  const { data, error } = await (supabase as any).rpc('reject_ai_action_request', {
+    p_business_id: input.businessId,
+    p_action_id: input.actionId,
+  });
+
+  if (error) throw new Error(error.message || 'Failed to cancel the Velliqo AI action');
+  return data as VelliqoAIActionExecutionResult;
 }

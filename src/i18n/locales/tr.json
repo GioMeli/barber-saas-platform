@@ -1730,9 +1730,9 @@
     "customerData": "Müşteri verisi erişimi",
     "customerDataDescription": "İzinler uygun olduğunda AI özelliklerinin onaylı müşteri bilgilerini kullanmasına izin verin.",
     "manager": {
-      "readOnly": "Salt okunur zekâ",
+      "readOnly": "Onaylı işlemler",
       "welcome": "İşletme komuta merkeziniz, {{name}}",
-      "introduction": "Velliqo AI, {{business}} işletmesinin kiracıya özel canlı verilerini analiz eder ve harici AI sağlayıcısı veya mesaj başına AI ücreti olmadan kanıta dayalı önerilere dönüştürür.",
+      "introduction": "Velliqo AI, {{business}} canlı verilerini analiz eder, doğal bir yönetici görüşmesi yürütür ve onayınız için güvenli işletme işlemleri hazırlar.",
       "errorTitle": "Velliqo AI isteği tamamlayamadı",
       "history": "Geçmiş",
       "conversations": "Konuşmalar",
@@ -1746,7 +1746,7 @@
       "emptyDescription": "Günlük özetle başlayın veya finans, müşteriler, planlama, ekip, hizmetler, stok ya da marketing hakkında sorun.",
       "thinking": "Velliqo işletme verilerinizi analiz ediyor…",
       "placeholder": "Velliqo’ya işletmeniz hakkında sorun…",
-      "aggregateDataNotice": "İşletmeye özel ayrıştırılmış toplu verileri kullanır",
+      "aggregateDataNotice": "İşletmeye özel veriler; değişiklikler onay gerektirir",
       "send": "Gönder",
       "healthScore": "İşletme sağlık puanı: {{value}}/100",
       "suggestedActions": "İncelenmesi önerilen alanlar",
@@ -1778,10 +1778,46 @@
         "critical": "Kritik"
       },
       "zeroExternalCost": "Kontrollü kullanımlı AI",
-      "privateEngine": "Özel Velliqo zekâ motoru",
-      "privateEngineDescription": "Doğal konuşma, Velliqo sınırları ve kullanım takibiyle OpenAI API kullanır. Yalnızca toplu işletme metrikleri gönderilir; müşteri adları ve iletişim bilgileri hariç tutulur. Deterministik Velliqo Insights yedek olarak kullanılmaya devam eder ve bu aşama salt okunurdur.",
+      "privateEngine": "Güvenli Velliqo AI işlem motoru",
+      "privateEngineDescription": "Doğal konuşma, Velliqo kullanım limitleriyle OpenAI API kullanır. Müşteri bilgileri yalnızca açıkça etkinleştirildiğinde kullanılır. Değişiklikler model metninden doğrudan yürütülmez: Velliqo doğrulanmış bir işlem ve önizleme hazırlar, Owner veya Manager onayı ister.",
       "proactiveInsights": "Proaktif içgörüler",
-      "proactiveInsightsDescription": "Velliqo’nun işletme yöneticisini kullanırken veriye dayalı risk ve fırsatları göstermesine izin verin."
+      "proactiveInsightsDescription": "Velliqo’nun işletme yöneticisini kullanırken veriye dayalı risk ve fırsatları göstermesine izin verin.",
+      "actionEngineBadge": "Güvenli işlem motoru",
+      "writeActions": "Güvenli AI işlemlerine izin ver",
+      "writeActionsDescription": "Velliqo müşteri, randevu, kampanya taslağı ve gönderi taslağı işlemleri hazırlayabilir. Her işlem Owner veya Manager onayına kadar bekler.",
+      "customerDataActionDescription": "AI yöneticisinin müşteri eşleştirme ve randevu işlemleri için ad ve iletişim bilgilerini kullanmasına izin verin. Bu bilgiler yapılandırılmış AI sağlayıcısına gönderilebilir.",
+      "actionSettingsWarning": "Gerçek değişiklikleri test etmeye hazır olana kadar bu kontrolleri kapalı tutun. Kampanyalar ve gönderiler yalnızca taslak olarak oluşturulur.",
+      "actions": {
+        "prepared": "İşlem onay için hazırlandı",
+        "confirm": "Onayla ve çalıştır",
+        "change": "Değiştir",
+        "cancel": "İptal",
+        "executing": "Güvenli şekilde yürütülüyor…",
+        "executed": "İşlem tamamlandı",
+        "rejected": "İşlem iptal edildi",
+        "failed": "İşlem başarısız",
+        "reviewNotice": "Onaylamadan önce tüm alanları kontrol edin. Velliqo yürütme sırasında izinleri ve uygunluğu yeniden doğrular.",
+        "expiresSoon": "Onay 30 dakika sonra sona erer.",
+        "completedToast": "Velliqo işlemi başarıyla tamamlandı.",
+        "cancelledToast": "Bekleyen Velliqo işlemi iptal edildi.",
+        "failedToast": "İşlem tamamlanamadı.",
+        "changePrompt": "Bu bekleyen işlemi değiştir: {{summary}}. Önceki öneri iptal edildi. ",
+        "status": {
+          "pending": "Onay bekliyor",
+          "approved": "Onaylandı",
+          "executed": "Yürütüldü",
+          "rejected": "İptal edildi",
+          "failed": "Başarısız"
+        },
+        "types": {
+          "create_customer": "Müşteri oluştur",
+          "create_appointment": "Randevu oluştur",
+          "reschedule_appointment": "Randevuyu taşı",
+          "cancel_appointment": "Randevuyu iptal et",
+          "create_campaign_draft": "Kampanya taslağı oluştur",
+          "create_post_draft": "Gönderi taslağı oluştur"
+        }
+      }
     }
   },
   "customerPortal": {

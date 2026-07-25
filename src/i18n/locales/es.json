@@ -1730,9 +1730,9 @@
     "customerData": "Acceso a datos de clientes",
     "customerDataDescription": "Permite que las funciones de AI utilicen información de clientes aprobada cuando los permisos lo permitan.",
     "manager": {
-      "readOnly": "Inteligencia de solo lectura",
+      "readOnly": "Acciones con confirmación",
       "welcome": "El centro de mando de tu negocio, {{name}}",
-      "introduction": "Velliqo AI analiza datos en vivo aislados por negocio de {{business}} y los convierte en recomendaciones fundamentadas sin proveedor externo de AI ni coste por mensaje.",
+      "introduction": "Velliqo AI analiza datos en vivo de {{business}}, conversa de forma natural como gerente y prepara acciones empresariales seguras para tu confirmación.",
       "errorTitle": "Velliqo AI no pudo completar la solicitud",
       "history": "Historial",
       "conversations": "Conversaciones",
@@ -1746,7 +1746,7 @@
       "emptyDescription": "Empieza con un informe diario o pregunta sobre finanzas, clientes, agenda, equipo, servicios, inventario o marketing.",
       "thinking": "Velliqo está analizando los datos del negocio…",
       "placeholder": "Pregunta a Velliqo sobre tu negocio…",
-      "aggregateDataNotice": "Usa datos empresariales agregados y aislados por negocio",
+      "aggregateDataNotice": "Datos aislados por negocio; los cambios requieren confirmación",
       "send": "Enviar",
       "healthScore": "Puntuación de salud: {{value}}/100",
       "suggestedActions": "Áreas recomendadas para revisar",
@@ -1778,10 +1778,46 @@
         "critical": "Crítico"
       },
       "zeroExternalCost": "AI con uso controlado",
-      "privateEngine": "Motor privado de inteligencia Velliqo",
-      "privateEngineDescription": "La conversación natural utiliza la API de OpenAI con límites y seguimiento de uso de Velliqo. Solo se envían métricas empresariales agregadas; se excluyen nombres y datos de contacto de clientes. Velliqo Insights determinista permanece como respaldo y esta fase sigue siendo de solo lectura.",
+      "privateEngine": "Motor seguro de operaciones Velliqo AI",
+      "privateEngineDescription": "La conversación natural usa la API de OpenAI con límites de Velliqo. Los datos de clientes solo se incluyen cuando los habilitas expresamente. Los cambios nunca se ejecutan directamente desde el texto del modelo: Velliqo prepara una acción validada, muestra una vista previa y exige confirmación de Owner o Manager.",
       "proactiveInsights": "Insights proactivos",
-      "proactiveInsightsDescription": "Permite que Velliqo muestre riesgos y oportunidades basados en datos durante el uso del director digital."
+      "proactiveInsightsDescription": "Permite que Velliqo muestre riesgos y oportunidades basados en datos durante el uso del director digital.",
+      "actionEngineBadge": "Motor de acciones seguro",
+      "writeActions": "Permitir acciones AI seguras",
+      "writeActionsDescription": "Permite que Velliqo prepare clientes, citas, borradores de campañas y borradores de publicaciones. Cada acción queda pendiente hasta la confirmación de Owner o Manager.",
+      "customerDataActionDescription": "Permite al gerente AI usar nombres y datos de contacto solo para identificar clientes y gestionar citas. Esta información puede enviarse al proveedor AI configurado.",
+      "actionSettingsWarning": "Mantén estos controles desactivados hasta que estés listo para probar cambios reales. Las campañas y publicaciones solo se crean como borradores.",
+      "actions": {
+        "prepared": "Acción preparada para confirmación",
+        "confirm": "Confirmar y ejecutar",
+        "change": "Cambiar",
+        "cancel": "Cancelar",
+        "executing": "Ejecutando de forma segura…",
+        "executed": "Acción completada",
+        "rejected": "Acción cancelada",
+        "failed": "La acción falló",
+        "reviewNotice": "Revisa todos los campos. Velliqo volverá a validar permisos y disponibilidad al ejecutar.",
+        "expiresSoon": "La confirmación caduca después de 30 minutos.",
+        "completedToast": "La acción de Velliqo se completó correctamente.",
+        "cancelledToast": "La acción pendiente de Velliqo fue cancelada.",
+        "failedToast": "No se pudo completar la acción.",
+        "changePrompt": "Cambia esta acción pendiente: {{summary}}. La propuesta anterior fue cancelada. ",
+        "status": {
+          "pending": "Pendiente de confirmación",
+          "approved": "Aprobada",
+          "executed": "Ejecutada",
+          "rejected": "Cancelada",
+          "failed": "Fallida"
+        },
+        "types": {
+          "create_customer": "Crear cliente",
+          "create_appointment": "Crear cita",
+          "reschedule_appointment": "Reprogramar cita",
+          "cancel_appointment": "Cancelar cita",
+          "create_campaign_draft": "Crear borrador de campaña",
+          "create_post_draft": "Crear borrador de publicación"
+        }
+      }
     }
   },
   "customerPortal": {

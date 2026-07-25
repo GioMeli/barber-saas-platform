@@ -2,9 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '@/db/supabase';
 import {
   askVelliqoAI,
+  executeVelliqoAIAction,
   loadVelliqoAISnapshot,
+  rejectVelliqoAIAction,
   type AIAgentKey,
   type AILanguage,
+  type VelliqoAIActionExecutionResult,
   type VelliqoAIBusinessSnapshot,
   type VelliqoAIConversation,
   type VelliqoAIMessage,
@@ -23,6 +26,7 @@ export function useVelliqoAI(input: {
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [loadingSnapshot, setLoadingSnapshot] = useState(false);
   const [sending, setSending] = useState(false);
+  const [actionBusyId, setActionBusyId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const refreshConversations = useCallback(async () => {
@@ -132,6 +136,7 @@ export function useVelliqoAI(input: {
           provider: result.provider,
           external_ai: result.provider === 'openai',
           estimated_cost: result.estimatedCost,
+          pending_action: result.pendingAction || null,
         },
         created_at: result.createdAt,
       };
@@ -148,6 +153,74 @@ export function useVelliqoAI(input: {
       setSending(false);
     }
   }, [activeConversationId, businessId, language, page, refreshConversations, sending]);
+
+
+  const updateActionInMessages = useCallback((
+    actionId: string,
+    patch: Record<string, unknown>,
+  ) => {
+    setMessages((current) => current.map((message) => {
+      const pendingAction = message.metadata?.pending_action;
+      if (!pendingAction || pendingAction.id !== actionId) return message;
+
+      return {
+        ...message,
+        metadata: {
+          ...message.metadata,
+          pending_action: {
+            ...pendingAction,
+            ...patch,
+          },
+        },
+      };
+    }));
+  }, []);
+
+  const executeAction = useCallback(async (
+    actionId: string,
+  ): Promise<VelliqoAIActionExecutionResult | null> => {
+    if (!businessId || actionBusyId) return null;
+
+    setActionBusyId(actionId);
+    setError(null);
+    try {
+      const result = await executeVelliqoAIAction({ businessId, actionId });
+      updateActionInMessages(actionId, {
+        status: result.status,
+        execution_result: result.result || null,
+        error_message: result.error || null,
+      });
+      if (result.success) await refreshSnapshot();
+      else setError(result.error || 'The Velliqo AI action failed');
+      return result;
+    } catch (actionError) {
+      const message = actionError instanceof Error ? actionError.message : String(actionError);
+      updateActionInMessages(actionId, { status: 'failed', error_message: message });
+      setError(message);
+      return null;
+    } finally {
+      setActionBusyId(null);
+    }
+  }, [actionBusyId, businessId, refreshSnapshot, updateActionInMessages]);
+
+  const rejectAction = useCallback(async (
+    actionId: string,
+  ): Promise<VelliqoAIActionExecutionResult | null> => {
+    if (!businessId || actionBusyId) return null;
+
+    setActionBusyId(actionId);
+    setError(null);
+    try {
+      const result = await rejectVelliqoAIAction({ businessId, actionId });
+      updateActionInMessages(actionId, { status: result.status, error_message: null });
+      return result;
+    } catch (actionError) {
+      setError(actionError instanceof Error ? actionError.message : String(actionError));
+      return null;
+    } finally {
+      setActionBusyId(null);
+    }
+  }, [actionBusyId, businessId, updateActionInMessages]);
 
   const deleteConversation = useCallback(async (conversationId: string) => {
     const { error: deleteError } = await supabase
@@ -178,12 +251,15 @@ export function useVelliqoAI(input: {
     loadingHistory,
     loadingSnapshot,
     sending,
+    actionBusyId,
     error,
     refreshConversations,
     refreshSnapshot,
     openConversation,
     startNewConversation,
     sendMessage,
+    executeAction,
+    rejectAction,
     deleteConversation,
   };
 }

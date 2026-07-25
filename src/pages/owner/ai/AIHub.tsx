@@ -4,14 +4,19 @@ import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
   Bot,
+  CheckCircle2,
+  Clock3,
   CalendarDays,
   ChevronRight,
   CircleDollarSign,
   History,
   Lightbulb,
   Loader2,
+  FilePenLine,
+  Megaphone,
   MessageSquareText,
   PackageSearch,
+  Pencil,
   Plus,
   RefreshCw,
   Send,
@@ -19,11 +24,20 @@ import {
   ShieldCheck,
   Sparkles,
   Trash2,
+  UserPlus,
   Users,
+  XCircle,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
 import { useVelliqoAI } from '@/hooks/useVelliqoAI';
-import { AI_AGENT_REGISTRY, normalizeLanguage, type AIAgentKey, type VelliqoAIMessage } from '@/ai';
+import {
+  AI_AGENT_REGISTRY,
+  normalizeLanguage,
+  type AIAgentKey,
+  type VelliqoAIActionRequest,
+  type VelliqoAIActionType,
+  type VelliqoAIMessage,
+} from '@/ai';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -74,6 +88,25 @@ export default function AIHub() {
       event.preventDefault();
       void send();
     }
+  };
+
+
+  const executeAction = async (action: VelliqoAIActionRequest) => {
+    const result = await ai.executeAction(action.id);
+    if (result?.success) toast.success(t('ai.manager.actions.completedToast'));
+    else if (result) toast.error(result.error || t('ai.manager.actions.failedToast'));
+  };
+
+  const cancelAction = async (action: VelliqoAIActionRequest) => {
+    const result = await ai.rejectAction(action.id);
+    if (result?.success) toast.success(t('ai.manager.actions.cancelledToast'));
+  };
+
+  const changeAction = async (action: VelliqoAIActionRequest) => {
+    const result = await ai.rejectAction(action.id);
+    if (!result?.success) return;
+    setDraft(t('ai.manager.actions.changePrompt', { summary: action.summary }));
+    window.setTimeout(() => document.getElementById('velliqo-ai-composer')?.focus(), 0);
   };
 
   const currency = activeBusiness?.currency || ai.snapshot?.business?.currency || 'EUR';
@@ -299,7 +332,11 @@ export default function AIHub() {
                       key={message.id}
                       message={message}
                       language={language}
+                      actionBusyId={ai.actionBusyId}
                       onAskQuestion={(question, messageAgent) => void send(question, messageAgent || agent)}
+                      onExecuteAction={(action) => void executeAction(action)}
+                      onCancelAction={(action) => void cancelAction(action)}
+                      onChangeAction={(action) => void changeAction(action)}
                     />
                   ))}
                   {ai.sending && (
@@ -346,13 +383,23 @@ export default function AIHub() {
 function AIMessageBubble({
   message,
   language,
+  actionBusyId,
   onAskQuestion,
+  onExecuteAction,
+  onCancelAction,
+  onChangeAction,
 }: {
   message: VelliqoAIMessage;
   language: string;
+  actionBusyId: string | null;
   onAskQuestion: (question: string, agent?: AIAgentKey) => void;
+  onExecuteAction: (action: VelliqoAIActionRequest) => void;
+  onCancelAction: (action: VelliqoAIActionRequest) => void;
+  onChangeAction: (action: VelliqoAIActionRequest) => void;
 }) {
+  const { t } = useTranslation();
   const response = message.metadata?.response;
+  const pendingAction = message.metadata?.pending_action;
   const isUser = message.role === 'user';
 
   if (isUser) {
@@ -373,6 +420,16 @@ function AIMessageBubble({
       <div className="min-w-0 flex-1">
         <div className="rounded-3xl rounded-tl-lg border bg-background p-4 text-sm leading-7 sm:p-5">
           <div className="whitespace-pre-wrap">{message.content}</div>
+
+          {pendingAction ? (
+            <AIActionConfirmationCard
+              action={pendingAction}
+              busy={actionBusyId === pendingAction.id}
+              onExecute={() => onExecuteAction(pendingAction)}
+              onCancel={() => onCancelAction(pendingAction)}
+              onChange={() => onChangeAction(pendingAction)}
+            />
+          ) : null}
         </div>
 
         <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 pl-1">
@@ -409,6 +466,114 @@ function AIMessageBubble({
       </div>
     </div>
   );
+}
+
+function AIActionConfirmationCard({
+  action,
+  busy,
+  onExecute,
+  onCancel,
+  onChange,
+}: {
+  action: VelliqoAIActionRequest;
+  busy: boolean;
+  onExecute: () => void;
+  onCancel: () => void;
+  onChange: () => void;
+}) {
+  const { t } = useTranslation();
+  const isPending = action.status === 'pending';
+  const isExecuted = action.status === 'executed';
+  const isRejected = action.status === 'rejected';
+  const isFailed = action.status === 'failed';
+  const ActionIcon = actionIcon(action.action_type);
+
+  const stateClasses = isExecuted
+    ? 'border-emerald-200 bg-emerald-50/80'
+    : isRejected
+      ? 'border-slate-200 bg-slate-50'
+      : isFailed
+        ? 'border-red-200 bg-red-50/70'
+        : 'border-violet-200 bg-violet-50/70';
+
+  return (
+    <div className={`mt-5 overflow-hidden rounded-2xl border ${stateClasses}`}>
+      <div className="flex items-start justify-between gap-3 border-b border-current/10 px-4 py-3">
+        <div className="flex min-w-0 gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/80 text-violet-700 shadow-sm">
+            <ActionIcon className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <div className="text-xs font-semibold uppercase tracking-[.12em] text-muted-foreground">
+              {isPending ? t('ai.manager.actions.prepared') : t(`ai.manager.actions.status.${action.status}`)}
+            </div>
+            <div className="mt-0.5 font-bold text-foreground">
+              {action.title || t(`ai.manager.actions.types.${action.action_type}`)}
+            </div>
+            {action.summary ? <p className="mt-1 text-xs leading-5 text-muted-foreground">{action.summary}</p> : null}
+          </div>
+        </div>
+        <Badge variant="outline" className="shrink-0 bg-white/70">
+          {t(`ai.manager.actions.status.${action.status}`)}
+        </Badge>
+      </div>
+
+      {action.preview?.items?.length ? (
+        <dl className="grid gap-x-5 gap-y-3 px-4 py-4 sm:grid-cols-2">
+          {action.preview.items.map((item) => (
+            <div key={`${item.label}-${item.value}`} className="min-w-0">
+              <dt className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">{item.label}</dt>
+              <dd className="mt-0.5 break-words text-sm font-medium text-foreground">{item.value}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+
+      {action.preview?.warning ? (
+        <div className="mx-4 mb-3 flex gap-2 rounded-xl bg-white/70 px-3 py-2 text-xs leading-5 text-muted-foreground">
+          <ShieldCheck className="mt-0.5 h-3.5 w-3.5 shrink-0 text-violet-600" />
+          {action.preview.warning}
+        </div>
+      ) : null}
+
+      {isPending ? (
+        <div className="border-t border-current/10 bg-white/45 px-4 py-3">
+          <div className="mb-3 flex gap-2 text-xs leading-5 text-muted-foreground">
+            <Clock3 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+            <span>{t('ai.manager.actions.reviewNotice')} {t('ai.manager.actions.expiresSoon')}</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Button size="sm" onClick={onExecute} disabled={busy}>
+              {busy ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="mr-2 h-3.5 w-3.5" />}
+              {busy ? t('ai.manager.actions.executing') : t('ai.manager.actions.confirm')}
+            </Button>
+            <Button size="sm" variant="outline" onClick={onChange} disabled={busy}>
+              <Pencil className="mr-2 h-3.5 w-3.5" />{t('ai.manager.actions.change')}
+            </Button>
+            <Button size="sm" variant="ghost" onClick={onCancel} disabled={busy}>
+              <XCircle className="mr-2 h-3.5 w-3.5" />{t('ai.manager.actions.cancel')}
+            </Button>
+          </div>
+        </div>
+      ) : (
+        <div className="flex items-center gap-2 border-t border-current/10 bg-white/45 px-4 py-3 text-xs font-semibold">
+          {isExecuted ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : null}
+          {isRejected ? <XCircle className="h-4 w-4 text-slate-500" /> : null}
+          {isFailed ? <AlertTriangle className="h-4 w-4 text-red-600" /> : null}
+          {isExecuted ? t('ai.manager.actions.executed') : isRejected ? t('ai.manager.actions.rejected') : t('ai.manager.actions.failed')}
+          {action.error_message ? <span className="font-normal text-muted-foreground">— {action.error_message}</span> : null}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function actionIcon(actionType: VelliqoAIActionType) {
+  if (actionType === 'create_customer') return UserPlus;
+  if (actionType === 'create_appointment' || actionType === 'reschedule_appointment' || actionType === 'cancel_appointment') return CalendarDays;
+  if (actionType === 'create_campaign_draft') return Megaphone;
+  if (actionType === 'create_post_draft') return FilePenLine;
+  return Bot;
 }
 
 function formatAgentName(agent: AIAgentKey) {
