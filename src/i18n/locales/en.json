@@ -1777,9 +1777,9 @@
         "warning": "Warning",
         "critical": "Critical"
       },
-      "zeroExternalCost": "No external AI charge",
+      "zeroExternalCost": "Usage-controlled AI",
       "privateEngine": "Private Velliqo intelligence engine",
-      "privateEngineDescription": "Analysis runs through Velliqo rules and aggregate business metrics. No OpenAI key is required, no customer names or contacts are sent to an external AI provider, and the assistant remains read-only.",
+      "privateEngineDescription": "Natural conversation uses the OpenAI API with Velliqo limits and usage tracking. Only aggregate business metrics are sent; customer names and contacts are excluded. Deterministic Velliqo Insights remains available as a fallback, and this phase remains read-only.",
       "proactiveInsights": "Proactive insights",
       "proactiveInsightsDescription": "Allow Velliqo to surface data-driven risks and opportunities while you use the business manager."
     }

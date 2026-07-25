@@ -1777,9 +1777,9 @@
         "warning": "Uyarı",
         "critical": "Kritik"
       },
-      "zeroExternalCost": "Harici AI ücreti yok",
+      "zeroExternalCost": "Kontrollü kullanımlı AI",
       "privateEngine": "Özel Velliqo zekâ motoru",
-      "privateEngineDescription": "Analiz Velliqo kuralları ve toplu işletme metrikleriyle çalışır. OpenAI anahtarı gerekmez, müşteri adları veya iletişim bilgileri harici AI sağlayıcısına gönderilmez ve asistan salt okunur kalır.",
+      "privateEngineDescription": "Doğal konuşma, Velliqo sınırları ve kullanım takibiyle OpenAI API kullanır. Yalnızca toplu işletme metrikleri gönderilir; müşteri adları ve iletişim bilgileri hariç tutulur. Deterministik Velliqo Insights yedek olarak kullanılmaya devam eder ve bu aşama salt okunurdur.",
       "proactiveInsights": "Proaktif içgörüler",
       "proactiveInsightsDescription": "Velliqo’nun işletme yöneticisini kullanırken veriye dayalı risk ve fırsatları göstermesine izin verin."
     }

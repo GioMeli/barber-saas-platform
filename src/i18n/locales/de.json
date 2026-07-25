@@ -1777,9 +1777,9 @@
         "warning": "Warnung",
         "critical": "Kritisch"
       },
-      "zeroExternalCost": "Keine externen AI-Kosten",
+      "zeroExternalCost": "AI mit kontrollierter Nutzung",
       "privateEngine": "Private Velliqo Intelligence Engine",
-      "privateEngineDescription": "Die Analyse läuft über Velliqo-Regeln und aggregierte Geschäftskennzahlen. Kein OpenAI-Schlüssel ist erforderlich, Kundennamen oder Kontaktdaten werden nicht an externe AI-Anbieter gesendet und der Assistent bleibt schreibgeschützt.",
+      "privateEngineDescription": "Natürliche Gespräche verwenden die OpenAI API mit Velliqo-Limits und Nutzungsprotokollierung. Es werden nur aggregierte Geschäftskennzahlen gesendet; Kundennamen und Kontaktdaten bleiben ausgeschlossen. Deterministische Velliqo Insights bleiben als Fallback verfügbar, und diese Phase bleibt schreibgeschützt.",
       "proactiveInsights": "Proaktive Insights",
       "proactiveInsightsDescription": "Velliqo darf datenbasierte Risiken und Chancen während der Nutzung des Business Managers hervorheben."
     }

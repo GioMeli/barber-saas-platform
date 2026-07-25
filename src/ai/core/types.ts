@@ -142,9 +142,9 @@ export interface VelliqoAIFunctionResult {
   createdAt: string;
   response: VelliqoAIResponse;
   model: string;
-  provider: 'velliqo_free';
+  provider: 'openai' | 'velliqo_free';
   usage: { inputTokens: number; outputTokens: number };
-  estimatedCost: 0;
+  estimatedCost: number;
   readOnly: true;
 }
 

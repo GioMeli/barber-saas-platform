@@ -38,26 +38,21 @@ requireText(edge, ".from('business_members')", 'Edge membership validation');
 requireText(edge, 'get_ai_business_snapshot', 'Grounded snapshot');
 requireText(edge, 'daily_request_limit', 'Rate limit');
 requireText(edge, "ENGINE_NAME = 'velliqo-insights-v1'", 'Free intelligence engine');
-requireText(edge, "provider: 'velliqo_free'", 'Zero-cost provider audit');
-requireText(edge, 'estimated_cost: 0', 'Zero estimated AI cost');
-requireText(edge, 'external_ai: false', 'No external AI metadata');
+requireText(edge, "Deno.env.get('OPENAI_API_KEY')", 'OpenAI secret configuration');
+requireText(edge, "OPENAI_MODEL", 'Configurable OpenAI model');
+requireText(edge, "/responses", 'OpenAI Responses API');
+requireText(edge, "store: false", 'OpenAI response storage disabled');
+requireText(edge, "provider = 'openai'", 'External provider audit');
+requireText(edge, 'estimateOpenAICost', 'Usage cost estimation');
 requireText(edge, 'classifyTopic', 'Natural-language topic routing');
 requireText(edge, 'calculateHealthScore', 'Business health scoring');
 requireText(edge, 'buildInsights', 'Deterministic insight engine');
 requireText(edge, 'read_only: true', 'Read-only response metadata');
 
-if (/OPENAI_API_KEY|api\.openai\.com|OPENAI_BASE_URL|OPENAI_MODEL/.test(edge + api + hub + hook + settings)) {
-  errors.push('Free Velliqo AI must not require or reference OpenAI credentials or endpoints.');
-}
-
-if (/fetch\s*\(\s*[`'\"]https?:\/\//.test(edge)) {
-  errors.push('Free Velliqo AI Edge Function must not call an external HTTP AI provider.');
-}
-
 requireText(hub, 'useVelliqoAI', 'AI Hub integration');
 requireText(hub, 'velliqo-ai-composer', 'AI composer');
 requireText(hub, 'suggested_actions', 'Read-only recommendations');
-requireText(hub, 'zeroExternalCost', 'Zero-cost UI disclosure');
+requireText(hub, 'zeroExternalCost', 'AI usage disclosure');
 requireText(hub, 'onAskQuestion', 'Interactive follow-up prompts');
 requireText(settings, 'privateEngineDescription', 'Private engine settings disclosure');
 requireText(settings, 'allow_customer_data: false', 'Aggregate-only customer privacy');
@@ -96,4 +91,4 @@ if (errors.length) {
 }
 
 console.log('Velliqo AI Manager validation passed.');
-console.log('Validated: JWT auth, tenant isolation, aggregate-only snapshot, zero external AI dependency, deterministic multilingual responses, structured insights, read-only recommendations, rate limits, conversation history, UI and 5 locales.');
+console.log('Validated: JWT auth, tenant isolation, aggregate-only snapshot, OpenAI Responses API, deterministic fallback, cost tracking, structured insights, read-only recommendations, rate limits, conversation history, UI and 5 locales.');

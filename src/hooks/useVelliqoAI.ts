@@ -127,10 +127,10 @@ export function useVelliqoAI(input: {
         model: result.model,
         metadata: {
           response: result.response,
-          read_only: true,
+          read_only: result.readOnly,
           agent: payload.agent,
           provider: result.provider,
-          external_ai: false,
+          external_ai: result.provider === 'openai',
           estimated_cost: result.estimatedCost,
         },
         created_at: result.createdAt,

@@ -1777,9 +1777,9 @@
         "warning": "Advertencia",
         "critical": "Crítico"
       },
-      "zeroExternalCost": "Sin coste externo de AI",
+      "zeroExternalCost": "AI con uso controlado",
       "privateEngine": "Motor privado de inteligencia Velliqo",
-      "privateEngineDescription": "El análisis funciona con reglas Velliqo y métricas empresariales agregadas. No requiere clave de OpenAI, no envía nombres ni contactos de clientes a un proveedor externo de AI y el asistente permanece en modo de solo lectura.",
+      "privateEngineDescription": "La conversación natural utiliza la API de OpenAI con límites y seguimiento de uso de Velliqo. Solo se envían métricas empresariales agregadas; se excluyen nombres y datos de contacto de clientes. Velliqo Insights determinista permanece como respaldo y esta fase sigue siendo de solo lectura.",
       "proactiveInsights": "Insights proactivos",
       "proactiveInsightsDescription": "Permite que Velliqo muestre riesgos y oportunidades basados en datos durante el uso del director digital."
     }
