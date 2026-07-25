@@ -3,13 +3,10 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
-  BarChart3,
   Bot,
   CalendarDays,
-  CheckCircle2,
   ChevronRight,
   CircleDollarSign,
-  Clock3,
   History,
   Lightbulb,
   Loader2,
@@ -22,7 +19,6 @@ import {
   ShieldCheck,
   Sparkles,
   Trash2,
-  TrendingUp,
   Users,
 } from 'lucide-react';
 import { useAuth } from '@/hooks/useAuth';
@@ -44,13 +40,6 @@ const QUICK_PROMPTS: Array<{ key: string; agent: AIAgentKey }> = [
   { key: 'retentionOpportunities', agent: 'customer_success' },
   { key: 'scheduleOpportunities', agent: 'scheduling_assistant' },
 ];
-
-const SEVERITY_STYLES = {
-  info: 'border-blue-200 bg-blue-50 text-blue-900',
-  opportunity: 'border-emerald-200 bg-emerald-50 text-emerald-900',
-  warning: 'border-amber-200 bg-amber-50 text-amber-950',
-  critical: 'border-red-200 bg-red-50 text-red-950',
-};
 
 export default function AIHub() {
   const { t, i18n } = useTranslation();
@@ -272,7 +261,9 @@ export default function AIHub() {
                   <SelectTrigger className="w-full sm:w-[230px]"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {Object.values(AI_AGENT_REGISTRY).map((definition) => (
-                      <SelectItem key={definition.key} value={definition.key}>{t(definition.nameKey)}</SelectItem>
+                      <SelectItem key={definition.key} value={definition.key}>
+                        {t(definition.nameKey, { defaultValue: formatAgentName(definition.key) })}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -307,7 +298,6 @@ export default function AIHub() {
                     <AIMessageBubble
                       key={message.id}
                       message={message}
-                      t={t}
                       language={language}
                       onAskQuestion={(question, messageAgent) => void send(question, messageAgent || agent)}
                     />
@@ -355,12 +345,10 @@ export default function AIHub() {
 
 function AIMessageBubble({
   message,
-  t,
   language,
   onAskQuestion,
 }: {
   message: VelliqoAIMessage;
-  t: ReturnType<typeof useTranslation>['t'];
   language: string;
   onAskQuestion: (question: string, agent?: AIAgentKey) => void;
 }) {
@@ -379,62 +367,39 @@ function AIMessageBubble({
 
   return (
     <div className="flex gap-3">
-      <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><Sparkles className="h-4 w-4" /></div>
-      <div className="min-w-0 flex-1 space-y-4">
+      <div className="mt-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+        <Sparkles className="h-4 w-4" />
+      </div>
+      <div className="min-w-0 flex-1">
         <div className="rounded-3xl rounded-tl-lg border bg-background p-4 text-sm leading-7 sm:p-5">
           <div className="whitespace-pre-wrap">{message.content}</div>
-          {response && (
-            <div className="mt-4 flex flex-wrap items-center gap-2 border-t pt-4">
-              <Badge variant="outline"><TrendingUp className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.healthScore', { value: response.business_health_score })}</Badge>
-              <Badge variant="outline"><CheckCircle2 className="mr-1.5 h-3.5 w-3.5" />{t(`ai.manager.confidence.${response.confidence}`)}</Badge>
-              <Badge variant="outline"><ShieldCheck className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.privateEngine')}</Badge>
-              <span className="ml-auto text-[11px] text-muted-foreground">{formatDate(message.created_at, language)}</span>
-            </div>
-          )}
         </div>
 
-        {response?.insights?.length ? (
-          <div className="grid gap-3 lg:grid-cols-2">
-            {response.insights.map((insight, index) => (
-              <div key={`${insight.title}-${index}`} className={`rounded-2xl border p-4 ${SEVERITY_STYLES[insight.severity]}`}>
-                <div className="flex items-start justify-between gap-3">
-                  <div className="font-bold">{insight.title}</div>
-                  <Badge variant="outline" className="bg-white/45 text-[10px] uppercase">{t(`ai.manager.severity.${insight.severity}`)}</Badge>
-                </div>
-                <p className="mt-2 text-xs leading-5 opacity-85">{insight.explanation}</p>
-                {insight.evidence?.length > 0 && (
-                  <ul className="mt-3 space-y-1 text-xs">
-                    {insight.evidence.map((item) => <li key={item} className="flex gap-2"><span>•</span><span>{item}</span></li>)}
-                  </ul>
-                )}
-                <div className="mt-3 rounded-xl bg-white/55 p-3 text-xs font-medium">{insight.recommendation}</div>
-              </div>
-            ))}
-          </div>
-        ) : null}
+        <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-2 pl-1">
+          <span className="text-[11px] text-muted-foreground">
+            {formatDate(message.created_at, language)}
+          </span>
 
-        {response?.suggested_actions?.length ? (
-          <div className="rounded-2xl border p-4">
-            <div className="text-xs font-bold uppercase tracking-[.14em] text-primary">{t('ai.manager.suggestedActions')}</div>
-            <div className="mt-3 grid gap-2 sm:grid-cols-2">
-              {response.suggested_actions.map((action) => (
-                <Link key={`${action.type}-${action.title}`} to={action.destinationPath} className="flex items-center justify-between gap-3 rounded-2xl border p-3 transition hover:bg-muted/30">
-                  <div><div className="text-sm font-semibold">{action.title}</div><div className="mt-1 text-xs text-muted-foreground">{action.rationale}</div></div>
-                  <ChevronRight className="h-4 w-4 shrink-0" />
-                </Link>
-              ))}
-            </div>
-          </div>
-        ) : null}
+          {response?.suggested_actions?.slice(0, 4).map((action) => (
+            <Link
+              key={`${action.type}-${action.title}`}
+              to={action.destinationPath}
+              className="inline-flex items-center gap-0.5 text-xs font-medium text-primary hover:underline"
+            >
+              {action.title}
+              <ChevronRight className="h-3.5 w-3.5" />
+            </Link>
+          ))}
+        </div>
 
         {response?.follow_up_questions?.length ? (
-          <div className="flex flex-wrap gap-2">
-            {response.follow_up_questions.map((question) => (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {response.follow_up_questions.slice(0, 3).map((question) => (
               <button
                 type="button"
                 key={question}
                 onClick={() => onAskQuestion(question, message.metadata?.agent)}
-                className="rounded-full bg-secondary px-3 py-2 text-left text-xs font-medium text-secondary-foreground transition hover:bg-secondary/75"
+                className="rounded-full px-3 py-1.5 text-left text-xs font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground"
               >
                 {question}
               </button>
@@ -444,6 +409,13 @@ function AIMessageBubble({
       </div>
     </div>
   );
+}
+
+function formatAgentName(agent: AIAgentKey) {
+  return agent
+    .split('_')
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(' ');
 }
 
 function formatCurrency(value: unknown, currency: string, language: string) {
