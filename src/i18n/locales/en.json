@@ -1695,7 +1695,7 @@
   "ai": {
     "ownerFallback": "Owner",
     "welcome": "Welcome, {{name}}",
-    "introduction": "Velliqo AI is being prepared to help {{business}} understand performance, customers and scheduling.",
+    "introduction": "Velliqo AI helps {{business}} understand performance, customers and scheduling using the business data already recorded in Velliqo.",
     "yourBusiness": "your business",
     "askVelliqo": "Ask Velliqo",
     "settings": "AI Settings",
@@ -1728,7 +1728,61 @@
     "conversationHistory": "Conversation history",
     "conversationHistoryDescription": "Keep AI conversations so authorised users can return to previous work.",
     "customerData": "Customer data access",
-    "customerDataDescription": "Allow AI features to use approved customer information when permissions permit."
+    "customerDataDescription": "Allow AI features to use approved customer information when permissions permit.",
+    "manager": {
+      "readOnly": "Read-only intelligence",
+      "welcome": "Your business command centre, {{name}}",
+      "introduction": "Velliqo AI analyses tenant-isolated live data from {{business}} and turns it into grounded recommendations without an external AI provider or per-message AI charge.",
+      "errorTitle": "Velliqo AI could not complete the request",
+      "history": "History",
+      "conversations": "Conversations",
+      "newConversation": "New conversation",
+      "noConversations": "Your recent Velliqo AI conversations will appear here.",
+      "untitledConversation": "Velliqo AI conversation",
+      "conversationDeleted": "Conversation deleted",
+      "chatTitle": "Ask your electronic business manager",
+      "chatDescription": "Choose a specialist and ask about real business performance.",
+      "emptyTitle": "What should Velliqo analyse?",
+      "emptyDescription": "Start with a daily briefing or ask a specific question about finance, customers, scheduling, staff, services, inventory or marketing.",
+      "thinking": "Velliqo is analysing your business data…",
+      "placeholder": "Ask Velliqo about your business…",
+      "aggregateDataNotice": "Uses tenant-isolated aggregate business data",
+      "send": "Send",
+      "healthScore": "Health score: {{value}}/100",
+      "suggestedActions": "Recommended places to review",
+      "metrics": {
+        "revenue": "Collected revenue",
+        "appointments": "Appointments",
+        "customers": "Customers",
+        "inventory": "Low-stock items",
+        "lastDays": "Last {{days}} days",
+        "completion": "{{value}}% completion rate",
+        "atRisk": "{{value}} customers at risk",
+        "lowStock": "Require inventory review"
+      },
+      "prompts": {
+        "dailyBriefing": "Give me today’s executive business briefing.",
+        "revenueChanges": "Explain the most important revenue and profit changes.",
+        "retentionOpportunities": "Find the strongest customer retention opportunities.",
+        "scheduleOpportunities": "Find scheduling gaps and capacity opportunities."
+      },
+      "confidence": {
+        "low": "Low confidence",
+        "medium": "Medium confidence",
+        "high": "High confidence"
+      },
+      "severity": {
+        "info": "Information",
+        "opportunity": "Opportunity",
+        "warning": "Warning",
+        "critical": "Critical"
+      },
+      "zeroExternalCost": "No external AI charge",
+      "privateEngine": "Private Velliqo intelligence engine",
+      "privateEngineDescription": "Analysis runs through Velliqo rules and aggregate business metrics. No OpenAI key is required, no customer names or contacts are sent to an external AI provider, and the assistant remains read-only.",
+      "proactiveInsights": "Proactive insights",
+      "proactiveInsightsDescription": "Allow Velliqo to surface data-driven risks and opportunities while you use the business manager."
+    }
   },
   "customerPortal": {
     "auth": {

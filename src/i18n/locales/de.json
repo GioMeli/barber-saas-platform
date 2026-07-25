@@ -1695,7 +1695,7 @@
   "ai": {
     "ownerFallback": "Inhaber",
     "welcome": "Willkommen, {{name}}",
-    "introduction": "Velliqo AI wird vorbereitet, um {{business}} bei der Analyse von Leistung, Kunden und Terminplanung zu unterstützen.",
+    "introduction": "Velliqo AI hilft {{business}}, Leistung, Kunden und Planung anhand der bereits in Velliqo erfassten Daten zu verstehen.",
     "yourBusiness": "Ihr Unternehmen",
     "askVelliqo": "Velliqo fragen",
     "settings": "AI-Einstellungen",
@@ -1728,7 +1728,61 @@
     "conversationHistory": "Gesprächsverlauf",
     "conversationHistoryDescription": "Speichern Sie AI-Gespräche, damit autorisierte Benutzer frühere Arbeit fortsetzen können.",
     "customerData": "Zugriff auf Kundendaten",
-    "customerDataDescription": "Erlauben Sie AI-Funktionen, genehmigte Kundendaten im Rahmen der Berechtigungen zu verwenden."
+    "customerDataDescription": "Erlauben Sie AI-Funktionen, genehmigte Kundendaten im Rahmen der Berechtigungen zu verwenden.",
+    "manager": {
+      "readOnly": "Schreibgeschützte Intelligenz",
+      "welcome": "Ihre Unternehmenszentrale, {{name}}",
+      "introduction": "Velliqo AI analysiert mandantenisolierte Live-Daten von {{business}} und erstellt fundierte Empfehlungen ohne externen AI-Anbieter oder Kosten pro Nachricht.",
+      "errorTitle": "Velliqo AI konnte die Anfrage nicht abschließen",
+      "history": "Verlauf",
+      "conversations": "Gespräche",
+      "newConversation": "Neues Gespräch",
+      "noConversations": "Ihre letzten Gespräche mit Velliqo AI erscheinen hier.",
+      "untitledConversation": "Velliqo-AI-Gespräch",
+      "conversationDeleted": "Gespräch gelöscht",
+      "chatTitle": "Fragen Sie Ihren digitalen Geschäftsleiter",
+      "chatDescription": "Wählen Sie einen Spezialisten und fragen Sie nach der realen Unternehmensleistung.",
+      "emptyTitle": "Was soll Velliqo analysieren?",
+      "emptyDescription": "Beginnen Sie mit einem Tagesbriefing oder fragen Sie zu Finanzen, Kunden, Planung, Team, Leistungen, Bestand oder Marketing.",
+      "thinking": "Velliqo analysiert Ihre Unternehmensdaten…",
+      "placeholder": "Fragen Sie Velliqo zu Ihrem Unternehmen…",
+      "aggregateDataNotice": "Verwendet mandantenisolierte aggregierte Unternehmensdaten",
+      "send": "Senden",
+      "healthScore": "Gesundheitswert: {{value}}/100",
+      "suggestedActions": "Empfohlene Bereiche zur Prüfung",
+      "metrics": {
+        "revenue": "Eingegangener Umsatz",
+        "appointments": "Termine",
+        "customers": "Kunden",
+        "inventory": "Artikel mit niedrigem Bestand",
+        "lastDays": "Letzte {{days}} Tage",
+        "completion": "{{value}}% Abschlussquote",
+        "atRisk": "{{value}} gefährdete Kunden",
+        "lowStock": "Bestandsprüfung erforderlich"
+      },
+      "prompts": {
+        "dailyBriefing": "Geben Sie mir das heutige Executive-Briefing.",
+        "revenueChanges": "Erklären Sie die wichtigsten Umsatz- und Gewinnänderungen.",
+        "retentionOpportunities": "Finden Sie die stärksten Chancen zur Kundenbindung.",
+        "scheduleOpportunities": "Finden Sie Terminlücken und Kapazitätschancen."
+      },
+      "confidence": {
+        "low": "Geringe Sicherheit",
+        "medium": "Mittlere Sicherheit",
+        "high": "Hohe Sicherheit"
+      },
+      "severity": {
+        "info": "Information",
+        "opportunity": "Chance",
+        "warning": "Warnung",
+        "critical": "Kritisch"
+      },
+      "zeroExternalCost": "Keine externen AI-Kosten",
+      "privateEngine": "Private Velliqo Intelligence Engine",
+      "privateEngineDescription": "Die Analyse läuft über Velliqo-Regeln und aggregierte Geschäftskennzahlen. Kein OpenAI-Schlüssel ist erforderlich, Kundennamen oder Kontaktdaten werden nicht an externe AI-Anbieter gesendet und der Assistent bleibt schreibgeschützt.",
+      "proactiveInsights": "Proaktive Insights",
+      "proactiveInsightsDescription": "Velliqo darf datenbasierte Risiken und Chancen während der Nutzung des Business Managers hervorheben."
+    }
   },
   "customerPortal": {
     "auth": {

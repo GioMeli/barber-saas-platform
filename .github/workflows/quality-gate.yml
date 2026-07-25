@@ -48,6 +48,7 @@ jobs:
           npm run finance:check
           npm run marketing:check
           npm run delivery:check
+          npm run ai:check
 
       - name: TypeScript
         run: npm run typecheck

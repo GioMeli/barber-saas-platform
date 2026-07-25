@@ -1695,7 +1695,7 @@
   "ai": {
     "ownerFallback": "Propietario",
     "welcome": "Bienvenido, {{name}}",
-    "introduction": "Velliqo AI se está preparando para ayudar a {{business}} a comprender el rendimiento, los clientes y la planificación.",
+    "introduction": "Velliqo AI ayuda a {{business}} a comprender rendimiento, clientes y agenda usando los datos ya registrados en Velliqo.",
     "yourBusiness": "tu negocio",
     "askVelliqo": "Preguntar a Velliqo",
     "settings": "Configuración de AI",
@@ -1728,7 +1728,61 @@
     "conversationHistory": "Historial de conversaciones",
     "conversationHistoryDescription": "Conserva las conversaciones de AI para volver al trabajo anterior.",
     "customerData": "Acceso a datos de clientes",
-    "customerDataDescription": "Permite que las funciones de AI utilicen información de clientes aprobada cuando los permisos lo permitan."
+    "customerDataDescription": "Permite que las funciones de AI utilicen información de clientes aprobada cuando los permisos lo permitan.",
+    "manager": {
+      "readOnly": "Inteligencia de solo lectura",
+      "welcome": "El centro de mando de tu negocio, {{name}}",
+      "introduction": "Velliqo AI analiza datos en vivo aislados por negocio de {{business}} y los convierte en recomendaciones fundamentadas sin proveedor externo de AI ni coste por mensaje.",
+      "errorTitle": "Velliqo AI no pudo completar la solicitud",
+      "history": "Historial",
+      "conversations": "Conversaciones",
+      "newConversation": "Nueva conversación",
+      "noConversations": "Tus conversaciones recientes con Velliqo AI aparecerán aquí.",
+      "untitledConversation": "Conversación de Velliqo AI",
+      "conversationDeleted": "Conversación eliminada",
+      "chatTitle": "Pregunta a tu director digital",
+      "chatDescription": "Elige un especialista y pregunta por el rendimiento real del negocio.",
+      "emptyTitle": "¿Qué debe analizar Velliqo?",
+      "emptyDescription": "Empieza con un informe diario o pregunta sobre finanzas, clientes, agenda, equipo, servicios, inventario o marketing.",
+      "thinking": "Velliqo está analizando los datos del negocio…",
+      "placeholder": "Pregunta a Velliqo sobre tu negocio…",
+      "aggregateDataNotice": "Usa datos empresariales agregados y aislados por negocio",
+      "send": "Enviar",
+      "healthScore": "Puntuación de salud: {{value}}/100",
+      "suggestedActions": "Áreas recomendadas para revisar",
+      "metrics": {
+        "revenue": "Ingresos cobrados",
+        "appointments": "Citas",
+        "customers": "Clientes",
+        "inventory": "Productos con poco stock",
+        "lastDays": "Últimos {{days}} días",
+        "completion": "{{value}}% de finalización",
+        "atRisk": "{{value}} clientes en riesgo",
+        "lowStock": "Requieren revisión de inventario"
+      },
+      "prompts": {
+        "dailyBriefing": "Dame el informe ejecutivo de hoy.",
+        "revenueChanges": "Explica los cambios más importantes en ingresos y beneficio.",
+        "retentionOpportunities": "Encuentra las mejores oportunidades de retención.",
+        "scheduleOpportunities": "Encuentra huecos de agenda y oportunidades de capacidad."
+      },
+      "confidence": {
+        "low": "Confianza baja",
+        "medium": "Confianza media",
+        "high": "Confianza alta"
+      },
+      "severity": {
+        "info": "Información",
+        "opportunity": "Oportunidad",
+        "warning": "Advertencia",
+        "critical": "Crítico"
+      },
+      "zeroExternalCost": "Sin coste externo de AI",
+      "privateEngine": "Motor privado de inteligencia Velliqo",
+      "privateEngineDescription": "El análisis funciona con reglas Velliqo y métricas empresariales agregadas. No requiere clave de OpenAI, no envía nombres ni contactos de clientes a un proveedor externo de AI y el asistente permanece en modo de solo lectura.",
+      "proactiveInsights": "Insights proactivos",
+      "proactiveInsightsDescription": "Permite que Velliqo muestre riesgos y oportunidades basados en datos durante el uso del director digital."
+    }
   },
   "customerPortal": {
     "auth": {

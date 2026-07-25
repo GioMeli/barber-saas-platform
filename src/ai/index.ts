@@ -5,3 +5,4 @@ export * from './localization/languages';
 export * from './localization/formatters';
 export * from './permissions/permissions';
 export * from './providers/providerRegistry';
+export * from './api/velliqoAI';

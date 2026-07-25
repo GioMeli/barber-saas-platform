@@ -1695,7 +1695,7 @@
   "ai": {
     "ownerFallback": "İşletme sahibi",
     "welcome": "Hoş geldiniz, {{name}}",
-    "introduction": "Velliqo AI, {{business}} için performans, müşteriler ve planlamayı anlamaya yardımcı olmak üzere hazırlanıyor.",
+    "introduction": "Velliqo AI, Velliqo içinde kayıtlı verileri kullanarak {{business}} için performans, müşteriler ve planlamayı anlamaya yardımcı olur.",
     "yourBusiness": "işletmeniz",
     "askVelliqo": "Velliqo’ya sor",
     "settings": "AI Ayarları",
@@ -1728,7 +1728,61 @@
     "conversationHistory": "Konuşma geçmişi",
     "conversationHistoryDescription": "Yetkili kullanıcıların önceki çalışmalara dönebilmesi için AI konuşmalarını saklayın.",
     "customerData": "Müşteri verisi erişimi",
-    "customerDataDescription": "İzinler uygun olduğunda AI özelliklerinin onaylı müşteri bilgilerini kullanmasına izin verin."
+    "customerDataDescription": "İzinler uygun olduğunda AI özelliklerinin onaylı müşteri bilgilerini kullanmasına izin verin.",
+    "manager": {
+      "readOnly": "Salt okunur zekâ",
+      "welcome": "İşletme komuta merkeziniz, {{name}}",
+      "introduction": "Velliqo AI, {{business}} işletmesinin kiracıya özel canlı verilerini analiz eder ve harici AI sağlayıcısı veya mesaj başına AI ücreti olmadan kanıta dayalı önerilere dönüştürür.",
+      "errorTitle": "Velliqo AI isteği tamamlayamadı",
+      "history": "Geçmiş",
+      "conversations": "Konuşmalar",
+      "newConversation": "Yeni konuşma",
+      "noConversations": "Son Velliqo AI konuşmalarınız burada görünecek.",
+      "untitledConversation": "Velliqo AI konuşması",
+      "conversationDeleted": "Konuşma silindi",
+      "chatTitle": "Dijital işletme yöneticinize sorun",
+      "chatDescription": "Bir uzman seçin ve gerçek işletme performansını sorun.",
+      "emptyTitle": "Velliqo neyi analiz etsin?",
+      "emptyDescription": "Günlük özetle başlayın veya finans, müşteriler, planlama, ekip, hizmetler, stok ya da marketing hakkında sorun.",
+      "thinking": "Velliqo işletme verilerinizi analiz ediyor…",
+      "placeholder": "Velliqo’ya işletmeniz hakkında sorun…",
+      "aggregateDataNotice": "İşletmeye özel ayrıştırılmış toplu verileri kullanır",
+      "send": "Gönder",
+      "healthScore": "İşletme sağlık puanı: {{value}}/100",
+      "suggestedActions": "İncelenmesi önerilen alanlar",
+      "metrics": {
+        "revenue": "Tahsil edilen gelir",
+        "appointments": "Randevular",
+        "customers": "Müşteriler",
+        "inventory": "Düşük stoklu ürünler",
+        "lastDays": "Son {{days}} gün",
+        "completion": "%{{value}} tamamlanma oranı",
+        "atRisk": "Risk altındaki {{value}} müşteri",
+        "lowStock": "Stok incelemesi gerekiyor"
+      },
+      "prompts": {
+        "dailyBriefing": "Bugünün yönetici işletme özetini ver.",
+        "revenueChanges": "Gelir ve kârdaki en önemli değişiklikleri açıkla.",
+        "retentionOpportunities": "En güçlü müşteri tutma fırsatlarını bul.",
+        "scheduleOpportunities": "Program boşluklarını ve kapasite fırsatlarını bul."
+      },
+      "confidence": {
+        "low": "Düşük güven",
+        "medium": "Orta güven",
+        "high": "Yüksek güven"
+      },
+      "severity": {
+        "info": "Bilgi",
+        "opportunity": "Fırsat",
+        "warning": "Uyarı",
+        "critical": "Kritik"
+      },
+      "zeroExternalCost": "Harici AI ücreti yok",
+      "privateEngine": "Özel Velliqo zekâ motoru",
+      "privateEngineDescription": "Analiz Velliqo kuralları ve toplu işletme metrikleriyle çalışır. OpenAI anahtarı gerekmez, müşteri adları veya iletişim bilgileri harici AI sağlayıcısına gönderilmez ve asistan salt okunur kalır.",
+      "proactiveInsights": "Proaktif içgörüler",
+      "proactiveInsightsDescription": "Velliqo’nun işletme yöneticisini kullanırken veriye dayalı risk ve fırsatları göstermesine izin verin."
+    }
   },
   "customerPortal": {
     "auth": {
