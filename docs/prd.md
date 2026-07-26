@@ -2,24 +2,24 @@
 
 ## 1. Application Overview
 
-**Application Name**: Salon & Barber SaaS Platform
+**Application Name**: Velliqo
 
-**Description**: A professional multi-tenant SaaS platform enabling barbers, hairdressers and salon owners to manage their businesses independently. Each business operates in an isolated workspace with a dedicated public standalone app accessible via unique QR code and link. Customers scan the QR code to access the business's app, authenticate or continue as guest, view business information, book appointments, browse services and products, and receive confirmation and reminder notifications.
+**Description**: A professional multi-tenant SaaS platform enabling appointment-based and service businesses to operate independently. Each business has an isolated workspace and a dedicated public experience accessible by QR code or link. Customers can authenticate or continue as guests, view business information, book appointments, browse services and products, and receive confirmations and reminders. Industry terminology is derived from the selected business type and never assumed globally.
 
 ## 2. Users and Usage Scenarios
 
 ### 2.1 Target Users
 
 - **Platform Admin**: Manages the entire SaaS platform, monitors all businesses, subscriptions and system health
-- **Business Owner**: Creates and manages their salon/barbershop, configures services, staff, working hours, uploads photos, customizes public app appearance and generates QR code
+- **Business Owner**: Creates and manages one business workspace, configures services, team members, working hours, uploads media, customizes the public experience and generates a QR code
 - **Manager**: Assists owner with business operations within assigned permissions
-- **Employee/Barber/Hairdresser**: Views assigned appointments, manages personal schedule and service delivery
+- **Team Member / Professional**: Views assigned appointments, manages personal schedule and permitted service-delivery tasks
 - **Registered Customer**: Creates account at specific business, books appointments, manages profile and views appointment history
 - **Guest Customer**: Books appointments without creating account using business's public app
 
 ### 2.2 Core Usage Scenarios
 
-- Business owners onboard their salon, configure services and staff, upload photos, customize public app and generate QR code
+- Business owners onboard their selected service business, configure services and team members, upload media, customize the public experience and generate a QR code
 - Owners share QR code and link with customers via print materials, social media or website
 - Customers scan QR code or visit link to access business's standalone public app
 - Customers choose to sign in, create account or continue as guest for this specific business

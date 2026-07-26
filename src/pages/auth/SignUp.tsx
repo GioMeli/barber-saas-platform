@@ -41,7 +41,7 @@ export default function SignUp() {
     ? requestedIndustry
     : isIndustryKey(storedIndustry)
       ? storedIndustry
-      : 'hair_salon';
+      : 'appointment_service_business';
   const industry = getIndustryConfig(industryKey);
 
   React.useEffect(() => {

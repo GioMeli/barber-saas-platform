@@ -1,5 +1,5 @@
 /* =========================================================
-   SALONOS — OUTLOOK-STYLE CALENDAR
+   VELLIQO — OUTLOOK-STYLE CALENDAR
    FullCalendar presentation layer
    ========================================================= */
 
@@ -383,7 +383,7 @@
   cursor: pointer;
 }
 
-.outlook-calendar-shell .salonos-event {
+.outlook-calendar-shell .velliqo-event {
   overflow: hidden;
   border: 1px solid transparent;
   border-left-width: 4px;
@@ -397,20 +397,20 @@
     transform 150ms ease;
 }
 
-.outlook-calendar-shell .salonos-event:hover {
+.outlook-calendar-shell .velliqo-event:hover {
   z-index: 20 !important;
   filter: brightness(0.985);
   box-shadow: 0 5px 14px rgb(15 23 42 / 0.16);
 }
 
-.outlook-calendar-shell .salonos-event,
-.outlook-calendar-shell .salonos-event *,
-.outlook-calendar-shell .salonos-event .fc-event-main {
+.outlook-calendar-shell .velliqo-event,
+.outlook-calendar-shell .velliqo-event *,
+.outlook-calendar-shell .velliqo-event .fc-event-main {
   color: #111827 !important;
 }
 
 /* Hide FullCalendar's default event content spacing */
-.outlook-calendar-shell .salonos-event .fc-event-main {
+.outlook-calendar-shell .velliqo-event .fc-event-main {
   min-width: 0;
   padding: 0;
 }
@@ -420,7 +420,7 @@
    Only time and customer name are displayed.
    --------------------------------------------------------- */
 
-.outlook-calendar-shell .salonos-event-content {
+.outlook-calendar-shell .velliqo-event-content {
   display: flex;
   min-width: 0;
   height: 100%;
@@ -431,7 +431,7 @@
   line-height: 1.12;
 }
 
-.outlook-calendar-shell .salonos-event-time {
+.outlook-calendar-shell .velliqo-event-time {
   display: block;
   flex: 0 0 auto;
   overflow: hidden;
@@ -443,7 +443,7 @@
   white-space: nowrap;
 }
 
-.outlook-calendar-shell .salonos-event-title {
+.outlook-calendar-shell .velliqo-event-title {
   display: block;
   min-width: 0;
   margin-top: 2px;
@@ -460,15 +460,15 @@
   These classes may still exist in older component code.
   Keep them hidden so the labels contain only time + name.
 */
-.outlook-calendar-shell .salonos-event-service,
-.outlook-calendar-shell .salonos-event-status {
+.outlook-calendar-shell .velliqo-event-service,
+.outlook-calendar-shell .velliqo-event-status {
   display: none !important;
 }
 
 /* Very short FullCalendar events */
 .outlook-calendar-shell
   .fc-timegrid-event-short
-  .salonos-event-content {
+  .velliqo-event-content {
   flex-direction: row;
   align-items: center;
   gap: 4px;
@@ -476,14 +476,14 @@
 
 .outlook-calendar-shell
   .fc-timegrid-event-short
-  .salonos-event-time {
+  .velliqo-event-time {
   flex: 0 1 auto;
   font-size: 0.62rem;
 }
 
 .outlook-calendar-shell
   .fc-timegrid-event-short
-  .salonos-event-title {
+  .velliqo-event-title {
   flex: 1 1 auto;
   margin-top: 0;
   font-size: 0.65rem;
@@ -492,14 +492,14 @@
 /* Extremely short events: time is prioritised */
 .outlook-calendar-shell
   .fc-timegrid-event-short
-  .salonos-event-title:empty {
+  .velliqo-event-title:empty {
   display: none;
 }
 
 /* Month event content */
 .outlook-calendar-shell
   .fc-daygrid-event
-  .salonos-event-content {
+  .velliqo-event-content {
   display: block;
   min-width: 0;
   padding: 1px 0;
@@ -507,7 +507,7 @@
 
 .outlook-calendar-shell
   .fc-daygrid-event
-  .salonos-event-time {
+  .velliqo-event-time {
   display: inline;
   margin-right: 4px;
   font-size: 0.65rem;
@@ -515,7 +515,7 @@
 
 .outlook-calendar-shell
   .fc-daygrid-event
-  .salonos-event-title {
+  .velliqo-event-title {
   display: inline;
   margin-top: 0;
   font-size: 0.68rem;
@@ -527,39 +527,39 @@
    --------------------------------------------------------- */
 
 /* Upcoming / confirmed */
-.outlook-calendar-shell .salonos-status-confirmed,
-.outlook-calendar-shell .salonos-status-pending {
+.outlook-calendar-shell .velliqo-status-confirmed,
+.outlook-calendar-shell .velliqo-status-pending {
   border-color: #93c5fd;
   border-left-color: #2563eb;
   background: #dbeafe;
 }
 
 /* Completed */
-.outlook-calendar-shell .salonos-status-completed {
+.outlook-calendar-shell .velliqo-status-completed {
   border-color: #86efac;
   border-left-color: #16a34a;
   background: #dcfce7;
 }
 
 /* Checked in / waiting */
-.outlook-calendar-shell .salonos-status-checked_in,
-.outlook-calendar-shell .salonos-status-checked-in {
+.outlook-calendar-shell .velliqo-status-checked_in,
+.outlook-calendar-shell .velliqo-status-checked-in {
   border-color: #fdba74;
   border-left-color: #ea580c;
   background: #ffedd5;
 }
 
 /* No-show */
-.outlook-calendar-shell .salonos-status-no_show,
-.outlook-calendar-shell .salonos-status-no-show {
+.outlook-calendar-shell .velliqo-status-no_show,
+.outlook-calendar-shell .velliqo-status-no-show {
   border-color: #d8b4fe;
   border-left-color: #9333ea;
   background: #f3e8ff;
 }
 
 /* Cancelled */
-.outlook-calendar-shell .salonos-status-cancelled_by_business,
-.outlook-calendar-shell .salonos-status-cancelled_by_customer {
+.outlook-calendar-shell .velliqo-status-cancelled_by_business,
+.outlook-calendar-shell .velliqo-status-cancelled_by_customer {
   border-color: #fca5a5;
   border-left-color: #dc2626;
   background: #fee2e2;
@@ -571,11 +571,11 @@
    BUSINESS CLOSURES
    --------------------------------------------------------- */
 
-.outlook-calendar-shell .salonos-closure-background {
+.outlook-calendar-shell .velliqo-closure-background {
   background: rgb(239 68 68 / 0.08);
 }
 
-.outlook-calendar-shell .salonos-closure-label {
+.outlook-calendar-shell .velliqo-closure-label {
   overflow: hidden;
   border: 1px solid #fecaca;
   border-left: 4px solid #dc2626;
@@ -584,12 +584,12 @@
   color: #7f1d1d;
 }
 
-.outlook-calendar-shell .salonos-closure-label *,
-.outlook-calendar-shell .salonos-closure-label .fc-event-main {
+.outlook-calendar-shell .velliqo-closure-label *,
+.outlook-calendar-shell .velliqo-closure-label .fc-event-main {
   color: #7f1d1d !important;
 }
 
-.outlook-calendar-shell .salonos-closure-event-content {
+.outlook-calendar-shell .velliqo-closure-event-content {
   display: flex;
   min-width: 0;
   align-items: center;
@@ -600,7 +600,7 @@
 }
 
 .outlook-calendar-shell
-  .salonos-closure-event-content
+  .velliqo-closure-event-content
   span {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -877,29 +877,29 @@
     margin: 1px 2px;
   }
 
-  .outlook-calendar-shell .salonos-event {
+  .outlook-calendar-shell .velliqo-event {
     border-left-width: 3px;
     border-radius: 5px;
     padding: 2px 3px;
   }
 
-  .outlook-calendar-shell .salonos-event-time {
+  .outlook-calendar-shell .velliqo-event-time {
     font-size: 0.61rem;
   }
 
-  .outlook-calendar-shell .salonos-event-title {
+  .outlook-calendar-shell .velliqo-event-title {
     font-size: 0.65rem;
   }
 
   .outlook-calendar-shell
     .fc-daygrid-event
-    .salonos-event-time {
+    .velliqo-event-time {
     font-size: 0.59rem;
   }
 
   .outlook-calendar-shell
     .fc-daygrid-event
-    .salonos-event-title {
+    .velliqo-event-title {
     font-size: 0.62rem;
   }
 
@@ -911,19 +911,19 @@
 
   .outlook-calendar-shell
     .fc-timegrid-event-short
-    .salonos-event-content {
+    .velliqo-event-content {
     gap: 2px;
   }
 
   .outlook-calendar-shell
     .fc-timegrid-event-short
-    .salonos-event-time {
+    .velliqo-event-time {
     font-size: 0.57rem;
   }
 
   .outlook-calendar-shell
     .fc-timegrid-event-short
-    .salonos-event-title {
+    .velliqo-event-title {
     font-size: 0.59rem;
   }
 }
@@ -970,17 +970,17 @@
     font-size: 0.62rem;
   }
 
-  .outlook-calendar-shell .salonos-event-time {
+  .outlook-calendar-shell .velliqo-event-time {
     font-size: 0.56rem;
   }
 
-  .outlook-calendar-shell .salonos-event-title {
+  .outlook-calendar-shell .velliqo-event-title {
     font-size: 0.6rem;
   }
 }
 
 
-.salonos-break-event {
+.velliqo-break-event {
   border: 1px solid rgb(148 163 184 / 0.8) !important;
   border-left: 4px solid rgb(100 116 139) !important;
   background:
@@ -996,7 +996,7 @@
   opacity: 0.95;
 }
 
-.salonos-break-event-content {
+.velliqo-break-event-content {
   display: flex;
   min-width: 0;
   flex-direction: column;
@@ -1006,8 +1006,8 @@
   line-height: 1.15;
 }
 
-.salonos-break-event-content strong,
-.salonos-break-event-content span {
+.velliqo-break-event-content strong,
+.velliqo-break-event-content span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

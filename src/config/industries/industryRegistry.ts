@@ -47,6 +47,7 @@ export const INDUSTRY_CATEGORIES: IndustryCategory[] = [
 ];
 
 const entries: Array<[IndustryKey, IndustryConfig]> = [
+  ['appointment_service_business', industry({key:'appointment_service_business',category:'professional_services',name:'Service Business',shortName:'Business',description:'A general appointment-based or service business.',icon:'✨',launchEnabled:false,defaultCategory:'Services',defaultModules:[...core,'payments'],palette:palettes.purple,professional:'team member',service:'Consultation',price:30,duration:30})],
   ['hair_salon', industry({key:'hair_salon',category:'beauty_personal_care',name:'Hair Salon',shortName:'Hair',description:'Hair styling, colouring and salon services.',icon:'✂️',launchEnabled:true,defaultCategory:'Hair Services',defaultModules:retail,palette:palettes.gold,professional:'stylist',service:'Haircut',price:25,duration:30})],
   ['barber_shop', industry({key:'barber_shop',category:'beauty_personal_care',name:'Barber Shop',shortName:'Barber',description:'Cuts, grooming and barbering services.',icon:'💈',launchEnabled:true,defaultCategory:'Barber Services',defaultModules:retail,palette:palettes.gold,professional:'barber',service:'Standard Haircut',price:25,duration:30})],
   ['beauty_studio', industry({key:'beauty_studio',category:'beauty_personal_care',name:'Beauty Studio',shortName:'Beauty',description:'Skincare, lashes and cosmetic services.',icon:'🌸',launchEnabled:true,defaultCategory:'Beauty Treatments',defaultModules:retail,palette:palettes.rose,professional:'beauty professional',service:'Facial Treatment',price:45,duration:60})],
@@ -97,8 +98,8 @@ const entries: Array<[IndustryKey, IndustryConfig]> = [
 ];
 
 export const INDUSTRY_REGISTRY = Object.fromEntries(entries) as Record<IndustryKey, IndustryConfig>;
-export const DEFAULT_INDUSTRY_KEY: IndustryKey = 'hair_salon';
+export const DEFAULT_INDUSTRY_KEY: IndustryKey = 'appointment_service_business';
 export function isIndustryKey(value: unknown): value is IndustryKey { return typeof value === 'string' && value in INDUSTRY_REGISTRY; }
 export function getIndustryConfig(value: unknown): IndustryConfig { return isIndustryKey(value) ? INDUSTRY_REGISTRY[value] : INDUSTRY_REGISTRY[DEFAULT_INDUSTRY_KEY]; }
 export const LAUNCH_INDUSTRIES = Object.values(INDUSTRY_REGISTRY).filter((industry) => industry.launchEnabled);
-export function getIndustriesByCategory(category: IndustryConfig['category']) { return Object.values(INDUSTRY_REGISTRY).filter((industry) => industry.category === category); }
+export function getIndustriesByCategory(category: IndustryConfig['category']) { return Object.values(INDUSTRY_REGISTRY).filter((industry) => industry.launchEnabled && industry.category === category); }

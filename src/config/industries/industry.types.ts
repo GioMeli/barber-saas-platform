@@ -13,6 +13,7 @@ export type IndustryCategoryKey =
   | 'events';
 
 export type IndustryKey =
+  | 'appointment_service_business'
   | 'hair_salon' | 'barber_shop' | 'beauty_studio' | 'nail_salon' | 'spa' | 'massage_center' | 'wellness_center' | 'aesthetic_clinic' | 'tattoo_studio'
   | 'physiotherapy' | 'chiropractic' | 'nutritionist' | 'psychology_practice' | 'speech_therapy' | 'dental_clinic' | 'medical_practice'
   | 'personal_training' | 'gym_studio' | 'pilates_studio' | 'yoga_studio' | 'dance_studio'

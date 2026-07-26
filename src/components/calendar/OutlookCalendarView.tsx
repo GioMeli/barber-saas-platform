@@ -295,7 +295,7 @@ export default function OutlookCalendarView({
         title: `${appointment.customers?.full_name || t('calendar.labels.customer')} · ${services}`,
         start: appointment.start_time,
         end: appointment.end_time,
-        classNames: ['salonos-event', `salonos-status-${status}`],
+        classNames: ['velliqo-event', `velliqo-status-${status}`],
         extendedProps: {
           kind: 'appointment',
           appointment,
@@ -311,7 +311,7 @@ export default function OutlookCalendarView({
       end: addOneDayIso(closure.end_date),
       allDay: true,
       display: 'background',
-      classNames: ['salonos-closure-background'],
+      classNames: ['velliqo-closure-background'],
       extendedProps: { kind: 'closure-background', closure },
     }));
 
@@ -321,7 +321,7 @@ export default function OutlookCalendarView({
       start: closure.start_date,
       end: addOneDayIso(closure.end_date),
       allDay: true,
-      classNames: ['salonos-closure-label'],
+      classNames: ['velliqo-closure-label'],
       extendedProps: { kind: 'closure-label', closure },
     }));
 
@@ -345,7 +345,7 @@ export default function OutlookCalendarView({
           editable: false,
           startEditable: false,
           durationEditable: false,
-          classNames: ['salonos-break-event'],
+          classNames: ['velliqo-break-event'],
           extendedProps: {
             kind: 'break',
             breakItem: item,
@@ -431,7 +431,7 @@ export default function OutlookCalendarView({
   const renderEventContent = (arg: EventContentArg) => {
     if (arg.event.extendedProps.kind === 'closure-label') {
       return (
-        <div className="salonos-closure-event-content">
+        <div className="velliqo-closure-event-content">
           <strong>{t('calendar.labels.closed')}</strong>
           <span className="truncate">
             {arg.event.extendedProps.closure.title}
@@ -442,7 +442,7 @@ export default function OutlookCalendarView({
 
     if (arg.event.extendedProps.kind === 'break') {
       return (
-        <div className="salonos-break-event-content">
+        <div className="velliqo-break-event-content">
           <strong>
             {arg.event.extendedProps.breakItem.label ||
               t('calendar.labels.break')}
@@ -459,9 +459,9 @@ export default function OutlookCalendarView({
       t('calendar.labels.customer');
 
     return (
-      <div className="salonos-event-content">
-        <div className="salonos-event-time">{arg.timeText}</div>
-        <div className="salonos-event-title">{customerName}</div>
+      <div className="velliqo-event-content">
+        <div className="velliqo-event-time">{arg.timeText}</div>
+        <div className="velliqo-event-title">{customerName}</div>
       </div>
     );
   };
