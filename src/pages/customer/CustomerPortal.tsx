@@ -1459,13 +1459,13 @@ function downloadAppointmentIcs(appointment: any, business: any, t: (key: string
     const ics = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//Barber SaaS//Customer Appointment//EN',
+      'PRODID:-//Velliqo//Customer Appointment//EN',
       'CALSCALE:GREGORIAN',
       'BEGIN:VEVENT',
       `UID:${escapeIcs(
         appointment.appointment_id ||
           appointment.booking_reference
-      )}@barber-saas`,
+      )}@appointments.velliqo`,
       `DTSTAMP:${formatIcsDate(new Date())}`,
       `DTSTART:${formatIcsDate(start)}`,
       `DTEND:${formatIcsDate(end)}`,

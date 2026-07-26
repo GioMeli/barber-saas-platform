@@ -51,6 +51,7 @@ jobs:
           npm run ai:check
           npm run automations:check
           npm run voice:check
+          npm run industry-neutral:check
 
       - name: TypeScript
         run: npm run typecheck

@@ -379,9 +379,9 @@ export default function PublicBooking() {
     const content = [
       'BEGIN:VCALENDAR',
       'VERSION:2.0',
-      'PRODID:-//Barber SaaS//Booking//EN',
+      'PRODID:-//Velliqo//Appointment//EN',
       'BEGIN:VEVENT',
-      `UID:${bookingSuccess.booking_reference}@barber-saas`,
+      `UID:${bookingSuccess.booking_reference}@appointments.velliqo`,
       `DTSTAMP:${toIcsDate(new Date())}`,
       `DTSTART:${toIcsDate(start)}`,
       `DTEND:${toIcsDate(end)}`,

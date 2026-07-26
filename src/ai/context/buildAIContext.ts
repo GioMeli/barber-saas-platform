@@ -7,7 +7,7 @@ export function buildAIContext(input: { user: User; profile: any; business: any;
   const language = normalizeLanguage(input.language);
   return {
     user: { id: input.user.id, role, language, permissions: getAICapabilities(role) },
-    business: { id: input.business.id, name: input.business.name, industryKey: input.business.industry_key ?? 'hair_salon', timezone: input.business.timezone ?? 'UTC', currency: input.business.currency ?? 'EUR', language: normalizeLanguage(input.business.default_language ?? language) },
+    business: { id: input.business.id, name: input.business.name, industryKey: input.business.industry_key ?? 'appointment_service_business', timezone: input.business.timezone ?? 'UTC', currency: input.business.currency ?? 'EUR', language: normalizeLanguage(input.business.default_language ?? language) },
     request: { agent: input.agent, page: input.page, message: input.message, locale: language },
   };
 }

@@ -46,7 +46,7 @@ export default function BusinessTypeSelection() {
             <div className="mx-auto mt-8 max-w-2xl rounded-[1.75rem] border border-white/20 bg-white/12 p-3 shadow-2xl backdrop-blur-xl">
               <div className="relative">
                 <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-violet-500" />
-                <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search e.g. dentist, barber, trainer..." className="h-14 rounded-2xl border-white bg-white pl-12 text-base text-slate-950 shadow-lg placeholder:text-slate-400" />
+                <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search e.g. dentist, consultant, trainer..." className="h-14 rounded-2xl border-white bg-white pl-12 text-base text-slate-950 shadow-lg placeholder:text-slate-400" />
               </div>
             </div>
             <div className="mt-6 flex flex-wrap justify-center gap-4 text-xs font-semibold text-violet-100"><TrustItem text="No card required"/><TrustItem text="Guided setup"/><TrustItem text="Change settings later"/></div>
