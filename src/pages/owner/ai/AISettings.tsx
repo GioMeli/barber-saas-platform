@@ -15,18 +15,56 @@ import {
   AlertTriangle,
   BellRing,
   Bot,
+  CalendarClock,
   ChartNoAxesCombined,
   Clock3,
   Database,
   Loader2,
+  Megaphone,
+  PackageSearch,
   Save,
   ShieldCheck,
-  PackageSearch,
   Sparkles,
   UserRoundCog,
   UsersRound,
+  Workflow,
 } from 'lucide-react';
-import { SUPPORTED_AI_LANGUAGES, normalizeLanguage, type AILanguage } from '@/ai';
+import {
+  SUPPORTED_AI_LANGUAGES,
+  loadAIAutomationConfiguration,
+  normalizeLanguage,
+  saveAIAutomationConfiguration,
+  type AIAutomationKey,
+  type AIAutomationRule,
+  type AIAutomationSettings,
+  type AIAutonomyLevel,
+  type AILanguage,
+} from '@/ai';
+
+const OPERATIONAL_RULE_KEYS: AIAutomationKey[] = [
+  'customer_reactivation',
+  'schedule_optimisation',
+  'low_stock_actions',
+  'campaign_planning',
+];
+
+const AUTONOMY_LEVELS: AIAutonomyLevel[] = [
+  'disabled',
+  'recommend_only',
+  'prepare_draft',
+  'auto_execute_low_risk',
+];
+
+const RECOMMENDATION_ONLY_LEVELS: AIAutonomyLevel[] = ['disabled', 'recommend_only'];
+
+const RULE_ICONS: Record<AIAutomationKey, React.ReactNode> = {
+  proactive_recommendations: <Sparkles className="h-5 w-5" />,
+  daily_briefing: <BellRing className="h-5 w-5" />,
+  customer_reactivation: <UsersRound className="h-5 w-5" />,
+  schedule_optimisation: <CalendarClock className="h-5 w-5" />,
+  low_stock_actions: <PackageSearch className="h-5 w-5" />,
+  campaign_planning: <Megaphone className="h-5 w-5" />,
+};
 
 type SettingsState = {
   enabled: boolean;
@@ -51,6 +89,9 @@ export default function AISettings() {
   const { activeBusiness } = useAuth();
   const [loading, setLoading] = React.useState(true);
   const [saving, setSaving] = React.useState(false);
+  const [automationUnavailable, setAutomationUnavailable] = React.useState(false);
+  const [automationSettings, setAutomationSettings] = React.useState<AIAutomationSettings | null>(null);
+  const [automationRules, setAutomationRules] = React.useState<AIAutomationRule[]>([]);
   const [settings, setSettings] = React.useState<SettingsState>({
     enabled: true,
     default_language: normalizeLanguage(i18n.language),
@@ -71,7 +112,11 @@ export default function AISettings() {
 
   React.useEffect(() => {
     if (!activeBusiness?.id) return;
+
     void (async () => {
+      setLoading(true);
+      setAutomationUnavailable(false);
+
       const { data, error } = await supabase
         .from('ai_settings')
         .select('enabled, default_language, retain_history, response_style, proactive_insights, allow_customer_data, allow_write_actions, proactive_briefing_enabled, briefing_time, notify_owner_on_ai_alert, monitor_revenue_changes, monitor_no_shows, monitor_customer_retention, monitor_inventory, monitor_marketing_performance')
@@ -98,6 +143,18 @@ export default function AISettings() {
           monitor_marketing_performance: data.monitor_marketing_performance !== false,
         });
       }
+
+      try {
+        const configuration = await loadAIAutomationConfiguration(activeBusiness.id);
+        setAutomationSettings(configuration.settings);
+        setAutomationRules(sortRules(configuration.rules));
+      } catch (automationError) {
+        console.warn('Operational automation configuration is unavailable', automationError);
+        setAutomationUnavailable(true);
+        setAutomationSettings(null);
+        setAutomationRules([]);
+      }
+
       setLoading(false);
     })();
   }, [activeBusiness?.id]);
@@ -105,14 +162,61 @@ export default function AISettings() {
   const save = async () => {
     if (!activeBusiness?.id) return;
     setSaving(true);
-    const { error } = await supabase.from('ai_settings').upsert({
-      business_id: activeBusiness.id,
-      ...settings,
-      updated_at: new Date().toISOString(),
-    }, { onConflict: 'business_id' });
-    setSaving(false);
-    if (error) toast.error(error.message);
-    else toast.success(t('ai.settingsSaved'));
+
+    try {
+      const { error } = await supabase.from('ai_settings').upsert({
+        business_id: activeBusiness.id,
+        ...settings,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'business_id' });
+      if (error) throw error;
+
+      if (automationSettings) {
+        const saved = await saveAIAutomationConfiguration({
+          businessId: activeBusiness.id,
+          settings: {
+            manager_automations_enabled: automationSettings.manager_automations_enabled,
+            automation_default_autonomy: automationSettings.automation_default_autonomy,
+            automation_timezone: automationSettings.automation_timezone,
+          },
+          rules: automationRules.map((rule) => ({
+            automation_key: rule.automation_key,
+            enabled: rule.enabled,
+            autonomy_level: rule.autonomy_level,
+            requires_confirmation: rule.requires_confirmation,
+          })),
+        });
+        setAutomationSettings(saved.settings);
+        setAutomationRules(sortRules(saved.rules));
+      }
+
+      toast.success(t('ai.settingsSaved'));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : String(error));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const updateRule = (automationKey: AIAutomationKey, patch: Partial<AIAutomationRule>) => {
+    setAutomationRules((current) => current.map((rule) => (
+      rule.automation_key === automationKey ? { ...rule, ...patch } : rule
+    )));
+  };
+
+  const updateAutonomy = (rule: AIAutomationRule, autonomyLevel: AIAutonomyLevel) => {
+    const supportsDrafts = rule.allowed_action_types.length > 0;
+    const safeAutonomy = supportsDrafts ? autonomyLevel : (
+      autonomyLevel === 'disabled' ? 'disabled' : 'recommend_only'
+    );
+
+    updateRule(rule.automation_key, {
+      autonomy_level: safeAutonomy,
+      enabled: safeAutonomy === 'disabled' ? false : rule.enabled,
+      requires_confirmation: safeAutonomy === 'auto_execute_low_risk'
+        ? rule.requires_confirmation
+        : true,
+    });
   };
 
   if (loading) {
@@ -127,6 +231,9 @@ export default function AISettings() {
             <span className="text-xs font-semibold uppercase tracking-[.18em] text-primary">Velliqo AI</span>
             <Badge variant="outline" className="border-violet-200 bg-violet-50 text-violet-800">
               <ShieldCheck className="mr-1.5 h-3.5 w-3.5" />{t('ai.manager.actionEngineBadge')}
+            </Badge>
+            <Badge variant="outline" className="border-sky-200 bg-sky-50 text-sky-800">
+              <Workflow className="mr-1.5 h-3.5 w-3.5" />{t('ai.automations.phaseBadge')}
             </Badge>
           </div>
           <h1 className="app-page-title">{t('ai.settings')}</h1>
@@ -341,8 +448,185 @@ export default function AISettings() {
           </Alert>
         </CardContent>
       </Card>
+
+      <Card className="rounded-3xl shadow-card">
+        <CardContent className="space-y-7 p-6 sm:p-7">
+          <div className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
+                <Workflow className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-extrabold">{t('ai.automations.title')}</h2>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{t('ai.automations.description')}</p>
+              </div>
+            </div>
+            <Badge variant="outline" className="w-fit border-sky-200 bg-sky-50 text-sky-800">
+              {t('ai.automations.phaseBadge')}
+            </Badge>
+          </div>
+
+          {automationUnavailable || !automationSettings ? (
+            <Alert variant="destructive" className="rounded-2xl">
+              <AlertTriangle className="h-4 w-4" />
+              <AlertTitle>{t('ai.automations.unavailableTitle')}</AlertTitle>
+              <AlertDescription>{t('ai.automations.unavailableDescription')}</AlertDescription>
+            </Alert>
+          ) : (
+            <>
+              <SettingRow
+                icon={<Workflow className="h-5 w-5" />}
+                title={t('ai.automations.masterEnabled')}
+                description={t('ai.automations.masterEnabledDescription')}
+              >
+                <Switch
+                  checked={automationSettings.manager_automations_enabled}
+                  onCheckedChange={(manager_automations_enabled) => setAutomationSettings((current) => (
+                    current ? { ...current, manager_automations_enabled } : current
+                  ))}
+                />
+              </SettingRow>
+
+              <div className="grid gap-5 border-b pb-6 sm:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>{t('ai.automations.defaultAutonomy')}</Label>
+                  <Select
+                    value={automationSettings.automation_default_autonomy}
+                    onValueChange={(automation_default_autonomy: AIAutonomyLevel) => setAutomationSettings((current) => (
+                      current ? { ...current, automation_default_autonomy } : current
+                    ))}
+                  >
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                      {AUTONOMY_LEVELS.map((level) => (
+                        <SelectItem key={level} value={level}>{t(`ai.automations.autonomy.${level}`)}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <p className="text-xs leading-5 text-muted-foreground">{t('ai.automations.defaultAutonomyDescription')}</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="automation-timezone">{t('ai.automations.timezone')}</Label>
+                  <Input
+                    id="automation-timezone"
+                    value={automationSettings.automation_timezone}
+                    onChange={(event) => setAutomationSettings((current) => (
+                      current ? { ...current, automation_timezone: event.target.value } : current
+                    ))}
+                    placeholder="Europe/Nicosia"
+                  />
+                  <p className="text-xs leading-5 text-muted-foreground">{t('ai.automations.timezoneDescription')}</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <div className="font-extrabold">{t('ai.automations.rulesTitle')}</div>
+                  <p className="mt-1 text-sm leading-6 text-muted-foreground">{t('ai.automations.rulesDescription')}</p>
+                </div>
+
+                <div className="grid gap-4">
+                  {OPERATIONAL_RULE_KEYS.map((automationKey) => {
+                    const rule = automationRules.find((item) => item.automation_key === automationKey);
+                    if (!rule) return null;
+                    const supportsDrafts = rule.allowed_action_types.length > 0;
+                    const autonomyOptions = supportsDrafts ? AUTONOMY_LEVELS : RECOMMENDATION_ONLY_LEVELS;
+
+                    return (
+                      <div key={automationKey} className="rounded-2xl border bg-muted/10 p-5">
+                        <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
+                          <div className="flex min-w-0 gap-3">
+                            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-background text-primary shadow-sm">
+                              {RULE_ICONS[automationKey]}
+                            </div>
+                            <div className="min-w-0">
+                              <div className="flex flex-wrap items-center gap-2">
+                                <div className="font-bold">{t(`ai.automations.rules.${automationKey}.title`)}</div>
+                                <Badge variant="outline" className="text-[11px]">
+                                  {t(`ai.automations.handlerStatus.${rule.handler_status}`)}
+                                </Badge>
+                              </div>
+                              <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+                                {t(`ai.automations.rules.${automationKey}.description`)}
+                              </p>
+                              <div className="mt-3 flex flex-wrap gap-2 text-xs text-muted-foreground">
+                                <span>{t('ai.automations.schedule')}: {t(`ai.automations.scheduleKind.${rule.schedule_kind}`)}</span>
+                                <span>•</span>
+                                <span>{t('ai.automations.lastRun')}: {formatRunDate(rule.last_run_at, i18n.language, t('ai.automations.never'))}</span>
+                                {rule.consecutive_failures > 0 ? (
+                                  <Badge variant="destructive" className="text-[10px]">
+                                    {t('ai.automations.failures', { count: rule.consecutive_failures })}
+                                  </Badge>
+                                ) : null}
+                              </div>
+                            </div>
+                          </div>
+
+                          <div className="grid shrink-0 gap-3 sm:grid-cols-[190px_auto] lg:w-[310px]">
+                            <Select
+                              value={rule.autonomy_level}
+                              onValueChange={(value: AIAutonomyLevel) => updateAutonomy(rule, value)}
+                            >
+                              <SelectTrigger><SelectValue /></SelectTrigger>
+                              <SelectContent>
+                                {autonomyOptions.map((level) => (
+                                  <SelectItem key={level} value={level}>{t(`ai.automations.autonomy.${level}`)}</SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <div className="flex items-center justify-end gap-2">
+                              <Switch
+                                checked={rule.enabled}
+                                disabled={rule.handler_status !== 'available' || rule.autonomy_level === 'disabled'}
+                                onCheckedChange={(enabled) => updateRule(rule.automation_key, { enabled })}
+                              />
+                            </div>
+                          </div>
+                        </div>
+
+                        {supportsDrafts && rule.autonomy_level === 'auto_execute_low_risk' ? (
+                          <div className="mt-4 flex items-start justify-between gap-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-amber-950">
+                            <div>
+                              <div className="text-sm font-bold">{t('ai.automations.confirmationTitle')}</div>
+                              <p className="mt-1 text-xs leading-5 text-amber-900/80">{t('ai.automations.confirmationDescription')}</p>
+                            </div>
+                            <Switch
+                              checked={rule.requires_confirmation}
+                              onCheckedChange={(requires_confirmation) => updateRule(rule.automation_key, { requires_confirmation })}
+                            />
+                          </div>
+                        ) : null}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <Alert className="rounded-2xl border-sky-200 bg-sky-50 text-sky-950">
+                <ShieldCheck className="h-4 w-4 text-sky-700" />
+                <AlertTitle>{t('ai.automations.safetyTitle')}</AlertTitle>
+                <AlertDescription>{t('ai.automations.safetyDescription')}</AlertDescription>
+              </Alert>
+            </>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
+}
+
+function sortRules(rules: AIAutomationRule[]) {
+  const order = new Map(OPERATIONAL_RULE_KEYS.map((key, index) => [key, index]));
+  return [...rules].sort((left, right) => (
+    (order.get(left.automation_key) ?? 99) - (order.get(right.automation_key) ?? 99)
+  ));
+}
+
+function formatRunDate(value: string | null | undefined, language: string, fallback: string) {
+  if (!value) return fallback;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return fallback;
+  return date.toLocaleString(language || 'en', { dateStyle: 'medium', timeStyle: 'short' });
 }
 
 function MonitorToggle({

@@ -1858,6 +1858,65 @@
         "safetyTitle": "Recommendations remain controlled",
         "safetyDescription": "The proactive manager detects issues and proposes next steps. It never creates, changes, sends or publishes business data without the existing confirmation-based Action Engine."
       }
+    },
+    "automations": {
+      "phaseBadge": "Phase 9D",
+      "title": "Manager Automations",
+      "description": "Configure how Velliqo detects operational opportunities, prepares drafts and records every automation run.",
+      "unavailableTitle": "Operational automations are unavailable",
+      "unavailableDescription": "Apply database migration 00039 before configuring the Phase 9D operational handlers.",
+      "masterEnabled": "Enable Manager Automations",
+      "masterEnabledDescription": "Allow enabled operational rules to run in the background. Every rule remains tenant-isolated, rate-limited and audited.",
+      "defaultAutonomy": "Default autonomy",
+      "defaultAutonomyDescription": "The starting safety level for automation rules. Each operational rule can still be restricted separately.",
+      "timezone": "Automation timezone",
+      "timezoneDescription": "Use an IANA timezone such as Europe/Nicosia so schedules are evaluated in the business local time.",
+      "rulesTitle": "Operational rules",
+      "rulesDescription": "Enable only the workflows the business needs and choose how far each handler may proceed.",
+      "schedule": "Schedule",
+      "lastRun": "Last run",
+      "never": "Never",
+      "failures": "{{count}} consecutive failures",
+      "confirmationTitle": "Require owner confirmation",
+      "confirmationDescription": "When disabled, Velliqo may create a low-risk campaign draft automatically. It can never send the campaign automatically.",
+      "safetyTitle": "Protected by the Action Engine",
+      "safetyDescription": "Customer consent is checked before reactivation. Appointments are never moved automatically, purchases are never placed, and campaign delivery remains a separate confirmed action.",
+      "autonomy": {
+        "disabled": "Disabled",
+        "recommend_only": "Recommend only",
+        "prepare_draft": "Prepare confirmation draft",
+        "auto_execute_low_risk": "Auto-create low-risk drafts"
+      },
+      "handlerStatus": {
+        "planned": "Planned",
+        "available": "Available",
+        "paused": "Paused"
+      },
+      "scheduleKind": {
+        "manual": "Manual",
+        "event": "Event based",
+        "hourly": "Hourly",
+        "daily": "Daily",
+        "weekly": "Weekly"
+      },
+      "rules": {
+        "customer_reactivation": {
+          "title": "Customer reactivation",
+          "description": "Find consented inactive customers and optionally prepare a secure win-back campaign draft."
+        },
+        "schedule_optimisation": {
+          "title": "Schedule optimisation",
+          "description": "Detect usable gaps and workload imbalance without moving or cancelling appointments."
+        },
+        "low_stock_actions": {
+          "title": "Low-stock actions",
+          "description": "Calculate replenishment suggestions and estimated restock cost without placing supplier orders."
+        },
+        "campaign_planning": {
+          "title": "Campaign planning",
+          "description": "Choose a data-backed objective, audience and message, then optionally prepare a campaign draft."
+        }
+      }
     }
   },
   "customerPortal": {

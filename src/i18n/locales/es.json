@@ -1858,6 +1858,65 @@
         "safetyTitle": "Las recomendaciones permanecen controladas",
         "safetyDescription": "El gestor proactivo detecta problemas y propone pasos. Nunca crea, modifica, envía o publica datos sin la Action Engine existente con confirmación."
       }
+    },
+    "automations": {
+      "phaseBadge": "Fase 9D",
+      "title": "Automatizaciones del Manager",
+      "description": "Configura cómo Velliqo detecta oportunidades operativas, prepara borradores y audita cada ejecución.",
+      "unavailableTitle": "Las automatizaciones operativas no están disponibles",
+      "unavailableDescription": "Aplica la migración 00039 antes de configurar los handlers de la Fase 9D.",
+      "masterEnabled": "Activar Manager Automations",
+      "masterEnabledDescription": "Permite ejecutar reglas activas en segundo plano con aislamiento, límites y auditoría.",
+      "defaultAutonomy": "Autonomía predeterminada",
+      "defaultAutonomyDescription": "Nivel inicial de seguridad. Cada regla puede limitarse por separado.",
+      "timezone": "Zona horaria",
+      "timezoneDescription": "Usa una zona IANA como Europe/Nicosia.",
+      "rulesTitle": "Reglas operativas",
+      "rulesDescription": "Activa solo los flujos necesarios y define hasta dónde puede avanzar cada handler.",
+      "schedule": "Programación",
+      "lastRun": "Última ejecución",
+      "never": "Nunca",
+      "failures": "{{count}} fallos consecutivos",
+      "confirmationTitle": "Requerir confirmación del propietario",
+      "confirmationDescription": "Si se desactiva, Velliqo solo puede crear automáticamente un borrador de campaña de bajo riesgo. Nunca puede enviarlo.",
+      "safetyTitle": "Protegido por Action Engine",
+      "safetyDescription": "Se verifica el consentimiento. Las citas nunca se mueven automáticamente, no se realizan compras y el envío de campañas requiere confirmación aparte.",
+      "autonomy": {
+        "disabled": "Desactivado",
+        "recommend_only": "Solo recomendar",
+        "prepare_draft": "Preparar borrador para confirmar",
+        "auto_execute_low_risk": "Crear borradores de bajo riesgo"
+      },
+      "handlerStatus": {
+        "planned": "Planificado",
+        "available": "Disponible",
+        "paused": "Pausado"
+      },
+      "scheduleKind": {
+        "manual": "Manual",
+        "event": "Por evento",
+        "hourly": "Cada hora",
+        "daily": "Diario",
+        "weekly": "Semanal"
+      },
+      "rules": {
+        "customer_reactivation": {
+          "title": "Reactivación de clientes",
+          "description": "Encuentra clientes inactivos con consentimiento y puede preparar un borrador seguro de recuperación."
+        },
+        "schedule_optimisation": {
+          "title": "Optimización de agenda",
+          "description": "Detecta huecos y desequilibrios sin mover ni cancelar citas."
+        },
+        "low_stock_actions": {
+          "title": "Acciones de stock bajo",
+          "description": "Calcula reposición y coste estimado sin realizar pedidos a proveedores."
+        },
+        "campaign_planning": {
+          "title": "Planificación de campañas",
+          "description": "Selecciona objetivo, audiencia y mensaje con datos y puede preparar un borrador."
+        }
+      }
     }
   },
   "customerPortal": {

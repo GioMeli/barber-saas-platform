@@ -1858,6 +1858,65 @@
         "safetyTitle": "Empfehlungen bleiben kontrolliert",
         "safetyDescription": "Der proaktive Manager erkennt Probleme und empfiehlt Schritte. Er verändert, sendet oder veröffentlicht keine Geschäftsdaten ohne die bestehende bestätigungsbasierte Action Engine."
       }
+    },
+    "automations": {
+      "phaseBadge": "Phase 9D",
+      "title": "Manager-Automatisierungen",
+      "description": "Legen Sie fest, wie Velliqo betriebliche Chancen erkennt, Entwürfe vorbereitet und jeden Lauf protokolliert.",
+      "unavailableTitle": "Betriebliche Automatisierungen sind nicht verfügbar",
+      "unavailableDescription": "Wenden Sie Migration 00039 an, bevor Sie die Phase-9D-Handler konfigurieren.",
+      "masterEnabled": "Manager-Automatisierungen aktivieren",
+      "masterEnabledDescription": "Aktive Regeln dürfen im Hintergrund laufen. Jede Regel bleibt mandantenisoliert, begrenzt und vollständig auditiert.",
+      "defaultAutonomy": "Standardautonomie",
+      "defaultAutonomyDescription": "Ausgangssicherheitsstufe für Regeln. Jede Regel kann separat eingeschränkt werden.",
+      "timezone": "Zeitzone der Automatisierung",
+      "timezoneDescription": "Verwenden Sie eine IANA-Zeitzone wie Europe/Nicosia.",
+      "rulesTitle": "Betriebliche Regeln",
+      "rulesDescription": "Aktivieren Sie nur benötigte Workflows und legen Sie den zulässigen Handlungsspielraum fest.",
+      "schedule": "Zeitplan",
+      "lastRun": "Letzter Lauf",
+      "never": "Nie",
+      "failures": "{{count}} aufeinanderfolgende Fehler",
+      "confirmationTitle": "Bestätigung durch Inhaber erforderlich",
+      "confirmationDescription": "Ohne Bestätigung darf Velliqo nur einen risikoarmen Kampagnenentwurf automatisch erstellen. Es sendet niemals automatisch.",
+      "safetyTitle": "Durch die Action Engine geschützt",
+      "safetyDescription": "Einwilligungen werden geprüft. Termine werden nie automatisch verschoben, Bestellungen nie ausgelöst und Kampagnenversand bleibt separat bestätigt.",
+      "autonomy": {
+        "disabled": "Deaktiviert",
+        "recommend_only": "Nur empfehlen",
+        "prepare_draft": "Bestätigungsentwurf vorbereiten",
+        "auto_execute_low_risk": "Risikoarme Entwürfe automatisch erstellen"
+      },
+      "handlerStatus": {
+        "planned": "Geplant",
+        "available": "Verfügbar",
+        "paused": "Pausiert"
+      },
+      "scheduleKind": {
+        "manual": "Manuell",
+        "event": "Ereignisbasiert",
+        "hourly": "Stündlich",
+        "daily": "Täglich",
+        "weekly": "Wöchentlich"
+      },
+      "rules": {
+        "customer_reactivation": {
+          "title": "Kundenreaktivierung",
+          "description": "Findet inaktive Kunden mit Einwilligung und kann einen sicheren Win-back-Entwurf vorbereiten."
+        },
+        "schedule_optimisation": {
+          "title": "Terminplanoptimierung",
+          "description": "Erkennt nutzbare Lücken und Arbeitslastunterschiede, ohne Termine zu verschieben oder abzusagen."
+        },
+        "low_stock_actions": {
+          "title": "Niedrigbestand-Aktionen",
+          "description": "Berechnet Nachfüllvorschläge und Kosten, ohne Lieferantenbestellungen auszulösen."
+        },
+        "campaign_planning": {
+          "title": "Kampagnenplanung",
+          "description": "Wählt Ziel, Zielgruppe und Nachricht datenbasiert und kann einen Kampagnenentwurf vorbereiten."
+        }
+      }
     }
   },
   "customerPortal": {
