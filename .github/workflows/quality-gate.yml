@@ -50,6 +50,7 @@ jobs:
           npm run delivery:check
           npm run ai:check
           npm run automations:check
+          npm run voice:check
 
       - name: TypeScript
         run: npm run typecheck

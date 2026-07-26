@@ -21,12 +21,14 @@ import {
   Database,
   Loader2,
   Megaphone,
+  Mic2,
   PackageSearch,
   Save,
   ShieldCheck,
   Sparkles,
   UserRoundCog,
   UsersRound,
+  Volume2,
   Workflow,
 } from 'lucide-react';
 import {
@@ -82,6 +84,12 @@ type SettingsState = {
   monitor_customer_retention: boolean;
   monitor_inventory: boolean;
   monitor_marketing_performance: boolean;
+  voice_enabled: boolean;
+  voice_auto_play: boolean;
+  voice_continuous_mode: boolean;
+  voice_allow_low_risk_confirmation: boolean;
+  voice_rate: number;
+  voice_pitch: number;
 };
 
 export default function AISettings() {
@@ -108,6 +116,12 @@ export default function AISettings() {
     monitor_customer_retention: true,
     monitor_inventory: true,
     monitor_marketing_performance: true,
+    voice_enabled: false,
+    voice_auto_play: true,
+    voice_continuous_mode: true,
+    voice_allow_low_risk_confirmation: false,
+    voice_rate: 1,
+    voice_pitch: 1,
   });
 
   React.useEffect(() => {
@@ -119,7 +133,7 @@ export default function AISettings() {
 
       const { data, error } = await supabase
         .from('ai_settings')
-        .select('enabled, default_language, retain_history, response_style, proactive_insights, allow_customer_data, allow_write_actions, proactive_briefing_enabled, briefing_time, notify_owner_on_ai_alert, monitor_revenue_changes, monitor_no_shows, monitor_customer_retention, monitor_inventory, monitor_marketing_performance')
+        .select('enabled, default_language, retain_history, response_style, proactive_insights, allow_customer_data, allow_write_actions, proactive_briefing_enabled, briefing_time, notify_owner_on_ai_alert, monitor_revenue_changes, monitor_no_shows, monitor_customer_retention, monitor_inventory, monitor_marketing_performance, voice_enabled, voice_auto_play, voice_continuous_mode, voice_allow_low_risk_confirmation, voice_rate, voice_pitch')
         .eq('business_id', activeBusiness.id)
         .maybeSingle();
 
@@ -141,6 +155,12 @@ export default function AISettings() {
           monitor_customer_retention: data.monitor_customer_retention !== false,
           monitor_inventory: data.monitor_inventory !== false,
           monitor_marketing_performance: data.monitor_marketing_performance !== false,
+          voice_enabled: Boolean(data.voice_enabled),
+          voice_auto_play: data.voice_auto_play !== false,
+          voice_continuous_mode: data.voice_continuous_mode !== false,
+          voice_allow_low_risk_confirmation: Boolean(data.voice_allow_low_risk_confirmation),
+          voice_rate: Number(data.voice_rate || 1),
+          voice_pitch: Number(data.voice_pitch || 1),
         });
       }
 
@@ -445,6 +465,115 @@ export default function AISettings() {
             <ShieldCheck className="h-4 w-4 text-violet-700" />
             <AlertTitle>{t('ai.manager.proactive.safetyTitle')}</AlertTitle>
             <AlertDescription>{t('ai.manager.proactive.safetyDescription')}</AlertDescription>
+          </Alert>
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-3xl shadow-card">
+        <CardContent className="space-y-7 p-6 sm:p-7">
+          <div className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+                <Mic2 className="h-5 w-5" />
+              </div>
+              <div>
+                <h2 className="text-lg font-extrabold">{t('ai.voice.settingsTitle')}</h2>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{t('ai.voice.settingsDescription')}</p>
+              </div>
+            </div>
+            <Badge variant="outline" className="w-fit border-violet-200 bg-violet-50 text-violet-800">
+              {t('ai.voice.phaseBadge')}
+            </Badge>
+          </div>
+
+          <SettingRow
+            icon={<Mic2 className="h-5 w-5" />}
+            title={t('ai.voice.enable')}
+            description={t('ai.voice.enableDescription')}
+          >
+            <Switch
+              checked={settings.voice_enabled}
+              onCheckedChange={(voice_enabled) => setSettings((current) => ({ ...current, voice_enabled }))}
+            />
+          </SettingRow>
+
+          <div className="grid gap-4 sm:grid-cols-3">
+            <div className="rounded-2xl border bg-muted/10 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="font-bold">{t('ai.voice.autoPlay')}</div>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{t('ai.voice.autoPlayDescription')}</p>
+                </div>
+                <Switch
+                  checked={settings.voice_auto_play}
+                  disabled={!settings.voice_enabled}
+                  onCheckedChange={(voice_auto_play) => setSettings((current) => ({ ...current, voice_auto_play }))}
+                />
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-muted/10 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="font-bold">{t('ai.voice.continuousMode')}</div>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{t('ai.voice.continuousModeDescription')}</p>
+                </div>
+                <Switch
+                  checked={settings.voice_continuous_mode}
+                  disabled={!settings.voice_enabled}
+                  onCheckedChange={(voice_continuous_mode) => setSettings((current) => ({ ...current, voice_continuous_mode }))}
+                />
+              </div>
+            </div>
+            <div className="rounded-2xl border bg-muted/10 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <div className="font-bold">{t('ai.voice.lowRiskVoiceConfirmation')}</div>
+                  <p className="mt-1 text-xs leading-5 text-muted-foreground">{t('ai.voice.lowRiskVoiceConfirmationDescription')}</p>
+                </div>
+                <Switch
+                  checked={settings.voice_allow_low_risk_confirmation}
+                  disabled={!settings.voice_enabled || !settings.allow_write_actions}
+                  onCheckedChange={(voice_allow_low_risk_confirmation) => setSettings((current) => ({ ...current, voice_allow_low_risk_confirmation }))}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="voice-rate">{t('ai.voice.rate')}</Label>
+              <Input
+                id="voice-rate"
+                type="number"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value={settings.voice_rate}
+                disabled={!settings.voice_enabled}
+                onChange={(event) => setSettings((current) => ({ ...current, voice_rate: Number(event.target.value || 1) }))}
+              />
+              <p className="text-xs leading-5 text-muted-foreground">{t('ai.voice.rateDescription')}</p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="voice-pitch">{t('ai.voice.pitch')}</Label>
+              <Input
+                id="voice-pitch"
+                type="number"
+                min="0.5"
+                max="2"
+                step="0.1"
+                value={settings.voice_pitch}
+                disabled={!settings.voice_enabled}
+                onChange={(event) => setSettings((current) => ({ ...current, voice_pitch: Number(event.target.value || 1) }))}
+              />
+              <p className="text-xs leading-5 text-muted-foreground">{t('ai.voice.pitchDescription')}</p>
+            </div>
+          </div>
+
+          <Alert className="rounded-2xl border-violet-200 bg-violet-50 text-violet-950">
+            <Volume2 className="h-4 w-4 text-violet-700" />
+            <AlertTitle>{t('ai.voice.safetyTitle')}</AlertTitle>
+            <AlertDescription>{t('ai.voice.safetyDescription')}</AlertDescription>
           </Alert>
         </CardContent>
       </Card>

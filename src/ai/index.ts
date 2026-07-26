@@ -8,3 +8,5 @@ export * from './providers/providerRegistry';
 export * from './api/velliqoAI';
 export * from './automations/types';
 export * from './automations/api';
+export * from './voice/types';
+export * from './voice/api';
