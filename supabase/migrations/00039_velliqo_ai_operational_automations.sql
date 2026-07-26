@@ -189,7 +189,7 @@ create index if not exists ai_automation_runs_queue_idx
   where status in ('queued', 'running');
 
 create index if not exists ai_automation_runs_rule_idx
-  on public.ai_automation_runs (rule_id, created_at desc);
+  on public.ai_automation_runs (rule_id, started_at desc);
 
 -- ---------------------------------------------------------------------------
 -- 4. Enrich proactive alerts so every operational result has evidence,
@@ -619,7 +619,7 @@ begin
         select count(*)
         from public.ai_automation_runs recent
         where recent.business_id = r.business_id
-          and recent.created_at >= now() - interval '1 hour'
+          and recent.started_at >= now() - interval '1 hour'
       ) < ai.automation_max_runs_per_hour
     order by r.next_run_at
     for update of r skip locked
@@ -778,7 +778,7 @@ begin
           and r.status = 'queued'
           and r.available_at <= now()
           and r.attempt_count < r.max_attempts
-        order by r.scheduled_for, r.created_at
+        order by r.scheduled_for, r.started_at
         for update of r skip locked
         limit v_slots
       )

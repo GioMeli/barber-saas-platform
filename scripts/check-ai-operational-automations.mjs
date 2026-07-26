@@ -25,6 +25,22 @@ for (const token of [
   'idempotency_key',
 ]) requireText(migration, token);
 
+for (const token of [
+  'on public.ai_automation_runs (rule_id, started_at desc)',
+  "recent.started_at >= now() - interval '1 hour'",
+  'order by r.scheduled_for, r.started_at',
+]) requireText(migration, token, `00038-compatible run timestamp: ${token}`);
+
+for (const forbidden of [
+  'on public.ai_automation_runs (rule_id, created_at desc)',
+  'recent.created_at',
+  'order by r.scheduled_for, r.created_at',
+]) {
+  if (read(migration).includes(forbidden)) {
+    failures.push(`${migration}: incompatible ai_automation_runs timestamp reference: ${forbidden}`);
+  }
+}
+
 const worker = 'supabase/functions/process-ai-manager-automations/index.ts';
 for (const token of [
   'runOperationalAutomationScan',
