@@ -49,6 +49,7 @@ jobs:
           npm run marketing:check
           npm run delivery:check
           npm run ai:check
+          npm run automations:check
 
       - name: TypeScript
         run: npm run typecheck

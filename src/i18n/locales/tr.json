@@ -1858,6 +1858,65 @@
         "safetyTitle": "Öneriler kontrollü kalır",
         "safetyDescription": "Proaktif yönetici sorunları algılar ve sonraki adımları önerir. Mevcut onay tabanlı Action Engine olmadan işletme verisi oluşturmaz, değiştirmez, göndermez veya yayınlamaz."
       }
+    },
+    "automations": {
+      "phaseBadge": "Aşama 9D",
+      "title": "Manager Otomasyonları",
+      "description": "Velliqo’nun operasyonel fırsatları nasıl tespit edeceğini, taslak hazırlayacağını ve her çalışmayı kaydedeceğini yapılandırın.",
+      "unavailableTitle": "Operasyonel otomasyonlar kullanılamıyor",
+      "unavailableDescription": "Aşama 9D handler’larını yapılandırmadan önce 00039 migration’ını uygulayın.",
+      "masterEnabled": "Manager Otomasyonlarını etkinleştir",
+      "masterEnabledDescription": "Etkin kuralların arka planda çalışmasına izin verir. Her kural işletme bazında izole, sınırlı ve denetlenir.",
+      "defaultAutonomy": "Varsayılan özerklik",
+      "defaultAutonomyDescription": "Kurallar için başlangıç güvenlik seviyesi. Her kural ayrıca sınırlandırılabilir.",
+      "timezone": "Otomasyon saat dilimi",
+      "timezoneDescription": "Europe/Nicosia gibi bir IANA saat dilimi kullanın.",
+      "rulesTitle": "Operasyonel kurallar",
+      "rulesDescription": "Yalnız gerekli iş akışlarını etkinleştirin ve her handler’ın ne kadar ilerleyebileceğini belirleyin.",
+      "schedule": "Program",
+      "lastRun": "Son çalışma",
+      "never": "Hiçbir zaman",
+      "failures": "{{count}} ardışık hata",
+      "confirmationTitle": "İşletme sahibi onayı iste",
+      "confirmationDescription": "Kapatılırsa Velliqo yalnız düşük riskli kampanya taslağını otomatik oluşturabilir. Kampanyayı asla otomatik göndermez.",
+      "safetyTitle": "Action Engine ile korunur",
+      "safetyDescription": "Müşteri izni kontrol edilir. Randevular otomatik taşınmaz, satın alma yapılmaz ve kampanya gönderimi ayrı onay gerektirir.",
+      "autonomy": {
+        "disabled": "Devre dışı",
+        "recommend_only": "Yalnız öner",
+        "prepare_draft": "Onay taslağı hazırla",
+        "auto_execute_low_risk": "Düşük riskli taslak oluştur"
+      },
+      "handlerStatus": {
+        "planned": "Planlandı",
+        "available": "Kullanılabilir",
+        "paused": "Duraklatıldı"
+      },
+      "scheduleKind": {
+        "manual": "Manuel",
+        "event": "Olay bazlı",
+        "hourly": "Saatlik",
+        "daily": "Günlük",
+        "weekly": "Haftalık"
+      },
+      "rules": {
+        "customer_reactivation": {
+          "title": "Müşteri yeniden kazanımı",
+          "description": "İzinli pasif müşterileri bulur ve güvenli bir geri kazanım kampanyası taslağı hazırlayabilir."
+        },
+        "schedule_optimisation": {
+          "title": "Takvim optimizasyonu",
+          "description": "Randevuları taşımadan veya iptal etmeden boşlukları ve iş yükü dengesizliğini tespit eder."
+        },
+        "low_stock_actions": {
+          "title": "Düşük stok işlemleri",
+          "description": "Tedarikçi siparişi vermeden yenileme miktarını ve tahmini maliyeti hesaplar."
+        },
+        "campaign_planning": {
+          "title": "Kampanya planlama",
+          "description": "Veriye dayalı hedef, kitle ve mesaj seçer ve kampanya taslağı hazırlayabilir."
+        }
+      }
     }
   },
   "customerPortal": {

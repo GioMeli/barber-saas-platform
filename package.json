@@ -15,7 +15,8 @@
     "marketing:check": "node scripts/check-marketing-experience.mjs",
     "production:check": "node scripts/check-production-readiness.mjs",
     "delivery:check": "node scripts/check-marketing-delivery-engine.mjs",
-    "ai:check": "node scripts/check-velliqo-ai-manager.mjs"
+    "ai:check": "node scripts/check-velliqo-ai-manager.mjs",
+    "automations:check": "node scripts/check-ai-operational-automations.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

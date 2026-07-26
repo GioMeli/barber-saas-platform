@@ -1858,6 +1858,65 @@
         "safetyTitle": "Οι προτάσεις παραμένουν ελεγχόμενες",
         "safetyDescription": "Ο προληπτικός διευθυντής εντοπίζει προβλήματα και προτείνει επόμενα βήματα. Δεν δημιουργεί, αλλάζει, αποστέλλει ή δημοσιεύει δεδομένα χωρίς το υπάρχον Action Engine με επιβεβαίωση."
       }
+    },
+    "automations": {
+      "phaseBadge": "Phase 9D",
+      "title": "Manager Automations",
+      "description": "Ρυθμίστε πώς το Velliqo εντοπίζει λειτουργικές ευκαιρίες, προετοιμάζει drafts και καταγράφει κάθε εκτέλεση αυτοματισμού.",
+      "unavailableTitle": "Οι operational automations δεν είναι διαθέσιμοι",
+      "unavailableDescription": "Εφαρμόστε το database migration 00039 πριν ρυθμίσετε τους operational handlers του Phase 9D.",
+      "masterEnabled": "Ενεργοποίηση Manager Automations",
+      "masterEnabledDescription": "Επιτρέπει στους ενεργούς operational rules να εκτελούνται στο background. Κάθε κανόνας παραμένει απομονωμένος ανά επιχείρηση, rate-limited και πλήρως καταγεγραμμένος.",
+      "defaultAutonomy": "Προεπιλεγμένη αυτονομία",
+      "defaultAutonomyDescription": "Το αρχικό επίπεδο ασφάλειας των κανόνων. Κάθε operational rule μπορεί να περιοριστεί ξεχωριστά.",
+      "timezone": "Ζώνη ώρας αυτοματισμών",
+      "timezoneDescription": "Χρησιμοποιήστε IANA timezone, όπως Europe/Nicosia, ώστε τα schedules να αξιολογούνται στην τοπική ώρα της επιχείρησης.",
+      "rulesTitle": "Operational rules",
+      "rulesDescription": "Ενεργοποιήστε μόνο τα workflows που χρειάζεται η επιχείρηση και ορίστε μέχρι ποιο σημείο μπορεί να προχωρά κάθε handler.",
+      "schedule": "Πρόγραμμα",
+      "lastRun": "Τελευταία εκτέλεση",
+      "never": "Ποτέ",
+      "failures": "{{count}} συνεχόμενες αποτυχίες",
+      "confirmationTitle": "Απαίτηση επιβεβαίωσης owner",
+      "confirmationDescription": "Όταν είναι κλειστό, το Velliqo μπορεί να δημιουργεί αυτόματα μόνο low-risk campaign draft. Δεν μπορεί ποτέ να στείλει αυτόματα το campaign.",
+      "safetyTitle": "Προστασία από το Action Engine",
+      "safetyDescription": "Η συγκατάθεση πελατών ελέγχεται πριν από επανενεργοποίηση. Τα ραντεβού δεν μετακινούνται αυτόματα, δεν γίνονται παραγγελίες αγοράς και η αποστολή campaign παραμένει ξεχωριστή επιβεβαιωμένη ενέργεια.",
+      "autonomy": {
+        "disabled": "Απενεργοποιημένο",
+        "recommend_only": "Μόνο προτάσεις",
+        "prepare_draft": "Προετοιμασία draft για επιβεβαίωση",
+        "auto_execute_low_risk": "Αυτόματη δημιουργία low-risk drafts"
+      },
+      "handlerStatus": {
+        "planned": "Προγραμματισμένο",
+        "available": "Διαθέσιμο",
+        "paused": "Σε παύση"
+      },
+      "scheduleKind": {
+        "manual": "Χειροκίνητα",
+        "event": "Βάσει συμβάντος",
+        "hourly": "Κάθε ώρα",
+        "daily": "Καθημερινά",
+        "weekly": "Εβδομαδιαία"
+      },
+      "rules": {
+        "customer_reactivation": {
+          "title": "Επανενεργοποίηση πελατών",
+          "description": "Εντοπίζει ανενεργούς πελάτες με συγκατάθεση και μπορεί να προετοιμάσει ασφαλές win-back campaign draft."
+        },
+        "schedule_optimisation": {
+          "title": "Βελτιστοποίηση προγράμματος",
+          "description": "Εντοπίζει αξιοποιήσιμα κενά και ανισορροπία φόρτου χωρίς να μετακινεί ή να ακυρώνει ραντεβού."
+        },
+        "low_stock_actions": {
+          "title": "Ενέργειες χαμηλού αποθέματος",
+          "description": "Υπολογίζει προτάσεις αναπλήρωσης και εκτιμώμενο κόστος χωρίς να πραγματοποιεί παραγγελίες σε προμηθευτές."
+        },
+        "campaign_planning": {
+          "title": "Σχεδιασμός campaigns",
+          "description": "Επιλέγει τεκμηριωμένο στόχο, κοινό και μήνυμα και μπορεί να προετοιμάσει campaign draft."
+        }
+      }
     }
   },
   "customerPortal": {
