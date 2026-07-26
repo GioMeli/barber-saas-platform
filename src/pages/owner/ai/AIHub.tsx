@@ -54,6 +54,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from 'sonner';
+import { VelliqoVoiceAssistant } from '@/components/ai/VelliqoVoiceAssistant';
 
 const QUICK_PROMPTS: Array<{ key: string; agent: AIAgentKey }> = [
   { key: 'dailyBriefing', agent: 'business_coach' },
@@ -102,11 +103,13 @@ export default function AIHub() {
     const result = await ai.executeAction(action.id);
     if (result?.success) toast.success(t('ai.manager.actions.completedToast'));
     else if (result) toast.error(result.error || t('ai.manager.actions.failedToast'));
+    return result;
   };
 
   const cancelAction = async (action: VelliqoAIActionRequest) => {
     const result = await ai.rejectAction(action.id);
     if (result?.success) toast.success(t('ai.manager.actions.cancelledToast'));
+    return result;
   };
 
   const changeAction = async (action: VelliqoAIActionRequest) => {
@@ -409,10 +412,23 @@ export default function AIHub() {
                   <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
                     <ShieldCheck className="h-3.5 w-3.5" />{t('ai.manager.aggregateDataNotice')}
                   </div>
-                  <Button onClick={() => void send()} disabled={!draft.trim() || ai.sending}>
-                    {ai.sending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
-                    {t('ai.manager.send')}
-                  </Button>
+                  <div className="flex items-center gap-2">
+                    <VelliqoVoiceAssistant
+                      businessId={activeBusiness?.id}
+                      conversationId={ai.activeConversationId}
+                      language={language}
+                      agent={agent}
+                      sending={ai.sending}
+                      actionBusyId={ai.actionBusyId}
+                      onSendMessage={(message, selectedAgent) => ai.sendMessage({ agent: selectedAgent, message })}
+                      onExecuteAction={executeAction}
+                      onRejectAction={cancelAction}
+                    />
+                    <Button onClick={() => void send()} disabled={!draft.trim() || ai.sending}>
+                      {ai.sending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
+                      {t('ai.manager.send')}
+                    </Button>
+                  </div>
                 </div>
               </div>
             </div>
