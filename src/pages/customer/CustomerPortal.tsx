@@ -20,7 +20,7 @@ import {
   Navigation,
   Phone,
   RotateCcw,
-  Scissors,
+  BriefcaseBusiness,
   Sparkles,
   Star,
   UserCircle,
@@ -498,7 +498,7 @@ export default function CustomerPortal() {
         <MetricCard
           title={t('customerPortal.metrics.favouriteService')}
           value={favouriteService}
-          icon={<Scissors className="h-5 w-5" />}
+          icon={<BriefcaseBusiness className="h-5 w-5" />}
           compact
         />
         <MetricCard
@@ -815,7 +815,7 @@ function NextAppointmentPanel({
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2">
+        <div className="mobile-stack-actions sm:flex sm:flex-wrap sm:gap-2">
           <Button
             variant="outline"
             onClick={() => downloadAppointmentIcs(appointment, business, t)}
@@ -1006,7 +1006,7 @@ function ProfilePanel({
             </div>
           </div>
 
-          <div className="mt-6 flex justify-end">
+          <div className="mt-6 grid sm:flex sm:justify-end">
             <Button
               disabled={savingProfile}
               onClick={() => void saveProfile()}
@@ -1119,7 +1119,7 @@ function TimelineAppointment({
   return (
     <div className="relative z-10 flex gap-4">
       <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl border bg-card text-primary shadow-sm">
-        <Scissors className="h-5 w-5" />
+        <BriefcaseBusiness className="h-5 w-5" />
       </div>
 
       <Card className="min-w-0 flex-1 rounded-2xl shadow-sm">
@@ -1252,7 +1252,7 @@ function AppointmentCard({
           />
 
           <InfoLine
-            icon={<Scissors className="h-4 w-4" />}
+            icon={<BriefcaseBusiness className="h-4 w-4" />}
             label={t('customerPortal.appointment.professional')}
             value={
               appointment.employee_name ||

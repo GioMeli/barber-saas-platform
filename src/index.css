@@ -48,25 +48,63 @@
   }
 
   * { @apply border-border; }
-  html { scroll-behavior: smooth; }
-  body { @apply min-h-screen bg-background text-foreground antialiased; font-family: 'Montserrat', sans-serif; }
+  html { min-width: 320px; scroll-behavior: smooth; overflow-x: hidden; }
+  body { @apply min-h-screen bg-background text-foreground antialiased; min-width: 320px; overflow-x: hidden; font-family: 'Montserrat', sans-serif; }
+  #root { min-height: 100dvh; min-width: 0; }
   h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; @apply tracking-tight; }
   button,input,textarea,select { font: inherit; }
   ::selection { background: hsl(var(--primary) / .20); }
 }
 
 @layer components {
-  .app-page { @apply mx-auto w-full max-w-[1440px] space-y-6 px-0; }
-  .app-page-header { @apply flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between; }
-  .app-page-title { @apply text-2xl font-bold tracking-tight sm:text-3xl; }
+  .app-page { @apply mx-auto w-full min-w-0 max-w-[1440px] space-y-5 px-0 sm:space-y-6; }
+  .app-page > * { min-width: 0; }
+  .app-page-header { @apply flex min-w-0 flex-col gap-4 lg:flex-row lg:items-center lg:justify-between; }
+  .app-page-header > :first-child { min-width: 0; }
+  .app-page-title { @apply break-words text-2xl font-bold leading-tight tracking-tight sm:text-3xl; }
   .app-page-description { @apply mt-1 max-w-2xl text-sm leading-6 text-muted-foreground; }
-  .surface-card { @apply rounded-2xl border bg-card shadow-card; }
-  .metric-card { @apply rounded-2xl border bg-card p-5 shadow-card transition duration-200 hover:-translate-y-0.5 hover:shadow-hover; }
+  .app-page-actions { @apply grid w-full gap-2 sm:flex sm:w-auto sm:flex-wrap sm:items-center; }
+  .app-page-actions > * { @apply w-full sm:w-auto; }
+  .responsive-toolbar { @apply flex min-w-0 flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between; }
+  .responsive-toolbar-group { @apply flex min-w-0 flex-wrap items-center gap-2; }
+  .responsive-tabs { @apply scrollbar-subtle flex max-w-full gap-1 overflow-x-auto overscroll-x-contain pb-1; }
+  .responsive-data-scroll { @apply scrollbar-subtle max-w-full overscroll-x-contain overflow-x-auto; }
+  .surface-card { @apply min-w-0 rounded-2xl border bg-card shadow-card; }
+  .metric-card { @apply min-w-0 rounded-2xl border bg-card p-4 shadow-card transition duration-200 sm:p-5 hover:-translate-y-0.5 hover:shadow-hover; }
   .section-heading { @apply text-lg font-bold sm:text-xl; }
   .safe-bottom { padding-bottom: max(1rem, env(safe-area-inset-bottom)); }
   .scrollbar-subtle { scrollbar-width: thin; scrollbar-color: hsl(var(--border)) transparent; }
   .scrollbar-subtle::-webkit-scrollbar { width: 8px; height: 8px; }
   .scrollbar-subtle::-webkit-scrollbar-thumb { border-radius: 9999px; background: hsl(var(--border)); }
+
+  @media (max-width: 639px) {
+    .app-page-header > :last-child:not(:first-child) {
+      width: 100%;
+    }
+
+    .app-page-header > button:last-child:not(:first-child),
+    .app-page-header > a:last-child:not(:first-child) {
+      min-height: 2.75rem;
+    }
+
+    .app-page-header > :last-child:not(:first-child):is(button, a),
+    .app-page-header > :last-child:not(:first-child) > button,
+    .app-page-header > :last-child:not(:first-child) > a {
+      width: 100%;
+    }
+
+    .mobile-stack-actions {
+      display: grid;
+      width: 100%;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.5rem;
+    }
+
+    .mobile-stack-actions > * {
+      width: 100%;
+    }
+  }
+
 }
 
 [data-industry] { transition: background-color 180ms ease, color 180ms ease; }

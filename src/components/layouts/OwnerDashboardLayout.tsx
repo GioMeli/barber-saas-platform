@@ -6,6 +6,7 @@ import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { IndustryThemeRoot } from '@/theme';
 import OwnerSidebar from './owner-shell/OwnerSidebar';
 import OwnerTopBar from './owner-shell/OwnerTopBar';
+import OwnerMobileNavigation from './owner-shell/OwnerMobileNavigation';
 import ConnectivityBanner from '@/components/pwa/ConnectivityBanner';
 
 export default function OwnerDashboardLayout() {
@@ -19,7 +20,7 @@ export default function OwnerDashboardLayout() {
   return (
     <IndustryThemeRoot industryKey={activeBusiness?.industry_key}>
       <div className="min-h-screen bg-background">
-        <aside className="fixed inset-y-0 left-0 z-40 hidden w-[264px] border-r border-sidebar-border bg-sidebar md:block">
+        <aside className="fixed inset-y-0 left-0 z-40 hidden w-[264px] border-r border-sidebar-border bg-sidebar lg:block">
           <OwnerSidebar
             business={activeBusiness}
             profile={profile}
@@ -42,7 +43,7 @@ export default function OwnerDashboardLayout() {
           </SheetContent>
         </Sheet>
 
-        <div className="min-w-0 md:pl-[264px]">
+        <div className="min-w-0 lg:pl-[264px]">
           <OwnerTopBar
             businessId={activeBusiness?.id}
             businessName={activeBusiness?.name}
@@ -51,9 +52,11 @@ export default function OwnerDashboardLayout() {
 
           <ConnectivityBanner />
 
-          <main className="min-h-[calc(100vh-72px)] min-w-0 px-3 py-4 sm:px-5 sm:py-6 lg:px-7 xl:px-8">
+          <main className="min-h-[calc(100dvh-64px)] min-w-0 overflow-x-clip px-3 py-4 pb-[calc(6.25rem+env(safe-area-inset-bottom))] sm:min-h-[calc(100dvh-72px)] sm:px-5 sm:py-6 lg:px-7 lg:pb-7 xl:px-8">
             <Outlet />
           </main>
+
+          <OwnerMobileNavigation onOpenMenu={() => setIsMobileOpen(true)} />
         </div>
       </div>
     </IndustryThemeRoot>

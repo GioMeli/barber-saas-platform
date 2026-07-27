@@ -9,7 +9,7 @@ import {
   LogIn,
   LogOut,
   Menu,
-  Scissors,
+  CalendarCheck2,
   UserCircle,
   X,
   CheckCircle2,
@@ -248,7 +248,7 @@ export default function PublicAppLayout() {
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
         <div className="max-w-md text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
-            <Scissors className="h-7 w-7 text-muted-foreground" />
+            <CalendarCheck2 className="h-7 w-7 text-muted-foreground" />
           </div>
           <h1 className="mt-5 text-2xl font-bold">{t('storefront.public.notFound.title')}</h1>
           <p className="mt-2 text-sm text-muted-foreground">
@@ -269,10 +269,10 @@ export default function PublicAppLayout() {
         description={business.online_presence?.seo_description || business.description || t('storefront.public.hero.defaultTagline')}
       />
       <header className="sticky top-0 z-40 border-b bg-background/95 shadow-[0_1px_0_rgba(0,0,0,0.03)] backdrop-blur-xl">
-        <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6">
+        <div className="mx-auto flex h-16 max-w-7xl min-w-0 items-center justify-between gap-3 px-3 sm:h-[72px] sm:px-6">
           <Link
             to={`/app/${business.slug}`}
-            className="flex min-w-0 items-center gap-3"
+            className="flex min-w-0 flex-1 items-center gap-2.5 md:flex-none md:gap-3"
           >
             {business.logo_url ? (
               <img
@@ -361,7 +361,7 @@ export default function PublicAppLayout() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="border-t bg-background px-4 py-4 shadow-lg md:hidden">
+          <div className="safe-bottom max-h-[calc(100dvh-4rem)] overflow-y-auto border-t bg-background px-3 py-4 shadow-lg md:hidden">
             <div className="space-y-2">
               {navItems.map((item) => (
                 <Link
@@ -396,7 +396,7 @@ export default function PublicAppLayout() {
         )}
       </header>
 
-      <main className="min-h-[calc(100vh-72px)]">
+      <main className={`min-h-[calc(100dvh-4rem)] min-w-0 overflow-x-clip sm:min-h-[calc(100dvh-72px)] ${!location.pathname.endsWith('/book') ? 'pb-20 md:pb-0' : ''}`}>
         <Outlet
           context={{
             business,
@@ -419,8 +419,8 @@ export default function PublicAppLayout() {
       )}
 
       <Dialog open={authOpen} onOpenChange={setAuthOpen}>
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-hidden rounded-3xl border-0 p-0 shadow-2xl">
-          <div className="grid max-h-[94vh] overflow-y-auto lg:grid-cols-[0.9fr_1.1fr]">
+        <DialogContent className="max-h-[calc(100dvh-.75rem)] w-[calc(100%-.75rem)] max-w-4xl overflow-hidden rounded-3xl border-0 p-0 shadow-2xl sm:max-h-[94vh] sm:w-[calc(100%-1.5rem)]">
+          <div className="grid max-h-[calc(100dvh-.75rem)] min-w-0 overflow-y-auto sm:max-h-[94vh] lg:grid-cols-[0.9fr_1.1fr]">
             <section className="relative hidden overflow-hidden bg-zinc-950 p-8 text-white lg:block">
               {business.cover_image_url && (
                 <img
@@ -442,7 +442,7 @@ export default function PublicAppLayout() {
                       />
                     ) : (
                       <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
-                        <Scissors className="h-6 w-6" />
+                        <CalendarCheck2 className="h-6 w-6" />
                       </div>
                     )}
 
@@ -498,7 +498,7 @@ export default function PublicAppLayout() {
                     />
                   ) : (
                     <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/15 text-primary">
-                      <Scissors className="h-5 w-5" />
+                      <CalendarCheck2 className="h-5 w-5" />
                     </div>
                   )}
                   <div>

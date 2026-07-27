@@ -169,7 +169,7 @@ export default function AIHub() {
 
   return (
     <div className="app-page pb-12">
-      <section className="relative overflow-hidden rounded-[2rem] border border-violet-300/20 bg-[#111027] p-6 text-white shadow-2xl sm:p-8 lg:p-10">
+      <section className="relative min-w-0 overflow-hidden rounded-[1.5rem] border border-violet-300/20 bg-[#111027] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 lg:p-10">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(139,92,246,.35),transparent_35%),radial-gradient(circle_at_90%_90%,rgba(245,158,11,.16),transparent_30%)]" />
         <div className="relative grid gap-8 lg:grid-cols-[1fr_280px] lg:items-center">
           <div>
@@ -192,7 +192,7 @@ export default function AIHub() {
                 business: activeBusiness?.name || t('ai.yourBusiness'),
               })}
             </p>
-            <div className="mt-6 flex flex-wrap gap-3">
+            <div className="mobile-stack-actions mt-6 sm:flex sm:flex-wrap sm:gap-3">
               <Button
                 className="bg-white text-slate-950 hover:bg-white/90"
                 onClick={() => document.getElementById('velliqo-ai-composer')?.focus()}
@@ -210,7 +210,7 @@ export default function AIHub() {
               </Button>
             </div>
           </div>
-          <div className="mx-auto w-full max-w-[235px]">
+          <div className="mx-auto w-full max-w-[170px] sm:max-w-[235px]">
             <img
               src="/brand/velliqo-ai.png"
               alt="Velliqo AI"
@@ -282,7 +282,7 @@ export default function AIHub() {
               </Button>
             </div>
 
-            <ScrollArea className="mt-4 h-[280px] pr-3 xl:h-[560px]">
+            <ScrollArea className="mt-4 h-[220px] pr-3 sm:h-[280px] xl:h-[560px]">
               <div className="space-y-2">
                 {ai.conversations.length === 0 && (
                   <div className="rounded-2xl border border-dashed p-4 text-sm text-muted-foreground">
@@ -349,11 +349,11 @@ export default function AIHub() {
               </div>
             </div>
 
-            <ScrollArea className="h-[430px] px-4 py-5 sm:px-6">
+            <ScrollArea className="h-[min(52dvh,430px)] min-h-[340px] px-3 py-4 sm:h-[430px] sm:px-6 sm:py-5">
               {ai.loadingHistory ? (
                 <div className="space-y-4"><Skeleton className="h-20 w-3/4 rounded-2xl" /><Skeleton className="ml-auto h-16 w-2/3 rounded-2xl" /></div>
               ) : ai.messages.length === 0 ? (
-                <div className="mx-auto flex min-h-[360px] max-w-2xl flex-col items-center justify-center text-center">
+                <div className="mx-auto flex min-h-[300px] max-w-2xl flex-col items-center justify-center text-center sm:min-h-[360px]">
                   <div className="flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary"><Sparkles className="h-7 w-7" /></div>
                   <h3 className="mt-5 text-xl font-extrabold">{t('ai.manager.emptyTitle')}</h3>
                   <p className="mt-2 max-w-lg text-sm leading-6 text-muted-foreground">{t('ai.manager.emptyDescription')}</p>
@@ -408,11 +408,11 @@ export default function AIHub() {
                   maxLength={4000}
                   disabled={ai.sending}
                 />
-                <div className="flex items-center justify-between gap-3 px-2 pb-1">
-                  <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground">
+                <div className="flex flex-col gap-3 px-2 pb-1 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="flex min-w-0 items-start gap-1.5 text-[11px] leading-5 text-muted-foreground">
                     <ShieldCheck className="h-3.5 w-3.5" />{t('ai.manager.aggregateDataNotice')}
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
                     <VelliqoVoiceAssistant
                       businessId={activeBusiness?.id}
                       conversationId={ai.activeConversationId}
@@ -780,15 +780,15 @@ function AIActionConfirmationCard({
             <Clock3 className="mt-0.5 h-3.5 w-3.5 shrink-0" />
             <span>{t('ai.manager.actions.reviewNotice')} {t('ai.manager.actions.expiresSoon')}</span>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <Button size="sm" onClick={onExecute} disabled={busy}>
+          <div className="grid gap-2 sm:flex sm:flex-wrap">
+            <Button className="w-full sm:w-auto" size="sm" onClick={onExecute} disabled={busy}>
               {busy ? <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" /> : <CheckCircle2 className="mr-2 h-3.5 w-3.5" />}
               {busy ? t('ai.manager.actions.executing') : t('ai.manager.actions.confirm')}
             </Button>
-            <Button size="sm" variant="outline" onClick={onChange} disabled={busy}>
+            <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={onChange} disabled={busy}>
               <Pencil className="mr-2 h-3.5 w-3.5" />{t('ai.manager.actions.change')}
             </Button>
-            <Button size="sm" variant="ghost" onClick={onCancel} disabled={busy}>
+            <Button className="w-full sm:w-auto" size="sm" variant="ghost" onClick={onCancel} disabled={busy}>
               <XCircle className="mr-2 h-3.5 w-3.5" />{t('ai.manager.actions.cancel')}
             </Button>
           </div>

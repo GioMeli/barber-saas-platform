@@ -20,7 +20,7 @@ import {
   Download,
   ExternalLink,
   MapPin,
-  Scissors,
+  BriefcaseBusiness,
   Sparkles,
   UserRound,
 } from 'lucide-react';
@@ -415,7 +415,7 @@ export default function PublicBooking() {
 
   if (step === 5 && bookingSuccess) {
     return (
-      <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6">
+      <div className="mx-auto max-w-3xl px-3 py-8 sm:px-6 sm:py-12">
         <Card className="overflow-hidden rounded-3xl border-emerald-200 shadow-card">
           <CardContent className="p-7 text-center sm:p-10">
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
@@ -484,12 +484,12 @@ export default function PublicBooking() {
   }
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-8 pb-28 sm:px-6 sm:py-10 md:pb-12">
+    <div className="mx-auto max-w-7xl min-w-0 px-3 py-6 pb-[calc(7.5rem+env(safe-area-inset-bottom))] sm:px-6 sm:py-10 md:pb-12">
       <div className="mb-8">
         <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
           {t('publicBooking.header.eyebrow')}
         </div>
-        <h1 className="mt-2 text-3xl font-bold sm:text-4xl">
+        <h1 className="mt-2 break-words text-2xl font-bold leading-tight sm:text-4xl">
           {t('publicBooking.header.title', { business: business.name })}
         </h1>
         <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground">
@@ -497,7 +497,7 @@ export default function PublicBooking() {
         </p>
       </div>
 
-      <div className="scrollbar-subtle mb-8 flex gap-2 overflow-x-auto pb-1">
+      <div className="scrollbar-subtle -mx-3 mb-6 flex snap-x gap-2 overflow-x-auto px-3 pb-2 sm:mx-0 sm:mb-8 sm:px-0">
         {STEPS.map((item) => {
           const active = step === item.id;
           const completed = step > item.id;
@@ -505,7 +505,7 @@ export default function PublicBooking() {
           return (
             <div
               key={item.id}
-              className={`flex min-w-[150px] items-center gap-3 rounded-2xl border px-4 py-3 ${
+              className={`flex min-w-[138px] snap-start items-center gap-2.5 rounded-2xl border px-3 py-3 sm:min-w-[150px] sm:gap-3 sm:px-4 ${
                 active
                   ? 'border-primary bg-primary/10'
                   : completed
@@ -536,7 +536,7 @@ export default function PublicBooking() {
             {step === 1 && (
               <section className="space-y-5">
                 <StepTitle
-                  icon={<Scissors className="h-5 w-5" />}
+                  icon={<BriefcaseBusiness className="h-5 w-5" />}
                   title={t('publicBooking.services.title')}
                   description={t('publicBooking.services.description')}
                 />
@@ -1019,7 +1019,7 @@ export default function PublicBooking() {
         </aside>
       </div>
 
-      <div className="fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur xl:hidden">
+      <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-3 pt-3 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur xl:hidden">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
           <div className="min-w-0">
             <div className="truncate text-xs text-muted-foreground">

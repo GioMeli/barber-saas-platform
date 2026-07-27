@@ -731,8 +731,10 @@
   .outlook-calendar-mobile-views {
     display: flex;
     flex: 0 0 auto;
+    max-width: 100%;
     gap: 4px;
     overflow-x: auto;
+    overscroll-behavior-x: contain;
     border: 1px solid hsl(var(--border));
     border-radius: 12px;
     padding: 4px;
@@ -767,10 +769,27 @@
    MOBILE
    --------------------------------------------------------- */
 
+@media (max-width: 1023px) {
+  .outlook-calendar-page {
+    min-height: 540px;
+    height: calc(100dvh - 156px);
+    padding: 12px;
+  }
+
+  .outlook-calendar-toolbar {
+    gap: 10px;
+  }
+
+  .outlook-calendar-title {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
 @media (max-width: 760px) {
   .outlook-calendar-page {
-    min-height: 560px;
-    height: calc(100dvh - 104px);
+    min-height: 500px;
+    height: calc(100dvh - 148px);
     gap: 8px;
     overflow: hidden;
     padding: 8px;
@@ -821,8 +840,8 @@
   .outlook-calendar-mobile-fab {
     position: absolute;
     z-index: 45;
-    right: 20px;
-    bottom: 20px;
+    right: 14px;
+    bottom: 14px;
     display: inline-flex;
     width: 52px;
     height: 52px;
@@ -934,6 +953,8 @@
 
 @media (max-width: 480px) {
   .outlook-calendar-page {
+    min-height: 460px;
+    height: calc(100dvh - 144px);
     padding: 6px;
   }
 

@@ -2,9 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 export function PageContainer({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`mx-auto w-full max-w-7xl px-4 py-8 pb-28 sm:px-6 sm:py-10 md:pb-12 ${className}`}>{children}</div>;
+  return <div className={cn('mx-auto w-full max-w-7xl min-w-0 px-3 py-6 pb-28 sm:px-6 sm:py-10 md:pb-12', className)}>{children}</div>;
 }
 
 export function PageHero({
@@ -22,14 +23,14 @@ export function PageHero({
 }) {
   return (
     <section className="overflow-hidden rounded-3xl border bg-gradient-to-br from-primary/15 via-card to-card shadow-card">
-      <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+      <div className="grid min-w-0 gap-6 p-4 sm:p-8 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
         <div className="min-w-0">
           {eyebrow && <div className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{eyebrow}</div>}
-          <h1 className="mt-2 text-3xl font-bold tracking-tight sm:text-4xl">{title}</h1>
+          <h1 className="mt-2 break-words text-2xl font-bold leading-tight tracking-tight sm:text-4xl">{title}</h1>
           {description && <div className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">{description}</div>}
           {children && <div className="mt-6">{children}</div>}
         </div>
-        {actions && <div className="flex flex-wrap gap-3 lg:justify-end">{actions}</div>}
+        {actions && <div className="grid w-full gap-2 sm:flex sm:flex-wrap sm:gap-3 lg:w-auto lg:justify-end [&>*]:w-full sm:[&>*]:w-auto">{actions}</div>}
       </div>
     </section>
   );
@@ -53,7 +54,7 @@ export function MetricCard({
       <div className="flex h-full items-start justify-between gap-4">
         <div className="min-w-0">
           <div className="text-sm text-muted-foreground">{title}</div>
-          <div className={`mt-2 truncate font-bold tracking-tight ${compact ? 'text-lg' : 'text-3xl'}`}>{value}</div>
+          <div className={`mt-2 break-words font-bold leading-tight tracking-tight ${compact ? 'text-base sm:text-lg' : 'text-2xl sm:text-3xl'}`}>{value}</div>
           {caption && <div className="mt-2 text-xs leading-5 text-muted-foreground">{caption}</div>}
         </div>
         {icon && <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">{icon}</div>}
@@ -72,12 +73,12 @@ export function SectionHeader({
   action?: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-      <div>
-        <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+    <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+      <div className="min-w-0">
+        <h2 className="break-words text-xl font-bold tracking-tight sm:text-2xl">{title}</h2>
         {description && <div className="mt-1 text-sm leading-6 text-muted-foreground">{description}</div>}
       </div>
-      {action && <div className="shrink-0">{action}</div>}
+      {action && <div className="grid w-full shrink-0 gap-2 sm:flex sm:w-auto [&>*]:w-full sm:[&>*]:w-auto">{action}</div>}
     </div>
   );
 }
@@ -92,7 +93,7 @@ type ActionCardProps = {
 };
 
 export function ActionCard({ title, description, icon, to, onClick, disabled }: ActionCardProps) {
-  const className = "flex min-h-[92px] w-full items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm transition hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60";
+  const className = "flex min-h-[88px] w-full items-center gap-4 rounded-2xl border bg-card p-3.5 shadow-sm transition sm:p-4 hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60";
   const content = (
     <>
       <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-primary">{icon}</div>
@@ -121,7 +122,7 @@ export function EmptyState({
 }) {
   return (
     <Card className="rounded-3xl shadow-card">
-      <CardContent className="flex min-h-[320px] flex-col items-center justify-center p-8 text-center sm:p-10">
+      <CardContent className="flex min-h-[240px] flex-col items-center justify-center p-6 text-center sm:min-h-[320px] sm:p-10">
         <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted text-muted-foreground">{icon}</div>
         <h3 className="mt-5 text-lg font-bold">{title}</h3>
         <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">{description}</p>
@@ -160,5 +161,5 @@ export function StatBadge({ children, tone = 'default' }: { children: React.Reac
 }
 
 export function DashboardGrid({ children, className = '' }: { children: React.ReactNode; className?: string }) {
-  return <div className={`grid gap-4 sm:grid-cols-2 xl:grid-cols-3 ${className}`}>{children}</div>;
+  return <div className={cn('grid min-w-0 gap-4 sm:grid-cols-2 xl:grid-cols-3', className)}>{children}</div>;
 }
