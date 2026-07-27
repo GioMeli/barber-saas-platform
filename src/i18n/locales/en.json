@@ -129,7 +129,9 @@
       "expense": "New expense",
       "campaign": "New campaign"
     },
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "mobile_appointment": "Appointment",
+    "more": "More"
   },
   "system": {
     "loading": "Loading...",
@@ -1816,7 +1818,9 @@
           "cancel_appointment": "Cancel appointment",
           "create_campaign_draft": "Create campaign draft",
           "create_post_draft": "Create post draft"
-        }
+        },
+        "confirmationBadge": "Confirmation required",
+        "confirmationDescription": "Review the prepared action before Velliqo executes it."
       },
       "proactive": {
         "dailyBriefing": "Daily executive briefing",
@@ -1924,7 +1928,8 @@
         "speaking": "Speaking…",
         "confirming": "Waiting for confirmation",
         "error": "Needs attention"
-      }
+      },
+      "actionChangeRequested": "Tell me what you would like to change, by voice or text."
     },
     "automations": {
       "phaseBadge": "Phase 9D",
@@ -1984,6 +1989,11 @@
           "description": "Choose a data-backed objective, audience and message, then optionally prepare a campaign draft."
         }
       }
+    },
+    "quickAccess": {
+      "title": "Ask Velliqo",
+      "description": "Send a written or voice message and keep the conversation open while you review actions.",
+      "insights": "AI insights"
     }
   },
   "customerPortal": {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
@@ -55,6 +55,8 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { toast } from 'sonner';
 import { VelliqoVoiceAssistant } from '@/components/ai/VelliqoVoiceAssistant';
+import { VelliqoActionConfirmationDialog } from '@/components/ai/VelliqoActionConfirmationDialog';
+import { cn } from '@/lib/utils';
 
 const QUICK_PROMPTS: Array<{ key: string; agent: AIAgentKey }> = [
   { key: 'dailyBriefing', agent: 'business_coach' },
@@ -66,9 +68,12 @@ const QUICK_PROMPTS: Array<{ key: string; agent: AIAgentKey }> = [
 export default function AIHub() {
   const { t, i18n } = useTranslation();
   const { activeBusiness, profile } = useAuth();
+  const [searchParams] = useSearchParams();
+  const assistantMode = searchParams.get('mode') === 'assistant';
   const language = normalizeLanguage(i18n.resolvedLanguage || i18n.language);
   const [agent, setAgent] = React.useState<AIAgentKey>('business_coach');
   const [draft, setDraft] = React.useState('');
+  const [confirmationAction, setConfirmationAction] = React.useState<VelliqoAIActionRequest | null>(null);
   const endRef = React.useRef<HTMLDivElement | null>(null);
   const firstName = profile?.full_name?.split(' ')[0] || t('ai.ownerFallback');
 
@@ -82,12 +87,21 @@ export default function AIHub() {
     endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }, [ai.messages, ai.sending]);
 
+  React.useEffect(() => {
+    if (!assistantMode) return;
+    const timer = window.setTimeout(() => {
+      document.getElementById('velliqo-ai-composer')?.focus();
+    }, 180);
+    return () => window.clearTimeout(timer);
+  }, [assistantMode]);
+
   const send = async (message = draft, selectedAgent = agent) => {
     const cleanMessage = message.trim();
     if (!cleanMessage || ai.sending) return;
     setAgent(selectedAgent);
     setDraft('');
     const result = await ai.sendMessage({ agent: selectedAgent, message: cleanMessage });
+    if (result?.pendingAction) setConfirmationAction(result.pendingAction);
     if (!result && cleanMessage === draft.trim()) setDraft(cleanMessage);
   };
 
@@ -101,22 +115,32 @@ export default function AIHub() {
 
   const executeAction = async (action: VelliqoAIActionRequest) => {
     const result = await ai.executeAction(action.id);
-    if (result?.success) toast.success(t('ai.manager.actions.completedToast'));
-    else if (result) toast.error(result.error || t('ai.manager.actions.failedToast'));
+    if (result?.success) {
+      toast.success(t('ai.manager.actions.completedToast'));
+      setConfirmationAction(null);
+    } else if (result) {
+      toast.error(result.error || t('ai.manager.actions.failedToast'));
+      setConfirmationAction(null);
+    }
     return result;
   };
 
   const cancelAction = async (action: VelliqoAIActionRequest) => {
     const result = await ai.rejectAction(action.id);
-    if (result?.success) toast.success(t('ai.manager.actions.cancelledToast'));
+    if (result?.success) {
+      toast.success(t('ai.manager.actions.cancelledToast'));
+      setConfirmationAction(null);
+    }
     return result;
   };
 
   const changeAction = async (action: VelliqoAIActionRequest) => {
     const result = await ai.rejectAction(action.id);
-    if (!result?.success) return;
+    if (!result?.success) return result;
+    setConfirmationAction(null);
     setDraft(t('ai.manager.actions.changePrompt', { summary: action.summary }));
     window.setTimeout(() => document.getElementById('velliqo-ai-composer')?.focus(), 0);
+    return result;
   };
 
   const refreshBriefing = async () => {
@@ -168,8 +192,43 @@ export default function AIHub() {
   ];
 
   return (
-    <div className="app-page pb-12">
-      <section className="relative min-w-0 overflow-hidden rounded-[1.5rem] border border-violet-300/20 bg-[#111027] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 lg:p-10">
+    <div className={cn('app-page pb-12', assistantMode && 'gap-4 pb-4')}>
+      {assistantMode ? (
+        <section className="relative overflow-hidden rounded-[1.5rem] border border-violet-300/20 bg-[#111027] px-4 py-4 text-white shadow-xl sm:px-6">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_0%,rgba(139,92,246,.34),transparent_38%),radial-gradient(circle_at_100%_100%,rgba(245,158,11,.14),transparent_34%)]" />
+          <div className="relative flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex min-w-0 items-center gap-3">
+              <img
+                src="/brand/velliqo-ai.png"
+                alt="Velliqo AI"
+                className="h-12 w-12 shrink-0 rounded-2xl object-cover mix-blend-screen drop-shadow-[0_0_18px_rgba(168,85,247,.48)]"
+              />
+              <div className="min-w-0">
+                <div className="text-xs font-bold uppercase tracking-[.16em] text-violet-200">Velliqo AI</div>
+                <h1 className="mt-1 truncate text-xl font-extrabold">{t('ai.quickAccess.title')}</h1>
+                <p className="mt-1 text-xs leading-5 text-white/62">{t('ai.quickAccess.description')}</p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                onClick={ai.startNewConversation}
+              >
+                <Plus className="mr-2 h-4 w-4" />{t('ai.manager.newConversation')}
+              </Button>
+              <Button asChild className="bg-white text-slate-950 hover:bg-white/90">
+                <Link to="/dashboard/ai">
+                  <Gauge className="mr-2 h-4 w-4" />{t('ai.quickAccess.insights')}
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
+      <section className={cn('relative min-w-0 overflow-hidden rounded-[1.5rem] border border-violet-300/20 bg-[#111027] p-4 text-white shadow-2xl sm:rounded-[2rem] sm:p-8 lg:p-10', assistantMode && 'hidden')}>
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(139,92,246,.35),transparent_35%),radial-gradient(circle_at_90%_90%,rgba(245,158,11,.16),transparent_30%)]" />
         <div className="relative grid gap-8 lg:grid-cols-[1fr_280px] lg:items-center">
           <div>
@@ -228,7 +287,7 @@ export default function AIHub() {
         </Alert>
       )}
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,.75fr)]">
+      <section className={cn('grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,.75fr)]', assistantMode && 'hidden')}>
         <AIManagerBriefingPanel
           briefing={ai.briefing}
           loading={ai.loadingProactive}
@@ -245,7 +304,7 @@ export default function AIHub() {
         />
       </section>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section className={cn('grid gap-4 sm:grid-cols-2 xl:grid-cols-4', assistantMode && 'hidden')}>
         {ai.loadingSnapshot
           ? Array.from({ length: 4 }).map((_, index) => (
             <Card key={index} className="rounded-3xl shadow-card"><CardContent className="p-5"><Skeleton className="h-11 w-11 rounded-2xl" /><Skeleton className="mt-4 h-4 w-28" /><Skeleton className="mt-3 h-8 w-20" /><Skeleton className="mt-2 h-3 w-32" /></CardContent></Card>
@@ -269,7 +328,11 @@ export default function AIHub() {
           ))}
       </section>
 
-      <section className="grid gap-6 xl:grid-cols-[280px_minmax(0,1fr)]">
+      <section
+        id="velliqo-assistant-workspace"
+        className={cn('grid gap-6', !assistantMode && 'xl:grid-cols-[280px_minmax(0,1fr)]')}
+      >
+        {!assistantMode ? (
         <Card className="rounded-3xl shadow-card">
           <CardContent className="p-4 sm:p-5">
             <div className="flex items-center justify-between gap-2">
@@ -322,15 +385,18 @@ export default function AIHub() {
             </ScrollArea>
           </CardContent>
         </Card>
+        ) : null}
 
-        <Card className="overflow-hidden rounded-3xl shadow-card">
+        <Card className={cn('overflow-hidden rounded-3xl shadow-card', assistantMode && 'border-violet-200/80 shadow-[0_22px_70px_rgba(55,32,115,.16)]')}>
           <CardContent className="p-0">
             <div className="border-b bg-muted/15 p-4 sm:p-5">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
-                    <Bot className="h-5 w-5" />
-                  </div>
+                  <img
+                    src="/brand/velliqo-ai.png"
+                    alt="Velliqo AI"
+                    className="h-11 w-11 rounded-2xl object-cover mix-blend-multiply dark:mix-blend-screen"
+                  />
                   <div>
                     <h2 className="font-extrabold">{t('ai.manager.chatTitle')}</h2>
                     <p className="text-xs text-muted-foreground">{t('ai.manager.chatDescription')}</p>
@@ -349,7 +415,12 @@ export default function AIHub() {
               </div>
             </div>
 
-            <ScrollArea className="h-[min(52dvh,430px)] min-h-[340px] px-3 py-4 sm:h-[430px] sm:px-6 sm:py-5">
+            <ScrollArea
+              className={cn(
+                'h-[min(52dvh,430px)] min-h-[340px] px-3 py-4 sm:h-[430px] sm:px-6 sm:py-5',
+                assistantMode && 'h-[calc(100dvh-23rem)] min-h-[360px] max-h-[680px] sm:h-[calc(100dvh-21rem)]',
+              )}
+            >
               {ai.loadingHistory ? (
                 <div className="space-y-4"><Skeleton className="h-20 w-3/4 rounded-2xl" /><Skeleton className="ml-auto h-16 w-2/3 rounded-2xl" /></div>
               ) : ai.messages.length === 0 ? (
@@ -423,6 +494,7 @@ export default function AIHub() {
                       onSendMessage={(message, selectedAgent) => ai.sendMessage({ agent: selectedAgent, message })}
                       onExecuteAction={executeAction}
                       onRejectAction={cancelAction}
+                      onChangeAction={changeAction}
                     />
                     <Button onClick={() => void send()} disabled={!draft.trim() || ai.sending}>
                       {ai.sending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Send className="mr-2 h-4 w-4" />}
@@ -435,6 +507,24 @@ export default function AIHub() {
           </CardContent>
         </Card>
       </section>
+
+      <VelliqoActionConfirmationDialog
+        open={Boolean(confirmationAction)}
+        action={confirmationAction}
+        busy={Boolean(confirmationAction && ai.actionBusyId === confirmationAction.id)}
+        onOpenChange={(open) => {
+          if (!open) setConfirmationAction(null);
+        }}
+        onConfirm={() => {
+          if (confirmationAction) void executeAction(confirmationAction);
+        }}
+        onCancel={() => {
+          if (confirmationAction) void cancelAction(confirmationAction);
+        }}
+        onChange={() => {
+          if (confirmationAction) void changeAction(confirmationAction);
+        }}
+      />
     </div>
   );
 }

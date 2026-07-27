@@ -129,7 +129,9 @@
       "expense": "Νέο έξοδο",
       "campaign": "Νέα καμπάνια"
     },
-    "marketing": "Μάρκετινγκ"
+    "marketing": "Μάρκετινγκ",
+    "mobile_appointment": "Ραντεβού",
+    "more": "Περισσότερα"
   },
   "system": {
     "loading": "Φόρτωση...",
@@ -1816,7 +1818,9 @@
           "cancel_appointment": "Ακύρωση ραντεβού",
           "create_campaign_draft": "Δημιουργία πρόχειρης καμπάνιας",
           "create_post_draft": "Δημιουργία πρόχειρης ανάρτησης"
-        }
+        },
+        "confirmationBadge": "Απαιτείται επιβεβαίωση",
+        "confirmationDescription": "Έλεγξε την προετοιμασμένη ενέργεια πριν την εκτελέσει το Velliqo."
       },
       "proactive": {
         "dailyBriefing": "Ημερήσια ενημέρωση διευθυντή",
@@ -1924,7 +1928,8 @@
         "speaking": "Μιλάω…",
         "confirming": "Αναμονή επιβεβαίωσης",
         "error": "Χρειάζεται προσοχή"
-      }
+      },
+      "actionChangeRequested": "Πες μου τι θέλεις να αλλάξεις, με φωνή ή κείμενο."
     },
     "automations": {
       "phaseBadge": "Phase 9D",
@@ -1984,6 +1989,11 @@
           "description": "Επιλέγει τεκμηριωμένο στόχο, κοινό και μήνυμα και μπορεί να προετοιμάσει campaign draft."
         }
       }
+    },
+    "quickAccess": {
+      "title": "Ρώτησε το Velliqo",
+      "description": "Στείλε γραπτό ή φωνητικό μήνυμα και κράτησε τη συνομιλία ανοιχτή όσο ελέγχεις τις ενέργειες.",
+      "insights": "AI αναλύσεις"
     }
   },
   "customerPortal": {

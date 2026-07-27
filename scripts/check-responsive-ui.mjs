@@ -31,13 +31,16 @@ requireText('src/components/layouts/OwnerDashboardLayout.tsx', [
   'lg:block',
   'lg:pl-[264px]',
   'OwnerMobileNavigation',
-  'pb-[calc(6.25rem+env(safe-area-inset-bottom))]',
+  'pb-[calc(7rem+env(safe-area-inset-bottom))]',
 ]);
 
 requireText('src/components/layouts/owner-shell/OwnerMobileNavigation.tsx', [
-  "const MOBILE_NAV_KEYS = ['home', 'calendar', 'sales', 'ai']",
+  "const MOBILE_NAV_KEYS = ['home', 'calendar']",
   'grid-cols-5',
   'safe-bottom fixed',
+  'bg-sidebar',
+  '/dashboard/calendar?action=new',
+  '/dashboard/ai?mode=assistant',
   'onOpenMenu',
 ]);
 

@@ -52,7 +52,7 @@ export default function OwnerDashboardLayout() {
 
           <ConnectivityBanner />
 
-          <main className="min-h-[calc(100dvh-64px)] min-w-0 overflow-x-clip px-3 py-4 pb-[calc(6.25rem+env(safe-area-inset-bottom))] sm:min-h-[calc(100dvh-72px)] sm:px-5 sm:py-6 lg:px-7 lg:pb-7 xl:px-8">
+          <main className="min-h-[calc(100dvh-64px)] min-w-0 overflow-x-clip px-3 py-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:min-h-[calc(100dvh-72px)] sm:px-5 sm:py-6 lg:px-7 lg:pb-7 xl:px-8">
             <Outlet />
           </main>
 
