@@ -52,6 +52,7 @@ jobs:
           npm run automations:check
           npm run voice:check
           npm run industry-neutral:check
+          npm run responsive:check
 
       - name: TypeScript
         run: npm run typecheck

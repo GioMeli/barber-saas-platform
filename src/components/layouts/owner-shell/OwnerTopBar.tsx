@@ -26,12 +26,12 @@ export default function OwnerTopBar({
 
   return (
     <header className="sticky top-0 z-30 border-b border-border/70 bg-background/88 backdrop-blur-xl">
-      <div className="flex h-[72px] min-w-0 items-center gap-2 px-3 sm:px-5 lg:px-7">
+      <div className="flex h-16 min-w-0 items-center gap-1.5 px-3 sm:h-[72px] sm:gap-2 sm:px-5 lg:px-7">
         <Button
           type="button"
           variant="outline"
           size="icon"
-          className="h-10 w-10 shrink-0 rounded-xl bg-card/80 shadow-sm md:hidden"
+          className="h-10 w-10 shrink-0 rounded-xl bg-card/80 shadow-sm lg:hidden"
           aria-label={t('navigation.open_menu')}
           onClick={onOpenMobileMenu}
         >
@@ -47,7 +47,9 @@ export default function OwnerTopBar({
           </div>
         </div>
 
-        <OwnerCommandPalette />
+        <div className="hidden md:block">
+          <OwnerCommandPalette />
+        </div>
 
         <OwnerQuickAdd />
 
@@ -55,13 +57,15 @@ export default function OwnerTopBar({
           <OwnerNotificationCenter businessId={businessId} variant="icon" />
         )}
 
-        <PWAStatusCenter />
+        <div className="hidden sm:block">
+          <PWAStatusCenter />
+        </div>
 
         <Button
           asChild
           variant="outline"
           size="icon"
-          className="relative hidden h-10 w-10 rounded-xl border-primary/25 bg-primary/10 text-primary shadow-sm hover:bg-primary/15 hover:text-primary sm:inline-flex"
+          className="relative h-10 w-10 shrink-0 rounded-xl border-violet-300/40 bg-violet-600 text-white shadow-[0_8px_20px_rgba(124,58,237,.22)] hover:bg-violet-700 hover:text-white"
         >
           <Link to="/dashboard/ai" aria-label={t('navigation.open_ai')}>
             <Sparkles className="h-4 w-4" />
@@ -69,7 +73,7 @@ export default function OwnerTopBar({
           </Link>
         </Button>
 
-        <LanguageSwitcher compact className="hidden lg:inline-flex" />
+        <LanguageSwitcher compact className="hidden xl:inline-flex" />
       </div>
     </header>
   );

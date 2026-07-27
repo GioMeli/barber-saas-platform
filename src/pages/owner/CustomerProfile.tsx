@@ -355,7 +355,7 @@ export default function CustomerProfile() {
         </CardContent>
       </Card>
 
-      <div className="flex gap-2 rounded-2xl border bg-card p-2 shadow-card">
+      <div className="responsive-tabs rounded-2xl border bg-card p-2 shadow-card">
         <TabButton
           active={activeTab === 'records'}
           label={t('customerProfile.tabs.records', { count: records.length })}
@@ -369,9 +369,9 @@ export default function CustomerProfile() {
       </div>
 
       {activeTab === 'records' ? (
-        <section className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+        <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {records.length === 0 ? (
-            <Card className="col-span-2 lg:col-span-4">
+            <Card className="sm:col-span-2 lg:col-span-4">
               <CardContent className="p-12 text-center">
                 <Camera className="mx-auto h-9 w-9 text-muted-foreground/50" />
                 <h3 className="mt-4 font-bold">{t('customerProfile.states.noRecords')}</h3>
