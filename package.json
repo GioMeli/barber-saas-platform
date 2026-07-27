@@ -19,7 +19,8 @@
     "automations:check": "node scripts/check-ai-operational-automations.mjs",
     "voice:check": "node scripts/check-ai-voice-assistant.mjs",
     "industry-neutral:check": "node scripts/check-industry-neutral-platform.mjs",
-    "responsive:check": "node scripts/check-responsive-ui.mjs"
+    "responsive:check": "node scripts/check-responsive-ui.mjs",
+    "mobile-ai:check": "node scripts/check-mobile-ai-quick-access.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

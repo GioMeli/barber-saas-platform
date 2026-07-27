@@ -129,7 +129,9 @@
       "expense": "Nuevo gasto",
       "campaign": "Nueva campaña"
     },
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "mobile_appointment": "Cita",
+    "more": "Más"
   },
   "system": {
     "loading": "Cargando...",
@@ -1816,7 +1818,9 @@
           "cancel_appointment": "Cancelar cita",
           "create_campaign_draft": "Crear borrador de campaña",
           "create_post_draft": "Crear borrador de publicación"
-        }
+        },
+        "confirmationBadge": "Se requiere confirmación",
+        "confirmationDescription": "Revisa la acción preparada antes de que Velliqo la ejecute."
       },
       "proactive": {
         "dailyBriefing": "Informe ejecutivo diario",
@@ -1924,7 +1928,8 @@
         "speaking": "Hablando…",
         "confirming": "Esperando confirmación",
         "error": "Requiere atención"
-      }
+      },
+      "actionChangeRequested": "Dime por voz o texto qué quieres cambiar."
     },
     "automations": {
       "phaseBadge": "Fase 9D",
@@ -1984,6 +1989,11 @@
           "description": "Selecciona objetivo, audiencia y mensaje con datos y puede preparar un borrador."
         }
       }
+    },
+    "quickAccess": {
+      "title": "Pregunta a Velliqo",
+      "description": "Envía un mensaje de texto o voz y mantén abierta la conversación mientras revisas las acciones.",
+      "insights": "Análisis de IA"
     }
   },
   "customerPortal": {

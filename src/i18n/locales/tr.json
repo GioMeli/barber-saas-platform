@@ -129,7 +129,9 @@
       "expense": "Yeni gider",
       "campaign": "Yeni kampanya"
     },
-    "marketing": "Pazarlama"
+    "marketing": "Pazarlama",
+    "mobile_appointment": "Randevu",
+    "more": "Daha fazla"
   },
   "system": {
     "loading": "Yükleniyor...",
@@ -1816,7 +1818,9 @@
           "cancel_appointment": "Randevuyu iptal et",
           "create_campaign_draft": "Kampanya taslağı oluştur",
           "create_post_draft": "Gönderi taslağı oluştur"
-        }
+        },
+        "confirmationBadge": "Onay gerekli",
+        "confirmationDescription": "Velliqo işlemi uygulamadan önce hazırlanan eylemi gözden geçirin."
       },
       "proactive": {
         "dailyBriefing": "Günlük yönetici özeti",
@@ -1924,7 +1928,8 @@
         "speaking": "Konuşuyor…",
         "confirming": "Onay bekleniyor",
         "error": "Dikkat gerekiyor"
-      }
+      },
+      "actionChangeRequested": "Neyi değiştirmek istediğinizi sesli veya yazılı olarak söyleyin."
     },
     "automations": {
       "phaseBadge": "Aşama 9D",
@@ -1984,6 +1989,11 @@
           "description": "Veriye dayalı hedef, kitle ve mesaj seçer ve kampanya taslağı hazırlayabilir."
         }
       }
+    },
+    "quickAccess": {
+      "title": "Velliqo'ya sor",
+      "description": "Yazılı veya sesli mesaj gönderin ve işlemleri incelerken konuşmayı açık tutun.",
+      "insights": "AI analizleri"
     }
   },
   "customerPortal": {

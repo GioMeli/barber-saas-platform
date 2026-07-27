@@ -129,7 +129,9 @@
       "expense": "Neue Ausgabe",
       "campaign": "Neue Kampagne"
     },
-    "marketing": "Marketing"
+    "marketing": "Marketing",
+    "mobile_appointment": "Termin",
+    "more": "Mehr"
   },
   "system": {
     "loading": "Wird geladen...",
@@ -1816,7 +1818,9 @@
           "cancel_appointment": "Termin stornieren",
           "create_campaign_draft": "Kampagnenentwurf erstellen",
           "create_post_draft": "Beitragsentwurf erstellen"
-        }
+        },
+        "confirmationBadge": "Bestätigung erforderlich",
+        "confirmationDescription": "Prüfe die vorbereitete Aktion, bevor Velliqo sie ausführt."
       },
       "proactive": {
         "dailyBriefing": "Tägliches Executive-Briefing",
@@ -1924,7 +1928,8 @@
         "speaking": "Spricht…",
         "confirming": "Wartet auf Bestätigung",
         "error": "Aufmerksamkeit erforderlich"
-      }
+      },
+      "actionChangeRequested": "Sag mir per Sprache oder Text, was du ändern möchtest."
     },
     "automations": {
       "phaseBadge": "Phase 9D",
@@ -1984,6 +1989,11 @@
           "description": "Wählt Ziel, Zielgruppe und Nachricht datenbasiert und kann einen Kampagnenentwurf vorbereiten."
         }
       }
+    },
+    "quickAccess": {
+      "title": "Velliqo fragen",
+      "description": "Sende eine Text- oder Sprachnachricht und lass die Unterhaltung geöffnet, während du Aktionen prüfst.",
+      "insights": "KI-Einblicke"
     }
   },
   "customerPortal": {

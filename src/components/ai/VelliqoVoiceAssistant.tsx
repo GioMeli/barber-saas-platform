@@ -36,6 +36,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { VelliqoActionConfirmationDialog } from '@/components/ai/VelliqoActionConfirmationDialog';
 
 const DEFAULT_SETTINGS: AIVoiceSettings = {
   voice_enabled: false,
@@ -59,6 +60,7 @@ export function VelliqoVoiceAssistant({
   onSendMessage,
   onExecuteAction,
   onRejectAction,
+  onChangeAction,
 }: {
   businessId?: string;
   conversationId?: string | null;
@@ -69,6 +71,7 @@ export function VelliqoVoiceAssistant({
   onSendMessage: (message: string, agent: AIAgentKey) => Promise<VelliqoAIFunctionResult | null>;
   onExecuteAction: (action: VelliqoAIActionRequest) => Promise<VelliqoAIActionExecutionResult | null>;
   onRejectAction: (action: VelliqoAIActionRequest) => Promise<VelliqoAIActionExecutionResult | null>;
+  onChangeAction?: (action: VelliqoAIActionRequest) => Promise<VelliqoAIActionExecutionResult | null>;
 }) {
   const { t } = useTranslation();
   const [open, setOpen] = React.useState(false);
@@ -80,6 +83,7 @@ export function VelliqoVoiceAssistant({
   const [transcript, setTranscript] = React.useState('');
   const [assistantText, setAssistantText] = React.useState('');
   const [pendingAction, setPendingAction] = React.useState<VelliqoAIActionRequest | null>(null);
+  const [confirmationOpen, setConfirmationOpen] = React.useState(false);
   const sessionIdRef = React.useRef<string | null>(null);
   const openRef = React.useRef(false);
   const finalTranscriptHandlerRef = React.useRef<(value: string) => void>(() => undefined);
@@ -178,11 +182,13 @@ export function VelliqoVoiceAssistant({
       const message = t(successKey);
       setAssistantText(message);
       setPendingAction(null);
+      setConfirmationOpen(false);
       speakText(message);
       return;
     }
     const message = result?.error || t('ai.voice.actionFailed');
     setAssistantText(message);
+    setConfirmationOpen(false);
     speakText(message);
   }, [speakText, t]);
 
@@ -249,6 +255,7 @@ export function VelliqoVoiceAssistant({
 
     const action = result.pendingAction || null;
     setPendingAction(action);
+    setConfirmationOpen(Boolean(action));
     setAssistantText(result.response.answer);
     await safeLog('response_received', {
       provider: result.provider,
@@ -302,6 +309,7 @@ export function VelliqoVoiceAssistant({
       sessionIdRef.current = newSessionId;
       setSessionId(newSessionId);
       setPendingAction(null);
+      setConfirmationOpen(false);
       setAssistantText(t('ai.voice.readyMessage'));
       setTranscript('');
       setStage('idle');
@@ -320,6 +328,7 @@ export function VelliqoVoiceAssistant({
     sessionIdRef.current = null;
     setSessionId(null);
     setPendingAction(null);
+    setConfirmationOpen(false);
     setStage('idle');
     if (businessId && activeSessionId) {
       try {
@@ -347,6 +356,7 @@ export function VelliqoVoiceAssistant({
   const statusLabel = t(`ai.voice.status.${stage}`);
 
   return (
+    <>
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button type="button" variant="outline" size="icon" aria-label={t('ai.voice.open')} title={t('ai.voice.open')}>
@@ -506,6 +516,36 @@ export function VelliqoVoiceAssistant({
         )}
       </DialogContent>
     </Dialog>
+
+    <VelliqoActionConfirmationDialog
+      open={confirmationOpen}
+      action={pendingAction}
+      busy={Boolean(actionBusyId)}
+      onOpenChange={setConfirmationOpen}
+      onConfirm={() => {
+        if (!pendingAction) return;
+        void onExecuteAction(pendingAction).then((result) => {
+          speakActionResult(result, 'ai.voice.actionCompleted');
+        });
+      }}
+      onCancel={() => {
+        if (!pendingAction) return;
+        void onRejectAction(pendingAction).then((result) => {
+          speakActionResult(result, 'ai.voice.actionCancelled');
+        });
+      }}
+      onChange={onChangeAction && pendingAction ? () => {
+        void onChangeAction(pendingAction).then((result) => {
+          if (!result?.success) return;
+          setConfirmationOpen(false);
+          setPendingAction(null);
+          const message = t('ai.voice.actionChangeRequested');
+          setAssistantText(message);
+          speakText(message, { resume: false });
+        });
+      } : undefined}
+    />
+    </>
   );
 }
 
