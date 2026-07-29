@@ -112,3 +112,29 @@
 @layer components {
   .h-13 { height: 3.25rem; }
 }
+
+@keyframes velliqo-ai-enter {
+  0% { opacity: 0; transform: translateY(10px) scale(.992); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes velliqo-mic-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(139,92,246,.35); }
+  50% { box-shadow: 0 0 0 8px rgba(139,92,246,0); }
+}
+
+@keyframes velliqo-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.velliqo-ai-scene { animation: velliqo-ai-enter .42s ease-out both; }
+.velliqo-mic-pulse { animation: velliqo-mic-ring 2.2s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .velliqo-ai-scene,
+  .velliqo-mic-pulse,
+  [class*="velliqo-marquee"] {
+    animation: none !important;
+  }
+}

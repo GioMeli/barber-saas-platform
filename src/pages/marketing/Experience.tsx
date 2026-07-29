@@ -51,6 +51,7 @@ export default function Experience() {
             <a href="#owner" className="transition hover:text-white">Owner</a>
             <a href="#customer" className="transition hover:text-white">Customer</a>
             <a href="#public-page" className="transition hover:text-white">Public page</a>
+            <Link to="/velliqo-ai" className="transition text-violet-200 hover:text-white">Velliqo AI</Link>
             <Link to="/why-velliqo" className="transition hover:text-white">Why Velliqo?</Link>
             <Link to="/pricing" className="transition hover:text-white">Pricing</Link>
           </nav>
@@ -72,6 +73,7 @@ export default function Experience() {
               {['owner', 'customer', 'public-page'].map(item => (
                 <a key={item} href={`#${item}`} className="rounded-xl px-3 py-2.5 text-sm font-semibold capitalize text-white/75 hover:bg-white/10" onClick={() => setMenuOpen(false)}>{item.replace('-', ' ')}</a>
               ))}
+              <Link to="/velliqo-ai" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-violet-200 hover:bg-white/10">Velliqo AI</Link>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <Button asChild variant="outline" className="rounded-xl border-white/20 bg-transparent text-white"><Link to="/">Home</Link></Button>
                 <Button asChild className="rounded-xl bg-white text-slate-950"><Link to="/business-types">Start free</Link></Button>

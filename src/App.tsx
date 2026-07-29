@@ -8,6 +8,7 @@ import BusinessTypeSelection from './pages/marketing/BusinessTypeSelection';
 import Pricing from './pages/marketing/Pricing';
 import WhyVelliqo from './pages/marketing/WhyVelliqo';
 import Experience from './pages/marketing/Experience';
+import VelliqoAI from './pages/marketing/VelliqoAI';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import CheckEmail from './pages/auth/CheckEmail';
@@ -68,6 +69,7 @@ function App() {
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/why-velliqo" element={<WhyVelliqo />} />
         <Route path="/experience" element={<Experience />} />
+        <Route path="/velliqo-ai" element={<VelliqoAI />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/check-email" element={<CheckEmail />} />
