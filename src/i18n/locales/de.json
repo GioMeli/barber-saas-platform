@@ -131,7 +131,8 @@
     },
     "marketing": "Marketing",
     "mobile_appointment": "Termin",
-    "more": "Mehr"
+    "more": "Mehr",
+    "training": "Schulung"
   },
   "system": {
     "loading": "Wird geladen...",
@@ -3308,6 +3309,82 @@
       "campaignQueued": "Kampagne wurde sicher zur Zustellung eingereiht.",
       "campaignQueueFailed": "Kampagne konnte nicht eingereiht werden.",
       "confirmLive": "Live-Versand aktivieren und Velliqo erlauben, echte berechtigte Kunden zu kontaktieren?"
+    }
+  },
+  "training": {
+    "eyebrow": "Lernzentrum für Inhaber",
+    "title": "Training Portal",
+    "description": "Schritt-für-Schritt-PDF-Anleitungen für die wichtigsten Arbeitsabläufe. Lernen Sie im eigenen Tempo, markieren Sie Anleitungen als abgeschlossen und öffnen Sie den passenden Arbeitsbereich.",
+    "startGuide": "Mit dem Schnellstart beginnen",
+    "askAi": "Velliqo AI fragen",
+    "progress": "Lernfortschritt",
+    "completedCount": "{{completed}} von {{total}} Anleitungen abgeschlossen",
+    "reset": "Zurücksetzen",
+    "searchPlaceholder": "Anleitungen und Abläufe durchsuchen...",
+    "completed": "Abgeschlossen",
+    "markComplete": "Als abgeschlossen markieren",
+    "minutes": "{{count}} Min. Anleitung",
+    "openPdf": "PDF öffnen",
+    "download": "Herunterladen",
+    "openWorkspace": "Passenden Bereich öffnen",
+    "noResults": "Keine passenden Schulungsanleitungen gefunden.",
+    "categories": {
+      "all": "Alle Anleitungen",
+      "setup": "Einrichtung",
+      "operations": "Täglicher Betrieb",
+      "growth": "Wachstum",
+      "intelligence": "Analysen & AI",
+      "account": "Konto"
+    },
+    "guides": {
+      "getting-started": {
+        "title": "Erste Schritte mit Velliqo",
+        "description": "Richten Sie die wichtigsten Unternehmensdaten ein und lernen Sie den Owner-Arbeitsbereich kennen."
+      },
+      "business-storefront": {
+        "title": "Unternehmensprofil und Storefront",
+        "description": "Konfigurieren Sie die öffentliche Seite, Kontaktdaten und Buchungsinformationen."
+      },
+      "services-pricing": {
+        "title": "Services, Dauer und Preise",
+        "description": "Erstellen Sie Services mit korrekten Preisen und Dauern für zuverlässige Buchungszeiten."
+      },
+      "staff-availability": {
+        "title": "Team und Verfügbarkeit",
+        "description": "Fügen Sie Fachkräfte hinzu und pflegen Sie Arbeitszeiten und Verfügbarkeiten."
+      },
+      "calendar-appointments": {
+        "title": "Kalender und Terminverwaltung",
+        "description": "Erstellen, verschieben und stornieren Sie Termine ohne Konflikte."
+      },
+      "customers-profiles": {
+        "title": "Kunden und Profilhistorie",
+        "description": "Nutzen Sie Kundenprofile, Terminverlauf und Aktivitäten sicher und konsistent."
+      },
+      "products-sales": {
+        "title": "Produkte, Bestand und Verkauf",
+        "description": "Verwalten Sie Lagerbestände, Verkäufe und deren Auswirkungen auf Berichte."
+      },
+      "marketing-content": {
+        "title": "Marketing, Beiträge und Galerie",
+        "description": "Erstellen Sie prüfbare Kampagnen und veröffentlichen Sie professionelle Inhalte."
+      },
+      "reports-finance": {
+        "title": "Berichte und finanzielle Übersicht",
+        "description": "Verstehen Sie Umsatz-, Termin- und Betriebsberichte ohne sie mit Buchhaltungsberatung zu verwechseln."
+      },
+      "velliqo-ai": {
+        "title": "Velliqo AI per Text und Sprache",
+        "description": "Stellen Sie Fragen, nutzen Sie Sprache sicher und prüfen Sie Bestätigungen."
+      },
+      "automations-security": {
+        "title": "Automatisierungen, Rechte und Sicherheit",
+        "description": "Konfigurieren Sie Autonomiestufen und behalten Sie wichtige Aktionen unter Kontrolle."
+      },
+      "billing-subscription": {
+        "title": "Abrechnung und Abonnement",
+        "description": "Prüfen Sie Plan, Zahlungsstatus und Abrechnungshistorie."
+      }
     }
   }
 }

@@ -8,6 +8,7 @@ import {
   WalletCards,
   Images,
   LayoutDashboard,
+  GraduationCap,
   Megaphone,
   RadioTower,
   Package,
@@ -139,6 +140,13 @@ export const OWNER_NAVIGATION_ITEMS: OwnerNavigationItem[] = [
     path: '/dashboard/ai',
     icon: Sparkles,
     keywords: ['velliqo ai', 'assistant', 'insights'],
+  },
+  {
+    key: 'training',
+    labelKey: 'navigation.training',
+    path: '/dashboard/training',
+    icon: GraduationCap,
+    keywords: ['training', 'guides', 'help', 'learning', 'pdf'],
   },
   {
     key: 'settings',

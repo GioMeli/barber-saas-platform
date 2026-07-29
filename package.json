@@ -23,7 +23,8 @@
     "mobile-ai:check": "node scripts/check-mobile-ai-quick-access.mjs",
     "premium-marketing:check": "node scripts/check-premium-marketing-experience.mjs",
     "public-visual-contact:check": "node scripts/check-public-visual-contact.mjs",
-    "precision-devices:check": "node scripts/check-precision-device-mockups.mjs"
+    "precision-devices:check": "node scripts/check-precision-device-mockups.mjs",
+    "demo-training:check": "node scripts/check-demo-training-portal.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",
