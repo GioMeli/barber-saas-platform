@@ -21,7 +21,9 @@
     "industry-neutral:check": "node scripts/check-industry-neutral-platform.mjs",
     "responsive:check": "node scripts/check-responsive-ui.mjs",
     "mobile-ai:check": "node scripts/check-mobile-ai-quick-access.mjs",
-    "premium-marketing:check": "node scripts/check-premium-marketing-experience.mjs"
+    "premium-marketing:check": "node scripts/check-premium-marketing-experience.mjs",
+    "public-visual-contact:check": "node scripts/check-public-visual-contact.mjs",
+    "precision-devices:check": "node scripts/check-precision-device-mockups.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

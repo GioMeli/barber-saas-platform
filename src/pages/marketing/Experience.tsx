@@ -21,8 +21,8 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-
-const SUPPORT_EMAIL = 'support@yourdomain.com';
+import { DesktopDevice, LaptopDevice, PhoneDevice, TabletDevice } from '@/components/marketing/DeviceFrame';
+import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
 
 const ownerCapabilities = [
   ['Calendar control', 'Plan appointments, delays and team availability from one operational view.'],
@@ -40,8 +40,6 @@ const customerCapabilities = [
 
 export default function Experience() {
   const [menuOpen, setMenuOpen] = React.useState(false);
-  const supportHref = `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent('Velliqo experience enquiry')}`;
-
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f7fc] text-slate-950">
       <header className="sticky top-0 z-50 border-b border-white/10 bg-slate-950/90 text-white backdrop-blur-2xl">
@@ -54,6 +52,7 @@ export default function Experience() {
             <Link to="/velliqo-ai" className="transition text-violet-200 hover:text-white">Velliqo AI</Link>
             <Link to="/why-velliqo" className="transition hover:text-white">Why Velliqo?</Link>
             <Link to="/pricing" className="transition hover:text-white">Pricing</Link>
+            <Link to="/contact" className="transition hover:text-white">Contact</Link>
           </nav>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost" className="hidden rounded-xl text-white hover:bg-white/10 hover:text-white sm:inline-flex">
@@ -74,6 +73,7 @@ export default function Experience() {
                 <a key={item} href={`#${item}`} className="rounded-xl px-3 py-2.5 text-sm font-semibold capitalize text-white/75 hover:bg-white/10" onClick={() => setMenuOpen(false)}>{item.replace('-', ' ')}</a>
               ))}
               <Link to="/velliqo-ai" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-violet-200 hover:bg-white/10">Velliqo AI</Link>
+              <Link to="/contact" className="rounded-xl px-3 py-2.5 text-sm font-semibold text-white/75 hover:bg-white/10" onClick={() => setMenuOpen(false)}>Contact</Link>
               <div className="mt-2 grid grid-cols-2 gap-2">
                 <Button asChild variant="outline" className="rounded-xl border-white/20 bg-transparent text-white"><Link to="/">Home</Link></Button>
                 <Button asChild className="rounded-xl bg-white text-slate-950"><Link to="/business-types">Start free</Link></Button>
@@ -114,15 +114,16 @@ export default function Experience() {
               </div>
             </div>
 
-            <div className="relative mx-auto mt-16 max-w-6xl lg:mt-20">
-              <div className="absolute -inset-10 rounded-[4rem] bg-violet-500/20 blur-3xl" />
-              <DesktopDevice image="/marketing/experience/owner/dashboard.jpg" alt="Velliqo owner dashboard" />
-              <div className="absolute -bottom-14 -left-2 hidden w-[24%] rotate-[-5deg] lg:block">
-                <PhoneDevice image="/marketing/experience/customer/booking-mobile.jpg" alt="Velliqo mobile customer booking" dark screenAspect="aspect-[347/757]" />
-              </div>
-              <div className="absolute -bottom-10 -right-4 hidden w-[31%] rotate-[3deg] md:block">
-                <TabletDevice image="/marketing/experience/customer/storefront.jpg" alt="Velliqo customer storefront" />
-              </div>
+            <div className="mx-auto mt-16 w-full max-w-6xl pb-8 lg:mt-20 lg:pb-20">
+              <ResponsiveDeviceShowcase
+                laptopImage="/marketing/screens/precision/calendar-laptop.webp"
+                laptopAlt="Velliqo owner dashboard and calendar"
+                phoneImage="/marketing/screens/precision/booking-phone.webp"
+                phoneAlt="Velliqo mobile customer booking"
+                tabletImage="/marketing/screens/precision/storefront-tablet.webp"
+                tabletAlt="Velliqo customer storefront"
+                priority
+              />
             </div>
           </div>
         </section>
@@ -148,11 +149,11 @@ export default function Experience() {
                   <Link to="/business-types">Build your owner workspace <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </div>
-              <div className="relative">
+              <div className="relative pb-8 sm:pb-14">
                 <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-violet-200/70 to-sky-100/40 blur-2xl" />
-                <DesktopDevice image="/marketing/experience/owner/calendar.jpg" alt="Velliqo owner calendar" />
-                <div className="absolute -bottom-12 -right-3 w-[25%] rotate-[4deg] sm:right-2">
-                  <PhoneDevice image="/marketing/experience/owner/calendar-mobile.png" alt="Velliqo owner mobile calendar" />
+                <DesktopDevice image="/marketing/screens/precision/calendar-desktop.webp" alt="Velliqo owner calendar on desktop" fit="fill" />
+                <div className="relative z-20 mx-auto -mt-10 w-[31%] min-w-[150px] max-w-[220px] sm:absolute sm:-bottom-2 sm:right-4 sm:mt-0 sm:w-[24%]">
+                  <PhoneDevice image="/marketing/screens/precision/calendar-phone.webp" alt="Velliqo owner mobile calendar" fit="fill" />
                 </div>
               </div>
             </div>
@@ -162,9 +163,9 @@ export default function Experience() {
         <section className="overflow-hidden bg-[#0b1020] py-20 text-white lg:py-32">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
             <div className="grid gap-6 lg:grid-cols-3">
-              <FeatureShowcase title="Know what is happening" text="Today’s schedule, customer activity and expected revenue stay visible at a glance." image="/marketing/experience/owner/dashboard.jpg" icon={<BarChart3 className="h-5 w-5" />} />
-              <FeatureShowcase title="Manage your people" text="Staff profiles and calendars live inside the same coordinated workspace." image="/marketing/experience/owner/staff.jpg" icon={<Users className="h-5 w-5" />} />
-              <FeatureShowcase title="Act on real data" text="Reports turn daily activity into clear indicators for better decisions." image="/marketing/experience/owner/reports.jpg" icon={<CalendarDays className="h-5 w-5" />} />
+              <FeatureShowcase device="laptop" title="Know what is happening" text="Today’s schedule, customer activity and expected revenue stay visible at a glance." image="/marketing/screens/precision/dashboard-laptop.webp" icon={<BarChart3 className="h-5 w-5" />} />
+              <FeatureShowcase device="tablet" title="Manage your people" text="Staff profiles and calendars live inside the same coordinated workspace." image="/marketing/screens/precision/staff-tablet.webp" icon={<Users className="h-5 w-5" />} />
+              <FeatureShowcase device="desktop" title="Act on real data" text="Reports turn daily activity into clear indicators for better decisions." image="/marketing/screens/precision/reports-desktop.webp" icon={<CalendarDays className="h-5 w-5" />} />
             </div>
           </div>
         </section>
@@ -172,10 +173,10 @@ export default function Experience() {
         <section id="public-page" className="relative overflow-hidden bg-white py-20 lg:py-32">
           <div className="absolute right-[-12%] top-0 h-[520px] w-[520px] rounded-full bg-fuchsia-100/80 blur-3xl" />
           <div className="relative mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.15fr_.85fr] lg:px-8">
-            <div className="relative">
-              <BrowserDevice image="/marketing/experience/customer/storefront.jpg" alt="Velliqo public business page" />
-              <div className="absolute -bottom-10 -right-2 w-[24%] rotate-[5deg] sm:right-4">
-                <PhoneDevice image="/marketing/experience/customer/booking-mobile.jpg" alt="Velliqo public mobile booking" screenAspect="aspect-[347/757]" />
+            <div className="relative pb-10">
+              <LaptopDevice image="/marketing/screens/precision/calendar-laptop.webp" alt="Velliqo public business page on laptop" fit="fill" />
+              <div className="relative z-20 mx-auto -mt-8 w-[34%] min-w-[150px] max-w-[220px] sm:absolute sm:-bottom-2 sm:right-5 sm:mt-0 sm:w-[24%]">
+                <PhoneDevice image="/marketing/screens/precision/booking-phone.webp" alt="Velliqo public mobile booking" fit="fill" />
               </div>
             </div>
             <div>
@@ -207,8 +208,8 @@ export default function Experience() {
                 <CapabilityList items={customerCapabilities} tone="fuchsia" compact />
               </div>
               <div className="grid gap-5 sm:grid-cols-2">
-                <VisualCard image="/marketing/experience/customer/services.jpg" title="Choose services clearly" label="Services" />
-                <VisualCard image="/marketing/experience/customer/professionals.jpg" title="Book the right professional" label="Team" />
+                <VisualCard image="/marketing/screens/precision/services-tablet.webp" title="Choose services clearly" label="Services" />
+                <VisualCard image="/marketing/screens/precision/professionals-tablet.webp" title="Book the right professional" label="Team" />
               </div>
             </div>
 
@@ -223,10 +224,10 @@ export default function Experience() {
                   <FeatureLine icon={<CalendarDays />} text="Turn interest into a booking through a guided flow." />
                 </div>
               </div>
-              <div className="relative flex items-end justify-center gap-4 sm:gap-8">
-                <div className="w-[31%] -rotate-[3deg]"><PhoneDevice image="/marketing/experience/owner/posts-mobile.png" alt="Velliqo announcements mobile view" /></div>
-                <div className="w-[35%] translate-y-4"><PhoneDevice image="/marketing/experience/customer/booking-mobile.jpg" alt="Velliqo customer booking mobile view" dark screenAspect="aspect-[347/757]" /></div>
-                <div className="w-[31%] rotate-[3deg]"><PhoneDevice image="/marketing/experience/owner/gallery-mobile.png" alt="Velliqo gallery mobile view" /></div>
+              <div className="grid grid-cols-3 items-end justify-items-center gap-3 sm:gap-6">
+                <div className="w-full max-w-[190px]"><PhoneDevice image="/marketing/screens/precision/posts-phone.webp" alt="Velliqo announcements mobile view" fit="fill" /></div>
+                <div className="w-full max-w-[205px] sm:translate-y-4"><PhoneDevice image="/marketing/screens/precision/booking-phone.webp" alt="Velliqo customer booking mobile view" fit="fill" /></div>
+                <div className="w-full max-w-[190px]"><PhoneDevice image="/marketing/screens/precision/gallery-phone.webp" alt="Velliqo gallery mobile view" fit="fill" /></div>
               </div>
             </div>
           </div>
@@ -242,7 +243,7 @@ export default function Experience() {
                 <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-white/65">Create the workspace that runs your business and the public page that helps customers discover, trust and choose it.</p>
                 <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
                   <Button asChild size="lg" className="h-12 rounded-xl bg-white px-7 text-slate-950 hover:bg-violet-50"><Link to="/business-types">Find your business type <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-                  <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/20 bg-white/5 px-7 text-white hover:bg-white/10 hover:text-white"><a href={supportHref}>Talk to support</a></Button>
+                  <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/20 bg-white/5 px-7 text-white hover:bg-white/10 hover:text-white"><Link to="/contact">Talk to Velliqo</Link></Button>
                 </div>
               </div>
             </div>
@@ -254,7 +255,7 @@ export default function Experience() {
         <div className="mx-auto flex max-w-[1440px] flex-col gap-6 px-4 py-8 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
           <VelliqoBrand />
           <div className="flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-500">
-            <Link to="/">Home</Link><Link to="/why-velliqo">Why Velliqo?</Link><Link to="/pricing">Pricing</Link><Link to="/business-types">Business types</Link><a href={supportHref}>Support</a>
+            <Link to="/">Home</Link><Link to="/why-velliqo">Why Velliqo?</Link><Link to="/pricing">Pricing</Link><Link to="/business-types">Business types</Link><Link to="/contact">Contact</Link>
           </div>
           <div className="text-xs text-slate-400">© 2026 Velliqo</div>
         </div>
@@ -270,77 +271,17 @@ function TrustItem({ text }: { text: string }) { return <span className="flex it
 function Proof({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="flex gap-3 rounded-2xl p-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-700">{icon}</div><div><div className="text-sm font-extrabold">{title}</div><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p></div></div>; }
 function SectionHeading({ number, eyebrow, title, text, centered = false }: { number: string; eyebrow: string; title: string; text: string; centered?: boolean }) { return <div className={centered ? 'mx-auto max-w-4xl text-center' : 'max-w-4xl'}><div className={`flex items-center gap-3 ${centered ? 'justify-center' : ''}`}><span className="text-xs font-black text-violet-300">{number}</span><span className="text-xs font-extrabold uppercase tracking-[.24em] text-violet-600">{eyebrow}</span></div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.045em] sm:text-5xl">{title}</h2><p className="mt-5 text-base leading-8 text-slate-600 sm:text-lg">{text}</p></div>; }
 function CapabilityList({ items, tone, compact = false }: { items: string[][]; tone: 'violet' | 'fuchsia'; compact?: boolean }) { return <div className={`${compact ? 'mt-7' : ''} space-y-5`}>{items.map(([title,text],i)=><div key={title} className="flex gap-4"><div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${tone==='violet'?'bg-violet-100 text-violet-700':'bg-fuchsia-100 text-fuchsia-700'}`}>{i+1}</div><div><h3 className="font-extrabold">{title}</h3><p className="mt-1 text-sm leading-6 text-slate-600">{text}</p></div></div>)}</div>; }
-function DesktopDevice({ image, alt }: { image: string; alt: string }) {
-  return (
-    <div className="relative overflow-hidden rounded-[1.6rem] border border-white/20 bg-[#111827] p-2 shadow-[0_35px_100px_rgba(15,23,42,.28)]">
-      <div className="mb-2 flex items-center gap-1.5 px-2">
-        <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400" />
-        <span className="ml-3 h-5 flex-1 rounded-md bg-white/8" />
-      </div>
-      <div className="aspect-[1917/866] overflow-hidden rounded-[1.05rem] bg-white">
-        <img src={image} alt={alt} className="block h-full w-full object-cover object-center" />
-      </div>
-    </div>
-  );
-}
+function FeatureShowcase({ title, text, image, icon, device }: { title: string; text: string; image: string; icon: React.ReactNode; device: 'laptop' | 'desktop' | 'tablet' }) {
+  const visual = device === 'desktop'
+    ? <DesktopDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[360px]" />
+    : device === 'tablet'
+      ? <TabletDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[410px]" />
+      : <LaptopDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[430px]" />;
 
-function BrowserDevice({ image, alt }: { image: string; alt: string }) {
   return (
-    <div className="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white p-2 shadow-[0_28px_90px_rgba(15,23,42,.16)]">
-      <div className="mb-2 flex items-center gap-2 px-2">
-        <div className="flex gap-1.5">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-amber-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-300" />
-        </div>
-        <div className="h-6 flex-1 rounded-lg bg-slate-100 px-3 text-[8px] leading-6 text-slate-400">yourbusiness.velliqo.com</div>
-      </div>
-      <div className="aspect-[1896/866] overflow-hidden rounded-[1.2rem] bg-slate-50">
-        <img src={image} alt={alt} className="block h-full w-full object-cover object-center" />
-      </div>
-    </div>
-  );
-}
-
-function TabletDevice({ image, alt }: { image: string; alt: string }) {
-  return (
-    <div className="rounded-[1.55rem] border-[7px] border-slate-900 bg-slate-900 p-1 shadow-[0_28px_70px_rgba(15,23,42,.35)]">
-      <div className="mx-auto mb-1 h-1 w-8 rounded-full bg-slate-700" />
-      <div className="aspect-[1896/866] overflow-hidden rounded-[.85rem] bg-white">
-        <img src={image} alt={alt} className="block h-full w-full object-cover object-center" />
-      </div>
-    </div>
-  );
-}
-
-function PhoneDevice({
-  image,
-  alt,
-  dark = false,
-  screenAspect = 'aspect-[407/757]',
-}: {
-  image: string;
-  alt: string;
-  dark?: boolean;
-  screenAspect?: string;
-}) {
-  return (
-    <div className={`rounded-[2rem] border-[6px] p-1 shadow-[0_25px_70px_rgba(15,23,42,.3)] ${dark ? 'border-violet-950 bg-violet-950' : 'border-slate-900 bg-slate-900'}`}>
-      <div className="mx-auto mb-1 h-1.5 w-12 rounded-full bg-slate-700" />
-      <div className={`${screenAspect} overflow-hidden rounded-[1.25rem] bg-white`}>
-        <img src={image} alt={alt} className="block h-full w-full object-cover object-top" />
-      </div>
-    </div>
-  );
-}
-
-function FeatureShowcase({ title, text, image, icon }: { title: string; text: string; image: string; icon: React.ReactNode }) {
-  return (
-    <article className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[.055] p-3 backdrop-blur">
-      <div className="aspect-[1917/866] overflow-hidden rounded-[1.45rem] bg-white">
-        <img src={image} alt={title} className="block h-full w-full object-cover object-center transition duration-700 group-hover:scale-[1.015]" />
+    <article className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[.055] p-4 backdrop-blur">
+      <div className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-[1.45rem] bg-gradient-to-br from-white/[.06] to-violet-500/[.08] p-3">
+        {visual}
       </div>
       <div className="p-4">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-200">{icon}</div>
@@ -374,5 +315,14 @@ function FeatureLine({ icon, text }: { icon: React.ReactNode; text: string }) {
   );
 }
 function PublicBenefit({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="rounded-2xl border border-slate-200 bg-white p-5"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-700">{icon}</div><h3 className="mt-4 font-extrabold">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{text}</p></div>; }
-function VisualCard({ image, title, label }: { image: string; title: string; label: string }) { return <article className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-3 shadow-[0_18px_60px_rgba(15,23,42,.08)]"><div className="overflow-hidden rounded-[1.4rem] bg-slate-50"><img src={image} alt={title} className="block h-auto w-full transition duration-700 group-hover:scale-[1.015]" /></div><div className="p-4"><span className="text-[10px] font-extrabold uppercase tracking-[.2em] text-violet-600">{label}</span><h3 className="mt-2 text-lg font-extrabold">{title}</h3></div></article>; }
+function VisualCard({ image, title, label }: { image: string; title: string; label: string }) {
+  return (
+    <article className="group overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-4 shadow-[0_18px_60px_rgba(15,23,42,.08)]">
+      <div className="flex min-h-[260px] items-center justify-center overflow-hidden rounded-[1.4rem] bg-gradient-to-br from-violet-50 to-slate-50 p-4">
+        <TabletDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[430px] transition duration-700 group-hover:scale-[1.015]" />
+      </div>
+      <div className="p-4"><span className="text-[10px] font-extrabold uppercase tracking-[.2em] text-violet-600">{label}</span><h3 className="mt-2 text-lg font-extrabold">{title}</h3></div>
+    </article>
+  );
+}
 
