@@ -10,6 +10,7 @@ import WhyVelliqo from './pages/marketing/WhyVelliqo';
 import Experience from './pages/marketing/Experience';
 import VelliqoAI from './pages/marketing/VelliqoAI';
 import Contact from './pages/marketing/Contact';
+import Demo from './pages/marketing/Demo';
 import SignIn from './pages/auth/SignIn';
 import SignUp from './pages/auth/SignUp';
 import CheckEmail from './pages/auth/CheckEmail';
@@ -42,6 +43,7 @@ import Business from './pages/owner/Business';
 import Settings from './pages/owner/Settings';
 import AIHub from './pages/owner/ai/AIHub';
 import AISettings from './pages/owner/ai/AISettings';
+import TrainingPortal from './pages/owner/TrainingPortal';
 
 function ProtectedRoute({ children, allowedRoles }: { children: React.ReactNode; allowedRoles?: string[] }) {
   const { user, profile, loading } = useAuth();
@@ -72,6 +74,7 @@ function App() {
         <Route path="/experience" element={<Experience />} />
         <Route path="/velliqo-ai" element={<VelliqoAI />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/demo" element={<Demo />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
         <Route path="/check-email" element={<CheckEmail />} />
@@ -108,6 +111,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="ai" element={<AIHub />} />
           <Route path="ai/settings" element={<AISettings />} />
+          <Route path="training" element={<TrainingPortal />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

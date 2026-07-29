@@ -131,7 +131,8 @@
     },
     "marketing": "Marketing",
     "mobile_appointment": "Cita",
-    "more": "Más"
+    "more": "Más",
+    "training": "Formación"
   },
   "system": {
     "loading": "Cargando...",
@@ -3308,6 +3309,82 @@
       "campaignQueued": "Campaña puesta en cola de forma segura.",
       "campaignQueueFailed": "No se pudo poner la campaña en cola.",
       "confirmLive": "¿Activar el envío en vivo y permitir que Velliqo contacte a clientes reales elegibles?"
+    }
+  },
+  "training": {
+    "eyebrow": "Centro de aprendizaje para propietarios",
+    "title": "Portal de formación",
+    "description": "Guías PDF paso a paso para los flujos esenciales. Aprende a tu ritmo, marca las guías completadas y abre el área relacionada para practicar.",
+    "startGuide": "Empezar con la guía rápida",
+    "askAi": "Preguntar a Velliqo AI",
+    "progress": "Progreso de aprendizaje",
+    "completedCount": "{{completed}} de {{total}} guías completadas",
+    "reset": "Restablecer",
+    "searchPlaceholder": "Buscar guías y flujos...",
+    "completed": "Completada",
+    "markComplete": "Marcar como completada",
+    "minutes": "Guía de {{count}} min",
+    "openPdf": "Abrir PDF",
+    "download": "Descargar",
+    "openWorkspace": "Abrir área relacionada",
+    "noResults": "No hay guías que coincidan con la búsqueda.",
+    "categories": {
+      "all": "Todas las guías",
+      "setup": "Configuración",
+      "operations": "Operaciones diarias",
+      "growth": "Crecimiento",
+      "intelligence": "Análisis e IA",
+      "account": "Cuenta"
+    },
+    "guides": {
+      "getting-started": {
+        "title": "Primeros pasos con Velliqo",
+        "description": "Configura los datos esenciales del negocio y conoce el espacio de trabajo del propietario."
+      },
+      "business-storefront": {
+        "title": "Perfil del negocio y escaparate",
+        "description": "Configura la página pública, los datos de contacto y la información de reservas."
+      },
+      "services-pricing": {
+        "title": "Servicios, duración y precios",
+        "description": "Crea servicios con precios y duraciones correctos para calcular la disponibilidad."
+      },
+      "staff-availability": {
+        "title": "Equipo y disponibilidad",
+        "description": "Añade profesionales y mantén horarios y disponibilidad precisos."
+      },
+      "calendar-appointments": {
+        "title": "Calendario y citas",
+        "description": "Crea, reprograma y cancela citas evitando conflictos."
+      },
+      "customers-profiles": {
+        "title": "Clientes e historial",
+        "description": "Utiliza perfiles, historial de citas y actividad de forma segura."
+      },
+      "products-sales": {
+        "title": "Productos, inventario y ventas",
+        "description": "Gestiona existencias, ventas y su impacto en los informes."
+      },
+      "marketing-content": {
+        "title": "Marketing, publicaciones y galería",
+        "description": "Crea campañas revisables y publica contenido profesional."
+      },
+      "reports-finance": {
+        "title": "Informes y visibilidad financiera",
+        "description": "Interpreta ingresos, citas y operaciones sin confundirlos con asesoramiento contable."
+      },
+      "velliqo-ai": {
+        "title": "Velliqo AI por texto y voz",
+        "description": "Haz preguntas, usa la voz de forma segura y revisa confirmaciones."
+      },
+      "automations-security": {
+        "title": "Automatizaciones, permisos y seguridad",
+        "description": "Configura niveles de autonomía y conserva el control de acciones importantes."
+      },
+      "billing-subscription": {
+        "title": "Facturación y suscripción",
+        "description": "Revisa el plan, el estado de pago y el historial de facturación."
+      }
     }
   }
 }

@@ -131,7 +131,8 @@
     },
     "marketing": "Marketing",
     "mobile_appointment": "Appointment",
-    "more": "More"
+    "more": "More",
+    "training": "Training"
   },
   "system": {
     "loading": "Loading...",
@@ -3308,6 +3309,82 @@
       "campaignQueued": "Campaign queued for secure delivery.",
       "campaignQueueFailed": "Unable to queue this campaign.",
       "confirmLive": "Enable live delivery and allow Velliqo to contact real eligible customers?"
+    }
+  },
+  "training": {
+    "eyebrow": "Owner learning center",
+    "title": "Training Portal",
+    "description": "Step-by-step PDF guides for the essential workflows every owner should understand. Learn at your pace, mark guides complete and open the related workspace when you are ready to practise.",
+    "startGuide": "Start with the quick guide",
+    "askAi": "Ask Velliqo AI",
+    "progress": "Learning progress",
+    "completedCount": "{{completed}} of {{total}} guides completed",
+    "reset": "Reset",
+    "searchPlaceholder": "Search guides and workflows...",
+    "completed": "Completed",
+    "markComplete": "Mark complete",
+    "minutes": "{{count}} min guide",
+    "openPdf": "Open PDF",
+    "download": "Download",
+    "openWorkspace": "Open related workspace",
+    "noResults": "No training guides match this search.",
+    "categories": {
+      "all": "All guides",
+      "setup": "Setup",
+      "operations": "Daily operations",
+      "growth": "Growth",
+      "intelligence": "Intelligence & AI",
+      "account": "Account"
+    },
+    "guides": {
+      "getting-started": {
+        "title": "Getting started with Velliqo",
+        "description": "Set up the essential business information, understand the owner workspace and complete the first-day checklist."
+      },
+      "business-storefront": {
+        "title": "Business profile and storefront",
+        "description": "Configure the public business page, contact details, booking information and customer-facing presentation."
+      },
+      "services-pricing": {
+        "title": "Services, duration and pricing",
+        "description": "Create services with clear prices and durations so availability and booking slots are calculated correctly."
+      },
+      "staff-availability": {
+        "title": "Team members and availability",
+        "description": "Add professionals, assign working hours and maintain accurate availability for each person."
+      },
+      "calendar-appointments": {
+        "title": "Calendar and appointment management",
+        "description": "Create, edit, reschedule and cancel appointments while preventing conflicts and protecting the customer experience."
+      },
+      "customers-profiles": {
+        "title": "Customers and profile history",
+        "description": "Use customer profiles, appointment history and activity safely to provide consistent service."
+      },
+      "products-sales": {
+        "title": "Products, inventory and sales",
+        "description": "Maintain product stock, record sales and understand how transactions affect inventory and reports."
+      },
+      "marketing-content": {
+        "title": "Marketing, posts and gallery",
+        "description": "Create reviewable campaigns, publish updates and maintain a professional public content experience."
+      },
+      "reports-finance": {
+        "title": "Reports and financial visibility",
+        "description": "Read revenue, appointment, customer and operational reports without confusing activity with accounting advice."
+      },
+      "velliqo-ai": {
+        "title": "Velliqo AI text and voice assistant",
+        "description": "Ask useful questions, use voice safely and review confirmations before the assistant performs protected actions."
+      },
+      "automations-security": {
+        "title": "Automations, permissions and security",
+        "description": "Configure recommendation levels, understand approvals and keep high-risk actions under owner control."
+      },
+      "billing-subscription": {
+        "title": "Billing and subscription management",
+        "description": "Review the active plan, payment status and billing history while keeping business and platform charges separate."
+      }
     }
   }
 }

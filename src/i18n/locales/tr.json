@@ -131,7 +131,8 @@
     },
     "marketing": "Pazarlama",
     "mobile_appointment": "Randevu",
-    "more": "Daha fazla"
+    "more": "Daha fazla",
+    "training": "Eğitim"
   },
   "system": {
     "loading": "Yükleniyor...",
@@ -3308,6 +3309,82 @@
       "campaignQueued": "Kampanya güvenli teslimat için kuyruğa alındı.",
       "campaignQueueFailed": "Kampanya kuyruğa alınamadı.",
       "confirmLive": "Canlı gönderim etkinleştirilsin ve Velliqo uygun gerçek müşterilerle iletişim kursun mu?"
+    }
+  },
+  "training": {
+    "eyebrow": "İşletme sahibi öğrenme merkezi",
+    "title": "Eğitim Portalı",
+    "description": "Her işletme sahibinin bilmesi gereken temel işlemler için adım adım PDF rehberleri. Kendi hızınızda öğrenin, tamamlanan rehberleri işaretleyin ve uygulama alanını açın.",
+    "startGuide": "Hızlı rehberle başla",
+    "askAi": "Velliqo AI'ya sor",
+    "progress": "Öğrenme ilerlemesi",
+    "completedCount": "{{total}} rehberden {{completed}} tanesi tamamlandı",
+    "reset": "Sıfırla",
+    "searchPlaceholder": "Rehber ve işlemlerde ara...",
+    "completed": "Tamamlandı",
+    "markComplete": "Tamamlandı olarak işaretle",
+    "minutes": "{{count}} dk rehber",
+    "openPdf": "PDF aç",
+    "download": "İndir",
+    "openWorkspace": "İlgili alanı aç",
+    "noResults": "Aramanızla eşleşen eğitim rehberi bulunamadı.",
+    "categories": {
+      "all": "Tüm rehberler",
+      "setup": "Kurulum",
+      "operations": "Günlük işlemler",
+      "growth": "Büyüme",
+      "intelligence": "Analiz ve AI",
+      "account": "Hesap"
+    },
+    "guides": {
+      "getting-started": {
+        "title": "Velliqo ile başlangıç",
+        "description": "Temel işletme bilgilerini ayarlayın ve işletme sahibi çalışma alanını tanıyın."
+      },
+      "business-storefront": {
+        "title": "İşletme profili ve vitrin",
+        "description": "Herkese açık sayfayı, iletişim bilgilerini ve rezervasyon bilgilerini yapılandırın."
+      },
+      "services-pricing": {
+        "title": "Hizmetler, süre ve fiyatlandırma",
+        "description": "Doğru müsaitlik için hizmetleri fiyat ve süreleriyle oluşturun."
+      },
+      "staff-availability": {
+        "title": "Ekip ve müsaitlik",
+        "description": "Profesyonelleri ekleyin, çalışma saatlerini ve müsaitliği yönetin."
+      },
+      "calendar-appointments": {
+        "title": "Takvim ve randevu yönetimi",
+        "description": "Çakışmaları önleyerek randevu oluşturun, taşıyın ve iptal edin."
+      },
+      "customers-profiles": {
+        "title": "Müşteriler ve profil geçmişi",
+        "description": "Müşteri profillerini, randevu geçmişini ve aktiviteleri güvenle kullanın."
+      },
+      "products-sales": {
+        "title": "Ürünler, stok ve satış",
+        "description": "Stokları ve satışları yönetin, raporlara etkisini anlayın."
+      },
+      "marketing-content": {
+        "title": "Pazarlama, gönderiler ve galeri",
+        "description": "İncelenebilir kampanyalar oluşturun ve profesyonel içerik yayınlayın."
+      },
+      "reports-finance": {
+        "title": "Raporlar ve finansal görünürlük",
+        "description": "Gelir ve operasyon raporlarını muhasebe tavsiyesiyle karıştırmadan okuyun."
+      },
+      "velliqo-ai": {
+        "title": "Metin ve ses ile Velliqo AI",
+        "description": "Sorular sorun, sesi güvenle kullanın ve onayları inceleyin."
+      },
+      "automations-security": {
+        "title": "Otomasyonlar, izinler ve güvenlik",
+        "description": "Otonomi seviyelerini ayarlayın ve önemli işlemleri kontrol altında tutun."
+      },
+      "billing-subscription": {
+        "title": "Faturalandırma ve abonelik",
+        "description": "Planı, ödeme durumunu ve faturalandırma geçmişini inceleyin."
+      }
     }
   }
 }

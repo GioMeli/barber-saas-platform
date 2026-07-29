@@ -21,6 +21,7 @@ Velliqo includes configurations for beauty and personal care, health and wellnes
 - Stripe subscription foundation
 - Resend and Twilio delivery foundations
 - Velliqo AI Manager, operational automations and browser voice assistant
+- Public local-only product demo and a five-language owner Training Portal with PDF guides
 - Vercel deployment and GitHub Actions quality gates
 
 ## Local development
@@ -50,6 +51,12 @@ npm run ai:check
 npm run automations:check
 npm run voice:check
 npm run industry-neutral:check
+npm run responsive:check
+npm run mobile-ai:check
+npm run premium-marketing:check
+npm run public-visual-contact:check
+npm run precision-devices:check
+npm run demo-training:check
 npm run typecheck
 npm run build
 ```
