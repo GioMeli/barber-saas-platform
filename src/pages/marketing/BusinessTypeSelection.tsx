@@ -32,7 +32,7 @@ export default function BusinessTypeSelection() {
             <img src="/brand/velliqo-logo.png" alt="Velliqo logo" className="h-11 w-11 rounded-xl object-contain" />
             <div><div className="font-extrabold">Velliqo</div><div className="text-[10px] font-bold uppercase tracking-[0.18em] text-violet-600">Book. Manage. Grow.</div></div>
           </Link>
-          <Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"><ArrowLeft className="h-4 w-4" />Back to website</Link>
+          <div className="flex items-center gap-4"><Link to="/contact" className="hidden text-sm font-semibold text-slate-600 hover:text-slate-950 sm:inline-flex">Contact</Link><Link to="/" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"><ArrowLeft className="h-4 w-4" />Back to website</Link></div>
         </div>
       </header>
 

@@ -55,6 +55,8 @@ jobs:
           npm run responsive:check
           npm run mobile-ai:check
           npm run premium-marketing:check
+          npm run public-visual-contact:check
+          npm run precision-devices:check
 
       - name: TypeScript
         run: npm run typecheck

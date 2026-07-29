@@ -15,6 +15,8 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { VelliqoAICallout, VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
+import { DesktopDevice } from '@/components/marketing/DeviceFrame';
+import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
 
 const productBenefits = [
   { icon: CalendarDays, title: 'Scheduling that stays clear', text: 'Daily, weekly and monthly views designed for real appointment operations.' },
@@ -93,7 +95,7 @@ export default function IndustrySelection() {
               <p className="mt-5 text-base leading-7 text-slate-600">Reports combine operational metrics with daily context. Velliqo AI then helps the owner interpret patterns and prepare reviewable actions.</p>
               <div className="mt-7 space-y-4"><FeatureLine title="Revenue and appointment performance" text="Track trends without leaving the operational workspace." /><FeatureLine title="Customer retention signals" text="Identify regular customers who may be slipping outside their normal cycle." /><FeatureLine title="Staff and service visibility" text="Understand utilisation, demand and the shape of the working day." /></div>
             </div>
-            <div className="overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 p-2 shadow-[0_30px_95px_rgba(15,23,42,.18)] sm:p-3"><div className="flex h-7 items-center gap-1.5 px-3"><span className="h-2.5 w-2.5 rounded-full bg-rose-400"/><span className="h-2.5 w-2.5 rounded-full bg-amber-300"/><span className="h-2.5 w-2.5 rounded-full bg-emerald-400"/></div><img src="/marketing/product/reports-desktop.png" alt="Velliqo reporting workspace" className="w-full rounded-[1.35rem] border border-white/10" /></div>
+            <div className="relative mx-auto w-full max-w-[720px] rounded-[2rem] bg-gradient-to-br from-violet-100 to-white p-5 shadow-[0_30px_95px_rgba(15,23,42,.12)]"><DesktopDevice image="/marketing/screens/precision/reports-desktop.webp" alt="Velliqo reporting workspace on desktop" fit="fill" /></div>
           </div>
         </section>
 
@@ -107,7 +109,19 @@ export default function IndustrySelection() {
 }
 
 function ProductStage() {
-  return <div className="relative mx-auto w-full max-w-[780px] pb-12 pt-3"><div className="absolute -left-8 top-16 h-44 w-44 rounded-full bg-violet-300/45 blur-3xl"/><div className="absolute -right-8 bottom-6 h-44 w-44 rounded-full bg-fuchsia-300/35 blur-3xl"/><div className="relative overflow-hidden rounded-[2rem] border border-slate-200 bg-slate-950 p-2 shadow-[0_35px_100px_rgba(76,29,149,.24)] sm:p-3"><div className="flex h-7 items-center gap-1.5 px-3"><span className="h-2.5 w-2.5 rounded-full bg-rose-400"/><span className="h-2.5 w-2.5 rounded-full bg-amber-300"/><span className="h-2.5 w-2.5 rounded-full bg-emerald-400"/></div><img src="/marketing/product/dashboard-desktop.png" alt="Velliqo owner dashboard" className="w-full rounded-[1.35rem] border border-white/10" /></div><div className="absolute -bottom-1 -left-1 hidden w-[32%] overflow-hidden rounded-[1.7rem] border-[7px] border-slate-950 bg-white shadow-[0_24px_70px_rgba(15,23,42,.28)] sm:block"><img src="/marketing/product/calendar-mobile.png" alt="Velliqo mobile calendar" className="w-full" /></div><div className="absolute -bottom-5 right-3 hidden w-[43%] overflow-hidden rounded-[1.5rem] border-[7px] border-slate-950 bg-white shadow-[0_24px_70px_rgba(15,23,42,.25)] lg:block"><img src="/marketing/product/today-schedule-desktop.png" alt="Velliqo daily schedule" className="w-full" /></div></div>;
+  return (
+    <div className="relative mx-auto w-full max-w-[820px] py-4 lg:pb-16">
+      <ResponsiveDeviceShowcase
+        laptopImage="/marketing/screens/precision/calendar-laptop.webp"
+        laptopAlt="Velliqo owner workspace on laptop"
+        phoneImage="/marketing/screens/precision/booking-phone.webp"
+        phoneAlt="Velliqo customer booking on phone"
+        tabletImage="/marketing/screens/precision/storefront-tablet.webp"
+        tabletAlt="Velliqo storefront on tablet"
+        priority
+      />
+    </div>
+  );
 }
 
 function SectionHeading({ eyebrow, title, text, centered = false }: { eyebrow: string; title: string; text: string; centered?: boolean }) {
