@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { DesktopDevice, LaptopDevice } from '@/components/marketing/DeviceFrame';
+import { FinalProductPair, FinalProductVisual } from '@/components/marketing/FinalProductVisuals';
 
 const questions = [
   ['Is Velliqo only for salons?', 'No. Velliqo is being built for appointment-based and service businesses across beauty, wellness, fitness, professional services, education, pets, automotive and other industries. The setup adapts terminology and starter modules to the selected business type.'],
@@ -52,8 +52,15 @@ export default function WhyVelliqo() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Start free <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/20 bg-white/5 px-6 text-white hover:bg-white/10"><Link to="/pricing">See pricing</Link></Button></div>
             </div>
             <div className="relative">
-              <div className="rounded-[2rem] border border-white/10 bg-white/[.05] p-5 shadow-[0_35px_100px_rgba(0,0,0,.35)] backdrop-blur"><LaptopDevice image="/marketing/screens/precision/dashboard-laptop.webp" alt="Velliqo business dashboard on laptop" loading="eager" fit="fill" /></div>
-              <div className="absolute -bottom-5 -left-3 hidden max-w-[260px] rounded-2xl border border-white/15 bg-slate-900/90 p-4 shadow-xl backdrop-blur sm:block"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-200"><HeartHandshake className="h-5 w-5" /></div><div><div className="text-sm font-extrabold">Built around real operations</div><div className="mt-1 text-xs text-white/50">Not software for software’s sake.</div></div></div></div>
+              <FinalProductPair
+                desktopSrc="/marketing/final/home-laptop.png"
+                desktopAlt="Velliqo owner workspace on laptop"
+                mobileSrc="/marketing/final/home-mobile.png"
+                mobileAlt="Velliqo owner workspace on mobile"
+                dark
+                priority
+              />
+              <div className="absolute -bottom-3 left-4 z-30 hidden max-w-[260px] rounded-2xl border border-white/15 bg-slate-900/90 p-4 shadow-xl backdrop-blur sm:block"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-200"><HeartHandshake className="h-5 w-5" /></div><div><div className="text-sm font-extrabold">Built around real operations</div><div className="mt-1 text-xs text-white/50">Not software for software’s sake.</div></div></div></div>
             </div>
           </div>
         </section>
@@ -81,7 +88,12 @@ export default function WhyVelliqo() {
 
         <section className="border-y border-slate-200 bg-[#f0edff]">
           <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
-            <div className="rounded-[2rem] border border-violet-200 bg-white p-5 shadow-[0_28px_90px_rgba(76,29,149,.15)]"><DesktopDevice image="/marketing/screens/precision/calendar-desktop.webp" alt="Velliqo calendar workspace on desktop" fit="fill" /></div>
+            <FinalProductVisual
+              src="/marketing/final/calendar-desktop.png"
+              alt="Velliqo calendar workspace on desktop"
+              className="p-3"
+              imageClassName="rounded-[1.4rem]"
+            />
             <div>
               <div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">Built for adoption</div>
               <h2 className="mt-4 text-3xl font-extrabold tracking-[-.035em] sm:text-4xl">Premium should feel easier—not more complicated.</h2>
