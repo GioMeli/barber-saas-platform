@@ -3,12 +3,13 @@ import { Menu, Sparkles, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-export type MarketingRoute = 'product' | 'ai' | 'demo' | 'experience' | 'why' | 'pricing' | 'business-types' | 'contact';
+export type MarketingRoute = 'product' | 'ai' | 'demo' | 'courses' | 'experience' | 'why' | 'pricing' | 'business-types' | 'contact';
 
 const links: Array<{ key: MarketingRoute; label: string; to: string }> = [
   { key: 'product', label: 'Product', to: '/' },
   { key: 'ai', label: 'Velliqo AI', to: '/velliqo-ai' },
-  { key: 'demo', label: 'Live demo', to: '/demo' },
+  { key: 'demo', label: 'Demo', to: '/demo' },
+  { key: 'courses', label: 'Courses', to: '/courses' },
   { key: 'experience', label: 'Experience', to: '/experience' },
   { key: 'why', label: 'Why Velliqo?', to: '/why-velliqo' },
   { key: 'pricing', label: 'Pricing', to: '/pricing' },
@@ -54,5 +55,5 @@ export function MarketingBrand({ dark = false }: { dark?: boolean }) {
 }
 
 export function MarketingFooter() {
-  return <footer className="border-t border-white/10 bg-[#090812] text-white"><div className="mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.2fr_.8fr_.8fr] lg:px-8"><div><MarketingBrand dark /><p className="mt-4 max-w-sm text-sm leading-6 text-white/45">A premium operating platform for appointment-based and service businesses, powered by Velliqo AI.</p></div><div><div className="text-xs font-extrabold uppercase tracking-[.18em] text-white/35">Explore</div><div className="mt-4 grid gap-3 text-sm font-semibold text-white/60"><Link to="/velliqo-ai" className="hover:text-white">Velliqo AI</Link><Link to="/demo" className="hover:text-white">Live demo</Link><Link to="/experience" className="hover:text-white">Product experience</Link><Link to="/pricing" className="hover:text-white">Pricing</Link><Link to="/business-types" className="hover:text-white">Business types</Link></div></div><div><div className="text-xs font-extrabold uppercase tracking-[.18em] text-white/35">Access</div><div className="mt-4 grid gap-3 text-sm font-semibold text-white/60"><Link to="/sign-in" className="hover:text-white">Business login</Link><Link to="/business-types" className="hover:text-white">Start free</Link><Link to="/why-velliqo" className="hover:text-white">Why Velliqo?</Link><Link to="/contact" className="hover:text-white">Contact</Link></div></div></div><div className="border-t border-white/10 px-4 py-6 text-center text-xs text-white/30">© 2026 Velliqo. Built for modern service operations.</div></footer>;
+  return <footer className="border-t border-white/10 bg-[#090812] text-white"><div className="mx-auto grid max-w-[1440px] gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.2fr_.8fr_.8fr] lg:px-8"><div><MarketingBrand dark /><p className="mt-4 max-w-sm text-sm leading-6 text-white/45">A premium operating platform for appointment-based and service businesses, powered by Velliqo AI.</p></div><div><div className="text-xs font-extrabold uppercase tracking-[.18em] text-white/35">Explore</div><div className="mt-4 grid gap-3 text-sm font-semibold text-white/60"><Link to="/velliqo-ai" className="hover:text-white">Velliqo AI</Link><Link to="/demo" className="hover:text-white">Demo</Link><Link to="/courses" className="hover:text-white">Courses</Link><Link to="/experience" className="hover:text-white">Product experience</Link><Link to="/pricing" className="hover:text-white">Pricing</Link><Link to="/business-types" className="hover:text-white">Business types</Link></div></div><div><div className="text-xs font-extrabold uppercase tracking-[.18em] text-white/35">Access</div><div className="mt-4 grid gap-3 text-sm font-semibold text-white/60"><Link to="/sign-in" className="hover:text-white">Business login</Link><Link to="/business-types" className="hover:text-white">Start free</Link><Link to="/why-velliqo" className="hover:text-white">Why Velliqo?</Link><Link to="/contact" className="hover:text-white">Contact</Link></div></div></div><div className="border-t border-white/10 px-4 py-6 text-center text-xs text-white/30">© 2026 Velliqo. Built for modern service operations.</div></footer>;
 }

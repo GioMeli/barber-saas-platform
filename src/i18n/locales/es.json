@@ -132,7 +132,8 @@
     "marketing": "Marketing",
     "mobile_appointment": "Cita",
     "more": "Más",
-    "training": "Formación"
+    "training": "Formación",
+    "courses": "Cursos"
   },
   "system": {
     "loading": "Cargando...",
@@ -3385,6 +3386,16 @@
         "title": "Facturación y suscripción",
         "description": "Revisa el plan, el estado de pago y el historial de facturación."
       }
-    }
+    },
+    "publicEyebrow": "Biblioteca de aprendizaje Velliqo",
+    "publicTitle": "Cursos para usar Velliqo con confianza",
+    "publicDescription": "Guías profesionales paso a paso con capturas reales de la aplicación, procesos exactos y controles prácticos de seguridad. Los vídeos relacionados podrán añadirse a cada curso cuando estén listos.",
+    "openDemo": "Practicar en Demo",
+    "videoLibrary": "Biblioteca de cursos en vídeo",
+    "videoLibraryDescription": "Cada curso está preparado para incluir un vídeo explicativo sin cambiar la biblioteca PDF.",
+    "videoComingSoon": "Los vídeos se añadirán aquí cuando estén disponibles. Las guías PDF ya están disponibles.",
+    "videoLabel": "vídeo",
+    "videoComingSoonShort": "Vídeo pronto",
+    "practiceInDemo": "Practicar en Demo"
   }
 }

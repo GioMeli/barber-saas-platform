@@ -21,21 +21,23 @@ export type TrainingGuide = {
   category: TrainingCategory;
   estimatedMinutes: number;
   route?: string;
+  demoRoute?: string;
+  videoUrl?: string | null;
 };
 
 export const TRAINING_GUIDES: TrainingGuide[] = [
-  { slug: 'getting-started', category: 'setup', estimatedMinutes: 8, route: '/dashboard/business' },
-  { slug: 'business-storefront', category: 'setup', estimatedMinutes: 10, route: '/dashboard/storefront' },
-  { slug: 'services-pricing', category: 'operations', estimatedMinutes: 8, route: '/dashboard/services' },
-  { slug: 'staff-availability', category: 'operations', estimatedMinutes: 10, route: '/dashboard/staff' },
-  { slug: 'calendar-appointments', category: 'operations', estimatedMinutes: 12, route: '/dashboard/calendar' },
-  { slug: 'customers-profiles', category: 'operations', estimatedMinutes: 9, route: '/dashboard/customers' },
-  { slug: 'products-sales', category: 'growth', estimatedMinutes: 10, route: '/dashboard/products' },
-  { slug: 'marketing-content', category: 'growth', estimatedMinutes: 12, route: '/dashboard/marketing' },
-  { slug: 'reports-finance', category: 'intelligence', estimatedMinutes: 12, route: '/dashboard/reports' },
-  { slug: 'velliqo-ai', category: 'intelligence', estimatedMinutes: 10, route: '/dashboard/ai?mode=assistant' },
-  { slug: 'automations-security', category: 'intelligence', estimatedMinutes: 12, route: '/dashboard/ai/settings' },
-  { slug: 'billing-subscription', category: 'account', estimatedMinutes: 7, route: '/dashboard/billing' },
+  { slug: 'getting-started', category: 'setup', estimatedMinutes: 8, route: '/dashboard/business', demoRoute: '/demo/business', videoUrl: null },
+  { slug: 'business-storefront', category: 'setup', estimatedMinutes: 10, route: '/dashboard/storefront', demoRoute: '/demo/storefront', videoUrl: null },
+  { slug: 'services-pricing', category: 'operations', estimatedMinutes: 8, route: '/dashboard/services', demoRoute: '/demo/services', videoUrl: null },
+  { slug: 'staff-availability', category: 'operations', estimatedMinutes: 10, route: '/dashboard/staff', demoRoute: '/demo/staff', videoUrl: null },
+  { slug: 'calendar-appointments', category: 'operations', estimatedMinutes: 12, route: '/dashboard/calendar', demoRoute: '/demo/calendar', videoUrl: null },
+  { slug: 'customers-profiles', category: 'operations', estimatedMinutes: 9, route: '/dashboard/customers', demoRoute: '/demo/customers', videoUrl: null },
+  { slug: 'products-sales', category: 'growth', estimatedMinutes: 10, route: '/dashboard/products', demoRoute: '/demo/products', videoUrl: null },
+  { slug: 'marketing-content', category: 'growth', estimatedMinutes: 12, route: '/dashboard/marketing', demoRoute: '/demo/marketing', videoUrl: null },
+  { slug: 'reports-finance', category: 'intelligence', estimatedMinutes: 12, route: '/dashboard/reports', demoRoute: '/demo/reports', videoUrl: null },
+  { slug: 'velliqo-ai', category: 'intelligence', estimatedMinutes: 10, route: '/dashboard/ai?mode=assistant', demoRoute: '/demo/ai', videoUrl: null },
+  { slug: 'automations-security', category: 'intelligence', estimatedMinutes: 12, route: '/dashboard/ai/settings', demoRoute: '/demo/settings', videoUrl: null },
+  { slug: 'billing-subscription', category: 'account', estimatedMinutes: 7, route: '/dashboard/billing', demoRoute: '/demo/billing', videoUrl: null },
 ];
 
 export const TRAINING_CATEGORIES: TrainingCategory[] = ['setup', 'operations', 'growth', 'intelligence', 'account'];
