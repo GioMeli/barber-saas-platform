@@ -132,7 +132,8 @@
     "marketing": "Pazarlama",
     "mobile_appointment": "Randevu",
     "more": "Daha fazla",
-    "training": "Eğitim"
+    "training": "Eğitim",
+    "courses": "Kurslar"
   },
   "system": {
     "loading": "Yükleniyor...",
@@ -3385,6 +3386,16 @@
         "title": "Faturalandırma ve abonelik",
         "description": "Planı, ödeme durumunu ve faturalandırma geçmişini inceleyin."
       }
-    }
+    },
+    "publicEyebrow": "Velliqo eğitim kütüphanesi",
+    "publicTitle": "Velliqo’yu güvenle kullanmak için kurslar",
+    "publicDescription": "Gerçek uygulama ekran görüntüleri, kesin iş akışları ve pratik güvenlik kontrolleri içeren profesyonel adım adım rehberler. Hazırlandıkça her kursa ilgili videolar eklenebilir.",
+    "openDemo": "Demo’da pratik yap",
+    "videoLibrary": "Video kurs kütüphanesi",
+    "videoLibraryDescription": "Her kurs, PDF kütüphanesi değişmeden ilgili eğitim videosunun eklenmesine hazırdır.",
+    "videoComingSoon": "Videolar hazırlandıkça buraya eklenecektir. PDF rehberleri şimdi kullanılabilir.",
+    "videoLabel": "video",
+    "videoComingSoonShort": "Video yakında",
+    "practiceInDemo": "Demo’da pratik yap"
   }
 }

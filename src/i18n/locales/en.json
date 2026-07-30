@@ -132,7 +132,8 @@
     "marketing": "Marketing",
     "mobile_appointment": "Appointment",
     "more": "More",
-    "training": "Training"
+    "training": "Training",
+    "courses": "Courses"
   },
   "system": {
     "loading": "Loading...",
@@ -3385,6 +3386,16 @@
         "title": "Billing and subscription management",
         "description": "Review the active plan, payment status and billing history while keeping business and platform charges separate."
       }
-    }
+    },
+    "publicEyebrow": "Velliqo learning library",
+    "publicTitle": "Courses for confident Velliqo owners",
+    "publicDescription": "Professional step-by-step guides with real application screenshots, exact workflows and practical safety checks. Video lessons can be added to each course as they become available.",
+    "openDemo": "Practise in Demo",
+    "videoLibrary": "Video course library",
+    "videoLibraryDescription": "Each course is prepared for a matching walkthrough video without changing the PDF library.",
+    "videoComingSoon": "Video lessons will be added here as they are produced. The PDF guides are available now.",
+    "videoLabel": "video",
+    "videoComingSoonShort": "Video soon",
+    "practiceInDemo": "Practise in Demo"
   }
 }

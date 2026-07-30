@@ -9,6 +9,7 @@ import {
   PlayCircle,
   RotateCcw,
   Search,
+  Video,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -79,7 +80,7 @@ export default function TrainingPortal() {
               <div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} · {t(`training.categories.${guide.category}`)}</div>
               <h2 className="mt-2 text-lg font-extrabold tracking-tight">{t(`training.guides.${guide.slug}.title`)}</h2>
               <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{t(`training.guides.${guide.slug}.description`)}</p>
-              <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span>PDF</span></div>
+              <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className="inline-flex items-center gap-1"><Video className="h-3.5 w-3.5" />PDF + {t('training.videoComingSoonShort')}</span></div>
               <div className="mt-4 grid grid-cols-2 gap-2"><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
               {guide.route && <Button asChild variant="ghost" className="mt-2 justify-between rounded-xl px-3"><Link to={guide.route}>{t('training.openWorkspace')}<ArrowUpRight className="h-4 w-4" /></Link></Button>}
             </article>

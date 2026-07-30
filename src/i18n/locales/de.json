@@ -132,7 +132,8 @@
     "marketing": "Marketing",
     "mobile_appointment": "Termin",
     "more": "Mehr",
-    "training": "Schulung"
+    "training": "Schulung",
+    "courses": "Kurse"
   },
   "system": {
     "loading": "Wird geladen...",
@@ -3385,6 +3386,16 @@
         "title": "Abrechnung und Abonnement",
         "description": "Prüfen Sie Plan, Zahlungsstatus und Abrechnungshistorie."
       }
-    }
+    },
+    "publicEyebrow": "Velliqo Lernbibliothek",
+    "publicTitle": "Kurse für eine sichere Nutzung von Velliqo",
+    "publicDescription": "Professionelle Schritt-für-Schritt-Anleitungen mit echten Anwendungsscreenshots, genauen Abläufen und praktischen Sicherheitsprüfungen. Passende Videos können später jedem Kurs hinzugefügt werden.",
+    "openDemo": "Im Demo üben",
+    "videoLibrary": "Video-Kursbibliothek",
+    "videoLibraryDescription": "Jeder Kurs ist für ein passendes Anleitungsvideo vorbereitet, ohne die PDF-Bibliothek zu ändern.",
+    "videoComingSoon": "Videos werden hier ergänzt, sobald sie verfügbar sind. Die PDF-Anleitungen stehen bereits bereit.",
+    "videoLabel": "Video",
+    "videoComingSoonShort": "Video folgt",
+    "practiceInDemo": "Im Demo üben"
   }
 }
