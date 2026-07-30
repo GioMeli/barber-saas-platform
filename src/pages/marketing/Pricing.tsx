@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { FinalProductPair } from '@/components/marketing/FinalProductVisuals';
 
 const faqs = [
   {
@@ -147,6 +148,30 @@ export default function Pricing() {
                 ))}
               </div>
             </div>
+          </div>
+        </section>
+
+
+        <section className="border-y border-slate-200 bg-[#f0edff]">
+          <div className="mx-auto grid max-w-[1280px] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[.86fr_1.14fr] lg:px-8 lg:py-24">
+            <div>
+              <div className="text-xs font-extrabold uppercase tracking-[0.2em] text-violet-600">Included across every device</div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">One subscription for the complete owner experience.</h2>
+              <p className="mt-5 text-base leading-7 text-slate-600">Use the same Velliqo workspace from desktop or mobile, with scheduling, customers, services, reporting and Velliqo AI available inside the same plan.</p>
+              <div className="mt-6 grid gap-3 sm:grid-cols-2">
+                <MiniTrust text="Owner workspace" />
+                <MiniTrust text="Customer storefront" />
+                <MiniTrust text="Velliqo AI" />
+                <MiniTrust text="Mobile and desktop" />
+              </div>
+            </div>
+            <FinalProductPair
+              desktopSrc="/marketing/final/home-laptop.png"
+              desktopAlt="Velliqo owner workspace on laptop"
+              mobileSrc="/marketing/final/home-mobile.png"
+              mobileAlt="Velliqo owner workspace on mobile"
+              mobileSide="right"
+            />
           </div>
         </section>
 

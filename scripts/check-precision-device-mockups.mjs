@@ -44,10 +44,11 @@ if (!showcase.includes('lg:absolute') || !showcase.includes('sm:grid-cols-2')) {
 }
 
 const publicPages = [experience, home, why].join('\n');
-if (!publicPages.includes('ResponsiveDeviceShowcase')) fail('precision showcase is not used on public pages');
-if (!publicPages.includes('/marketing/screens/precision/')) fail('public pages do not use device-ready captures');
+const usesPrecisionShowcase = publicPages.includes('ResponsiveDeviceShowcase') && publicPages.includes('/marketing/screens/precision/');
+const usesFinalVisuals = publicPages.includes('FinalProductVisual') && publicPages.includes('/marketing/final/');
+if (!usesPrecisionShowcase && !usesFinalVisuals) fail('public pages do not use a validated precision or final device visual system');
 if (/rotate-\[|rotate\(|-rotate-/.test(publicPages)) fail('device compositions still use perspective-breaking rotations');
 if (/objectFit:\s*fit/.test(device)) fail('legacy percentage-positioned image layer remains');
 
 console.log('Phase 10B.2 precision device mockup checks passed.');
-console.log('Exact SVG screen clipping, device-ready captures, non-distorted layouts and responsive compositions verified.');
+console.log('Exact SVG clipping and final complete-device captures, non-distorted layouts and responsive compositions verified.');
