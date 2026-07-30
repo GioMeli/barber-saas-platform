@@ -86,12 +86,14 @@ export function VelliqoVoiceAssistant({
   const [confirmationOpen, setConfirmationOpen] = React.useState(false);
   const sessionIdRef = React.useRef<string | null>(null);
   const openRef = React.useRef(false);
+  const previousLanguageRef = React.useRef(language);
   const finalTranscriptHandlerRef = React.useRef<(value: string) => void>(() => undefined);
 
   const voice = useBrowserVoice({
     language,
     rate: settings.voice_rate,
     pitch: settings.voice_pitch,
+    silenceGraceMs: 3000,
     onFinalTranscript: (value) => finalTranscriptHandlerRef.current(value),
     onError: (message) => {
       setStage('error');
@@ -339,6 +341,15 @@ export function VelliqoVoiceAssistant({
     }
   }, [businessId, voice]);
 
+  React.useEffect(() => {
+    if (previousLanguageRef.current === language) return;
+    previousLanguageRef.current = language;
+    void endSession('interrupted');
+    setTranscript('');
+    setAssistantText(t('ai.voice.languageChangedMessage'));
+    voice.clearTranscript();
+  }, [endSession, language, t, voice]);
+
   const interruptAndSpeak = React.useCallback(async () => {
     if (voice.speaking) {
       voice.stopSpeaking();
@@ -508,9 +519,15 @@ export function VelliqoVoiceAssistant({
               </Alert>
             ) : null}
 
-            <div className="flex items-start gap-2 rounded-2xl bg-muted/40 p-4 text-xs leading-5 text-muted-foreground">
-              <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-              {t('ai.voice.privacyNotice')}
+            <div className="grid gap-2">
+              <div className="flex items-start gap-2 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 text-xs leading-5 text-violet-950">
+                <Waves className="mt-0.5 h-4 w-4 shrink-0 text-violet-700" />
+                {t('ai.voice.pauseHint', { seconds: 3 })}
+              </div>
+              <div className="flex items-start gap-2 rounded-2xl bg-muted/40 p-4 text-xs leading-5 text-muted-foreground">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                {t('ai.voice.privacyNotice')}
+              </div>
             </div>
           </div>
         )}

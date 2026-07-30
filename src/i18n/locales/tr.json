@@ -1895,7 +1895,8 @@
         "monitorMarketing": "Pazarlama dönüşümleri",
         "safetyTitle": "Öneriler kontrollü kalır",
         "safetyDescription": "Proaktif yönetici sorunları algılar ve sonraki adımları önerir. Mevcut onay tabanlı Action Engine olmadan işletme verisi oluşturmaz, değiştirmez, göndermez veya yayınlamaz."
-      }
+      },
+      "languageChanged": "Velliqo AI seçilen dile geçti. Bu dile özel yeni bir konuşma hazırlandı."
     },
     "voice": {
       "phaseBadge": "Faz 9E",
@@ -1963,7 +1964,9 @@
         "confirming": "Onay bekleniyor",
         "error": "Dikkat gerekiyor"
       },
-      "actionChangeRequested": "Neyi değiştirmek istediğinizi sesli veya yazılı olarak söyleyin."
+      "actionChangeRequested": "Neyi değiştirmek istediğinizi sesli veya yazılı olarak söyleyin.",
+      "pauseHint": "Konuşurken doğal duraklamalar yapabilirsiniz. Velliqo, isteğinizi göndermeden önce algılanan son kelimelerden sonra en az {{seconds}} saniye bekler.",
+      "languageChangedMessage": "Sesli oturum yeni seçilen dili kullanacak şekilde sıfırlandı. Hazır olduğunuzda konuşmaya başlayın."
     },
     "automations": {
       "phaseBadge": "Aşama 9D",
@@ -2028,7 +2031,8 @@
       "title": "Velliqo'ya sor",
       "description": "Yazılı veya sesli mesaj gönderin ve işlemleri incelerken konuşmayı açık tutun.",
       "insights": "AI analizleri"
-    }
+    },
+    "defaultLanguageDescription": "Planlanmış özetler ve otomasyonlar için kullanılır. Canlı metin ve sesli konuşmalar her zaman Velliqo arayüzünde seçili olan dili kullanır."
   },
   "customerPortal": {
     "auth": {
