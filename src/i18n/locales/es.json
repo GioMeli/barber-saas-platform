@@ -88,7 +88,8 @@
     "back": "Atrás",
     "copy": "Copiar",
     "notAvailable": "No disponible",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "close": "Cerrar"
   },
   "language": {
     "label": "Idioma",
@@ -934,10 +935,22 @@
       "created": "Servicio creado",
       "saveError": "No se pudo guardar el servicio",
       "removed": "Servicio eliminado",
-      "deleteBlocked": "Este servicio no puede eliminarse porque existe historial de citas"
+      "deleteBlocked": "Este servicio no puede eliminarse porque existe historial de citas",
+      "imageSaveError": "No se pudo guardar la foto del servicio.",
+      "savedWithoutImage": "El servicio se guardó, pero la foto no se actualizó: {{error}}"
     },
     "delete": {
       "confirm": "¿Eliminar “{{name}}”? El historial de citas existente puede impedir la eliminación permanente."
+    },
+    "media": {
+      "label": "Foto del servicio",
+      "title": "Imagen del servicio para clientes",
+      "help": "JPG, PNG o WebP de hasta 5 MB. Velliqo la recorta y optimiza en una miniatura uniforme 4:3.",
+      "upload": "Añadir foto",
+      "replace": "Cambiar foto",
+      "remove": "Eliminar foto",
+      "previewAlt": "Vista previa de la imagen del servicio",
+      "invalid": "Selecciona una imagen JPG, PNG o WebP válida."
     }
   },
   "products": {
@@ -1402,6 +1415,13 @@
         "showProducts": "Mostrar productos",
         "showGallery": "Mostrar galería",
         "showReviews": "Mostrar reseñas"
+      },
+      "pwa": {
+        "title": "Aplicación instalable para clientes",
+        "description": "Permite que los clientes instalen esta página como aplicación con el nombre y logotipo del negocio.",
+        "shortName": "Nombre corto de la aplicación",
+        "shortNameHint": "Hasta 30 caracteres. Déjalo vacío para usar el nombre completo del negocio.",
+        "logoHint": "Para obtener el mejor icono, sube un logotipo cuadrado con espacio seguro alrededor."
       }
     },
     "qr": {
@@ -1455,7 +1475,8 @@
         "guestBookingPrefix": "La reserva como invitado está disponible.",
         "guestBookingSuffix": "para futuras reservas más rápidas.",
         "quickAccess": "Acceso rápido",
-        "shareText": "Reserva una cita con {{business}}"
+        "shareText": "Reserva una cita con {{business}}",
+        "reviewCount": "{{count}} reseñas verificadas"
       },
       "sections": {
         "services": {
@@ -1578,6 +1599,17 @@
         "openMenu": "Abrir menú de navegación",
         "closeMenu": "Cerrar menú de navegación",
         "signOut": "Cerrar sesión"
+      },
+      "install": {
+        "eyebrow": "Instalar la app del negocio",
+        "title": "Guarda {{business}} en tu pantalla de inicio",
+        "description": "Accede más rápido a reservas, servicios y tu cuenta de cliente en una experiencia independiente.",
+        "action": "Instalar app",
+        "instructions": "Cómo instalar",
+        "dialogTitle": "Instalar {{business}}",
+        "iosStep1": "Abre el menú Compartir del navegador.",
+        "iosStep2": "Selecciona “Añadir a pantalla de inicio” o “Instalar aplicación”.",
+        "iosStep3": "Confirma Añadir. La aplicación usará el logotipo del negocio y abrirá esta página."
       }
     }
   },

@@ -24,6 +24,7 @@ import { getIndustryConfig } from '@/config/industries';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
+import { useStorePWA } from '@/hooks/useStorePWA';
 import {
   Dialog,
   DialogContent,
@@ -51,6 +52,8 @@ export default function PublicAppLayout() {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  useStorePWA(business);
 
   useEffect(() => {
     if (slug) void fetchBusiness();

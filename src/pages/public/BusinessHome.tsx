@@ -37,6 +37,8 @@ import { supabase } from '@/db/supabase';
 import { useAuth } from '@/hooks/useAuth';
 import type { IndustryConfig } from '@/config/industries';
 import { useTranslation } from 'react-i18next';
+import { ServiceThumbnail } from '@/components/storefront/ServiceThumbnail';
+import { StoreInstallPrompt } from '@/components/storefront/StoreInstallPrompt';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import type { TFunction } from 'i18next';
 
@@ -241,6 +243,16 @@ export default function BusinessHome() {
     gallery?.[0]?.image_url ||
     null;
 
+  const reviewSummary = useMemo(() => {
+    if (!reviews.length) return null;
+    const ratings = reviews.map((review) => Number(review.rating || 0)).filter((rating) => rating > 0);
+    if (!ratings.length) return null;
+    return {
+      average: ratings.reduce((sum, rating) => sum + rating, 0) / ratings.length,
+      count: ratings.length,
+    };
+  }, [reviews]);
+
   const bookUrl = `/app/${business.slug}/book`;
 
   const scrollToSection = (id: string) => {
@@ -297,6 +309,12 @@ export default function BusinessHome() {
               >
                 {activeClosure ? t('storefront.public.status.temporarilyClosed') : t('storefront.public.status.acceptingBookings')}
               </Badge>
+              {reviewSummary && (
+                <Badge className="border-white/15 bg-white/10 text-white hover:bg-white/15">
+                  <Star className="mr-1.5 h-3.5 w-3.5 fill-amber-300 text-amber-300" />
+                  {reviewSummary.average.toFixed(1)} · {t('storefront.public.hero.reviewCount', { count: reviewSummary.count })}
+                </Badge>
+              )}
             </div>
 
             <div className="mt-5 flex items-center gap-4">
@@ -463,6 +481,8 @@ export default function BusinessHome() {
       </nav>
 
       <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6">
+        <StoreInstallPrompt business={business} />
+
         <section id="services" className="scroll-mt-32">
           <CompactHeading
             icon={<Scissors className="h-5 w-5" />}
@@ -481,19 +501,9 @@ export default function BusinessHome() {
                   {services.map((service) => (
                     <div
                       key={service.id}
-                      className="grid gap-3 p-4 transition hover:bg-muted/30 sm:grid-cols-[52px_minmax(0,1fr)_auto] sm:items-center"
+                      className="grid gap-4 p-4 transition hover:bg-muted/30 sm:grid-cols-[84px_minmax(0,1fr)_auto] sm:items-center sm:p-5"
                     >
-                      {service.image_url ? (
-                        <img
-                          src={service.image_url}
-                          alt={service.name}
-                          className="h-12 w-12 rounded-xl object-cover"
-                        />
-                      ) : (
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                          <Scissors className="h-5 w-5" />
-                        </div>
-                      )}
+                      <ServiceThumbnail src={service.image_url} alt={service.name} className="h-20 w-20 rounded-2xl" />
 
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
@@ -504,7 +514,7 @@ export default function BusinessHome() {
                           </span>
                         </div>
                         {service.description && (
-                          <p className="mt-1 line-clamp-1 text-sm text-muted-foreground">
+                          <p className="mt-1 line-clamp-2 text-sm leading-6 text-muted-foreground">
                             {service.description}
                           </p>
                         )}
@@ -514,7 +524,7 @@ export default function BusinessHome() {
                         <div className="text-lg font-bold">
                           {currencyFormatter.format(Number(service.price))}
                         </div>
-                        <Button asChild size="sm" variant="outline">
+                        <Button asChild size="sm" className="rounded-xl">
                           <Link to={`${bookUrl}?service=${service.id}`}>
                             {t('storefront.public.actions.book')}
                             <ChevronRight className="ml-1 h-4 w-4" />

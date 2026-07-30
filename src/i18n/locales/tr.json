@@ -88,7 +88,8 @@
     "back": "Geri",
     "copy": "Kopyala",
     "notAvailable": "Kullanılamıyor",
-    "refresh": "Yenile"
+    "refresh": "Yenile",
+    "close": "Kapat"
   },
   "language": {
     "label": "Dil",
@@ -934,10 +935,22 @@
       "created": "Hizmet oluşturuldu",
       "saveError": "Hizmet kaydedilemedi",
       "removed": "Hizmet kaldırıldı",
-      "deleteBlocked": "Randevu geçmişi bulunduğu için bu hizmet kaldırılamaz"
+      "deleteBlocked": "Randevu geçmişi bulunduğu için bu hizmet kaldırılamaz",
+      "imageSaveError": "Hizmet fotoğrafı kaydedilemedi.",
+      "savedWithoutImage": "Hizmet kaydedildi ancak fotoğraf güncellenemedi: {{error}}"
     },
     "delete": {
       "confirm": "“{{name}}” kaldırılsın mı? Mevcut randevu geçmişi kalıcı silmeyi engelleyebilir."
+    },
+    "media": {
+      "label": "Hizmet fotoğrafı",
+      "title": "Müşterilere gösterilen hizmet görseli",
+      "help": "En fazla 5 MB JPG, PNG veya WebP. Velliqo görseli tutarlı 4:3 oranında kırpar ve optimize eder.",
+      "upload": "Fotoğraf ekle",
+      "replace": "Fotoğrafı değiştir",
+      "remove": "Fotoğrafı kaldır",
+      "previewAlt": "Hizmet görseli önizlemesi",
+      "invalid": "Geçerli bir JPG, PNG veya WebP görseli seçin."
     }
   },
   "products": {
@@ -1402,6 +1415,13 @@
         "showProducts": "Ürünleri göster",
         "showGallery": "Galeriyi göster",
         "showReviews": "Yorumları göster"
+      },
+      "pwa": {
+        "title": "Yüklenebilir müşteri uygulaması",
+        "description": "Müşterilerin bu mağazayı işletme adınız ve logonuzla uygulama olarak yüklemesine izin verin.",
+        "shortName": "Kısa uygulama adı",
+        "shortNameHint": "En fazla 30 karakter. Tam işletme adını kullanmak için boş bırakın.",
+        "logoHint": "En iyi ana ekran simgesi için işaretin çevresinde güvenli boşluk bulunan kare bir logo yükleyin."
       }
     },
     "qr": {
@@ -1455,7 +1475,8 @@
         "guestBookingPrefix": "Misafir olarak rezervasyon yapılabilir.",
         "guestBookingSuffix": "gelecekte daha hızlı rezervasyonlar için.",
         "quickAccess": "Hızlı erişim",
-        "shareText": "{{business}} için randevu al"
+        "shareText": "{{business}} için randevu al",
+        "reviewCount": "{{count}} doğrulanmış değerlendirme"
       },
       "sections": {
         "services": {
@@ -1578,6 +1599,17 @@
         "openMenu": "Gezinme menüsünü aç",
         "closeMenu": "Gezinme menüsünü kapat",
         "signOut": "Çıkış yap"
+      },
+      "install": {
+        "eyebrow": "İşletme uygulamasını yükle",
+        "title": "{{business}} ana ekranınızda olsun",
+        "description": "Rezervasyonlara, hizmetlere ve müşteri hesabınıza bağımsız uygulama deneyimiyle daha hızlı ulaşın.",
+        "action": "Uygulamayı yükle",
+        "instructions": "Yükleme adımları",
+        "dialogTitle": "{{business}} uygulamasını yükle",
+        "iosStep1": "Tarayıcınızın Paylaş menüsünü açın.",
+        "iosStep2": "“Ana Ekrana Ekle” veya “Uygulamayı yükle” seçeneğini seçin.",
+        "iosStep3": "Ekle seçeneğini onaylayın. Uygulama işletme logosunu kullanır ve bu mağazayı açar."
       }
     }
   },

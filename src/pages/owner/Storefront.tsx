@@ -30,7 +30,7 @@ import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
 import { useTranslation } from 'react-i18next';
 
 const EMPTY_FORM = {
-  description: '', logo_url: '', cover_image_url: '', phone: '', email: '',
+  description: '', logo_url: '', cover_image_url: '', phone: '', email: '', pwa_enabled: true, pwa_short_name: '',
   address: '', address_line_1: '', address_line_2: '', city: '', district: '',
   postal_code: '', latitude: '', longitude: '',
 };
@@ -88,7 +88,7 @@ export default function Storefront() {
     const next = {
       description: data.description ?? '', logo_url: data.logo_url ?? '',
       cover_image_url: data.cover_image_url ?? '', phone: data.phone ?? '',
-      email: data.email ?? '', address: data.address ?? '',
+      email: data.email ?? '', pwa_enabled: data.pwa_enabled !== false, pwa_short_name: data.pwa_short_name ?? '', address: data.address ?? '',
       address_line_1: data.address_line_1 ?? '', address_line_2: data.address_line_2 ?? '',
       city: data.city ?? '', district: data.district ?? '',
       postal_code: data.postal_code ?? '',
@@ -130,7 +130,7 @@ export default function Storefront() {
   }, [form]);
   const completion = Math.round((completedFields / 7) * 100);
 
-  const update = (key: keyof typeof form, value: string) =>
+  const update = <K extends keyof typeof form>(key: K, value: (typeof form)[K]) =>
     setForm((current) => ({ ...current, [key]: value }));
   const updatePresence = <K extends keyof typeof presenceForm>(key: K, value: (typeof presenceForm)[K]) =>
     setPresenceForm((current) => ({ ...current, [key]: value }));
@@ -158,6 +158,8 @@ export default function Storefront() {
       cover_image_url: form.cover_image_url || null,
       phone: form.phone.trim() || null,
       email: form.email.trim() || null,
+      pwa_enabled: form.pwa_enabled,
+      pwa_short_name: form.pwa_short_name.trim() || null,
       address: form.address.trim() || null,
       address_line_1: form.address_line_1.trim() || null,
       address_line_2: form.address_line_2.trim() || null,
@@ -321,6 +323,19 @@ export default function Storefront() {
               <Textarea rows={7} value={form.description} onChange={(event) => update('description', event.target.value)} placeholder={t('storefront.owner.branding.descriptionPlaceholder')} />
               <div className="mt-2 text-right text-xs text-muted-foreground">{t('storefront.owner.branding.characterCount', { count: form.description.length })}</div>
             </Field>
+            <div className="grid gap-5 rounded-2xl border bg-muted/15 p-5 md:grid-cols-[1fr_auto] md:items-center">
+              <div>
+                <Label>{t('storefront.owner.pwa.title')}</Label>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">{t('storefront.owner.pwa.description')}</p>
+              </div>
+              <Switch checked={form.pwa_enabled} onCheckedChange={(value) => update('pwa_enabled', value)} />
+              <Field label={t('storefront.owner.pwa.shortName')} hint={t('storefront.owner.pwa.shortNameHint')} className="md:col-span-2">
+                <Input maxLength={30} value={form.pwa_short_name} onChange={(event) => update('pwa_short_name', event.target.value)} placeholder={business?.name || 'Velliqo'} />
+              </Field>
+              <div className="rounded-xl bg-background p-4 text-xs leading-5 text-muted-foreground md:col-span-2">
+                {t('storefront.owner.pwa.logoHint')}
+              </div>
+            </div>
           </CardContent>
         </Card>
       )}

@@ -58,6 +58,7 @@ jobs:
           npm run public-visual-contact:check
           npm run precision-devices:check
           npm run demo-training:check
+          npm run customer-experience:check
 
       - name: TypeScript
         run: npm run typecheck

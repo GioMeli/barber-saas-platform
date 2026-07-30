@@ -16,12 +16,16 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { ServiceThumbnail } from '@/components/storefront/ServiceThumbnail';
+import { removeServiceImage, uploadServiceImage, validateServiceImage } from '@/lib/serviceMedia';
 import { toast } from 'sonner';
 import {
   Clock3,
   Edit,
   Euro,
   Plus,
+  ImagePlus,
+  X,
   Scissors,
   Search,
   Trash2,
@@ -55,6 +59,10 @@ export default function Services() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<ServiceFilter>('all');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [existingImagePath, setExistingImagePath] = useState<string | null>(null);
+  const [removeExistingImage, setRemoveExistingImage] = useState(false);
 
   useEffect(() => {
     if (businessId) void fetchData();
@@ -127,9 +135,21 @@ export default function Services() {
       ) / services.length
     : 0;
 
+  const resetImageState = () => {
+    if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    setExistingImagePath(null);
+    setRemoveExistingImage(false);
+  };
+
   const handleOpenDialog = (service?: any) => {
+    resetImageState();
+
     if (service) {
       setEditingId(service.id);
+      setExistingImagePath(service.image_path ?? null);
+      setImagePreview(service.image_url ?? null);
       setFormData({
         name: service.name ?? '',
         description: service.description ?? '',
@@ -148,6 +168,29 @@ export default function Services() {
     }
 
     setIsDialogOpen(true);
+  };
+
+  const handleImageSelection = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = '';
+    if (!file) return;
+
+    try {
+      validateServiceImage(file);
+      if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview);
+      setImageFile(file);
+      setImagePreview(URL.createObjectURL(file));
+      setRemoveExistingImage(false);
+    } catch (error: any) {
+      toast.error(error.message || t('services.media.invalid'));
+    }
+  };
+
+  const clearImage = () => {
+    if (imagePreview?.startsWith('blob:')) URL.revokeObjectURL(imagePreview);
+    setImageFile(null);
+    setImagePreview(null);
+    setRemoveExistingImage(Boolean(existingImagePath));
   };
 
   const handleSave = async () => {
@@ -190,6 +233,8 @@ export default function Services() {
         updated_at: new Date().toISOString(),
       };
 
+      let serviceId = editingId;
+
       if (editingId) {
         const { error } = await supabase
           .from('services')
@@ -198,15 +243,47 @@ export default function Services() {
           .eq('business_id', businessId);
 
         if (error) throw error;
-        toast.success(t('services.messages.updated'));
       } else {
-        const { error } = await supabase.from('services').insert(payload);
+        const { data, error } = await supabase
+          .from('services')
+          .insert(payload)
+          .select('id')
+          .single();
 
         if (error) throw error;
-        toast.success(t('services.messages.created'));
+        serviceId = data.id;
       }
 
+      if (!serviceId) throw new Error(t('services.messages.saveError'));
+
+      let mediaWarning: string | null = null;
+      try {
+        if (imageFile) {
+          const media = await uploadServiceImage({ businessId, serviceId, file: imageFile });
+          const { error } = await supabase
+            .from('services')
+            .update({ image_url: media.publicUrl, image_path: media.path, updated_at: new Date().toISOString() })
+            .eq('id', serviceId)
+            .eq('business_id', businessId);
+          if (error) throw error;
+        } else if (removeExistingImage && existingImagePath) {
+          const { error } = await supabase
+            .from('services')
+            .update({ image_url: null, image_path: null, updated_at: new Date().toISOString() })
+            .eq('id', serviceId)
+            .eq('business_id', businessId);
+          if (error) throw error;
+          await removeServiceImage(existingImagePath);
+        }
+      } catch (mediaError: any) {
+        console.error('Service image error:', mediaError);
+        mediaWarning = mediaError.message || t('services.messages.imageSaveError');
+      }
+
+      toast.success(editingId ? t('services.messages.updated') : t('services.messages.created'));
+      if (mediaWarning) toast.warning(t('services.messages.savedWithoutImage', { error: mediaWarning }));
       setIsDialogOpen(false);
+      resetImageState();
       await fetchData();
     } catch (error: any) {
       toast.error(error.message || t('services.messages.saveError'));
@@ -231,6 +308,7 @@ export default function Services() {
 
       if (error) throw error;
 
+      await removeServiceImage(service.image_path);
       toast.success(t('services.messages.removed'));
       await fetchData();
     } catch (error: any) {
@@ -356,7 +434,9 @@ export default function Services() {
                   key={service.id}
                   className="grid gap-4 px-5 py-5 transition hover:bg-muted/30 md:grid-cols-[minmax(0,1.4fr)_150px_130px_160px_auto] md:items-center sm:px-6"
                 >
-                  <div className="min-w-0">
+                  <div className="flex min-w-0 items-start gap-3">
+                    <ServiceThumbnail src={service.image_url} alt={service.name} className="h-12 w-12" />
+                    <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="truncate font-semibold">{service.name}</h3>
                       <Badge variant="outline">
@@ -369,6 +449,7 @@ export default function Services() {
                         {service.description}
                       </p>
                     )}
+                    </div>
                   </div>
 
                   <div className="flex items-center gap-2 text-sm">
@@ -423,7 +504,7 @@ export default function Services() {
         </CardContent>
       </Card>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+      <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) resetImageState(); }}>
         <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
@@ -441,6 +522,32 @@ export default function Services() {
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
+
+              <div className="grid gap-3 sm:col-span-2">
+                <Label>{t('services.media.label')}</Label>
+                <div className="flex flex-col gap-4 rounded-2xl border bg-muted/15 p-4 sm:flex-row sm:items-center">
+                  <ServiceThumbnail src={imagePreview} alt={formData.name || t('services.media.previewAlt')} className="h-24 w-32 rounded-xl" />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold">{t('services.media.title')}</p>
+                    <p className="mt-1 text-xs leading-5 text-muted-foreground">{t('services.media.help')}</p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <Button type="button" size="sm" variant="outline" asChild>
+                        <label className="cursor-pointer">
+                          <ImagePlus className="mr-2 h-4 w-4" />
+                          {imagePreview ? t('services.media.replace') : t('services.media.upload')}
+                          <input type="file" className="sr-only" accept="image/jpeg,image/png,image/webp" onChange={handleImageSelection} />
+                        </label>
+                      </Button>
+                      {imagePreview && (
+                        <Button type="button" size="sm" variant="ghost" onClick={clearImage}>
+                          <X className="mr-2 h-4 w-4" />
+                          {t('services.media.remove')}
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
                 <div className="grid gap-2 sm:col-span-2">
                   <Label htmlFor="name">{t('services.fields.name')} *</Label>
                   <Input

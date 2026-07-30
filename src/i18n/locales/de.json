@@ -88,7 +88,8 @@
     "back": "Zurück",
     "copy": "Kopieren",
     "notAvailable": "Nicht verfügbar",
-    "refresh": "Aktualisieren"
+    "refresh": "Aktualisieren",
+    "close": "Schließen"
   },
   "language": {
     "label": "Sprache",
@@ -934,10 +935,22 @@
       "created": "Dienstleistung erstellt",
       "saveError": "Dienstleistung konnte nicht gespeichert werden",
       "removed": "Dienstleistung entfernt",
-      "deleteBlocked": "Diese Dienstleistung kann wegen vorhandener Terminhistorie nicht entfernt werden"
+      "deleteBlocked": "Diese Dienstleistung kann wegen vorhandener Terminhistorie nicht entfernt werden",
+      "imageSaveError": "Das Servicefoto konnte nicht gespeichert werden.",
+      "savedWithoutImage": "Der Service wurde gespeichert, aber das Foto wurde nicht aktualisiert: {{error}}"
     },
     "delete": {
       "confirm": "„{{name}}“ entfernen? Vorhandene Terminhistorie kann eine dauerhafte Löschung verhindern."
+    },
+    "media": {
+      "label": "Servicefoto",
+      "title": "Servicebild für Kunden",
+      "help": "JPG, PNG oder WebP bis 5 MB. Velliqo schneidet das Bild auf ein einheitliches 4:3-Format zu und optimiert es.",
+      "upload": "Foto hinzufügen",
+      "replace": "Foto ersetzen",
+      "remove": "Foto entfernen",
+      "previewAlt": "Vorschau des Servicebildes",
+      "invalid": "Wählen Sie ein gültiges JPG-, PNG- oder WebP-Bild."
     }
   },
   "products": {
@@ -1402,6 +1415,13 @@
         "showProducts": "Produkte anzeigen",
         "showGallery": "Galerie anzeigen",
         "showReviews": "Bewertungen anzeigen"
+      },
+      "pwa": {
+        "title": "Installierbare Kunden-App",
+        "description": "Kunden können diesen Store mit Ihrem Unternehmensnamen und Logo als App installieren.",
+        "shortName": "Kurzer App-Name",
+        "shortNameHint": "Bis zu 30 Zeichen. Leer lassen, um den vollständigen Unternehmensnamen zu verwenden.",
+        "logoHint": "Für ein optimales Startbildschirm-Symbol laden Sie ein quadratisches Logo mit ausreichend Rand hoch."
       }
     },
     "qr": {
@@ -1455,7 +1475,8 @@
         "guestBookingPrefix": "Buchung als Gast ist möglich.",
         "guestBookingSuffix": "für schnellere zukünftige Buchungen.",
         "quickAccess": "Schnellzugriff",
-        "shareText": "Termin bei {{business}} buchen"
+        "shareText": "Termin bei {{business}} buchen",
+        "reviewCount": "{{count}} verifizierte Bewertungen"
       },
       "sections": {
         "services": {
@@ -1578,6 +1599,17 @@
         "openMenu": "Navigationsmenü öffnen",
         "closeMenu": "Navigationsmenü schließen",
         "signOut": "Abmelden"
+      },
+      "install": {
+        "eyebrow": "Business-App installieren",
+        "title": "{{business}} zum Startbildschirm hinzufügen",
+        "description": "Öffnen Sie Buchungen, Services und Ihr Kundenkonto schneller in einer eigenständigen App.",
+        "action": "App installieren",
+        "instructions": "Installationsanleitung",
+        "dialogTitle": "{{business}} installieren",
+        "iosStep1": "Öffnen Sie das Teilen-Menü Ihres Browsers.",
+        "iosStep2": "Wählen Sie „Zum Home-Bildschirm“ oder „App installieren“.",
+        "iosStep3": "Bestätigen Sie das Hinzufügen. Die App verwendet das Logo dieses Unternehmens und öffnet diesen Store."
       }
     }
   },

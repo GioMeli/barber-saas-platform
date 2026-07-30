@@ -30,6 +30,7 @@ import {
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import { ServiceThumbnail } from '@/components/storefront/ServiceThumbnail';
 import {
   ActionCard,
   DashboardGrid,
@@ -791,27 +792,30 @@ function NextAppointmentPanel({
   return (
     <div className="rounded-2xl border bg-card/80 p-5 backdrop-blur sm:p-6">
       <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <StatBadge>{t('customerPortal.appointment.next')}</StatBadge>
-            <StatBadge tone="success">
-              {formatPortalRelativeTime(startTime, locale)}
-            </StatBadge>
-          </div>
+        <div className="flex min-w-0 items-start gap-4">
+          <ServiceThumbnail src={services[0]?.image_url} alt={services[0]?.name || business.name} className="hidden h-20 w-20 rounded-2xl sm:block" />
+          <div className="min-w-0">
+            <div className="flex flex-wrap items-center gap-2">
+              <StatBadge>{t('customerPortal.appointment.next')}</StatBadge>
+              <StatBadge tone="success">
+                {formatPortalRelativeTime(startTime, locale)}
+              </StatBadge>
+            </div>
 
-          <div className="mt-4 text-2xl font-bold">
-            {formatPortalDate(startTime, locale, { weekday: 'long', month: 'long', day: 'numeric' })}
-          </div>
-          <div className="mt-1 text-lg font-semibold text-primary">
-            {formatPortalTime(startTime, locale)}
-          </div>
+            <div className="mt-4 text-2xl font-bold">
+              {formatPortalDate(startTime, locale, { weekday: 'long', month: 'long', day: 'numeric' })}
+            </div>
+            <div className="mt-1 text-lg font-semibold text-primary">
+              {formatPortalTime(startTime, locale)}
+            </div>
 
-          <div className="mt-3 text-sm text-muted-foreground">
-            {services.map((service: any) => service.name).join(', ') ||
-              t('customerPortal.appointment.fallback')}
-            {appointment.employee_name
-              ? t('customerPortal.appointment.withProfessional', { name: appointment.employee_name })
-              : ''}
+            <div className="mt-3 text-sm text-muted-foreground">
+              {services.map((service: any) => service.name).join(', ') ||
+                t('customerPortal.appointment.fallback')}
+              {appointment.employee_name
+                ? t('customerPortal.appointment.withProfessional', { name: appointment.employee_name })
+                : ''}
+            </div>
           </div>
         </div>
 
@@ -1118,9 +1122,7 @@ function TimelineAppointment({
 
   return (
     <div className="relative z-10 flex gap-4">
-      <div className="flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl border bg-card text-primary shadow-sm">
-        <BriefcaseBusiness className="h-5 w-5" />
-      </div>
+      <ServiceThumbnail src={services[0]?.image_url} alt={services[0]?.name || t('customerPortal.appointment.fallback')} className="h-[52px] w-[52px] rounded-2xl" />
 
       <Card className="min-w-0 flex-1 rounded-2xl shadow-sm">
         <CardContent className="p-4 sm:p-5">
@@ -1216,18 +1218,21 @@ function AppointmentCard({
     >
       <CardContent className="p-0">
         <div className="flex items-start justify-between gap-4 border-b bg-muted/20 p-5 sm:p-6">
-          <div>
-            <div className="text-xs font-semibold uppercase tracking-wide text-primary">
-              {upcoming
-                ? t('customerPortal.appointment.upcoming')
-                : t('customerPortal.appointment.record')}
-            </div>
-            <h3 className="mt-2 text-lg font-bold">
-              {services.map((service: any) => service.name).join(', ') ||
-                t('customerPortal.appointment.fallback')}
-            </h3>
-            <div className="mt-1 text-xs text-muted-foreground">
-              {t('customerPortal.appointment.reference', { reference: appointment.booking_reference })}
+          <div className="flex min-w-0 items-start gap-3">
+            <ServiceThumbnail src={services[0]?.image_url} alt={services[0]?.name || t('customerPortal.appointment.fallback')} className="h-14 w-14 rounded-xl" />
+            <div className="min-w-0">
+              <div className="text-xs font-semibold uppercase tracking-wide text-primary">
+                {upcoming
+                  ? t('customerPortal.appointment.upcoming')
+                  : t('customerPortal.appointment.record')}
+              </div>
+              <h3 className="mt-2 line-clamp-2 text-lg font-bold">
+                {services.map((service: any) => service.name).join(', ') ||
+                  t('customerPortal.appointment.fallback')}
+              </h3>
+              <div className="mt-1 text-xs text-muted-foreground">
+                {t('customerPortal.appointment.reference', { reference: appointment.booking_reference })}
+              </div>
             </div>
           </div>
 

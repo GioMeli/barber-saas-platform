@@ -88,7 +88,8 @@
     "back": "Back",
     "copy": "Copy",
     "notAvailable": "Not available",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "close": "Close"
   },
   "language": {
     "label": "Language",
@@ -934,10 +935,22 @@
       "created": "Service created",
       "saveError": "Failed to save service",
       "removed": "Service removed",
-      "deleteBlocked": "This service cannot be removed because appointment history exists"
+      "deleteBlocked": "This service cannot be removed because appointment history exists",
+      "imageSaveError": "The service photo could not be saved.",
+      "savedWithoutImage": "The service was saved, but the photo was not updated: {{error}}"
     },
     "delete": {
       "confirm": "Remove \"{{name}}\"? Existing appointment history may prevent permanent deletion."
+    },
+    "media": {
+      "label": "Service photo",
+      "title": "Customer-facing service image",
+      "help": "JPG, PNG or WebP up to 5 MB. Velliqo crops and optimizes it to a consistent 4:3 thumbnail.",
+      "upload": "Add photo",
+      "replace": "Replace photo",
+      "remove": "Remove photo",
+      "previewAlt": "Service image preview",
+      "invalid": "Choose a valid JPG, PNG or WebP image."
     }
   },
   "products": {
@@ -1402,6 +1415,13 @@
         "showProducts": "Show products",
         "showGallery": "Show gallery",
         "showReviews": "Show reviews"
+      },
+      "pwa": {
+        "title": "Installable customer app",
+        "description": "Allow customers to install this storefront as an app using your business name and logo.",
+        "shortName": "Installed app short name",
+        "shortNameHint": "Up to 30 characters. Leave blank to use the full business name.",
+        "logoHint": "For the best home-screen icon, upload a square logo with safe spacing around the mark."
       }
     },
     "qr": {
@@ -1455,7 +1475,8 @@
         "guestBookingPrefix": "Guest booking is available.",
         "guestBookingSuffix": "for faster future bookings.",
         "quickAccess": "Quick access",
-        "shareText": "Book an appointment with {{business}}"
+        "shareText": "Book an appointment with {{business}}",
+        "reviewCount": "{{count}} verified reviews"
       },
       "sections": {
         "services": {
@@ -1578,6 +1599,17 @@
         "openMenu": "Open navigation menu",
         "closeMenu": "Close navigation menu",
         "signOut": "Sign out"
+      },
+      "install": {
+        "eyebrow": "Install this business app",
+        "title": "Keep {{business}} on your home screen",
+        "description": "Open bookings, services and your customer account faster in a standalone app experience.",
+        "action": "Install app",
+        "instructions": "How to install",
+        "dialogTitle": "Install {{business}}",
+        "iosStep1": "Open your browser Share menu.",
+        "iosStep2": "Choose “Add to Home Screen” or “Install app”.",
+        "iosStep3": "Confirm Add. The app will use this business logo and open this storefront."
       }
     }
   },
