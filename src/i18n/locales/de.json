@@ -1895,7 +1895,8 @@
         "monitorMarketing": "Marketing-Conversions",
         "safetyTitle": "Empfehlungen bleiben kontrolliert",
         "safetyDescription": "Der proaktive Manager erkennt Probleme und empfiehlt Schritte. Er verändert, sendet oder veröffentlicht keine Geschäftsdaten ohne die bestehende bestätigungsbasierte Action Engine."
-      }
+      },
+      "languageChanged": "Velliqo AI verwendet jetzt die ausgewählte Sprache. Eine neue sprachspezifische Unterhaltung ist bereit."
     },
     "voice": {
       "phaseBadge": "Phase 9E",
@@ -1963,7 +1964,9 @@
         "confirming": "Wartet auf Bestätigung",
         "error": "Aufmerksamkeit erforderlich"
       },
-      "actionChangeRequested": "Sag mir per Sprache oder Text, was du ändern möchtest."
+      "actionChangeRequested": "Sag mir per Sprache oder Text, was du ändern möchtest.",
+      "pauseHint": "Sie können beim Sprechen natürliche Pausen machen. Velliqo wartet nach den zuletzt erkannten Wörtern mindestens {{seconds}} Sekunden, bevor Ihre Anfrage gesendet wird.",
+      "languageChangedMessage": "Die Sprachsitzung wurde auf die neu ausgewählte Sprache zurückgesetzt. Sprechen Sie, sobald Sie bereit sind."
     },
     "automations": {
       "phaseBadge": "Phase 9D",
@@ -2028,7 +2031,8 @@
       "title": "Velliqo fragen",
       "description": "Sende eine Text- oder Sprachnachricht und lass die Unterhaltung geöffnet, während du Aktionen prüfst.",
       "insights": "KI-Einblicke"
-    }
+    },
+    "defaultLanguageDescription": "Wird für geplante Briefings und Automatisierungen verwendet. Live-Text- und Sprachunterhaltungen folgen immer der aktuell in Velliqo ausgewählten Sprache."
   },
   "customerPortal": {
     "auth": {

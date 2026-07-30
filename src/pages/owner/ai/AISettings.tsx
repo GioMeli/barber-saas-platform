@@ -288,6 +288,7 @@ export default function AISettings() {
                   ))}
                 </SelectContent>
               </Select>
+              <p className="text-xs leading-5 text-muted-foreground">{t('ai.defaultLanguageDescription')}</p>
             </div>
             <div className="space-y-2">
               <Label>{t('ai.responseStyle')}</Label>

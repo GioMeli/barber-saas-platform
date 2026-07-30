@@ -34,23 +34,41 @@ type SpeechWindow = Window & typeof globalThis & {
 };
 
 const LANGUAGE_LOCALES: Record<AILanguage, string> = {
-  en: 'en-US',
+  en: 'en-GB',
   el: 'el-GR',
   de: 'de-DE',
   es: 'es-ES',
   tr: 'tr-TR',
 };
 
+const DEFAULT_SILENCE_GRACE_MS = 3000;
+const RECOGNITION_RESTART_DELAY_MS = 160;
+
 export function useBrowserVoice(input: {
   language: AILanguage;
   rate: number;
   pitch: number;
+  silenceGraceMs?: number;
   onFinalTranscript: (transcript: string) => void | Promise<void>;
   onError?: (message: string) => void;
 }) {
-  const { language, rate, pitch, onFinalTranscript, onError } = input;
+  const {
+    language,
+    rate,
+    pitch,
+    silenceGraceMs = DEFAULT_SILENCE_GRACE_MS,
+    onFinalTranscript,
+    onError,
+  } = input;
   const recognitionRef = React.useRef<SpeechRecognitionLike | null>(null);
   const finalTranscriptRef = React.useRef('');
+  const interimTranscriptRef = React.useRef('');
+  const listeningIntentRef = React.useRef(false);
+  const submittedRef = React.useRef(false);
+  const lastSpeechActivityRef = React.useRef(0);
+  const silenceTimerRef = React.useRef<number | null>(null);
+  const restartTimerRef = React.useRef<number | null>(null);
+  const recognitionCycleRef = React.useRef<() => boolean>(() => false);
   const speechRunRef = React.useRef(0);
   const finalHandlerRef = React.useRef(onFinalTranscript);
   const errorHandlerRef = React.useRef(onError);
@@ -86,6 +104,20 @@ export function useBrowserVoice(input: {
     if (!supported) setPermission('unsupported');
   }, [supported]);
 
+  const clearSilenceTimer = React.useCallback(() => {
+    if (silenceTimerRef.current !== null) {
+      window.clearTimeout(silenceTimerRef.current);
+      silenceTimerRef.current = null;
+    }
+  }, []);
+
+  const clearRestartTimer = React.useCallback(() => {
+    if (restartTimerRef.current !== null) {
+      window.clearTimeout(restartTimerRef.current);
+      restartTimerRef.current = null;
+    }
+  }, []);
+
   const reportError = React.useCallback((message: string) => {
     setError(message);
     errorHandlerRef.current?.(message);
@@ -116,19 +148,53 @@ export function useBrowserVoice(input: {
     }
   }, [reportError, supported]);
 
-  const stopListening = React.useCallback((abort = false) => {
+  const finishListening = React.useCallback((submitTranscript: boolean) => {
+    if (submittedRef.current && submitTranscript) return;
+
+    listeningIntentRef.current = false;
+    clearSilenceTimer();
+    clearRestartTimer();
+
     const recognition = recognitionRef.current;
     recognitionRef.current = null;
     if (recognition) {
       try {
-        if (abort) recognition.abort();
-        else recognition.stop();
+        recognition.abort();
       } catch {
-        // Recognition may already have stopped in the browser.
+        // Recognition may already have ended in the browser.
       }
     }
+
     setListening(false);
-  }, []);
+    setInterimTranscript('');
+
+    if (!submitTranscript) {
+      interimTranscriptRef.current = '';
+      return;
+    }
+
+    submittedRef.current = true;
+    const transcript = [finalTranscriptRef.current, interimTranscriptRef.current]
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .join(' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    interimTranscriptRef.current = '';
+    if (transcript) void finalHandlerRef.current(transcript);
+  }, [clearRestartTimer, clearSilenceTimer]);
+
+  const scheduleSilenceCompletion = React.useCallback(() => {
+    clearSilenceTimer();
+    const grace = Math.max(3000, Math.min(Number(silenceGraceMs) || DEFAULT_SILENCE_GRACE_MS, 10000));
+    silenceTimerRef.current = window.setTimeout(() => {
+      finishListening(true);
+    }, grace);
+  }, [clearSilenceTimer, finishListening, silenceGraceMs]);
+
+  const stopListening = React.useCallback((abort = false) => {
+    finishListening(!abort);
+  }, [finishListening]);
 
   const stopSpeaking = React.useCallback(() => {
     speechRunRef.current += 1;
@@ -138,30 +204,23 @@ export function useBrowserVoice(input: {
     setSpeaking(false);
   }, []);
 
-  const startListening = React.useCallback(async () => {
+  const startRecognitionCycle = React.useCallback(() => {
+    if (!listeningIntentRef.current || submittedRef.current) return false;
     const Constructor = recognitionConstructor();
-    if (!supported || !Constructor) {
-      setPermission('unsupported');
-      reportError('Speech recognition is not supported by this browser.');
-      return false;
-    }
-
-    stopSpeaking();
-    stopListening(true);
-    finalTranscriptRef.current = '';
-    setFinalTranscript('');
-    setInterimTranscript('');
-    setError(null);
+    if (!Constructor) return false;
 
     const recognition = new Constructor();
     recognition.lang = LANGUAGE_LOCALES[language];
-    recognition.continuous = false;
+    recognition.continuous = true;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
+
     recognition.onstart = () => {
+      if (!listeningIntentRef.current) return;
       setPermission('granted');
       setListening(true);
     };
+
     recognition.onresult = (event) => {
       let interim = '';
       let final = finalTranscriptRef.current;
@@ -174,24 +233,56 @@ export function useBrowserVoice(input: {
       }
 
       finalTranscriptRef.current = final;
+      interimTranscriptRef.current = interim;
+      lastSpeechActivityRef.current = Date.now();
       setFinalTranscript(final);
       setInterimTranscript(interim);
+      scheduleSilenceCompletion();
     };
+
     recognition.onerror = (event) => {
-      setListening(false);
-      if (event.error === 'aborted' || event.error === 'no-speech') return;
+      if (event.error === 'aborted') return;
+      if (event.error === 'no-speech') {
+        // Chrome may end a recognition cycle after a short silence. The onend
+        // handler restarts it while the 3-second grace period remains active.
+        return;
+      }
+
       const message = event.message || event.error || 'Voice recognition failed.';
       if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
         setPermission('denied');
+        listeningIntentRef.current = false;
+      }
+      if (event.error === 'audio-capture' || event.error === 'network') {
+        listeningIntentRef.current = false;
       }
       reportError(message);
     };
+
     recognition.onend = () => {
-      recognitionRef.current = null;
-      setListening(false);
-      setInterimTranscript('');
-      const transcript = finalTranscriptRef.current.trim();
-      if (transcript) void finalHandlerRef.current(transcript);
+      if (recognitionRef.current === recognition) recognitionRef.current = null;
+      if (!listeningIntentRef.current || submittedRef.current) {
+        setListening(false);
+        return;
+      }
+
+      const grace = Math.max(3000, Math.min(Number(silenceGraceMs) || DEFAULT_SILENCE_GRACE_MS, 10000));
+      const hasTranscript = Boolean(finalTranscriptRef.current.trim() || interimTranscriptRef.current.trim());
+      const elapsed = lastSpeechActivityRef.current > 0
+        ? Date.now() - lastSpeechActivityRef.current
+        : 0;
+
+      if (hasTranscript && elapsed >= grace) {
+        finishListening(true);
+        return;
+      }
+
+      clearRestartTimer();
+      restartTimerRef.current = window.setTimeout(() => {
+        if (listeningIntentRef.current && !submittedRef.current) {
+          recognitionCycleRef.current();
+        }
+      }, RECOGNITION_RESTART_DELAY_MS);
     };
 
     recognitionRef.current = recognition;
@@ -199,12 +290,38 @@ export function useBrowserVoice(input: {
       recognition.start();
       return true;
     } catch (startError) {
-      recognitionRef.current = null;
+      if (recognitionRef.current === recognition) recognitionRef.current = null;
       setListening(false);
       reportError(startError instanceof Error ? startError.message : String(startError));
       return false;
     }
-  }, [language, recognitionConstructor, reportError, stopListening, stopSpeaking, supported]);
+  }, [clearRestartTimer, finishListening, language, recognitionConstructor, reportError, scheduleSilenceCompletion, silenceGraceMs]);
+
+  React.useEffect(() => {
+    recognitionCycleRef.current = startRecognitionCycle;
+  }, [startRecognitionCycle]);
+
+  const startListening = React.useCallback(async () => {
+    const Constructor = recognitionConstructor();
+    if (!supported || !Constructor) {
+      setPermission('unsupported');
+      reportError('Speech recognition is not supported by this browser.');
+      return false;
+    }
+
+    stopSpeaking();
+    finishListening(false);
+    finalTranscriptRef.current = '';
+    interimTranscriptRef.current = '';
+    submittedRef.current = false;
+    listeningIntentRef.current = true;
+    lastSpeechActivityRef.current = 0;
+    setFinalTranscript('');
+    setInterimTranscript('');
+    setError(null);
+
+    return startRecognitionCycle();
+  }, [finishListening, recognitionConstructor, reportError, startRecognitionCycle, stopSpeaking, supported]);
 
   const speak = React.useCallback((text: string, onEnd?: () => void) => {
     const cleanText = text.trim();
@@ -224,9 +341,10 @@ export function useBrowserVoice(input: {
     utterance.pitch = Math.max(0.5, Math.min(pitch, 2));
 
     const voices = window.speechSynthesis.getVoices();
-    const localePrefix = LANGUAGE_LOCALES[language].split('-')[0]?.toLowerCase();
-    const matchingVoice = voices.find((voice) => voice.lang.toLowerCase() === LANGUAGE_LOCALES[language].toLowerCase())
-      || voices.find((voice) => voice.lang.toLowerCase().startsWith(localePrefix || ''));
+    const requestedLocale = LANGUAGE_LOCALES[language].toLowerCase();
+    const localePrefix = requestedLocale.split('-')[0] || '';
+    const matchingVoice = voices.find((voice) => voice.lang.toLowerCase() === requestedLocale)
+      || voices.find((voice) => voice.lang.toLowerCase().startsWith(localePrefix));
     if (matchingVoice) utterance.voice = matchingVoice;
 
     utterance.onstart = () => {
@@ -250,9 +368,9 @@ export function useBrowserVoice(input: {
   }, [language, pitch, rate, reportError, stopListening]);
 
   React.useEffect(() => () => {
-    stopListening(true);
+    finishListening(false);
     stopSpeaking();
-  }, [stopListening, stopSpeaking]);
+  }, [finishListening, stopSpeaking]);
 
   return {
     supported,
@@ -269,6 +387,7 @@ export function useBrowserVoice(input: {
     stopSpeaking,
     clearTranscript: () => {
       finalTranscriptRef.current = '';
+      interimTranscriptRef.current = '';
       setFinalTranscript('');
       setInterimTranscript('');
     },

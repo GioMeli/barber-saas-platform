@@ -1895,7 +1895,8 @@
         "monitorMarketing": "Marketing conversions",
         "safetyTitle": "Recommendations remain controlled",
         "safetyDescription": "The proactive manager detects issues and proposes next steps. It never creates, changes, sends or publishes business data without the existing confirmation-based Action Engine."
-      }
+      },
+      "languageChanged": "Velliqo AI switched to the selected language. A new language-specific conversation is ready."
     },
     "voice": {
       "phaseBadge": "Phase 9E",
@@ -1963,7 +1964,9 @@
         "confirming": "Waiting for confirmation",
         "error": "Needs attention"
       },
-      "actionChangeRequested": "Tell me what you would like to change, by voice or text."
+      "actionChangeRequested": "Tell me what you would like to change, by voice or text.",
+      "pauseHint": "You can pause naturally while speaking. Velliqo waits at least {{seconds}} seconds after the last detected words before sending your request.",
+      "languageChangedMessage": "The voice session was reset to use the newly selected language. Start speaking when you are ready."
     },
     "automations": {
       "phaseBadge": "Phase 9D",
@@ -2028,7 +2031,8 @@
       "title": "Ask Velliqo",
       "description": "Send a written or voice message and keep the conversation open while you review actions.",
       "insights": "AI insights"
-    }
+    },
+    "defaultLanguageDescription": "Used for scheduled briefings and automations. Live text and voice conversations always follow the language currently selected in the Velliqo interface."
   },
   "customerPortal": {
     "auth": {

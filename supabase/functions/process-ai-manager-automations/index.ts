@@ -197,6 +197,7 @@ Deno.serve(async (request) => {
       force: Boolean(body?.force),
       runType: 'manual_refresh',
       requestedBy: authData.user.id,
+      requestedLanguage: normalizeLanguage(body?.language || settings.default_language),
     });
     return json(result);
   } catch (error) {
@@ -272,7 +273,7 @@ async function loadSettings(businessId: string): Promise<AutomationSettings | nu
 
 async function processBusiness(
   settings: AutomationSettings,
-  options: { force: boolean; runType: 'manual_refresh' | 'scheduled_scan'; requestedBy?: string },
+  options: { force: boolean; runType: 'manual_refresh' | 'scheduled_scan'; requestedBy?: string; requestedLanguage?: Language },
 ) {
   const { data: businessData, error: businessError } = await service
     .from('businesses')
@@ -287,6 +288,7 @@ async function processBusiness(
   const localDate = localDateParts(new Date(), timezone).date;
   const localMinutes = localDateParts(new Date(), timezone).minutes;
   const dueMinutes = timeToMinutes(settings.briefing_time || '08:00');
+  const selectedLanguage = options.requestedLanguage || normalizeLanguage(settings.default_language);
 
   if (!options.force && localMinutes < dueMinutes) {
     return { status: 'skipped', reason: 'before_configured_time', local_date: localDate };
@@ -297,6 +299,7 @@ async function processBusiness(
     .select('id,generated_at')
     .eq('business_id', business.id)
     .eq('briefing_date', localDate)
+    .eq('language', selectedLanguage)
     .maybeSingle();
 
   if (existing && !options.force) {
@@ -309,7 +312,7 @@ async function processBusiness(
       business_id: business.id,
       run_type: options.runType,
       status: 'started',
-      metadata: { local_date: localDate, timezone, requested_by: options.requestedBy || null },
+      metadata: { local_date: localDate, timezone, language: selectedLanguage, requested_by: options.requestedBy || null },
     })
     .select('id')
     .single();
@@ -317,10 +320,10 @@ async function processBusiness(
 
   try {
     const metrics = await buildMetrics(business.id);
-    const alerts = buildAlerts(metrics, settings, normalizeLanguage(settings.default_language));
+    const alerts = buildAlerts(metrics, settings, selectedLanguage);
     const healthScore = calculateHealthScore(metrics);
     const briefing = await generateBriefing({
-      language: normalizeLanguage(settings.default_language),
+      language: selectedLanguage,
       business,
       metrics,
       alerts,
@@ -332,7 +335,7 @@ async function processBusiness(
       .upsert({
         business_id: business.id,
         briefing_date: localDate,
-        language: normalizeLanguage(settings.default_language),
+        language: selectedLanguage,
         title: briefing.title,
         summary: briefing.summary,
         business_health_score: healthScore,
@@ -345,7 +348,7 @@ async function processBusiness(
         estimated_cost: estimateOpenAICost(briefing.model, briefing.inputTokens, briefing.outputTokens),
         generated_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
-      }, { onConflict: 'business_id,briefing_date' })
+      }, { onConflict: 'business_id,briefing_date,language' })
       .select('*')
       .single();
     if (briefingError) throw briefingError;
@@ -357,6 +360,7 @@ async function processBusiness(
         .from('ai_manager_alerts')
         .upsert({
           business_id: business.id,
+          language: selectedLanguage,
           category: alert.category,
           severity: alert.severity,
           title: alert.title,
@@ -371,7 +375,7 @@ async function processBusiness(
           last_seen_at: new Date().toISOString(),
           expires_at: addDaysIso(14),
           updated_at: new Date().toISOString(),
-        }, { onConflict: 'business_id,dedupe_key' });
+        }, { onConflict: 'business_id,dedupe_key,language' });
       if (alertError) throw alertError;
       createdOrUpdated += 1;
     }
@@ -380,6 +384,7 @@ async function processBusiness(
       .from('ai_manager_alerts')
       .update({ status: 'resolved', updated_at: new Date().toISOString() })
       .eq('business_id', business.id)
+      .eq('language', selectedLanguage)
       .in('status', ['new', 'reviewed']);
     if (activeKeys.length) staleQuery.not('dedupe_key', 'in', `(${activeKeys.map(escapePostgrestValue).join(',')})`);
     await staleQuery;
@@ -392,7 +397,8 @@ async function processBusiness(
         p_type: 'ai_briefing',
         p_metadata: {
           briefing_id: briefingRow.id,
-          dedupe_key: `briefing:${localDate}`,
+          dedupe_key: `briefing:${selectedLanguage}:${localDate}`,
+          language: selectedLanguage,
           destination_path: '/dashboard/ai',
           health_score: healthScore,
         },
@@ -405,7 +411,8 @@ async function processBusiness(
           p_message: alert.summary.slice(0, 500),
           p_type: 'ai_alert',
           p_metadata: {
-            dedupe_key: `alert:${alert.dedupeKey}:${localDate}`,
+            dedupe_key: `alert:${selectedLanguage}:${alert.dedupeKey}:${localDate}`,
+            language: selectedLanguage,
             alert_key: alert.dedupeKey,
             severity: alert.severity,
             destination_path: alert.destinationPath,
@@ -449,6 +456,7 @@ async function processBusiness(
       status: 'completed',
       briefing_id: briefingRow.id,
       local_date: localDate,
+      language: selectedLanguage,
       provider: briefing.provider,
       alerts: createdOrUpdated,
       health_score: healthScore,
@@ -695,7 +703,7 @@ async function handleCustomerReactivation(context: OperationalContext): Promise<
 
   const dedupeKey = `operational:customer_reactivation:${channel}:${inactiveDays}`;
   if (eligible.length === 0) {
-    await resolveOperationalAlerts(context.business.id, 'customer_reactivation', []);
+    await resolveOperationalAlerts(context.business.id, 'customer_reactivation', context.language, []);
     return {
       status: 'skipped',
       summary: copy.reactivationNone,
@@ -786,7 +794,7 @@ async function handleCustomerReactivation(context: OperationalContext): Promise<
     suggestedPrompt: copy.reactivationPrompt,
   });
 
-  await resolveOperationalAlerts(context.business.id, 'customer_reactivation', [dedupeKey]);
+  await resolveOperationalAlerts(context.business.id, 'customer_reactivation', context.language, [dedupeKey]);
   await notifyOperationalAlert(context, alert, dedupeKey);
 
   return {
@@ -836,7 +844,7 @@ async function handleLowStockActions(context: OperationalContext): Promise<Opera
 
   const dedupeKey = 'operational:low_stock_actions:active';
   if (lowStock.length === 0) {
-    await resolveOperationalAlerts(context.business.id, 'low_stock_actions', []);
+    await resolveOperationalAlerts(context.business.id, 'low_stock_actions', context.language, []);
     return {
       status: 'skipped',
       summary: copy.stockHealthy,
@@ -886,7 +894,7 @@ async function handleLowStockActions(context: OperationalContext): Promise<Opera
     suggestedPrompt: copy.stockPrompt,
   });
 
-  await resolveOperationalAlerts(context.business.id, 'low_stock_actions', [dedupeKey]);
+  await resolveOperationalAlerts(context.business.id, 'low_stock_actions', context.language, [dedupeKey]);
   await notifyOperationalAlert(context, alert, dedupeKey);
 
   return {
@@ -1052,7 +1060,7 @@ async function handleScheduleOptimisation(context: OperationalContext): Promise<
   const dedupeKey = `operational:schedule_optimisation:${lookaheadDays}`;
 
   if (!material) {
-    await resolveOperationalAlerts(context.business.id, 'schedule_optimisation', []);
+    await resolveOperationalAlerts(context.business.id, 'schedule_optimisation', context.language, []);
     return {
       status: 'skipped',
       summary: copy.scheduleHealthy,
@@ -1105,7 +1113,7 @@ async function handleScheduleOptimisation(context: OperationalContext): Promise<
     suggestedPrompt: copy.schedulePrompt,
   });
 
-  await resolveOperationalAlerts(context.business.id, 'schedule_optimisation', [dedupeKey]);
+  await resolveOperationalAlerts(context.business.id, 'schedule_optimisation', context.language, [dedupeKey]);
   await notifyOperationalAlert(context, alert, dedupeKey);
 
   return {
@@ -1229,7 +1237,7 @@ async function handleCampaignPlanning(context: OperationalContext): Promise<Oper
     suggestedPrompt: copy.campaignPrompt,
   });
 
-  await resolveOperationalAlerts(context.business.id, 'campaign_planning', [dedupeKey]);
+  await resolveOperationalAlerts(context.business.id, 'campaign_planning', context.language, [dedupeKey]);
   await notifyOperationalAlert(context, alert, dedupeKey);
 
   return {
@@ -1339,6 +1347,7 @@ async function upsertOperationalAlert(input: {
     .from('ai_manager_alerts')
     .upsert({
       business_id: input.context.business.id,
+      language: input.context.language,
       run_id: input.context.run.id,
       automation_key: input.context.rule.automation_key,
       category: input.category,
@@ -1360,7 +1369,7 @@ async function upsertOperationalAlert(input: {
       last_seen_at: now,
       expires_at: addDaysIso(14),
       updated_at: now,
-    }, { onConflict: 'business_id,dedupe_key' })
+    }, { onConflict: 'business_id,dedupe_key,language' })
     .select('id,title,summary,severity')
     .single();
   if (error) throw error;
@@ -1370,12 +1379,14 @@ async function upsertOperationalAlert(input: {
 async function resolveOperationalAlerts(
   businessId: string,
   automationKey: OperationalAutomationKey,
+  language: Language,
   activeDedupeKeys: string[],
 ) {
   let query = service
     .from('ai_manager_alerts')
     .update({ status: 'resolved', updated_at: new Date().toISOString() })
     .eq('business_id', businessId)
+    .eq('language', language)
     .eq('automation_key', automationKey)
     .in('status', ['new', 'reviewed']);
 
@@ -1401,7 +1412,8 @@ async function notifyOperationalAlert(
     p_type: 'ai_alert',
     p_metadata: {
       alert_id: alert.id,
-      dedupe_key: `${dedupeKey}:${localDateParts(new Date(), context.timezone).date}`,
+      dedupe_key: `${context.language}:${dedupeKey}:${localDateParts(new Date(), context.timezone).date}`,
+      language: context.language,
       automation_key: context.rule.automation_key,
       severity: alert.severity,
       destination_path: context.rule.automation_key === 'low_stock_actions'

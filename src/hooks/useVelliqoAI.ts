@@ -51,6 +51,7 @@ export function useVelliqoAI(input: {
       .from('ai_conversations')
       .select('*')
       .eq('business_id', businessId)
+      .eq('language', language)
       .order('updated_at', { ascending: false })
       .limit(20);
 
@@ -60,7 +61,7 @@ export function useVelliqoAI(input: {
     }
 
     setConversations((data || []) as VelliqoAIConversation[]);
-  }, [businessId]);
+  }, [businessId, language]);
 
   const refreshSnapshot = useCallback(async (periodDays = 30) => {
     if (!businessId) {
@@ -79,7 +80,7 @@ export function useVelliqoAI(input: {
     }
   }, [businessId]);
 
-  const refreshProactive = useCallback(async () => {
+  const refreshProactive = useCallback(async (ensureSelectedLanguage = true) => {
     if (!businessId) {
       setBriefing(null);
       setAlerts([]);
@@ -88,10 +89,19 @@ export function useVelliqoAI(input: {
 
     setLoadingProactive(true);
     try {
-      const [latestBriefing, activeAlerts] = await Promise.all([
-        loadLatestAIManagerBriefing(businessId),
-        loadAIManagerAlerts(businessId),
+      let [latestBriefing, activeAlerts] = await Promise.all([
+        loadLatestAIManagerBriefing(businessId, language),
+        loadAIManagerAlerts(businessId, language),
       ]);
+
+      if (!latestBriefing && ensureSelectedLanguage) {
+        await refreshAIManagerBriefing(businessId, language);
+        [latestBriefing, activeAlerts] = await Promise.all([
+          loadLatestAIManagerBriefing(businessId, language),
+          loadAIManagerAlerts(businessId, language),
+        ]);
+      }
+
       setBriefing(latestBriefing);
       setAlerts(activeAlerts);
       setError(null);
@@ -100,7 +110,7 @@ export function useVelliqoAI(input: {
     } finally {
       setLoadingProactive(false);
     }
-  }, [businessId]);
+  }, [businessId, language]);
 
   const generateBriefing = useCallback(async (): Promise<VelliqoAIProactiveRefreshResult | null> => {
     if (!businessId || refreshingBriefing) return null;
@@ -108,8 +118,8 @@ export function useVelliqoAI(input: {
     setRefreshingBriefing(true);
     setError(null);
     try {
-      const result = await refreshAIManagerBriefing(businessId);
-      await refreshProactive();
+      const result = await refreshAIManagerBriefing(businessId, language);
+      await refreshProactive(false);
       return result;
     } catch (briefingError) {
       setError(briefingError instanceof Error ? briefingError.message : String(briefingError));
@@ -117,7 +127,7 @@ export function useVelliqoAI(input: {
     } finally {
       setRefreshingBriefing(false);
     }
-  }, [businessId, refreshProactive, refreshingBriefing]);
+  }, [businessId, language, refreshProactive, refreshingBriefing]);
 
   const setAlertStatus = useCallback(async (
     alertId: string,
@@ -307,9 +317,13 @@ export function useVelliqoAI(input: {
   }, [activeConversationId, refreshConversations, startNewConversation]);
 
   useEffect(() => {
+    startNewConversation();
+  }, [language, startNewConversation]);
+
+  useEffect(() => {
     void refreshConversations();
     void refreshSnapshot();
-    void refreshProactive();
+    void refreshProactive(true);
   }, [refreshConversations, refreshProactive, refreshSnapshot]);
 
   return {

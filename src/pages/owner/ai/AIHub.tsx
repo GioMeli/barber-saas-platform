@@ -75,6 +75,7 @@ export default function AIHub() {
   const [draft, setDraft] = React.useState('');
   const [confirmationAction, setConfirmationAction] = React.useState<VelliqoAIActionRequest | null>(null);
   const endRef = React.useRef<HTMLDivElement | null>(null);
+  const previousLanguageRef = React.useRef(language);
   const firstName = profile?.full_name?.split(' ')[0] || t('ai.ownerFallback');
 
   const ai = useVelliqoAI({
@@ -94,6 +95,14 @@ export default function AIHub() {
     }, 180);
     return () => window.clearTimeout(timer);
   }, [assistantMode]);
+
+  React.useEffect(() => {
+    if (previousLanguageRef.current === language) return;
+    previousLanguageRef.current = language;
+    setDraft('');
+    setConfirmationAction(null);
+    toast.info(t('ai.manager.languageChanged'));
+  }, [language, t]);
 
   const send = async (message = draft, selectedAgent = agent) => {
     const cleanMessage = message.trim();

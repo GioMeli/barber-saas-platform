@@ -239,6 +239,7 @@ export interface VelliqoAIManagerBriefing {
 export interface VelliqoAIManagerAlert {
   id: string;
   business_id: string;
+  language: AILanguage;
   category: AIInsightCategory;
   severity: AIInsightSeverity;
   title: string;

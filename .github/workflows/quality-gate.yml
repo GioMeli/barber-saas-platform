@@ -59,6 +59,7 @@ jobs:
           npm run precision-devices:check
           npm run demo-training:check
           npm run customer-experience:check
+          npm run ai-multilingual:check
 
       - name: TypeScript
         run: npm run typecheck

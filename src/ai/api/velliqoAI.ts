@@ -84,11 +84,13 @@ export async function rejectVelliqoAIAction(input: {
 
 export async function loadLatestAIManagerBriefing(
   businessId: string,
+  language: AILanguage,
 ): Promise<VelliqoAIManagerBriefing | null> {
   const { data, error } = await supabase
     .from('ai_manager_briefings')
     .select('*')
     .eq('business_id', businessId)
+    .eq('language', language)
     .order('briefing_date', { ascending: false })
     .limit(1)
     .maybeSingle();
@@ -99,11 +101,13 @@ export async function loadLatestAIManagerBriefing(
 
 export async function loadAIManagerAlerts(
   businessId: string,
+  language: AILanguage,
 ): Promise<VelliqoAIManagerAlert[]> {
   const { data, error } = await supabase
     .from('ai_manager_alerts')
     .select('*')
     .eq('business_id', businessId)
+    .eq('language', language)
     .in('status', ['new', 'reviewed'])
     .order('last_seen_at', { ascending: false })
     .limit(20);
@@ -114,9 +118,10 @@ export async function loadAIManagerAlerts(
 
 export async function refreshAIManagerBriefing(
   businessId: string,
+  language: AILanguage,
 ): Promise<VelliqoAIProactiveRefreshResult> {
   const { data, error } = await supabase.functions.invoke('process-ai-manager-automations', {
-    body: { businessId, force: true, source: 'owner_refresh' },
+    body: { businessId, force: true, source: 'owner_refresh', language },
   });
 
   if (error) {
