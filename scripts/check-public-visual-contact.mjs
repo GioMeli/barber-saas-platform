@@ -54,10 +54,8 @@ for (const token of [
 }
 
 const deviceReferences = [experience, home, why].join('\n');
-const usesLegacyDeviceSet = ['LaptopDevice', 'DesktopDevice', 'TabletDevice', 'PhoneDevice'].every((component) => deviceReferences.includes(component));
-const usesFinalProductVisuals = deviceReferences.includes('FinalProductVisual') && deviceReferences.includes('/marketing/final/');
-if (!usesLegacyDeviceSet && !usesFinalProductVisuals) {
-  fail('public marketing pages do not use either the original device system or the final product visual system');
+for (const component of ['LaptopDevice', 'DesktopDevice', 'TabletDevice', 'PhoneDevice']) {
+  if (!deviceReferences.includes(component)) fail(`${component} is not used by the public marketing experience`);
 }
 
 if (/function\s+(DesktopDevice|TabletDevice|PhoneDevice|BrowserDevice)\s*\(/.test(experience)) {
@@ -69,4 +67,4 @@ for (const source of [chrome, experience, why, pricing]) {
 }
 
 console.log('Phase 10B.1 public visual and Contact checks passed.');
-console.log('Original and final product visual assets, public contact navigation and reviewable email drafts verified.');
+console.log('Original laptop, desktop, tablet and phone frames, real product captures, public contact navigation and reviewable email drafts verified.');

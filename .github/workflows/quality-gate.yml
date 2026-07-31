@@ -60,7 +60,6 @@ jobs:
           npm run demo-training:check
           npm run customer-experience:check
           npm run ai-multilingual:check
-          npm run final-marketing-visuals:check
 
       - name: TypeScript
         run: npm run typecheck
