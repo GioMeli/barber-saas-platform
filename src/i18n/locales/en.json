@@ -1414,7 +1414,9 @@
         "showTeam": "Show team",
         "showProducts": "Show products",
         "showGallery": "Show gallery",
-        "showReviews": "Show reviews"
+        "showReviews": "Show reviews",
+        "discoveryListing": "Marketplace discovery listing",
+        "discoveryListingHint": "Allow customers to find this storefront through location, service and map search."
       },
       "pwa": {
         "title": "Installable customer app",
@@ -3433,5 +3435,72 @@
     "videoLabel": "video",
     "videoComingSoonShort": "Video soon",
     "practiceInDemo": "Practise in Demo"
+  },
+  "discovery": {
+    "search": {
+      "locationLabel": "Location",
+      "locationPlaceholder": "City, district or near me",
+      "locationSearchPlaceholder": "Search locations…",
+      "currentLocation": "Current location",
+      "useCurrentLocation": "Use my current location",
+      "useCurrentLocationHint": "Show nearby businesses and your position on the map",
+      "locating": "Locating…",
+      "locationUnsupported": "Location is not supported by this browser.",
+      "locationDenied": "Location access was not granted. You can still search by area.",
+      "noLocations": "No matching locations found.",
+      "serviceLabel": "Service",
+      "servicePlaceholder": "Service or category",
+      "serviceSearchPlaceholder": "Search services and categories…",
+      "noServices": "No matching services found.",
+      "businessLabel": "Business",
+      "businessPlaceholder": "Business name",
+      "businessTypeHint": "Type at least two characters to find a business.",
+      "noBusinesses": "No matching businesses found.",
+      "onlineBusiness": "Online booking business",
+      "clearBusiness": "Clear business",
+      "submit": "Search",
+      "homeEyebrow": "Discover services near you",
+      "kind": {
+        "service": "Service",
+        "category": "Category",
+        "industry": "Business type"
+      }
+    },
+    "page": {
+      "eyebrow": "Velliqo marketplace",
+      "title": "Find trusted service businesses near you.",
+      "description": "Search by area, service or business name, compare verified ratings and explore every location on one premium map.",
+      "personalised": "Results matched to your search",
+      "popularFirst": "Most booked businesses appear first"
+    },
+    "results": {
+      "searching": "Searching businesses…",
+      "count": "{{count}} businesses found",
+      "serviceContext": "Showing businesses for “{{service}}”",
+      "defaultContext": "Recommended from public Velliqo storefronts",
+      "loading": "Preparing map and results…",
+      "errorTitle": "Marketplace search is temporarily unavailable",
+      "errorDescription": "The discovery service could not load. Please try again after the latest database migration is deployed.",
+      "emptyTitle": "No businesses match this search",
+      "emptyDescription": "Try a broader area, another service category or remove the business-name filter.",
+      "online": "Online business",
+      "newListing": "New listing",
+      "fromPrice": "From {{price}}",
+      "showOnMap": "Show on map",
+      "viewBusiness": "View business"
+    },
+    "sort": {
+      "recommended": "Recommended",
+      "nearest": "Nearest",
+      "rating": "Top rated",
+      "popular": "Most booked"
+    },
+    "map": {
+      "viewBusiness": "Open customer page",
+      "yourLocation": "Your location",
+      "unavailable": "Map unavailable",
+      "unavailableDescription": "The business list is still available while the map provider reconnects.",
+      "noPins": "These matching businesses have not added map coordinates yet."
+    }
   }
 }

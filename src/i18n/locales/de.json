@@ -1414,7 +1414,9 @@
         "showTeam": "Team anzeigen",
         "showProducts": "Produkte anzeigen",
         "showGallery": "Galerie anzeigen",
-        "showReviews": "Bewertungen anzeigen"
+        "showReviews": "Bewertungen anzeigen",
+        "discoveryListing": "Marketplace-Eintrag",
+        "discoveryListingHint": "Kunden können dieses Unternehmen über Standort-, Dienstleistungs- und Kartensuche finden."
       },
       "pwa": {
         "title": "Installierbare Kunden-App",
@@ -3433,5 +3435,72 @@
     "videoLabel": "Video",
     "videoComingSoonShort": "Video folgt",
     "practiceInDemo": "Im Demo üben"
+  },
+  "discovery": {
+    "search": {
+      "locationLabel": "Standort",
+      "locationPlaceholder": "Stadt, Bezirk oder in meiner Nähe",
+      "locationSearchPlaceholder": "Standorte suchen…",
+      "currentLocation": "Aktueller Standort",
+      "useCurrentLocation": "Meinen Standort verwenden",
+      "useCurrentLocationHint": "Unternehmen in der Nähe und Ihre Position auf der Karte anzeigen",
+      "locating": "Standort wird ermittelt…",
+      "locationUnsupported": "Standortdienste werden von diesem Browser nicht unterstützt.",
+      "locationDenied": "Der Standortzugriff wurde nicht gewährt. Sie können weiterhin nach einem Gebiet suchen.",
+      "noLocations": "Keine passenden Standorte gefunden.",
+      "serviceLabel": "Dienstleistung",
+      "servicePlaceholder": "Dienstleistung oder Kategorie",
+      "serviceSearchPlaceholder": "Dienstleistungen und Kategorien suchen…",
+      "noServices": "Keine passenden Dienstleistungen gefunden.",
+      "businessLabel": "Unternehmen",
+      "businessPlaceholder": "Unternehmensname",
+      "businessTypeHint": "Geben Sie mindestens zwei Zeichen ein.",
+      "noBusinesses": "Keine passenden Unternehmen gefunden.",
+      "onlineBusiness": "Unternehmen mit Online-Buchung",
+      "clearBusiness": "Unternehmen löschen",
+      "submit": "Suchen",
+      "homeEyebrow": "Dienstleistungen in Ihrer Nähe entdecken",
+      "kind": {
+        "service": "Dienstleistung",
+        "category": "Kategorie",
+        "industry": "Unternehmenstyp"
+      }
+    },
+    "page": {
+      "eyebrow": "Velliqo Marketplace",
+      "title": "Finden Sie vertrauenswürdige Dienstleistungsunternehmen in Ihrer Nähe.",
+      "description": "Suchen Sie nach Gebiet, Dienstleistung oder Unternehmensname, vergleichen Sie verifizierte Bewertungen und entdecken Sie Standorte auf einer Premium-Karte.",
+      "personalised": "Ergebnisse passend zu Ihrer Suche",
+      "popularFirst": "Unternehmen mit den meisten Buchungen zuerst"
+    },
+    "results": {
+      "searching": "Unternehmen werden gesucht…",
+      "count": "{{count}} Unternehmen gefunden",
+      "serviceContext": "Unternehmen für „{{service}}“",
+      "defaultContext": "Empfehlungen aus öffentlichen Velliqo-Seiten",
+      "loading": "Karte und Ergebnisse werden vorbereitet…",
+      "errorTitle": "Die Marketplace-Suche ist vorübergehend nicht verfügbar",
+      "errorDescription": "Der Suchdienst konnte nicht geladen werden. Versuchen Sie es nach der neuesten Datenbankmigration erneut.",
+      "emptyTitle": "Keine Unternehmen entsprechen dieser Suche",
+      "emptyDescription": "Versuchen Sie ein größeres Gebiet, eine andere Kategorie oder entfernen Sie den Namensfilter.",
+      "online": "Online-Unternehmen",
+      "newListing": "Neuer Eintrag",
+      "fromPrice": "Ab {{price}}",
+      "showOnMap": "Auf Karte zeigen",
+      "viewBusiness": "Unternehmen ansehen"
+    },
+    "sort": {
+      "recommended": "Empfohlen",
+      "nearest": "Am nächsten",
+      "rating": "Bestbewertet",
+      "popular": "Meiste Buchungen"
+    },
+    "map": {
+      "viewBusiness": "Kundenseite öffnen",
+      "yourLocation": "Ihr Standort",
+      "unavailable": "Karte nicht verfügbar",
+      "unavailableDescription": "Die Unternehmensliste bleibt verfügbar, während die Kartenverbindung wiederhergestellt wird.",
+      "noPins": "Diese Unternehmen haben noch keine Kartenkoordinaten hinterlegt."
+    }
   }
 }

@@ -26,7 +26,8 @@
     "precision-devices:check": "node scripts/check-precision-device-mockups.mjs",
     "demo-training:check": "node scripts/check-demo-training-portal.mjs",
     "customer-experience:check": "node scripts/check-premium-customer-storefront.mjs",
-    "ai-multilingual:check": "node scripts/check-ai-multilingual-voice.mjs"
+    "ai-multilingual:check": "node scripts/check-ai-multilingual-voice.mjs",
+    "discovery:check": "node scripts/check-public-discovery-marketplace.mjs"
   },
   "dependencies": {
     "@fullcalendar/core": "^6.1.21",

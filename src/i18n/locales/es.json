@@ -1414,7 +1414,9 @@
         "showTeam": "Mostrar equipo",
         "showProducts": "Mostrar productos",
         "showGallery": "Mostrar galería",
-        "showReviews": "Mostrar reseñas"
+        "showReviews": "Mostrar reseñas",
+        "discoveryListing": "Listado en el marketplace",
+        "discoveryListingHint": "Permite que los clientes encuentren este negocio por ubicación, servicio y mapa."
       },
       "pwa": {
         "title": "Aplicación instalable para clientes",
@@ -3433,5 +3435,72 @@
     "videoLabel": "vídeo",
     "videoComingSoonShort": "Vídeo pronto",
     "practiceInDemo": "Practicar en Demo"
+  },
+  "discovery": {
+    "search": {
+      "locationLabel": "Ubicación",
+      "locationPlaceholder": "Ciudad, zona o cerca de mí",
+      "locationSearchPlaceholder": "Buscar ubicaciones…",
+      "currentLocation": "Ubicación actual",
+      "useCurrentLocation": "Usar mi ubicación",
+      "useCurrentLocationHint": "Mostrar negocios cercanos y tu posición en el mapa",
+      "locating": "Localizando…",
+      "locationUnsupported": "Este navegador no admite la ubicación.",
+      "locationDenied": "No se concedió acceso a la ubicación. Puedes buscar por zona.",
+      "noLocations": "No se encontraron ubicaciones.",
+      "serviceLabel": "Servicio",
+      "servicePlaceholder": "Servicio o categoría",
+      "serviceSearchPlaceholder": "Buscar servicios y categorías…",
+      "noServices": "No se encontraron servicios.",
+      "businessLabel": "Negocio",
+      "businessPlaceholder": "Nombre del negocio",
+      "businessTypeHint": "Escribe al menos dos caracteres para encontrar un negocio.",
+      "noBusinesses": "No se encontraron negocios.",
+      "onlineBusiness": "Negocio con reservas online",
+      "clearBusiness": "Borrar negocio",
+      "submit": "Buscar",
+      "homeEyebrow": "Descubre servicios cerca de ti",
+      "kind": {
+        "service": "Servicio",
+        "category": "Categoría",
+        "industry": "Tipo de negocio"
+      }
+    },
+    "page": {
+      "eyebrow": "Marketplace Velliqo",
+      "title": "Encuentra negocios de servicios de confianza cerca de ti.",
+      "description": "Busca por zona, servicio o nombre, compara valoraciones verificadas y explora cada ubicación en un mapa premium.",
+      "personalised": "Resultados adaptados a tu búsqueda",
+      "popularFirst": "Primero aparecen los negocios con más reservas"
+    },
+    "results": {
+      "searching": "Buscando negocios…",
+      "count": "Se encontraron {{count}} negocios",
+      "serviceContext": "Negocios para «{{service}}»",
+      "defaultContext": "Recomendados de escaparates públicos Velliqo",
+      "loading": "Preparando mapa y resultados…",
+      "errorTitle": "La búsqueda del marketplace no está disponible temporalmente",
+      "errorDescription": "No se pudo cargar el servicio. Inténtalo después de aplicar la última migración.",
+      "emptyTitle": "Ningún negocio coincide con esta búsqueda",
+      "emptyDescription": "Prueba una zona más amplia, otra categoría o elimina el filtro de nombre.",
+      "online": "Negocio online",
+      "newListing": "Nuevo anuncio",
+      "fromPrice": "Desde {{price}}",
+      "showOnMap": "Mostrar en el mapa",
+      "viewBusiness": "Ver negocio"
+    },
+    "sort": {
+      "recommended": "Recomendados",
+      "nearest": "Más cercanos",
+      "rating": "Mejor valorados",
+      "popular": "Más reservas"
+    },
+    "map": {
+      "viewBusiness": "Abrir página del cliente",
+      "yourLocation": "Tu ubicación",
+      "unavailable": "Mapa no disponible",
+      "unavailableDescription": "La lista sigue disponible mientras se restablece el proveedor del mapa.",
+      "noPins": "Estos negocios todavía no han añadido coordenadas al mapa."
+    }
   }
 }
