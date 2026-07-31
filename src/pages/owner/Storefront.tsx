@@ -30,7 +30,7 @@ import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
 import { useTranslation } from 'react-i18next';
 
 const EMPTY_FORM = {
-  description: '', logo_url: '', cover_image_url: '', phone: '', email: '', pwa_enabled: true, pwa_short_name: '',
+  description: '', logo_url: '', cover_image_url: '', phone: '', email: '', pwa_enabled: true, pwa_short_name: '', discovery_enabled: true,
   address: '', address_line_1: '', address_line_2: '', city: '', district: '',
   postal_code: '', latitude: '', longitude: '',
 };
@@ -88,7 +88,7 @@ export default function Storefront() {
     const next = {
       description: data.description ?? '', logo_url: data.logo_url ?? '',
       cover_image_url: data.cover_image_url ?? '', phone: data.phone ?? '',
-      email: data.email ?? '', pwa_enabled: data.pwa_enabled !== false, pwa_short_name: data.pwa_short_name ?? '', address: data.address ?? '',
+      email: data.email ?? '', pwa_enabled: data.pwa_enabled !== false, pwa_short_name: data.pwa_short_name ?? '', discovery_enabled: data.discovery_enabled !== false, address: data.address ?? '',
       address_line_1: data.address_line_1 ?? '', address_line_2: data.address_line_2 ?? '',
       city: data.city ?? '', district: data.district ?? '',
       postal_code: data.postal_code ?? '',
@@ -160,6 +160,7 @@ export default function Storefront() {
       email: form.email.trim() || null,
       pwa_enabled: form.pwa_enabled,
       pwa_short_name: form.pwa_short_name.trim() || null,
+      discovery_enabled: form.discovery_enabled,
       address: form.address.trim() || null,
       address_line_1: form.address_line_1.trim() || null,
       address_line_2: form.address_line_2.trim() || null,
@@ -409,6 +410,7 @@ export default function Storefront() {
               <VisibilityToggle label={t('storefront.owner.online.showProducts')} checked={presenceForm.show_products} onChange={(checked) => updatePresence('show_products', checked)} />
               <VisibilityToggle label={t('storefront.owner.online.showGallery')} checked={presenceForm.show_gallery} onChange={(checked) => updatePresence('show_gallery', checked)} />
               <VisibilityToggle label={t('storefront.owner.online.showReviews')} checked={presenceForm.show_reviews} onChange={(checked) => updatePresence('show_reviews', checked)} />
+              <VisibilityToggle label={t('storefront.owner.online.discoveryListing')} description={t('storefront.owner.online.discoveryListingHint')} checked={form.discovery_enabled} onChange={(checked) => update('discovery_enabled', checked)} />
             </CardContent>
           </Card>
         </div>
@@ -458,8 +460,8 @@ function Field({ label, hint, children, className = '' }: { label: string; hint?
 }
 
 
-function VisibilityToggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (checked: boolean) => void }) {
-  return <div className="flex items-center justify-between gap-4 rounded-2xl border p-4"><span className="text-sm font-semibold">{label}</span><Switch checked={checked} onCheckedChange={onChange} /></div>;
+function VisibilityToggle({ label, description, checked, onChange }: { label: string; description?: string; checked: boolean; onChange: (checked: boolean) => void }) {
+  return <div className="flex items-center justify-between gap-4 rounded-2xl border p-4"><div><span className="text-sm font-semibold">{label}</span>{description && <p className="mt-1 text-xs text-muted-foreground">{description}</p>}</div><Switch checked={checked} onCheckedChange={onChange} /></div>;
 }
 
 function ChecklistLine({ label, complete }: { label: string; complete: boolean }) {

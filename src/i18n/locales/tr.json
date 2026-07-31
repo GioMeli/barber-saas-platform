@@ -1414,7 +1414,9 @@
         "showTeam": "Ekibi göster",
         "showProducts": "Ürünleri göster",
         "showGallery": "Galeriyi göster",
-        "showReviews": "Yorumları göster"
+        "showReviews": "Yorumları göster",
+        "discoveryListing": "Marketplace listelemesi",
+        "discoveryListingHint": "Müşterilerin bu işletmeyi konum, hizmet ve harita aramasıyla bulmasını sağlar."
       },
       "pwa": {
         "title": "Yüklenebilir müşteri uygulaması",
@@ -3433,5 +3435,72 @@
     "videoLabel": "video",
     "videoComingSoonShort": "Video yakında",
     "practiceInDemo": "Demo’da pratik yap"
+  },
+  "discovery": {
+    "search": {
+      "locationLabel": "Konum",
+      "locationPlaceholder": "Şehir, bölge veya yakınımda",
+      "locationSearchPlaceholder": "Konum ara…",
+      "currentLocation": "Mevcut konum",
+      "useCurrentLocation": "Konumumu kullan",
+      "useCurrentLocationHint": "Yakındaki işletmeleri ve haritadaki konumunuzu gösterin",
+      "locating": "Konum belirleniyor…",
+      "locationUnsupported": "Bu tarayıcı konumu desteklemiyor.",
+      "locationDenied": "Konum erişimi verilmedi. Bölgeye göre arama yapabilirsiniz.",
+      "noLocations": "Eşleşen konum bulunamadı.",
+      "serviceLabel": "Hizmet",
+      "servicePlaceholder": "Hizmet veya kategori",
+      "serviceSearchPlaceholder": "Hizmet ve kategori ara…",
+      "noServices": "Eşleşen hizmet bulunamadı.",
+      "businessLabel": "İşletme",
+      "businessPlaceholder": "İşletme adı",
+      "businessTypeHint": "İşletme bulmak için en az iki karakter yazın.",
+      "noBusinesses": "Eşleşen işletme bulunamadı.",
+      "onlineBusiness": "Online rezervasyon işletmesi",
+      "clearBusiness": "İşletmeyi temizle",
+      "submit": "Ara",
+      "homeEyebrow": "Yakınınızdaki hizmetleri keşfedin",
+      "kind": {
+        "service": "Hizmet",
+        "category": "Kategori",
+        "industry": "İşletme türü"
+      }
+    },
+    "page": {
+      "eyebrow": "Velliqo marketplace",
+      "title": "Yakınınızdaki güvenilir hizmet işletmelerini bulun.",
+      "description": "Bölgeye, hizmete veya işletme adına göre arayın, doğrulanmış puanları karşılaştırın ve tüm konumları premium haritada keşfedin.",
+      "personalised": "Aramanıza uygun sonuçlar",
+      "popularFirst": "En çok rezervasyon alan işletmeler önce gösterilir"
+    },
+    "results": {
+      "searching": "İşletmeler aranıyor…",
+      "count": "{{count}} işletme bulundu",
+      "serviceContext": "“{{service}}” için işletmeler",
+      "defaultContext": "Herkese açık Velliqo sayfalarından öneriler",
+      "loading": "Harita ve sonuçlar hazırlanıyor…",
+      "errorTitle": "Marketplace araması geçici olarak kullanılamıyor",
+      "errorDescription": "Arama hizmeti yüklenemedi. Son veritabanı migration uygulandıktan sonra tekrar deneyin.",
+      "emptyTitle": "Bu aramayla eşleşen işletme yok",
+      "emptyDescription": "Daha geniş bir bölge, farklı bir kategori deneyin veya işletme adı filtresini kaldırın.",
+      "online": "Online işletme",
+      "newListing": "Yeni listeleme",
+      "fromPrice": "{{price}} başlangıç",
+      "showOnMap": "Haritada göster",
+      "viewBusiness": "İşletmeyi görüntüle"
+    },
+    "sort": {
+      "recommended": "Önerilen",
+      "nearest": "En yakın",
+      "rating": "En yüksek puan",
+      "popular": "En çok rezervasyon"
+    },
+    "map": {
+      "viewBusiness": "Müşteri sayfasını aç",
+      "yourLocation": "Konumunuz",
+      "unavailable": "Harita kullanılamıyor",
+      "unavailableDescription": "Harita sağlayıcısı yeniden bağlanırken işletme listesi kullanılabilir.",
+      "noPins": "Bu işletmeler henüz harita koordinatlarını eklemedi."
+    }
   }
 }

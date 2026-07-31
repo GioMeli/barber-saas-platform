@@ -3,7 +3,7 @@ import { Menu, Sparkles, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 
-export type MarketingRoute = 'product' | 'ai' | 'demo' | 'courses' | 'experience' | 'why' | 'pricing' | 'business-types' | 'contact';
+export type MarketingRoute = 'product' | 'discover' | 'ai' | 'demo' | 'courses' | 'experience' | 'why' | 'pricing' | 'business-types' | 'contact';
 
 const links: Array<{ key: MarketingRoute; label: string; to: string }> = [
   { key: 'product', label: 'Product', to: '/' },

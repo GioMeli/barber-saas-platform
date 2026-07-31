@@ -17,6 +17,8 @@ import { MarketingFooter, MarketingHeader } from '@/components/marketing/Marketi
 import { VelliqoAICallout, VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
 import { DesktopDevice } from '@/components/marketing/DeviceFrame';
 import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
+import { DiscoverySearchBar } from '@/components/discovery/DiscoverySearchBar';
+import { useTranslation } from 'react-i18next';
 
 const productBenefits = [
   { icon: CalendarDays, title: 'Scheduling that stays clear', text: 'Daily, weekly and monthly views designed for real appointment operations.' },
@@ -28,6 +30,7 @@ const productBenefits = [
 const industries = ['Beauty & personal care', 'Health & wellness', 'Fitness', 'Pet services', 'Automotive', 'Home services', 'Professional services', 'Education', 'Creative services', 'Events'];
 
 export default function IndustrySelection() {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f7fb] text-slate-950">
       <MarketingHeader active="product" />
@@ -35,7 +38,12 @@ export default function IndustrySelection() {
         <section className="relative overflow-hidden border-b border-slate-200 bg-[#0d0b18] text-white">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_8%,rgba(124,58,237,.34),transparent_31%),radial-gradient(circle_at_88%_18%,rgba(217,70,239,.18),transparent_28%),linear-gradient(180deg,#0d0b18_0%,#111025_100%)]" />
           <div className="absolute inset-x-0 bottom-0 h-44 bg-gradient-to-t from-violet-950/20 to-transparent" />
-          <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[.75fr_1.25fr] lg:px-8 lg:py-24">
+          <div className="relative mx-auto max-w-[1440px] px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+            <div className="mb-10 lg:mb-12">
+              <div className="mb-3 text-xs font-extrabold uppercase tracking-[.2em] text-violet-200/75">{t('discovery.search.homeEyebrow')}</div>
+              <DiscoverySearchBar variant="hero" />
+            </div>
+            <div className="grid items-center gap-12 lg:grid-cols-[.75fr_1.25fr]">
             <div className="max-w-2xl">
               <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-extrabold text-violet-200"><Sparkles className="h-4 w-4" />Premium operations, powered by Velliqo AI</div>
               <h1 className="mt-7 text-4xl font-extrabold leading-[1.01] tracking-[-.06em] sm:text-5xl lg:text-[4.45rem]">The operating platform your service business can grow into.</h1>
@@ -47,6 +55,7 @@ export default function IndustrySelection() {
               <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42"><TrustItem text="14-day free trial" dark /><TrustItem text="No card required" dark /><TrustItem text="Industry-aware setup" dark /></div>
             </div>
             <VelliqoAIPreview compact />
+            </div>
           </div>
         </section>
 

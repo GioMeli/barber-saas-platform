@@ -10,6 +10,7 @@ import WhyVelliqo from './pages/marketing/WhyVelliqo';
 import Experience from './pages/marketing/Experience';
 import VelliqoAI from './pages/marketing/VelliqoAI';
 import Contact from './pages/marketing/Contact';
+import DiscoverBusinesses from './pages/marketing/DiscoverBusinesses';
 import Courses from './pages/marketing/Courses';
 import DemoOwnerLayout from './components/demo/DemoOwnerLayout';
 import DemoModulePage from './pages/demo/DemoModulePage';
@@ -76,6 +77,7 @@ function App() {
         <Route path="/experience" element={<Experience />} />
         <Route path="/velliqo-ai" element={<VelliqoAI />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/discover" element={<DiscoverBusinesses />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/demo" element={<DemoOwnerLayout />}>
           <Route index element={<DemoModulePage />} />
