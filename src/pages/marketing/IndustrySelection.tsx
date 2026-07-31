@@ -14,8 +14,9 @@ import {
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
-import { VelliqoAICallout } from '@/components/marketing/VelliqoAIPreview';
-import { FinalProductPair, FinalProductVisual } from '@/components/marketing/FinalProductVisuals';
+import { VelliqoAICallout, VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
+import { DesktopDevice } from '@/components/marketing/DeviceFrame';
+import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
 
 const productBenefits = [
   { icon: CalendarDays, title: 'Scheduling that stays clear', text: 'Daily, weekly and monthly views designed for real appointment operations.' },
@@ -45,15 +46,7 @@ export default function IndustrySelection() {
               </div>
               <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42"><TrustItem text="14-day free trial" dark /><TrustItem text="No card required" dark /><TrustItem text="Industry-aware setup" dark /></div>
             </div>
-            <FinalProductPair
-              desktopSrc="/marketing/final/home-laptop.png"
-              desktopAlt="Velliqo owner workspace on laptop"
-              mobileSrc="/marketing/final/home-mobile.png"
-              mobileAlt="Velliqo owner workspace on mobile"
-              dark
-              mobileSide="right"
-              priority
-            />
+            <VelliqoAIPreview compact />
           </div>
         </section>
 
@@ -102,12 +95,7 @@ export default function IndustrySelection() {
               <p className="mt-5 text-base leading-7 text-slate-600">Reports combine operational metrics with daily context. Velliqo AI then helps the owner interpret patterns and prepare reviewable actions.</p>
               <div className="mt-7 space-y-4"><FeatureLine title="Revenue and appointment performance" text="Track trends without leaving the operational workspace." /><FeatureLine title="Customer retention signals" text="Identify regular customers who may be slipping outside their normal cycle." /><FeatureLine title="Staff and service visibility" text="Understand utilisation, demand and the shape of the working day." /></div>
             </div>
-            <FinalProductVisual
-              src="/marketing/final/home-desktop.png"
-              alt="Velliqo owner dashboard on desktop"
-              className="mx-auto w-full max-w-[720px] p-3"
-              imageClassName="rounded-[1.4rem]"
-            />
+            <div className="relative mx-auto w-full max-w-[720px] rounded-[2rem] bg-gradient-to-br from-violet-100 to-white p-5 shadow-[0_30px_95px_rgba(15,23,42,.12)]"><DesktopDevice image="/marketing/screens/precision/reports-desktop.webp" alt="Velliqo reporting workspace on desktop" fit="fill" /></div>
           </div>
         </section>
 
@@ -122,14 +110,15 @@ export default function IndustrySelection() {
 
 function ProductStage() {
   return (
-    <div className="relative mx-auto w-full max-w-[920px] py-4">
-      <FinalProductVisual
-        src="/marketing/final/storefront-responsive.png"
-        alt="Velliqo customer storefront on mobile and laptop"
-        className="border-0 bg-transparent p-0 shadow-none"
-        imageClassName="drop-shadow-[0_28px_48px_rgba(15,23,42,.2)]"
+    <div className="relative mx-auto w-full max-w-[820px] py-4 lg:pb-16">
+      <ResponsiveDeviceShowcase
+        laptopImage="/marketing/screens/precision/calendar-laptop.webp"
+        laptopAlt="Velliqo owner workspace on laptop"
+        phoneImage="/marketing/screens/precision/booking-phone.webp"
+        phoneAlt="Velliqo customer booking on phone"
+        tabletImage="/marketing/screens/precision/storefront-tablet.webp"
+        tabletAlt="Velliqo storefront on tablet"
         priority
-        surface="transparent"
       />
     </div>
   );

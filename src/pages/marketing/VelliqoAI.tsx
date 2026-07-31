@@ -2,7 +2,7 @@ import { ArrowRight, AudioLines, BrainCircuit, Check, LockKeyhole, MessageSquare
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
-import { FinalProductPair } from '@/components/marketing/FinalProductVisuals';
+import { VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
 
 const capabilities = [
   { icon: BrainCircuit, title: 'Understands the active business', text: 'Answers are grounded in the current workspace, selected industry and enabled modules.' },
@@ -28,14 +28,7 @@ export default function VelliqoAI() {
               <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Start with Velliqo AI <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] px-6 text-white hover:bg-white/[.08] hover:text-white"><Link to="/experience">See the full platform</Link></Button></div>
               <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs font-bold text-white/45">{['Tenant-isolated data', 'Visible confirmations', 'Industry-aware language'].map((item) => <span key={item} className="inline-flex items-center gap-2"><Check className="h-3.5 w-3.5 text-emerald-400" />{item}</span>)}</div>
             </div>
-            <FinalProductPair
-              desktopSrc="/marketing/final/ai-laptop.png"
-              desktopAlt="Velliqo AI business manager on laptop"
-              mobileSrc="/marketing/final/ai-mobile.png"
-              mobileAlt="Velliqo AI business manager on mobile"
-              dark
-              priority
-            />
+            <VelliqoAIPreview />
           </div>
         </section>
 

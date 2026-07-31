@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   ArrowRight,
+  BarChart3,
   BellRing,
   CalendarDays,
   Check,
@@ -20,8 +21,8 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { TabletDevice } from '@/components/marketing/DeviceFrame';
-import { FinalProductGallery, FinalProductPair, FinalProductVisual } from '@/components/marketing/FinalProductVisuals';
+import { DesktopDevice, LaptopDevice, PhoneDevice, TabletDevice } from '@/components/marketing/DeviceFrame';
+import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
 
 const ownerCapabilities = [
   ['Calendar control', 'Plan appointments, delays and team availability from one operational view.'],
@@ -114,12 +115,13 @@ export default function Experience() {
             </div>
 
             <div className="mx-auto mt-16 w-full max-w-6xl pb-8 lg:mt-20 lg:pb-20">
-              <FinalProductPair
-                desktopSrc="/marketing/final/home-laptop.png"
-                desktopAlt="Velliqo owner home workspace on laptop"
-                mobileSrc="/marketing/final/home-mobile.png"
-                mobileAlt="Velliqo owner home workspace on mobile"
-                dark
+              <ResponsiveDeviceShowcase
+                laptopImage="/marketing/screens/precision/calendar-laptop.webp"
+                laptopAlt="Velliqo owner dashboard and calendar"
+                phoneImage="/marketing/screens/precision/booking-phone.webp"
+                phoneAlt="Velliqo mobile customer booking"
+                tabletImage="/marketing/screens/precision/storefront-tablet.webp"
+                tabletAlt="Velliqo customer storefront"
                 priority
               />
             </div>
@@ -147,39 +149,36 @@ export default function Experience() {
                   <Link to="/business-types">Build your owner workspace <ArrowRight className="ml-2 h-4 w-4" /></Link>
                 </Button>
               </div>
-              <FinalProductPair
-                desktopSrc="/marketing/final/calendar-desktop.png"
-                desktopAlt="Velliqo owner calendar on desktop"
-                mobileSrc="/marketing/final/calendar-mobile.png"
-                mobileAlt="Velliqo owner calendar on mobile"
-                mobileSide="right"
-              />
+              <div className="relative pb-8 sm:pb-14">
+                <div className="absolute -inset-8 rounded-[3rem] bg-gradient-to-br from-violet-200/70 to-sky-100/40 blur-2xl" />
+                <DesktopDevice image="/marketing/screens/precision/calendar-desktop.webp" alt="Velliqo owner calendar on desktop" fit="fill" />
+                <div className="relative z-20 mx-auto -mt-10 w-[31%] min-w-[150px] max-w-[220px] sm:absolute sm:-bottom-2 sm:right-4 sm:mt-0 sm:w-[24%]">
+                  <PhoneDevice image="/marketing/screens/precision/calendar-phone.webp" alt="Velliqo owner mobile calendar" fit="fill" />
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
         <section className="overflow-hidden bg-[#0b1020] py-20 text-white lg:py-32">
           <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
-            <FinalProductGallery
-              items={[
-                { src: '/marketing/final/home-laptop.png', alt: 'Velliqo daily owner dashboard on laptop', label: 'Daily owner overview' },
-                { src: '/marketing/final/calendar-desktop.png', alt: 'Velliqo scheduling calendar on desktop', label: 'Calendar and team capacity' },
-                { src: '/marketing/final/ai-laptop.png', alt: 'Velliqo AI business manager on laptop', label: 'Business intelligence and AI' },
-              ]}
-            />
+            <div className="grid gap-6 lg:grid-cols-3">
+              <FeatureShowcase device="laptop" title="Know what is happening" text="Today’s schedule, customer activity and expected revenue stay visible at a glance." image="/marketing/screens/precision/dashboard-laptop.webp" icon={<BarChart3 className="h-5 w-5" />} />
+              <FeatureShowcase device="tablet" title="Manage your people" text="Staff profiles and calendars live inside the same coordinated workspace." image="/marketing/screens/precision/staff-tablet.webp" icon={<Users className="h-5 w-5" />} />
+              <FeatureShowcase device="desktop" title="Act on real data" text="Reports turn daily activity into clear indicators for better decisions." image="/marketing/screens/precision/reports-desktop.webp" icon={<CalendarDays className="h-5 w-5" />} />
+            </div>
           </div>
         </section>
 
         <section id="public-page" className="relative overflow-hidden bg-white py-20 lg:py-32">
           <div className="absolute right-[-12%] top-0 h-[520px] w-[520px] rounded-full bg-fuchsia-100/80 blur-3xl" />
           <div className="relative mx-auto grid max-w-[1440px] items-center gap-14 px-4 sm:px-6 lg:grid-cols-[1.15fr_.85fr] lg:px-8">
-            <FinalProductVisual
-              src="/marketing/final/storefront-responsive.png"
-              alt="Velliqo customer storefront on mobile and laptop"
-              className="border-0 bg-transparent p-0 shadow-none"
-              imageClassName="drop-shadow-[0_30px_52px_rgba(15,23,42,.18)]"
-              surface="transparent"
-            />
+            <div className="relative pb-10">
+              <LaptopDevice image="/marketing/screens/precision/calendar-laptop.webp" alt="Velliqo public business page on laptop" fit="fill" />
+              <div className="relative z-20 mx-auto -mt-8 w-[34%] min-w-[150px] max-w-[220px] sm:absolute sm:-bottom-2 sm:right-5 sm:mt-0 sm:w-[24%]">
+                <PhoneDevice image="/marketing/screens/precision/booking-phone.webp" alt="Velliqo public mobile booking" fit="fill" />
+              </div>
+            </div>
             <div>
               <div className="text-xs font-extrabold uppercase tracking-[.24em] text-fuchsia-600">Created automatically</div>
               <h2 className="mt-4 text-3xl font-extrabold tracking-[-.045em] sm:text-5xl">Your business receives a public digital home from the moment it is created.</h2>
@@ -225,13 +224,11 @@ export default function Experience() {
                   <FeatureLine icon={<CalendarDays />} text="Turn interest into a booking through a guided flow." />
                 </div>
               </div>
-              <FinalProductVisual
-                src="/marketing/final/storefront-responsive.png"
-                alt="Velliqo installable customer storefront across mobile and laptop"
-                className="border-0 bg-transparent p-0 shadow-none"
-                imageClassName="drop-shadow-[0_30px_52px_rgba(76,29,149,.16)]"
-                surface="transparent"
-              />
+              <div className="grid grid-cols-3 items-end justify-items-center gap-3 sm:gap-6">
+                <div className="w-full max-w-[190px]"><PhoneDevice image="/marketing/screens/precision/posts-phone.webp" alt="Velliqo announcements mobile view" fit="fill" /></div>
+                <div className="w-full max-w-[205px] sm:translate-y-4"><PhoneDevice image="/marketing/screens/precision/booking-phone.webp" alt="Velliqo customer booking mobile view" fit="fill" /></div>
+                <div className="w-full max-w-[190px]"><PhoneDevice image="/marketing/screens/precision/gallery-phone.webp" alt="Velliqo gallery mobile view" fit="fill" /></div>
+              </div>
             </div>
           </div>
         </section>
@@ -274,6 +271,27 @@ function TrustItem({ text }: { text: string }) { return <span className="flex it
 function Proof({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="flex gap-3 rounded-2xl p-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-700">{icon}</div><div><div className="text-sm font-extrabold">{title}</div><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p></div></div>; }
 function SectionHeading({ number, eyebrow, title, text, centered = false }: { number: string; eyebrow: string; title: string; text: string; centered?: boolean }) { return <div className={centered ? 'mx-auto max-w-4xl text-center' : 'max-w-4xl'}><div className={`flex items-center gap-3 ${centered ? 'justify-center' : ''}`}><span className="text-xs font-black text-violet-300">{number}</span><span className="text-xs font-extrabold uppercase tracking-[.24em] text-violet-600">{eyebrow}</span></div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.045em] sm:text-5xl">{title}</h2><p className="mt-5 text-base leading-8 text-slate-600 sm:text-lg">{text}</p></div>; }
 function CapabilityList({ items, tone, compact = false }: { items: string[][]; tone: 'violet' | 'fuchsia'; compact?: boolean }) { return <div className={`${compact ? 'mt-7' : ''} space-y-5`}>{items.map(([title,text],i)=><div key={title} className="flex gap-4"><div className={`mt-1 flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-black ${tone==='violet'?'bg-violet-100 text-violet-700':'bg-fuchsia-100 text-fuchsia-700'}`}>{i+1}</div><div><h3 className="font-extrabold">{title}</h3><p className="mt-1 text-sm leading-6 text-slate-600">{text}</p></div></div>)}</div>; }
+function FeatureShowcase({ title, text, image, icon, device }: { title: string; text: string; image: string; icon: React.ReactNode; device: 'laptop' | 'desktop' | 'tablet' }) {
+  const visual = device === 'desktop'
+    ? <DesktopDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[360px]" />
+    : device === 'tablet'
+      ? <TabletDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[410px]" />
+      : <LaptopDevice image={image} alt={title} fit="fill" className="mx-auto max-w-[430px]" />;
+
+  return (
+    <article className="group overflow-hidden rounded-[2rem] border border-white/10 bg-white/[.055] p-4 backdrop-blur">
+      <div className="flex min-h-[280px] items-center justify-center overflow-hidden rounded-[1.45rem] bg-gradient-to-br from-white/[.06] to-violet-500/[.08] p-3">
+        {visual}
+      </div>
+      <div className="p-4">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-500/20 text-violet-200">{icon}</div>
+        <h3 className="mt-4 text-xl font-extrabold">{title}</h3>
+        <p className="mt-2 text-sm leading-6 text-white/55">{text}</p>
+      </div>
+    </article>
+  );
+}
+
 function MiniFeature({ icon, title }: { icon: React.ReactNode; title: string }) {
   return (
     <div className="flex items-center gap-3 rounded-2xl border border-violet-100 bg-violet-50/70 p-4 text-slate-800 transition duration-300 hover:-translate-y-0.5 hover:border-violet-200 hover:bg-white hover:shadow-[0_14px_38px_rgba(124,58,237,.10)]">

@@ -14,7 +14,7 @@ const css = read('src/index.css');
 const workflow = read('.github/workflows/quality-gate.yml');
 
 if (!app.includes('path="/velliqo-ai"') || !app.includes('<VelliqoAI />')) fail('the public Velliqo AI route is missing');
-if ((!landing.includes('<VelliqoAIPreview compact />') && !landing.includes('/marketing/final/home-laptop.png')) || !landing.includes('<VelliqoAICallout />')) fail('the landing page must make Velliqo AI and the product workspace visible in the hero and product story');
+if (!landing.includes('<VelliqoAIPreview compact />') || !landing.includes('<VelliqoAICallout />')) fail('the landing page must make Velliqo AI visible in the hero and product story');
 if (!landing.includes('appointment-based') && !landing.includes('service business')) fail('landing copy must remain industry-neutral');
 if (!preview.includes('prefers-reduced-motion: reduce')) fail('AI preview rotation must respect reduced-motion preferences');
 if (!preview.includes('Nothing will be sent without approval') || !preview.includes('Review draft')) fail('the AI preview must show reviewable, non-deceptive actions');
