@@ -6,6 +6,10 @@
       "destination": "/api/store-manifest?slug=:slug"
     },
     {
+      "source": "/staff-manifest/:slug.webmanifest",
+      "destination": "/api/staff-manifest?slug=:slug"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -35,6 +39,19 @@
     },
     {
       "source": "/store-manifest/(.*).webmanifest",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=300, stale-while-revalidate=3600"
+        },
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/staff-manifest/(.*).webmanifest",
       "headers": [
         {
           "key": "Cache-Control",

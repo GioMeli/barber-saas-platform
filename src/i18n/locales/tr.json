@@ -861,6 +861,30 @@
         "revenue": "Gelir",
         "upcoming": "{{count}} yaklaşan"
       }
+    },
+    "personalAccess": {
+      "title": "Kişisel randevu erişimi",
+      "description": "Bu çalışana yalnızca kendi randevularını görüp yönetebileceği özel ve kurulabilir bir uygulama verin. Değişiklikler işletme sahibi takvimiyle anında senkronize edilir.",
+      "passwordlessNote": "Çalışan güvenli e-posta bağlantısıyla giriş yapar. Parola oluşturulmaz veya paylaşılmaz. Erişim kapatıldığında uygulama hemen engellenir.",
+      "appLink": "Personel uygulaması bağlantısı",
+      "status": {
+        "active": "Kişisel erişim"
+      },
+      "actions": {
+        "copyLink": "Uygulama bağlantısını kopyala",
+        "resend": "Erişim bağlantısını yeniden gönder",
+        "revoke": "Erişimi iptal et"
+      },
+      "validation": {
+        "emailRequired": "Kişisel erişim için e-posta adresi gereklidir."
+      },
+      "messages": {
+        "updateFailed": "Kişisel personel erişimi güncellenemedi",
+        "revoked": "Personel erişimi iptal edildi",
+        "inviteSent": "Güvenli erişim bağlantısı gönderildi",
+        "accessReady": "Kişisel erişim hazır. Çalışan personel uygulamasından parolasız bağlantı isteyebilir.",
+        "linkCopied": "Personel uygulaması bağlantısı kopyalandı"
+      }
     }
   },
   "services": {
@@ -2562,12 +2586,22 @@
     "messages": {
       "loadFailed": "Personel çalışma alanı yüklenemedi",
       "statusUpdated": "Randevu durumu güncellendi",
-      "statusFailed": "Randevu durumu güncellenemedi"
+      "statusFailed": "Randevu durumu güncellenemedi",
+      "rescheduleFailed": "Randevu yeniden planlanamadı",
+      "rescheduled": "Randevu yeniden planlandı",
+      "notesFailed": "Notlar kaydedilemedi",
+      "notesSaved": "Randevu notları kaydedildi",
+      "cancelFailed": "Randevu iptal edilemedi",
+      "cancelled": "Randevu iptal edildi",
+      "createFailed": "Randevu oluşturulamadı",
+      "created": "Randevu oluşturuldu"
     },
     "states": {
       "loading": "Çalışma alanınız yükleniyor…",
       "noProfileTitle": "Personel profili bağlı değil",
-      "noProfileDescription": "Bu hesap aktif bir personel profiline bağlı değil. İşletme sahibinden erişiminizi kontrol etmesini isteyin."
+      "noProfileDescription": "Bu hesap aktif bir personel profiline bağlı değil. İşletme sahibinden erişiminizi kontrol etmesini isteyin.",
+      "accessRevokedTitle": "Erişim kullanılamıyor",
+      "accessRevokedDescription": "İşletme sahibi bu kişisel çalışma alanını devre dışı bıraktı. Randevu verileri kullanılamıyor."
     },
     "actions": {
       "signOut": "Çıkış yap",
@@ -2575,7 +2609,8 @@
       "callBusiness": "İşletmeyi ara",
       "directions": "Yol tarifi",
       "callClient": "Müşteriyi ara",
-      "emailClient": "Müşteriye e-posta"
+      "emailClient": "Müşteriye e-posta",
+      "install": "Personel uygulamasını kur"
     },
     "header": {
       "subtitle": "Personel çalışma alanı"
@@ -2610,7 +2645,16 @@
     "appointment": {
       "duration": "{{minutes}} dakika",
       "walkIn": "Kayıtsız müşteri",
-      "updateStatus": "Durumu güncelle"
+      "updateStatus": "Durumu güncelle",
+      "open": "Randevuyu aç",
+      "customerPhone": "Müşteri telefonu",
+      "customerEmail": "Müşteri e-postası",
+      "reschedule": "Randevuyu yeniden planla",
+      "applyReschedule": "Yeni saati uygula",
+      "notes": "Operasyon notları",
+      "saveNotes": "Notları kaydet",
+      "cancel": "Randevuyu iptal et",
+      "confirmCancel": "Bu randevu iptal edilsin mi? İşletme sahibi takvimi anında güncellenecektir."
     },
     "status": {
       "pending": "Bekliyor",
@@ -2618,7 +2662,45 @@
       "arrived": "Geldi",
       "inProgress": "Hizmette",
       "completed": "Tamamlandı",
-      "noShow": "Gelmedi"
+      "noShow": "Gelmedi",
+      "cancelled": "İptal edildi",
+      "rescheduled": "Yeniden planlandı"
+    },
+    "access": {
+      "title": "Personel uygulamanızı açın",
+      "description": "İşletme sahibinin onayladığı personel e-postasını girin. Güvenli, tek kullanımlık giriş bağlantısı göndereceğiz.",
+      "email": "Personel e-postası",
+      "sending": "Bağlantı gönderiliyor…",
+      "sendLink": "Güvenli erişim bağlantısı gönder",
+      "securityNote": "Parola gerekmez. Erişim yalnızca işletme sahibi etkin tuttuğu sürece çalışır.",
+      "emailRequired": "Onaylanmış personel e-postasını girin.",
+      "linkFailed": "Erişim bağlantısı gönderilemedi",
+      "linkSent": "Güvenli personel uygulaması bağlantısı için e-postanızı kontrol edin."
+    },
+    "calendar": {
+      "today": "Bugün",
+      "day": "Gün",
+      "week": "Hafta",
+      "list": "Liste"
+    },
+    "business": {
+      "location": "İşletme konumu",
+      "phone": "İşletme telefonu",
+      "email": "İşletme e-postası"
+    },
+    "create": {
+      "action": "Yeni randevu",
+      "title": "Randevu oluştur",
+      "customerName": "Müşteri adı *",
+      "customerPhone": "Müşteri telefonu",
+      "customerEmail": "Müşteri e-postası",
+      "services": "Hizmetler *",
+      "date": "Tarih *",
+      "time": "Saat *",
+      "notes": "Notlar",
+      "required": "Müşteri, hizmet, tarih ve saat alanlarını tamamlayın.",
+      "saving": "Oluşturuluyor…",
+      "save": "Randevu oluştur"
     }
   },
   "sales": {

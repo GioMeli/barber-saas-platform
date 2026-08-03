@@ -59,10 +59,32 @@ export default function OwnerHome() {
     if (business?.id) void fetchDashboardData();
   }, [business?.id]);
 
-  const fetchDashboardData = async () => {
+  useEffect(() => {
     if (!business?.id) return;
 
-    setLoading(true);
+    const channel = supabase
+      .channel(`owner-home-appointments-${business.id}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'appointments',
+          filter: `business_id=eq.${business.id}`,
+        },
+        () => void fetchDashboardData(true)
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [business?.id]);
+
+  const fetchDashboardData = async (silent = false) => {
+    if (!business?.id) return;
+
+    if (!silent) setLoading(true);
 
     const now = new Date();
     const todayStart = startOfDay(now).toISOString();
@@ -203,7 +225,7 @@ export default function OwnerHome() {
       console.error('Dashboard loading error:', error);
       toast.error(error.message || t('dashboard_home.errors.load_failed'));
     } finally {
-      setLoading(false);
+      if (!silent) setLoading(false);
     }
   };
 

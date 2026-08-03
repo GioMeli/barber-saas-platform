@@ -861,6 +861,30 @@
         "revenue": "Revenue",
         "upcoming": "{{count}} upcoming"
       }
+    },
+    "personalAccess": {
+      "title": "Personal appointment access",
+      "description": "Give this staff member a private, installable app for viewing and managing only their own appointments. Changes synchronize instantly with the owner calendar.",
+      "passwordlessNote": "The employee signs in with a secure email link. No password is created or shared. Turning access off blocks the app immediately.",
+      "appLink": "Staff app link",
+      "status": {
+        "active": "Personal access"
+      },
+      "actions": {
+        "copyLink": "Copy app link",
+        "resend": "Resend access link",
+        "revoke": "Revoke access"
+      },
+      "validation": {
+        "emailRequired": "An email address is required for personal access."
+      },
+      "messages": {
+        "updateFailed": "Unable to update personal staff access",
+        "revoked": "Staff access revoked",
+        "inviteSent": "Secure access link sent",
+        "accessReady": "Personal access is ready. The employee can request a passwordless link from the staff app.",
+        "linkCopied": "Staff app link copied"
+      }
     }
   },
   "services": {
@@ -2562,12 +2586,22 @@
     "messages": {
       "loadFailed": "Failed to load your staff workspace",
       "statusUpdated": "Appointment status updated",
-      "statusFailed": "Failed to update appointment status"
+      "statusFailed": "Failed to update appointment status",
+      "rescheduleFailed": "Failed to reschedule the appointment",
+      "rescheduled": "Appointment rescheduled",
+      "notesFailed": "Failed to save notes",
+      "notesSaved": "Appointment notes saved",
+      "cancelFailed": "Failed to cancel the appointment",
+      "cancelled": "Appointment cancelled",
+      "createFailed": "Failed to create the appointment",
+      "created": "Appointment created"
     },
     "states": {
       "loading": "Loading your workspace…",
       "noProfileTitle": "Staff profile not connected",
-      "noProfileDescription": "This account is not linked to an active staff profile. Ask the business owner to review your access."
+      "noProfileDescription": "This account is not linked to an active staff profile. Ask the business owner to review your access.",
+      "accessRevokedTitle": "Access unavailable",
+      "accessRevokedDescription": "The business owner has disabled this personal staff workspace. No appointment data is available."
     },
     "actions": {
       "signOut": "Sign out",
@@ -2575,7 +2609,8 @@
       "callBusiness": "Call business",
       "directions": "Directions",
       "callClient": "Call client",
-      "emailClient": "Email client"
+      "emailClient": "Email client",
+      "install": "Install staff app"
     },
     "header": {
       "subtitle": "Staff workspace"
@@ -2610,7 +2645,16 @@
     "appointment": {
       "duration": "{{minutes}} minutes",
       "walkIn": "Walk-in customer",
-      "updateStatus": "Update status"
+      "updateStatus": "Update status",
+      "open": "Open appointment",
+      "customerPhone": "Customer phone",
+      "customerEmail": "Customer email",
+      "reschedule": "Reschedule appointment",
+      "applyReschedule": "Apply new time",
+      "notes": "Operational notes",
+      "saveNotes": "Save notes",
+      "cancel": "Cancel appointment",
+      "confirmCancel": "Cancel this appointment? The owner calendar will update immediately."
     },
     "status": {
       "pending": "Pending",
@@ -2618,7 +2662,45 @@
       "arrived": "Arrived",
       "inProgress": "In service",
       "completed": "Completed",
-      "noShow": "No-show"
+      "noShow": "No-show",
+      "cancelled": "Cancelled",
+      "rescheduled": "Rescheduled"
+    },
+    "access": {
+      "title": "Open your staff app",
+      "description": "Enter the staff email approved by the business owner. We will send a secure, single-use sign-in link.",
+      "email": "Staff email",
+      "sending": "Sending link…",
+      "sendLink": "Send secure access link",
+      "securityNote": "No password is required. Access works only while the business owner keeps it enabled.",
+      "emailRequired": "Enter your approved staff email.",
+      "linkFailed": "Unable to send the access link",
+      "linkSent": "Check your email for the secure staff app link."
+    },
+    "calendar": {
+      "today": "Today",
+      "day": "Day",
+      "week": "Week",
+      "list": "List"
+    },
+    "business": {
+      "location": "Business location",
+      "phone": "Business phone",
+      "email": "Business email"
+    },
+    "create": {
+      "action": "New appointment",
+      "title": "Create your appointment",
+      "customerName": "Customer name *",
+      "customerPhone": "Customer phone",
+      "customerEmail": "Customer email",
+      "services": "Services *",
+      "date": "Date *",
+      "time": "Time *",
+      "notes": "Notes",
+      "required": "Complete the customer, service, date and time fields.",
+      "saving": "Creating…",
+      "save": "Create appointment"
     }
   },
   "sales": {

@@ -861,6 +861,30 @@
         "revenue": "Ingresos",
         "upcoming": "{{count}} próximas"
       }
+    },
+    "personalAccess": {
+      "title": "Acceso personal a citas",
+      "description": "Ofrece a este empleado una app privada e instalable para ver y gestionar únicamente sus propias citas. Los cambios se sincronizan al instante con el calendario del propietario.",
+      "passwordlessNote": "El empleado inicia sesión mediante un enlace seguro por email. No se crea ni comparte contraseña. Al desactivar el acceso, la app queda bloqueada inmediatamente.",
+      "appLink": "Enlace de la app del personal",
+      "status": {
+        "active": "Acceso personal"
+      },
+      "actions": {
+        "copyLink": "Copiar enlace",
+        "resend": "Reenviar enlace de acceso",
+        "revoke": "Revocar acceso"
+      },
+      "validation": {
+        "emailRequired": "Se requiere un email para el acceso personal."
+      },
+      "messages": {
+        "updateFailed": "No se pudo actualizar el acceso personal",
+        "revoked": "Acceso del empleado revocado",
+        "inviteSent": "Enlace seguro enviado",
+        "accessReady": "El acceso personal está listo. El empleado puede solicitar un enlace sin contraseña desde la app.",
+        "linkCopied": "Enlace de la app copiado"
+      }
     }
   },
   "services": {
@@ -2562,12 +2586,22 @@
     "messages": {
       "loadFailed": "No se pudo cargar el espacio del personal",
       "statusUpdated": "Estado de la cita actualizado",
-      "statusFailed": "No se pudo actualizar el estado"
+      "statusFailed": "No se pudo actualizar el estado",
+      "rescheduleFailed": "No se pudo reprogramar la cita",
+      "rescheduled": "Cita reprogramada",
+      "notesFailed": "No se pudieron guardar las notas",
+      "notesSaved": "Notas guardadas",
+      "cancelFailed": "No se pudo cancelar la cita",
+      "cancelled": "Cita cancelada",
+      "createFailed": "No se pudo crear la cita",
+      "created": "Cita creada"
     },
     "states": {
       "loading": "Cargando tu espacio…",
       "noProfileTitle": "Perfil de personal no conectado",
-      "noProfileDescription": "Esta cuenta no está vinculada a un perfil de personal activo. Pide al propietario que revise tu acceso."
+      "noProfileDescription": "Esta cuenta no está vinculada a un perfil de personal activo. Pide al propietario que revise tu acceso.",
+      "accessRevokedTitle": "Acceso no disponible",
+      "accessRevokedDescription": "El propietario ha desactivado este espacio personal. No hay datos de citas disponibles."
     },
     "actions": {
       "signOut": "Cerrar sesión",
@@ -2575,7 +2609,8 @@
       "callBusiness": "Llamar al negocio",
       "directions": "Cómo llegar",
       "callClient": "Llamar al cliente",
-      "emailClient": "Email al cliente"
+      "emailClient": "Email al cliente",
+      "install": "Instalar app del personal"
     },
     "header": {
       "subtitle": "Espacio del personal"
@@ -2610,7 +2645,16 @@
     "appointment": {
       "duration": "{{minutes}} minutos",
       "walkIn": "Cliente sin registro",
-      "updateStatus": "Actualizar estado"
+      "updateStatus": "Actualizar estado",
+      "open": "Abrir cita",
+      "customerPhone": "Teléfono del cliente",
+      "customerEmail": "Email del cliente",
+      "reschedule": "Reprogramar cita",
+      "applyReschedule": "Aplicar nueva hora",
+      "notes": "Notas operativas",
+      "saveNotes": "Guardar notas",
+      "cancel": "Cancelar cita",
+      "confirmCancel": "¿Cancelar esta cita? El calendario del propietario se actualizará inmediatamente."
     },
     "status": {
       "pending": "Pendiente",
@@ -2618,7 +2662,45 @@
       "arrived": "Ha llegado",
       "inProgress": "En servicio",
       "completed": "Completada",
-      "noShow": "No se presentó"
+      "noShow": "No se presentó",
+      "cancelled": "Cancelada",
+      "rescheduled": "Reprogramada"
+    },
+    "access": {
+      "title": "Abrir tu app del personal",
+      "description": "Introduce el email aprobado por el propietario. Enviaremos un enlace seguro de un solo uso.",
+      "email": "Email del empleado",
+      "sending": "Enviando enlace…",
+      "sendLink": "Enviar enlace seguro",
+      "securityNote": "No se necesita contraseña. El acceso funciona solo mientras el propietario lo mantenga activo.",
+      "emailRequired": "Introduce el email aprobado del empleado.",
+      "linkFailed": "No se pudo enviar el enlace",
+      "linkSent": "Revisa tu email para abrir el enlace seguro de la app."
+    },
+    "calendar": {
+      "today": "Hoy",
+      "day": "Día",
+      "week": "Semana",
+      "list": "Lista"
+    },
+    "business": {
+      "location": "Ubicación del negocio",
+      "phone": "Teléfono del negocio",
+      "email": "Email del negocio"
+    },
+    "create": {
+      "action": "Nueva cita",
+      "title": "Crear cita",
+      "customerName": "Nombre del cliente *",
+      "customerPhone": "Teléfono del cliente",
+      "customerEmail": "Email del cliente",
+      "services": "Servicios *",
+      "date": "Fecha *",
+      "time": "Hora *",
+      "notes": "Notas",
+      "required": "Completa cliente, servicio, fecha y hora.",
+      "saving": "Creando…",
+      "save": "Crear cita"
     }
   },
   "sales": {

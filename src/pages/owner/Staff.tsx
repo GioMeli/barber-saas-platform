@@ -24,12 +24,17 @@ import {
   CalendarClock,
   CalendarDays,
   Clock3,
+  Copy,
   Edit,
+  Link2,
   Mail,
   Phone,
   Plus,
   Scissors,
   Search,
+  Send,
+  ShieldCheck,
+  Smartphone,
   Trash2,
   UserCheck,
   Users,
@@ -81,12 +86,14 @@ const EMPTY_FORM = {
   is_active: true,
   inactive_start_date: '',
   inactive_end_date: '',
+  personal_access_enabled: false,
 };
 
 export default function Staff() {
   const { t } = useTranslation();
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
+  const businessSlug = businessMemberships[0]?.businesses?.slug;
 
   const [staff, setStaff] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
@@ -99,6 +106,9 @@ export default function Staff() {
   const [sortBy, setSortBy] = useState<StaffSort>('name');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [accessActionLoading, setAccessActionLoading] = useState(false);
+  const [originalAccessEnabled, setOriginalAccessEnabled] = useState(false);
+  const [originalEmail, setOriginalEmail] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -185,6 +195,8 @@ export default function Staff() {
     setSelectedServiceIds([]);
     setWeeklySchedule(DEFAULT_SCHEDULE.map((day) => ({ ...day })));
     setWeeklyBreaks([]);
+    setOriginalAccessEnabled(false);
+    setOriginalEmail('');
   };
 
   const handleOpenDialog = async (employee?: any) => {
@@ -205,7 +217,10 @@ export default function Staff() {
       is_active: employee.is_active ?? true,
       inactive_start_date: employee.inactive_start_date ?? '',
       inactive_end_date: employee.inactive_end_date ?? '',
+      personal_access_enabled: Boolean(employee.personal_access_enabled),
     });
+    setOriginalAccessEnabled(Boolean(employee.personal_access_enabled));
+    setOriginalEmail(employee.email ?? '');
 
     try {
       const [serviceAssignments, savedWorkingHours, savedBreaks] =
@@ -395,6 +410,11 @@ export default function Staff() {
       }
     }
 
+    if (formData.personal_access_enabled && !formData.email.trim()) {
+      toast.error(t('staff.personalAccess.validation.emailRequired'));
+      return false;
+    }
+
     if (
       formData.inactive_start_date &&
       formData.inactive_end_date &&
@@ -514,6 +534,28 @@ export default function Staff() {
         if (insertBreaksError) throw insertBreaksError;
       }
 
+      const accessChanged =
+        formData.personal_access_enabled !== originalAccessEnabled ||
+        (formData.personal_access_enabled && formData.email.trim().toLowerCase() !== originalEmail.trim().toLowerCase());
+
+      if (accessChanged) {
+        const action = formData.personal_access_enabled ? 'enable' : 'revoke';
+        const { data: accessData, error: accessError } = await supabase.functions.invoke(
+          'manage-staff-access',
+          {
+            body: {
+              action,
+              employee_id: employeeId,
+              origin: window.location.origin,
+            },
+          }
+        );
+
+        if (accessError || accessData?.error) {
+          throw new Error(accessData?.error || accessError?.message || t('staff.personalAccess.messages.updateFailed'));
+        }
+      }
+
       toast.success(
         editingId ? t('staff.messages.updated') : t('staff.messages.added')
       );
@@ -526,6 +568,42 @@ export default function Staff() {
     } finally {
       setSaving(false);
     }
+  };
+
+  const runAccessAction = async (employeeId: string, action: 'enable' | 'resend' | 'revoke') => {
+    setAccessActionLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('manage-staff-access', {
+        body: { action, employee_id: employeeId, origin: window.location.origin },
+      });
+      if (error || data?.error) throw new Error(data?.error || error?.message);
+
+      if (action === 'revoke') {
+        setFormData((current) => ({ ...current, personal_access_enabled: false }));
+        setOriginalAccessEnabled(false);
+        toast.success(t('staff.personalAccess.messages.revoked'));
+      } else {
+        setFormData((current) => ({ ...current, personal_access_enabled: true }));
+        setOriginalAccessEnabled(true);
+        setOriginalEmail(formData.email.trim());
+        toast.success(
+          data?.email_sent
+            ? t('staff.personalAccess.messages.inviteSent')
+            : t('staff.personalAccess.messages.accessReady')
+        );
+      }
+      await fetchData();
+    } catch (error: any) {
+      toast.error(error.message || t('staff.personalAccess.messages.updateFailed'));
+    } finally {
+      setAccessActionLoading(false);
+    }
+  };
+
+  const copyStaffAppLink = async () => {
+    if (!businessSlug) return;
+    await navigator.clipboard.writeText(`${window.location.origin}/staff/${businessSlug}`);
+    toast.success(t('staff.personalAccess.messages.linkCopied'));
   };
 
   const handleDelete = async (member: any) => {
@@ -837,11 +915,17 @@ export default function Staff() {
                         </div>
                       )}
 
-                      <Badge
-                        variant={member.is_active ? 'default' : 'secondary'}
-                      >
-                        {member.is_active ? t('staff.status.active') : t('staff.status.inactive')}
-                      </Badge>
+                      <div className="flex flex-col items-end gap-2">
+                        <Badge variant={member.is_active ? 'default' : 'secondary'}>
+                          {member.is_active ? t('staff.status.active') : t('staff.status.inactive')}
+                        </Badge>
+                        {member.personal_access_enabled && (
+                          <Badge variant="outline" className="border-emerald-200 bg-emerald-50 text-emerald-700">
+                            <ShieldCheck className="mr-1 h-3.5 w-3.5" />
+                            {t('staff.personalAccess.status.active')}
+                          </Badge>
+                        )}
+                      </div>
                     </div>
 
                     <div className="mt-4">
@@ -1053,6 +1137,71 @@ export default function Staff() {
                     setFormData({ ...formData, is_active: checked })
                   }
                 />
+              </div>
+
+              <div className="rounded-2xl border border-primary/20 bg-primary/[0.03] p-4 sm:p-5">
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                  <div className="flex gap-3">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                      <Smartphone className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <Label>{t('staff.personalAccess.title')}</Label>
+                      <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
+                        {t('staff.personalAccess.description')}
+                      </p>
+                    </div>
+                  </div>
+                  <Switch
+                    checked={formData.personal_access_enabled}
+                    onCheckedChange={(checked) =>
+                      setFormData({ ...formData, personal_access_enabled: checked })
+                    }
+                    aria-label={t('staff.personalAccess.title')}
+                  />
+                </div>
+
+                {formData.personal_access_enabled && (
+                  <div className="mt-4 space-y-4 border-t pt-4">
+                    <div className="flex items-start gap-2 rounded-xl bg-background p-3 text-sm text-muted-foreground">
+                      <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                      <span>{t('staff.personalAccess.passwordlessNote')}</span>
+                    </div>
+
+                    {businessSlug && (
+                      <div className="flex flex-col gap-2 rounded-xl border bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0">
+                          <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                            {t('staff.personalAccess.appLink')}
+                          </div>
+                          <div className="mt-1 truncate text-sm font-semibold">
+                            {`${window.location.origin}/staff/${businessSlug}`}
+                          </div>
+                        </div>
+                        <Button type="button" variant="outline" size="sm" onClick={() => void copyStaffAppLink()}>
+                          <Copy className="mr-2 h-4 w-4" />
+                          {t('staff.personalAccess.actions.copyLink')}
+                        </Button>
+                      </div>
+                    )}
+
+                    {editingId && originalAccessEnabled && (
+                      <div className="flex flex-wrap gap-2">
+                        <Button type="button" variant="outline" disabled={accessActionLoading} onClick={() => void runAccessAction(editingId, 'resend')}>
+                          <Send className="mr-2 h-4 w-4" />
+                          {t('staff.personalAccess.actions.resend')}
+                        </Button>
+                        <Button type="button" variant="outline" disabled={accessActionLoading} onClick={() => void copyStaffAppLink()}>
+                          <Link2 className="mr-2 h-4 w-4" />
+                          {t('staff.personalAccess.actions.copyLink')}
+                        </Button>
+                        <Button type="button" variant="destructive" disabled={accessActionLoading} onClick={() => void runAccessAction(editingId, 'revoke')}>
+                          {t('staff.personalAccess.actions.revoke')}
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </section>
 

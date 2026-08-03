@@ -861,6 +861,30 @@
         "revenue": "Umsatz",
         "upcoming": "{{count}} bevorstehend"
       }
+    },
+    "personalAccess": {
+      "title": "Persönlicher Terminzugang",
+      "description": "Geben Sie diesem Teammitglied eine private, installierbare App, in der ausschließlich die eigenen Termine angezeigt und verwaltet werden. Änderungen werden sofort mit dem Inhaber-Kalender synchronisiert.",
+      "passwordlessNote": "Die Anmeldung erfolgt über einen sicheren E-Mail-Link. Es wird kein Passwort erstellt oder geteilt. Nach dem Deaktivieren wird die App sofort gesperrt.",
+      "appLink": "Link zur Mitarbeiter-App",
+      "status": {
+        "active": "Persönlicher Zugang"
+      },
+      "actions": {
+        "copyLink": "App-Link kopieren",
+        "resend": "Zugangslink erneut senden",
+        "revoke": "Zugang widerrufen"
+      },
+      "validation": {
+        "emailRequired": "Für den persönlichen Zugang ist eine E-Mail-Adresse erforderlich."
+      },
+      "messages": {
+        "updateFailed": "Der persönliche Mitarbeiterzugang konnte nicht aktualisiert werden",
+        "revoked": "Mitarbeiterzugang wurde widerrufen",
+        "inviteSent": "Sicherer Zugangslink wurde gesendet",
+        "accessReady": "Der persönliche Zugang ist bereit. Das Teammitglied kann in der Mitarbeiter-App einen passwortlosen Link anfordern.",
+        "linkCopied": "Link zur Mitarbeiter-App kopiert"
+      }
     }
   },
   "services": {
@@ -2562,12 +2586,22 @@
     "messages": {
       "loadFailed": "Mitarbeiterbereich konnte nicht geladen werden",
       "statusUpdated": "Terminstatus aktualisiert",
-      "statusFailed": "Terminstatus konnte nicht aktualisiert werden"
+      "statusFailed": "Terminstatus konnte nicht aktualisiert werden",
+      "rescheduleFailed": "Termin konnte nicht verschoben werden",
+      "rescheduled": "Termin wurde verschoben",
+      "notesFailed": "Notizen konnten nicht gespeichert werden",
+      "notesSaved": "Terminnotizen gespeichert",
+      "cancelFailed": "Termin konnte nicht storniert werden",
+      "cancelled": "Termin wurde storniert",
+      "createFailed": "Termin konnte nicht erstellt werden",
+      "created": "Termin wurde erstellt"
     },
     "states": {
       "loading": "Arbeitsbereich wird geladen…",
       "noProfileTitle": "Mitarbeiterprofil nicht verbunden",
-      "noProfileDescription": "Dieses Konto ist keinem aktiven Mitarbeiterprofil zugeordnet. Bitten Sie den Inhaber, Ihren Zugang zu prüfen."
+      "noProfileDescription": "Dieses Konto ist keinem aktiven Mitarbeiterprofil zugeordnet. Bitten Sie den Inhaber, Ihren Zugang zu prüfen.",
+      "accessRevokedTitle": "Zugang nicht verfügbar",
+      "accessRevokedDescription": "Der Geschäftsinhaber hat diesen persönlichen Mitarbeiterbereich deaktiviert. Termindaten sind nicht verfügbar."
     },
     "actions": {
       "signOut": "Abmelden",
@@ -2575,7 +2609,8 @@
       "callBusiness": "Betrieb anrufen",
       "directions": "Route",
       "callClient": "Kunden anrufen",
-      "emailClient": "E-Mail an Kunden"
+      "emailClient": "E-Mail an Kunden",
+      "install": "Mitarbeiter-App installieren"
     },
     "header": {
       "subtitle": "Mitarbeiterbereich"
@@ -2610,7 +2645,16 @@
     "appointment": {
       "duration": "{{minutes}} Minuten",
       "walkIn": "Laufkundschaft",
-      "updateStatus": "Status aktualisieren"
+      "updateStatus": "Status aktualisieren",
+      "open": "Termin öffnen",
+      "customerPhone": "Kundentelefon",
+      "customerEmail": "Kunden-E-Mail",
+      "reschedule": "Termin verschieben",
+      "applyReschedule": "Neue Zeit übernehmen",
+      "notes": "Betriebliche Notizen",
+      "saveNotes": "Notizen speichern",
+      "cancel": "Termin stornieren",
+      "confirmCancel": "Diesen Termin stornieren? Der Inhaber-Kalender wird sofort aktualisiert."
     },
     "status": {
       "pending": "Ausstehend",
@@ -2618,7 +2662,45 @@
       "arrived": "Eingetroffen",
       "inProgress": "In Behandlung",
       "completed": "Abgeschlossen",
-      "noShow": "Nicht erschienen"
+      "noShow": "Nicht erschienen",
+      "cancelled": "Storniert",
+      "rescheduled": "Verschoben"
+    },
+    "access": {
+      "title": "Mitarbeiter-App öffnen",
+      "description": "Geben Sie die vom Geschäftsinhaber genehmigte Mitarbeiter-E-Mail ein. Wir senden einen sicheren Einmal-Link.",
+      "email": "Mitarbeiter-E-Mail",
+      "sending": "Link wird gesendet…",
+      "sendLink": "Sicheren Zugangslink senden",
+      "securityNote": "Kein Passwort erforderlich. Der Zugang funktioniert nur, solange der Geschäftsinhaber ihn aktiviert lässt.",
+      "emailRequired": "Geben Sie die genehmigte Mitarbeiter-E-Mail ein.",
+      "linkFailed": "Zugangslink konnte nicht gesendet werden",
+      "linkSent": "Prüfen Sie Ihre E-Mails auf den sicheren Link zur Mitarbeiter-App."
+    },
+    "calendar": {
+      "today": "Heute",
+      "day": "Tag",
+      "week": "Woche",
+      "list": "Liste"
+    },
+    "business": {
+      "location": "Geschäftsadresse",
+      "phone": "Geschäftstelefon",
+      "email": "Geschäfts-E-Mail"
+    },
+    "create": {
+      "action": "Neuer Termin",
+      "title": "Termin erstellen",
+      "customerName": "Kundenname *",
+      "customerPhone": "Kundentelefon",
+      "customerEmail": "Kunden-E-Mail",
+      "services": "Leistungen *",
+      "date": "Datum *",
+      "time": "Uhrzeit *",
+      "notes": "Notizen",
+      "required": "Kunde, Leistung, Datum und Uhrzeit ausfüllen.",
+      "saving": "Wird erstellt…",
+      "save": "Termin erstellen"
     }
   },
   "sales": {

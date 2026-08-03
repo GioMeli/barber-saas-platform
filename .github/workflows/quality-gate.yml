@@ -61,6 +61,7 @@ jobs:
           npm run customer-experience:check
           npm run ai-multilingual:check
           npm run discovery:check
+          npm run staff-access:check
 
       - name: TypeScript
         run: npm run typecheck
