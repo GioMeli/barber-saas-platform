@@ -95,7 +95,8 @@ function App() {
           <Route path="reviews" element={<CustomerReviews />} />
         </Route>
 
-        <Route path="/staff-portal" element={<ProtectedRoute allowedRoles={['Employee', 'Manager']}><EmployeeDashboard /></ProtectedRoute>} />
+        <Route path="/staff/:slug" element={<EmployeeDashboard />} />
+        <Route path="/staff-portal" element={<EmployeeDashboard />} />
         <Route path="/admin" element={<ProtectedRoute allowedRoles={['Platform Admin']}><PlatformAdmin /></ProtectedRoute>} />
         <Route path="/onboarding" element={<ProtectedRoute allowedRoles={['Business Owner']}><OnboardingWizard /></ProtectedRoute>} />
 

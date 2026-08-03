@@ -131,6 +131,28 @@ export default function Calendar() {
   }, [businessId, visibleRange.start.getTime(), visibleRange.end.getTime()]);
 
   useEffect(() => {
+    if (!businessId) return;
+
+    const channel = supabase
+      .channel(`owner-calendar-${businessId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'appointments',
+          filter: `business_id=eq.${businessId}`,
+        },
+        () => void fetchCalendarRange()
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [businessId, visibleRange.start.getTime(), visibleRange.end.getTime()]);
+
+  useEffect(() => {
     if (
       isNewDialogOpen &&
       businessId &&
