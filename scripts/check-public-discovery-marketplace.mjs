@@ -25,11 +25,18 @@ const requireText = (file, text, label = text) => {
 requireText('src/App.tsx', 'path="/discover"', 'public discovery route');
 requireText('src/pages/marketing/IndustrySelection.tsx', '<DiscoverySearchBar', 'homepage marketplace search');
 requireText('src/components/discovery/DiscoveryMap.tsx', 'velliqo-user-location-marker', 'user-location marker');
-requireText('src/components/discovery/DiscoveryMap.tsx', 'setHTML(popupHtml', 'map business popup');
+requireText('src/components/discovery/DiscoveryMap.tsx', 'onSelect(business)', 'stable marker-to-business selection');
 requireText('src/components/discovery/DiscoveryMap.tsx', 'setMapReady(true)', 'map-ready marker lifecycle');
 requireText('src/discovery/url.ts', 'latitudeParam == null ? Number.NaN', 'safe coordinate URL parsing');
 requireText('src/components/discovery/BusinessResultCard.tsx', 'average_rating', 'verified rating display');
 requireText('src/pages/owner/Storefront.tsx', 'discovery_enabled', 'owner marketplace visibility control');
+
+requireText('src/pages/marketing/DiscoverBusinesses.tsx', 'lg:grid-cols-4', 'four-card desktop discovery grid');
+requireText('src/pages/marketing/DiscoverBusinesses.tsx', 'lg:h-[320px]', 'compact full-width desktop map height');
+requireText('src/pages/marketing/DiscoverBusinesses.tsx', 'setDetailsOpen(true)', 'map selection opens right-side business details');
+requireText('src/pages/marketing/DiscoverBusinesses.tsx', '<Sheet open={detailsOpen}', 'business details drawer');
+requireText('src/components/discovery/DiscoveryMap.tsx', 'mappableBusinesses.find((item) => item.id === selectedBusinessId)', 'stable-id selected marker resolution');
+if (read('src/components/discovery/BusinessResultCard.tsx').includes('onMouseEnter={onSelect}')) failures.push('Business cards must not override map pin selection on hover');
 
 const migration = read('supabase/migrations/00044_velliqo_public_discovery_marketplace.sql');
 [
@@ -50,6 +57,7 @@ const migration = read('supabase/migrations/00044_velliqo_public_discovery_marke
 for (const locale of ['en', 'el', 'de', 'es', 'tr']) {
   const data = JSON.parse(read(`src/i18n/locales/${locale}.json`));
   if (!data.discovery?.search?.submit || !data.discovery?.search?.homeEyebrow || !data.discovery?.search?.kind?.service || !data.discovery?.map?.yourLocation) failures.push(`${locale} locale missing discovery translations`);
+  if (!data.discovery?.details?.about || !data.discovery?.details?.location || !data.discovery?.details?.services) failures.push(`${locale} locale missing discovery details translations`);
   if (!data.storefront?.owner?.online?.discoveryListing) failures.push(`${locale} locale missing owner discovery control`);
 }
 
@@ -60,4 +68,4 @@ if (failures.length) {
 }
 
 console.log('Phase 10C.4 public discovery marketplace checks passed.');
-console.log('Homepage search, secure geo RPCs, popularity ranking, map pins, user location, ratings and responsive result cards verified.');
+console.log('Compact full-width map, four-card desktop grid, stable-id map selection, right-side business details, geo RPCs, user location and ratings verified.');

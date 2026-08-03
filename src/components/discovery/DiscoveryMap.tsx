@@ -12,45 +12,30 @@ interface DiscoveryMapProps {
   onSelect: (business: DiscoveryBusiness) => void;
 }
 
-function escapeHtml(value: string): string {
-  return value.replace(/[&<>'"]/g, (character) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;',
-  })[character] ?? character);
-}
-
-function popupHtml(business: DiscoveryBusiness, viewLabel: string): string {
-  const location = [business.city, business.district].filter(Boolean).join(', ');
-  const description = business.description?.trim() || location || '';
-  const rating = business.review_count > 0
-    ? `<div style="margin-top:8px;font-size:12px;font-weight:800;color:#b45309">★ ${business.average_rating.toFixed(1)} <span style="color:#64748b;font-weight:600">(${business.review_count})</span></div>`
-    : '';
-  return `<div style="min-width:230px;max-width:290px;font-family:Inter,ui-sans-serif,system-ui,sans-serif">
-    <div style="display:flex;align-items:center;gap:10px">
-      ${business.logo_url ? `<img src="${escapeHtml(business.logo_url)}" alt="" style="width:42px;height:42px;border-radius:12px;object-fit:cover;border:1px solid #e2e8f0" />` : '<div style="width:42px;height:42px;border-radius:12px;background:#ede9fe;color:#6d28d9;display:flex;align-items:center;justify-content:center;font-weight:900">V</div>'}
-      <div style="min-width:0"><div style="font-size:15px;font-weight:900;color:#0f172a">${escapeHtml(business.name)}</div>${location ? `<div style="font-size:11px;color:#64748b;margin-top:2px">${escapeHtml(location)}</div>` : ''}</div>
-    </div>
-    ${description ? `<p style="font-size:12px;line-height:1.55;color:#475569;margin:10px 0 0">${escapeHtml(description.slice(0, 160))}${description.length > 160 ? '…' : ''}</p>` : ''}
-    ${rating}
-    <a href="/app/${encodeURIComponent(business.slug)}" style="display:block;margin-top:12px;padding:10px 12px;border-radius:11px;background:#7c3aed;color:white;text-align:center;text-decoration:none;font-size:12px;font-weight:900">${escapeHtml(viewLabel)}</a>
-  </div>`;
-}
-
 export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onSelect }: DiscoveryMapProps) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const markersRef = useRef<maplibregl.Marker[]>([]);
-  const popupRef = useRef<maplibregl.Popup | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [mapReady, setMapReady] = useState(false);
 
   const mappableBusinesses = useMemo(
     () => businesses.filter(
       (business): business is DiscoveryBusiness & { latitude: number; longitude: number } =>
-        business.latitude != null && business.longitude != null,
+        typeof business.latitude === 'number' &&
+        Number.isFinite(business.latitude) &&
+        typeof business.longitude === 'number' &&
+        Number.isFinite(business.longitude),
     ),
     [businesses],
   );
+
+  const validUserLocation = useMemo(() => {
+    if (!userLocation) return null;
+    if (!Number.isFinite(userLocation.latitude) || !Number.isFinite(userLocation.longitude)) return null;
+    return userLocation;
+  }, [userLocation]);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -113,8 +98,6 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
         map.off('error', handleError);
         markersRef.current.forEach((marker) => marker.remove());
         markersRef.current = [];
-        popupRef.current?.remove();
-        popupRef.current = null;
         map.remove();
         mapRef.current = null;
         setMapReady(false);
@@ -132,8 +115,6 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
 
     markersRef.current.forEach((marker) => marker.remove());
     markersRef.current = [];
-    popupRef.current?.remove();
-    popupRef.current = null;
 
     const bounds = new maplibregl.LngLatBounds();
     for (const business of mappableBusinesses) {
@@ -141,14 +122,23 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
       markerElement.type = 'button';
       markerElement.setAttribute('aria-label', business.name);
       markerElement.className = 'velliqo-discovery-marker';
-      markerElement.innerHTML = `<span>${business.logo_url ? `<img src="${escapeHtml(business.logo_url)}" alt="" />` : 'V'}</span>`;
+
+      const markerBadge = document.createElement('span');
+      if (business.logo_url) {
+        const markerLogo = document.createElement('img');
+        markerLogo.src = business.logo_url;
+        markerLogo.alt = '';
+        markerLogo.loading = 'lazy';
+        markerLogo.referrerPolicy = 'no-referrer';
+        markerBadge.appendChild(markerLogo);
+      } else {
+        markerBadge.textContent = 'V';
+      }
+      markerElement.appendChild(markerBadge);
+
       markerElement.addEventListener('click', () => {
+        // The page owns the details drawer. Selection is keyed by the stable business id.
         onSelect(business);
-        popupRef.current?.remove();
-        popupRef.current = new maplibregl.Popup({ offset: 28, closeButton: true, maxWidth: '320px' })
-          .setLngLat([business.longitude, business.latitude])
-          .setHTML(popupHtml(business, t('discovery.map.viewBusiness')))
-          .addTo(map);
       });
 
       const marker = new maplibregl.Marker({ element: markerElement, anchor: 'bottom' })
@@ -158,15 +148,15 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
       bounds.extend([business.longitude, business.latitude]);
     }
 
-    if (userLocation) {
+    if (validUserLocation) {
       const userElement = document.createElement('div');
       userElement.className = 'velliqo-user-location-marker';
       userElement.title = t('discovery.map.yourLocation');
       const userMarker = new maplibregl.Marker({ element: userElement })
-        .setLngLat([userLocation.longitude, userLocation.latitude])
+        .setLngLat([validUserLocation.longitude, validUserLocation.latitude])
         .addTo(map);
       markersRef.current.push(userMarker);
-      bounds.extend([userLocation.longitude, userLocation.latitude]);
+      bounds.extend([validUserLocation.longitude, validUserLocation.latitude]);
     }
 
     if (!bounds.isEmpty()) {
@@ -174,24 +164,20 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
     } else {
       map.resize();
     }
-  }, [mapReady, mappableBusinesses, onSelect, t, userLocation]);
+  }, [mapReady, mappableBusinesses, onSelect, t, validUserLocation]);
 
   useEffect(() => {
-    const business = businesses.find((item) => item.id === selectedBusinessId);
+    // Resolve the selected pin by stable business id, never by list index/order.
+    const business = mappableBusinesses.find((item) => item.id === selectedBusinessId);
     const map = mapRef.current;
     if (!mapReady || !business || business.latitude == null || business.longitude == null || !map) return;
 
     map.flyTo({ center: [business.longitude, business.latitude], zoom: Math.max(map.getZoom(), 13), duration: 650 });
-    popupRef.current?.remove();
-    popupRef.current = new maplibregl.Popup({ offset: 28, closeButton: true, maxWidth: '320px' })
-      .setLngLat([business.longitude, business.latitude])
-      .setHTML(popupHtml(business, t('discovery.map.viewBusiness')))
-      .addTo(map);
-  }, [businesses, mapReady, selectedBusinessId, t]);
+  }, [mapReady, mappableBusinesses, selectedBusinessId, t]);
 
   if (loadError) {
     return (
-      <div className="flex h-full min-h-[420px] items-center justify-center rounded-[1.75rem] bg-slate-100 p-8 text-center">
+      <div className="flex h-full min-h-[300px] items-center justify-center rounded-[1.75rem] bg-slate-100 p-8 text-center">
         <div>
           <MapPinned className="mx-auto h-9 w-9 text-slate-400" />
           <div className="mt-3 font-extrabold text-slate-900">{t('discovery.map.unavailable')}</div>
@@ -202,14 +188,14 @@ export function DiscoveryMap({ businesses, selectedBusinessId, userLocation, onS
   }
 
   return (
-    <div className="relative h-full min-h-[420px] overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-100 shadow-[0_24px_80px_rgba(15,23,42,.12)]">
+    <div className="relative h-full min-h-[300px] overflow-hidden rounded-[1.75rem] border border-slate-200 bg-slate-100 shadow-[0_24px_80px_rgba(15,23,42,.12)]">
       <div ref={containerRef} className="absolute inset-0" />
       {!mapReady && (
         <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center bg-white/85 backdrop-blur-sm">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-violet-200 border-t-violet-600" />
         </div>
       )}
-      {userLocation && (
+      {validUserLocation && (
         <div className="pointer-events-none absolute bottom-4 left-4 z-10 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-white/95 px-3 py-2 text-xs font-extrabold text-blue-700 shadow-lg backdrop-blur">
           <LocateFixed className="h-3.5 w-3.5" />
           {t('discovery.map.yourLocation')}

@@ -3501,6 +3501,15 @@
       "unavailable": "Mapa no disponible",
       "unavailableDescription": "La lista sigue disponible mientras se restablece el proveedor del mapa.",
       "noPins": "Estos negocios todavía no han añadido coordenadas al mapa."
+    },
+    "details": {
+      "panelDescription": "Detalles del negocio en el marketplace de Velliqo.",
+      "rating": "Valoración",
+      "startingPrice": "Precio inicial",
+      "about": "Sobre este negocio",
+      "location": "Ubicación",
+      "services": "Servicios",
+      "distanceAway": "A {{distance}}"
     }
   }
 }
