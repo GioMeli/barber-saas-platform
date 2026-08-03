@@ -3501,6 +3501,15 @@
       "unavailable": "Harita kullanılamıyor",
       "unavailableDescription": "Harita sağlayıcısı yeniden bağlanırken işletme listesi kullanılabilir.",
       "noPins": "Bu işletmeler henüz harita koordinatlarını eklemedi."
+    },
+    "details": {
+      "panelDescription": "Velliqo marketplace işletme ayrıntıları.",
+      "rating": "Puan",
+      "startingPrice": "Başlangıç fiyatı",
+      "about": "Bu işletme hakkında",
+      "location": "Konum",
+      "services": "Hizmetler",
+      "distanceAway": "{{distance}} uzakta"
     }
   }
 }

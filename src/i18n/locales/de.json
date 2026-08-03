@@ -3501,6 +3501,15 @@
       "unavailable": "Karte nicht verfügbar",
       "unavailableDescription": "Die Unternehmensliste bleibt verfügbar, während die Kartenverbindung wiederhergestellt wird.",
       "noPins": "Diese Unternehmen haben noch keine Kartenkoordinaten hinterlegt."
+    },
+    "details": {
+      "panelDescription": "Unternehmensdetails aus dem Velliqo Marketplace.",
+      "rating": "Bewertung",
+      "startingPrice": "Startpreis",
+      "about": "Über dieses Unternehmen",
+      "location": "Standort",
+      "services": "Dienstleistungen",
+      "distanceAway": "{{distance}} entfernt"
     }
   }
 }
