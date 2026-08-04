@@ -17,6 +17,7 @@ import { Switch } from '@/components/ui/switch';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
 import { ImageUploader } from '@/components/ui/image-uploader';
+import { ensureBusinessPwaIcons } from '@/pwa/businessIconAssets';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import {
@@ -94,6 +95,7 @@ export default function Staff() {
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
   const businessSlug = businessMemberships[0]?.businesses?.slug;
+  const businessLogoUrl = businessMemberships[0]?.businesses?.logo_url;
 
   const [staff, setStaff] = useState<any[]>([]);
   const [services, setServices] = useState<any[]>([]);
@@ -121,6 +123,13 @@ export default function Staff() {
   useEffect(() => {
     if (businessId) void fetchData();
   }, [businessId]);
+
+  useEffect(() => {
+    if (!businessId || !businessLogoUrl) return;
+    void ensureBusinessPwaIcons(businessId, businessLogoUrl).catch((error) => {
+      console.error('Unable to prepare business PWA icons', error);
+    });
+  }, [businessId, businessLogoUrl]);
 
   useEffect(() => {
     if (!businessId) return;
@@ -557,6 +566,11 @@ export default function Staff() {
 
       if (accessChanged) {
         const action = formData.personal_access_enabled ? 'enable' : 'revoke';
+        if (action === 'enable' && businessId && businessLogoUrl) {
+          await ensureBusinessPwaIcons(businessId, businessLogoUrl).catch((error) => {
+            console.error('Unable to prepare business PWA icons before staff access', error);
+          });
+        }
         const { data: accessData, error: accessError } = await supabase.functions.invoke(
           'manage-staff-access',
           {
@@ -590,6 +604,11 @@ export default function Staff() {
   const runAccessAction = async (employeeId: string, action: 'enable' | 'resend' | 'revoke') => {
     setAccessActionLoading(true);
     try {
+      if (action !== 'revoke' && businessId && businessLogoUrl) {
+        await ensureBusinessPwaIcons(businessId, businessLogoUrl).catch((error) => {
+          console.error('Unable to prepare business PWA icons before staff access', error);
+        });
+      }
       const { data, error } = await supabase.functions.invoke('manage-staff-access', {
         body: { action, employee_id: employeeId, origin: window.location.origin },
       });
@@ -622,6 +641,11 @@ export default function Staff() {
     const params = new URLSearchParams({ employee: employeeId });
     if (employeeName?.trim()) params.set('employeeName', employeeName.trim());
     return `${window.location.origin}/staff/${businessSlug}?${params.toString()}`;
+  };
+
+  const staffAppLinkLabel = () => {
+    if (!businessSlug) return window.location.host;
+    return `${window.location.host}/staff/${businessSlug}/…`;
   };
 
   const copyStaffAppLink = async () => {
@@ -1068,7 +1092,7 @@ export default function Staff() {
           }
         }}
       >
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-2xl p-0">
+        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-x-hidden overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">
               {editingId ? t('staff.dialog.editTitle') : t('staff.dialog.addTitle')}
@@ -1078,7 +1102,7 @@ export default function Staff() {
             </p>
           </DialogHeader>
 
-          <div className="space-y-8 px-5 py-6 sm:px-7">
+          <div className="min-w-0 space-y-8 px-5 py-6 sm:px-7">
             <section className="space-y-4">
               <SectionTitle
                 title={t('staff.profile.title')}
@@ -1193,16 +1217,19 @@ export default function Staff() {
                     </div>
 
                     {businessSlug && (
-                      <div className="flex flex-col gap-2 rounded-xl border bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
-                        <div className="min-w-0">
+                      <div className="flex min-w-0 max-w-full flex-col gap-2 overflow-hidden rounded-xl border bg-background p-3 sm:flex-row sm:items-center sm:justify-between">
+                        <div className="min-w-0 flex-1 overflow-hidden">
                           <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                             {t('staff.personalAccess.appLink')}
                           </div>
-                          <div className="mt-1 truncate text-sm font-semibold">
-                            {staffAppLink(editingId, formData.name)}
+                          <div
+                            className="mt-1 max-w-full truncate text-sm font-semibold"
+                            title={staffAppLink(editingId, formData.name)}
+                          >
+                            {staffAppLinkLabel()}
                           </div>
                         </div>
-                        <Button type="button" variant="outline" size="sm" onClick={() => void copyStaffAppLink()}>
+                        <Button className="shrink-0" type="button" variant="outline" size="sm" onClick={() => void copyStaffAppLink()}>
                           <Copy className="mr-2 h-4 w-4" />
                           {t('staff.personalAccess.actions.copyLink')}
                         </Button>

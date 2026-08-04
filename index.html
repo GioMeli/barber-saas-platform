@@ -21,12 +21,12 @@
           const employee = params.get('employee') || '';
           if (/^[a-z0-9-]{2,120}$/i.test(parts[1]) && /^[a-z0-9-]{2,120}$/i.test(employee)) {
             const employeeName = (params.get('employeeName') || '').trim().slice(0, 60);
-            const query = new URLSearchParams({ v: '6' });
+            const query = new URLSearchParams({ v: '7' });
             if (employeeName) query.set('employeeName', employeeName);
             manifestHref = `/staff-manifest/${encodeURIComponent(parts[1])}/${encodeURIComponent(employee)}.webmanifest?${query.toString()}`;
           }
         } else if (parts[0] === 'app' && parts[1] && /^[a-z0-9-]{2,120}$/i.test(parts[1])) {
-          manifestHref = `/store-manifest/${encodeURIComponent(parts[1])}.webmanifest?v=2`;
+          manifestHref = `/store-manifest/${encodeURIComponent(parts[1])}.webmanifest?v=3`;
         }
 
         const manifest = document.createElement('link');
