@@ -320,7 +320,7 @@ export default function Finance() {
           <h1 className="app-page-title">{t('finance.title')}</h1>
           <p className="app-page-description">{t('finance.description')}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div data-tour="finance-actions" className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => void refresh()} disabled={loading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             {t('finance.actions.refresh')}
@@ -329,14 +329,14 @@ export default function Finance() {
             <Download className="mr-2 h-4 w-4" />
             {t('finance.actions.export')}
           </Button>
-          <Button onClick={openNewExpense}>
+          <Button data-tour="finance-new-expense" onClick={openNewExpense}>
             <Plus className="mr-2 h-4 w-4" />
             {t('finance.actions.addExpense')}
           </Button>
         </div>
       </header>
 
-      <Card className="overflow-hidden rounded-3xl border-primary/10 shadow-card">
+      <Card data-tour="finance-filters" className="overflow-hidden rounded-3xl border-primary/10 shadow-card">
         <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-fuchsia-400" />
         <CardContent className="p-4 sm:p-5">
           <div className="grid gap-4 xl:grid-cols-[1fr_1fr_auto] xl:items-end">
@@ -368,11 +368,12 @@ export default function Finance() {
         </CardContent>
       </Card>
 
-      <div className="flex w-full max-w-md rounded-2xl border bg-muted/35 p-1">
+      <div data-tour="finance-view-tabs" className="flex w-full max-w-md rounded-2xl border bg-muted/35 p-1">
         {(['overview', 'expenses'] as const).map((item) => (
           <button
             key={item}
             type="button"
+            data-tour={`finance-tab-${item}`}
             onClick={() => setView(item)}
             className={`flex flex-1 items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition ${
               view === item ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground'
@@ -402,7 +403,7 @@ export default function Finance() {
       ) : data && view === 'overview' ? (
         <FinanceOverview data={data} />
       ) : data ? (
-        <section className="space-y-4">
+        <section data-tour="finance-expenses" className="space-y-4">
           <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h2 className="text-xl font-extrabold tracking-tight">{t('finance.expenses.title')}</h2>
@@ -449,7 +450,7 @@ export default function Finance() {
       ) : null}
 
       <Dialog open={expenseDialogOpen} onOpenChange={(open) => !savingExpense && setExpenseDialogOpen(open)}>
-        <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="finance-expense-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle>
               {editingExpense ? t('finance.dialog.editTitle') : t('finance.dialog.createTitle')}

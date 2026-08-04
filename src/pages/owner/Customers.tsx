@@ -388,7 +388,7 @@ export default function Customers() {
           </p>
         </div>
 
-        <Button onClick={() => handleOpenDialog()}>
+        <Button data-tour="customers-new-button" onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
           {t('customers.actions.add')}
         </Button>
@@ -430,7 +430,7 @@ export default function Customers() {
         />
       </section>
 
-      <Card className="rounded-2xl shadow-card">
+      <Card data-tour="customers-segments" className="rounded-2xl shadow-card">
         <CardContent className="p-3 sm:p-4">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1">
@@ -513,20 +513,23 @@ export default function Customers() {
         </CardContent>
       </Card>
 
-      <div className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
+      <div data-tour="customers-tabs" className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
         <MainTabButton
+          dataTour="customers-tab-customers"
           active={activeTab === 'customers'}
           label={t('customers.tabs.customers')}
           icon={<Users className="h-4 w-4" />}
           onClick={() => setActiveTab('customers')}
         />
         <MainTabButton
+          dataTour="customers-tab-records"
           active={activeTab === 'records'}
           label={t('customers.tabs.records')}
           icon={<BookOpenText className="h-4 w-4" />}
           onClick={() => setActiveTab('records')}
         />
         <MainTabButton
+          dataTour="customers-tab-history"
           active={activeTab === 'history'}
           label={t('customers.tabs.history')}
           icon={<History className="h-4 w-4" />}
@@ -609,7 +612,7 @@ export default function Customers() {
           </CardContent>
         </Card>
       ) : (
-        <Card className="overflow-hidden rounded-2xl shadow-card">
+        <Card data-tour="customers-records" className="overflow-hidden rounded-2xl shadow-card">
           <CardContent className="p-0">
             <div className="hidden overflow-x-auto lg:block">
               <Table>
@@ -909,7 +912,7 @@ export default function Customers() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="customers-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId
@@ -1002,15 +1005,18 @@ function MainTabButton({
   label,
   icon,
   onClick,
+  dataTour,
 }: {
   active: boolean;
   label: string;
   icon: React.ReactNode;
   onClick: () => void;
+  dataTour?: string;
 }) {
   return (
     <button
       type="button"
+      data-tour={dataTour}
       onClick={onClick}
       className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
         active

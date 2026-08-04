@@ -489,26 +489,26 @@ export default function Marketing() {
           <h1 className="app-page-title">{t('marketing.title')}</h1>
           <p className="app-page-description">{t('marketing.description')}</p>
         </div>
-        <Button onClick={openCreateCampaign}>
+        <Button data-tour="marketing-new-button" onClick={openCreateCampaign}>
           <Plus className="mr-2 h-4 w-4" />
           {t('marketing.actions.newCampaign')}
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section data-tour="marketing-metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard icon={<Users className="h-5 w-5" />} label={t('marketing.metrics.reachableCustomers')} value={reachableCustomers} />
         <MetricCard icon={<WandSparkles className="h-5 w-5" />} label={t('marketing.metrics.activeAutomations')} value={activeAutomations} />
         <MetricCard icon={<Star className="h-5 w-5" />} label={t('marketing.metrics.averageRating')} value={averageRating ? averageRating.toFixed(1) : '—'} detail={t('marketing.metrics.publishedReviews', { count: publishedReviews.length })} />
         <MetricCard icon={<BarChart3 className="h-5 w-5" />} label={t('marketing.metrics.attributedRevenue')} value={currency.format(attributedRevenue)} />
       </section>
 
-      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as MarketingTab)} className="mt-6">
-        <TabsList className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-muted/50 p-1 md:grid-cols-3 xl:grid-cols-5">
-          <TabsTrigger value="overview" className="rounded-xl py-2.5">{t('marketing.tabs.overview')}</TabsTrigger>
-          <TabsTrigger value="campaigns" className="rounded-xl py-2.5">{t('marketing.tabs.campaigns')}</TabsTrigger>
-          <TabsTrigger value="automations" className="rounded-xl py-2.5">{t('marketing.tabs.automations')}</TabsTrigger>
-          <TabsTrigger value="delivery" className="rounded-xl py-2.5">{t('marketing.tabs.delivery')}</TabsTrigger>
-          <TabsTrigger value="reviews" className="rounded-xl py-2.5">
+      <Tabs data-tour="marketing-workspace" value={activeTab} onValueChange={(value) => setActiveTab(value as MarketingTab)} className="mt-6">
+        <TabsList data-tour="marketing-tabs" className="grid h-auto w-full grid-cols-2 gap-1 rounded-2xl bg-muted/50 p-1 md:grid-cols-3 xl:grid-cols-5">
+          <TabsTrigger data-tour="marketing-tab-overview" value="overview" className="rounded-xl py-2.5">{t('marketing.tabs.overview')}</TabsTrigger>
+          <TabsTrigger data-tour="marketing-tab-campaigns" value="campaigns" className="rounded-xl py-2.5">{t('marketing.tabs.campaigns')}</TabsTrigger>
+          <TabsTrigger data-tour="marketing-tab-automations" value="automations" className="rounded-xl py-2.5">{t('marketing.tabs.automations')}</TabsTrigger>
+          <TabsTrigger data-tour="marketing-tab-delivery" value="delivery" className="rounded-xl py-2.5">{t('marketing.tabs.delivery')}</TabsTrigger>
+          <TabsTrigger data-tour="marketing-tab-reviews" value="reviews" className="rounded-xl py-2.5">
             {t('marketing.tabs.reviews')}
             {pendingReviews > 0 && <Badge className="ml-2 h-5 min-w-5 justify-center px-1.5">{pendingReviews}</Badge>}
           </TabsTrigger>
@@ -704,7 +704,7 @@ export default function Marketing() {
       </Tabs>
 
       <Dialog open={campaignDialogOpen} onOpenChange={setCampaignDialogOpen}>
-        <DialogContent className="max-h-[94vh] max-w-2xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="marketing-campaign-form" className="max-h-[94vh] max-w-2xl overflow-y-auto rounded-3xl">
           <DialogHeader><DialogTitle>{editingCampaignId ? t('marketing.dialog.editCampaign') : t('marketing.dialog.newCampaign')}</DialogTitle></DialogHeader>
           <div className="grid gap-5 py-4 sm:grid-cols-2">
             <Field label={t('marketing.fields.campaignName')} className="sm:col-span-2"><Input value={campaignForm.name} onChange={(event) => setCampaignForm((current) => ({ ...current, name: event.target.value }))} /></Field>

@@ -717,6 +717,7 @@ export default function Sales() {
             {t('sales.actions.refresh')}
           </Button>
           <Button
+            data-tour="sales-new-button"
             onClick={() => {
               resetCheckout();
               setWorkspaceTab('checkout');
@@ -735,7 +736,7 @@ export default function Sales() {
         </div>
       )}
 
-      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <section data-tour="sales-metrics" className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <SalesMetric
           icon={Euro}
           label={t('sales.metrics.todayRevenue')}
@@ -765,14 +766,16 @@ export default function Sales() {
         />
       </section>
 
-      <div className="flex w-full gap-1 overflow-x-auto rounded-2xl border bg-card p-1.5 shadow-card">
+      <div data-tour="sales-workspace-tabs" className="flex w-full gap-1 overflow-x-auto rounded-2xl border bg-card p-1.5 shadow-card">
         <WorkspaceTabButton
+          dataTour="sales-checkout-tab"
           active={workspaceTab === 'checkout'}
           onClick={() => setWorkspaceTab('checkout')}
           icon={ShoppingCart}
           label={t('sales.tabs.checkout')}
         />
         <WorkspaceTabButton
+          dataTour="sales-transactions-tab"
           active={workspaceTab === 'transactions'}
           onClick={() => setWorkspaceTab('transactions')}
           icon={History}
@@ -804,8 +807,9 @@ export default function Sales() {
                 )}
               </div>
 
-              <div className="mt-4 flex gap-2 overflow-x-auto pb-1">
+              <div data-tour="sales-catalog-tabs" className="mt-4 flex gap-2 overflow-x-auto pb-1">
                 <CatalogTabButton
+                  dataTour="sales-catalog-appointments"
                   active={catalogTab === 'appointments'}
                   icon={CalendarCheck2}
                   label={t('sales.catalog.appointments')}
@@ -813,6 +817,7 @@ export default function Sales() {
                   onClick={() => setCatalogTab('appointments')}
                 />
                 <CatalogTabButton
+                  dataTour="sales-catalog-services"
                   active={catalogTab === 'services'}
                   icon={Scissors}
                   label={t('sales.catalog.services')}
@@ -820,6 +825,7 @@ export default function Sales() {
                   onClick={() => setCatalogTab('services')}
                 />
                 <CatalogTabButton
+                  dataTour="sales-catalog-products"
                   active={catalogTab === 'products'}
                   icon={Package}
                   label={t('sales.catalog.products')}
@@ -827,6 +833,7 @@ export default function Sales() {
                   onClick={() => setCatalogTab('products')}
                 />
                 <CatalogTabButton
+                  dataTour="sales-catalog-custom"
                   active={catalogTab === 'custom'}
                   icon={Plus}
                   label={t('sales.catalog.custom')}
@@ -905,7 +912,7 @@ export default function Sales() {
             </CardContent>
           </Card>
 
-          <Card className="overflow-hidden rounded-2xl shadow-card xl:sticky xl:top-24">
+          <Card data-tour="sales-cart" className="overflow-hidden rounded-2xl shadow-card xl:sticky xl:top-24">
             <CardHeader className="border-b bg-muted/25 pb-4">
               <div className="flex items-center justify-between gap-3">
                 <div>
@@ -1076,7 +1083,7 @@ export default function Sales() {
           </Card>
         </div>
       ) : (
-        <Card className="overflow-hidden rounded-2xl shadow-card">
+        <Card data-tour="sales-transactions" className="overflow-hidden rounded-2xl shadow-card">
           <CardHeader className="border-b bg-muted/25 pb-4">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div>
@@ -1285,15 +1292,18 @@ function WorkspaceTabButton({
   onClick,
   icon: Icon,
   label,
+  dataTour,
 }: {
   active: boolean;
   onClick: () => void;
   icon: ComponentType<{ className?: string }>;
   label: string;
+  dataTour?: string;
 }) {
   return (
     <button
       type="button"
+      data-tour={dataTour}
       onClick={onClick}
       className={`flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-sm font-bold transition sm:flex-none ${
         active
@@ -1313,16 +1323,19 @@ function CatalogTabButton({
   icon: Icon,
   label,
   count,
+  dataTour,
 }: {
   active: boolean;
   onClick: () => void;
   icon: ComponentType<{ className?: string }>;
   label: string;
   count?: number;
+  dataTour?: string;
 }) {
   return (
     <button
       type="button"
+      data-tour={dataTour}
       onClick={onClick}
       className={`flex shrink-0 items-center gap-2 rounded-xl border px-3 py-2 text-sm font-semibold transition ${
         active

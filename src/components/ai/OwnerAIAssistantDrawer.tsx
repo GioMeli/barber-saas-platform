@@ -131,7 +131,7 @@ export default function OwnerAIAssistantDrawer({
       <Sheet open={open} onOpenChange={onOpenChange}>
         <SheetContent
           side="right"
-          className="hidden h-[100dvh] w-[min(96vw,540px)] max-w-[540px] overflow-hidden border-l border-violet-300/20 p-0 lg:flex lg:flex-col"
+          className="hidden h-[100dvh] w-[min(96vw,760px)] max-w-[760px] overflow-hidden border-l border-violet-300/20 p-0 lg:flex lg:flex-col 2xl:w-[min(58vw,860px)] 2xl:max-w-[860px]"
           data-tour="ai-drawer"
         >
           <SheetHeader className="relative shrink-0 overflow-hidden border-b border-white/10 bg-[#111027] px-5 py-5 text-left text-white">
@@ -353,7 +353,7 @@ function DrawerMessageBubble({
   if (isUser) {
     return (
       <div className="flex justify-end">
-        <div className="max-w-[88%] rounded-3xl rounded-br-lg bg-primary px-4 py-3 text-sm leading-6 text-primary-foreground">
+        <div className="max-w-[78%] rounded-3xl rounded-br-lg bg-primary px-4 py-3 text-sm leading-6 text-primary-foreground">
           {message.content}
         </div>
       </div>

@@ -476,8 +476,8 @@ export default function OutlookCalendarView({
   };
 
   return (
-    <div className="outlook-calendar-page">
-      <header className="outlook-calendar-toolbar">
+    <div className="outlook-calendar-page" data-tour="calendar-workspace">
+      <header className="outlook-calendar-toolbar" data-tour="calendar-toolbar">
         <div className="outlook-calendar-nav">
           <Button variant="outline" size="sm" onClick={() => api()?.today()}>
             {t('calendar.actions.today')}
@@ -519,11 +519,12 @@ export default function OutlookCalendarView({
             <option value="unassigned">{t('calendar.labels.unassigned')}</option>
           </select>
 
-          <div className="outlook-view-switcher">
+          <div className="outlook-view-switcher" data-tour="calendar-views">
             {CALENDAR_VIEWS.map((item) => (
               <button
                 key={item}
                 type="button"
+                data-tour={`calendar-view-${item}`}
                 className={view === item ? 'active' : ''}
                 onClick={() => changeView(item)}
               >
@@ -535,6 +536,7 @@ export default function OutlookCalendarView({
 
           <Button
             variant="outline"
+            data-tour="calendar-delay-button"
             className="outlook-calendar-delay-button"
             onClick={onCreateDelay}
           >
@@ -543,6 +545,7 @@ export default function OutlookCalendarView({
 
           <Button
             variant="outline"
+            data-tour="calendar-options-button"
             className="outlook-calendar-options-button"
             onClick={() => setPreferencesOpen(true)}
           >
@@ -553,6 +556,7 @@ export default function OutlookCalendarView({
           </Button>
 
           <Button
+            data-tour="calendar-new-button"
             className="outlook-calendar-new-button"
             onClick={() => onNewAppointment()}
           >
@@ -657,7 +661,7 @@ export default function OutlookCalendarView({
       </button>
 
       <Sheet open={preferencesOpen} onOpenChange={setPreferencesOpen}>
-        <SheetContent className="w-full overflow-y-auto sm:max-w-md">
+        <SheetContent data-tour="calendar-options-panel" className="w-full overflow-y-auto sm:max-w-md">
           <SheetHeader className="pr-8">
             <SheetTitle>{t('calendar.preferences.title')}</SheetTitle>
             <SheetDescription>

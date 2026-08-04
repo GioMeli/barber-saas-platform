@@ -332,7 +332,7 @@ export default function Services() {
           </p>
         </div>
 
-        <Button onClick={() => handleOpenDialog()}>
+        <Button data-tour="services-new-button" onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
           {t('services.actions.add')}
         </Button>
@@ -359,7 +359,7 @@ export default function Services() {
         />
       </section>
 
-      <Card className="overflow-hidden rounded-2xl shadow-card">
+      <Card data-tour="services-list" className="overflow-hidden rounded-2xl shadow-card">
         <div className="border-b px-4 py-4 sm:px-6">
           <div className="grid gap-4 xl:grid-cols-[1fr_auto_auto] xl:items-center">
             <div className="relative">
@@ -505,7 +505,7 @@ export default function Services() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) resetImageState(); }}>
-        <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="services-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId ? t('services.dialog.editTitle') : t('services.dialog.addTitle')}

@@ -744,7 +744,7 @@ export default function Calendar() {
           }
         }}
       >
-        <DialogContent className="max-h-[92vh] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="calendar-delay-form" className="max-h-[92vh] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <AlertTriangle className="h-5 w-5 text-amber-600" />
@@ -963,7 +963,7 @@ export default function Calendar() {
           }
         }}
       >
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-2xl p-0">
+        <DialogContent data-tour="calendar-appointment-form" className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">{t('calendar.newAppointment.title')}</DialogTitle>
             <p className="text-sm text-muted-foreground">

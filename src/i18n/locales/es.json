@@ -3758,6 +3758,13 @@
         "billing": "Revisa la suscripción, facturas y controles de pago. Aquí se aplicarán los derechos Standard, Pro y Premium.",
         "ai": "Abre el espacio completo de Velliqo AI para conversaciones, briefings, alertas, recomendaciones y acciones confirmadas.",
         "training": "Abre cursos, guías PDF y futuros vídeos de formación para los principales procesos de Velliqo."
+      },
+      "jumpTo": "Ir a una sección del recorrido",
+      "chapterProgress": "{{current}} / {{total}} en esta sección",
+      "detailsTitle": "Acciones y opciones explicadas aquí",
+      "interactiveNote": "Velliqo abrió esta pestaña o formulario como demostración. No se guarda nada salvo que pulses expresamente Guardar o Crear.",
+      "chapters": {
+        "workspace": "Conceptos básicos del espacio de trabajo"
       }
     }
   }

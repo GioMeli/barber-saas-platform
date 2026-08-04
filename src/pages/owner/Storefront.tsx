@@ -309,7 +309,7 @@ export default function Storefront() {
         </div>
       </header>
 
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
+      <section data-tour="storefront-readiness" className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_320px]">
         <Card className="overflow-hidden rounded-3xl border-primary/10 shadow-card">
           <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-fuchsia-400" />
           <CardContent className="p-5 sm:p-6">
@@ -343,16 +343,16 @@ export default function Storefront() {
         </Card>
       </section>
 
-      <div className="scrollbar-subtle sticky top-16 z-20 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur md:top-0">
+      <div data-tour="storefront-sections" className="scrollbar-subtle sticky top-16 z-20 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur md:top-0">
         {sections.map((section) => (
-          <button key={section.id} type="button" onClick={() => setActiveSection(section.id)} className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${activeSection === section.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
+          <button key={section.id} data-tour={`storefront-section-${section.id}`} type="button" onClick={() => setActiveSection(section.id)} className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${activeSection === section.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
             {section.icon}{section.label}
           </button>
         ))}
       </div>
 
       {activeSection === 'overview' && (
-        <section className="grid gap-6 lg:grid-cols-2">
+        <section data-tour="storefront-overview" className="grid gap-6 lg:grid-cols-2">
           <Card className="rounded-3xl shadow-card">
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
@@ -394,7 +394,7 @@ export default function Storefront() {
       )}
 
       {activeSection === 'branding' && (
-        <Card className="rounded-3xl shadow-card">
+        <Card data-tour="storefront-branding" className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
             <SectionHeader icon={<ImageIcon className="h-5 w-5" />} title={t('storefront.owner.branding.title')} description={t('storefront.owner.branding.description')} />
             <div className="grid gap-6 md:grid-cols-2">
@@ -423,7 +423,7 @@ export default function Storefront() {
       )}
 
       {activeSection === 'contact' && (
-        <Card className="rounded-3xl shadow-card">
+        <Card data-tour="storefront-contact" className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
             <SectionHeader icon={<Phone className="h-5 w-5" />} title={t('storefront.owner.contact.title')} description={t('storefront.owner.contact.description')} />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -435,7 +435,7 @@ export default function Storefront() {
       )}
 
       {activeSection === 'location' && (
-        <Card className="rounded-3xl shadow-card">
+        <Card data-tour="storefront-location" className="rounded-3xl shadow-card">
           <CardContent className="space-y-7 p-5 sm:p-7">
             <SectionHeader icon={<MapPin className="h-5 w-5" />} title={t('storefront.owner.location.title')} description={t('storefront.owner.location.description')} />
             <div className="grid gap-5 sm:grid-cols-2">
@@ -461,7 +461,7 @@ export default function Storefront() {
 
 
       {activeSection === 'booking' && (
-        <div className="space-y-6">
+        <div data-tour="storefront-booking" className="space-y-6">
           <Card className="rounded-3xl shadow-card">
             <CardContent className="space-y-7 p-5 sm:p-7">
               <SectionHeader icon={<CalendarClock className="h-5 w-5" />} title={t('settings.bookingPreferences.title')} description={t('settings.bookingPreferences.description')} />
@@ -486,7 +486,7 @@ export default function Storefront() {
 
 
       {activeSection === 'online' && (
-        <div className="space-y-6">
+        <div data-tour="storefront-online" className="space-y-6">
           <Card className="rounded-3xl shadow-card">
             <CardContent className="space-y-7 p-5 sm:p-7">
               <SectionHeader icon={<Search className="h-5 w-5" />} title={t('storefront.owner.online.title')} description={t('storefront.owner.online.description')} />
@@ -524,7 +524,7 @@ export default function Storefront() {
       )}
 
       {activeSection === 'sharing' && (
-        <div className="space-y-6">
+        <div data-tour="storefront-sharing" className="space-y-6">
           <Card className="rounded-3xl shadow-card">
             <CardContent className="p-5 sm:p-7">
               <SectionHeader icon={<Link2 className="h-5 w-5" />} title={t('storefront.owner.sharing.title')} description={t('storefront.owner.sharing.description')} />
@@ -542,7 +542,7 @@ export default function Storefront() {
         </div>
       )}
 
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 shadow-[0_-12px_30px_rgba(15,23,42,.08)] backdrop-blur md:left-[272px]">
+      <div data-tour="storefront-save" className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 shadow-[0_-12px_30px_rgba(15,23,42,.08)] backdrop-blur md:left-[272px]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4">
           <div className="min-w-0">
             <div className="text-sm font-semibold">{isDirty ? t('storefront.owner.status.unsaved') : t('storefront.owner.status.saved')}</div>

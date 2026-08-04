@@ -1,0 +1,42 @@
+Phase 11B — Wider Owner AI Drawer + Detailed Interactive Tour
+
+Main implementation:
+- src/components/ai/OwnerAIAssistantDrawer.tsx
+- src/components/tour/OwnerProductTour.tsx
+
+Tour targets / page instrumentation:
+- src/components/calendar/OutlookCalendarView.tsx
+- src/components/layouts/owner-shell/OwnerSidebar.tsx
+- src/pages/owner/Home.tsx
+- src/pages/owner/Calendar.tsx
+- src/pages/owner/Sales.tsx
+- src/pages/owner/Finance.tsx
+- src/pages/owner/Customers.tsx
+- src/pages/owner/Staff.tsx
+- src/pages/owner/Services.tsx
+- src/pages/owner/Products.tsx
+- src/pages/owner/Marketing.tsx
+- src/pages/owner/Posts.tsx
+- src/pages/owner/Gallery.tsx
+- src/pages/owner/Storefront.tsx
+- src/pages/owner/Business.tsx
+- src/pages/owner/Reports.tsx
+- src/pages/owner/Billing.tsx
+- src/pages/owner/ai/AIHub.tsx
+- src/pages/owner/TrainingPortal.tsx
+
+Locales:
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- src/i18n/locales/ru.json
+- src/i18n/locales/ar.json
+- src/i18n/locales/hi.json
+
+Validation and documentation:
+- scripts/check-owner-shell.mjs
+- docs/PHASE-11B-AI-DRAWER-DETAILED-OWNER-TOUR.md
+
+No new Supabase migration or Edge Function is required.

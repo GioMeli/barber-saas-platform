@@ -346,13 +346,13 @@ export default function Business() {
           </p>
         </div>
 
-        <Button onClick={openCreate}>
+        <Button data-tour="business-new-closure" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" />
           {t('business.actions.addClosure')}
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section data-tour="business-summary" className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
           title={t('business.summary.active.title')}
           value={activeClosures.length}
@@ -375,9 +375,9 @@ export default function Business() {
         />
       </section>
 
-      <Card className="overflow-hidden rounded-2xl shadow-card">
+      <Card data-tour="business-closures" className="overflow-hidden rounded-2xl shadow-card">
         <div className="border-b px-4 py-4 sm:px-6">
-          <div className="scrollbar-subtle flex gap-2 overflow-x-auto">
+          <div data-tour="business-filters" className="scrollbar-subtle flex gap-2 overflow-x-auto">
             <FilterButton
               active={activeFilter === 'active'}
               label={t('business.filters.active')}
@@ -495,7 +495,7 @@ export default function Business() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="business-closure-form" className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
               {editingId ? t('business.dialog.editTitle') : t('business.dialog.addTitle')}

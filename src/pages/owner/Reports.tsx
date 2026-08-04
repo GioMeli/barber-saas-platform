@@ -297,7 +297,7 @@ export default function Reports() {
             {t('reports.description')}
           </p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div data-tour="reports-actions" className="flex flex-wrap gap-2">
           <Button variant="outline" onClick={() => { void fetchData(); void refreshFinance(); }}>
             <RefreshCw className="mr-2 h-4 w-4" />{t('reports.actions.refresh')}
           </Button>
@@ -310,7 +310,7 @@ export default function Reports() {
         </div>
       </header>
 
-      <Card className="overflow-hidden rounded-3xl border-primary/10 shadow-card print:hidden">
+      <Card data-tour="reports-filters" className="overflow-hidden rounded-3xl border-primary/10 shadow-card print:hidden">
         <div className="h-1 bg-gradient-to-r from-primary via-violet-400 to-fuchsia-400" />
         <CardContent className="p-4 sm:p-5">
           <div className="grid gap-4 xl:grid-cols-[1fr_1fr_auto] xl:items-end">
@@ -367,11 +367,12 @@ export default function Reports() {
             />
           </section>
 
-          <div className="scrollbar-subtle sticky top-16 z-20 -mx-1 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur print:hidden md:top-0">
+          <div data-tour="reports-tabs" className="scrollbar-subtle sticky top-16 z-20 -mx-1 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur print:hidden md:top-0">
             {tabs.map((tab) => (
               <button
                 key={tab.id}
                 type="button"
+                data-tour={`reports-tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                   activeTab === tab.id

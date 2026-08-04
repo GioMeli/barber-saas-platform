@@ -3758,6 +3758,13 @@
         "billing": "Prüfen Sie Abonnement, Rechnungen und Abrechnung. Hier werden die finalen Standard-, Pro- und Premium-Rechte durchgesetzt.",
         "ai": "Öffnen Sie den vollständigen Velliqo-AI-Bereich für Dialoge, Briefings, Warnungen, Empfehlungen und bestätigte Aktionen.",
         "training": "Öffnen Sie strukturierte Kurse, PDF-Anleitungen und zukünftige Trainingsvideos für wichtige Workflows."
+      },
+      "jumpTo": "Zu einem Tour-Abschnitt wechseln",
+      "chapterProgress": "{{current}} / {{total}} in diesem Abschnitt",
+      "detailsTitle": "Hier erklärte Aktionen und Optionen",
+      "interactiveNote": "Velliqo hat diesen Tab oder dieses Formular zur Demonstration geöffnet. Es wird nichts gespeichert, außer du klickst bewusst auf Speichern oder Erstellen.",
+      "chapters": {
+        "workspace": "Grundlagen des Arbeitsbereichs"
       }
     }
   }
