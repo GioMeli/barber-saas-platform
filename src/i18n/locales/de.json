@@ -2668,14 +2668,29 @@
     },
     "access": {
       "title": "Mitarbeiter-App öffnen",
-      "description": "Geben Sie die vom Geschäftsinhaber genehmigte Mitarbeiter-E-Mail ein. Wir senden einen sicheren Einmal-Link.",
+      "description": "Verwende die vom Inhaber freigegebene Mitarbeiter-E-Mail einmal auf diesem Gerät. Danach wird die sichere Sitzung beim Öffnen der App automatisch wiederhergestellt.",
       "email": "Mitarbeiter-E-Mail",
       "sending": "Link wird gesendet…",
       "sendLink": "Sicheren Zugangslink senden",
-      "securityNote": "Kein Passwort erforderlich. Der Zugang funktioniert nur, solange der Geschäftsinhaber ihn aktiviert lässt.",
+      "securityNote": "Kein Passwort erforderlich. Dieses Gerät bleibt angemeldet, bis du dich abmeldest, Browserdaten löschst oder der Inhaber den Zugriff widerruft.",
       "emailRequired": "Geben Sie die genehmigte Mitarbeiter-E-Mail ein.",
       "linkFailed": "Zugangslink konnte nicht gesendet werden",
-      "linkSent": "Prüfen Sie Ihre E-Mails auf den sicheren Link zur Mitarbeiter-App."
+      "linkSent": "Prüfen Sie Ihre E-Mails auf den sicheren Link zur Mitarbeiter-App.",
+      "premiumBadge": "Persönlicher Mitarbeiterbereich",
+      "premiumTitle": "Dein Kalender. Deine Kunden. Ein fokussierter Arbeitsbereich.",
+      "premiumDescription": "Verwalte ausschließlich deine zugewiesenen Termine, erstelle Buchungen aus der Kundenliste des Betriebs und synchronisiere jede Änderung in Echtzeit mit dem Inhaberbereich.",
+      "oneTimeTitle": "Einmalige Geräteaktivierung",
+      "oneTimeDescription": "Nach dem ersten sicheren E-Mail-Link stellt der Browser oder die installierte App deine Sitzung automatisch wieder her.",
+      "features": {
+        "schedule": "Persönlicher Kalender",
+        "scheduleDescription": "Nur deine eigenen Termine und Verfügbarkeit.",
+        "sync": "Live-Synchronisierung",
+        "syncDescription": "Jede Änderung erscheint im Inhaberbereich.",
+        "secure": "Vom Inhaber gesteuert",
+        "secureDescription": "Der Zugriff endet sofort, wenn der Inhaber ihn deaktiviert.",
+        "install": "Installierbare App",
+        "installDescription": "Füge deinen persönlichen Bereich auf Mobilgerät oder Desktop hinzu."
+      }
     },
     "calendar": {
       "today": "Heute",
@@ -2700,7 +2715,24 @@
       "notes": "Notizen",
       "required": "Kunde, Leistung, Datum und Uhrzeit ausfüllen.",
       "saving": "Wird erstellt…",
-      "save": "Termin erstellen"
+      "save": "Termin erstellen",
+      "customerPickerLabel": "Geschäftskunde",
+      "customerPickerDescription": "Suche und wähle jeden Kunden dieses Betriebs aus oder lege für diesen Termin einen neuen Kunden an.",
+      "customerCount": "{{count}} Kunden",
+      "customerPickerPlaceholder": "Kundenliste des Betriebs durchsuchen",
+      "customerSearchPlaceholder": "Nach Name, Telefon oder E-Mail suchen…",
+      "customerEmpty": "Kein passender Kunde gefunden.",
+      "newCustomer": "Neuen Kunden anlegen",
+      "newCustomerDescription": "Neue Kontaktdaten unten eingeben",
+      "noContact": "Keine Kontaktdaten"
+    },
+    "install": {
+      "title": "Persönliche Staff App installieren",
+      "description": "Installiere diesen persönlichen Arbeitsbereich auf deinem Smartphone oder Computer. Er öffnet direkt deinen Kalender und hält dieses Gerät sicher angemeldet.",
+      "action": "Persönliche App installieren",
+      "installed": "Installiert",
+      "iosInstructions": "Auf iPhone oder iPad: Teilen und anschließend „Zum Home-Bildschirm“ wählen.",
+      "browserInstructions": "Öffne das Browsermenü und wähle „App installieren“ oder „Zum Startbildschirm hinzufügen“, sofern verfügbar."
     }
   },
   "sales": {

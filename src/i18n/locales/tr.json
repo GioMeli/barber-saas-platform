@@ -2668,14 +2668,29 @@
     },
     "access": {
       "title": "Personel uygulamanızı açın",
-      "description": "İşletme sahibinin onayladığı personel e-postasını girin. Güvenli, tek kullanımlık giriş bağlantısı göndereceğiz.",
+      "description": "İşletme sahibinin onayladığı personel e-postasını bu cihazda yalnızca bir kez kullanın. Daha sonra güvenli oturum uygulama her açıldığında otomatik olarak geri yüklenir.",
       "email": "Personel e-postası",
       "sending": "Bağlantı gönderiliyor…",
       "sendLink": "Güvenli erişim bağlantısı gönder",
-      "securityNote": "Parola gerekmez. Erişim yalnızca işletme sahibi etkin tuttuğu sürece çalışır.",
+      "securityNote": "Parola gerekmez. Çıkış yapana, tarayıcı verilerini temizleyene veya işletme sahibi erişimi iptal edene kadar bu cihaz oturumda kalır.",
       "emailRequired": "Onaylanmış personel e-postasını girin.",
       "linkFailed": "Erişim bağlantısı gönderilemedi",
-      "linkSent": "Güvenli personel uygulaması bağlantısı için e-postanızı kontrol edin."
+      "linkSent": "Güvenli personel uygulaması bağlantısı için e-postanızı kontrol edin.",
+      "premiumBadge": "Kişisel personel çalışma alanı",
+      "premiumTitle": "Takviminiz. Müşterileriniz. Odaklanmış tek çalışma alanı.",
+      "premiumDescription": "Yalnızca size atanmış randevuları yönetin, işletmenin müşteri listesinden rezervasyon oluşturun ve tüm değişiklikleri işletme sahibi alanıyla gerçek zamanlı eşitleyin.",
+      "oneTimeTitle": "Tek seferlik cihaz aktivasyonu",
+      "oneTimeDescription": "İlk güvenli e-posta bağlantısından sonra tarayıcı veya yüklü uygulama oturumunuzu otomatik olarak geri yükler.",
+      "features": {
+        "schedule": "Kişisel takvim",
+        "scheduleDescription": "Yalnızca kendi randevularınız ve uygunluğunuz.",
+        "sync": "Canlı sahip eşitlemesi",
+        "syncDescription": "Her değişiklik işletme sahibi alanında görünür.",
+        "secure": "Sahip kontrollü erişim",
+        "secureDescription": "İşletme sahibi kapattığında erişim hemen durur.",
+        "install": "Yüklenebilir uygulama",
+        "installDescription": "Kişisel alanınızı telefona veya masaüstüne ekleyin."
+      }
     },
     "calendar": {
       "today": "Bugün",
@@ -2700,7 +2715,24 @@
       "notes": "Notlar",
       "required": "Müşteri, hizmet, tarih ve saat alanlarını tamamlayın.",
       "saving": "Oluşturuluyor…",
-      "save": "Randevu oluştur"
+      "save": "Randevu oluştur",
+      "customerPickerLabel": "İşletme müşterisi",
+      "customerPickerDescription": "Bu işletmeye ait herhangi bir müşteriyi arayıp seçin veya bu randevu için yeni müşteri oluşturun.",
+      "customerCount": "{{count}} müşteri",
+      "customerPickerPlaceholder": "İşletme müşteri listesinde ara",
+      "customerSearchPlaceholder": "Ad, telefon veya e-posta ile ara…",
+      "customerEmpty": "Eşleşen müşteri bulunamadı.",
+      "newCustomer": "Yeni müşteri oluştur",
+      "newCustomerDescription": "Yeni iletişim bilgilerini aşağıya girin",
+      "noContact": "İletişim bilgisi yok"
+    },
+    "install": {
+      "title": "Kişisel personel uygulamanızı yükleyin",
+      "description": "Bu kişisel çalışma alanını telefonunuza veya bilgisayarınıza yükleyin. Doğrudan takviminizde açılır ve bu cihazı güvenli şekilde oturumda tutar.",
+      "action": "Kişisel uygulamayı yükle",
+      "installed": "Yüklendi",
+      "iosInstructions": "iPhone veya iPad’de Paylaş’a, ardından “Ana Ekrana Ekle”ye dokunun.",
+      "browserInstructions": "Tarayıcı menüsünü açın ve mevcutsa “Uygulamayı yükle” veya “Ana ekrana ekle”yi seçin."
     }
   },
   "sales": {

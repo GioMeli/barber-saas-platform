@@ -6,6 +6,10 @@
       "destination": "/api/store-manifest?slug=:slug"
     },
     {
+      "source": "/staff-manifest/:slug/:employeeId.webmanifest",
+      "destination": "/api/staff-manifest?slug=:slug&employeeId=:employeeId"
+    },
+    {
       "source": "/staff-manifest/:slug.webmanifest",
       "destination": "/api/staff-manifest?slug=:slug"
     },

@@ -1,8 +1,17 @@
+import { createClient } from '@supabase/supabase-js';
 
-            import { createClient } from "@supabase/supabase-js";
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-            const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-            const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+const isStaffRoute =
+  typeof window !== 'undefined' &&
+  (window.location.pathname.startsWith('/staff/') || window.location.pathname === '/staff-portal');
 
-            export const supabase = createClient(supabaseUrl, supabaseAnonKey);
-            
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    // The dedicated staff client handles magic-link callbacks on staff routes.
+    detectSessionInUrl: !isStaffRoute,
+  },
+});

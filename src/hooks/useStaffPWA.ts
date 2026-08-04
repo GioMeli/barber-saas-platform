@@ -7,6 +7,11 @@ type StaffBusiness = {
   logo_url?: string | null;
 };
 
+type StaffEmployee = {
+  id: string;
+  name: string;
+};
+
 function ensureLink(id: string, rel: string) {
   let link = document.getElementById(id) as HTMLLinkElement | null;
   if (!link) link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement | null;
@@ -31,28 +36,36 @@ function ensureMeta(id: string, name: string) {
   return meta;
 }
 
-export function useStaffPWA(business: StaffBusiness | null | undefined) {
+export function useStaffPWA(
+  business: StaffBusiness | null | undefined,
+  employee?: StaffEmployee | null
+) {
   const status = usePWAStatus();
-  const enabled = Boolean(business?.slug);
+  const enabled = Boolean(business?.slug && employee?.id);
 
   React.useEffect(() => {
-    if (!business?.slug) return;
+    if (!business?.slug || !employee?.id) return;
 
+    const employeeName = encodeURIComponent(employee.name || 'Staff');
     const manifest = ensureLink('staff-pwa-manifest', 'manifest');
-    manifest.href = `/staff-manifest/${encodeURIComponent(business.slug)}.webmanifest`;
+    manifest.href = `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?employeeName=${employeeName}`;
 
     const icon = ensureLink('staff-apple-touch-icon', 'apple-touch-icon');
     icon.href = business.logo_url || '/brand/velliqo-ai.png';
 
     const titleMeta = ensureMeta('staff-apple-title', 'apple-mobile-web-app-title');
-    titleMeta.content = `${business.name} Staff`;
+    titleMeta.content = `${employee.name} · ${business.name}`;
+
+    const previousTitle = document.title;
+    document.title = `${employee.name} · ${business.name} Staff`;
 
     return () => {
       manifest.href = '/manifest.webmanifest';
       icon.href = '/brand/velliqo-ai.png';
       titleMeta.content = 'Velliqo';
+      document.title = previousTitle;
     };
-  }, [business?.slug, business?.name, business?.logo_url]);
+  }, [business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
 
   return { ...status, enabled };
 }
