@@ -28,12 +28,22 @@ export function StaffInstallDialog({
 }: Props) {
   const { t } = useTranslation();
   const [prompting, setPrompting] = React.useState(false);
+  const [promptFailed, setPromptFailed] = React.useState(false);
+
+  React.useEffect(() => {
+    if (open) setPromptFailed(false);
+  }, [open]);
 
   const handleInstall = async () => {
     setPrompting(true);
-    const installed = await onInstall();
-    setPrompting(false);
-    if (installed) onOpenChange(false);
+    setPromptFailed(false);
+    try {
+      const installed = await onInstall();
+      if (installed) onOpenChange(false);
+      else setPromptFailed(true);
+    } finally {
+      setPrompting(false);
+    }
   };
 
   return (
@@ -63,7 +73,7 @@ export function StaffInstallDialog({
                 <div className="mt-1 text-sm text-emerald-800">{t('staffPortal.install.installedDescription')}</div>
               </div>
             </div>
-          ) : canPromptInstall ? (
+          ) : canPromptInstall && !promptFailed ? (
             <>
               <div className="rounded-2xl border bg-slate-50 p-4 text-sm leading-6 text-slate-700">
                 {t('staffPortal.install.nativePromptDescription')}

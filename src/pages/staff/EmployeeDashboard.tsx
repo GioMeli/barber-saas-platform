@@ -306,7 +306,14 @@ export default function EmployeeDashboard() {
       email: email.trim().toLowerCase(),
       options: {
         shouldCreateUser: false,
-        emailRedirectTo: `${window.location.origin}/staff/${slug}${searchParams.get('employee') ? `?employee=${encodeURIComponent(searchParams.get('employee') || '')}` : ''}`,
+        emailRedirectTo: (() => {
+          const employee = searchParams.get('employee') || '';
+          if (!employee) return `${window.location.origin}/staff/${slug}`;
+          const params = new URLSearchParams({ employee });
+          const employeeName = searchParams.get('employeeName');
+          if (employeeName) params.set('employeeName', employeeName);
+          return `${window.location.origin}/staff/${slug}?${params.toString()}`;
+        })(),
       },
     });
     setLinkSending(false);

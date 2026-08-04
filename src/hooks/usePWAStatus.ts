@@ -1,21 +1,39 @@
 import React from 'react';
 import { PWA_READY_EVENT, PWA_UPDATE_EVENT, type PWAUpdateDetail } from '@/pwa/registerServiceWorker';
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
-};
+import {
+  clearDeferredInstallPrompt,
+  getDeferredInstallPrompt,
+  INSTALL_PROMPT_CHANGED_EVENT,
+  type BeforeInstallPromptEventLike,
+  type InstallChoice,
+} from '@/pwa/installPromptStore';
 
 function isStandalone() {
   const iosStandalone = 'standalone' in navigator && Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
   return window.matchMedia('(display-mode: standalone)').matches || iosStandalone;
 }
 
+async function waitForInstallChoice(prompt: BeforeInstallPromptEventLike) {
+  const promptResult = await prompt.prompt();
+  if (promptResult && typeof promptResult === 'object' && 'outcome' in promptResult) {
+    return promptResult as InstallChoice;
+  }
+  if (!prompt.userChoice) return null;
+
+  let timeoutId = 0;
+  const timeout = new Promise<null>((resolve) => {
+    timeoutId = window.setTimeout(() => resolve(null), 15_000);
+  });
+  const result = await Promise.race([prompt.userChoice, timeout]);
+  window.clearTimeout(timeoutId);
+  return result;
+}
+
 export function usePWAStatus() {
   const [isOnline, setIsOnline] = React.useState(() => navigator.onLine);
   const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
   const [isInstalled, setIsInstalled] = React.useState(isStandalone);
-  const [installPrompt, setInstallPrompt] = React.useState<BeforeInstallPromptEvent | null>(null);
+  const [installPrompt, setInstallPrompt] = React.useState<BeforeInstallPromptEventLike | null>(() => getDeferredInstallPrompt());
   const [registration, setRegistration] = React.useState<ServiceWorkerRegistration | null>(null);
   const [updateAvailable, setUpdateAvailable] = React.useState(false);
 
@@ -26,10 +44,7 @@ export function usePWAStatus() {
       setIsInstalled(true);
       setInstallPrompt(null);
     };
-    const handleBeforeInstall = (event: Event) => {
-      event.preventDefault();
-      setInstallPrompt(event as BeforeInstallPromptEvent);
-    };
+    const handlePromptChanged = () => setInstallPrompt(getDeferredInstallPrompt());
     const handleReady = (event: Event) => {
       const detail = (event as CustomEvent<PWAUpdateDetail>).detail;
       setRegistration(detail.registration);
@@ -43,9 +58,11 @@ export function usePWAStatus() {
     window.addEventListener('online', handleOnline);
     window.addEventListener('offline', handleOffline);
     window.addEventListener('appinstalled', handleInstalled);
-    window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+    window.addEventListener(INSTALL_PROMPT_CHANGED_EVENT, handlePromptChanged);
     window.addEventListener(PWA_READY_EVENT, handleReady);
     window.addEventListener(PWA_UPDATE_EVENT, handleUpdate);
+
+    handlePromptChanged();
 
     if ('serviceWorker' in navigator) {
       void navigator.serviceWorker.getRegistration('/').then((value) => {
@@ -60,18 +77,27 @@ export function usePWAStatus() {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
       window.removeEventListener('appinstalled', handleInstalled);
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.removeEventListener(INSTALL_PROMPT_CHANGED_EVENT, handlePromptChanged);
       window.removeEventListener(PWA_READY_EVENT, handleReady);
       window.removeEventListener(PWA_UPDATE_EVENT, handleUpdate);
     };
   }, []);
 
   const install = React.useCallback(async () => {
-    if (!installPrompt) return false;
-    await installPrompt.prompt();
-    const choice = await installPrompt.userChoice;
-    if (choice.outcome === 'accepted') setInstallPrompt(null);
-    return choice.outcome === 'accepted';
+    const prompt = installPrompt || getDeferredInstallPrompt();
+    if (!prompt) return false;
+
+    try {
+      const choice = await waitForInstallChoice(prompt);
+      clearDeferredInstallPrompt(prompt);
+      setInstallPrompt(null);
+      return choice?.outcome === 'accepted';
+    } catch (error) {
+      console.warn('Velliqo install prompt failed', error);
+      clearDeferredInstallPrompt(prompt);
+      setInstallPrompt(null);
+      return false;
+    }
   }, [installPrompt]);
 
   const applyUpdate = React.useCallback(() => {

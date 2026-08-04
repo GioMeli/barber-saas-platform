@@ -95,7 +95,7 @@ Deno.serve(async (request) => {
     }
 
     const baseUrl = resolveBaseUrl(body.origin);
-    const staffAppUrl = `${baseUrl}/staff/${encodeURIComponent(business.slug)}?employee=${encodeURIComponent(employee.id)}`;
+    const staffAppUrl = `${baseUrl}/staff/${encodeURIComponent(business.slug)}?employee=${encodeURIComponent(employee.id)}&employeeName=${encodeURIComponent(employee.name || 'Staff')}`;
     const { data: linkData, error: linkError } = await admin.auth.admin.generateLink({
       type: 'magiclink',
       email,

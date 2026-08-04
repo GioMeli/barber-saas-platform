@@ -47,13 +47,22 @@ export default async function handler(request: any, response: any) {
   const fullName = `${employeeName} · ${business.name}`;
   const shortName = `${employeeName.slice(0, 14)} Staff`;
   const employeeParam = encodeURIComponent(employeeId);
+  const employeeNameParam = encodeURIComponent(employeeName);
   const businessLogo = typeof business.logo_url === 'string' && /^https?:\/\//i.test(business.logo_url)
     ? business.logo_url
     : null;
+  // Chromium installability requires explicit 192x192 and 512x512 icon entries.
+  // Business logos uploaded by Velliqo are browser-readable image resources, so the
+  // same tenant logo is advertised at both required sizes and the platform icons
+  // remain as raster fallbacks for browsers that reject a custom logo resource.
   const appIcons = businessLogo
     ? [
-        { src: businessLogo, sizes: 'any', purpose: 'any' },
-        { src: businessLogo, sizes: 'any', purpose: 'maskable' },
+        { src: businessLogo, sizes: '192x192', purpose: 'any' },
+        { src: businessLogo, sizes: '512x512', purpose: 'any' },
+        { src: businessLogo, sizes: '192x192', purpose: 'maskable' },
+        { src: businessLogo, sizes: '512x512', purpose: 'maskable' },
+        { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
       ]
     : [
         { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
@@ -67,7 +76,7 @@ export default async function handler(request: any, response: any) {
     name: fullName,
     short_name: shortName,
     description: `${employeeName}'s personal appointment workspace for ${business.name}.`,
-    start_url: `/staff/${business.slug}?source=pwa&employee=${employeeParam}`,
+    start_url: `/staff/${business.slug}?source=pwa&employee=${employeeParam}&employeeName=${employeeNameParam}`,
     scope: `/staff/${business.slug}`,
     display: 'standalone',
     orientation: 'any',
@@ -77,8 +86,8 @@ export default async function handler(request: any, response: any) {
     prefer_related_applications: false,
     icons: appIcons,
     shortcuts: [
-      { name: 'My schedule', url: `/staff/${business.slug}?employee=${employeeParam}`, icons: [{ src: shortcutIcon, sizes: businessLogo ? 'any' : '192x192' }] },
-      { name: 'New appointment', url: `/staff/${business.slug}?employee=${employeeParam}&action=new`, icons: [{ src: shortcutIcon, sizes: businessLogo ? 'any' : '192x192' }] },
+      { name: 'My schedule', url: `/staff/${business.slug}?employee=${employeeParam}&employeeName=${employeeNameParam}`, icons: [{ src: shortcutIcon, sizes: '192x192' }] },
+      { name: 'New appointment', url: `/staff/${business.slug}?employee=${employeeParam}&employeeName=${employeeNameParam}&action=new`, icons: [{ src: shortcutIcon, sizes: '192x192' }] },
     ],
   };
 
