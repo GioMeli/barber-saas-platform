@@ -47,6 +47,21 @@ export default async function handler(request: any, response: any) {
   const fullName = `${employeeName} · ${business.name}`;
   const shortName = `${employeeName.slice(0, 14)} Staff`;
   const employeeParam = encodeURIComponent(employeeId);
+  const businessLogo = typeof business.logo_url === 'string' && /^https?:\/\//i.test(business.logo_url)
+    ? business.logo_url
+    : null;
+  const appIcons = businessLogo
+    ? [
+        { src: businessLogo, sizes: 'any', purpose: 'any' },
+        { src: businessLogo, sizes: 'any', purpose: 'maskable' },
+      ]
+    : [
+        { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+        { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+      ];
+  const shortcutIcon = businessLogo || '/icons/icon-192.png';
   const manifest = {
     id: `/staff/${business.slug}/app/${employeeParam}`,
     name: fullName,
@@ -60,15 +75,10 @@ export default async function handler(request: any, response: any) {
     theme_color: '#6d28d9',
     categories: ['business', 'productivity'],
     prefer_related_applications: false,
-    icons: [
-      { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/icons/icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-      { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-    ],
+    icons: appIcons,
     shortcuts: [
-      { name: 'My schedule', url: `/staff/${business.slug}?employee=${employeeParam}`, icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
-      { name: 'New appointment', url: `/staff/${business.slug}?employee=${employeeParam}&action=new`, icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+      { name: 'My schedule', url: `/staff/${business.slug}?employee=${employeeParam}`, icons: [{ src: shortcutIcon, sizes: businessLogo ? 'any' : '192x192' }] },
+      { name: 'New appointment', url: `/staff/${business.slug}?employee=${employeeParam}&action=new`, icons: [{ src: shortcutIcon, sizes: businessLogo ? 'any' : '192x192' }] },
     ],
   };
 

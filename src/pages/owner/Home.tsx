@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Button } from '@/components/ui/button';
@@ -30,12 +30,12 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import DailyStaffSchedule from '@/components/dashboard/DailyStaffSchedule';
+import { OwnerAppointmentDetailsSheet, type OwnerAppointmentStatus } from '@/components/appointments/OwnerAppointmentDetailsSheet';
 import { BusinessHealth, TodaysAlerts } from '@/components/dashboard/OwnerDashboardInsights';
 
 export default function OwnerHome() {
   const { businessMemberships } = useAuth();
   const business = businessMemberships[0]?.businesses;
-  const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
 
@@ -54,6 +54,8 @@ export default function OwnerHome() {
   const [staffBreaks, setStaffBreaks] = useState<any[]>([]);
   const [unreadNotifications, setUnreadNotifications] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null);
+  const [appointmentDetailsOpen, setAppointmentDetailsOpen] = useState(false);
 
   useEffect(() => {
     if (business?.id) void fetchDashboardData();
@@ -109,7 +111,7 @@ export default function OwnerHome() {
         supabase
           .from('appointments')
           .select(
-            '*, customers(full_name), employees(id, name, photo_url), appointment_services(services(name))'
+            '*, customers(id, full_name, phone, email), employees(id, name, photo_url), appointment_services(services(name))'
           )
           .eq('business_id', business.id)
           .gte('start_time', todayStart)
@@ -229,6 +231,35 @@ export default function OwnerHome() {
     }
   };
 
+  const updateAppointmentStatus = async (
+    appointmentId: string,
+    status: OwnerAppointmentStatus
+  ) => {
+    if (!business?.id) return false;
+
+    try {
+      const { error } = await supabase.rpc('owner_update_appointment_status', {
+        p_business_id: business.id,
+        p_appointment_id: appointmentId,
+        p_status: status,
+      });
+
+      if (error) throw error;
+      toast.success(t('calendar.messages.updated'));
+      setAppointmentDetailsOpen(false);
+      await fetchDashboardData(true);
+      return true;
+    } catch (error: any) {
+      toast.error(error.message || t('calendar.errors.updateAppointment'));
+      return false;
+    }
+  };
+
+  const cancelAppointment = async (appointmentId: string) => {
+    if (!window.confirm(t('calendar.confirmCancel'))) return;
+    await updateAppointmentStatus(appointmentId, 'cancelled_by_business');
+  };
+
   const todayKey = format(new Date(), 'yyyy-MM-dd');
 
   const activeClosure = closures.find(
@@ -323,9 +354,10 @@ export default function OwnerHome() {
               loading={loading}
               startHour={6}
               endHour={22}
-              onAppointmentClick={() =>
-                navigate('/dashboard/calendar')
-              }
+              onAppointmentClick={(appointment) => {
+                setSelectedAppointment(appointment);
+                setAppointmentDetailsOpen(true);
+              }}
             />
           </CardContent>
         </Card>
@@ -372,6 +404,14 @@ export default function OwnerHome() {
           />
         </aside>
       </section>
+
+      <OwnerAppointmentDetailsSheet
+        appointment={selectedAppointment}
+        open={appointmentDetailsOpen}
+        onOpenChange={setAppointmentDetailsOpen}
+        onCancel={cancelAppointment}
+        onStatusChange={updateAppointmentStatus}
+      />
 
       <TodaysAlerts
         unreadNotifications={unreadNotifications}
