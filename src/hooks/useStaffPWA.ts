@@ -1,7 +1,9 @@
 import React from 'react';
 import { usePWAStatus } from '@/hooks/usePWAStatus';
+import { businessPwaIconPublicUrl } from '@/pwa/businessIconAssets';
 
 type StaffBusiness = {
+  id?: string | null;
   slug: string;
   name: string;
   logo_url?: string | null;
@@ -39,7 +41,7 @@ function ensureMeta(id: string, name: string) {
 function staffManifestHref(business: StaffBusiness, employee: StaffEmployee) {
   const query = new URLSearchParams({
     employeeName: employee.name || 'Staff',
-    v: '6',
+    v: '7',
   });
   return `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?${query.toString()}`;
 }
@@ -59,7 +61,7 @@ export function useStaffPWA(
     if (manifest.getAttribute('href') !== nextManifestHref) manifest.href = nextManifestHref;
 
     const icon = ensureLink('app-apple-touch-icon', 'apple-touch-icon');
-    icon.href = business.logo_url || '/icons/icon-192.png';
+    icon.href = business.logo_url && business.id ? businessPwaIconPublicUrl(business.id, 192) : business.logo_url || '/icons/icon-192.png';
 
     const titleMeta = ensureMeta('app-apple-title', 'apple-mobile-web-app-title');
     titleMeta.content = `${employee.name} · ${business.name}`;
@@ -80,7 +82,7 @@ export function useStaffPWA(
       });
       document.title = previousTitle;
     };
-  }, [business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
+  }, [business?.id, business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
 
   return { ...status, enabled };
 }

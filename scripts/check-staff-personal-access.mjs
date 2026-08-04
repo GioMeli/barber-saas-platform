@@ -14,6 +14,7 @@ const requireText = (file, text, label = text) => {
   'src/pages/staff/EmployeeDashboard.tsx',
   'src/hooks/useStaffPWA.ts',
   'src/pwa/installPromptStore.ts',
+  'src/pwa/businessIconAssets.ts',
   'src/hooks/useStaffAuth.ts',
   'src/db/staffSupabase.ts',
   'api/staff-manifest.ts',
@@ -47,7 +48,7 @@ requireText('src/db/staffSupabase.ts', 'autoRefreshToken: true', 'automatic staf
 requireText('src/db/staffSupabase.ts', 'velliqo.staff.auth.${employeeSessionId', 'employee-isolated staff auth storage');
 requireText('src/db/supabase.ts', 'detectSessionInUrl: !isStaffRoute', 'staff magic-link client isolation');
 requireText('src/hooks/useStaffPWA.ts', 'employee?.id', 'employee-specific manifest');
-requireText('src/hooks/useStaffPWA.ts', "v: '6'", 'staff manifest cache/version hardening');
+requireText('src/hooks/useStaffPWA.ts', "v: '7'", 'staff manifest cache/version hardening');
 requireText('src/pwa/installPromptStore.ts', 'beforeinstallprompt', 'early install prompt capture');
 requireText('src/hooks/usePWAStatus.ts', '15_000', 'install prompt timeout recovery');
 requireText('index.html', '/staff-manifest/', 'staff manifest preloaded before React');
@@ -62,6 +63,14 @@ requireText('src/staff/trustedDevice.ts', "functions.invoke('staff-device-auth'"
 requireText('src/staff/trustedDevice.ts', 'staff_register_trusted_device', 'trusted-device registration');
 requireText('src/pages/owner/Staff.tsx', 'owner-staff-sync-', 'owner realtime staff profile sync');
 requireText('api/staff-manifest.ts', "'/icons/icon-512.png'", 'valid 512 PWA icon');
+requireText('api/staff-manifest.ts', 'pwa/icon-${size}.png', 'tenant PWA icon path');
+requireText('api/staff-manifest.ts', 'tenant192', 'tenant 192 PWA icon');
+requireText('api/staff-manifest.ts', 'tenant512', 'tenant 512 PWA icon');
+requireText('src/pwa/businessIconAssets.ts', 'canvas.toBlob', 'exact PNG business icon generation');
+requireText('src/pwa/businessIconAssets.ts', "upsert: true", 'business PWA icon refresh');
+requireText('src/pages/owner/Staff.tsx', 'staffAppLinkLabel', 'compact staff-link presentation');
+requireText('src/pages/owner/Staff.tsx', 'overflow-x-hidden', 'staff dialog horizontal overflow protection');
+requireText('src/pages/owner/Staff.tsx', 'ensureBusinessPwaIcons', 'existing business logo PWA backfill');
 requireText('api/staff-manifest.ts', '?employee=${employeeParam}', 'employee identity in PWA shortcuts');
 
 const migration45 = read('supabase/migrations/00045_velliqo_staff_personal_access.sql');
@@ -143,5 +152,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Phase 10C.7 premium trusted-device staff experience checks passed.');
-console.log('Trusted-device sign-in, installable employee PWA, self-service profile sync, customer selection, tenant isolation and realtime owner sync verified.');
+console.log('Phase 10C.10 staff access, compact-link and tenant-icon checks passed.');
+console.log('Trusted-device sign-in, tenant-branded PWA icons, compact owner access UI, tenant isolation and realtime owner sync verified.');

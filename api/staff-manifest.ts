@@ -29,7 +29,7 @@ export default async function handler(request: any, response: any) {
   }
 
   const query = new URLSearchParams({
-    select: 'name,slug,logo_url,status',
+    select: 'id,name,slug,logo_url,status',
     slug: `eq.${slug}`,
     status: 'eq.active',
     limit: '1',
@@ -51,16 +51,19 @@ export default async function handler(request: any, response: any) {
   const businessLogo = typeof business.logo_url === 'string' && /^https?:\/\//i.test(business.logo_url)
     ? business.logo_url
     : null;
-  // Chromium installability requires explicit 192x192 and 512x512 icon entries.
-  // Business logos uploaded by Velliqo are browser-readable image resources, so the
-  // same tenant logo is advertised at both required sizes and the platform icons
-  // remain as raster fallbacks for browsers that reject a custom logo resource.
+  const storageBase = `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/images`;
+  const tenantIcon = (size: 192 | 512) =>
+    `${storageBase}/businesses/${encodeURIComponent(business.id)}/pwa/icon-${size}.png`;
+  const tenant192 = tenantIcon(192);
+  const tenant512 = tenantIcon(512);
+
+  // Owner-side logo processing creates exact 192px and 512px PNG assets in a
+  // predictable tenant folder. The Velliqo icons remain as resilient fallbacks,
+  // but Chromium/Edge receives the business icon first for each required size.
   const appIcons = businessLogo
     ? [
-        { src: businessLogo, sizes: '192x192', purpose: 'any' },
-        { src: businessLogo, sizes: '512x512', purpose: 'any' },
-        { src: businessLogo, sizes: '192x192', purpose: 'maskable' },
-        { src: businessLogo, sizes: '512x512', purpose: 'maskable' },
+        { src: tenant192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: tenant512, sizes: '512x512', type: 'image/png', purpose: 'any' },
         { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
         { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
       ]
@@ -70,7 +73,7 @@ export default async function handler(request: any, response: any) {
         { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
         { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
       ];
-  const shortcutIcon = businessLogo || '/icons/icon-192.png';
+  const shortcutIcon = businessLogo ? tenant192 : '/icons/icon-192.png';
   const manifest = {
     id: `/staff/${business.slug}/app/${employeeParam}`,
     name: fullName,

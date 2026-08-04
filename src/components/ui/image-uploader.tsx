@@ -5,14 +5,16 @@ import { supabase } from '@/db/supabase';
 import { toast } from 'sonner';
 import { UploadCloud, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { syncBusinessPwaIconsFromBlob } from '@/pwa/businessIconAssets';
 
 interface ImageUploaderProps {
   value: string;
   onChange: (url: string) => void;
   folder?: string;
+  pwaIconBusinessId?: string | null;
 }
 
-export function ImageUploader({ value, onChange, folder = 'general' }: ImageUploaderProps) {
+export function ImageUploader({ value, onChange, folder = 'general', pwaIconBusinessId }: ImageUploaderProps) {
   const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
@@ -122,6 +124,14 @@ export function ImageUploader({ value, onChange, folder = 'general' }: ImageUplo
       const { data: publicUrlData } = supabase.storage
         .from('images')
         .getPublicUrl(fileName);
+
+      if (pwaIconBusinessId) {
+        try {
+          await syncBusinessPwaIconsFromBlob(pwaIconBusinessId, file, publicUrlData.publicUrl);
+        } catch (iconError) {
+          console.error('PWA icon generation failed:', iconError);
+        }
+      }
 
       onChange(publicUrlData.publicUrl);
       setProgress(100);

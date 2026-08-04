@@ -179,6 +179,7 @@ export default function Settings() {
               value={businessData.logo_url} 
               onChange={url => setBusinessData({...businessData, logo_url: url})} 
               folder={`businesses/${businessId}/logo`}
+              pwaIconBusinessId={businessId}
             />
           </div>
 

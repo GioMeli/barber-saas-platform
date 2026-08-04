@@ -18,7 +18,7 @@ export default async function handler(request: any, response: any) {
   }
 
   const query = new URLSearchParams({
-    select: 'name,slug,logo_url,pwa_enabled,pwa_short_name,status',
+    select: 'id,name,slug,logo_url,pwa_enabled,pwa_short_name,status',
     slug: `eq.${slug}`,
     status: 'eq.active',
     limit: '1',
@@ -35,7 +35,11 @@ export default async function handler(request: any, response: any) {
     return response.status(404).json({ error: 'Store app is unavailable' });
   }
 
-  const icon = business.logo_url || FALLBACK_ICON;
+  const hasBusinessLogo = typeof business.logo_url === 'string' && /^https?:\/\//i.test(business.logo_url);
+  const storageBase = `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/images`;
+  const tenant192 = `${storageBase}/businesses/${encodeURIComponent(business.id)}/pwa/icon-192.png`;
+  const tenant512 = `${storageBase}/businesses/${encodeURIComponent(business.id)}/pwa/icon-512.png`;
+  const icon = hasBusinessLogo ? tenant192 : FALLBACK_ICON;
   const shortName = String(business.pwa_short_name || business.name).slice(0, 30);
   const manifest = {
     id: `/app/${business.slug}`,
@@ -49,12 +53,17 @@ export default async function handler(request: any, response: any) {
     background_color: '#ffffff',
     theme_color: '#0f172a',
     prefer_related_applications: false,
-    icons: [
-      { src: icon, sizes: '192x192', purpose: 'any' },
-      { src: icon, sizes: '512x512', purpose: 'any' },
-      { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-    ],
+    icons: hasBusinessLogo
+      ? [
+          { src: tenant192, sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: tenant512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        ]
+      : [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        ],
     shortcuts: [
       { name: 'Book appointment', url: `/app/${business.slug}/book`, icons: [{ src: icon, sizes: '192x192' }] },
       { name: 'My appointments', url: `/app/${business.slug}/account`, icons: [{ src: icon, sizes: '192x192' }] },

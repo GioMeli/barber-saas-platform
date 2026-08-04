@@ -317,7 +317,7 @@ export default function Storefront() {
           <CardContent className="space-y-7 p-5 sm:p-7">
             <SectionHeader icon={<ImageIcon className="h-5 w-5" />} title={t('storefront.owner.branding.title')} description={t('storefront.owner.branding.description')} />
             <div className="grid gap-6 md:grid-cols-2">
-              <Field label={t('storefront.owner.branding.businessLogo')} hint={t('storefront.owner.branding.businessLogoHint')}><ImageUploader value={form.logo_url} onChange={(value) => update('logo_url', value)} folder={`businesses/${businessId ?? 'unknown'}/logo`} /></Field>
+              <Field label={t('storefront.owner.branding.businessLogo')} hint={t('storefront.owner.branding.businessLogoHint')}><ImageUploader value={form.logo_url} onChange={(value) => update('logo_url', value)} folder={`businesses/${businessId ?? 'unknown'}/logo`} pwaIconBusinessId={businessId} /></Field>
               <Field label={t('storefront.owner.branding.coverImage')} hint={t('storefront.owner.branding.coverImageHint')}><ImageUploader value={form.cover_image_url} onChange={(value) => update('cover_image_url', value)} folder={`businesses/${businessId ?? 'unknown'}/cover`} /></Field>
             </div>
             <Field label={t('storefront.owner.branding.storeDescription')} hint={t('storefront.owner.branding.storeDescriptionHint')}>
