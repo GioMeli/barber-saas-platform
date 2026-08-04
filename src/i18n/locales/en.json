@@ -1395,7 +1395,8 @@
         "latitude": "Latitude",
         "longitude": "Longitude",
         "coordinateHint": "Example: {{value}}",
-        "mapTitle": "Store location preview"
+        "mapTitle": "Store location preview",
+        "mapUrlHint": "Optional Google Maps or embeddable map URL used when coordinates are not provided."
       },
       "sharing": {
         "title": "Preview and sharing",
@@ -1413,13 +1414,16 @@
       },
       "validation": {
         "coordinates": "Latitude and longitude must be valid numbers",
-        "email": "Enter a valid public email address"
+        "email": "Enter a valid public email address",
+        "slug": "Use only lowercase letters, numbers and hyphens for the booking slug.",
+        "bookingRules": "Booking interval and maximum advance must be greater than zero, and minimum notice cannot be negative."
       },
       "messages": {
         "loadError": "Unable to load storefront details",
         "saveError": "Unable to save storefront changes",
         "updated": "Storefront updated successfully",
-        "linkCopied": "Public link copied"
+        "linkCopied": "Public link copied",
+        "iconSyncError": "Storefront saved, but the business app icons could not be refreshed. Try saving the logo again."
       },
       "online": {
         "title": "Search and booking presentation",
@@ -2344,7 +2348,12 @@
       "interval": "Booking Interval (mins)",
       "minNotice": "Min Notice (hours)",
       "maxAdvance": "Max Advance (days)",
-      "emailReminders": "Enable automated email reminders for customers"
+      "emailReminders": "Enable automated email reminders for customers",
+      "emailRemindersHint": "Send automated appointment reminder emails when reminder delivery is enabled.",
+      "customerPolicies": "Customer policies",
+      "customerPoliciesDescription": "Keep the cancellation policy and terms shown to customers in the same Storefront workspace.",
+      "cancellationPolicy": "Cancellation policy",
+      "termsConditions": "Terms & conditions"
     },
     "qr": {
       "title": "QR Code & App Link",
@@ -2699,8 +2708,8 @@
       "mobileDescription": "A secure, installable app for your own appointments.",
       "personalWorkspace": "Personal staff workspace",
       "signInTitle": "Sign in to your staff app",
-      "trustedReady": "This device is trusted. Enter your staff email to sign in without sending another authorization email.",
-      "verifyFirst": "This device needs one email verification before trusted sign-in becomes available.",
+      "trustedReady": "This device is trusted. Enter your approved staff email to continue securely.",
+      "verifyFirst": "Enter your approved staff email. If you already have an active session you will enter immediately; otherwise we will verify this device securely by email.",
       "signInEmail": "Sign in with email",
       "signingIn": "Signing in…",
       "or": "or",
@@ -2710,7 +2719,9 @@
       "trustedSignInFailed": "Trusted sign-in failed. Verify this device by email and try again.",
       "signedOutTrusted": "Signed out. This device remains trusted for your next sign-in.",
       "noRepeatedEmailTitle": "No repeated authorization emails",
-      "noRepeatedEmailDescription": "After the first verification on this device, normal sign-in uses the local trusted-device credential. A new email is only needed on a new or forgotten device."
+      "noRepeatedEmailDescription": "After the first verification on this device, your trusted-device credential can restore secure access. Email verification is required again only when the session or trusted device cannot be verified.",
+      "invalidLink": "This staff app link is incomplete. Ask the business owner for a new personal access link.",
+      "emailNotApproved": "This email is not approved for this staff app."
     },
     "calendar": {
       "today": "Today",

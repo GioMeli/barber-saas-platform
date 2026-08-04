@@ -7,8 +7,9 @@ export function businessPwaIconStoragePath(businessId: string, size: 192 | 512) 
   return `businesses/${businessId}/pwa/icon-${size}.png`;
 }
 
-export function businessPwaIconPublicUrl(businessId: string, size: 192 | 512) {
-  return supabase.storage.from('images').getPublicUrl(businessPwaIconStoragePath(businessId, size)).data.publicUrl;
+export function businessPwaIconPublicUrl(businessId: string, size: 192 | 512, version?: string | null) {
+  const url = supabase.storage.from('images').getPublicUrl(businessPwaIconStoragePath(businessId, size)).data.publicUrl;
+  return version ? `${url}?v=${encodeURIComponent(version)}` : url;
 }
 
 async function loadImageFromBlob(blob: Blob): Promise<HTMLImageElement> {
@@ -93,9 +94,15 @@ export async function ensureBusinessPwaIcons(businessId: string, logoUrl?: strin
   if (!businessId || !normalizedLogo) return;
 
   try {
-    if (window.localStorage.getItem(`${ICON_CACHE_PREFIX}${businessId}`) === normalizedLogo) return;
+    if (window.localStorage.getItem(`${ICON_CACHE_PREFIX}${businessId}`) === normalizedLogo) {
+      const { data, error } = await supabase.storage
+        .from('images')
+        .list(`businesses/${businessId}/pwa`, { limit: 10 });
+      const names = new Set((data || []).map((item) => item.name));
+      if (!error && names.has('icon-192.png') && names.has('icon-512.png')) return;
+    }
   } catch {
-    // Continue when localStorage is unavailable.
+    // The cache is only an optimisation. Missing assets are regenerated below.
   }
 
   const response = await fetch(normalizedLogo, { cache: 'no-store', mode: 'cors' });

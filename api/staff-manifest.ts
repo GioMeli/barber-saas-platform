@@ -29,7 +29,7 @@ export default async function handler(request: any, response: any) {
   }
 
   const query = new URLSearchParams({
-    select: 'id,name,slug,logo_url,status',
+    select: 'id,name,slug,logo_url,updated_at,status',
     slug: `eq.${slug}`,
     status: 'eq.active',
     limit: '1',
@@ -54,8 +54,9 @@ export default async function handler(request: any, response: any) {
   const storageBase = `${supabaseUrl.replace(/\/$/, '')}/storage/v1/object/public/images`;
   const tenantIcon = (size: 192 | 512) =>
     `${storageBase}/businesses/${encodeURIComponent(business.id)}/pwa/icon-${size}.png`;
-  const tenant192 = tenantIcon(192);
-  const tenant512 = tenantIcon(512);
+  const iconVersion = encodeURIComponent(String(business.updated_at || business.logo_url || '8'));
+  const tenant192 = `${tenantIcon(192)}?v=${iconVersion}`;
+  const tenant512 = `${tenantIcon(512)}?v=${iconVersion}`;
 
   // Owner-side logo processing creates exact 192px and 512px PNG assets in a
   // predictable tenant folder. The Velliqo icons remain as resilient fallbacks,
@@ -64,6 +65,7 @@ export default async function handler(request: any, response: any) {
     ? [
         { src: tenant192, sizes: '192x192', type: 'image/png', purpose: 'any' },
         { src: tenant512, sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: businessLogo, sizes: 'any', purpose: 'any' },
         { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
         { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
       ]
@@ -95,6 +97,6 @@ export default async function handler(request: any, response: any) {
   };
 
   response.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
-  response.setHeader('Cache-Control', 'private, max-age=300, stale-while-revalidate=3600');
+  response.setHeader('Cache-Control', 'private, max-age=0, must-revalidate');
   return response.status(200).send(JSON.stringify(manifest));
 }

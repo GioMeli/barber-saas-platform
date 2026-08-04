@@ -46,7 +46,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=300, stale-while-revalidate=3600"
+          "value": "public, max-age=0, must-revalidate"
         },
         {
           "key": "Content-Type",
@@ -59,7 +59,7 @@
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, max-age=300, stale-while-revalidate=3600"
+          "value": "private, max-age=0, must-revalidate"
         },
         {
           "key": "Content-Type",

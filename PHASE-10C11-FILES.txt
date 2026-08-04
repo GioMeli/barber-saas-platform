@@ -1,0 +1,24 @@
+Phase 10C.11 replacement files. Extract this ZIP over the repository root.
+
+api/staff-manifest.ts
+api/store-manifest.ts
+index.html
+scripts/check-demo-training-portal.mjs
+scripts/check-owner-shell.mjs
+scripts/check-staff-personal-access.mjs
+src/App.tsx
+src/components/layouts/owner-shell/navigation.ts
+src/hooks/useStaffPWA.ts
+src/i18n/locales/de.json
+src/i18n/locales/el.json
+src/i18n/locales/en.json
+src/i18n/locales/es.json
+src/i18n/locales/tr.json
+src/pages/demo/DemoModulePage.tsx
+src/pages/owner/Settings.tsx
+src/pages/owner/Storefront.tsx
+src/pages/public/BusinessHome.tsx
+src/pages/staff/EmployeeDashboard.tsx
+src/pwa/businessIconAssets.ts
+supabase/functions/staff-email-auth/index.ts
+vercel.json

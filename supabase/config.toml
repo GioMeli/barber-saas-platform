@@ -434,5 +434,8 @@ verify_jwt = false
 [functions.velliqo-ai-manager]
 verify_jwt = true
 
+[functions.staff-email-auth]
+verify_jwt = false
+
 [functions.process-ai-manager-automations]
 verify_jwt = false

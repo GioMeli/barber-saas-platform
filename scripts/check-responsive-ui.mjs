@@ -131,7 +131,6 @@ const ownerPages = [
   'Business',
   'Reports',
   'Billing',
-  'Settings',
 ];
 
 for (const page of ownerPages) {

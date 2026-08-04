@@ -33,9 +33,11 @@ for (const [file, source] of [['DemoOwnerLayout', layout], ['DemoModulePage', mo
 assert(context.includes('browser session') && context.includes('never saved to the database'), 'Demo local-only disclosure is missing.');
 assert(context.includes('useState') && context.includes('addAppointment') && context.includes('addCustomer'), 'Demo actions are not connected to local state.');
 assert(layout.includes('DEMO_NAVIGATION_ITEMS') && demoNavigation.includes('OWNER_NAVIGATION_ITEMS'), 'Demo must mirror the owner navigation architecture.');
-for (const key of ['calendar','sales','finance','customers','staff','services','products','marketing','posts','gallery','storefront','business','reports','billing','ai','training','settings']) {
+for (const key of ['calendar','sales','finance','customers','staff','services','products','marketing','posts','gallery','storefront','business','reports','billing','ai','training']) {
   assert(modulePage.includes(`moduleKey === '${key}'`) || key === 'training', `Demo module is missing: ${key}`);
 }
+assert(!modulePage.includes("moduleKey === 'settings'"), 'Removed owner Settings must not remain in the demo navigation experience.');
+assert(modulePage.includes('Storefront & booking controls'), 'Demo Storefront must reflect consolidated booking configuration.');
 assert(modulePage.includes('Apply in demo') && modulePage.includes('No database request will be made'), 'Demo action confirmation boundary is missing.');
 
 assert(courses.includes('getTrainingPdfPath'), 'Courses page does not link professional PDFs.');

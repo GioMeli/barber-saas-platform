@@ -116,6 +116,7 @@ export default function EmployeeDashboard() {
   const [accessDenied, setAccessDenied] = useState(false);
   const [email, setEmail] = useState('');
   const [linkSending, setLinkSending] = useState(false);
+  const [emailSigningIn, setEmailSigningIn] = useState(false);
   const [trustedSigningIn, setTrustedSigningIn] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -296,14 +297,14 @@ export default function EmployeeDashboard() {
     [appointments, t]
   );
 
-  const sendMagicLink = async () => {
-    if (!email.trim()) {
+  const sendMagicLink = async (normalizedEmail = email.trim().toLowerCase()) => {
+    if (!normalizedEmail) {
       toast.error(t('staffPortal.access.emailRequired'));
-      return;
+      return false;
     }
     setLinkSending(true);
     const { error } = await staffSupabase.auth.signInWithOtp({
-      email: email.trim().toLowerCase(),
+      email: normalizedEmail,
       options: {
         shouldCreateUser: false,
         emailRedirectTo: (() => {
@@ -317,28 +318,81 @@ export default function EmployeeDashboard() {
       },
     });
     setLinkSending(false);
-    if (error) toast.error(error.message || t('staffPortal.access.linkFailed'));
-    else toast.success(t('staffPortal.access.linkSent'));
+    if (error) {
+      toast.error(error.message || t('staffPortal.access.linkFailed'));
+      return false;
+    }
+    toast.success(t('staffPortal.access.linkSent'));
+    return true;
   };
 
-  const signInOnTrustedDevice = async () => {
-    if (!email.trim()) {
+  const signInOnTrustedDevice = async (normalizedEmail = email.trim().toLowerCase()) => {
+    if (!normalizedEmail) {
       toast.error(t('staffPortal.access.emailRequired'));
-      return;
+      return false;
     }
     if (!employeeParam || !getTrustedDeviceCredentials(employeeParam)) {
-      toast.info(t('staffPortal.access.trustedDeviceRequired'));
-      return;
+      return false;
     }
     setTrustedSigningIn(true);
     try {
-      await trustedDeviceSignIn({ businessSlug: slug, employeeId: employeeParam, email: email.trim().toLowerCase() });
+      await trustedDeviceSignIn({ businessSlug: slug, employeeId: employeeParam, email: normalizedEmail });
       toast.success(t('staffPortal.access.signedIn'));
+      return true;
     } catch (error: any) {
       console.error('Trusted staff sign-in failed', error);
-      toast.error(error?.message === 'TRUSTED_DEVICE_REQUIRED' ? t('staffPortal.access.trustedDeviceRequired') : t('staffPortal.access.trustedSignInFailed'));
+      return false;
     } finally {
       setTrustedSigningIn(false);
+    }
+  };
+
+  const continueWithEmail = async () => {
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!normalizedEmail) {
+      toast.error(t('staffPortal.access.emailRequired'));
+      return;
+    }
+    if (!employeeParam) {
+      toast.error(t('staffPortal.access.invalidLink'));
+      return;
+    }
+
+    setEmailSigningIn(true);
+    try {
+      const { data: access, error: accessError } = await staffSupabase.functions.invoke('staff-email-auth', {
+        body: {
+          business_slug: slug,
+          employee_id: employeeParam,
+          email: normalizedEmail,
+        },
+      });
+
+      if (accessError || access?.error) {
+        throw new Error(access?.error || accessError?.message || 'STAFF_EMAIL_NOT_APPROVED');
+      }
+
+      // A currently authenticated Supabase session is the strongest proof that
+      // the person using this browser owns the approved staff account.
+      if (access?.authenticated) {
+        await loadWorkspace();
+        toast.success(t('staffPortal.access.signedIn'));
+        return;
+      }
+
+      // After one successful email verification, a local device credential may
+      // establish the staff session without another authorization email.
+      if (trustedDeviceAvailable && await signInOnTrustedDevice(normalizedEmail)) return;
+
+      // Never grant access just because an address was confirmed in the past.
+      // Without an active session or trusted-device proof, send a fresh secure
+      // magic link to the approved staff mailbox.
+      await sendMagicLink(normalizedEmail);
+    } catch (error: any) {
+      console.error('Staff email sign-in failed', error);
+      toast.error(t('staffPortal.access.emailNotApproved'));
+    } finally {
+      setEmailSigningIn(false);
     }
   };
 
@@ -565,18 +619,12 @@ export default function EmployeeDashboard() {
                       <Label htmlFor="staff-email">{t('staffPortal.access.email')}</Label>
                       <div className="relative">
                         <Mail className="absolute left-4 top-4 h-4 w-4 text-slate-400" />
-                        <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl pl-11" onKeyDown={(event) => { if (event.key === 'Enter' && trustedDeviceAvailable) void signInOnTrustedDevice(); }} />
+                        <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl pl-11" onKeyDown={(event) => { if (event.key === 'Enter') void continueWithEmail(); }} />
                       </div>
                     </div>
 
-                    <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={trustedSigningIn || !trustedDeviceAvailable} onClick={() => void signInOnTrustedDevice()}>
-                      <ShieldCheck className="mr-2 h-4 w-4" />{trustedSigningIn ? t('staffPortal.access.signingIn') : t('staffPortal.access.signInEmail')}
-                    </Button>
-
-                    <div className="flex items-center gap-3"><div className="h-px flex-1 bg-slate-200" /><span className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400">{t('staffPortal.access.or')}</span><div className="h-px flex-1 bg-slate-200" /></div>
-
-                    <Button variant="outline" className="h-12 w-full rounded-xl font-bold" disabled={linkSending} onClick={() => void sendMagicLink()}>
-                      <Mail className="mr-2 h-4 w-4" />{linkSending ? t('staffPortal.access.sending') : t('staffPortal.access.verifyByEmail')}
+                    <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={emailSigningIn || trustedSigningIn || linkSending} onClick={() => void continueWithEmail()}>
+                      <ShieldCheck className="mr-2 h-4 w-4" />{emailSigningIn || trustedSigningIn || linkSending ? t('staffPortal.access.signingIn') : t('staffPortal.access.signInEmail')}
                     </Button>
 
                     <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">

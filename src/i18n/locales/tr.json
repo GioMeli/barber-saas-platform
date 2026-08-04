@@ -1395,7 +1395,8 @@
         "latitude": "Enlem",
         "longitude": "Boylam",
         "coordinateHint": "Örnek: {{value}}",
-        "mapTitle": "Mağaza konumu önizlemesi"
+        "mapTitle": "Mağaza konumu önizlemesi",
+        "mapUrlHint": "Koordinat verilmediğinde kullanılacak isteğe bağlı Google Maps veya gömülebilir harita URL’si."
       },
       "sharing": {
         "title": "Önizleme ve paylaşım",
@@ -1413,13 +1414,16 @@
       },
       "validation": {
         "coordinates": "Enlem ve boylam geçerli sayılar olmalıdır",
-        "email": "Geçerli bir herkese açık e-posta adresi girin"
+        "email": "Geçerli bir herkese açık e-posta adresi girin",
+        "slug": "Rezervasyon slug alanında yalnızca küçük harf, sayı ve tire kullanın.",
+        "bookingRules": "Rezervasyon aralığı ve maksimum ileri tarih sıfırdan büyük olmalı; minimum bildirim negatif olamaz."
       },
       "messages": {
         "loadError": "Vitrin bilgileri yüklenemedi",
         "saveError": "Vitrin değişiklikleri kaydedilemedi",
         "updated": "Vitrin başarıyla güncellendi",
-        "linkCopied": "Herkese açık bağlantı kopyalandı"
+        "linkCopied": "Herkese açık bağlantı kopyalandı",
+        "iconSyncError": "Vitrin kaydedildi ancak işletme uygulaması simgeleri yenilenemedi. Logoyu yeniden kaydetmeyi deneyin."
       },
       "online": {
         "title": "Arama ve rezervasyon görünümü",
@@ -2344,7 +2348,12 @@
       "interval": "Rezervasyon Aralığı (dk)",
       "minNotice": "Minimum Bildirim (saat)",
       "maxAdvance": "Maksimum İleri Tarih (gün)",
-      "emailReminders": "Otomatik e-posta hatırlatmalarını etkinleştir"
+      "emailReminders": "Otomatik e-posta hatırlatmalarını etkinleştir",
+      "emailRemindersHint": "Hatırlatma gönderimi etkin olduğunda otomatik randevu hatırlatma e-postaları gönder.",
+      "customerPolicies": "Müşteri politikaları",
+      "customerPoliciesDescription": "Müşterilere gösterilen iptal politikasını ve koşulları aynı Storefront alanından yönetin.",
+      "cancellationPolicy": "İptal politikası",
+      "termsConditions": "Şartlar ve koşullar"
     },
     "qr": {
       "title": "QR Kod ve Uygulama Bağlantısı",
@@ -2699,8 +2708,8 @@
       "mobileDescription": "Yalnızca kendi randevuların için güvenli ve kurulabilir uygulama.",
       "personalWorkspace": "Kişisel staff alanı",
       "signInTitle": "Staff uygulamasına giriş yap",
-      "trustedReady": "Bu cihaz güvenilir. Yeni yetkilendirme e-postası olmadan giriş için staff e-postanı gir.",
-      "verifyFirst": "Bu cihaz hızlı girişten önce bir kez e-posta ile doğrulanmalıdır.",
+      "trustedReady": "Bu cihaz güvenilir. Güvenli şekilde devam etmek için onaylı personel e-postanı gir.",
+      "verifyFirst": "Onaylı personel e-postanı gir. Zaten aktif bir oturum varsa hemen giriş yaparsın; yoksa bu cihaz e-posta ile güvenli şekilde doğrulanır.",
       "signInEmail": "E-posta ile giriş yap",
       "signingIn": "Giriş yapılıyor…",
       "or": "veya",
@@ -2710,7 +2719,9 @@
       "trustedSignInFailed": "Güvenilir cihaz girişi başarısız. Cihazı e-posta ile doğrulayıp tekrar dene.",
       "signedOutTrusted": "Çıkış yapıldı. Bu cihaz sonraki giriş için güvenilir kalır.",
       "noRepeatedEmailTitle": "Tekrarlanan yetkilendirme e-postaları yok",
-      "noRepeatedEmailDescription": "İlk doğrulamadan sonra normal giriş yerel güvenilir cihaz kimliğini kullanır. Yeni e-posta yalnızca yeni veya unutulan cihazda gerekir."
+      "noRepeatedEmailDescription": "Bu cihazdaki ilk doğrulamadan sonra güvenilir cihaz kimliği güvenli erişimi geri yükleyebilir. E-posta doğrulaması yalnızca oturum veya güvenilir cihaz doğrulanamadığında yeniden gerekir.",
+      "invalidLink": "Bu personel uygulaması bağlantısı eksik. İşletme sahibinden yeni bir kişisel erişim bağlantısı iste.",
+      "emailNotApproved": "Bu e-posta bu personel uygulaması için onaylı değil."
     },
     "calendar": {
       "today": "Bugün",
