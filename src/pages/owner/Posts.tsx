@@ -246,13 +246,13 @@ export default function Posts() {
           </p>
         </div>
 
-        <Button onClick={openCreate}>
+        <Button data-tour="posts-new-button" onClick={openCreate}>
           <Plus className="mr-2 h-4 w-4" />
           {t('posts.actions.create')}
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section data-tour="posts-summary" className="grid gap-4 sm:grid-cols-3">
         <SummaryCard
           title={t('posts.summary.published')}
           value={publishedCount}
@@ -271,7 +271,7 @@ export default function Posts() {
       </section>
 
       <section className="space-y-5">
-        <Card className="rounded-2xl shadow-card">
+        <Card data-tour="posts-filters" className="rounded-2xl shadow-card">
           <CardContent className="p-4 sm:p-5">
             <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
               <button
@@ -315,7 +315,7 @@ export default function Posts() {
           </CardContent>
         </Card>
 
-        <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
+        <div data-tour="posts-list" className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_280px]">
           <div className="min-w-0">
             {loading ? (
               <div className="rounded-2xl border bg-card p-12 text-center text-muted-foreground shadow-card">
@@ -482,7 +482,7 @@ export default function Posts() {
       </section>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl p-0">
+        <DialogContent data-tour="posts-form" className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">
               {editingId ? t('posts.dialog.editTitle') : t('posts.dialog.createTitle')}

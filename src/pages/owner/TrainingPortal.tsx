@@ -44,7 +44,7 @@ export default function TrainingPortal() {
 
   return (
     <div className="mx-auto max-w-[1500px] space-y-6">
-      <section className="overflow-hidden rounded-[2rem] border border-violet-200 bg-[radial-gradient(circle_at_top_right,_rgba(232,121,249,.25),_transparent_35%),linear-gradient(135deg,#2e1065_0%,#5b21b6_52%,#7c3aed_100%)] p-5 text-white shadow-[0_24px_80px_rgba(76,29,149,.22)] sm:p-7 lg:p-8">
+      <section data-tour="training-overview" className="overflow-hidden rounded-[2rem] border border-violet-200 bg-[radial-gradient(circle_at_top_right,_rgba(232,121,249,.25),_transparent_35%),linear-gradient(135deg,#2e1065_0%,#5b21b6_52%,#7c3aed_100%)] p-5 text-white shadow-[0_24px_80px_rgba(76,29,149,.22)] sm:p-7 lg:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.18em] text-violet-100"><GraduationCap className="h-4 w-4" />{t('training.eyebrow')}</div>
@@ -60,7 +60,7 @@ export default function TrainingPortal() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <section data-tour="training-filters" className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div className="relative w-full lg:max-w-md"><Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('training.searchPlaceholder')} className="h-11 rounded-xl pl-10" /></div>
           <div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1">
@@ -70,7 +70,7 @@ export default function TrainingPortal() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section data-tour="training-courses" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((guide, index) => {
           const isComplete = completed.includes(guide.slug);
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);

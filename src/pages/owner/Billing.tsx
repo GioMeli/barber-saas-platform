@@ -273,7 +273,7 @@ export default function Billing() {
             />
           )}
 
-          <section className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
+          <section data-tour="billing-plan" className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
             <Card className="relative overflow-hidden rounded-3xl border-primary/20 bg-gradient-to-br from-primary/15 via-card to-card shadow-card">
               <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
 
@@ -490,7 +490,7 @@ export default function Billing() {
             </div>
           </section>
 
-          <section className="space-y-4">
+          <section data-tour="billing-history" className="space-y-4">
             <div>
               <h2 className="section-heading">{t('billing.history.title')}</h2>
               <p className="mt-1 text-sm text-muted-foreground">

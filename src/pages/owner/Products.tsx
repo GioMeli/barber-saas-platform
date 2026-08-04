@@ -479,13 +479,13 @@ export default function Products() {
           </p>
         </div>
 
-        <Button onClick={() => handleOpenDialog()}>
+        <Button data-tour="products-new-button" onClick={() => handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
           {t('products.actions.add')}
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section data-tour="products-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           title={t('products.summary.active.title')}
           value={products.filter((product) => product.is_active).length}
@@ -516,20 +516,23 @@ export default function Products() {
         />
       </section>
 
-      <div className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
+      <div data-tour="products-tabs" className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
         <InventoryTabButton
+          dataTour="products-tab-products"
           active={activeTab === 'products'}
           label={t('products.tabs.products')}
           icon={<Package className="h-4 w-4" />}
           onClick={() => setActiveTab('products')}
         />
         <InventoryTabButton
+          dataTour="products-tab-movements"
           active={activeTab === 'movements'}
           label={t('products.tabs.movements')}
           icon={<History className="h-4 w-4" />}
           onClick={() => setActiveTab('movements')}
         />
         <InventoryTabButton
+          dataTour="products-tab-alerts"
           active={activeTab === 'alerts'}
           label={t('products.tabs.alerts', { count: lowStockProducts.length })}
           icon={<AlertTriangle className="h-4 w-4" />}
@@ -538,7 +541,7 @@ export default function Products() {
       </div>
 
       {activeTab === 'products' && (
-        <Card className="overflow-hidden rounded-2xl shadow-card">
+        <Card data-tour="products-list" className="overflow-hidden rounded-2xl shadow-card">
           <div className="border-b px-4 py-4 sm:px-6">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="relative w-full lg:max-w-sm">
@@ -680,7 +683,7 @@ export default function Products() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="products-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId
@@ -1030,15 +1033,18 @@ function InventoryTabButton({
   label,
   icon,
   onClick,
+  dataTour,
 }: {
   active: boolean;
   label: string;
   icon: React.ReactNode;
   onClick: () => void;
+  dataTour?: string;
 }) {
   return (
     <button
       type="button"
+      data-tour={dataTour}
       onClick={onClick}
       className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
         active

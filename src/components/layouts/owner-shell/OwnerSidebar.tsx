@@ -75,7 +75,7 @@ export default function OwnerSidebar({
           {t('navigation.workspace_navigation')}
         </div>
 
-        <nav className="grid grid-cols-2 gap-2" aria-label={t('navigation.workspace_navigation')}>
+        <nav data-tour="owner-navigation" className="grid grid-cols-2 gap-2" aria-label={t('navigation.workspace_navigation')}>
           {OWNER_NAVIGATION_ITEMS.map((item) => {
             const active = isOwnerNavigationItemActive(location.pathname, item);
             return (

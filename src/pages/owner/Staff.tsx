@@ -829,13 +829,13 @@ export default function Staff() {
           </p>
         </div>
 
-        <Button onClick={() => void handleOpenDialog()}>
+        <Button data-tour="staff-new-button" onClick={() => void handleOpenDialog()}>
           <Plus className="mr-2 h-4 w-4" />
           {t('staff.actions.add')}
         </Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <section data-tour="staff-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <SummaryCard
           title={t('staff.workspace.summary.activeTeam')}
           value={activeCount}
@@ -869,7 +869,7 @@ export default function Staff() {
         />
       </section>
 
-      <Card className="rounded-2xl shadow-card">
+      <Card data-tour="staff-filters" className="rounded-2xl shadow-card">
         <CardContent className="p-3 sm:p-4">
           <div className="grid gap-3 lg:grid-cols-[minmax(260px,1fr)_180px_190px]">
             <div className="relative">
@@ -936,7 +936,7 @@ export default function Staff() {
               </CardContent>
             </Card>
           ) : (
-          <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+          <section data-tour="staff-list" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
           {filteredStaff.map((member) => {
             const memberServices = getMemberServices(member.id);
             const performance = performanceByStaff[member.id] ?? { bookings: 0, completed: 0, revenue: 0, upcoming: 0 };
@@ -1092,7 +1092,7 @@ export default function Staff() {
           }
         }}
       >
-        <DialogContent className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-x-hidden overflow-y-auto rounded-2xl p-0">
+        <DialogContent data-tour="staff-form" className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-4xl overflow-x-hidden overflow-y-auto rounded-2xl p-0">
           <DialogHeader className="border-b px-5 py-5 sm:px-7">
             <DialogTitle className="text-2xl">
               {editingId ? t('staff.dialog.editTitle') : t('staff.dialog.addTitle')}

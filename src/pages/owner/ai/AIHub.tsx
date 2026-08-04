@@ -201,7 +201,7 @@ export default function AIHub() {
   ];
 
   return (
-    <div className={cn('app-page pb-12', assistantMode && 'gap-4 pb-4')}>
+    <div data-tour="ai-workspace" className={cn('app-page pb-12', assistantMode && 'gap-4 pb-4')}>
       {assistantMode ? (
         <section className="relative overflow-hidden rounded-[1.5rem] border border-violet-300/20 bg-[#111027] px-4 py-4 text-white shadow-xl sm:px-6">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_0%,rgba(139,92,246,.34),transparent_38%),radial-gradient(circle_at_100%_100%,rgba(245,158,11,.14),transparent_34%)]" />
@@ -296,7 +296,7 @@ export default function AIHub() {
         </Alert>
       )}
 
-      <section className={cn('grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,.75fr)]', assistantMode && 'hidden')}>
+      <section data-tour="ai-proactive" className={cn('grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,.75fr)]', assistantMode && 'hidden')}>
         <AIManagerBriefingPanel
           briefing={ai.briefing}
           loading={ai.loadingProactive}
@@ -338,6 +338,7 @@ export default function AIHub() {
       </section>
 
       <section
+        data-tour="ai-chat"
         id="velliqo-assistant-workspace"
         className={cn('grid gap-6', !assistantMode && 'xl:grid-cols-[280px_minmax(0,1fr)]')}
       >
@@ -411,7 +412,7 @@ export default function AIHub() {
                     <p className="text-xs text-muted-foreground">{t('ai.manager.chatDescription')}</p>
                   </div>
                 </div>
-                <Select value={agent} onValueChange={(value: AIAgentKey) => setAgent(value)}>
+                <div data-tour="ai-agent-selector"><Select value={agent} onValueChange={(value: AIAgentKey) => setAgent(value)}>
                   <SelectTrigger className="w-full sm:w-[230px]"><SelectValue /></SelectTrigger>
                   <SelectContent>
                     {Object.values(AI_AGENT_REGISTRY).map((definition) => (
@@ -420,7 +421,7 @@ export default function AIHub() {
                       </SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </Select></div>
               </div>
             </div>
 

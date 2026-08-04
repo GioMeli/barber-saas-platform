@@ -324,7 +324,7 @@ export default function OwnerHome() {
 
       {/* Keep the schedule full-width so businesses with larger teams can see more staff columns. */}
       <section className="grid min-w-0 gap-4">
-        <Card className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl shadow-card xl:h-[625px]">
+        <Card data-tour="home-schedule" className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl shadow-card xl:h-[625px]">
           <CardHeader className="border-b px-5 py-4 sm:px-6">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
               <div>
@@ -362,7 +362,7 @@ export default function OwnerHome() {
           </CardContent>
         </Card>
 
-        <aside className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <aside data-tour="home-metrics" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           <MetricCard
             title={t('dashboard_home.metrics.today_appointments')}
             value={
@@ -413,14 +413,16 @@ export default function OwnerHome() {
         onStatusChange={updateAppointmentStatus}
       />
 
-      <TodaysAlerts
+      <div data-tour="home-alerts">
+        <TodaysAlerts
         unreadNotifications={unreadNotifications}
         activeAppointments={todaySchedule}
         staff={staff}
         staffBreaks={staffBreaks}
-      />
+        />
+      </div>
 
-      <section className="grid gap-6 xl:grid-cols-3">
+      <section data-tour="home-health" className="grid gap-6 xl:grid-cols-3">
         <Card className="rounded-2xl shadow-card">
           <CardHeader>
             <CardTitle className="section-heading">

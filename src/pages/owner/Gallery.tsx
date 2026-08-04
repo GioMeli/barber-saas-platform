@@ -118,19 +118,19 @@ export default function Gallery() {
   };
 
   return (
-    <div className="app-page pb-12">
+    <div className="app-page pb-12" data-tour="gallery-workspace">
       <header className="app-page-header">
         <div><div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{t('gallery.eyebrow')}</div><h1 className="app-page-title">{t('gallery.title')}</h1><p className="app-page-description">{t('gallery.description')}</p></div>
-        <Button onClick={openCreate}><Plus className="mr-2 h-4 w-4" />{t('gallery.actions.add')}</Button>
+        <Button data-tour="gallery-new-button" onClick={openCreate}><Plus className="mr-2 h-4 w-4" />{t('gallery.actions.add')}</Button>
       </header>
 
-      <section className="grid gap-4 sm:grid-cols-3">
+      <section data-tour="gallery-summary" className="grid gap-4 sm:grid-cols-3">
         <Summary label={t('gallery.summary.total')} value={images.length} icon={<ImageIcon className="h-5 w-5" />} />
         <Summary label={t('gallery.summary.public')} value={publicCount} icon={<Eye className="h-5 w-5" />} />
         <Summary label={t('gallery.summary.private')} value={privateCount} icon={<EyeOff className="h-5 w-5" />} />
       </section>
 
-      <Card className="mt-6 rounded-3xl shadow-card">
+      <Card data-tour="gallery-filters" className="mt-6 rounded-3xl shadow-card">
         <CardContent className="p-4 sm:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input className="pl-9" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('gallery.searchPlaceholder')} /></div>
@@ -143,7 +143,7 @@ export default function Gallery() {
 
       {loading ? <div className="py-12 text-center text-muted-foreground">{t('gallery.status.loading')}</div>
       : filteredImages.length === 0 ? <Card className="mt-6 rounded-3xl"><CardContent className="flex flex-col items-center p-12 text-center"><ImageIcon className="h-12 w-12 text-muted-foreground" /><h2 className="mt-4 text-lg font-semibold">{images.length ? t('gallery.empty.filteredTitle') : t('gallery.empty.title')}</h2><p className="mt-2 text-sm text-muted-foreground">{images.length ? t('gallery.empty.filteredDescription') : t('gallery.empty.description')}</p>{!images.length && <Button className="mt-5" onClick={openCreate}>{t('gallery.actions.addFirst')}</Button>}</CardContent></Card>
-      : <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">{filteredImages.map((image) => {
+      : <div data-tour="gallery-grid" className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-4">{filteredImages.map((image) => {
         const orderedIndex = images.findIndex((item) => item.id === image.id);
         return <Card key={image.id} className="group overflow-hidden rounded-3xl shadow-card">
           <div className="relative"><img src={image.image_url} alt={image.alt_text || image.title || t('gallery.imageFallback')} className="aspect-square w-full object-cover" /><Badge className="absolute left-3 top-3" variant={image.is_public ? 'default' : 'secondary'}>{image.is_public ? t('gallery.visibility.public') : t('gallery.visibility.private')}</Badge></div>
@@ -152,7 +152,7 @@ export default function Gallery() {
       })}</div>}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="max-h-[92vh] max-w-xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="gallery-form" className="max-h-[92vh] max-w-xl overflow-y-auto rounded-3xl">
           <DialogHeader><DialogTitle>{editingId ? t('gallery.dialog.edit') : t('gallery.dialog.add')}</DialogTitle></DialogHeader>
           <div className="space-y-5 py-4">
             <div className="space-y-2"><Label>{t('gallery.fields.image')} *</Label><ImageUploader value={form.image_url} onChange={(value) => setForm((current) => ({ ...current, image_url: value }))} folder={`gallery/${businessId ?? 'unknown'}/${editingId ?? 'new'}`} /></div>

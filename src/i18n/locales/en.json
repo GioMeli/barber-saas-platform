@@ -3758,6 +3758,13 @@
         "billing": "Review the current subscription, invoices and billing controls. Final Standard, Pro and Premium entitlements will be enforced here.",
         "ai": "Open the full Velliqo AI workspace for conversations, briefings, alerts, recommendations and confirmed operational actions.",
         "training": "Open structured courses, PDF guides and future training videos for every important Velliqo workflow."
+      },
+      "jumpTo": "Jump to a tour section",
+      "chapterProgress": "{{current}} / {{total}} in this section",
+      "detailsTitle": "Actions and options explained here",
+      "interactiveNote": "Velliqo opened this tab or form for demonstration. Nothing is saved unless you deliberately press its Save or Create button.",
+      "chapters": {
+        "workspace": "Workspace basics"
       }
     }
   }

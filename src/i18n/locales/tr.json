@@ -3758,6 +3758,13 @@
         "billing": "Abonelik, faturalar ve ödeme kontrollerini inceleyin. Standard, Pro ve Premium hakları burada uygulanacaktır.",
         "ai": "Sohbetler, briefingler, uyarılar, öneriler ve onaylı işlemler için tam Velliqo AI çalışma alanını açın.",
         "training": "Önemli Velliqo süreçleri için yapılandırılmış kursları, PDF rehberleri ve gelecekteki videoları açın."
+      },
+      "jumpTo": "Tur bölümüne geç",
+      "chapterProgress": "Bu bölümde {{current}} / {{total}}",
+      "detailsTitle": "Burada açıklanan işlemler ve seçenekler",
+      "interactiveNote": "Velliqo bu sekmeyi veya formu tanıtım amacıyla açtı. Kaydet ya da Oluştur düğmesine bilerek basmadığınız sürece hiçbir şey kaydedilmez.",
+      "chapters": {
+        "workspace": "Çalışma alanı temelleri"
       }
     }
   }
