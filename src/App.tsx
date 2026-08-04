@@ -43,7 +43,6 @@ import Marketing from './pages/owner/Marketing';
 import Gallery from './pages/owner/Gallery';
 import Storefront from './pages/owner/Storefront';
 import Business from './pages/owner/Business';
-import Settings from './pages/owner/Settings';
 import AIHub from './pages/owner/ai/AIHub';
 import AISettings from './pages/owner/ai/AISettings';
 import TrainingPortal from './pages/owner/TrainingPortal';
@@ -117,7 +116,7 @@ function App() {
           <Route path="business" element={<Business />} />
           <Route path="billing" element={<Billing />} />
           <Route path="reports" element={<Reports />} />
-          <Route path="settings" element={<Settings />} />
+          <Route path="settings" element={<Navigate to="/dashboard/storefront" replace />} />
           <Route path="ai" element={<AIHub />} />
           <Route path="ai/settings" element={<AISettings />} />
           <Route path="training" element={<TrainingPortal />} />

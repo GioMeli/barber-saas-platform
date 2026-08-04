@@ -1395,7 +1395,8 @@
         "latitude": "Latitud",
         "longitude": "Longitud",
         "coordinateHint": "Ejemplo: {{value}}",
-        "mapTitle": "Vista previa de la ubicación"
+        "mapTitle": "Vista previa de la ubicación",
+        "mapUrlHint": "URL opcional de Google Maps o de un mapa incrustable cuando no se proporcionan coordenadas."
       },
       "sharing": {
         "title": "Vista previa y compartir",
@@ -1413,13 +1414,16 @@
       },
       "validation": {
         "coordinates": "La latitud y la longitud deben ser números válidos",
-        "email": "Introduce una dirección de correo pública válida"
+        "email": "Introduce una dirección de correo pública válida",
+        "slug": "Usa solo letras minúsculas, números y guiones en el slug de reservas.",
+        "bookingRules": "El intervalo de reserva y la antelación máxima deben ser mayores que cero, y el aviso mínimo no puede ser negativo."
       },
       "messages": {
         "loadError": "No se pudieron cargar los datos del escaparate",
         "saveError": "No se pudieron guardar los cambios del escaparate",
         "updated": "Escaparate actualizado correctamente",
-        "linkCopied": "Enlace público copiado"
+        "linkCopied": "Enlace público copiado",
+        "iconSyncError": "El escaparate se guardó, pero no se pudieron actualizar los iconos de la empresa. Intenta guardar el logo de nuevo."
       },
       "online": {
         "title": "Presentación en búsquedas y reservas",
@@ -2344,7 +2348,12 @@
       "interval": "Intervalo de reserva (min)",
       "minNotice": "Aviso mínimo (horas)",
       "maxAdvance": "Antelación máxima (días)",
-      "emailReminders": "Activar recordatorios automáticos por correo"
+      "emailReminders": "Activar recordatorios automáticos por correo",
+      "emailRemindersHint": "Envía recordatorios automáticos de citas por email cuando el servicio de recordatorios esté activado.",
+      "customerPolicies": "Políticas para clientes",
+      "customerPoliciesDescription": "Gestiona la política de cancelación y los términos que ven los clientes desde el mismo Storefront.",
+      "cancellationPolicy": "Política de cancelación",
+      "termsConditions": "Términos y condiciones"
     },
     "qr": {
       "title": "Código QR y enlace de la app",
@@ -2699,8 +2708,8 @@
       "mobileDescription": "Una app segura e instalable solo para tus citas.",
       "personalWorkspace": "Espacio personal de staff",
       "signInTitle": "Inicia sesión en tu staff app",
-      "trustedReady": "Este dispositivo es de confianza. Introduce tu email de staff para entrar sin otro correo de autorización.",
-      "verifyFirst": "Este dispositivo necesita una verificación inicial por email.",
+      "trustedReady": "Este dispositivo es de confianza. Introduce tu email de staff aprobado para continuar de forma segura.",
+      "verifyFirst": "Introduce tu email de staff aprobado. Si ya existe una sesión activa entrarás de inmediato; de lo contrario verificaremos este dispositivo de forma segura por email.",
       "signInEmail": "Iniciar sesión con email",
       "signingIn": "Iniciando sesión…",
       "or": "o",
@@ -2710,7 +2719,9 @@
       "trustedSignInFailed": "Falló el acceso de confianza. Verifica el dispositivo por email e inténtalo de nuevo.",
       "signedOutTrusted": "Sesión cerrada. Este dispositivo seguirá siendo de confianza para el próximo acceso.",
       "noRepeatedEmailTitle": "Sin correos de autorización repetidos",
-      "noRepeatedEmailDescription": "Después de la primera verificación, el acceso normal usa la credencial local del dispositivo. Solo se necesita otro email en un dispositivo nuevo u olvidado."
+      "noRepeatedEmailDescription": "Después de la primera verificación, la credencial del dispositivo de confianza puede restaurar el acceso seguro. Solo se requiere otra verificación por email si no se puede validar la sesión o el dispositivo.",
+      "invalidLink": "Este enlace de la app de staff está incompleto. Pide al propietario un nuevo enlace de acceso personal.",
+      "emailNotApproved": "Este email no está aprobado para esta app de staff."
     },
     "calendar": {
       "today": "Hoy",

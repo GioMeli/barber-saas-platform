@@ -239,7 +239,6 @@ export default function BusinessHome() {
 
   const coverImage =
     business.cover_image_url ||
-    business.photos?.[0] ||
     gallery?.[0]?.image_url ||
     null;
 

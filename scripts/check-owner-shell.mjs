@@ -14,6 +14,8 @@ const requiredFiles = [
   'src/components/layouts/owner-shell/OwnerTopBar.tsx',
   'src/components/layouts/owner-shell/OwnerCommandPalette.tsx',
   'src/components/layouts/owner-shell/OwnerQuickAdd.tsx',
+  'src/pages/owner/Storefront.tsx',
+  'src/pages/owner/Settings.tsx',
   'public/brand/velliqo-mark.png',
 ];
 
@@ -28,6 +30,8 @@ if (failures.length === 0) {
   const navigation = read('src/components/layouts/owner-shell/navigation.ts');
   const app = read('src/App.tsx');
   const calendar = read('src/pages/owner/Calendar.tsx');
+  const storefront = read('src/pages/owner/Storefront.tsx');
+  const legacySettings = read('src/pages/owner/Settings.tsx');
   const shellSources = [layout, sidebar, topbar, navigation].join('\n');
 
   const requiredChecks = [
@@ -38,7 +42,13 @@ if (failures.length === 0) {
     [topbar.includes('OwnerNotificationCenter'), 'Notification center is missing from the top bar.'],
     [navigation.includes("path: '/dashboard/ai'"), 'Velliqo AI navigation entry is missing.'],
     [app.includes('<Route path="ai" element={<AIHub />} />'), 'Velliqo AI route is missing.'],
-    [app.includes('<Route path="settings" element={<Settings />} />'), 'Settings route is missing.'],
+    [app.includes('<Route path="settings" element={<Navigate to="/dashboard/storefront" replace />} />'), 'Legacy Settings route must redirect to Storefront.'],
+    [!navigation.includes("path: '/dashboard/settings'"), 'Duplicate Settings navigation entry must be removed.'],
+    [storefront.includes("from('business_settings')"), 'Storefront must own booking settings persistence.'],
+    [storefront.includes('booking_interval'), 'Storefront booking preferences are missing.'],
+    [storefront.includes('map_url'), 'Storefront map configuration is missing.'],
+    [legacySettings.includes('<Navigate to="/dashboard/storefront" replace />'), 'Legacy Settings component must redirect to Storefront.'],
+    [!legacySettings.includes("from('business_settings')"), 'Legacy Settings must not remain a second persistence source.'],
     [calendar.includes("searchParams.get('action')"), 'Quick appointment action is not connected to Calendar.'],
     [!shellSources.toLowerCase().includes('fresha'), 'Owner shell contains a Fresha brand reference.'],
   ];
@@ -90,4 +100,4 @@ if (failures.length > 0) {
 }
 
 console.log('Owner shell validation passed.');
-console.log('Validated: two-column desktop/mobile navigation, top bar, routes, quick actions, Velliqo branding and 5-locale coverage.');
+console.log('Validated: owner navigation, Storefront settings consolidation, routes, quick actions, Velliqo branding and 5-locale coverage.');

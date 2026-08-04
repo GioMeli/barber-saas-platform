@@ -8,9 +8,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { ImageUploader } from '@/components/ui/image-uploader';
+import { ensureBusinessPwaIcons } from '@/pwa/businessIconAssets';
 import { toast } from 'sonner';
 import {
   Building2,
+  CalendarClock,
   CheckCircle2,
   Copy,
   ExternalLink,
@@ -30,9 +32,18 @@ import StoreQrShareCard from '@/components/storefront/StoreQrShareCard';
 import { useTranslation } from 'react-i18next';
 
 const EMPTY_FORM = {
-  description: '', logo_url: '', cover_image_url: '', phone: '', email: '', pwa_enabled: true, pwa_short_name: '', discovery_enabled: true,
-  address: '', address_line_1: '', address_line_2: '', city: '', district: '',
+  name: '', slug: '', description: '', logo_url: '', cover_image_url: '', phone: '', email: '', pwa_enabled: true, pwa_short_name: '', discovery_enabled: true,
+  address: '', address_line_1: '', address_line_2: '', city: '', district: '', map_url: '',
   postal_code: '', latitude: '', longitude: '',
+};
+
+const EMPTY_BOOKING = {
+  booking_interval: 30,
+  min_booking_notice: 2,
+  max_booking_period: 60,
+  email_reminders_enabled: true,
+  cancellation_policy: '',
+  terms_conditions: '',
 };
 
 const EMPTY_PRESENCE = {
@@ -41,10 +52,10 @@ const EMPTY_PRESENCE = {
   show_team: true, show_products: true, show_gallery: true, show_reviews: true,
 };
 
-type SectionKey = 'overview' | 'branding' | 'contact' | 'location' | 'online' | 'sharing';
+type SectionKey = 'overview' | 'branding' | 'contact' | 'location' | 'booking' | 'online' | 'sharing';
 
 export default function Storefront() {
-  const { activeBusiness } = useAuth();
+  const { activeBusiness, refreshAuthData } = useAuth();
   const { t } = useTranslation();
   const businessId = activeBusiness?.id;
   const business = activeBusiness;
@@ -52,6 +63,8 @@ export default function Storefront() {
   const [initialForm, setInitialForm] = useState(EMPTY_FORM);
   const [presenceForm, setPresenceForm] = useState(EMPTY_PRESENCE);
   const [initialPresenceForm, setInitialPresenceForm] = useState(EMPTY_PRESENCE);
+  const [bookingForm, setBookingForm] = useState(EMPTY_BOOKING);
+  const [initialBookingForm, setInitialBookingForm] = useState(EMPTY_BOOKING);
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [activeSection, setActiveSection] = useState<SectionKey>('overview');
@@ -62,21 +75,22 @@ export default function Storefront() {
 
   useEffect(() => {
     const warn = (event: BeforeUnloadEvent) => {
-      if (JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm)) {
+      if (JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm) || JSON.stringify(bookingForm) !== JSON.stringify(initialBookingForm)) {
         event.preventDefault();
         event.returnValue = '';
       }
     };
     window.addEventListener('beforeunload', warn);
     return () => window.removeEventListener('beforeunload', warn);
-  }, [form, initialForm, presenceForm, initialPresenceForm]);
+  }, [form, initialForm, presenceForm, initialPresenceForm, bookingForm, initialBookingForm]);
 
   const loadBusiness = async () => {
     if (!businessId) return;
     setLoading(true);
-    const [businessResult, presenceResult] = await Promise.all([
+    const [businessResult, presenceResult, bookingResult] = await Promise.all([
       supabase.from('businesses').select('*').eq('id', businessId).single(),
       supabase.from('business_online_presence').select('*').eq('business_id', businessId).maybeSingle(),
+      supabase.from('business_settings').select('*').eq('business_id', businessId).maybeSingle(),
     ]);
     if (businessResult.error) {
       console.error('Storefront load error:', businessResult.error);
@@ -86,11 +100,11 @@ export default function Storefront() {
     }
     const data = businessResult.data;
     const next = {
-      description: data.description ?? '', logo_url: data.logo_url ?? '',
+      name: data.name ?? '', slug: data.slug ?? '', description: data.description ?? '', logo_url: data.logo_url ?? '',
       cover_image_url: data.cover_image_url ?? '', phone: data.phone ?? '',
       email: data.email ?? '', pwa_enabled: data.pwa_enabled !== false, pwa_short_name: data.pwa_short_name ?? '', discovery_enabled: data.discovery_enabled !== false, address: data.address ?? '',
       address_line_1: data.address_line_1 ?? '', address_line_2: data.address_line_2 ?? '',
-      city: data.city ?? '', district: data.district ?? '',
+      city: data.city ?? '', district: data.district ?? '', map_url: data.map_url ?? '',
       postal_code: data.postal_code ?? '',
       latitude: data.latitude != null ? String(data.latitude) : '',
       longitude: data.longitude != null ? String(data.longitude) : '',
@@ -108,19 +122,32 @@ export default function Storefront() {
       show_gallery: presenceResult.data.show_gallery !== false,
       show_reviews: presenceResult.data.show_reviews !== false,
     } : { ...EMPTY_PRESENCE };
+    const booking = bookingResult.data ? {
+      booking_interval: Number(bookingResult.data.booking_interval ?? 30),
+      min_booking_notice: Number(bookingResult.data.min_booking_notice ?? 2),
+      max_booking_period: Number(bookingResult.data.max_booking_period ?? 60),
+      email_reminders_enabled: bookingResult.data.email_reminders_enabled !== false,
+      cancellation_policy: bookingResult.data.cancellation_policy ?? '',
+      terms_conditions: bookingResult.data.terms_conditions ?? '',
+    } : { ...EMPTY_BOOKING };
     setForm(next);
     setInitialForm(next);
     setPresenceForm(presence);
     setInitialPresenceForm(presence);
+    setBookingForm(booking);
+    setInitialBookingForm(booking);
+    if (next.logo_url) {
+      void ensureBusinessPwaIcons(businessId, next.logo_url).catch((error) => console.error('Storefront PWA icon backfill failed', error));
+    }
     setLoading(false);
   };
 
   const publicUrl = useMemo(
-    () => business?.slug ? `${window.location.origin}/app/${business.slug}` : '',
-    [business?.slug]
+    () => form.slug ? `${window.location.origin}/app/${form.slug}` : '',
+    [form.slug]
   );
 
-  const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm);
+  const isDirty = JSON.stringify(form) !== JSON.stringify(initialForm) || JSON.stringify(presenceForm) !== JSON.stringify(initialPresenceForm) || JSON.stringify(bookingForm) !== JSON.stringify(initialBookingForm);
   const completedFields = useMemo(() => {
     const important = [
       form.logo_url, form.cover_image_url, form.description, form.phone,
@@ -134,6 +161,8 @@ export default function Storefront() {
     setForm((current) => ({ ...current, [key]: value }));
   const updatePresence = <K extends keyof typeof presenceForm>(key: K, value: (typeof presenceForm)[K]) =>
     setPresenceForm((current) => ({ ...current, [key]: value }));
+  const updateBooking = <K extends keyof typeof bookingForm>(key: K, value: (typeof bookingForm)[K]) =>
+    setBookingForm((current) => ({ ...current, [key]: value }));
 
   const saveStorefront = async () => {
     if (!businessId) return;
@@ -146,13 +175,32 @@ export default function Storefront() {
       setSaving(false);
       return;
     }
+    if (!form.name.trim()) {
+      toast.error(t('settings.fields.businessName'));
+      setSaving(false);
+      return;
+    }
+    const normalizedSlug = form.slug.trim().toLowerCase();
+    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(normalizedSlug)) {
+      toast.error(t('storefront.owner.validation.slug'));
+      setSaving(false);
+      return;
+    }
     if (form.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
       toast.error(t('storefront.owner.validation.email'));
       setSaving(false);
       return;
     }
 
+    if (bookingForm.booking_interval < 5 || bookingForm.min_booking_notice < 0 || bookingForm.max_booking_period < 1) {
+      toast.error(t('storefront.owner.validation.bookingRules'));
+      setSaving(false);
+      return;
+    }
+
     const payload = {
+      name: form.name.trim(),
+      slug: normalizedSlug,
       description: form.description.trim() || null,
       logo_url: form.logo_url || null,
       cover_image_url: form.cover_image_url || null,
@@ -166,13 +214,14 @@ export default function Storefront() {
       address_line_2: form.address_line_2.trim() || null,
       city: form.city.trim() || null,
       district: form.district.trim() || null,
+      map_url: form.map_url.trim() || null,
       postal_code: form.postal_code.trim() || null,
       latitude,
       longitude,
       updated_at: new Date().toISOString(),
     };
 
-    const [businessResult, presenceResult] = await Promise.all([
+    const [businessResult, presenceResult, bookingResult] = await Promise.all([
       supabase.from('businesses').update(payload).eq('id', businessId),
       supabase.from('business_online_presence').upsert({
         business_id: businessId,
@@ -189,13 +238,34 @@ export default function Storefront() {
         show_reviews: presenceForm.show_reviews,
         updated_at: new Date().toISOString(),
       }, { onConflict: 'business_id' }),
+      supabase.from('business_settings').upsert({
+        business_id: businessId,
+        booking_interval: Math.round(bookingForm.booking_interval),
+        min_booking_notice: Math.round(bookingForm.min_booking_notice),
+        max_booking_period: Math.round(bookingForm.max_booking_period),
+        email_reminders_enabled: bookingForm.email_reminders_enabled,
+        cancellation_policy: bookingForm.cancellation_policy.trim() || null,
+        terms_conditions: bookingForm.terms_conditions.trim() || null,
+      }, { onConflict: 'business_id' }),
     ]);
-    if (businessResult.error || presenceResult.error) {
-      console.error('Storefront save error:', businessResult.error || presenceResult.error);
+    if (businessResult.error || presenceResult.error || bookingResult.error) {
+      console.error('Storefront save error:', businessResult.error || presenceResult.error || bookingResult.error);
       toast.error(t('storefront.owner.messages.saveError'));
     } else {
-      setInitialForm(form);
+      const normalizedForm = { ...form, name: form.name.trim(), slug: normalizedSlug };
+      setForm(normalizedForm);
+      setInitialForm(normalizedForm);
       setInitialPresenceForm(presenceForm);
+      setInitialBookingForm(bookingForm);
+      if (normalizedForm.logo_url) {
+        try {
+          await ensureBusinessPwaIcons(businessId, normalizedForm.logo_url);
+        } catch (iconError) {
+          console.error('Unable to prepare tenant PWA icons after storefront save', iconError);
+          toast.error(t('storefront.owner.messages.iconSyncError'));
+        }
+      }
+      await refreshAuthData();
       toast.success(t('storefront.owner.messages.updated'));
     }
     setSaving(false);
@@ -212,6 +282,7 @@ export default function Storefront() {
     { id: 'branding', label: t('storefront.owner.sections.branding'), icon: <ImageIcon className="h-4 w-4" /> },
     { id: 'contact', label: t('storefront.owner.sections.contact'), icon: <Phone className="h-4 w-4" /> },
     { id: 'location', label: t('storefront.owner.sections.location'), icon: <MapPin className="h-4 w-4" /> },
+    { id: 'booking', label: t('settings.bookingPreferences.title'), icon: <CalendarClock className="h-4 w-4" /> },
     { id: 'online', label: t('storefront.owner.sections.online'), icon: <Globe2 className="h-4 w-4" /> },
     { id: 'sharing', label: t('storefront.owner.sections.sharing'), icon: <Link2 className="h-4 w-4" /> },
   ];
@@ -286,7 +357,7 @@ export default function Storefront() {
             <CardContent className="p-6">
               <div className="flex items-start gap-4">
                 <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary"><Building2 className="h-6 w-6" /></div>
-                <div><h2 className="text-xl font-extrabold">{business?.name}</h2><p className="mt-1 text-sm text-muted-foreground">{t('storefront.owner.readiness.identityDescription')}</p></div>
+                <div><h2 className="text-xl font-extrabold">{form.name || business?.name}</h2><p className="mt-1 text-sm text-muted-foreground">{t('storefront.owner.readiness.identityDescription')}</p></div>
               </div>
               <div className="mt-6 space-y-3">
                 <ChecklistLine label={t('storefront.owner.readiness.businessLogo')} complete={Boolean(form.logo_url)} />
@@ -304,10 +375,20 @@ export default function Storefront() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
               <div className="absolute bottom-5 left-5 flex items-center gap-3 text-white">
                 {form.logo_url ? <img src={form.logo_url} alt="" className="h-14 w-14 rounded-2xl border-2 border-white object-cover shadow-lg" /> : <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/15 text-xl font-bold backdrop-blur">{business?.name?.charAt(0) || 'V'}</div>}
-                <div><div className="text-lg font-extrabold">{business?.name}</div><div className="text-xs text-white/70">{form.city || t('storefront.owner.readiness.yourLocation')}</div></div>
+                <div><div className="text-lg font-extrabold">{form.name || business?.name}</div><div className="text-xs text-white/70">{form.city || t('storefront.owner.readiness.yourLocation')}</div></div>
               </div>
             </div>
             <CardContent className="p-5"><p className="line-clamp-3 text-sm leading-6 text-muted-foreground">{form.description || t('storefront.owner.readiness.descriptionFallback')}</p></CardContent>
+          </Card>
+
+          <Card className="rounded-3xl shadow-card lg:col-span-2">
+            <CardContent className="space-y-6 p-5 sm:p-7">
+              <SectionHeader icon={<Building2 className="h-5 w-5" />} title={t('settings.businessProfile.title')} description={t('settings.businessProfile.description')} />
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label={t('settings.fields.businessName')}><Input value={form.name} onChange={(event) => update('name', event.target.value)} /></Field>
+                <Field label={t('settings.fields.bookingSlug')} hint={`/app/${form.slug || 'your-business'}`}><Input value={form.slug} onChange={(event) => update('slug', event.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-'))} /></Field>
+              </div>
+            </CardContent>
           </Card>
         </section>
       )}
@@ -331,7 +412,7 @@ export default function Storefront() {
               </div>
               <Switch checked={form.pwa_enabled} onCheckedChange={(value) => update('pwa_enabled', value)} />
               <Field label={t('storefront.owner.pwa.shortName')} hint={t('storefront.owner.pwa.shortNameHint')} className="md:col-span-2">
-                <Input maxLength={30} value={form.pwa_short_name} onChange={(event) => update('pwa_short_name', event.target.value)} placeholder={business?.name || 'Velliqo'} />
+                <Input maxLength={30} value={form.pwa_short_name} onChange={(event) => update('pwa_short_name', event.target.value)} placeholder={form.name || business?.name || 'Velliqo'} />
               </Field>
               <div className="rounded-xl bg-background p-4 text-xs leading-5 text-muted-foreground md:col-span-2">
                 {t('storefront.owner.pwa.logoHint')}
@@ -367,14 +448,40 @@ export default function Storefront() {
               <div />
               <Field label={t('storefront.owner.location.latitude')} hint={t('storefront.owner.location.coordinateHint', { value: '35.1856' })}><Input value={form.latitude} onChange={(event) => update('latitude', event.target.value)} /></Field>
               <Field label={t('storefront.owner.location.longitude')} hint={t('storefront.owner.location.coordinateHint', { value: '33.3823' })}><Input value={form.longitude} onChange={(event) => update('longitude', event.target.value)} /></Field>
+              <Field label={t('settings.fields.mapUrl')} hint={t('storefront.owner.location.mapUrlHint')} className="sm:col-span-2"><Input type="url" value={form.map_url} onChange={(event) => update('map_url', event.target.value)} placeholder="https://www.google.com/maps/embed?..." /></Field>
             </div>
-            {form.latitude && form.longitude && (
+            {(form.latitude && form.longitude) || form.map_url ? (
               <div className="overflow-hidden rounded-2xl border">
-                <iframe title={t('storefront.owner.location.mapTitle')} src={`https://www.google.com/maps?q=${form.latitude},${form.longitude}&z=15&output=embed`} className="h-80 w-full" loading="lazy" />
+                <iframe title={t('storefront.owner.location.mapTitle')} src={form.latitude && form.longitude ? `https://www.google.com/maps?q=${form.latitude},${form.longitude}&z=15&output=embed` : form.map_url} className="h-80 w-full" loading="lazy" />
               </div>
-            )}
+            ) : null}
           </CardContent>
         </Card>
+      )}
+
+
+      {activeSection === 'booking' && (
+        <div className="space-y-6">
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="space-y-7 p-5 sm:p-7">
+              <SectionHeader icon={<CalendarClock className="h-5 w-5" />} title={t('settings.bookingPreferences.title')} description={t('settings.bookingPreferences.description')} />
+              <div className="grid gap-5 sm:grid-cols-3">
+                <Field label={t('settings.bookingPreferences.interval')}><Input type="number" min="5" step="5" value={bookingForm.booking_interval} onChange={(event) => updateBooking('booking_interval', Number(event.target.value))} /></Field>
+                <Field label={t('settings.bookingPreferences.minNotice')}><Input type="number" min="0" step="1" value={bookingForm.min_booking_notice} onChange={(event) => updateBooking('min_booking_notice', Number(event.target.value))} /></Field>
+                <Field label={t('settings.bookingPreferences.maxAdvance')}><Input type="number" min="1" step="1" value={bookingForm.max_booking_period} onChange={(event) => updateBooking('max_booking_period', Number(event.target.value))} /></Field>
+              </div>
+              <VisibilityToggle label={t('settings.bookingPreferences.emailReminders')} description={t('settings.bookingPreferences.emailRemindersHint')} checked={bookingForm.email_reminders_enabled} onChange={(checked) => updateBooking('email_reminders_enabled', checked)} />
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl shadow-card">
+            <CardContent className="space-y-6 p-5 sm:p-7">
+              <SectionHeader icon={<Globe2 className="h-5 w-5" />} title={t('settings.bookingPreferences.customerPolicies')} description={t('settings.bookingPreferences.customerPoliciesDescription')} />
+              <Field label={t('settings.bookingPreferences.cancellationPolicy')}><Textarea rows={5} value={bookingForm.cancellation_policy} onChange={(event) => updateBooking('cancellation_policy', event.target.value)} /></Field>
+              <Field label={t('settings.bookingPreferences.termsConditions')}><Textarea rows={7} value={bookingForm.terms_conditions} onChange={(event) => updateBooking('terms_conditions', event.target.value)} /></Field>
+            </CardContent>
+          </Card>
+        </div>
       )}
 
 
@@ -384,7 +491,7 @@ export default function Storefront() {
             <CardContent className="space-y-7 p-5 sm:p-7">
               <SectionHeader icon={<Search className="h-5 w-5" />} title={t('storefront.owner.online.title')} description={t('storefront.owner.online.description')} />
               <div className="grid gap-5 sm:grid-cols-2">
-                <Field label={t('storefront.owner.online.seoTitle')} hint={t('storefront.owner.online.seoTitleHint')} className="sm:col-span-2"><Input value={presenceForm.seo_title} onChange={(event) => updatePresence('seo_title', event.target.value)} placeholder={business?.name || ''} /></Field>
+                <Field label={t('storefront.owner.online.seoTitle')} hint={t('storefront.owner.online.seoTitleHint')} className="sm:col-span-2"><Input value={presenceForm.seo_title} onChange={(event) => updatePresence('seo_title', event.target.value)} placeholder={form.name || business?.name || ''} /></Field>
                 <Field label={t('storefront.owner.online.seoDescription')} hint={t('storefront.owner.online.seoDescriptionHint')} className="sm:col-span-2"><Textarea rows={4} value={presenceForm.seo_description} onChange={(event) => updatePresence('seo_description', event.target.value)} /></Field>
                 <Field label={t('storefront.owner.online.bookingCta')} hint={t('storefront.owner.online.bookingCtaHint')} className="sm:col-span-2"><Input value={presenceForm.booking_cta_label} onChange={(event) => updatePresence('booking_cta_label', event.target.value)} placeholder={t('storefront.public.actions.bookAppointment')} /></Field>
               </div>
@@ -431,7 +538,7 @@ export default function Storefront() {
               </div>
             </CardContent>
           </Card>
-          <StoreQrShareCard publicUrl={publicUrl} businessName={business?.name || t('storefront.owner.sharing.defaultBusinessName')} />
+          <StoreQrShareCard publicUrl={publicUrl} businessName={form.name || business?.name || t('storefront.owner.sharing.defaultBusinessName')} />
         </div>
       )}
 

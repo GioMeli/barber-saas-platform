@@ -23,6 +23,8 @@ const requireText = (file, text, label = text) => {
   'supabase/migrations/00046_velliqo_persistent_premium_staff_app.sql',
   'supabase/migrations/00047_velliqo_staff_trusted_device_profile_pwa.sql',
   'supabase/functions/staff-device-auth/index.ts',
+  'supabase/functions/staff-email-auth/index.ts',
+  'supabase/config.toml',
   'src/staff/trustedDevice.ts',
   'src/components/staff/StaffInstallDialog.tsx',
   'src/components/staff/StaffProfileSheet.tsx',
@@ -48,7 +50,7 @@ requireText('src/db/staffSupabase.ts', 'autoRefreshToken: true', 'automatic staf
 requireText('src/db/staffSupabase.ts', 'velliqo.staff.auth.${employeeSessionId', 'employee-isolated staff auth storage');
 requireText('src/db/supabase.ts', 'detectSessionInUrl: !isStaffRoute', 'staff magic-link client isolation');
 requireText('src/hooks/useStaffPWA.ts', 'employee?.id', 'employee-specific manifest');
-requireText('src/hooks/useStaffPWA.ts', "v: '7'", 'staff manifest cache/version hardening');
+requireText('src/hooks/useStaffPWA.ts', "v: '8'", 'staff manifest cache/version hardening');
 requireText('src/pwa/installPromptStore.ts', 'beforeinstallprompt', 'early install prompt capture');
 requireText('src/hooks/usePWAStatus.ts', '15_000', 'install prompt timeout recovery');
 requireText('index.html', '/staff-manifest/', 'staff manifest preloaded before React');
@@ -56,6 +58,9 @@ requireText('api/staff-manifest.ts', 'employeeId', 'employee-specific PWA identi
 requireText('api/staff-manifest.ts', "display: 'standalone'", 'standalone staff PWA');
 requireText('vercel.json', '/staff-manifest/:slug/:employeeId.webmanifest', 'employee manifest rewrite');
 
+requireText('src/pages/staff/EmployeeDashboard.tsx', 'continueWithEmail', 'unified staff email sign in');
+requireText('supabase/config.toml', '[functions.staff-email-auth]\nverify_jwt = false', 'public pre-auth staff email function configuration');
+requireText('src/pages/staff/EmployeeDashboard.tsx', "functions.invoke('staff-email-auth'", 'server-side staff email/session authorization');
 requireText('src/pages/staff/EmployeeDashboard.tsx', 'signInOnTrustedDevice', 'trusted-device email sign in');
 requireText('src/pages/staff/EmployeeDashboard.tsx', '<StaffProfileSheet', 'staff profile manager');
 requireText('src/pages/staff/EmployeeDashboard.tsx', '<StaffInstallDialog', 'install guidance dialog');
@@ -66,6 +71,8 @@ requireText('api/staff-manifest.ts', "'/icons/icon-512.png'", 'valid 512 PWA ico
 requireText('api/staff-manifest.ts', 'pwa/icon-${size}.png', 'tenant PWA icon path');
 requireText('api/staff-manifest.ts', 'tenant192', 'tenant 192 PWA icon');
 requireText('api/staff-manifest.ts', 'tenant512', 'tenant 512 PWA icon');
+requireText('api/staff-manifest.ts', "sizes: 'any'", 'original business logo fallback');
+requireText('api/staff-manifest.ts', 'updated_at', 'business-logo manifest cache busting');
 requireText('src/pwa/businessIconAssets.ts', 'canvas.toBlob', 'exact PNG business icon generation');
 requireText('src/pwa/businessIconAssets.ts', "upsert: true", 'business PWA icon refresh');
 requireText('src/pages/owner/Staff.tsx', 'staffAppLinkLabel', 'compact staff-link presentation');
@@ -115,6 +122,17 @@ const migration47 = read('supabase/migrations/00047_velliqo_staff_trusted_device
   "e.personal_access_enabled = true",
 ].forEach((text) => { if (!migration47.includes(text)) failures.push(`Migration 00047 missing ${text}`); });
 
+const emailAuth = read('supabase/functions/staff-email-auth/index.ts');
+[
+  'personal_access_enabled',
+  'personal_access_status',
+  'admin.auth.admin.getUserById',
+  'auth.getUser()',
+  'authenticated',
+  'account_confirmed',
+  'requires_email_verification',
+].forEach((text) => { if (!emailAuth.includes(text)) failures.push(`Staff email auth missing ${text}`); });
+
 const deviceAuth = read('supabase/functions/staff-device-auth/index.ts');
 [
   'staff_trusted_devices',
@@ -152,5 +170,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Phase 10C.10 staff access, compact-link and tenant-icon checks passed.');
-console.log('Trusted-device sign-in, tenant-branded PWA icons, compact owner access UI, tenant isolation and realtime owner sync verified.');
+console.log('Phase 10C.11 staff authentication, tenant-icon and Storefront consolidation checks passed.');
+console.log('Unified email sign-in, trusted-device restore, tenant-branded PWA icons, tenant isolation and realtime owner sync verified.');

@@ -1395,7 +1395,8 @@
         "latitude": "Breitengrad",
         "longitude": "Längengrad",
         "coordinateHint": "Beispiel: {{value}}",
-        "mapTitle": "Vorschau des Store-Standorts"
+        "mapTitle": "Vorschau des Store-Standorts",
+        "mapUrlHint": "Optionale Google-Maps- oder einbettbare Karten-URL, wenn keine Koordinaten angegeben sind."
       },
       "sharing": {
         "title": "Vorschau und Teilen",
@@ -1413,13 +1414,16 @@
       },
       "validation": {
         "coordinates": "Breiten- und Längengrad müssen gültige Zahlen sein",
-        "email": "Geben Sie eine gültige öffentliche E-Mail-Adresse ein"
+        "email": "Geben Sie eine gültige öffentliche E-Mail-Adresse ein",
+        "slug": "Verwende für den Buchungs-Slug nur Kleinbuchstaben, Zahlen und Bindestriche.",
+        "bookingRules": "Buchungsintervall und maximaler Vorlauf müssen größer als null sein; der Mindestvorlauf darf nicht negativ sein."
       },
       "messages": {
         "loadError": "Storefront-Daten konnten nicht geladen werden",
         "saveError": "Storefront-Änderungen konnten nicht gespeichert werden",
         "updated": "Storefront erfolgreich aktualisiert",
-        "linkCopied": "Öffentlicher Link kopiert"
+        "linkCopied": "Öffentlicher Link kopiert",
+        "iconSyncError": "Storefront gespeichert, aber die App-Symbole des Betriebs konnten nicht aktualisiert werden. Speichere das Logo erneut."
       },
       "online": {
         "title": "Darstellung in Suche und Buchung",
@@ -2344,7 +2348,12 @@
       "interval": "Buchungsintervall (Min.)",
       "minNotice": "Mindestvorlauf (Stunden)",
       "maxAdvance": "Maximaler Vorlauf (Tage)",
-      "emailReminders": "Automatische E-Mail-Erinnerungen aktivieren"
+      "emailReminders": "Automatische E-Mail-Erinnerungen aktivieren",
+      "emailRemindersHint": "Automatische Terminerinnerungen per E-Mail senden, wenn der Erinnerungsversand aktiviert ist.",
+      "customerPolicies": "Kundenrichtlinien",
+      "customerPoliciesDescription": "Verwalte Stornierungsrichtlinie und Bedingungen für Kunden direkt im Storefront-Arbeitsbereich.",
+      "cancellationPolicy": "Stornierungsrichtlinie",
+      "termsConditions": "Allgemeine Geschäftsbedingungen"
     },
     "qr": {
       "title": "QR-Code & App-Link",
@@ -2699,8 +2708,8 @@
       "mobileDescription": "Eine sichere, installierbare App nur für deine Termine.",
       "personalWorkspace": "Persönlicher Staff-Bereich",
       "signInTitle": "In die Staff-App einloggen",
-      "trustedReady": "Dieses Gerät ist vertrauenswürdig. Gib deine Staff-E-Mail ein, um dich ohne neue Autorisierungs-E-Mail anzumelden.",
-      "verifyFirst": "Dieses Gerät benötigt einmalig eine E-Mail-Bestätigung.",
+      "trustedReady": "Dieses Gerät ist vertrauenswürdig. Gib deine freigegebene Mitarbeiter-E-Mail ein, um sicher fortzufahren.",
+      "verifyFirst": "Gib deine freigegebene Mitarbeiter-E-Mail ein. Bei einer bereits aktiven Sitzung gelangst du sofort hinein; andernfalls wird dieses Gerät sicher per E-Mail verifiziert.",
       "signInEmail": "Mit E-Mail anmelden",
       "signingIn": "Anmeldung…",
       "or": "oder",
@@ -2710,7 +2719,9 @@
       "trustedSignInFailed": "Die vertrauenswürdige Anmeldung ist fehlgeschlagen. Bestätige das Gerät per E-Mail und versuche es erneut.",
       "signedOutTrusted": "Abgemeldet. Dieses Gerät bleibt für die nächste Anmeldung vertrauenswürdig.",
       "noRepeatedEmailTitle": "Keine wiederholten Autorisierungs-E-Mails",
-      "noRepeatedEmailDescription": "Nach der ersten Bestätigung verwendet die normale Anmeldung die lokale Geräteberechtigung. Eine neue E-Mail ist nur auf einem neuen oder entfernten Gerät nötig."
+      "noRepeatedEmailDescription": "Nach der ersten Verifizierung auf diesem Gerät kann die Vertrauensgeräte-Anmeldung den sicheren Zugriff wiederherstellen. Eine erneute E-Mail-Verifizierung ist nur nötig, wenn Sitzung oder Gerät nicht verifiziert werden können.",
+      "invalidLink": "Dieser Mitarbeiter-App-Link ist unvollständig. Bitte den Betriebsinhaber um einen neuen persönlichen Zugangslink.",
+      "emailNotApproved": "Diese E-Mail ist für diese Mitarbeiter-App nicht freigegeben."
     },
     "calendar": {
       "today": "Heute",

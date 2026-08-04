@@ -41,7 +41,7 @@ function ensureMeta(id: string, name: string) {
 function staffManifestHref(business: StaffBusiness, employee: StaffEmployee) {
   const query = new URLSearchParams({
     employeeName: employee.name || 'Staff',
-    v: '7',
+    v: '8',
   });
   return `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?${query.toString()}`;
 }
@@ -61,7 +61,7 @@ export function useStaffPWA(
     if (manifest.getAttribute('href') !== nextManifestHref) manifest.href = nextManifestHref;
 
     const icon = ensureLink('app-apple-touch-icon', 'apple-touch-icon');
-    icon.href = business.logo_url && business.id ? businessPwaIconPublicUrl(business.id, 192) : business.logo_url || '/icons/icon-192.png';
+    icon.href = business.logo_url && business.id ? businessPwaIconPublicUrl(business.id, 192, business.logo_url) : business.logo_url || '/icons/icon-192.png';
 
     const titleMeta = ensureMeta('app-apple-title', 'apple-mobile-web-app-title');
     titleMeta.content = `${employee.name} · ${business.name}`;

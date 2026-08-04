@@ -14,7 +14,6 @@ import {
   Package,
   Scissors,
   ShoppingCart,
-  Settings2,
   Sparkles,
   Store,
   Users,
@@ -147,13 +146,6 @@ export const OWNER_NAVIGATION_ITEMS: OwnerNavigationItem[] = [
     path: '/dashboard/training',
     icon: GraduationCap,
     keywords: ['training', 'guides', 'help', 'learning', 'pdf'],
-  },
-  {
-    key: 'settings',
-    labelKey: 'dashboard.settings',
-    path: '/dashboard/settings',
-    icon: Settings2,
-    keywords: ['settings', 'preferences', 'configuration'],
   },
 ];
 
