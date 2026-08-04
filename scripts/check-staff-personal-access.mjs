@@ -19,6 +19,11 @@ const requireText = (file, text, label = text) => {
   'supabase/functions/manage-staff-access/index.ts',
   'supabase/migrations/00045_velliqo_staff_personal_access.sql',
   'supabase/migrations/00046_velliqo_persistent_premium_staff_app.sql',
+  'supabase/migrations/00047_velliqo_staff_trusted_device_profile_pwa.sql',
+  'supabase/functions/staff-device-auth/index.ts',
+  'src/staff/trustedDevice.ts',
+  'src/components/staff/StaffInstallDialog.tsx',
+  'src/components/staff/StaffProfileSheet.tsx',
 ].forEach(requireFile);
 
 requireText('src/App.tsx', 'path="/staff/:slug"', 'company staff app route');
@@ -43,6 +48,15 @@ requireText('src/hooks/useStaffPWA.ts', 'employee?.id', 'employee-specific manif
 requireText('api/staff-manifest.ts', 'employeeId', 'employee-specific PWA identity');
 requireText('api/staff-manifest.ts', "display: 'standalone'", 'standalone staff PWA');
 requireText('vercel.json', '/staff-manifest/:slug/:employeeId.webmanifest', 'employee manifest rewrite');
+
+requireText('src/pages/staff/EmployeeDashboard.tsx', 'signInOnTrustedDevice', 'trusted-device email sign in');
+requireText('src/pages/staff/EmployeeDashboard.tsx', '<StaffProfileSheet', 'staff profile manager');
+requireText('src/pages/staff/EmployeeDashboard.tsx', '<StaffInstallDialog', 'install guidance dialog');
+requireText('src/staff/trustedDevice.ts', "functions.invoke('staff-device-auth'", 'trusted-device auth Edge Function');
+requireText('src/staff/trustedDevice.ts', 'staff_register_trusted_device', 'trusted-device registration');
+requireText('src/pages/owner/Staff.tsx', 'owner-staff-sync-', 'owner realtime staff profile sync');
+requireText('api/staff-manifest.ts', "'/icons/icon-512.png'", 'valid 512 PWA icon');
+requireText('api/staff-manifest.ts', '?employee=${employeeParam}', 'employee identity in PWA shortcuts');
 
 const migration45 = read('supabase/migrations/00045_velliqo_staff_personal_access.sql');
 [
@@ -75,6 +89,27 @@ const migration46 = read('supabase/migrations/00046_velliqo_persistent_premium_s
   "'source', 'staff_app'",
 ].forEach((text) => { if (!migration46.includes(text)) failures.push(`Migration 00046 missing ${text}`); });
 
+const migration47 = read('supabase/migrations/00047_velliqo_staff_trusted_device_profile_pwa.sql');
+[
+  'staff_trusted_devices',
+  'staff_register_trusted_device',
+  'staff_revoke_trusted_device',
+  'staff_update_own_profile',
+  "bucket_id = 'staff-avatars'",
+  "e.user_id = auth.uid()",
+  "e.personal_access_enabled = true",
+].forEach((text) => { if (!migration47.includes(text)) failures.push(`Migration 00047 missing ${text}`); });
+
+const deviceAuth = read('supabase/functions/staff-device-auth/index.ts');
+[
+  'staff_trusted_devices',
+  'constantTimeEqual',
+  'admin.auth.admin.generateLink',
+  'hashed_token',
+  "personal_access_enabled",
+  "personal_access_status",
+].forEach((text) => { if (!deviceAuth.includes(text)) failures.push(`Staff device auth missing ${text}`); });
+
 const edgeFunction = read('supabase/functions/manage-staff-access/index.ts');
 [
   "type AccessAction = 'enable' | 'resend' | 'revoke'",
@@ -101,5 +136,5 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log('Phase 10C.6 persistent premium staff app checks passed.');
-console.log('Persistent isolated sessions, business customer selection, employee-specific PWA identity, tenant isolation and realtime owner sync verified.');
+console.log('Phase 10C.7 premium trusted-device staff experience checks passed.');
+console.log('Trusted-device sign-in, installable employee PWA, self-service profile sync, customer selection, tenant isolation and realtime owner sync verified.');

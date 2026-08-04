@@ -122,6 +122,23 @@ export default function Staff() {
     if (businessId) void fetchData();
   }, [businessId]);
 
+  useEffect(() => {
+    if (!businessId) return;
+
+    const channel = supabase
+      .channel(`owner-staff-sync-${businessId}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'employees', filter: `business_id=eq.${businessId}` },
+        () => void fetchData()
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [businessId]);
+
   const fetchData = async () => {
     if (!businessId) return;
 

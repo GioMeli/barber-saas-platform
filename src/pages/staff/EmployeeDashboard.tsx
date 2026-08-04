@@ -10,6 +10,9 @@ import { format, isToday, parseISO } from 'date-fns';
 import { useStaffAuth } from '@/hooks/useStaffAuth';
 import { useStaffPWA } from '@/hooks/useStaffPWA';
 import { staffSupabase } from '@/db/staffSupabase';
+import { StaffInstallDialog } from '@/components/staff/StaffInstallDialog';
+import { StaffProfileSheet } from '@/components/staff/StaffProfileSheet';
+import { getTrustedDeviceCredentials, registerTrustedDevice, revokeTrustedDevice, trustedDeviceSignIn } from '@/staff/trustedDevice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -53,6 +56,7 @@ import {
   ShieldCheck,
   Smartphone,
   Sparkles,
+  UserRound,
   XCircle,
 } from 'lucide-react';
 
@@ -112,6 +116,9 @@ export default function EmployeeDashboard() {
   const [accessDenied, setAccessDenied] = useState(false);
   const [email, setEmail] = useState('');
   const [linkSending, setLinkSending] = useState(false);
+  const [trustedSigningIn, setTrustedSigningIn] = useState(false);
+  const [installOpen, setInstallOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -122,7 +129,10 @@ export default function EmployeeDashboard() {
   const [rescheduleTime, setRescheduleTime] = useState('');
   const [appointmentNotes, setAppointmentNotes] = useState('');
 
-  const pwa = useStaffPWA(workspace?.business || publicBusiness, workspace?.employee);
+  const employeeParam = searchParams.get('employee')?.replace(/[^a-z0-9-]/gi, '').slice(0, 120) || '';
+  const pwaEmployee = workspace?.employee || (employeeParam ? { id: employeeParam, name: t('staffPortal.access.staffFallbackName') } : null);
+  const pwa = useStaffPWA(workspace?.business || publicBusiness, pwaEmployee);
+  const trustedDeviceAvailable = Boolean(employeeParam && getTrustedDeviceCredentials(employeeParam));
 
   useEffect(() => {
     if (routeSlug) {
@@ -158,6 +168,15 @@ export default function EmployeeDashboard() {
       setSearchParams(searchParams, { replace: true });
     }
   }, [workspace, searchParams]);
+
+  useEffect(() => {
+    if (!workspace?.employee?.id || !workspace?.business?.slug) return;
+    void registerTrustedDevice({
+      businessSlug: workspace.business.slug,
+      employeeId: workspace.employee.id,
+      employeeName: workspace.employee.name,
+    }).catch((error) => console.error('Unable to register trusted staff device', error));
+  }, [workspace?.employee?.id, workspace?.business?.slug]);
 
   useEffect(() => {
     if (!workspace?.employee?.id || !workspace?.business?.id) return;
@@ -211,7 +230,7 @@ export default function EmployeeDashboard() {
   const loadPublicBusiness = async () => {
     const { data } = await staffSupabase
       .from('businesses')
-      .select('id,slug,name,logo_url,address,phone,email,status')
+      .select('id,slug,name,logo_url,cover_image_url,description,address,phone,email,status')
       .eq('slug', slug)
       .eq('status', 'active')
       .maybeSingle();
@@ -293,6 +312,27 @@ export default function EmployeeDashboard() {
     setLinkSending(false);
     if (error) toast.error(error.message || t('staffPortal.access.linkFailed'));
     else toast.success(t('staffPortal.access.linkSent'));
+  };
+
+  const signInOnTrustedDevice = async () => {
+    if (!email.trim()) {
+      toast.error(t('staffPortal.access.emailRequired'));
+      return;
+    }
+    if (!employeeParam || !getTrustedDeviceCredentials(employeeParam)) {
+      toast.info(t('staffPortal.access.trustedDeviceRequired'));
+      return;
+    }
+    setTrustedSigningIn(true);
+    try {
+      await trustedDeviceSignIn({ businessSlug: slug, employeeId: employeeParam, email: email.trim().toLowerCase() });
+      toast.success(t('staffPortal.access.signedIn'));
+    } catch (error: any) {
+      console.error('Trusted staff sign-in failed', error);
+      toast.error(error?.message === 'TRUSTED_DEVICE_REQUIRED' ? t('staffPortal.access.trustedDeviceRequired') : t('staffPortal.access.trustedSignInFailed'));
+    } finally {
+      setTrustedSigningIn(false);
+    }
   };
 
   const openAppointment = (appointment: any) => {
@@ -421,8 +461,23 @@ export default function EmployeeDashboard() {
   };
 
   const handleSignOut = async () => {
-    await staffSupabase.auth.signOut();
+    await staffSupabase.auth.signOut({ scope: 'local' });
     setWorkspace(null);
+    toast.success(t('staffPortal.access.signedOutTrusted'));
+  };
+
+  const forgetThisDevice = async () => {
+    if (!workspace?.employee?.id || !workspace?.business?.slug) return;
+    try {
+      await revokeTrustedDevice({ businessSlug: workspace.business.slug, employeeId: workspace.employee.id });
+    } catch (error) {
+      console.error('Unable to revoke trusted device', error);
+    } finally {
+      await staffSupabase.auth.signOut({ scope: 'local' });
+      setWorkspace(null);
+      setProfileOpen(false);
+      toast.success(t('staffPortal.profile.deviceForgotten'));
+    }
   };
 
   if (loading || authLoading) {
@@ -431,55 +486,123 @@ export default function EmployeeDashboard() {
 
   if (!user) {
     return (
-      <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.18),transparent_36%),linear-gradient(135deg,#f8fafc_0%,#ffffff_48%,#f5f3ff_100%)] px-4 py-6 sm:py-10">
+      <div className="min-h-screen overflow-hidden bg-slate-950">
         <PageMeta title={`${publicBusiness?.name || 'Velliqo'} Staff`} description={t('staffPortal.access.description')} />
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-8 flex items-center justify-between">
-            <Brand business={publicBusiness} />
-            <LanguageSwitcher />
-          </div>
-          <div className="grid overflow-hidden rounded-[32px] border border-white/70 bg-white/80 shadow-2xl shadow-primary/10 backdrop-blur-xl lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="relative hidden min-h-[620px] overflow-hidden bg-slate-950 p-12 text-white lg:flex lg:flex-col lg:justify-between">
-              <div className="pointer-events-none absolute -right-24 -top-24 h-80 w-80 rounded-full bg-primary/35 blur-3xl" />
-              <div className="pointer-events-none absolute -bottom-32 -left-24 h-96 w-96 rounded-full bg-fuchsia-500/20 blur-3xl" />
-              <div className="relative">
-                <Badge className="rounded-full border-white/15 bg-white/10 px-4 py-2 text-white hover:bg-white/10">
+        <div className="relative min-h-screen">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_16%_18%,rgba(124,58,237,0.34),transparent_30%),radial-gradient(circle_at_82%_8%,rgba(217,70,239,0.18),transparent_24%),linear-gradient(135deg,#020617_0%,#0f172a_52%,#111827_100%)]" />
+          {publicBusiness?.cover_image_url && <img src={publicBusiness.cover_image_url} alt="" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.10] mix-blend-luminosity" />}
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:42px_42px]" />
+
+          <div className="relative mx-auto flex min-h-screen max-w-[1500px] flex-col px-4 py-5 sm:px-6 lg:px-8">
+            <header className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl sm:px-5">
+              <Brand business={publicBusiness} inverted />
+              <div className="flex items-center gap-2">
+                {pwaEmployee && !pwa.isInstalled && (
+                  <Button variant="ghost" className="hidden border border-white/10 bg-white/[0.06] text-white hover:bg-white/10 hover:text-white sm:inline-flex" onClick={() => setInstallOpen(true)}>
+                    <Download className="mr-2 h-4 w-4" />{t('staffPortal.install.action')}
+                  </Button>
+                )}
+                <div className="rounded-xl bg-white"><LanguageSwitcher /></div>
+              </div>
+            </header>
+
+            <main className="grid flex-1 items-center gap-8 py-8 lg:grid-cols-[1.08fr_0.92fr] lg:gap-14 lg:py-12">
+              <section className="hidden lg:block">
+                <Badge className="rounded-full border-violet-300/20 bg-violet-400/10 px-4 py-2 text-violet-100 hover:bg-violet-400/10">
                   <Sparkles className="mr-2 h-4 w-4" />{t('staffPortal.access.premiumBadge')}
                 </Badge>
-                <h1 className="mt-8 max-w-xl text-4xl font-black leading-tight xl:text-5xl">{t('staffPortal.access.premiumTitle')}</h1>
-                <p className="mt-5 max-w-xl text-base leading-7 text-slate-300">{t('staffPortal.access.premiumDescription')}</p>
-              </div>
-              <div className="relative grid gap-4 sm:grid-cols-2">
-                <PremiumFeature icon={<CalendarDays className="h-5 w-5" />} title={t('staffPortal.access.features.schedule')} description={t('staffPortal.access.features.scheduleDescription')} />
-                <PremiumFeature icon={<RefreshCw className="h-5 w-5" />} title={t('staffPortal.access.features.sync')} description={t('staffPortal.access.features.syncDescription')} />
-                <PremiumFeature icon={<ShieldCheck className="h-5 w-5" />} title={t('staffPortal.access.features.secure')} description={t('staffPortal.access.features.secureDescription')} />
-                <PremiumFeature icon={<Download className="h-5 w-5" />} title={t('staffPortal.access.features.install')} description={t('staffPortal.access.features.installDescription')} />
-              </div>
-            </div>
-            <div className="flex min-h-[620px] items-center p-5 sm:p-10 lg:p-12">
-              <Card className="w-full overflow-hidden rounded-3xl border-slate-200/80 bg-white shadow-xl shadow-slate-200/60">
-                <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-primary/90 px-6 py-8 text-white sm:px-8">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-white/10"><ShieldCheck className="h-7 w-7" /></div>
-                  <h2 className="mt-6 text-2xl font-black sm:text-3xl">{t('staffPortal.access.title')}</h2>
-                  <p className="mt-3 text-sm leading-6 text-slate-300">{t('staffPortal.access.description')}</p>
+                <h1 className="mt-7 max-w-2xl text-5xl font-black leading-[1.04] tracking-tight text-white xl:text-6xl">{t('staffPortal.access.landingTitle')}</h1>
+                <p className="mt-6 max-w-xl text-lg leading-8 text-slate-300">{t('staffPortal.access.landingDescription')}</p>
+
+                <div className="mt-9 grid max-w-2xl gap-3 sm:grid-cols-2">
+                  <PremiumFeature icon={<CalendarDays className="h-5 w-5" />} title={t('staffPortal.access.features.schedule')} description={t('staffPortal.access.features.scheduleDescription')} />
+                  <PremiumFeature icon={<RefreshCw className="h-5 w-5" />} title={t('staffPortal.access.features.sync')} description={t('staffPortal.access.features.syncDescription')} />
+                  <PremiumFeature icon={<ShieldCheck className="h-5 w-5" />} title={t('staffPortal.access.features.secure')} description={t('staffPortal.access.features.secureDescription')} />
+                  <PremiumFeature icon={<Smartphone className="h-5 w-5" />} title={t('staffPortal.access.features.install')} description={t('staffPortal.access.features.installDescription')} />
                 </div>
-                <CardContent className="space-y-5 p-6 sm:p-8">
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">
-                    <div className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /><div><strong>{t('staffPortal.access.oneTimeTitle')}</strong><div className="mt-1 text-emerald-800">{t('staffPortal.access.oneTimeDescription')}</div></div></div>
+
+                <div className="mt-8 flex max-w-2xl items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.05] p-4 backdrop-blur">
+                  {publicBusiness?.logo_url ? <img src={publicBusiness.logo_url} alt={publicBusiness.name} className="h-14 w-14 rounded-2xl object-cover ring-1 ring-white/15" /> : <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 text-xl font-black text-white">{String(publicBusiness?.name || 'V').charAt(0)}</div>}
+                  <div className="min-w-0">
+                    <div className="truncate text-lg font-black text-white">{publicBusiness?.name || 'Velliqo'}</div>
+                    <div className="mt-1 line-clamp-2 text-sm leading-5 text-slate-400">{publicBusiness?.description || t('staffPortal.access.businessFallbackDescription')}</div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="staff-email">{t('staffPortal.access.email')}</Label>
-                    <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl" />
+                </div>
+              </section>
+
+              <section className="mx-auto w-full max-w-xl">
+                <div className="mb-5 text-center lg:hidden">
+                  <div className="mx-auto flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-white/10 bg-white/10 shadow-2xl">
+                    {publicBusiness?.logo_url ? <img src={publicBusiness.logo_url} alt={publicBusiness.name} className="h-full w-full object-cover" /> : <ShieldCheck className="h-8 w-8 text-white" />}
                   </div>
-                  <Button className="h-12 w-full rounded-xl text-base font-bold shadow-lg shadow-primary/20" disabled={linkSending} onClick={() => void sendMagicLink()}>
-                    <Mail className="mr-2 h-4 w-4" />{linkSending ? t('staffPortal.access.sending') : t('staffPortal.access.sendLink')}
-                  </Button>
-                  <p className="text-center text-xs leading-5 text-muted-foreground">{t('staffPortal.access.securityNote')}</p>
-                </CardContent>
-              </Card>
-            </div>
+                  <h1 className="mt-4 text-3xl font-black text-white">{t('staffPortal.access.mobileTitle')}</h1>
+                  <p className="mt-2 text-sm leading-6 text-slate-300">{t('staffPortal.access.mobileDescription')}</p>
+                </div>
+
+                <Card className="overflow-hidden rounded-[30px] border-white/70 bg-white shadow-2xl shadow-black/30">
+                  <div className="border-b bg-gradient-to-br from-white via-white to-violet-50 px-6 py-7 sm:px-8">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <Badge variant="secondary" className="rounded-full bg-primary/10 text-primary">{t('staffPortal.access.personalWorkspace')}</Badge>
+                        <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">{t('staffPortal.access.signInTitle')}</h2>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{trustedDeviceAvailable ? t('staffPortal.access.trustedReady') : t('staffPortal.access.verifyFirst')}</p>
+                      </div>
+                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${trustedDeviceAvailable ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'}`}>
+                        {trustedDeviceAvailable ? <CheckCircle2 className="h-6 w-6" /> : <ShieldCheck className="h-6 w-6" />}
+                      </div>
+                    </div>
+                  </div>
+
+                  <CardContent className="space-y-5 p-6 sm:p-8">
+                    <div className="space-y-2">
+                      <Label htmlFor="staff-email">{t('staffPortal.access.email')}</Label>
+                      <div className="relative">
+                        <Mail className="absolute left-4 top-4 h-4 w-4 text-slate-400" />
+                        <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl pl-11" onKeyDown={(event) => { if (event.key === 'Enter' && trustedDeviceAvailable) void signInOnTrustedDevice(); }} />
+                      </div>
+                    </div>
+
+                    <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={trustedSigningIn || !trustedDeviceAvailable} onClick={() => void signInOnTrustedDevice()}>
+                      <ShieldCheck className="mr-2 h-4 w-4" />{trustedSigningIn ? t('staffPortal.access.signingIn') : t('staffPortal.access.signInEmail')}
+                    </Button>
+
+                    <div className="flex items-center gap-3"><div className="h-px flex-1 bg-slate-200" /><span className="text-[11px] font-black uppercase tracking-[0.16em] text-slate-400">{t('staffPortal.access.or')}</span><div className="h-px flex-1 bg-slate-200" /></div>
+
+                    <Button variant="outline" className="h-12 w-full rounded-xl font-bold" disabled={linkSending} onClick={() => void sendMagicLink()}>
+                      <Mail className="mr-2 h-4 w-4" />{linkSending ? t('staffPortal.access.sending') : t('staffPortal.access.verifyByEmail')}
+                    </Button>
+
+                    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">
+                      <div className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /><div><strong>{t('staffPortal.access.noRepeatedEmailTitle')}</strong><div className="mt-1 text-emerald-800">{t('staffPortal.access.noRepeatedEmailDescription')}</div></div></div>
+                    </div>
+
+                    {pwaEmployee && !pwa.isInstalled && (
+                      <button type="button" onClick={() => setInstallOpen(true)} className="flex w-full items-center justify-between rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-left transition hover:bg-violet-100">
+                        <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white"><Download className="h-5 w-5" /></span><span><span className="block text-sm font-black text-violet-950">{t('staffPortal.install.loginCardTitle')}</span><span className="block text-xs text-violet-700">{t('staffPortal.install.loginCardDescription')}</span></span></span>
+                        <span className="text-violet-700">→</span>
+                      </button>
+                    )}
+                  </CardContent>
+                </Card>
+              </section>
+            </main>
+
+            <div className="pb-2 text-center text-xs text-slate-500">{t('staffPortal.access.securityNote')}</div>
           </div>
         </div>
+
+        {pwaEmployee && publicBusiness && (
+          <StaffInstallDialog
+            open={installOpen}
+            onOpenChange={setInstallOpen}
+            businessName={publicBusiness.name}
+            employeeName={pwaEmployee.name}
+            canPromptInstall={pwa.canInstall}
+            isInstalled={pwa.isInstalled}
+            needsManualIOSInstall={pwa.needsManualIOSInstall}
+            onInstall={pwa.install}
+          />
+        )}
       </div>
     );
   }
@@ -512,9 +635,12 @@ export default function EmployeeDashboard() {
             <LanguageSwitcher />
             {pwa.isInstalled ? (
               <Badge variant="secondary" className="hidden rounded-full px-3 py-1.5 sm:inline-flex"><Check className="mr-1.5 h-3.5 w-3.5" />{t('staffPortal.install.installed')}</Badge>
-            ) : pwa.canInstall ? (
-              <Button variant="outline" size="icon" onClick={() => void pwa.install()} aria-label={t('staffPortal.actions.install')}><Download className="h-4 w-4" /></Button>
-            ) : null}
+            ) : (
+              <Button variant="outline" size="icon" onClick={() => setInstallOpen(true)} aria-label={t('staffPortal.actions.install')}><Download className="h-4 w-4" /></Button>
+            )}
+            <Button variant="outline" size="icon" onClick={() => setProfileOpen(true)} aria-label={t('staffPortal.profile.open')}>
+              <UserRound className="h-4 w-4" />
+            </Button>
             <Button variant="outline" size="icon" disabled={refreshing} onClick={() => void loadWorkspace(true)} aria-label={t('staffPortal.actions.refresh')}>
               <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
             </Button>
@@ -559,7 +685,7 @@ export default function EmployeeDashboard() {
                   {!pwa.canInstall && !pwa.needsManualIOSInstall && <p className="mt-2 text-xs text-muted-foreground">{t('staffPortal.install.browserInstructions')}</p>}
                 </div>
               </div>
-              {pwa.canInstall && <Button className="h-11 rounded-xl px-5" onClick={() => void pwa.install()}><Download className="mr-2 h-4 w-4" />{t('staffPortal.install.action')}</Button>}
+              <Button className="h-11 rounded-xl px-5" onClick={() => setInstallOpen(true)}><Download className="mr-2 h-4 w-4" />{t('staffPortal.install.action')}</Button>
             </div>
           </section>
         )}
@@ -719,6 +845,26 @@ export default function EmployeeDashboard() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <StaffInstallDialog
+        open={installOpen}
+        onOpenChange={setInstallOpen}
+        businessName={workspace.business.name}
+        employeeName={workspace.employee.name}
+        canPromptInstall={pwa.canInstall}
+        isInstalled={pwa.isInstalled}
+        needsManualIOSInstall={pwa.needsManualIOSInstall}
+        onInstall={pwa.install}
+      />
+
+      <StaffProfileSheet
+        open={profileOpen}
+        onOpenChange={setProfileOpen}
+        business={workspace.business}
+        employee={workspace.employee}
+        onSaved={() => loadWorkspace(true)}
+        onForgetDevice={forgetThisDevice}
+      />
     </div>
   );
 }
@@ -728,11 +874,11 @@ function PremiumFeature({ icon, title, description }: { icon: React.ReactNode; t
   return <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-violet-200">{icon}</div><div className="mt-3 font-bold">{title}</div><p className="mt-1 text-xs leading-5 text-slate-400">{description}</p></div>;
 }
 
-function Brand({ business }: { business: any }) {
+function Brand({ business, inverted = false }: { business: any; inverted?: boolean }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
-      {business?.logo_url ? <img src={business.logo_url} alt={business.name} className="h-10 w-10 rounded-xl object-cover" /> : <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-950 font-black text-white">{String(business?.name || 'V').charAt(0)}</div>}
-      <div className="min-w-0"><div className="truncate font-black">{business?.name || 'Velliqo'}</div><div className="text-xs text-muted-foreground">Staff App</div></div>
+      {business?.logo_url ? <img src={business.logo_url} alt={business.name} className="h-10 w-10 rounded-xl object-cover ring-1 ring-black/5" /> : <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-black text-white ${inverted ? 'bg-white/10 ring-1 ring-white/10' : 'bg-slate-950'}`}>{String(business?.name || 'V').charAt(0)}</div>}
+      <div className="min-w-0"><div className={`truncate font-black ${inverted ? 'text-white' : ''}`}>{business?.name || 'Velliqo'}</div><div className={`text-xs ${inverted ? 'text-slate-400' : 'text-muted-foreground'}`}>Staff App</div></div>
     </div>
   );
 }
