@@ -3699,5 +3699,66 @@
       "services": "Hizmetler",
       "distanceAway": "{{distance}} uzakta"
     }
+  },
+  "ownerExperience": {
+    "aiDrawer": {
+      "title": "Operasyon asistanınız",
+      "description": "Mevcut sayfadan ayrılmadan sorular sorun, işletme içgörülerini inceleyin, sesli konuşun ve korumalı işlemleri onaylayın.",
+      "openWorkspace": "AI çalışma alanını aç",
+      "emptyDescription": "Bugünün programı, müşteriler, gelir, stok, kampanyalar veya sıradaki doğru adım hakkında sorun."
+    },
+    "tour": {
+      "button": "Tur",
+      "title": "Velliqo rehberli turu",
+      "stepCounter": "{{total}} adımın {{current}}. adımı",
+      "back": "Geri",
+      "next": "İleri",
+      "finish": "Bitir",
+      "skip": "Turu atla",
+      "close": "Turu kapat",
+      "restart": "Yeniden başlat",
+      "targetUnavailable": "Bu alan hâlâ yükleniyor. Devam edip daha sonra geri dönebilirsiniz.",
+      "steps": {
+        "welcome": {
+          "title": "Owner çalışma alanına hoş geldiniz",
+          "description": "Bu tur tüm Velliqo çalışma alanını dolaşır; her özelliğin nerede olduğunu, neyi yönettiğini ve temel işlemlerin nasıl tamamlandığını açıklar."
+        },
+        "quickAdd": {
+          "title": "Sık kullanılan kayıtları hızlı oluşturun",
+          "description": "Hızlı ekle ile herhangi bir Owner sayfasından randevu, satış, gider, müşteri, çalışan, hizmet, kampanya veya gönderi oluşturun."
+        },
+        "notifications": {
+          "title": "Operasyonel değişiklikleri takip edin",
+          "description": "Bildirimler randevuları, müşterileri, AI uyarılarını ve otomasyon olaylarını gösterir. İlgili alana gitmek için öğeyi açın."
+        },
+        "aiAssistant": {
+          "title": "Her yerden Velliqo AI ile konuşun",
+          "description": "Metin veya ses için masaüstü asistanını açın. Tam AI çalışma alanıyla aynı izinleri ve onayları kullanır."
+        },
+        "language": {
+          "title": "Çalışma alanı dilini değiştirin",
+          "description": "İşletme verilerini değiştirmeden Owner arayüzü ve desteklenen AI deneyiminin dilini değiştirin."
+        }
+      },
+      "features": {
+        "home": "Bugünün performansını, randevuları, uyarıları ve işletme sağlığını inceleyin. Kartlar ilgili operasyon alanını açar.",
+        "calendar": "Randevu oluşturun, taşıyın, düzenleyin veya iptal edin ve çalışan uygunluğunu kontrol edin. Yeni randevu veya zaman aralığıyla başlayın.",
+        "sales": "Hizmet ve ürün satışlarını, ödeme bilgilerini, işlem ve fiş geçmişini kaydedin.",
+        "finance": "Giderleri kaydedin, nakit akışı ve kârlılığı izleyin ve finansal durumu değerlendirin.",
+        "customers": "Müşteri arayın veya ekleyin; randevu, harcama, not ve iletişim geçmişi için profili açın.",
+        "staff": "Çalışanları, hizmetleri, uygunluğu ve plan izin verdiğinde kişisel Staff App erişimini yönetin.",
+        "services": "Rezervasyon yapılabilen hizmetleri oluşturun; fiyat, süre, kategori, görünürlük ve görsel belirleyin.",
+        "products": "Ürünleri, stokları, fiyatları ve Satış ile Velliqo AI tarafından kullanılan düşük stok verilerini yönetin.",
+        "marketing": "Kampanyalar, hedef kitleler, değerlendirme istekleri ve otomatik müşteri etkileşim akışları hazırlayın.",
+        "posts": "Herkese açık müşteri deneyiminde gösterilecek işletme güncellemeleri ve duyurular oluşturun.",
+        "gallery": "Storefront ve müşteri deneyiminde kullanılan gerçek işletme görsellerini yükleyin ve düzenleyin.",
+        "storefront": "Kimlik, iletişim, rezervasyon kuralları, harita, SEO, sosyal bağlantılar ve görünürlük için tek kaynağı yönetin.",
+        "business": "Uygunluğu ve günlük operasyonu etkileyen kapanışları ve işletme düzeyi kontrolleri yönetin.",
+        "reports": "Gelir, randevu, çalışan performansı, iptaller, hizmetler ve eğilimleri analiz edin.",
+        "billing": "Abonelik, faturalar ve ödeme kontrollerini inceleyin. Standard, Pro ve Premium hakları burada uygulanacaktır.",
+        "ai": "Sohbetler, briefingler, uyarılar, öneriler ve onaylı işlemler için tam Velliqo AI çalışma alanını açın.",
+        "training": "Önemli Velliqo süreçleri için yapılandırılmış kursları, PDF rehberleri ve gelecekteki videoları açın."
+      }
+    }
   }
 }

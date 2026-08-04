@@ -3699,5 +3699,66 @@
       "services": "Servicios",
       "distanceAway": "A {{distance}}"
     }
+  },
+  "ownerExperience": {
+    "aiDrawer": {
+      "title": "Tu asistente operativo",
+      "description": "Haz preguntas, revisa información del negocio, habla de forma natural y confirma acciones protegidas sin salir de la página actual.",
+      "openWorkspace": "Abrir espacio de IA",
+      "emptyDescription": "Pregunta por la agenda de hoy, clientes, ingresos, inventario, campañas o la siguiente acción recomendada."
+    },
+    "tour": {
+      "button": "Tour",
+      "title": "Tour guiado de Velliqo",
+      "stepCounter": "Paso {{current}} de {{total}}",
+      "back": "Atrás",
+      "next": "Siguiente",
+      "finish": "Finalizar",
+      "skip": "Omitir tour",
+      "close": "Cerrar tour",
+      "restart": "Reiniciar",
+      "targetUnavailable": "Esta zona todavía se está cargando. Puedes continuar y volver más tarde.",
+      "steps": {
+        "welcome": {
+          "title": "Bienvenido al espacio del propietario",
+          "description": "Este tour recorre todo Velliqo y explica dónde está cada función, qué controla y cómo completar las acciones más habituales."
+        },
+        "quickAdd": {
+          "title": "Crea registros habituales rápidamente",
+          "description": "Usa Creación rápida para añadir una cita, venta, gasto, cliente, empleado, servicio, campaña o publicación desde cualquier página."
+        },
+        "notifications": {
+          "title": "Controla los cambios operativos",
+          "description": "Las notificaciones muestran citas, clientes, alertas de IA y eventos de automatización. Abre un elemento para ir al área correspondiente."
+        },
+        "aiAssistant": {
+          "title": "Habla con Velliqo AI desde cualquier página",
+          "description": "Abre el asistente de escritorio para texto o voz. Usa los mismos permisos y confirmaciones que el espacio completo de IA."
+        },
+        "language": {
+          "title": "Cambia el idioma del espacio",
+          "description": "Cambia el idioma de la interfaz y de la experiencia de IA compatible sin modificar los datos del negocio."
+        }
+      },
+      "features": {
+        "home": "Revisa el rendimiento de hoy, las citas, alertas y salud del negocio. Las tarjetas y accesos abren el área correspondiente.",
+        "calendar": "Crea, mueve, edita o cancela citas y revisa la disponibilidad del personal. Empieza con Nueva cita o seleccionando una franja.",
+        "sales": "Registra ventas de servicios y productos, información de pago e historial de transacciones y recibos.",
+        "finance": "Registra gastos, controla flujo de caja y rentabilidad y revisa la posición financiera.",
+        "customers": "Busca y añade clientes y abre sus perfiles para revisar citas, gasto, notas e historial de comunicación.",
+        "staff": "Añade y edita empleados, servicios, disponibilidad y acceso a Staff Apps cuando el plan lo permita.",
+        "services": "Crea servicios reservables y define precio, duración, categoría, visibilidad e imagen.",
+        "products": "Gestiona productos, inventario, precios y alertas de stock utilizadas por Ventas y Velliqo AI.",
+        "marketing": "Prepara campañas, audiencias, solicitudes de reseñas y flujos automatizados de relación con clientes.",
+        "posts": "Crea novedades y anuncios que pueden mostrarse en la experiencia pública.",
+        "gallery": "Sube y organiza imágenes reales del negocio para el storefront y la experiencia del cliente.",
+        "storefront": "Gestiona la fuente única de identidad, contacto, reglas de reserva, mapa, SEO, redes sociales y visibilidad.",
+        "business": "Gestiona cierres y controles generales que afectan a la disponibilidad y operación diaria.",
+        "reports": "Analiza ingresos, citas, rendimiento del personal, cancelaciones, servicios y tendencias.",
+        "billing": "Revisa la suscripción, facturas y controles de pago. Aquí se aplicarán los derechos Standard, Pro y Premium.",
+        "ai": "Abre el espacio completo de Velliqo AI para conversaciones, briefings, alertas, recomendaciones y acciones confirmadas.",
+        "training": "Abre cursos, guías PDF y futuros vídeos de formación para los principales procesos de Velliqo."
+      }
+    }
   }
 }

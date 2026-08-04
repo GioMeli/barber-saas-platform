@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { supabase } from '@/db/supabase';
 import {
   askVelliqoAI,
@@ -27,6 +27,10 @@ export function useVelliqoAI(input: {
   page?: string;
 }) {
   const { businessId, language, page } = input;
+  const activeConversationStorageKey = useMemo(
+    () => businessId ? `velliqo-ai-active:${businessId}:${language}` : null,
+    [businessId, language],
+  );
   const [conversations, setConversations] = useState<VelliqoAIConversation[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const [messages, setMessages] = useState<VelliqoAIMessage[]>([]);
@@ -147,6 +151,7 @@ export function useVelliqoAI(input: {
 
   const openConversation = useCallback(async (conversationId: string) => {
     setActiveConversationId(conversationId);
+    if (activeConversationStorageKey) window.localStorage.setItem(activeConversationStorageKey, conversationId);
     setLoadingHistory(true);
     try {
       const { data, error: queryError } = await supabase
@@ -163,13 +168,14 @@ export function useVelliqoAI(input: {
     } finally {
       setLoadingHistory(false);
     }
-  }, []);
+  }, [activeConversationStorageKey]);
 
   const startNewConversation = useCallback(() => {
     setActiveConversationId(null);
     setMessages([]);
     setError(null);
-  }, []);
+    if (activeConversationStorageKey) window.localStorage.removeItem(activeConversationStorageKey);
+  }, [activeConversationStorageKey]);
 
   const sendMessage = useCallback(async (payload: {
     agent: AIAgentKey;
@@ -220,6 +226,7 @@ export function useVelliqoAI(input: {
       };
 
       setActiveConversationId(result.conversationId);
+      if (activeConversationStorageKey) window.localStorage.setItem(activeConversationStorageKey, result.conversationId);
       setMessages((current) => [...current, assistantMessage]);
       await refreshConversations();
       return result;
@@ -230,7 +237,7 @@ export function useVelliqoAI(input: {
     } finally {
       setSending(false);
     }
-  }, [activeConversationId, businessId, language, page, refreshConversations, sending]);
+  }, [activeConversationId, activeConversationStorageKey, businessId, language, page, refreshConversations, sending]);
 
 
   const updateActionInMessages = useCallback((
@@ -317,8 +324,20 @@ export function useVelliqoAI(input: {
   }, [activeConversationId, refreshConversations, startNewConversation]);
 
   useEffect(() => {
-    startNewConversation();
-  }, [language, startNewConversation]);
+    if (!activeConversationStorageKey) {
+      setActiveConversationId(null);
+      setMessages([]);
+      return;
+    }
+
+    const storedConversationId = window.localStorage.getItem(activeConversationStorageKey);
+    if (storedConversationId) void openConversation(storedConversationId);
+    else {
+      setActiveConversationId(null);
+      setMessages([]);
+      setError(null);
+    }
+  }, [activeConversationStorageKey, openConversation]);
 
   useEffect(() => {
     void refreshConversations();

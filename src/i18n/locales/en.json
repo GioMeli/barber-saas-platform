@@ -3699,5 +3699,66 @@
       "services": "Services",
       "distanceAway": "{{distance}} away"
     }
+  },
+  "ownerExperience": {
+    "aiDrawer": {
+      "title": "Your operational assistant",
+      "description": "Ask questions, review business insights, speak naturally and confirm protected actions without leaving the current page.",
+      "openWorkspace": "Open AI workspace",
+      "emptyDescription": "Ask about today’s schedule, customers, revenue, stock, campaigns or the next action your business should take."
+    },
+    "tour": {
+      "button": "Tour",
+      "title": "Velliqo guided tour",
+      "stepCounter": "Step {{current}} of {{total}}",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "skip": "Skip tour",
+      "close": "Close tour",
+      "restart": "Restart",
+      "targetUnavailable": "This area is still loading. You can continue and return to it later.",
+      "steps": {
+        "welcome": {
+          "title": "Welcome to your Owner workspace",
+          "description": "This guided tour moves through the complete Velliqo workspace and explains where each feature lives, what it controls and how to complete the most common actions."
+        },
+        "quickAdd": {
+          "title": "Create common records quickly",
+          "description": "Use Quick add to create an appointment, sale, expense, customer, staff member, service, campaign or post from any Owner page."
+        },
+        "notifications": {
+          "title": "Stay ahead of operational changes",
+          "description": "Notifications surface appointments, customers, AI alerts and automation events. Open an item to move directly to the relevant workspace."
+        },
+        "aiAssistant": {
+          "title": "Talk to Velliqo AI anywhere",
+          "description": "Open this desktop assistant for text or voice conversations. It uses the same permissions and confirmation controls as the full AI workspace."
+        },
+        "language": {
+          "title": "Change the workspace language",
+          "description": "Switch the Owner interface and supported AI experience without changing the business data stored in Velliqo."
+        }
+      },
+      "features": {
+        "home": "Review today’s performance, appointments, alerts and business health. Use the cards and shortcuts to open the relevant operational area.",
+        "calendar": "Create, move, edit or cancel appointments and review staff availability. Use the New appointment action or select a time slot to begin.",
+        "sales": "Record service and product sales, collect payment information and review transaction history and receipts.",
+        "finance": "Record expenses, monitor cash flow and profitability, and review the financial position of the business.",
+        "customers": "Search customer records, add a new customer and open a profile to review appointments, spending, notes and communication history.",
+        "staff": "Add and edit employees, configure services and availability, and manage personal Staff App access when the subscription plan allows it.",
+        "services": "Create the services customers can book, then define price, duration, category, visibility and service imagery.",
+        "products": "Manage retail products, stock levels, pricing and low-stock information used by Sales and Velliqo AI.",
+        "marketing": "Prepare campaigns, audiences, review requests and automated customer engagement workflows from one growth workspace.",
+        "posts": "Create business updates and announcements that can appear on the public customer experience.",
+        "gallery": "Upload and organize authentic business images used across the public storefront and customer experience.",
+        "storefront": "Manage the single source of truth for business identity, contact details, booking rules, map, SEO, social links and public visibility.",
+        "business": "Manage operational closures and business-level controls that affect availability and daily operations.",
+        "reports": "Analyse revenue, appointments, staff performance, cancellations, services and other business trends.",
+        "billing": "Review the current subscription, invoices and billing controls. Final Standard, Pro and Premium entitlements will be enforced here.",
+        "ai": "Open the full Velliqo AI workspace for conversations, briefings, alerts, recommendations and confirmed operational actions.",
+        "training": "Open structured courses, PDF guides and future training videos for every important Velliqo workflow."
+      }
+    }
   }
 }

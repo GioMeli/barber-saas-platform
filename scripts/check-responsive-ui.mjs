@@ -47,7 +47,8 @@ requireText('src/components/layouts/owner-shell/OwnerMobileNavigation.tsx', [
 requireText('src/components/layouts/owner-shell/OwnerTopBar.tsx', [
   'lg:hidden',
   'bg-violet-600',
-  'to="/dashboard/ai"',
+  'data-tour="desktop-ai"',
+  'lg:inline-flex',
   'hidden md:block',
 ]);
 
