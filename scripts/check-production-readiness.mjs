@@ -18,6 +18,7 @@ requireFile('public/icons/icon-512.png');
 requireFile('public/icons/icon-512-maskable.png');
 requireFile('src/pwa/registerServiceWorker.ts');
 requireFile('src/hooks/usePWAStatus.ts');
+requireFile('src/pwa/installPromptStore.ts');
 requireFile('src/components/pwa/PWAStatusCenter.tsx');
 requireFile('src/components/pwa/ConnectivityBanner.tsx');
 requireFile('.github/workflows/quality-gate.yml');
@@ -42,7 +43,8 @@ if (fs.existsSync(swPath)) {
 }
 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-if (!index.includes('rel="manifest"')) failures.push('index.html does not link the manifest');
+if (!index.includes("manifest.rel = 'manifest'") && !index.includes('rel="manifest"')) failures.push('index.html does not link the manifest');
+if (!index.includes('/staff-manifest/') || !index.includes("params.get('employee')")) failures.push('index.html does not preload the employee-specific staff manifest');
 if (!index.includes('theme-color')) failures.push('index.html missing theme color');
 
 const main = fs.readFileSync(path.join(root, 'src/main.tsx'), 'utf8');

@@ -13,6 +13,7 @@ const requireText = (file, text, label = text) => {
 [
   'src/pages/staff/EmployeeDashboard.tsx',
   'src/hooks/useStaffPWA.ts',
+  'src/pwa/installPromptStore.ts',
   'src/hooks/useStaffAuth.ts',
   'src/db/staffSupabase.ts',
   'api/staff-manifest.ts',
@@ -29,7 +30,8 @@ const requireText = (file, text, label = text) => {
 requireText('src/App.tsx', 'path="/staff/:slug"', 'company staff app route');
 requireText('src/pages/owner/Staff.tsx', 'staff.personalAccess.title', 'owner personal-access control');
 requireText('src/pages/owner/Staff.tsx', "'manage-staff-access'", 'secure access-management Edge Function');
-requireText('src/pages/owner/Staff.tsx', '?employee=${encodeURIComponent(employeeId)}', 'employee-specific staff app link');
+requireText('src/pages/owner/Staff.tsx', "new URLSearchParams({ employee: employeeId })", 'employee-specific staff app link');
+requireText('src/pages/owner/Staff.tsx', "params.set('employeeName'", 'employee name in staff app link');
 requireText('src/pages/staff/EmployeeDashboard.tsx', '<FullCalendar', 'staff calendar workspace');
 requireText('src/pages/staff/EmployeeDashboard.tsx', 'shouldCreateUser: false', 'pre-provisioned passwordless login');
 requireText('src/pages/staff/EmployeeDashboard.tsx', "searchParams.get('employee')", 'employee-specific auth redirect');
@@ -45,6 +47,10 @@ requireText('src/db/staffSupabase.ts', 'autoRefreshToken: true', 'automatic staf
 requireText('src/db/staffSupabase.ts', 'velliqo.staff.auth.${employeeSessionId', 'employee-isolated staff auth storage');
 requireText('src/db/supabase.ts', 'detectSessionInUrl: !isStaffRoute', 'staff magic-link client isolation');
 requireText('src/hooks/useStaffPWA.ts', 'employee?.id', 'employee-specific manifest');
+requireText('src/hooks/useStaffPWA.ts', "v: '6'", 'staff manifest cache/version hardening');
+requireText('src/pwa/installPromptStore.ts', 'beforeinstallprompt', 'early install prompt capture');
+requireText('src/hooks/usePWAStatus.ts', '15_000', 'install prompt timeout recovery');
+requireText('index.html', '/staff-manifest/', 'staff manifest preloaded before React');
 requireText('api/staff-manifest.ts', 'employeeId', 'employee-specific PWA identity');
 requireText('api/staff-manifest.ts', "display: 'standalone'", 'standalone staff PWA');
 requireText('vercel.json', '/staff-manifest/:slug/:employeeId.webmanifest', 'employee manifest rewrite');
@@ -116,6 +122,7 @@ const edgeFunction = read('supabase/functions/manage-staff-access/index.ts');
   "eq('role', 'Owner')",
   'admin.auth.admin.generateLink',
   '?employee=${encodeURIComponent(employee.id)}',
+  'employeeName=${encodeURIComponent(employee.name',
   "type: 'magiclink'",
   "personal_access_enabled: false",
   "personal_access_status: 'revoked'",

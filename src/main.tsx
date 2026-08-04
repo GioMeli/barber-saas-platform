@@ -7,6 +7,9 @@ import "./i18n";
 import { useTranslation } from "react-i18next";
 import { LocalizationRoot } from "./i18n/components/LocalizationRoot";
 import { registerVelliqoServiceWorker } from "./pwa/registerServiceWorker";
+import { initInstallPromptCapture } from "./pwa/installPromptStore";
+
+initInstallPromptCapture();
 
 Sentry.init({
   dsn: import.meta.env['VITE_SENTRY_DSN'] as string | undefined,

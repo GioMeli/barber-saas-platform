@@ -37,22 +37,26 @@ export function useStorePWA(business: StoreBusiness | null | undefined) {
   const status = usePWAStatus();
   const enabled = Boolean(business?.slug && business.pwa_enabled !== false);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!business?.slug || !enabled) return;
 
-    const manifest = ensureLink('store-pwa-manifest', 'manifest');
-    manifest.href = `/store-manifest/${encodeURIComponent(business.slug)}.webmanifest`;
+    const manifest = ensureLink('app-manifest', 'manifest');
+    const nextManifestHref = `/store-manifest/${encodeURIComponent(business.slug)}.webmanifest?v=2`;
+    if (manifest.getAttribute('href') !== nextManifestHref) manifest.href = nextManifestHref;
 
-    const icon = ensureLink('store-apple-touch-icon', 'apple-touch-icon');
-    icon.href = business.logo_url || '/brand/velliqo-ai.png';
+    const icon = ensureLink('app-apple-touch-icon', 'apple-touch-icon');
+    icon.href = business.logo_url || '/icons/icon-192.png';
 
-    const titleMeta = ensureMeta('store-apple-title', 'apple-mobile-web-app-title');
+    const titleMeta = ensureMeta('app-apple-title', 'apple-mobile-web-app-title');
     titleMeta.content = business.pwa_short_name || business.name;
 
     return () => {
-      manifest.href = '/manifest.webmanifest';
-      icon.href = '/brand/velliqo-ai.png';
-      titleMeta.content = 'Velliqo';
+      queueMicrotask(() => {
+        if (window.location.pathname.startsWith(`/app/${business.slug}`)) return;
+        manifest.href = '/manifest.webmanifest';
+        icon.href = '/icons/icon-192.png';
+        titleMeta.content = 'Velliqo';
+      });
     };
   }, [business?.slug, business?.name, business?.logo_url, business?.pwa_short_name, enabled]);
 

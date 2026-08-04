@@ -11,7 +11,31 @@
     <meta name="apple-mobile-web-app-title" content="Velliqo" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="description" content="Velliqo is the complete operating system for appointment-based businesses." />
-    <link rel="manifest" href="/manifest.webmanifest" />
+    <script>
+      (() => {
+        const parts = window.location.pathname.split('/').filter(Boolean);
+        const params = new URLSearchParams(window.location.search);
+        let manifestHref = '/manifest.webmanifest';
+
+        if (parts[0] === 'staff' && parts[1]) {
+          const employee = params.get('employee') || '';
+          if (/^[a-z0-9-]{2,120}$/i.test(parts[1]) && /^[a-z0-9-]{2,120}$/i.test(employee)) {
+            const employeeName = (params.get('employeeName') || '').trim().slice(0, 60);
+            const query = new URLSearchParams({ v: '6' });
+            if (employeeName) query.set('employeeName', employeeName);
+            manifestHref = `/staff-manifest/${encodeURIComponent(parts[1])}/${encodeURIComponent(employee)}.webmanifest?${query.toString()}`;
+          }
+        } else if (parts[0] === 'app' && parts[1] && /^[a-z0-9-]{2,120}$/i.test(parts[1])) {
+          manifestHref = `/store-manifest/${encodeURIComponent(parts[1])}.webmanifest?v=2`;
+        }
+
+        const manifest = document.createElement('link');
+        manifest.id = 'app-manifest';
+        manifest.rel = 'manifest';
+        manifest.href = manifestHref;
+        document.head.appendChild(manifest);
+      })();
+    </script>
     <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <title>Velliqo Business</title>

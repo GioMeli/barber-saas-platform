@@ -36,6 +36,14 @@ function ensureMeta(id: string, name: string) {
   return meta;
 }
 
+function staffManifestHref(business: StaffBusiness, employee: StaffEmployee) {
+  const query = new URLSearchParams({
+    employeeName: employee.name || 'Staff',
+    v: '6',
+  });
+  return `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?${query.toString()}`;
+}
+
 export function useStaffPWA(
   business: StaffBusiness | null | undefined,
   employee?: StaffEmployee | null
@@ -43,26 +51,33 @@ export function useStaffPWA(
   const status = usePWAStatus();
   const enabled = Boolean(business?.slug && employee?.id);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (!business?.slug || !employee?.id) return;
 
-    const employeeName = encodeURIComponent(employee.name || 'Staff');
-    const manifest = ensureLink('staff-pwa-manifest', 'manifest');
-    manifest.href = `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?employeeName=${employeeName}&v=4`;
+    const manifest = ensureLink('app-manifest', 'manifest');
+    const nextManifestHref = staffManifestHref(business, employee);
+    if (manifest.getAttribute('href') !== nextManifestHref) manifest.href = nextManifestHref;
 
-    const icon = ensureLink('staff-apple-touch-icon', 'apple-touch-icon');
-    icon.href = business.logo_url || '/brand/velliqo-ai.png';
+    const icon = ensureLink('app-apple-touch-icon', 'apple-touch-icon');
+    icon.href = business.logo_url || '/icons/icon-192.png';
 
-    const titleMeta = ensureMeta('staff-apple-title', 'apple-mobile-web-app-title');
+    const titleMeta = ensureMeta('app-apple-title', 'apple-mobile-web-app-title');
     titleMeta.content = `${employee.name} · ${business.name}`;
 
     const previousTitle = document.title;
     document.title = `${employee.name} · ${business.name} Staff`;
 
     return () => {
-      manifest.href = '/manifest.webmanifest';
-      icon.href = '/brand/velliqo-ai.png';
-      titleMeta.content = 'Velliqo';
+      // React runs effect cleanup both on unmount and before dependency updates.
+      // Only restore the generic manifest after navigation away from this staff route;
+      // transiently switching to the generic manifest invalidates Chromium's deferred
+      // install prompt and was the root cause of the installer getting stuck.
+      queueMicrotask(() => {
+        if (window.location.pathname.startsWith(`/staff/${business.slug}`)) return;
+        manifest.href = '/manifest.webmanifest';
+        icon.href = '/icons/icon-192.png';
+        titleMeta.content = 'Velliqo';
+      });
       document.title = previousTitle;
     };
   }, [business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
