@@ -48,7 +48,7 @@ export function useStaffPWA(
 
     const employeeName = encodeURIComponent(employee.name || 'Staff');
     const manifest = ensureLink('staff-pwa-manifest', 'manifest');
-    manifest.href = `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?employeeName=${employeeName}`;
+    manifest.href = `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?employeeName=${employeeName}&v=3`;
 
     const icon = ensureLink('staff-apple-touch-icon', 'apple-touch-icon');
     icon.href = business.logo_url || '/brand/velliqo-ai.png';

@@ -1,5 +1,3 @@
-const FALLBACK_ICON = '/brand/velliqo-ai.png';
-
 function cleanEmployeeName(value: unknown) {
   return String(value || 'Staff')
     .replace(/[<>\u0000-\u001f]/g, '')
@@ -46,7 +44,6 @@ export default async function handler(request: any, response: any) {
   const business = rows?.[0];
   if (!business) return response.status(404).json({ error: 'Staff app is unavailable' });
 
-  const icon = business.logo_url || FALLBACK_ICON;
   const fullName = `${employeeName} · ${business.name}`;
   const shortName = `${employeeName.slice(0, 14)} Staff`;
   const employeeParam = encodeURIComponent(employeeId);
@@ -64,12 +61,14 @@ export default async function handler(request: any, response: any) {
     categories: ['business', 'productivity'],
     prefer_related_applications: false,
     icons: [
-      { src: icon, sizes: '192x192', purpose: 'any' },
-      { src: icon, sizes: '512x512', purpose: 'any maskable' },
+      { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
+      { src: '/icons/icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
+      { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+      { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
     ],
     shortcuts: [
-      { name: 'My schedule', url: `/staff/${business.slug}`, icons: [{ src: icon, sizes: '192x192' }] },
-      { name: 'New appointment', url: `/staff/${business.slug}?action=new`, icons: [{ src: icon, sizes: '192x192' }] },
+      { name: 'My schedule', url: `/staff/${business.slug}?employee=${employeeParam}`, icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
+      { name: 'New appointment', url: `/staff/${business.slug}?employee=${employeeParam}&action=new`, icons: [{ src: '/icons/icon-192.png', sizes: '192x192' }] },
     ],
   };
 

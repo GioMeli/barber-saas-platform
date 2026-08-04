@@ -86,6 +86,12 @@ Deno.serve(async (request) => {
         .eq('business_id', employee.business_id);
       if (revokeError) throw revokeError;
 
+      await admin
+        .from('staff_trusted_devices')
+        .update({ revoked_at: now, updated_at: now })
+        .eq('employee_id', employee.id)
+        .is('revoked_at', null);
+
       await admin.from('staff_access_audit_logs').insert({
         business_id: employee.business_id,
         employee_id: employee.id,
