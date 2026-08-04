@@ -82,6 +82,7 @@ export default function OwnerSidebar({
               <Link
                 key={item.key}
                 to={item.path}
+                data-tour-nav={item.key}
                 onClick={onNavigate}
                 aria-current={active ? 'page' : undefined}
                 className={cn(

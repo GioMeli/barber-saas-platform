@@ -3699,5 +3699,66 @@
       "services": "Dienstleistungen",
       "distanceAway": "{{distance}} entfernt"
     }
+  },
+  "ownerExperience": {
+    "aiDrawer": {
+      "title": "Ihr operativer Assistent",
+      "description": "Stellen Sie Fragen, prüfen Sie Geschäftseinblicke, sprechen Sie natürlich und bestätigen Sie geschützte Aktionen, ohne die aktuelle Seite zu verlassen.",
+      "openWorkspace": "AI-Arbeitsbereich öffnen",
+      "emptyDescription": "Fragen Sie nach dem heutigen Zeitplan, Kunden, Umsatz, Bestand, Kampagnen oder dem nächsten sinnvollen Schritt."
+    },
+    "tour": {
+      "button": "Tour",
+      "title": "Geführte Velliqo-Tour",
+      "stepCounter": "Schritt {{current}} von {{total}}",
+      "back": "Zurück",
+      "next": "Weiter",
+      "finish": "Beenden",
+      "skip": "Tour überspringen",
+      "close": "Tour schließen",
+      "restart": "Neu starten",
+      "targetUnavailable": "Dieser Bereich wird noch geladen. Sie können fortfahren und später zurückkehren.",
+      "steps": {
+        "welcome": {
+          "title": "Willkommen im Owner-Arbeitsbereich",
+          "description": "Diese Tour führt durch den gesamten Velliqo-Arbeitsbereich und erklärt, wo jede Funktion liegt, was sie steuert und wie die wichtigsten Aktionen ausgeführt werden."
+        },
+        "quickAdd": {
+          "title": "Häufige Einträge schnell erstellen",
+          "description": "Mit „Schnell hinzufügen“ erstellen Sie von jeder Owner-Seite Termine, Verkäufe, Ausgaben, Kunden, Mitarbeiter, Services, Kampagnen oder Beiträge."
+        },
+        "notifications": {
+          "title": "Operative Änderungen im Blick behalten",
+          "description": "Benachrichtigungen zeigen Termine, Kunden, AI-Warnungen und Automationsereignisse. Öffnen Sie einen Eintrag, um direkt zum passenden Bereich zu gelangen."
+        },
+        "aiAssistant": {
+          "title": "Velliqo AI überall verwenden",
+          "description": "Öffnen Sie den Desktop-Assistenten für Text- oder Sprachdialoge. Er verwendet dieselben Berechtigungen und Bestätigungen wie der vollständige AI-Bereich."
+        },
+        "language": {
+          "title": "Sprache des Arbeitsbereichs ändern",
+          "description": "Wechseln Sie die Sprache der Owner-Oberfläche und der unterstützten AI-Erfahrung, ohne Geschäftsdaten zu verändern."
+        }
+      },
+      "features": {
+        "home": "Prüfen Sie heutige Leistung, Termine, Warnungen und Geschäftsgesundheit. Karten und Schnellzugriffe öffnen den jeweiligen Arbeitsbereich.",
+        "calendar": "Erstellen, verschieben, bearbeiten oder stornieren Sie Termine und prüfen Sie die Mitarbeiterverfügbarkeit. Starten Sie über „Neuer Termin“ oder einen Zeitraum.",
+        "sales": "Erfassen Sie Service- und Produktverkäufe, Zahlungsinformationen sowie Transaktions- und Belegverläufe.",
+        "finance": "Erfassen Sie Ausgaben, überwachen Sie Cashflow und Rentabilität und prüfen Sie die finanzielle Lage.",
+        "customers": "Suchen und erstellen Sie Kunden und öffnen Sie Profile für Termine, Ausgaben, Notizen und Kommunikationsverlauf.",
+        "staff": "Verwalten Sie Mitarbeiter, Services, Verfügbarkeit und persönliche Staff-App-Zugänge, wenn der Tarif dies erlaubt.",
+        "services": "Erstellen Sie buchbare Services und definieren Sie Preis, Dauer, Kategorie, Sichtbarkeit und Bilder.",
+        "products": "Verwalten Sie Produkte, Bestand, Preise und Niedrigbestandsinformationen für Sales und Velliqo AI.",
+        "marketing": "Erstellen Sie Kampagnen, Zielgruppen, Bewertungsanfragen und automatisierte Kundenbindungsabläufe.",
+        "posts": "Erstellen Sie Updates und Ankündigungen für die öffentliche Kundenerfahrung.",
+        "gallery": "Laden Sie authentische Unternehmensbilder für Storefront und Kundenerfahrung hoch und organisieren Sie sie.",
+        "storefront": "Verwalten Sie die zentrale Quelle für Identität, Kontakt, Buchungsregeln, Karte, SEO, Social Links und Sichtbarkeit.",
+        "business": "Verwalten Sie Schließzeiten und unternehmensweite Steuerungen für Verfügbarkeit und Tagesbetrieb.",
+        "reports": "Analysieren Sie Umsatz, Termine, Mitarbeiterleistung, Stornierungen, Services und Trends.",
+        "billing": "Prüfen Sie Abonnement, Rechnungen und Abrechnung. Hier werden die finalen Standard-, Pro- und Premium-Rechte durchgesetzt.",
+        "ai": "Öffnen Sie den vollständigen Velliqo-AI-Bereich für Dialoge, Briefings, Warnungen, Empfehlungen und bestätigte Aktionen.",
+        "training": "Öffnen Sie strukturierte Kurse, PDF-Anleitungen und zukünftige Trainingsvideos für wichtige Workflows."
+      }
+    }
   }
 }
