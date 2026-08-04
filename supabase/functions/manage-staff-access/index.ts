@@ -69,7 +69,7 @@ Deno.serve(async (request) => {
     if (!business || business.status !== 'active') return json({ error: 'Business is not active' }, 409);
 
     const baseUrl = resolveBaseUrl(body.origin);
-    const staffAppUrl = `${baseUrl}/staff/${encodeURIComponent(business.slug)}`;
+    const staffAppUrl = `${baseUrl}/staff/${encodeURIComponent(business.slug)}?employee=${encodeURIComponent(employee.id)}`;
 
     if (action === 'revoke') {
       const now = new Date().toISOString();

@@ -2668,14 +2668,29 @@
     },
     "access": {
       "title": "Open your staff app",
-      "description": "Enter the staff email approved by the business owner. We will send a secure, single-use sign-in link.",
+      "description": "Use your approved staff email once on this device. A secure session is then restored automatically whenever you open the app.",
       "email": "Staff email",
       "sending": "Sending link…",
       "sendLink": "Send secure access link",
-      "securityNote": "No password is required. Access works only while the business owner keeps it enabled.",
+      "securityNote": "No password is required. This device stays signed in until you sign out, clear browser data or the business owner revokes access.",
       "emailRequired": "Enter your approved staff email.",
       "linkFailed": "Unable to send the access link",
-      "linkSent": "Check your email for the secure staff app link."
+      "linkSent": "Check your email for the secure staff app link.",
+      "premiumBadge": "Personal staff workspace",
+      "premiumTitle": "Your schedule. Your customers. One focused workspace.",
+      "premiumDescription": "Manage only the appointments assigned to you, create bookings from the business customer list and keep the owner calendar synchronized in real time.",
+      "oneTimeTitle": "One-time device activation",
+      "oneTimeDescription": "After the first secure email link, this browser or installed app restores your session automatically.",
+      "features": {
+        "schedule": "Personal calendar",
+        "scheduleDescription": "Only your own appointments and availability.",
+        "sync": "Live owner sync",
+        "syncDescription": "Every change appears in the owner workspace.",
+        "secure": "Owner-controlled access",
+        "secureDescription": "Access stops immediately when the owner disables it.",
+        "install": "Installable app",
+        "installDescription": "Add your personal workspace to mobile or desktop."
+      }
     },
     "calendar": {
       "today": "Today",
@@ -2700,7 +2715,24 @@
       "notes": "Notes",
       "required": "Complete the customer, service, date and time fields.",
       "saving": "Creating…",
-      "save": "Create appointment"
+      "save": "Create appointment",
+      "customerPickerLabel": "Business customer",
+      "customerPickerDescription": "Search and select any customer belonging to this business, or create a new customer for this appointment.",
+      "customerCount": "{{count}} customers",
+      "customerPickerPlaceholder": "Search the business customer list",
+      "customerSearchPlaceholder": "Search by name, phone or email…",
+      "customerEmpty": "No matching customer found.",
+      "newCustomer": "Create a new customer",
+      "newCustomerDescription": "Enter new contact details below",
+      "noContact": "No contact details"
+    },
+    "install": {
+      "title": "Install your personal staff app",
+      "description": "Install this dedicated workspace on your phone or computer. It opens directly to your schedule and keeps this device signed in securely.",
+      "action": "Install personal app",
+      "installed": "Installed",
+      "iosInstructions": "On iPhone or iPad, tap Share and then “Add to Home Screen”.",
+      "browserInstructions": "Open the browser menu and choose “Install app” or “Add to Home Screen” when available."
     }
   },
   "sales": {

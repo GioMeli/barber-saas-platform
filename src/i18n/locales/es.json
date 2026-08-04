@@ -2668,14 +2668,29 @@
     },
     "access": {
       "title": "Abrir tu app del personal",
-      "description": "Introduce el email aprobado por el propietario. Enviaremos un enlace seguro de un solo uso.",
+      "description": "Usa una sola vez en este dispositivo el correo del empleado aprobado por el propietario. Después, la sesión segura se restaura automáticamente al abrir la aplicación.",
       "email": "Email del empleado",
       "sending": "Enviando enlace…",
       "sendLink": "Enviar enlace seguro",
-      "securityNote": "No se necesita contraseña. El acceso funciona solo mientras el propietario lo mantenga activo.",
+      "securityNote": "No se requiere contraseña. Este dispositivo permanecerá conectado hasta que cierres sesión, borres los datos del navegador o el propietario revoque el acceso.",
       "emailRequired": "Introduce el email aprobado del empleado.",
       "linkFailed": "No se pudo enviar el enlace",
-      "linkSent": "Revisa tu email para abrir el enlace seguro de la app."
+      "linkSent": "Revisa tu email para abrir el enlace seguro de la app.",
+      "premiumBadge": "Espacio personal del empleado",
+      "premiumTitle": "Tu agenda. Tus clientes. Un espacio de trabajo enfocado.",
+      "premiumDescription": "Gestiona únicamente tus citas asignadas, crea reservas desde la lista de clientes del negocio y sincroniza cada cambio con el espacio del propietario en tiempo real.",
+      "oneTimeTitle": "Activación única del dispositivo",
+      "oneTimeDescription": "Después del primer enlace seguro por correo, el navegador o la aplicación instalada restaura tu sesión automáticamente.",
+      "features": {
+        "schedule": "Calendario personal",
+        "scheduleDescription": "Solo tus propias citas y disponibilidad.",
+        "sync": "Sincronización en vivo",
+        "syncDescription": "Cada cambio aparece en el espacio del propietario.",
+        "secure": "Acceso controlado",
+        "secureDescription": "El acceso se detiene de inmediato cuando el propietario lo desactiva.",
+        "install": "Aplicación instalable",
+        "installDescription": "Añade tu espacio personal al móvil o al escritorio."
+      }
     },
     "calendar": {
       "today": "Hoy",
@@ -2700,7 +2715,24 @@
       "notes": "Notas",
       "required": "Completa cliente, servicio, fecha y hora.",
       "saving": "Creando…",
-      "save": "Crear cita"
+      "save": "Crear cita",
+      "customerPickerLabel": "Cliente del negocio",
+      "customerPickerDescription": "Busca y selecciona cualquier cliente de este negocio o crea uno nuevo para esta cita.",
+      "customerCount": "{{count}} clientes",
+      "customerPickerPlaceholder": "Buscar en la lista de clientes",
+      "customerSearchPlaceholder": "Buscar por nombre, teléfono o correo…",
+      "customerEmpty": "No se encontró ningún cliente.",
+      "newCustomer": "Crear nuevo cliente",
+      "newCustomerDescription": "Introduce los nuevos datos abajo",
+      "noContact": "Sin datos de contacto"
+    },
+    "install": {
+      "title": "Instala tu aplicación personal de personal",
+      "description": "Instala este espacio personal en tu teléfono u ordenador. Se abre directamente en tu agenda y mantiene este dispositivo conectado de forma segura.",
+      "action": "Instalar aplicación personal",
+      "installed": "Instalada",
+      "iosInstructions": "En iPhone o iPad, pulsa Compartir y después “Añadir a pantalla de inicio”.",
+      "browserInstructions": "Abre el menú del navegador y elige “Instalar aplicación” o “Añadir a pantalla de inicio” cuando esté disponible."
     }
   },
   "sales": {

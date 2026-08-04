@@ -600,9 +600,12 @@ export default function Staff() {
     }
   };
 
+  const staffAppLink = (employeeId?: string | null) =>
+    `${window.location.origin}/staff/${businessSlug}${employeeId ? `?employee=${encodeURIComponent(employeeId)}` : ''}`;
+
   const copyStaffAppLink = async () => {
     if (!businessSlug) return;
-    await navigator.clipboard.writeText(`${window.location.origin}/staff/${businessSlug}`);
+    await navigator.clipboard.writeText(staffAppLink(editingId));
     toast.success(t('staff.personalAccess.messages.linkCopied'));
   };
 
@@ -1175,7 +1178,7 @@ export default function Staff() {
                             {t('staff.personalAccess.appLink')}
                           </div>
                           <div className="mt-1 truncate text-sm font-semibold">
-                            {`${window.location.origin}/staff/${businessSlug}`}
+                            {staffAppLink(editingId)}
                           </div>
                         </div>
                         <Button type="button" variant="outline" size="sm" onClick={() => void copyStaffAppLink()}>

@@ -1,5 +1,12 @@
 const FALLBACK_ICON = '/brand/velliqo-ai.png';
 
+function cleanEmployeeName(value: unknown) {
+  return String(value || 'Staff')
+    .replace(/[<>\u0000-\u001f]/g, '')
+    .trim()
+    .slice(0, 60) || 'Staff';
+}
+
 export default async function handler(request: any, response: any) {
   if (request.method !== 'GET') {
     response.setHeader('Allow', 'GET');
@@ -7,8 +14,14 @@ export default async function handler(request: any, response: any) {
   }
 
   const slug = String(request.query?.slug || '').trim();
+  const employeeId = String(request.query?.employeeId || 'staff').trim();
+  const employeeName = cleanEmployeeName(request.query?.employeeName);
+
   if (!/^[a-z0-9-]{2,120}$/i.test(slug)) {
     return response.status(400).json({ error: 'Invalid business slug' });
+  }
+  if (!/^[a-z0-9-]{2,120}$/i.test(employeeId)) {
+    return response.status(400).json({ error: 'Invalid staff identifier' });
   }
 
   const supabaseUrl = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
@@ -34,22 +47,25 @@ export default async function handler(request: any, response: any) {
   if (!business) return response.status(404).json({ error: 'Staff app is unavailable' });
 
   const icon = business.logo_url || FALLBACK_ICON;
-  const shortName = `${String(business.name).slice(0, 20)} Staff`;
+  const fullName = `${employeeName} · ${business.name}`;
+  const shortName = `${employeeName.slice(0, 14)} Staff`;
+  const employeeParam = encodeURIComponent(employeeId);
   const manifest = {
-    id: `/staff/${business.slug}`,
-    name: `${business.name} Staff`,
+    id: `/staff/${business.slug}/app/${employeeParam}`,
+    name: fullName,
     short_name: shortName,
-    description: `Personal appointment workspace for ${business.name} staff.`,
-    start_url: `/staff/${business.slug}?source=pwa`,
+    description: `${employeeName}'s personal appointment workspace for ${business.name}.`,
+    start_url: `/staff/${business.slug}?source=pwa&employee=${employeeParam}`,
     scope: `/staff/${business.slug}`,
     display: 'standalone',
     orientation: 'any',
     background_color: '#f8fafc',
-    theme_color: '#0f172a',
+    theme_color: '#6d28d9',
+    categories: ['business', 'productivity'],
     prefer_related_applications: false,
     icons: [
       { src: icon, sizes: '192x192', purpose: 'any' },
-      { src: icon, sizes: '512x512', purpose: 'any' },
+      { src: icon, sizes: '512x512', purpose: 'any maskable' },
     ],
     shortcuts: [
       { name: 'My schedule', url: `/staff/${business.slug}`, icons: [{ src: icon, sizes: '192x192' }] },
@@ -58,6 +74,6 @@ export default async function handler(request: any, response: any) {
   };
 
   response.setHeader('Content-Type', 'application/manifest+json; charset=utf-8');
-  response.setHeader('Cache-Control', 'public, max-age=300, stale-while-revalidate=3600');
+  response.setHeader('Cache-Control', 'private, max-age=300, stale-while-revalidate=3600');
   return response.status(200).send(JSON.stringify(manifest));
 }
