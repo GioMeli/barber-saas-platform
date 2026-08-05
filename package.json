@@ -35,7 +35,8 @@
     "customer-ux:check": "node scripts/check-customer-ux-consistency.mjs",
     "phase12:check": "node scripts/check-phase12-public-training.mjs",
     "branding:check": "node scripts/check-transparent-branding.mjs",
-    "phase12d:check": "node scripts/check-phase12d-premium-learning-business-types.mjs"
+    "phase12d:check": "node scripts/check-phase12d-premium-learning-business-types.mjs",
+    "training-certification:check": "node scripts/check-training-certification.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",

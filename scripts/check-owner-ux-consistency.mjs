@@ -4,7 +4,7 @@ const checks = [
   ['src/components/layouts/OwnerDashboardLayout.tsx', 'id="owner-main-content"', 'Owner main landmark must expose the skip-link target'],
   ['src/components/layouts/OwnerDashboardLayout.tsx', 'ownerExperience.accessibility.skipToContent', 'Owner shell must provide a keyboard skip link'],
   ['src/components/layouts/OwnerDashboardLayout.tsx', 'aria-live="polite"', 'Owner shell must announce route changes'],
-  ['src/pages/owner/TrainingPortal.tsx', 'className="app-page pb-10"', 'Training must use the shared Owner responsive page container'],
+  ['src/components/training/TrainingCertificationLibrary.tsx', "embedded ? 'pb-4' : 'app-page pb-10'", 'Training must use the shared Owner responsive page container'],
   ['src/pages/owner/Storefront.tsx', 'sticky-owner-tabs', 'Storefront sticky navigation must respect the Owner top bar'],
   ['src/pages/owner/Reports.tsx', 'sticky-owner-tabs', 'Reports sticky navigation must respect the Owner top bar'],
   ['src/pages/owner/Storefront.tsx', 'bottom-[calc(5.75rem+env(safe-area-inset-bottom))]', 'Storefront save bar must sit above mobile Owner navigation'],

@@ -13,6 +13,7 @@ import { useIsMobile } from '@/hooks/use-mobile';
 import { staffSupabase } from '@/db/staffSupabase';
 import { StaffInstallDialog } from '@/components/staff/StaffInstallDialog';
 import { StaffProfileSheet } from '@/components/staff/StaffProfileSheet';
+import { StaffTrainingDialog } from '@/components/training/StaffTrainingDialog';
 import { getTrustedDeviceCredentials, registerTrustedDevice, revokeTrustedDevice, trustedDeviceSignIn } from '@/staff/trustedDevice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -64,6 +65,7 @@ import {
   ShieldCheck,
   Smartphone,
   Sparkles,
+  GraduationCap,
   UserRound,
   XCircle,
 } from 'lucide-react';
@@ -136,6 +138,7 @@ export default function EmployeeDashboard() {
   const [trustedSigningIn, setTrustedSigningIn] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [trainingOpen, setTrainingOpen] = useState(false);
   const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
   const [calendarTitle, setCalendarTitle] = useState('');
   const [calendarView, setCalendarView] = useState('timeGridWeek');
@@ -848,6 +851,9 @@ export default function EmployeeDashboard() {
               ) : (
                 <Button variant="outline" size="sm" className="rounded-xl" onClick={() => setInstallOpen(true)}><Download className="mr-2 h-4 w-4" />{t('staffPortal.actions.install')}</Button>
               )}
+              <Button variant="outline" size="icon" onClick={() => setTrainingOpen(true)} aria-label={t('training.certification.staffTrainingTitle')}>
+                <GraduationCap className="h-4 w-4" />
+              </Button>
               <Button variant="outline" size="icon" onClick={() => setProfileOpen(true)} aria-label={t('staffPortal.profile.open')}>
                 <UserRound className="h-4 w-4" />
               </Button>
@@ -906,6 +912,20 @@ export default function EmployeeDashboard() {
           <Metric icon={<CheckCircle2 className="h-5 w-5" />} label={t('staffPortal.stats.completed')} value={stats.completed} />
           <Metric icon={<Sparkles className="h-5 w-5" />} label={t('staffPortal.stats.remaining')} value={stats.remaining} />
           <Metric icon={<Clock3 className="h-5 w-5" />} label={t('staffPortal.stats.bookedTime')} value={formatMinutes(stats.minutes, t)} />
+        </section>
+
+        <section className="overflow-hidden rounded-3xl border border-violet-200 bg-[linear-gradient(135deg,#ffffff_0%,#f5f3ff_55%,#ede9fe_100%)] shadow-sm">
+          <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+            <div className="flex items-start gap-4">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-violet-700 text-white shadow-lg shadow-violet-200"><GraduationCap className="h-6 w-6" /></div>
+              <div>
+                <div className="text-xs font-black uppercase tracking-[.16em] text-violet-700">{t('training.certification.staffEyebrow')}</div>
+                <h2 className="mt-1 text-xl font-black text-slate-950">{t('training.certification.staffTrainingTitle')}</h2>
+                <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{t('training.certification.staffTrainingCardDescription')}</p>
+              </div>
+            </div>
+            <Button className="min-h-11 rounded-xl bg-violet-700 px-5 hover:bg-violet-800" onClick={() => setTrainingOpen(true)}><GraduationCap className="mr-2 h-4 w-4" />{t('training.certification.openTraining')}</Button>
+          </div>
         </section>
 
         {nextAppointment && (
@@ -984,9 +1004,10 @@ export default function EmployeeDashboard() {
       </main>
 
       <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-2 pt-2 shadow-[0_-12px_34px_rgba(15,23,42,0.10)] backdrop-blur-xl md:hidden" aria-label={t('staffPortal.mobileNav.label')}>
-        <div className="mx-auto grid max-w-lg grid-cols-4 gap-1">
+        <div className="mx-auto grid max-w-xl grid-cols-5 gap-1">
           <StaffMobileNavButton icon={<CalendarDays className="h-5 w-5" />} label={t('staffPortal.mobileNav.schedule')} onClick={scrollToSchedule} />
           <StaffMobileNavButton primary icon={<Plus className="h-5 w-5" />} label={t('staffPortal.mobileNav.newAppointment')} onClick={() => setCreateOpen(true)} />
+          <StaffMobileNavButton icon={<GraduationCap className="h-5 w-5" />} label={t('training.certification.mobileTraining')} onClick={() => setTrainingOpen(true)} />
           <StaffMobileNavButton icon={<UserRound className="h-5 w-5" />} label={t('staffPortal.mobileNav.profile')} onClick={() => setProfileOpen(true)} />
           <StaffMobileNavButton icon={<MoreHorizontal className="h-5 w-5" />} label={t('staffPortal.mobileNav.more')} onClick={() => setMobileActionsOpen(true)} />
         </div>
@@ -1005,6 +1026,9 @@ export default function EmployeeDashboard() {
                 <Download className="mr-3 h-5 w-5" />{t('staffPortal.actions.install')}
               </Button>
             )}
+            <Button variant="outline" className="min-h-12 w-full justify-start rounded-xl" onClick={() => { setMobileActionsOpen(false); setTrainingOpen(true); }}>
+              <GraduationCap className="mr-3 h-5 w-5" />{t('training.certification.openTraining')}
+            </Button>
             <Button variant="outline" className="min-h-12 w-full justify-start rounded-xl" disabled={refreshing} onClick={() => { setMobileActionsOpen(false); void loadWorkspace(true); }}>
               <RefreshCw className={`mr-3 h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />{t('staffPortal.actions.refresh')}
             </Button>
@@ -1141,6 +1165,14 @@ export default function EmployeeDashboard() {
         isInstalled={pwa.isInstalled}
         needsManualIOSInstall={pwa.needsManualIOSInstall}
         onInstall={pwa.install}
+      />
+
+      <StaffTrainingDialog
+        open={trainingOpen}
+        onOpenChange={setTrainingOpen}
+        business={workspace.business}
+        employee={workspace.employee}
+        userId={user?.id}
       />
 
       <StaffProfileSheet

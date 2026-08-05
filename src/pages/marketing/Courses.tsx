@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { TrainingCourseVisual } from '@/components/training/TrainingCourseVisual';
 import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
+import { TrainingCurriculumDialog } from '@/components/training/TrainingCurriculumDialog';
+import { getTrainingLessonsForGuide } from '@/training/curriculum';
 import {
   getTrainingPdfPath,
   TRAINING_CATEGORIES,
@@ -21,6 +23,7 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
   const [query, setQuery] = React.useState('');
   const [category, setCategory] = React.useState<TrainingCategory | 'all'>('all');
   const [activeVideo, setActiveVideo] = React.useState<TrainingGuide | null>(null);
+  const [activeGuide, setActiveGuide] = React.useState<TrainingGuide | null>(null);
 
   const filtered = React.useMemo(() => TRAINING_GUIDES.filter((guide) => {
     const title = t(`training.guides.${guide.slug}.title`).toLowerCase();
@@ -62,6 +65,7 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
           const demoPath = guide.demoRoute || guide.route?.replace('/dashboard', '/demo') || '/demo';
           const hasVideo = Boolean(guide.videoUrl);
+          const lessons = getTrainingLessonsForGuide('owner', guide.slug, i18n.language);
           return (
             <article key={guide.slug} className="group relative flex min-h-[430px] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200/90 bg-white p-3 shadow-[0_18px_55px_rgba(15,23,42,.09)] ring-1 ring-slate-950/[.025] transition duration-300 hover:-translate-y-1 hover:border-violet-300 hover:shadow-[0_26px_70px_rgba(76,29,149,.16)]">
               <TrainingCourseVisual
@@ -74,13 +78,14 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
               />
               <div className="flex flex-1 flex-col px-2 pb-2 pt-5 sm:px-3">
                 <div className="mb-3 flex items-center justify-between gap-3">
-                  <span className="rounded-full border border-violet-100 bg-violet-50 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.15em] text-violet-700">PDF + {t('training.videoLabel')}</span>
+                  <span className="rounded-full border border-violet-100 bg-violet-50 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.15em] text-violet-700">{t('training.certification.lessonCount', { count: lessons.length })}</span>
                   <span className="text-xs font-bold text-slate-500">{t('training.minutes', { count: guide.estimatedMinutes })}</span>
                 </div>
                 <h2 className="text-xl font-extrabold tracking-[-.025em] text-slate-950 transition group-hover:text-violet-800">{t(`training.guides.${guide.slug}.title`)}</h2>
                 <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">{t(`training.guides.${guide.slug}.description`)}</p>
-                {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-5 w-full justify-between rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><span className="inline-flex items-center"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</span><ArrowRight className="h-4 w-4" /></Button>}
-                <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-5')}><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
+                <Button type="button" onClick={() => setActiveGuide(guide)} className="mt-5 w-full justify-between rounded-xl bg-violet-700 text-white shadow-sm hover:bg-violet-800"><span className="inline-flex items-center"><GraduationCap className="mr-2 h-4 w-4" />{t('training.certification.viewCurriculum')}</span><ArrowRight className="h-4 w-4" /></Button>
+                {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-2 w-full justify-between rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><span className="inline-flex items-center"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</span><ArrowRight className="h-4 w-4" /></Button>}
+                <div className="mt-2 grid grid-cols-2 gap-2"><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
                 <Button asChild className="mt-2 justify-between rounded-xl bg-violet-600 shadow-sm hover:bg-violet-700"><Link to={demoPath}>{t('training.practiceInDemo')}<ArrowRight className="h-4 w-4" /></Link></Button>
               </div>
             </article>
@@ -88,6 +93,18 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
         })}
       </section>
       {filtered.length === 0 && <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">{t('training.noResults')}</div>}
+
+
+      {activeGuide && (
+        <TrainingCurriculumDialog
+          open
+          onOpenChange={(open) => { if (!open) setActiveGuide(null); }}
+          title={t(`training.guides.${activeGuide.slug}.title`)}
+          description={t(`training.guides.${activeGuide.slug}.description`)}
+          lessons={getTrainingLessonsForGuide('owner', activeGuide.slug, i18n.language)}
+          readOnly
+        />
+      )}
 
       {activeVideo && (
         <TrainingVideoDialog

@@ -65,6 +65,7 @@ jobs:
           npm run phase12:check
           npm run branding:check
           npm run phase12d:check
+          npm run training-certification:check
 
       - name: TypeScript
         run: npm run typecheck
