@@ -47,7 +47,7 @@ assert(training.includes('useTrainingProgress'), 'Owner Training Portal lost loc
 assert(progress.includes('window.localStorage'), 'Training progress must remain local-only.');
 assert(catalog.includes('demoRoute?: string') && catalog.includes('videoUrl?: string | null'), 'Training catalog is not ready for demo practice and future videos.');
 assert(generator.includes('Actual Velliqo') || generator.includes('Πραγματικό παράδειγμα εφαρμογής Velliqo'), 'Professional PDF generator must reference actual app screenshots.');
-assert(generator.includes('velliqo-logo.png') && generator.includes('SCREENSHOTS'), 'PDF branding or screenshot mapping is missing.');
+assert(generator.includes('velliqo-logo-transparent.png') && generator.includes('SCREENSHOTS'), 'PDF branding or screenshot mapping is missing.');
 
 const slugs = [...catalog.matchAll(/\{ slug: '([^']+)'/g)].map((match) => match[1]);
 const uniqueSlugs = [...new Set(slugs)];

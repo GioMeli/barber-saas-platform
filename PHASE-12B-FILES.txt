@@ -1,0 +1,14 @@
+Phase 12B — Transparent Velliqo Branding
+
+Purpose:
+- Transparent Velliqo mark across web UI.
+- Transparent favicon / Apple touch / PWA install icons.
+- Remove app-owned logo plates, borders and shadows.
+- Stop declaring generic Velliqo icons as maskable so browsers do not receive an app-supplied opaque plate.
+- Bust service-worker / manifest icon caches.
+- Use transparent full logo for future generated training PDFs.
+
+Validation:
+- npm run branding:check
+- npm run production:check
+- npm run phase12:check

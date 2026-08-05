@@ -277,7 +277,7 @@ export default function Experience() {
 }
 
 function VelliqoBrand({ light = false }: { light?: boolean }) {
-  return <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-contain" /><div><div className={`font-extrabold ${light ? 'text-white' : 'text-slate-950'}`}>Velliqo</div><div className={`text-[10px] font-bold uppercase tracking-[.16em] ${light ? 'text-white/45' : 'text-slate-400'}`}>Book. Manage. Grow.</div></div></Link>;
+  return <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 object-contain" /><div><div className={`font-extrabold ${light ? 'text-white' : 'text-slate-950'}`}>Velliqo</div><div className={`text-[10px] font-bold uppercase tracking-[.16em] ${light ? 'text-white/45' : 'text-slate-400'}`}>Book. Manage. Grow.</div></div></Link>;
 }
 function TrustItem({ text }: { text: string }) { return <span className="flex items-center gap-2"><Check className="h-4 w-4 text-emerald-400" />{text}</span>; }
 function Proof({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="flex gap-3 rounded-2xl p-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-100 text-violet-700">{icon}</div><div><div className="text-sm font-extrabold">{title}</div><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p></div></div>; }

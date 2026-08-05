@@ -1,4 +1,4 @@
-const FALLBACK_ICON = '/brand/velliqo-ai.png';
+const FALLBACK_ICON = '/icons/icon-192.png?v=2';
 
 export default async function handler(request: any, response: any) {
   if (request.method !== 'GET') {
@@ -59,12 +59,12 @@ export default async function handler(request: any, response: any) {
           { src: tenant192, sizes: '192x192', type: 'image/png', purpose: 'any' },
           { src: tenant512, sizes: '512x512', type: 'image/png', purpose: 'any' },
           { src: business.logo_url, sizes: 'any', purpose: 'any' },
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-192.png?v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
         ]
       : [
-          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-192.png?v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
+          { src: '/icons/icon-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
         ],
     shortcuts: [
       { name: 'Book appointment', url: `/app/${business.slug}/book`, icons: [{ src: icon, sizes: '192x192' }] },

@@ -30,7 +30,7 @@ from PIL import Image as PILImage
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'public' / 'training' / 'guides'
 LOCALES = ['en', 'el', 'de', 'es', 'tr']
-LOGO = ROOT / 'public' / 'brand' / 'velliqo-logo.png'
+LOGO = ROOT / 'public' / 'brand' / 'velliqo-logo-transparent.png'
 AI_LOGO = ROOT / 'public' / 'brand' / 'velliqo-ai.png'
 CACHE = Path(tempfile.gettempdir()) / 'velliqo-training-pdf-assets'
 CACHE.mkdir(parents=True, exist_ok=True)
