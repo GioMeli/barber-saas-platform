@@ -16,6 +16,7 @@ import { StaffProfileSheet } from '@/components/staff/StaffProfileSheet';
 import { getTrustedDeviceCredentials, registerTrustedDevice, revokeTrustedDevice, trustedDeviceSignIn } from '@/staff/trustedDevice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -52,6 +53,7 @@ import {
   Download,
   List,
   LogOut,
+  KeyRound,
   MoreHorizontal,
   Mail,
   MapPin,
@@ -124,8 +126,13 @@ export default function EmployeeDashboard() {
   const [refreshing, setRefreshing] = useState(false);
   const [accessDenied, setAccessDenied] = useState(false);
   const [email, setEmail] = useState('');
-  const [linkSending, setLinkSending] = useState(false);
+  const [otpSending, setOtpSending] = useState(false);
   const [emailSigningIn, setEmailSigningIn] = useState(false);
+  const [otpEmail, setOtpEmail] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpRequested, setOtpRequested] = useState(false);
+  const [otpVerifying, setOtpVerifying] = useState(false);
+  const [otpResendSeconds, setOtpResendSeconds] = useState(0);
   const [trustedSigningIn, setTrustedSigningIn] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -146,6 +153,14 @@ export default function EmployeeDashboard() {
   const pwaEmployee = workspace?.employee || (employeeParam ? { id: employeeParam, name: t('staffPortal.access.staffFallbackName') } : null);
   const pwa = useStaffPWA(workspace?.business || publicBusiness, pwaEmployee);
   const trustedDeviceAvailable = Boolean(employeeParam && getTrustedDeviceCredentials(employeeParam));
+
+  useEffect(() => {
+    if (otpResendSeconds <= 0) return;
+    const timer = window.setTimeout(() => {
+      setOtpResendSeconds((current) => Math.max(0, current - 1));
+    }, 1_000);
+    return () => window.clearTimeout(timer);
+  }, [otpResendSeconds]);
 
   useEffect(() => {
     if (routeSlug) {
@@ -316,33 +331,89 @@ export default function EmployeeDashboard() {
     [appointments, t]
   );
 
-  const sendMagicLink = async (normalizedEmail = email.trim().toLowerCase()) => {
+  const requestEmailOtp = async (normalizedEmail = email.trim().toLowerCase()) => {
     if (!normalizedEmail) {
       toast.error(t('staffPortal.access.emailRequired'));
       return false;
     }
-    setLinkSending(true);
+
+    setOtpSending(true);
     const { error } = await staffSupabase.auth.signInWithOtp({
       email: normalizedEmail,
       options: {
         shouldCreateUser: false,
-        emailRedirectTo: (() => {
-          const employee = searchParams.get('employee') || '';
-          if (!employee) return `${window.location.origin}/staff/${slug}`;
-          const params = new URLSearchParams({ employee });
-          const employeeName = searchParams.get('employeeName');
-          if (employeeName) params.set('employeeName', employeeName);
-          return `${window.location.origin}/staff/${slug}?${params.toString()}`;
-        })(),
       },
     });
-    setLinkSending(false);
+    setOtpSending(false);
+
     if (error) {
       toast.error(error.message || t('staffPortal.access.linkFailed'));
       return false;
     }
-    toast.success(t('staffPortal.access.linkSent'));
+
+    setOtpEmail(normalizedEmail);
+    setOtpCode('');
+    setOtpRequested(true);
+    setOtpResendSeconds(60);
+    toast.success(t('staffPortal.access.otpSent'));
     return true;
+  };
+
+  const verifyEmailOtp = async (code = otpCode) => {
+    const normalizedCode = code.replace(/\D/g, '').slice(0, 6);
+    if (!otpEmail || normalizedCode.length !== 6 || !employeeParam) {
+      toast.error(t('staffPortal.access.otpInvalid'));
+      return;
+    }
+
+    setOtpVerifying(true);
+    try {
+      const { data: verification, error: verifyError } = await staffSupabase.auth.verifyOtp({
+        email: otpEmail,
+        token: normalizedCode,
+        type: 'email',
+      });
+
+      if (
+        verifyError ||
+        !verification.user ||
+        String(verification.user.email || '').trim().toLowerCase() !== otpEmail
+      ) {
+        throw verifyError ?? new Error('STAFF_OTP_VERIFICATION_FAILED');
+      }
+
+      // Re-check business/employee authorization after the OTP creates a session.
+      // This prevents access if the owner disabled the employee between request and verification.
+      const { data: access, error: accessError } = await staffSupabase.functions.invoke('staff-email-auth', {
+        body: {
+          business_slug: slug,
+          employee_id: employeeParam,
+          email: otpEmail,
+        },
+      });
+
+      if (accessError || access?.error || !access?.authenticated) {
+        await staffSupabase.auth.signOut({ scope: 'local' });
+        throw new Error(access?.error || accessError?.message || 'STAFF_EMAIL_NOT_APPROVED');
+      }
+
+      setEmail(otpEmail);
+      setOtpRequested(false);
+      setOtpCode('');
+      toast.success(t('staffPortal.access.signedIn'));
+    } catch (error) {
+      console.error('Staff email OTP verification failed', error);
+      toast.error(t('staffPortal.access.otpInvalid'));
+    } finally {
+      setOtpVerifying(false);
+    }
+  };
+
+  const useDifferentEmail = () => {
+    setOtpRequested(false);
+    setOtpEmail('');
+    setOtpCode('');
+    setOtpResendSeconds(0);
   };
 
   const signInOnTrustedDevice = async (normalizedEmail = email.trim().toLowerCase()) => {
@@ -403,10 +474,11 @@ export default function EmployeeDashboard() {
       // establish the staff session without another authorization email.
       if (trustedDeviceAvailable && await signInOnTrustedDevice(normalizedEmail)) return;
 
-      // Never grant access just because an address was confirmed in the past.
-      // Without an active session or trusted-device proof, send a fresh secure
-      // magic link to the approved staff mailbox.
-      await sendMagicLink(normalizedEmail);
+      // Every untrusted phone, tablet or computer may authenticate independently.
+      // The approved staff mailbox receives a short-lived one-time code; after
+      // verification this device receives its own Supabase session and may then
+      // be registered as trusted without invalidating any other device.
+      await requestEmailOtp(normalizedEmail);
     } catch (error: any) {
       console.error('Staff email sign-in failed', error);
       toast.error(t('staffPortal.access.emailNotApproved'));
@@ -640,30 +712,74 @@ export default function EmployeeDashboard() {
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <Badge variant="secondary" className="rounded-full bg-primary/10 text-primary">{t('staffPortal.access.personalWorkspace')}</Badge>
-                        <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">{t('staffPortal.access.signInTitle')}</h2>
-                        <p className="mt-2 text-sm leading-6 text-slate-600">{trustedDeviceAvailable ? t('staffPortal.access.trustedReady') : t('staffPortal.access.verifyFirst')}</p>
+                        <h2 className="mt-4 text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">{otpRequested ? t('staffPortal.access.otpTitle') : t('staffPortal.access.signInTitle')}</h2>
+                        <p className="mt-2 text-sm leading-6 text-slate-600">{otpRequested ? t('staffPortal.access.otpDescription', { email: otpEmail }) : trustedDeviceAvailable ? t('staffPortal.access.trustedReady') : t('staffPortal.access.verifyFirst')}</p>
                       </div>
-                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${trustedDeviceAvailable ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'}`}>
-                        {trustedDeviceAvailable ? <CheckCircle2 className="h-6 w-6" /> : <ShieldCheck className="h-6 w-6" />}
+                      <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${otpRequested ? 'bg-violet-100 text-violet-700' : trustedDeviceAvailable ? 'bg-emerald-100 text-emerald-700' : 'bg-violet-100 text-violet-700'}`}>
+                        {otpRequested ? <KeyRound className="h-6 w-6" /> : trustedDeviceAvailable ? <CheckCircle2 className="h-6 w-6" /> : <ShieldCheck className="h-6 w-6" />}
                       </div>
                     </div>
                   </div>
 
                   <CardContent className="space-y-5 p-6 sm:p-8">
-                    <div className="space-y-2">
-                      <Label htmlFor="staff-email">{t('staffPortal.access.email')}</Label>
-                      <div className="relative">
-                        <Mail className="absolute left-4 top-4 h-4 w-4 text-slate-400" />
-                        <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl pl-11" onKeyDown={(event) => { if (event.key === 'Enter') void continueWithEmail(); }} />
-                      </div>
-                    </div>
+                    {!otpRequested ? (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="staff-email">{t('staffPortal.access.email')}</Label>
+                          <div className="relative">
+                            <Mail className="absolute left-4 top-4 h-4 w-4 text-slate-400" />
+                            <Input id="staff-email" type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} placeholder="name@example.com" className="h-12 rounded-xl pl-11" onKeyDown={(event) => { if (event.key === 'Enter') void continueWithEmail(); }} />
+                          </div>
+                        </div>
 
-                    <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={emailSigningIn || trustedSigningIn || linkSending} onClick={() => void continueWithEmail()}>
-                      <ShieldCheck className="mr-2 h-4 w-4" />{emailSigningIn || trustedSigningIn || linkSending ? t('staffPortal.access.signingIn') : t('staffPortal.access.signInEmail')}
-                    </Button>
+                        <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={emailSigningIn || trustedSigningIn || otpSending} onClick={() => void continueWithEmail()}>
+                          <ShieldCheck className="mr-2 h-4 w-4" />{emailSigningIn || trustedSigningIn || otpSending ? t('staffPortal.access.signingIn') : t('staffPortal.access.signInEmail')}
+                        </Button>
+                      </>
+                    ) : (
+                      <div className="space-y-5">
+                        <div className="rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-sm text-violet-950">
+                          <div className="font-black">{otpEmail}</div>
+                          <div className="mt-1 text-xs leading-5 text-violet-700">{t('staffPortal.access.otpCodeLabel')}</div>
+                        </div>
+
+                        <div className="space-y-3">
+                          <Label htmlFor="staff-email-otp">{t('staffPortal.access.otpCodeLabel')}</Label>
+                          <InputOTP
+                            id="staff-email-otp"
+                            maxLength={6}
+                            inputMode="numeric"
+                            autoComplete="one-time-code"
+                            value={otpCode}
+                            onChange={(value) => setOtpCode(value.replace(/\D/g, '').slice(0, 6))}
+                            onComplete={(value) => void verifyEmailOtp(value)}
+                            containerClassName="justify-center"
+                          >
+                            <InputOTPGroup className="gap-2">
+                              {Array.from({ length: 6 }, (_, index) => (
+                                <InputOTPSlot key={index} index={index} className="h-12 w-10 rounded-xl border sm:w-12" />
+                              ))}
+                            </InputOTPGroup>
+                          </InputOTP>
+                        </div>
+
+                        <Button className="h-12 w-full rounded-xl text-base font-black shadow-lg shadow-primary/20" disabled={otpVerifying || otpCode.length !== 6} onClick={() => void verifyEmailOtp()}>
+                          <KeyRound className="mr-2 h-4 w-4" />{otpVerifying ? t('staffPortal.access.otpVerifying') : t('staffPortal.access.otpVerify')}
+                        </Button>
+
+                        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <Button type="button" variant="ghost" className="justify-start px-0 text-sm" onClick={useDifferentEmail}>
+                            {t('staffPortal.access.otpDifferentEmail')}
+                          </Button>
+                          <Button type="button" variant="ghost" className="justify-start px-0 text-sm sm:justify-end" disabled={otpSending || otpResendSeconds > 0} onClick={() => void requestEmailOtp(otpEmail)}>
+                            {otpResendSeconds > 0 ? t('staffPortal.access.otpResendIn', { seconds: otpResendSeconds }) : t('staffPortal.access.otpResend')}
+                          </Button>
+                        </div>
+                      </div>
+                    )}
 
                     <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm leading-6 text-emerald-950">
-                      <div className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /><div><strong>{t('staffPortal.access.noRepeatedEmailTitle')}</strong><div className="mt-1 text-emerald-800">{t('staffPortal.access.noRepeatedEmailDescription')}</div></div></div>
+                      <div className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /><div><strong>{t('staffPortal.access.multiDeviceTitle')}</strong><div className="mt-1 text-emerald-800">{t('staffPortal.access.multiDeviceDescription')}</div></div></div>
                     </div>
 
                     {pwaEmployee && !pwa.isInstalled && (

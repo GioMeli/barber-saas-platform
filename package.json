@@ -29,6 +29,7 @@
     "ai-multilingual:check": "node scripts/check-ai-multilingual-voice.mjs",
     "discovery:check": "node scripts/check-public-discovery-marketplace.mjs",
     "staff-access:check": "node scripts/check-staff-personal-access.mjs",
+    "staff-otp:check": "node scripts/check-staff-multi-device-otp.mjs",
     "owner-ux:check": "node scripts/check-owner-ux-consistency.mjs",
     "staff-ux:check": "node scripts/check-staff-ux-consistency.mjs",
     "customer-ux:check": "node scripts/check-customer-ux-consistency.mjs",

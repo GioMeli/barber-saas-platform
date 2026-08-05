@@ -243,7 +243,15 @@ otp_expiry = 3600
 # admin_email = "admin@email.com"
 # sender_name = "Admin"
 
-# Uncomment to customize email template
+# Local Auth template for staff passwordless sign-in. The use of {{ .Token }}
+# makes signInWithOtp send a numeric OTP instead of a magic-link-only email.
+# For the hosted project, mirror this template in Supabase Dashboard →
+# Authentication → Email Templates → Magic Link.
+[auth.email.template.magic_link]
+subject = "Your Velliqo sign-in code"
+content_path = "./supabase/templates/staff-email-otp.html"
+
+# Uncomment to customize other email templates
 # [auth.email.template.invite]
 # subject = "You have been invited"
 # content_path = "./supabase/templates/invite.html"
