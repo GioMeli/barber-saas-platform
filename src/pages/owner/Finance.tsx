@@ -320,7 +320,7 @@ export default function Finance() {
           <h1 className="app-page-title">{t('finance.title')}</h1>
           <p className="app-page-description">{t('finance.description')}</p>
         </div>
-        <div data-tour="finance-actions" className="flex flex-wrap gap-2">
+        <div data-tour="finance-actions" className="app-page-actions">
           <Button variant="outline" onClick={() => void refresh()} disabled={loading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             {t('finance.actions.refresh')}
@@ -450,7 +450,7 @@ export default function Finance() {
       ) : null}
 
       <Dialog open={expenseDialogOpen} onOpenChange={(open) => !savingExpense && setExpenseDialogOpen(open)}>
-        <DialogContent data-tour="finance-expense-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="finance-expense-form" className="owner-form-dialog max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-3xl">
           <DialogHeader>
             <DialogTitle>
               {editingExpense ? t('finance.dialog.editTitle') : t('finance.dialog.createTitle')}
@@ -559,7 +559,7 @@ export default function Finance() {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="owner-dialog-footer">
             <Button variant="outline" onClick={() => setExpenseDialogOpen(false)} disabled={savingExpense}>
               {t('finance.actions.cancel')}
             </Button>

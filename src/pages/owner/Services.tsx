@@ -505,7 +505,7 @@ export default function Services() {
       </Card>
 
       <Dialog open={isDialogOpen} onOpenChange={(open) => { setIsDialogOpen(open); if (!open) resetImageState(); }}>
-        <DialogContent data-tour="services-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="services-form" className="owner-form-dialog max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId ? t('services.dialog.editTitle') : t('services.dialog.addTitle')}
@@ -669,7 +669,7 @@ export default function Services() {
             </section>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="owner-dialog-footer">
             <Button
               variant="outline"
               disabled={saving}

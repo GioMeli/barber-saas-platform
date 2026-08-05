@@ -3766,6 +3766,10 @@
       "chapters": {
         "workspace": "Çalışma alanı temelleri"
       }
+    },
+    "accessibility": {
+      "skipToContent": "Ana içeriğe geç",
+      "pageChanged": "{{page}} sayfası açıldı"
     }
   }
 }

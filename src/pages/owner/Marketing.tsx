@@ -704,7 +704,7 @@ export default function Marketing() {
       </Tabs>
 
       <Dialog open={campaignDialogOpen} onOpenChange={setCampaignDialogOpen}>
-        <DialogContent data-tour="marketing-campaign-form" className="max-h-[94vh] max-w-2xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="marketing-campaign-form" className="owner-form-dialog max-h-[94vh] max-w-2xl overflow-y-auto rounded-3xl">
           <DialogHeader><DialogTitle>{editingCampaignId ? t('marketing.dialog.editCampaign') : t('marketing.dialog.newCampaign')}</DialogTitle></DialogHeader>
           <div className="grid gap-5 py-4 sm:grid-cols-2">
             <Field label={t('marketing.fields.campaignName')} className="sm:col-span-2"><Input value={campaignForm.name} onChange={(event) => setCampaignForm((current) => ({ ...current, name: event.target.value }))} /></Field>
@@ -746,7 +746,7 @@ export default function Marketing() {
               {campaignForm.schedule_enabled && <Input className="mt-4" type="datetime-local" value={campaignForm.scheduled_at} onChange={(event) => setCampaignForm((current) => ({ ...current, scheduled_at: event.target.value }))} />}
             </div>
           </div>
-          <DialogFooter><Button variant="outline" disabled={campaignSaving} onClick={() => setCampaignDialogOpen(false)}>{t('common.cancel')}</Button><Button disabled={campaignSaving} onClick={() => void saveCampaign()}>{campaignSaving ? t('common.saving') : t('marketing.actions.saveCampaign')}</Button></DialogFooter>
+          <DialogFooter className="owner-dialog-footer"><Button variant="outline" disabled={campaignSaving} onClick={() => setCampaignDialogOpen(false)}>{t('common.cancel')}</Button><Button disabled={campaignSaving} onClick={() => void saveCampaign()}>{campaignSaving ? t('common.saving') : t('marketing.actions.saveCampaign')}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
 

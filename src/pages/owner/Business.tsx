@@ -495,7 +495,7 @@ export default function Business() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent data-tour="business-closure-form" className="max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="business-closure-form" className="owner-form-dialog max-h-[94vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle className="text-2xl">
               {editingId ? t('business.dialog.editTitle') : t('business.dialog.addTitle')}
@@ -626,7 +626,7 @@ export default function Business() {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="owner-dialog-footer">
             <Button
               variant="outline"
               disabled={saving}

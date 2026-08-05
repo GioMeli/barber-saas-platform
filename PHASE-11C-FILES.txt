@@ -1,0 +1,23 @@
+Phase 11C — Owner UX consistency & accessibility hardening
+
+src/index.css
+src/components/layouts/OwnerDashboardLayout.tsx
+src/pages/owner/Home.tsx
+src/pages/owner/Sales.tsx
+src/pages/owner/Finance.tsx
+src/pages/owner/Customers.tsx
+src/pages/owner/Products.tsx
+src/pages/owner/Services.tsx
+src/pages/owner/Marketing.tsx
+src/pages/owner/Business.tsx
+src/pages/owner/Gallery.tsx
+src/pages/owner/Storefront.tsx
+src/pages/owner/Reports.tsx
+src/pages/owner/TrainingPortal.tsx
+src/i18n/locales/en.json
+src/i18n/locales/el.json
+src/i18n/locales/tr.json
+src/i18n/locales/de.json
+src/i18n/locales/es.json
+scripts/check-owner-ux-consistency.mjs
+package.json

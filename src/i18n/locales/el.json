@@ -3766,6 +3766,10 @@
       "chapters": {
         "workspace": "Βασικές λειτουργίες workspace"
       }
+    },
+    "accessibility": {
+      "skipToContent": "Μετάβαση στο κύριο περιεχόμενο",
+      "pageChanged": "Άνοιξε η σελίδα {{page}}"
     }
   }
 }

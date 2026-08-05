@@ -3766,6 +3766,10 @@
       "chapters": {
         "workspace": "Grundlagen des Arbeitsbereichs"
       }
+    },
+    "accessibility": {
+      "skipToContent": "Zum Hauptinhalt springen",
+      "pageChanged": "{{page}} geöffnet"
     }
   }
 }

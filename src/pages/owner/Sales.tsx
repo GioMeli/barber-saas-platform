@@ -711,7 +711,7 @@ export default function Sales() {
           <p className="app-page-description">{t('sales.description')}</p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="app-page-actions">
           <Button variant="outline" onClick={() => void fetchData()} disabled={loading}>
             <RefreshCw className={`mr-2 h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
             {t('sales.actions.refresh')}
