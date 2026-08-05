@@ -1,0 +1,19 @@
+Phase 12E — Training video guide and Staff multi-device OTP
+
+Changed/added files:
+- package.json
+- src/pages/staff/EmployeeDashboard.tsx
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- supabase/config.toml
+- supabase/templates/staff-email-otp.html
+- scripts/check-staff-multi-device-otp.mjs
+- docs/PHASE-12E-TRAINING-VIDEOS-STAFF-MULTI-DEVICE-OTP.md
+- PHASE-12E-FILES.txt
+
+No database migration is required.
+No new Edge Function is required.
+Hosted Supabase action required: Authentication > Email Templates > Magic Link must use {{ .Token }}.
