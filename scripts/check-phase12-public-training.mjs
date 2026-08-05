@@ -31,7 +31,7 @@ const aiPage = read('src/pages/marketing/VelliqoAI.tsx');
 const chrome = read('src/components/marketing/MarketingChrome.tsx');
 const catalog = read('src/training/catalog.ts');
 const publicCourses = read('src/pages/marketing/Courses.tsx');
-const ownerTraining = read('src/pages/owner/TrainingPortal.tsx');
+const ownerTraining = read('src/components/training/TrainingCertificationLibrary.tsx');
 const videoDialog = read('src/components/training/TrainingVideoDialog.tsx');
 
 if (!artwork.includes('object-contain') || !artwork.includes('ApprovedArtwork')) fail('transparent approved-artwork renderer is incomplete');

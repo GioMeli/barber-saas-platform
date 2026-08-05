@@ -14,7 +14,7 @@ if (!exists(industryVisualPath)) fail('industry-specific visual component is mis
 const trainingVisual = read(trainingVisualPath);
 const industryVisual = read(industryVisualPath);
 const publicCourses = read('src/pages/marketing/Courses.tsx');
-const ownerTraining = read('src/pages/owner/TrainingPortal.tsx');
+const ownerTraining = read('src/components/training/TrainingCertificationLibrary.tsx');
 const businessTypes = read('src/pages/marketing/BusinessTypeSelection.tsx');
 const packageJson = JSON.parse(read('package.json'));
 const workflow = read('.github/workflows/quality-gate.yml');
@@ -28,7 +28,7 @@ for (const source of [publicCourses, ownerTraining]) {
   if (!source.includes('guide.videoUrl') || !source.includes('TrainingVideoDialog')) fail('training video functionality was lost');
   if (!source.includes('getTrainingPdfPath')) fail('training PDF functionality was lost');
 }
-if (!ownerTraining.includes('useTrainingProgress') || !ownerTraining.includes('toggle(guide.slug)')) fail('owner course completion tracking was lost');
+if (!ownerTraining.includes('useCertifiedTrainingProgress') || !ownerTraining.includes('setLessonCompleted')) fail('certified owner lesson completion tracking was lost');
 if (!publicCourses.includes('practiceInDemo')) fail('public course demo action was lost');
 
 for (const token of ['data-industry-visual', 'INDUSTRY_ICONS', 'h-[118px]', 'role="img"']) {

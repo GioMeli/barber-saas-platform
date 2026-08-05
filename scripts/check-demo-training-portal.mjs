@@ -12,9 +12,10 @@ const context = read('src/demo/DemoOwnerContext.tsx');
 const demoNavigation = read('src/demo/demoNavigation.ts');
 const courses = read('src/pages/marketing/Courses.tsx');
 const training = read('src/pages/owner/TrainingPortal.tsx');
+const trainingLibrary = read('src/components/training/TrainingCertificationLibrary.tsx');
 const navigation = read('src/components/layouts/owner-shell/navigation.ts');
 const catalog = read('src/training/catalog.ts');
-const progress = read('src/hooks/useTrainingProgress.ts');
+const progress = read('src/hooks/useCertifiedTrainingProgress.ts');
 const generator = read('scripts/generate-training-pdfs.py');
 const marketingChrome = read('src/components/marketing/MarketingChrome.tsx');
 
@@ -42,9 +43,11 @@ assert(modulePage.includes('Apply in demo') && modulePage.includes('No database 
 
 assert(courses.includes('getTrainingPdfPath'), 'Courses page does not link professional PDFs.');
 assert(courses.includes('videoComingSoon') && courses.includes('practiceInDemo'), 'Courses video placeholders or demo practice links are missing.');
-assert(training.includes('getTrainingPdfPath'), 'Owner Training Portal lost its PDF links.');
-assert(training.includes('useTrainingProgress'), 'Owner Training Portal lost local progress tracking.');
-assert(progress.includes('window.localStorage'), 'Training progress must remain local-only.');
+assert(training.includes('TrainingCertificationLibrary'), 'Owner Training Portal lost the certified training library.');
+assert(trainingLibrary.includes('getTrainingPdfPath'), 'Certified Training library lost its PDF links.');
+assert(trainingLibrary.includes('useCertifiedTrainingProgress'), 'Certified Training library lost persisted progress tracking.');
+assert(trainingLibrary.includes('TrainingQuizDialog') && trainingLibrary.includes('TrainingCertificateCard'), 'Certified Training library lost its assessment or certificate experience.');
+assert(progress.includes('window.localStorage'), 'Training progress must retain a local recovery fallback.');
 assert(catalog.includes('demoRoute?: string') && catalog.includes('videoUrl?: string | null'), 'Training catalog is not ready for demo practice and future videos.');
 assert(generator.includes('Actual Velliqo') || generator.includes('Πραγματικό παράδειγμα εφαρμογής Velliqo'), 'Professional PDF generator must reference actual app screenshots.');
 assert(generator.includes('velliqo-logo-transparent.png') && generator.includes('SCREENSHOTS'), 'PDF branding or screenshot mapping is missing.');
