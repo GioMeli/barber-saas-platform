@@ -9,12 +9,12 @@ import {
   PlayCircle,
   RotateCcw,
   Search,
-  Video,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TrainingCourseVisual } from '@/components/training/TrainingCourseVisual';
 import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useTrainingProgress } from '@/hooks/useTrainingProgress';
@@ -73,21 +73,34 @@ export default function TrainingPortal() {
         </div>
       </section>
 
-      <section data-tour="training-courses" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section data-tour="training-courses" className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((guide, index) => {
           const isComplete = completed.includes(guide.slug);
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
           const hasVideo = Boolean(guide.videoUrl);
           return (
-            <article key={guide.slug} className={cn('flex min-h-[330px] flex-col rounded-2xl border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg', isComplete ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-border')}>
-              <div className="flex items-start justify-between gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><FileText className="h-5 w-5" /></div><button type="button" onClick={() => toggle(guide.slug)} className={cn('inline-flex h-9 items-center gap-2 rounded-xl border px-3 text-xs font-bold transition', isComplete ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-border bg-background text-muted-foreground hover:text-foreground')}><span className={cn('flex h-4 w-4 items-center justify-center rounded-full border', isComplete ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-current')}>{isComplete && <Check className="h-3 w-3" />}</span>{isComplete ? t('training.completed') : t('training.markComplete')}</button></div>
-              <div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} · {t(`training.categories.${guide.category}`)}</div>
-              <h2 className="mt-2 text-lg font-extrabold tracking-tight">{t(`training.guides.${guide.slug}.title`)}</h2>
-              <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{t(`training.guides.${guide.slug}.description`)}</p>
-              <div className="mt-5 flex items-center justify-between gap-3 text-xs text-muted-foreground"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className={cn('inline-flex items-center gap-1', hasVideo && 'font-bold text-emerald-700')}><Video className="h-3.5 w-3.5" />{hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}</span></div>
-              {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-4 w-full justify-center rounded-xl bg-slate-950 text-white hover:bg-slate-800"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</Button>}
-              <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-4')}><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
-              {guide.route && <Button asChild variant="ghost" className="mt-2 justify-between rounded-xl px-3"><Link to={guide.route}>{t('training.openWorkspace')}<ArrowUpRight className="h-4 w-4" /></Link></Button>}
+            <article key={guide.slug} className={cn('group relative flex min-h-[420px] flex-col overflow-hidden rounded-[1.75rem] border bg-card p-3 shadow-[0_16px_48px_rgba(15,23,42,.08)] ring-1 ring-foreground/[.025] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(76,29,149,.14)]', isComplete ? 'border-emerald-300 ring-emerald-200/80' : 'border-border hover:border-violet-300')}>
+              <TrainingCourseVisual
+                slug={guide.slug}
+                category={guide.category}
+                index={index}
+                categoryLabel={t(`training.categories.${guide.category}`)}
+                hasVideo={hasVideo}
+                videoLabel={hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}
+                completed={isComplete}
+                completedLabel={t('training.completed')}
+              />
+              <div className="flex flex-1 flex-col px-2 pb-2 pt-4 sm:px-3">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <button type="button" onClick={() => toggle(guide.slug)} className={cn('inline-flex min-h-9 items-center gap-2 rounded-xl border px-3 py-2 text-xs font-bold transition', isComplete ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-border bg-background text-muted-foreground hover:border-violet-200 hover:bg-violet-50 hover:text-violet-800')}><span className={cn('flex h-4 w-4 items-center justify-center rounded-full border', isComplete ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-current')}>{isComplete && <Check className="h-3 w-3" />}</span>{isComplete ? t('training.completed') : t('training.markComplete')}</button>
+                  <span className="text-xs font-bold text-muted-foreground">{t('training.minutes', { count: guide.estimatedMinutes })}</span>
+                </div>
+                <h2 className="text-xl font-extrabold tracking-[-.025em] transition group-hover:text-violet-700">{t(`training.guides.${guide.slug}.title`)}</h2>
+                <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{t(`training.guides.${guide.slug}.description`)}</p>
+                {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-5 w-full justify-center rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</Button>}
+                <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-5')}><Button asChild variant="outline" className="rounded-xl hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
+                {guide.route && <Button asChild variant="ghost" className="mt-2 justify-between rounded-xl px-3 hover:bg-violet-50 hover:text-violet-800"><Link to={guide.route}>{t('training.openWorkspace')}<ArrowUpRight className="h-4 w-4" /></Link></Button>}
+              </div>
             </article>
           );
         })}

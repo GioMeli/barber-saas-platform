@@ -63,6 +63,8 @@ jobs:
           npm run discovery:check
           npm run staff-access:check
           npm run phase12:check
+          npm run branding:check
+          npm run phase12d:check
 
       - name: TypeScript
         run: npm run typecheck
