@@ -2727,7 +2727,12 @@
       "today": "Hoy",
       "day": "Día",
       "week": "Semana",
-      "list": "Lista"
+      "list": "Lista",
+      "scheduleTitle": "Mi agenda",
+      "scheduleDescription": "Cambia entre las vistas de día, semana y lista. Selecciona una cita para gestionarla o una hora libre para crear una nueva.",
+      "previous": "Periodo anterior",
+      "next": "Periodo siguiente",
+      "viewLabel": "Vista de agenda"
     },
     "business": {
       "location": "Ubicación del negocio",
@@ -2807,6 +2812,18 @@
       "deviceDescription": "Cerrar sesión mantiene este dispositivo como confiable para volver a entrar sin otro email. Olvidarlo elimina ese acceso rápido.",
       "forgetDevice": "Olvidar este dispositivo",
       "deviceForgotten": "Este dispositivo se eliminó del acceso de confianza."
+    },
+    "accessibility": {
+      "skipToWorkspace": "Ir al espacio de trabajo del personal"
+    },
+    "mobileNav": {
+      "label": "Navegación de la app del personal",
+      "schedule": "Agenda",
+      "newAppointment": "Nueva",
+      "profile": "Perfil",
+      "more": "Más",
+      "moreTitle": "Más acciones del personal",
+      "moreDescription": "Instala la app, actualiza tu agenda, contacta con el negocio o cierra sesión."
     }
   },
   "sales": {

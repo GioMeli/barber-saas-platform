@@ -2727,7 +2727,12 @@
       "today": "Bugün",
       "day": "Gün",
       "week": "Hafta",
-      "list": "Liste"
+      "list": "Liste",
+      "scheduleTitle": "Programım",
+      "scheduleDescription": "Gün, hafta ve liste görünümleri arasında geçiş yapın. Yönetmek için bir randevuya veya yeni randevu oluşturmak için boş bir saate dokunun.",
+      "previous": "Önceki dönem",
+      "next": "Sonraki dönem",
+      "viewLabel": "Program görünümü"
     },
     "business": {
       "location": "İşletme konumu",
@@ -2807,6 +2812,18 @@
       "deviceDescription": "Çıkış yapmak bu cihazı güvenilir tutar ve yeni e-posta olmadan tekrar giriş yapmanı sağlar. Cihazı unutmak bu hızlı erişimi kaldırır.",
       "forgetDevice": "Bu cihazı unut",
       "deviceForgotten": "Bu cihaz güvenilir girişten kaldırıldı."
+    },
+    "accessibility": {
+      "skipToWorkspace": "Personel çalışma alanına geç"
+    },
+    "mobileNav": {
+      "label": "Personel uygulaması gezinmesi",
+      "schedule": "Program",
+      "newAppointment": "Yeni",
+      "profile": "Profil",
+      "more": "Daha fazla",
+      "moreTitle": "Diğer personel işlemleri",
+      "moreDescription": "Uygulamayı yükleyin, programı yenileyin, işletmeyle iletişime geçin veya çıkış yapın."
     }
   },
   "sales": {

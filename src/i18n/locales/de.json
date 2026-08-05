@@ -2727,7 +2727,12 @@
       "today": "Heute",
       "day": "Tag",
       "week": "Woche",
-      "list": "Liste"
+      "list": "Liste",
+      "scheduleTitle": "Mein Zeitplan",
+      "scheduleDescription": "Wechsle zwischen Tages-, Wochen- und Listenansicht. Wähle einen Termin zum Bearbeiten oder eine freie Zeit zum Erstellen eines neuen Termins.",
+      "previous": "Vorheriger Zeitraum",
+      "next": "Nächster Zeitraum",
+      "viewLabel": "Zeitplanansicht"
     },
     "business": {
       "location": "Geschäftsadresse",
@@ -2807,6 +2812,18 @@
       "deviceDescription": "Abmelden lässt dieses Gerät vertrauenswürdig, damit du dich ohne neue E-Mail erneut anmelden kannst. „Gerät vergessen“ entfernt diese Möglichkeit.",
       "forgetDevice": "Dieses Gerät vergessen",
       "deviceForgotten": "Dieses Gerät wurde aus der vertrauenswürdigen Anmeldung entfernt."
+    },
+    "accessibility": {
+      "skipToWorkspace": "Zum Mitarbeiterbereich springen"
+    },
+    "mobileNav": {
+      "label": "Navigation der Mitarbeiter-App",
+      "schedule": "Zeitplan",
+      "newAppointment": "Neu",
+      "profile": "Profil",
+      "more": "Mehr",
+      "moreTitle": "Weitere Mitarbeiteraktionen",
+      "moreDescription": "App installieren, Zeitplan aktualisieren, den Betrieb kontaktieren oder abmelden."
     }
   },
   "sales": {

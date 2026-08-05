@@ -2727,7 +2727,12 @@
       "today": "Today",
       "day": "Day",
       "week": "Week",
-      "list": "List"
+      "list": "List",
+      "scheduleTitle": "My schedule",
+      "scheduleDescription": "Switch between day, week and agenda views. Select an appointment to manage it, or choose an empty time to create one.",
+      "previous": "Previous period",
+      "next": "Next period",
+      "viewLabel": "Schedule view"
     },
     "business": {
       "location": "Business location",
@@ -2807,6 +2812,18 @@
       "deviceDescription": "Sign out keeps this device trusted so you can sign in again without another email. Forgetting the device removes that shortcut and requires email verification next time.",
       "forgetDevice": "Forget this device",
       "deviceForgotten": "This device has been removed from trusted sign-in."
+    },
+    "accessibility": {
+      "skipToWorkspace": "Skip to staff workspace"
+    },
+    "mobileNav": {
+      "label": "Staff app navigation",
+      "schedule": "Schedule",
+      "newAppointment": "New",
+      "profile": "Profile",
+      "more": "More",
+      "moreTitle": "More staff actions",
+      "moreDescription": "Install the app, refresh your schedule, contact the business or sign out."
     }
   },
   "sales": {
