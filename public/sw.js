@@ -1,4 +1,4 @@
-const VERSION = 'velliqo-pwa-v2-transparent-brand';
+const VERSION = 'velliqo-pwa-v3-transparent-header-brand';
 const SHELL_CACHE = `${VERSION}-shell`;
 const ASSET_CACHE = `${VERSION}-assets`;
 const APP_SHELL = [
@@ -9,7 +9,7 @@ const APP_SHELL = [
   '/icons/apple-touch-icon.png?v=2',
   '/icons/icon-192.png?v=2',
   '/icons/icon-512.png?v=2',
-  '/brand/velliqo-mark.png'
+  '/brand/velliqo-mark-transparent-v2.png'
 ];
 
 self.addEventListener('install', (event) => {

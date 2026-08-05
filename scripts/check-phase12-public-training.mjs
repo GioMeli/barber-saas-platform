@@ -46,7 +46,7 @@ if (!why.includes('What is the Staff Portal?')) fail('Why Velliqo FAQ does not e
 if (!experience.includes('id="staff"') || !experience.includes('downloadable personal Staff Apps')) fail('Experience does not explain the Staff Portal and plan-controlled Staff Apps');
 
 if (!exists('public/brand/velliqo-logo-transparent.png')) fail('transparent full Velliqo logo is missing');
-if (!chrome.includes('/brand/velliqo-mark.png')) fail('public marketing chrome does not use the transparent Velliqo mark');
+if (!chrome.includes('/brand/velliqo-mark-transparent-v2.png')) fail('public marketing chrome does not use the transparent Velliqo mark');
 
 for (const token of ['videoUrl?: string | null', 'videoProvider?: TrainingVideoProvider', 'videoPosterUrl?: string | null', 'detectTrainingVideoProvider', 'buildTrainingVideoEmbedUrl']) {
   if (!catalog.includes(token)) fail(`training video catalog architecture missing ${token}`);

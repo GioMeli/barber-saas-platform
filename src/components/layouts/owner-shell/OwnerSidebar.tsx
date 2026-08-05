@@ -35,7 +35,7 @@ export default function OwnerSidebar({
       <div className="border-b border-sidebar-border px-4 py-4">
         <div className="flex items-center gap-3">
           <img
-            src="/brand/velliqo-mark.png"
+            src="/brand/velliqo-mark-transparent-v2.png"
             alt="Velliqo"
             className="h-11 w-11 object-contain"
           />
