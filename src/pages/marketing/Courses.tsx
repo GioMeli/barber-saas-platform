@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
+import { TrainingCourseVisual } from '@/components/training/TrainingCourseVisual';
 import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
 import {
   getTrainingPdfPath,
@@ -56,21 +57,32 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
         </div>
       </section>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <section className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
         {filtered.map((guide, index) => {
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
           const demoPath = guide.demoRoute || guide.route?.replace('/dashboard', '/demo') || '/demo';
           const hasVideo = Boolean(guide.videoUrl);
           return (
-            <article key={guide.slug} className="flex min-h-[380px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl">
-              <div className="flex items-start justify-between gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><FileText className="h-5 w-5" /></span><span className={cn('rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide', hasVideo ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500')}>PDF + {t('training.videoLabel')}</span></div>
-              <div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} - {t(`training.categories.${guide.category}`)}</div>
-              <h2 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">{t(`training.guides.${guide.slug}.title`)}</h2>
-              <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">{t(`training.guides.${guide.slug}.description`)}</p>
-              <div className="mt-4 flex items-center justify-between gap-3 text-xs text-slate-500"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className={cn('inline-flex items-center gap-1', hasVideo && 'font-bold text-emerald-700')}><Video className="h-3.5 w-3.5" />{hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}</span></div>
-              {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-4 w-full justify-between rounded-xl bg-slate-950 text-white hover:bg-slate-800"><span className="inline-flex items-center"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</span><ArrowRight className="h-4 w-4" /></Button>}
-              <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-4')}><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
-              <Button asChild className="mt-2 justify-between rounded-xl bg-violet-600 hover:bg-violet-700"><Link to={demoPath}>{t('training.practiceInDemo')}<ArrowRight className="h-4 w-4" /></Link></Button>
+            <article key={guide.slug} className="group relative flex min-h-[430px] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200/90 bg-white p-3 shadow-[0_18px_55px_rgba(15,23,42,.09)] ring-1 ring-slate-950/[.025] transition duration-300 hover:-translate-y-1 hover:border-violet-300 hover:shadow-[0_26px_70px_rgba(76,29,149,.16)]">
+              <TrainingCourseVisual
+                slug={guide.slug}
+                category={guide.category}
+                index={index}
+                categoryLabel={t(`training.categories.${guide.category}`)}
+                hasVideo={hasVideo}
+                videoLabel={hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}
+              />
+              <div className="flex flex-1 flex-col px-2 pb-2 pt-5 sm:px-3">
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <span className="rounded-full border border-violet-100 bg-violet-50 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.15em] text-violet-700">PDF + {t('training.videoLabel')}</span>
+                  <span className="text-xs font-bold text-slate-500">{t('training.minutes', { count: guide.estimatedMinutes })}</span>
+                </div>
+                <h2 className="text-xl font-extrabold tracking-[-.025em] text-slate-950 transition group-hover:text-violet-800">{t(`training.guides.${guide.slug}.title`)}</h2>
+                <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">{t(`training.guides.${guide.slug}.description`)}</p>
+                {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-5 w-full justify-between rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><span className="inline-flex items-center"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</span><ArrowRight className="h-4 w-4" /></Button>}
+                <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-5')}><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl border-slate-200 bg-white hover:border-violet-200 hover:bg-violet-50"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
+                <Button asChild className="mt-2 justify-between rounded-xl bg-violet-600 shadow-sm hover:bg-violet-700"><Link to={demoPath}>{t('training.practiceInDemo')}<ArrowRight className="h-4 w-4" /></Link></Button>
+              </div>
             </article>
           );
         })}
