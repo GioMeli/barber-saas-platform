@@ -197,3 +197,202 @@
 }
 .maplibregl-popup-content { border-radius: 18px !important; padding: 14px !important; box-shadow: 0 24px 70px rgba(15,23,42,.2) !important; }
 .maplibregl-popup-close-button { width: 28px; height: 28px; border-radius: 9999px; font-size: 18px; color: #64748b; }
+
+/* Phase 11D — Staff workspace calendar and mobile interaction polish */
+.staff-calendar-shell .fc {
+  color: #0f172a;
+  font-family: inherit;
+}
+
+.staff-calendar-shell .fc a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.staff-calendar-shell .fc-theme-standard td,
+.staff-calendar-shell .fc-theme-standard th,
+.staff-calendar-shell .fc-theme-standard .fc-scrollgrid {
+  border-color: #e2e8f0;
+}
+
+.staff-calendar-shell .fc-scrollgrid {
+  overflow: hidden;
+  border: 0;
+  border-radius: 16px;
+}
+
+.staff-calendar-shell .fc-col-header-cell {
+  background: #f8fafc;
+}
+
+.staff-calendar-shell .fc-col-header-cell-cushion {
+  display: block;
+  padding: 10px 6px;
+  color: #334155;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.staff-calendar-shell .fc-timegrid-axis,
+.staff-calendar-shell .fc-timegrid-slot-label {
+  background: #f8fafc;
+}
+
+.staff-calendar-shell .fc-timegrid-slot {
+  height: 42px;
+}
+
+.staff-calendar-shell .fc-timegrid-slot-label-cushion {
+  color: #64748b;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.staff-calendar-shell .fc-day-today {
+  background: rgba(139, 92, 246, 0.045) !important;
+}
+
+.staff-calendar-shell .fc-timegrid-now-indicator-line {
+  border-color: #7c3aed;
+  border-width: 2px 0 0;
+}
+
+.staff-calendar-shell .fc-timegrid-now-indicator-arrow {
+  border-left-color: #7c3aed;
+}
+
+.staff-calendar-shell .fc-event {
+  cursor: pointer;
+  border-radius: 8px;
+  border-width: 1px;
+  padding: 2px 4px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.staff-calendar-shell .fc-event-main {
+  color: inherit;
+}
+
+.staff-calendar-shell .fc-list-event-dot {
+  border-width: 5px;
+  border-color: #7c3aed;
+}
+
+.staff-calendar-shell .staff-event-pending {
+  border-color: #d97706 !important;
+  background: #fef3c7 !important;
+  color: #78350f !important;
+}
+
+.staff-calendar-shell .staff-event-confirmed {
+  border-color: #7c3aed !important;
+  background: #ede9fe !important;
+  color: #4c1d95 !important;
+}
+
+.staff-calendar-shell .staff-event-arrived {
+  border-color: #0284c7 !important;
+  background: #e0f2fe !important;
+  color: #0c4a6e !important;
+}
+
+.staff-calendar-shell .staff-event-in_progress {
+  border-color: #2563eb !important;
+  background: #dbeafe !important;
+  color: #1e3a8a !important;
+}
+
+.staff-calendar-shell .staff-event-completed {
+  border-color: #059669 !important;
+  background: #d1fae5 !important;
+  color: #064e3b !important;
+}
+
+.staff-calendar-shell .staff-event-no_show,
+.staff-calendar-shell .staff-event-cancelled_by_business,
+.staff-calendar-shell .staff-event-cancelled_by_customer {
+  border-color: #dc2626 !important;
+  background: #fee2e2 !important;
+  color: #7f1d1d !important;
+}
+
+.staff-calendar-shell .staff-event-rescheduled {
+  border-color: #64748b !important;
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+}
+
+.staff-calendar-shell .fc-list {
+  border: 0;
+}
+
+.staff-calendar-shell .fc-list-day-cushion {
+  padding: 11px 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.staff-calendar-shell .fc-list-event:hover td {
+  background: #fafafa;
+}
+
+.staff-calendar-shell .fc-list-event-time {
+  color: #475569;
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.staff-calendar-shell .fc-list-event-title {
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .staff-calendar-shell {
+    padding-right: 0.4rem;
+    padding-left: 0.4rem;
+  }
+
+  .staff-calendar-shell .fc-list-table {
+    border-collapse: separate;
+    border-spacing: 0 6px;
+  }
+
+  .staff-calendar-shell .fc-list-day td {
+    border: 0;
+  }
+
+  .staff-calendar-shell .fc-list-event td {
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    background: #fff;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .staff-calendar-shell .fc-list-event td:first-child {
+    border-left: 1px solid #e2e8f0;
+    border-radius: 12px 0 0 12px;
+  }
+
+  .staff-calendar-shell .fc-list-event td:last-child {
+    border-right: 1px solid #e2e8f0;
+    border-radius: 0 12px 12px 0;
+  }
+
+  .staff-calendar-shell .fc-list-event-time {
+    width: 76px;
+    white-space: normal;
+  }
+
+  .staff-calendar-shell .fc-list-event-title {
+    line-height: 1.35;
+  }
+
+  .staff-calendar-shell .fc-timegrid-slot {
+    height: 38px;
+  }
+}

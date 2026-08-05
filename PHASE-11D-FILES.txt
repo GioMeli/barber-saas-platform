@@ -1,0 +1,17 @@
+Phase 11D — Staff App UX/UI Hardening
+
+Modified:
+- package.json
+- src/index.css
+- src/pages/staff/EmployeeDashboard.tsx
+- src/components/staff/StaffProfileSheet.tsx
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+
+Added:
+- scripts/check-staff-ux-consistency.mjs
+- docs/PHASE-11D-STAFF-UX-HARDENING.md
+- PHASE-11D-FILES.txt

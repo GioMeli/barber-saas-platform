@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { format, isToday, parseISO } from 'date-fns';
 import { useStaffAuth } from '@/hooks/useStaffAuth';
 import { useStaffPWA } from '@/hooks/useStaffPWA';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { staffSupabase } from '@/db/staffSupabase';
 import { StaffInstallDialog } from '@/components/staff/StaffInstallDialog';
 import { StaffProfileSheet } from '@/components/staff/StaffProfileSheet';
@@ -41,12 +42,17 @@ import PageMeta from '@/components/common/PageMeta';
 import { toast } from 'sonner';
 import {
   CalendarDays,
+  CalendarRange,
+  ChevronLeft,
+  ChevronRight,
   Check,
   ChevronsUpDown,
   CheckCircle2,
   Clock3,
   Download,
+  List,
   LogOut,
+  MoreHorizontal,
   Mail,
   MapPin,
   Phone,
@@ -106,7 +112,10 @@ export default function EmployeeDashboard() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { t, i18n } = useTranslation();
+  const isMobile = useIsMobile();
   const { user, loading: authLoading } = useStaffAuth();
+  const calendarRef = React.useRef<FullCalendar | null>(null);
+  const calendarSectionRef = React.useRef<HTMLElement | null>(null);
 
   const [slug, setSlug] = useState(routeSlug || '');
   const [publicBusiness, setPublicBusiness] = useState<any>(null);
@@ -120,6 +129,9 @@ export default function EmployeeDashboard() {
   const [trustedSigningIn, setTrustedSigningIn] = useState(false);
   const [installOpen, setInstallOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [mobileActionsOpen, setMobileActionsOpen] = useState(false);
+  const [calendarTitle, setCalendarTitle] = useState('');
+  const [calendarView, setCalendarView] = useState('timeGridWeek');
   const [selectedAppointment, setSelectedAppointment] = useState<any | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
@@ -169,6 +181,13 @@ export default function EmployeeDashboard() {
       setSearchParams(searchParams, { replace: true });
     }
   }, [workspace, searchParams]);
+
+  useEffect(() => {
+    if (!workspace || !calendarRef.current) return;
+    const api = calendarRef.current.getApi();
+    const preferredView = isMobile ? 'listWeek' : 'timeGridWeek';
+    if (api.view.type !== preferredView) api.changeView(preferredView);
+  }, [isMobile, workspace?.employee?.id]);
 
   useEffect(() => {
     if (!workspace?.employee?.id || !workspace?.business?.slug) return;
@@ -396,6 +415,22 @@ export default function EmployeeDashboard() {
     }
   };
 
+  const calendarNavigate = (direction: 'prev' | 'next' | 'today') => {
+    const api = calendarRef.current?.getApi();
+    if (!api) return;
+    if (direction === 'prev') api.prev();
+    if (direction === 'next') api.next();
+    if (direction === 'today') api.today();
+  };
+
+  const changeCalendarView = (view: 'timeGridDay' | 'timeGridWeek' | 'listWeek') => {
+    calendarRef.current?.getApi().changeView(view);
+  };
+
+  const scrollToSchedule = () => {
+    calendarSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   const openAppointment = (appointment: any) => {
     setSelectedAppointment(appointment);
     setRescheduleDate(format(parseISO(appointment.start_time), 'yyyy-MM-dd'));
@@ -563,7 +598,7 @@ export default function EmployeeDashboard() {
                     <Download className="mr-2 h-4 w-4" />{t('staffPortal.install.action')}
                   </Button>
                 )}
-                <div className="rounded-xl bg-white"><LanguageSwitcher /></div>
+                <div className="rounded-xl bg-white"><LanguageSwitcher compact /></div>
               </div>
             </header>
 
@@ -666,7 +701,7 @@ export default function EmployeeDashboard() {
     return (
       <div className="min-h-screen bg-slate-50 px-4 py-10">
         <div className="mx-auto max-w-md">
-          <div className="mb-8 flex items-center justify-between"><Brand business={publicBusiness} /><LanguageSwitcher /></div>
+          <div className="mb-8 flex items-center justify-between gap-3"><Brand business={publicBusiness} /><LanguageSwitcher compact /></div>
           <Card className="rounded-3xl text-center shadow-card">
             <CardContent className="p-8">
               <XCircle className="mx-auto h-12 w-12 text-destructive" />
@@ -683,30 +718,35 @@ export default function EmployeeDashboard() {
   return (
     <div className="min-h-screen bg-[linear-gradient(180deg,#f8fafc_0%,#ffffff_42%,#f5f3ff_100%)]">
       <PageMeta title={`${workspace.business.name} Staff`} description={t('staffPortal.hero.description')} />
-      <header className="sticky top-0 z-40 border-b border-white/70 bg-white/85 shadow-sm backdrop-blur-xl">
-        <div className="mx-auto flex h-16 max-w-[1500px] items-center justify-between gap-3 px-4 sm:px-6">
-          <Brand business={workspace.business} />
-          <div className="flex items-center gap-2">
-            <LanguageSwitcher />
-            {pwa.isInstalled ? (
-              <Badge variant="secondary" className="hidden rounded-full px-3 py-1.5 sm:inline-flex"><Check className="mr-1.5 h-3.5 w-3.5" />{t('staffPortal.install.installed')}</Badge>
-            ) : (
-              <Button variant="outline" size="icon" onClick={() => setInstallOpen(true)} aria-label={t('staffPortal.actions.install')}><Download className="h-4 w-4" /></Button>
-            )}
-            <Button variant="outline" size="icon" onClick={() => setProfileOpen(true)} aria-label={t('staffPortal.profile.open')}>
-              <UserRound className="h-4 w-4" />
-            </Button>
-            <Button variant="outline" size="icon" disabled={refreshing} onClick={() => void loadWorkspace(true)} aria-label={t('staffPortal.actions.refresh')}>
-              <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => void handleSignOut()} aria-label={t('staffPortal.actions.signOut')}>
-              <LogOut className="h-5 w-5" />
-            </Button>
+      <a href="#staff-main" className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-xl bg-slate-950 px-4 py-2 text-sm font-bold text-white shadow-xl transition focus:translate-y-0">
+        {t('staffPortal.accessibility.skipToWorkspace')}
+      </a>
+      <header className="sticky top-0 z-40 border-b border-white/70 bg-white/90 shadow-sm backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-[1500px] items-center justify-between gap-2 px-3 sm:px-6">
+          <div className="min-w-0 max-w-[58vw] sm:max-w-none"><Brand business={workspace.business} /></div>
+          <div className="flex shrink-0 items-center gap-2">
+            <LanguageSwitcher compact />
+            <div className="hidden items-center gap-2 md:flex">
+              {pwa.isInstalled ? (
+                <Badge variant="secondary" className="rounded-full px-3 py-1.5"><Check className="mr-1.5 h-3.5 w-3.5" />{t('staffPortal.install.installed')}</Badge>
+              ) : (
+                <Button variant="outline" size="sm" className="rounded-xl" onClick={() => setInstallOpen(true)}><Download className="mr-2 h-4 w-4" />{t('staffPortal.actions.install')}</Button>
+              )}
+              <Button variant="outline" size="icon" onClick={() => setProfileOpen(true)} aria-label={t('staffPortal.profile.open')}>
+                <UserRound className="h-4 w-4" />
+              </Button>
+              <Button variant="outline" size="icon" disabled={refreshing} onClick={() => void loadWorkspace(true)} aria-label={t('staffPortal.actions.refresh')}>
+                <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+              </Button>
+              <Button variant="ghost" size="icon" onClick={() => void handleSignOut()} aria-label={t('staffPortal.actions.signOut')}>
+                <LogOut className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1500px] space-y-6 p-4 sm:p-6 lg:p-8">
+      <main id="staff-main" className="mx-auto max-w-[1500px] scroll-mt-20 space-y-5 p-3 pb-28 sm:space-y-6 sm:p-6 sm:pb-8 lg:p-8">
         <section className="overflow-hidden rounded-[28px] border border-slate-800 bg-slate-950 text-white shadow-2xl shadow-slate-300/40">
           <div className="relative grid gap-6 p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-center">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.42),transparent_42%)]" />
@@ -722,7 +762,7 @@ export default function EmployeeDashboard() {
                 <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-300">{t('staffPortal.hero.description')}</p>
               </div>
             </div>
-            <Button className="relative h-12 rounded-xl px-5" onClick={() => setCreateOpen(true)}>
+            <Button className="relative h-12 w-full rounded-xl px-5 sm:w-auto" onClick={() => setCreateOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />{t('staffPortal.create.action')}
             </Button>
           </div>
@@ -745,7 +785,7 @@ export default function EmployeeDashboard() {
           </section>
         )}
 
-        <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+        <section className="grid grid-cols-2 gap-3 xl:grid-cols-4">
           <Metric icon={<CalendarDays className="h-5 w-5" />} label={t('staffPortal.stats.today')} value={stats.today} />
           <Metric icon={<CheckCircle2 className="h-5 w-5" />} label={t('staffPortal.stats.completed')} value={stats.completed} />
           <Metric icon={<Sparkles className="h-5 w-5" />} label={t('staffPortal.stats.remaining')} value={stats.remaining} />
@@ -763,28 +803,61 @@ export default function EmployeeDashboard() {
           </section>
         )}
 
-        <section className="rounded-3xl border bg-white p-3 shadow-sm sm:p-5">
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
-            initialView={window.matchMedia('(max-width: 767px)').matches ? 'listWeek' : 'timeGridWeek'}
-            headerToolbar={{ left: 'prev,next today', center: 'title', right: 'timeGridDay,timeGridWeek,listWeek' }}
-            buttonText={{ today: t('staffPortal.calendar.today'), day: t('staffPortal.calendar.day'), week: t('staffPortal.calendar.week'), list: t('staffPortal.calendar.list') }}
-            allDaySlot={false}
-            nowIndicator
-            editable={false}
-            selectable
-            selectMirror
-            height="auto"
-            slotMinTime="07:00:00"
-            slotMaxTime="22:00:00"
-            slotDuration="00:30:00"
-            events={events}
-            eventClick={(info) => openAppointment(info.event.extendedProps.appointment)}
-            dateClick={(info) => {
-              setCreateForm((current) => ({ ...current, date: format(info.date, 'yyyy-MM-dd'), time: format(info.date, 'HH:mm') }));
-              setCreateOpen(true);
-            }}
-          />
+        <section ref={calendarSectionRef} id="staff-schedule" className="scroll-mt-20 overflow-hidden rounded-3xl border bg-white shadow-sm">
+          <div className="border-b bg-slate-50/80 p-4 sm:p-5">
+            <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 text-xs font-black uppercase tracking-[0.14em] text-primary">
+                  <CalendarRange className="h-4 w-4" />{t('staffPortal.calendar.scheduleTitle')}
+                </div>
+                <h2 className="mt-1 break-words text-xl font-black sm:text-2xl">{calendarTitle || t('staffPortal.calendar.scheduleTitle')}</h2>
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">{t('staffPortal.calendar.scheduleDescription')}</p>
+              </div>
+
+              <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between xl:justify-end">
+                <div className="grid grid-cols-[44px_minmax(0,1fr)_44px] items-center gap-2 sm:flex">
+                  <Button variant="outline" size="icon" className="rounded-xl" onClick={() => calendarNavigate('prev')} aria-label={t('staffPortal.calendar.previous')}>
+                    <ChevronLeft className="h-4 w-4" />
+                  </Button>
+                  <Button variant="outline" className="min-w-0 rounded-xl" onClick={() => calendarNavigate('today')}>{t('staffPortal.calendar.today')}</Button>
+                  <Button variant="outline" size="icon" className="rounded-xl" onClick={() => calendarNavigate('next')} aria-label={t('staffPortal.calendar.next')}>
+                    <ChevronRight className="h-4 w-4" />
+                  </Button>
+                </div>
+
+                <div className="grid grid-cols-3 rounded-xl border bg-white p-1" role="tablist" aria-label={t('staffPortal.calendar.viewLabel')}>
+                  <CalendarViewButton active={calendarView === 'timeGridDay'} icon={<CalendarDays className="h-4 w-4" />} label={t('staffPortal.calendar.day')} onClick={() => changeCalendarView('timeGridDay')} />
+                  <CalendarViewButton active={calendarView === 'timeGridWeek'} icon={<CalendarRange className="h-4 w-4" />} label={t('staffPortal.calendar.week')} onClick={() => changeCalendarView('timeGridWeek')} />
+                  <CalendarViewButton active={calendarView === 'listWeek'} icon={<List className="h-4 w-4" />} label={t('staffPortal.calendar.list')} onClick={() => changeCalendarView('listWeek')} />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="staff-calendar-shell p-2 sm:p-4">
+            <FullCalendar
+              ref={calendarRef}
+              plugins={[dayGridPlugin, timeGridPlugin, listPlugin, interactionPlugin]}
+              initialView={isMobile ? 'listWeek' : 'timeGridWeek'}
+              headerToolbar={false}
+              allDaySlot={false}
+              nowIndicator
+              editable={false}
+              selectable
+              selectMirror
+              height="auto"
+              slotMinTime="07:00:00"
+              slotMaxTime="22:00:00"
+              slotDuration="00:30:00"
+              events={events}
+              datesSet={(info) => { setCalendarTitle(info.view.title); setCalendarView(info.view.type); }}
+              eventClick={(info) => openAppointment(info.event.extendedProps.appointment)}
+              dateClick={(info) => {
+                setCreateForm((current) => ({ ...current, date: format(info.date, 'yyyy-MM-dd'), time: format(info.date, 'HH:mm') }));
+                setCreateOpen(true);
+              }}
+            />
+          </div>
         </section>
 
         <section className="grid gap-4 lg:grid-cols-3">
@@ -794,8 +867,50 @@ export default function EmployeeDashboard() {
         </section>
       </main>
 
+      <nav className="safe-bottom fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 px-2 pt-2 shadow-[0_-12px_34px_rgba(15,23,42,0.10)] backdrop-blur-xl md:hidden" aria-label={t('staffPortal.mobileNav.label')}>
+        <div className="mx-auto grid max-w-lg grid-cols-4 gap-1">
+          <StaffMobileNavButton icon={<CalendarDays className="h-5 w-5" />} label={t('staffPortal.mobileNav.schedule')} onClick={scrollToSchedule} />
+          <StaffMobileNavButton primary icon={<Plus className="h-5 w-5" />} label={t('staffPortal.mobileNav.newAppointment')} onClick={() => setCreateOpen(true)} />
+          <StaffMobileNavButton icon={<UserRound className="h-5 w-5" />} label={t('staffPortal.mobileNav.profile')} onClick={() => setProfileOpen(true)} />
+          <StaffMobileNavButton icon={<MoreHorizontal className="h-5 w-5" />} label={t('staffPortal.mobileNav.more')} onClick={() => setMobileActionsOpen(true)} />
+        </div>
+      </nav>
+
+      <Sheet open={mobileActionsOpen} onOpenChange={setMobileActionsOpen}>
+        <SheetContent side="bottom" className="safe-bottom max-h-[88dvh] rounded-t-[28px] p-0">
+          <div className="mx-auto mt-3 h-1.5 w-11 rounded-full bg-slate-200" aria-hidden="true" />
+          <SheetHeader className="px-5 pb-4 pt-5 pr-14 text-left">
+            <SheetTitle>{t('staffPortal.mobileNav.moreTitle')}</SheetTitle>
+            <SheetDescription>{t('staffPortal.mobileNav.moreDescription')}</SheetDescription>
+          </SheetHeader>
+          <div className="space-y-3 border-t px-5 py-5">
+            {!pwa.isInstalled && (
+              <Button variant="outline" className="min-h-12 w-full justify-start rounded-xl" onClick={() => { setMobileActionsOpen(false); setInstallOpen(true); }}>
+                <Download className="mr-3 h-5 w-5" />{t('staffPortal.actions.install')}
+              </Button>
+            )}
+            <Button variant="outline" className="min-h-12 w-full justify-start rounded-xl" disabled={refreshing} onClick={() => { setMobileActionsOpen(false); void loadWorkspace(true); }}>
+              <RefreshCw className={`mr-3 h-5 w-5 ${refreshing ? 'animate-spin' : ''}`} />{t('staffPortal.actions.refresh')}
+            </Button>
+            {workspace.business.phone && (
+              <Button asChild variant="outline" className="min-h-12 w-full justify-start rounded-xl">
+                <a href={`tel:${workspace.business.phone}`}><Phone className="mr-3 h-5 w-5" />{t('staffPortal.actions.callBusiness')}</a>
+              </Button>
+            )}
+            {workspace.business.address && (
+              <Button asChild variant="outline" className="min-h-12 w-full justify-start rounded-xl">
+                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(workspace.business.address)}`} target="_blank" rel="noreferrer"><MapPin className="mr-3 h-5 w-5" />{t('staffPortal.actions.directions')}</a>
+              </Button>
+            )}
+            <Button variant="destructive" className="min-h-12 w-full justify-start rounded-xl" onClick={() => { setMobileActionsOpen(false); void handleSignOut(); }}>
+              <LogOut className="mr-3 h-5 w-5" />{t('staffPortal.actions.signOut')}
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       <Sheet open={detailsOpen} onOpenChange={setDetailsOpen}>
-        <SheetContent className="w-full overflow-y-auto sm:max-w-xl">
+        <SheetContent side={isMobile ? 'bottom' : 'right'} className={isMobile ? 'safe-bottom max-h-[92dvh] w-full rounded-t-[28px] overflow-y-auto p-5' : 'w-full overflow-y-auto sm:max-w-xl'}>
           {selectedAppointment && (
             <>
               <SheetHeader>
@@ -846,9 +961,9 @@ export default function EmployeeDashboard() {
       </Sheet>
 
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
-        <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-2xl">
-          <DialogHeader><DialogTitle>{t('staffPortal.create.title')}</DialogTitle></DialogHeader>
-          <div className="space-y-5">
+        <DialogContent className="grid max-h-[94dvh] grid-rows-[auto_minmax(0,1fr)_auto] gap-0 overflow-hidden p-0 sm:max-w-2xl">
+          <DialogHeader className="border-b bg-white p-5 pr-16 sm:p-6"><DialogTitle>{t('staffPortal.create.title')}</DialogTitle></DialogHeader>
+          <div className="min-h-0 space-y-5 overflow-y-auto px-5 py-5 sm:px-6">
             <div className="rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/[0.05] to-white p-4 sm:p-5">
               <div className="flex items-start justify-between gap-4"><div><Label>{t('staffPortal.create.customerPickerLabel')}</Label><p className="mt-1 text-xs leading-5 text-muted-foreground">{t('staffPortal.create.customerPickerDescription')}</p></div><Badge variant="secondary" className="rounded-full">{t('staffPortal.create.customerCount', { count: customers.length })}</Badge></div>
               <Popover open={customerPickerOpen} onOpenChange={setCustomerPickerOpen}>
@@ -894,9 +1009,9 @@ export default function EmployeeDashboard() {
             </div>
             <Field label={t('staffPortal.create.notes')}><Textarea rows={4} value={createForm.notes} onChange={(event) => setCreateForm({ ...createForm, notes: event.target.value })} /></Field>
           </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setCreateOpen(false)}>{t('common.cancel')}</Button>
-            <Button disabled={saving} onClick={() => void createAppointment()}>{saving ? t('staffPortal.create.saving') : t('staffPortal.create.save')}</Button>
+          <DialogFooter className="safe-bottom border-t bg-white p-4 sm:px-6">
+            <Button variant="outline" className="min-h-11" onClick={() => setCreateOpen(false)}>{t('common.cancel')}</Button>
+            <Button className="min-h-11" disabled={saving} onClick={() => void createAppointment()}>{saving ? t('staffPortal.create.saving') : t('staffPortal.create.save')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -929,6 +1044,32 @@ function PremiumFeature({ icon, title, description }: { icon: React.ReactNode; t
   return <div className="rounded-2xl border border-white/10 bg-white/[0.06] p-4 backdrop-blur"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-violet-200">{icon}</div><div className="mt-3 font-bold">{title}</div><p className="mt-1 text-xs leading-5 text-slate-400">{description}</p></div>;
 }
 
+function CalendarViewButton({ active, icon, label, onClick }: { active: boolean; icon: React.ReactNode; label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      role="tab"
+      aria-selected={active}
+      onClick={onClick}
+      className={`flex min-h-10 items-center justify-center gap-1.5 rounded-lg px-2.5 text-xs font-bold transition sm:text-sm ${active ? 'bg-slate-950 text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'}`}
+    >
+      {icon}<span>{label}</span>
+    </button>
+  );
+}
+
+function StaffMobileNavButton({ icon, label, onClick, primary = false }: { icon: React.ReactNode; label: string; onClick: () => void; primary?: boolean }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex min-h-[54px] min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 text-[10px] font-bold leading-tight transition active:scale-[0.98] ${primary ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'}`}
+    >
+      {icon}<span className="max-w-full truncate">{label}</span>
+    </button>
+  );
+}
+
 function Brand({ business, inverted = false }: { business: any; inverted?: boolean }) {
   return (
     <div className="flex min-w-0 items-center gap-3">
@@ -943,7 +1084,7 @@ function StaffCenteredState({ business, text }: { business: any; text: string })
 }
 
 function Metric({ icon, label, value }: { icon: React.ReactNode; label: string; value: React.ReactNode }) {
-  return <div className="rounded-2xl border bg-white p-4 shadow-sm"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{icon}</div><div><div className="text-xs font-semibold text-muted-foreground">{label}</div><div className="text-xl font-black">{value}</div></div></div></div>;
+  return <div className="min-w-0 rounded-2xl border bg-white p-3 shadow-sm sm:p-4"><div className="flex min-w-0 items-center gap-2.5 sm:gap-3"><div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary sm:h-10 sm:w-10">{icon}</div><div className="min-w-0"><div className="line-clamp-2 text-[11px] font-semibold leading-4 text-muted-foreground sm:text-xs">{label}</div><div className="truncate text-lg font-black sm:text-xl">{value}</div></div></div></div>;
 }
 
 function ContactCard({ icon, title, value, href, compact = false }: { icon: React.ReactNode; title: string; value?: string | null; href?: string; compact?: boolean }) {

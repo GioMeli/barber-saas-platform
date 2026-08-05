@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 import { staffSupabase } from '@/db/staffSupabase';
+import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -21,6 +22,7 @@ type Props = {
 
 export function StaffProfileSheet({ open, onOpenChange, business, employee, onSaved, onForgetDevice }: Props) {
   const { t } = useTranslation();
+  const isMobile = useIsMobile();
   const [name, setName] = React.useState(employee?.name || '');
   const [phone, setPhone] = React.useState(employee?.phone || '');
   const [bio, setBio] = React.useState(employee?.bio || '');
@@ -92,7 +94,7 @@ export function StaffProfileSheet({ open, onOpenChange, business, employee, onSa
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full overflow-y-auto p-0 sm:max-w-xl">
+      <SheetContent side={isMobile ? 'bottom' : 'right'} className={isMobile ? 'safe-bottom max-h-[92dvh] w-full overflow-y-auto rounded-t-[28px] p-0' : 'w-full overflow-y-auto p-0 sm:max-w-xl'}>
         <div className="bg-gradient-to-br from-slate-950 via-slate-900 to-primary px-6 py-7 text-white">
           <SheetHeader className="text-left">
             <div className="mb-4 flex items-center justify-between gap-3">
