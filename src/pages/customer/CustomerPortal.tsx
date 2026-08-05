@@ -573,7 +573,11 @@ export default function CustomerPortal() {
         </DashboardGrid>
       </section>
 
-      <div className="scrollbar-subtle mt-10 flex gap-2 overflow-x-auto pb-1">
+      <div
+        className="scrollbar-subtle sticky top-16 z-20 -mx-3 mt-10 flex gap-2 overflow-x-auto border-y bg-background/95 px-3 py-2 backdrop-blur sm:top-[72px] sm:mx-0 sm:rounded-2xl sm:border"
+        role="tablist"
+        aria-label={t('customerPortal.tabs.label')}
+      >
         <PortalTabButton
           active={activeTab === 'overview'}
           label={t('customerPortal.tabs.overview')}
@@ -703,7 +707,7 @@ export default function CustomerPortal() {
               action={
                 <Button asChild>
                   <Link to={`/app/${business.slug}/book`}>
-                    Book Appointment
+                    {t('customerPortal.actions.bookAppointment')}
                   </Link>
                 </Button>
               }
@@ -730,7 +734,7 @@ export default function CustomerPortal() {
               action={
                 <Button asChild>
                   <Link to={`/app/${business.slug}/book`}>
-                    Book Appointment
+                    {t('customerPortal.actions.bookAppointment')}
                   </Link>
                 </Button>
               }
@@ -921,6 +925,7 @@ function ProfilePanel({
               <div className="relative">
                 <UserCircle className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
+                  autoComplete="name"
                   className="h-11 rounded-xl pl-10"
                   value={profileForm.display_name}
                   onChange={(event) =>
@@ -939,6 +944,8 @@ function ProfilePanel({
                 <Phone className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
                   className="h-11 rounded-xl pl-10"
                   value={profileForm.phone}
                   onChange={(event) =>
@@ -957,6 +964,8 @@ function ProfilePanel({
                 <Mail className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="email"
+                  inputMode="email"
+                  autoComplete="email"
                   className="h-11 rounded-xl pl-10"
                   value={profileForm.email}
                   onChange={(event) =>
@@ -1383,6 +1392,8 @@ function PortalTabButton({
   return (
     <button
       type="button"
+      role="tab"
+      aria-selected={active}
       onClick={onClick}
       className={`flex shrink-0 items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition ${
         active

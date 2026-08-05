@@ -204,7 +204,7 @@ export default function CustomerReviews() {
       </section>
 
       <Dialog open={reviewDialogOpen} onOpenChange={setReviewDialogOpen}>
-        <DialogContent className="max-w-lg rounded-3xl">
+        <DialogContent className="max-h-[92dvh] w-[calc(100%-.75rem)] max-w-lg overflow-y-auto rounded-3xl sm:w-full">
           <DialogHeader><DialogTitle>{t('customerReviews.dialog.title')}</DialogTitle></DialogHeader>
           <div className="space-y-5 py-4">
             <div className="space-y-2"><Label>{t('customerReviews.dialog.rating')}</Label><StarRating value={rating} onChange={setRating} /></div>
@@ -212,7 +212,7 @@ export default function CustomerReviews() {
             <div className="space-y-2"><Label>{t('customerReviews.dialog.comment')}</Label><Textarea rows={6} value={comment} onChange={(event) => setComment(event.target.value)} placeholder={t('customerReviews.dialog.commentPlaceholder')} /></div>
             <div className="rounded-2xl bg-muted/35 p-4 text-xs leading-5 text-muted-foreground">{t('customerReviews.dialog.moderationNote')}</div>
           </div>
-          <DialogFooter><Button variant="outline" disabled={saving} onClick={() => setReviewDialogOpen(false)}>{t('common.cancel')}</Button><Button disabled={saving} onClick={() => void submitReview()}>{saving ? t('common.saving') : t('customerReviews.dialog.submit')}</Button></DialogFooter>
+          <DialogFooter className="sticky bottom-0 -mx-6 -mb-6 border-t bg-background px-6 py-4 sm:static sm:m-0 sm:border-0 sm:bg-transparent sm:p-0"><Button className="w-full sm:w-auto" variant="outline" disabled={saving} onClick={() => setReviewDialogOpen(false)}>{t('common.cancel')}</Button><Button className="w-full sm:w-auto" disabled={saving} onClick={() => void submitReview()}>{saving ? t('common.saving') : t('customerReviews.dialog.submit')}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

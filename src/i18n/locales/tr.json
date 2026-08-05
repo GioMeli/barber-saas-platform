@@ -1628,7 +1628,9 @@
       "accessibility": {
         "openMenu": "Gezinme menüsünü aç",
         "closeMenu": "Gezinme menüsünü kapat",
-        "signOut": "Çıkış yap"
+        "signOut": "Çıkış yap",
+        "skipToContent": "İşletme içeriğine geç",
+        "mobileNavigation": "Müşteri navigasyonu"
       },
       "install": {
         "eyebrow": "İşletme uygulamasını yükle",
@@ -1724,7 +1726,8 @@
     },
     "actions": {
       "confirm": "Randevuyu onayla",
-      "confirming": "Onaylanıyor..."
+      "confirming": "Onaylanıyor...",
+      "backToStore": "İşletme sayfasına dön"
     },
     "states": {
       "loadingOptions": "Rezervasyon seçenekleri yükleniyor...",
@@ -1734,7 +1737,9 @@
       "noAppointmentsDescription": "Daha fazla saat görmek için başka bir tarih veya uzman seçin.",
       "notSelected": "Seçilmedi",
       "notAvailable": "Mevcut değil",
-      "notProvided": "Belirtilmedi"
+      "notProvided": "Belirtilmedi",
+      "noServices": "Çevrim içi rezervasyon için hizmet bulunmuyor",
+      "noServicesDescription": "Bu işletme henüz rezervasyona açık bir hizmet yayınlamadı. İşletme sayfasına dönün veya daha sonra tekrar deneyin."
     },
     "validation": {
       "namePhoneRequired": "Ad ve telefon zorunludur",
@@ -2120,7 +2125,8 @@
       "upcoming": "Yaklaşan",
       "history": "Geçmiş",
       "profile": "Profil",
-      "notifications": "Bildirimler"
+      "notifications": "Bildirimler",
+      "label": "Müşteri hesabı bölümleri"
     },
     "activity": {
       "title": "Son etkinlik",

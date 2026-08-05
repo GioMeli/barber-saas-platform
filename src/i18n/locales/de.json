@@ -1628,7 +1628,9 @@
       "accessibility": {
         "openMenu": "Navigationsmenü öffnen",
         "closeMenu": "Navigationsmenü schließen",
-        "signOut": "Abmelden"
+        "signOut": "Abmelden",
+        "skipToContent": "Zum Inhalt des Geschäfts springen",
+        "mobileNavigation": "Kundennavigation"
       },
       "install": {
         "eyebrow": "Business-App installieren",
@@ -1724,7 +1726,8 @@
     },
     "actions": {
       "confirm": "Termin bestätigen",
-      "confirming": "Wird bestätigt..."
+      "confirming": "Wird bestätigt...",
+      "backToStore": "Zurück zur Geschäftsseite"
     },
     "states": {
       "loadingOptions": "Buchungsoptionen werden geladen...",
@@ -1734,7 +1737,9 @@
       "noAppointmentsDescription": "Wählen Sie ein anderes Datum oder einen anderen Mitarbeiter.",
       "notSelected": "Nicht ausgewählt",
       "notAvailable": "Nicht verfügbar",
-      "notProvided": "Nicht angegeben"
+      "notProvided": "Nicht angegeben",
+      "noServices": "Keine Services für Online-Buchungen verfügbar",
+      "noServicesDescription": "Dieses Unternehmen hat noch keine buchbaren Services veröffentlicht. Kehren Sie zur Geschäftsseite zurück oder versuchen Sie es später erneut."
     },
     "validation": {
       "namePhoneRequired": "Name und Telefonnummer sind erforderlich",
@@ -2120,7 +2125,8 @@
       "upcoming": "Bevorstehend",
       "history": "Verlauf",
       "profile": "Profil",
-      "notifications": "Benachrichtigungen"
+      "notifications": "Benachrichtigungen",
+      "label": "Bereiche des Kundenkontos"
     },
     "activity": {
       "title": "Letzte Aktivitäten",
