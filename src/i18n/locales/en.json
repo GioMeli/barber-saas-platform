@@ -1417,7 +1417,8 @@
         "coordinates": "Latitude and longitude must be valid numbers",
         "email": "Enter a valid public email address",
         "slug": "Use only lowercase letters, numbers and hyphens for the booking slug.",
-        "bookingRules": "Booking interval and maximum advance must be greater than zero, and minimum notice cannot be negative."
+        "bookingRules": "Booking interval and maximum advance must be greater than zero, and minimum notice cannot be negative.",
+        "communicationEmail": "Enter a valid reply-to email address."
       },
       "messages": {
         "loadError": "Unable to load storefront details",
@@ -2360,7 +2361,23 @@
       "customerPolicies": "Customer policies",
       "customerPoliciesDescription": "Keep the cancellation policy and terms shown to customers in the same Storefront workspace.",
       "cancellationPolicy": "Cancellation policy",
-      "termsConditions": "Terms & conditions"
+      "termsConditions": "Terms & conditions",
+      "communicationTitle": "Customer communications",
+      "communicationDescription": "Control the operational emails and SMS messages sent for bookings and reminders.",
+      "communicationLanguage": "Communication language",
+      "communicationLanguageHint": "Default language for appointment confirmations, updates and reminders.",
+      "replyToEmail": "Reply-to email",
+      "replyToEmailHint": "Customer replies will be directed to this address. Leave blank to use the public business email.",
+      "transactionalEmail": "Appointment emails",
+      "transactionalEmailHint": "Send confirmations, cancellations and rescheduling updates by email.",
+      "transactionalSms": "Appointment SMS",
+      "transactionalSmsHint": "Send confirmations, cancellations and rescheduling updates by SMS when the production SMS provider is active.",
+      "smsReminders": "Automated SMS reminders",
+      "smsRemindersHint": "Send 24-hour and 2-hour appointment reminders by SMS.",
+      "providerActivationNote": "These preferences are ready now. Live email/SMS delivery is activated centrally after the verified domain and provider accounts are connected.",
+      "automationLocationTitle": "Appointment communications are managed in Marketing",
+      "automationLocationDescription": "Keep booking availability and customer policies here. Confirmations, updates, reminders, channels and language are controlled from Marketing → Automations.",
+      "openAutomations": "Open communication automations"
     },
     "qr": {
       "title": "QR Code & App Link",
@@ -3314,6 +3331,27 @@
     "automations": {
       "delay": "Trigger delay: {{hours}} hours",
       "providerNotice": "Automations are safely configured in Velliqo. Email/SMS delivery starts only after a trusted provider or worker is connected; the browser never sends bulk messages directly.",
+      "appointmentCommunications": {
+        "title": "Appointment communications",
+        "description": "Configure operational confirmations, appointment updates and reminders separately from promotional marketing journeys.",
+        "language": "Communication language",
+        "languageHint": "Default language for appointment confirmations, changes, cancellations and reminders.",
+        "replyToEmail": "Reply-to email",
+        "replyToEmailHint": "Customer replies are directed here. Leave blank to use the public business email.",
+        "transactionalEmail": "Appointment emails",
+        "transactionalEmailHint": "Send booking confirmations, cancellations and rescheduling updates by email.",
+        "transactionalSms": "Appointment SMS",
+        "transactionalSmsHint": "Send booking confirmations, cancellations and rescheduling updates by SMS when the provider is active.",
+        "emailReminders": "Automated email reminders",
+        "emailRemindersHint": "Send the configured 24-hour and 2-hour reminders by email.",
+        "smsReminders": "Automated SMS reminders",
+        "smsRemindersHint": "Send the configured 24-hour and 2-hour reminders by SMS.",
+        "providerNote": "These business preferences are ready now. Live delivery remains disabled until the verified domain, email provider and SMS provider are connected centrally.",
+        "save": "Save communication settings",
+        "saved": "Appointment communication settings saved.",
+        "saveFailed": "Could not save appointment communication settings.",
+        "invalidEmail": "Enter a valid reply-to email address."
+      },
       "birthday": {
         "title": "Birthday journey",
         "description": "Send a personal offer around the customer’s birthday.",

@@ -1417,7 +1417,8 @@
         "coordinates": "Breiten- und Längengrad müssen gültige Zahlen sein",
         "email": "Geben Sie eine gültige öffentliche E-Mail-Adresse ein",
         "slug": "Verwende für den Buchungs-Slug nur Kleinbuchstaben, Zahlen und Bindestriche.",
-        "bookingRules": "Buchungsintervall und maximaler Vorlauf müssen größer als null sein; der Mindestvorlauf darf nicht negativ sein."
+        "bookingRules": "Buchungsintervall und maximaler Vorlauf müssen größer als null sein; der Mindestvorlauf darf nicht negativ sein.",
+        "communicationEmail": "Gib eine gültige Antwort-E-Mail-Adresse ein."
       },
       "messages": {
         "loadError": "Storefront-Daten konnten nicht geladen werden",
@@ -2360,7 +2361,23 @@
       "customerPolicies": "Kundenrichtlinien",
       "customerPoliciesDescription": "Verwalte Stornierungsrichtlinie und Bedingungen für Kunden direkt im Storefront-Arbeitsbereich.",
       "cancellationPolicy": "Stornierungsrichtlinie",
-      "termsConditions": "Allgemeine Geschäftsbedingungen"
+      "termsConditions": "Allgemeine Geschäftsbedingungen",
+      "communicationTitle": "Kundenkommunikation",
+      "communicationDescription": "Steuere operative E-Mails und SMS für Buchungen und Erinnerungen.",
+      "communicationLanguage": "Kommunikationssprache",
+      "communicationLanguageHint": "Standardsprache für Terminbestätigungen, Änderungen und Erinnerungen.",
+      "replyToEmail": "Antwortadresse",
+      "replyToEmailHint": "Kundenantworten werden an diese Adresse gesendet. Leer lassen, um die öffentliche Geschäftsadresse zu verwenden.",
+      "transactionalEmail": "Termin-E-Mails",
+      "transactionalEmailHint": "Bestätigungen, Stornierungen und Terminänderungen per E-Mail senden.",
+      "transactionalSms": "Termin-SMS",
+      "transactionalSmsHint": "Bestätigungen, Stornierungen und Terminänderungen per SMS senden, sobald der produktive SMS-Anbieter aktiv ist.",
+      "smsReminders": "Automatische SMS-Erinnerungen",
+      "smsRemindersHint": "Terminerinnerungen 24 Stunden und 2 Stunden vorher per SMS senden.",
+      "providerActivationNote": "Diese Einstellungen sind vorbereitet. Der Live-Versand wird zentral aktiviert, nachdem Domain und Providerkonten verifiziert und verbunden sind.",
+      "automationLocationTitle": "Termin-Kommunikation wird im Marketing verwaltet",
+      "automationLocationDescription": "Buchungsverfügbarkeit und Kundenrichtlinien bleiben hier. Bestätigungen, Änderungen, Erinnerungen, Kanäle und Sprache werden unter Marketing → Automationen gesteuert.",
+      "openAutomations": "Kommunikations-Automationen öffnen"
     },
     "qr": {
       "title": "QR-Code & App-Link",
@@ -3314,6 +3331,27 @@
     "automations": {
       "delay": "Auslöseverzögerung: {{hours}} Stunden",
       "providerNotice": "Automatisierungen werden in Velliqo sicher konfiguriert. Der E-Mail-/SMS-Versand beginnt erst, nachdem ein vertrauenswürdiger Anbieter oder Worker verbunden wurde; der Browser versendet niemals direkt Massennachrichten.",
+      "appointmentCommunications": {
+        "title": "Termin-Kommunikation",
+        "description": "Konfigurieren Sie operative Bestätigungen, Terminänderungen und Erinnerungen getrennt von Werbekampagnen.",
+        "language": "Kommunikationssprache",
+        "languageHint": "Standardsprache für Bestätigungen, Änderungen, Stornierungen und Erinnerungen.",
+        "replyToEmail": "Antwort-E-Mail",
+        "replyToEmailHint": "Kundenantworten werden hierhin geleitet. Leer lassen, um die öffentliche Geschäfts-E-Mail zu verwenden.",
+        "transactionalEmail": "Termin-E-Mails",
+        "transactionalEmailHint": "Bestätigungen, Stornierungen und Umbuchungen per E-Mail senden.",
+        "transactionalSms": "Termin-SMS",
+        "transactionalSmsHint": "Bestätigungen, Stornierungen und Umbuchungen per SMS senden, wenn der Anbieter aktiv ist.",
+        "emailReminders": "Automatische E-Mail-Erinnerungen",
+        "emailRemindersHint": "Die konfigurierten 24- und 2-Stunden-Erinnerungen per E-Mail senden.",
+        "smsReminders": "Automatische SMS-Erinnerungen",
+        "smsRemindersHint": "Die konfigurierten 24- und 2-Stunden-Erinnerungen per SMS senden.",
+        "providerNote": "Diese Geschäftseinstellungen sind vorbereitet. Live-Zustellung bleibt deaktiviert, bis verifizierte Domain, E-Mail- und SMS-Anbieter zentral verbunden sind.",
+        "save": "Kommunikationseinstellungen speichern",
+        "saved": "Termin-Kommunikationseinstellungen gespeichert.",
+        "saveFailed": "Termin-Kommunikationseinstellungen konnten nicht gespeichert werden.",
+        "invalidEmail": "Geben Sie eine gültige Antwort-E-Mail-Adresse ein."
+      },
       "birthday": {
         "title": "Geburtstags-Journey",
         "description": "Senden Sie rund um den Geburtstag des Kunden ein persönliches Angebot.",

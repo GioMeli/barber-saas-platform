@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
@@ -41,7 +42,6 @@ const EMPTY_BOOKING = {
   booking_interval: 30,
   min_booking_notice: 2,
   max_booking_period: 60,
-  email_reminders_enabled: true,
   cancellation_policy: '',
   terms_conditions: '',
 };
@@ -126,7 +126,6 @@ export default function Storefront() {
       booking_interval: Number(bookingResult.data.booking_interval ?? 30),
       min_booking_notice: Number(bookingResult.data.min_booking_notice ?? 2),
       max_booking_period: Number(bookingResult.data.max_booking_period ?? 60),
-      email_reminders_enabled: bookingResult.data.email_reminders_enabled !== false,
       cancellation_policy: bookingResult.data.cancellation_policy ?? '',
       terms_conditions: bookingResult.data.terms_conditions ?? '',
     } : { ...EMPTY_BOOKING };
@@ -243,7 +242,6 @@ export default function Storefront() {
         booking_interval: Math.round(bookingForm.booking_interval),
         min_booking_notice: Math.round(bookingForm.min_booking_notice),
         max_booking_period: Math.round(bookingForm.max_booking_period),
-        email_reminders_enabled: bookingForm.email_reminders_enabled,
         cancellation_policy: bookingForm.cancellation_policy.trim() || null,
         terms_conditions: bookingForm.terms_conditions.trim() || null,
       }, { onConflict: 'business_id' }),
@@ -470,7 +468,18 @@ export default function Storefront() {
                 <Field label={t('settings.bookingPreferences.minNotice')}><Input type="number" min="0" step="1" value={bookingForm.min_booking_notice} onChange={(event) => updateBooking('min_booking_notice', Number(event.target.value))} /></Field>
                 <Field label={t('settings.bookingPreferences.maxAdvance')}><Input type="number" min="1" step="1" value={bookingForm.max_booking_period} onChange={(event) => updateBooking('max_booking_period', Number(event.target.value))} /></Field>
               </div>
-              <VisibilityToggle label={t('settings.bookingPreferences.emailReminders')} description={t('settings.bookingPreferences.emailRemindersHint')} checked={bookingForm.email_reminders_enabled} onChange={(checked) => updateBooking('email_reminders_enabled', checked)} />
+            </CardContent>
+          </Card>
+
+          <Card className="rounded-3xl border-primary/15 bg-primary/[0.035] shadow-none">
+            <CardContent className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+              <div className="max-w-2xl">
+                <h3 className="font-bold">{t('settings.bookingPreferences.automationLocationTitle')}</h3>
+                <p className="mt-1 text-sm leading-6 text-muted-foreground">{t('settings.bookingPreferences.automationLocationDescription')}</p>
+              </div>
+              <Button asChild variant="outline" className="shrink-0">
+                <Link to="/dashboard/marketing?tab=automations">{t('settings.bookingPreferences.openAutomations')}</Link>
+              </Button>
             </CardContent>
           </Card>
 

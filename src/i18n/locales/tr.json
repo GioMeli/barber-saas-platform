@@ -1417,7 +1417,8 @@
         "coordinates": "Enlem ve boylam geçerli sayılar olmalıdır",
         "email": "Geçerli bir herkese açık e-posta adresi girin",
         "slug": "Rezervasyon slug alanında yalnızca küçük harf, sayı ve tire kullanın.",
-        "bookingRules": "Rezervasyon aralığı ve maksimum ileri tarih sıfırdan büyük olmalı; minimum bildirim negatif olamaz."
+        "bookingRules": "Rezervasyon aralığı ve maksimum ileri tarih sıfırdan büyük olmalı; minimum bildirim negatif olamaz.",
+        "communicationEmail": "Geçerli bir yanıt e-posta adresi girin."
       },
       "messages": {
         "loadError": "Vitrin bilgileri yüklenemedi",
@@ -2360,7 +2361,23 @@
       "customerPolicies": "Müşteri politikaları",
       "customerPoliciesDescription": "Müşterilere gösterilen iptal politikasını ve koşulları aynı Storefront alanından yönetin.",
       "cancellationPolicy": "İptal politikası",
-      "termsConditions": "Şartlar ve koşullar"
+      "termsConditions": "Şartlar ve koşullar",
+      "communicationTitle": "Müşteri iletişimleri",
+      "communicationDescription": "Rezervasyon ve hatırlatmalar için gönderilen operasyonel e-posta ve SMS mesajlarını yönetin.",
+      "communicationLanguage": "İletişim dili",
+      "communicationLanguageHint": "Randevu onayları, güncellemeleri ve hatırlatmaları için varsayılan dil.",
+      "replyToEmail": "Yanıt e-postası",
+      "replyToEmailHint": "Müşteri yanıtları bu adrese yönlendirilir. İşletmenin genel e-postasını kullanmak için boş bırakın.",
+      "transactionalEmail": "Randevu e-postaları",
+      "transactionalEmailHint": "Onay, iptal ve yeniden planlama güncellemelerini e-postayla gönderin.",
+      "transactionalSms": "Randevu SMS mesajları",
+      "transactionalSmsHint": "Üretim SMS sağlayıcısı etkin olduğunda onay, iptal ve yeniden planlama mesajlarını SMS ile gönderin.",
+      "smsReminders": "Otomatik SMS hatırlatmaları",
+      "smsRemindersHint": "24 saat ve 2 saat önce SMS hatırlatmaları gönderin.",
+      "providerActivationNote": "Bu tercihler hazırdır. Canlı e-posta/SMS gönderimi, doğrulanmış alan adı ve sağlayıcı hesapları bağlandıktan sonra merkezi olarak etkinleştirilir.",
+      "automationLocationTitle": "Randevu iletişimleri Marketing bölümünde yönetilir",
+      "automationLocationDescription": "Rezervasyon uygunluğu ve müşteri politikaları burada kalır. Onaylar, değişiklikler, hatırlatmalar, kanallar ve dil Marketing → Automations bölümünden yönetilir.",
+      "openAutomations": "İletişim otomasyonlarını aç"
     },
     "qr": {
       "title": "QR Kod ve Uygulama Bağlantısı",
@@ -3314,6 +3331,27 @@
     "automations": {
       "delay": "Tetikleme gecikmesi: {{hours}} saat",
       "providerNotice": "Otomasyonlar Velliqo içinde güvenli biçimde yapılandırılır. E-posta/SMS gönderimi yalnızca güvenilir bir sağlayıcı veya worker bağlandıktan sonra başlar; tarayıcı hiçbir zaman doğrudan toplu mesaj göndermez.",
+      "appointmentCommunications": {
+        "title": "Randevu iletişimleri",
+        "description": "Operasyonel onayları, randevu değişikliklerini ve hatırlatmaları promosyon kampanyalarından ayrı yönetin.",
+        "language": "İletişim dili",
+        "languageHint": "Onaylar, değişiklikler, iptaller ve hatırlatmalar için varsayılan dil.",
+        "replyToEmail": "Yanıt e-postası",
+        "replyToEmailHint": "Müşteri yanıtları buraya yönlendirilir. Genel işletme e-postasını kullanmak için boş bırakın.",
+        "transactionalEmail": "Randevu e-postaları",
+        "transactionalEmailHint": "Rezervasyon onaylarını, iptalleri ve yeniden planlama bildirimlerini e-postayla gönderin.",
+        "transactionalSms": "Randevu SMS mesajları",
+        "transactionalSmsHint": "Sağlayıcı etkin olduğunda onayları, iptalleri ve değişiklikleri SMS ile gönderin.",
+        "emailReminders": "Otomatik e-posta hatırlatmaları",
+        "emailRemindersHint": "Yapılandırılmış 24 ve 2 saatlik hatırlatmaları e-postayla gönderin.",
+        "smsReminders": "Otomatik SMS hatırlatmaları",
+        "smsRemindersHint": "Yapılandırılmış 24 ve 2 saatlik hatırlatmaları SMS ile gönderin.",
+        "providerNote": "Bu işletme tercihleri hazırdır. Doğrulanmış alan adı ile e-posta ve SMS sağlayıcıları merkezi olarak bağlanana kadar canlı gönderim kapalı kalır.",
+        "save": "İletişim ayarlarını kaydet",
+        "saved": "Randevu iletişim ayarları kaydedildi.",
+        "saveFailed": "Randevu iletişim ayarları kaydedilemedi.",
+        "invalidEmail": "Geçerli bir yanıt e-posta adresi girin."
+      },
       "birthday": {
         "title": "Doğum günü yolculuğu",
         "description": "Müşterinin doğum günü döneminde kişisel bir teklif gönderin.",

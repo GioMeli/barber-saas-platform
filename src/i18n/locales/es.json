@@ -1417,7 +1417,8 @@
         "coordinates": "La latitud y la longitud deben ser números válidos",
         "email": "Introduce una dirección de correo pública válida",
         "slug": "Usa solo letras minúsculas, números y guiones en el slug de reservas.",
-        "bookingRules": "El intervalo de reserva y la antelación máxima deben ser mayores que cero, y el aviso mínimo no puede ser negativo."
+        "bookingRules": "El intervalo de reserva y la antelación máxima deben ser mayores que cero, y el aviso mínimo no puede ser negativo.",
+        "communicationEmail": "Introduce una dirección de respuesta válida."
       },
       "messages": {
         "loadError": "No se pudieron cargar los datos del escaparate",
@@ -2360,7 +2361,23 @@
       "customerPolicies": "Políticas para clientes",
       "customerPoliciesDescription": "Gestiona la política de cancelación y los términos que ven los clientes desde el mismo Storefront.",
       "cancellationPolicy": "Política de cancelación",
-      "termsConditions": "Términos y condiciones"
+      "termsConditions": "Términos y condiciones",
+      "communicationTitle": "Comunicaciones con clientes",
+      "communicationDescription": "Controla los correos y SMS operativos enviados para reservas y recordatorios.",
+      "communicationLanguage": "Idioma de comunicación",
+      "communicationLanguageHint": "Idioma predeterminado para confirmaciones, cambios y recordatorios de citas.",
+      "replyToEmail": "Correo de respuesta",
+      "replyToEmailHint": "Las respuestas de clientes llegarán a esta dirección. Déjalo vacío para usar el correo público del negocio.",
+      "transactionalEmail": "Correos de citas",
+      "transactionalEmailHint": "Envía confirmaciones, cancelaciones y cambios de cita por correo.",
+      "transactionalSms": "SMS de citas",
+      "transactionalSmsHint": "Envía confirmaciones, cancelaciones y cambios por SMS cuando el proveedor de producción esté activo.",
+      "smsReminders": "Recordatorios SMS automáticos",
+      "smsRemindersHint": "Envía recordatorios por SMS 24 horas y 2 horas antes.",
+      "providerActivationNote": "Estas preferencias ya están preparadas. El envío real se activa de forma central cuando se conectan el dominio verificado y las cuentas de proveedores.",
+      "automationLocationTitle": "Las comunicaciones de citas se gestionan en Marketing",
+      "automationLocationDescription": "Mantén aquí la disponibilidad y las políticas del cliente. Las confirmaciones, cambios, recordatorios, canales e idioma se controlan desde Marketing → Automatizaciones.",
+      "openAutomations": "Abrir automatizaciones de comunicación"
     },
     "qr": {
       "title": "Código QR y enlace de la app",
@@ -3314,6 +3331,27 @@
     "automations": {
       "delay": "Retraso de activación: {{hours}} horas",
       "providerNotice": "Las automatizaciones se configuran de forma segura en Velliqo. El envío de correo/SMS comienza únicamente después de conectar un proveedor o proceso de confianza; el navegador nunca envía mensajes masivos directamente.",
+      "appointmentCommunications": {
+        "title": "Comunicaciones de citas",
+        "description": "Configura confirmaciones operativas, cambios de cita y recordatorios por separado de las campañas promocionales.",
+        "language": "Idioma de comunicación",
+        "languageHint": "Idioma predeterminado para confirmaciones, cambios, cancelaciones y recordatorios.",
+        "replyToEmail": "Correo de respuesta",
+        "replyToEmailHint": "Las respuestas de clientes se dirigirán aquí. Déjalo vacío para usar el correo público del negocio.",
+        "transactionalEmail": "Correos de citas",
+        "transactionalEmailHint": "Enviar confirmaciones, cancelaciones y cambios de cita por correo.",
+        "transactionalSms": "SMS de citas",
+        "transactionalSmsHint": "Enviar confirmaciones, cancelaciones y cambios por SMS cuando el proveedor esté activo.",
+        "emailReminders": "Recordatorios automáticos por correo",
+        "emailRemindersHint": "Enviar por correo los recordatorios configurados de 24 y 2 horas.",
+        "smsReminders": "Recordatorios automáticos por SMS",
+        "smsRemindersHint": "Enviar por SMS los recordatorios configurados de 24 y 2 horas.",
+        "providerNote": "Estas preferencias del negocio ya están preparadas. La entrega real permanece desactivada hasta conectar centralmente el dominio verificado y los proveedores de correo y SMS.",
+        "save": "Guardar configuración de comunicación",
+        "saved": "Configuración de comunicaciones de citas guardada.",
+        "saveFailed": "No se pudo guardar la configuración de comunicaciones.",
+        "invalidEmail": "Introduce una dirección de correo de respuesta válida."
+      },
       "birthday": {
         "title": "Recorrido de cumpleaños",
         "description": "Envía una oferta personal cerca del cumpleaños del cliente.",
