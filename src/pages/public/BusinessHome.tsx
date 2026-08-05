@@ -344,8 +344,8 @@ export default function BusinessHome() {
                 t('storefront.public.hero.defaultTagline')}
             </p>
 
-            <div className="mt-7 flex flex-wrap gap-3">
-              <Button asChild size="lg" className="h-12 rounded-xl px-6">
+            <div className="mt-7 grid gap-3 sm:flex sm:flex-wrap">
+              <Button asChild size="lg" className="h-12 w-full rounded-xl px-6 sm:w-auto">
                 <Link to={bookUrl}>
                   <CalendarDays className="mr-2 h-5 w-5" />
                   {presence.booking_cta_label || t('storefront.public.actions.bookAppointment')}
@@ -357,7 +357,7 @@ export default function BusinessHome() {
                   asChild
                   size="lg"
                   variant="secondary"
-                  className="h-12 rounded-xl border border-white/15 bg-white/10 px-5 text-white hover:bg-white/20"
+                  className="h-12 w-full rounded-xl border border-white/15 bg-white/10 px-5 text-white hover:bg-white/20 sm:w-auto"
                 >
                   <a href={directionsUrl} target="_blank" rel="noreferrer">
                     <MapPin className="mr-2 h-4 w-4" />
@@ -370,7 +370,7 @@ export default function BusinessHome() {
                 type="button"
                 size="lg"
                 variant="secondary"
-                className="h-12 rounded-xl border border-white/15 bg-white/10 px-4 text-white hover:bg-white/20"
+                className="h-12 w-full rounded-xl border border-white/15 bg-white/10 px-4 text-white hover:bg-white/20 sm:w-auto"
                 onClick={() => void shareStore()}
               >
                 <Share2 className="mr-2 h-4 w-4" />
@@ -459,7 +459,7 @@ export default function BusinessHome() {
         </section>
       )}
 
-      <nav className="sticky top-[72px] z-30 border-b bg-background/95 backdrop-blur-xl">
+      <nav className="sticky top-16 z-30 border-b bg-background/95 backdrop-blur-xl sm:top-[72px]">
         <div className="scrollbar-subtle mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2 sm:px-6">
           <Button asChild size="sm" className="shrink-0 rounded-full">
             <Link to={bookUrl}>{t('storefront.public.navigation.book')}</Link>
@@ -482,7 +482,7 @@ export default function BusinessHome() {
       <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6">
         <StoreInstallPrompt business={business} />
 
-        <section id="services" className="scroll-mt-32">
+        <section id="services" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<Scissors className="h-5 w-5" />}
             title={t('storefront.public.sections.services.title')}
@@ -539,7 +539,7 @@ export default function BusinessHome() {
         </section>
 
         {presence.show_team !== false && (
-        <section id="team" className="scroll-mt-32">
+        <section id="team" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<UserRound className="h-5 w-5" />}
             title={t('storefront.public.sections.team.title')}
@@ -592,7 +592,7 @@ export default function BusinessHome() {
         )}
 
         {presence.show_gallery !== false && (
-        <section id="gallery" className="scroll-mt-32">
+        <section id="gallery" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<ImageIcon className="h-5 w-5" />}
             title={t('storefront.public.sections.gallery.title')}
@@ -630,7 +630,7 @@ export default function BusinessHome() {
         )}
 
         {presence.show_products !== false && (
-        <section id="products" className="scroll-mt-32">
+        <section id="products" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<Package className="h-5 w-5" />}
             title={t('storefront.public.sections.products.title')}
@@ -685,7 +685,7 @@ export default function BusinessHome() {
         )}
 
         {presence.show_reviews !== false && (
-        <section id="reviews" className="scroll-mt-32">
+        <section id="reviews" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<Star className="h-5 w-5" />}
             title={t('storefront.public.sections.reviews.title')}
@@ -723,7 +723,7 @@ export default function BusinessHome() {
         </section>
         )}
 
-        <section id="announcements" className="scroll-mt-32">
+        <section id="announcements" className="scroll-mt-28 sm:scroll-mt-32">
           <button
             type="button"
             className="flex w-full items-center justify-between gap-4 rounded-2xl border bg-card p-4 text-left shadow-sm transition hover:border-primary/30"

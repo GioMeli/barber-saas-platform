@@ -1628,7 +1628,9 @@
       "accessibility": {
         "openMenu": "Abrir menú de navegación",
         "closeMenu": "Cerrar menú de navegación",
-        "signOut": "Cerrar sesión"
+        "signOut": "Cerrar sesión",
+        "skipToContent": "Ir al contenido del negocio",
+        "mobileNavigation": "Navegación del cliente"
       },
       "install": {
         "eyebrow": "Instalar la app del negocio",
@@ -1724,7 +1726,8 @@
     },
     "actions": {
       "confirm": "Confirmar cita",
-      "confirming": "Confirmando..."
+      "confirming": "Confirmando...",
+      "backToStore": "Volver al negocio"
     },
     "states": {
       "loadingOptions": "Cargando opciones de reserva...",
@@ -1734,7 +1737,9 @@
       "noAppointmentsDescription": "Elige otra fecha o profesional para ver más horas.",
       "notSelected": "No seleccionado",
       "notAvailable": "No disponible",
-      "notProvided": "No indicado"
+      "notProvided": "No indicado",
+      "noServices": "No hay servicios disponibles para reserva online",
+      "noServicesDescription": "Este negocio aún no ha publicado servicios disponibles para reservar. Vuelve a la página del negocio o inténtalo de nuevo más tarde."
     },
     "validation": {
       "namePhoneRequired": "El nombre y el teléfono son obligatorios",
@@ -2120,7 +2125,8 @@
       "upcoming": "Próximas",
       "history": "Historial",
       "profile": "Perfil",
-      "notifications": "Notificaciones"
+      "notifications": "Notificaciones",
+      "label": "Secciones de la cuenta del cliente"
     },
     "activity": {
       "title": "Actividad reciente",

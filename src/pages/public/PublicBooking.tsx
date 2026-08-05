@@ -347,6 +347,38 @@ export default function PublicBooking() {
     }
   };
 
+  const handleMobilePrimaryAction = () => {
+    if (step === 1) {
+      if (selectedServices.length > 0) setStep(2);
+      return;
+    }
+
+    if (step === 3) {
+      if (selectedTime) setStep(4);
+      return;
+    }
+
+    if (step === 4) {
+      void handleBook();
+    }
+  };
+
+  const mobilePrimaryDisabled =
+    (step === 1 && selectedServices.length === 0) ||
+    (step === 3 && !selectedTime) ||
+    (step === 4 && (isSubmitting || customerProfileLoading));
+
+  const mobilePrimaryLabel =
+    step === 1
+      ? t('publicBooking.services.continue')
+      : step === 3
+        ? t('publicBooking.dateTime.continue')
+        : step === 4
+          ? isSubmitting
+            ? t('publicBooking.actions.confirming')
+            : t('publicBooking.actions.confirm')
+          : null;
+
   const directionsUrl = useMemo(() => {
     if (business.latitude && business.longitude) {
       return `https://www.google.com/maps/dir/?api=1&destination=${business.latitude},${business.longitude}`;
@@ -504,14 +536,20 @@ export default function PublicBooking() {
           const completed = step > item.id;
 
           return (
-            <div
+            <button
               key={item.id}
-              className={`flex min-w-[138px] snap-start items-center gap-2.5 rounded-2xl border px-3 py-3 sm:min-w-[150px] sm:gap-3 sm:px-4 ${
+              type="button"
+              disabled={item.id > step}
+              onClick={() => {
+                if (item.id <= step) setStep(item.id);
+              }}
+              aria-current={active ? 'step' : undefined}
+              className={`flex min-w-[138px] snap-start items-center gap-2.5 rounded-2xl border px-3 py-3 text-left transition sm:min-w-[150px] sm:gap-3 sm:px-4 ${
                 active
                   ? 'border-primary bg-primary/10'
                   : completed
-                    ? 'border-emerald-200 bg-emerald-50'
-                    : 'bg-card'
+                    ? 'border-emerald-200 bg-emerald-50 hover:border-emerald-300'
+                    : 'cursor-default bg-card'
               }`}
             >
               <div
@@ -526,7 +564,7 @@ export default function PublicBooking() {
                 {completed ? <Check className="h-4 w-4" /> : item.id}
               </div>
               <span className="text-sm font-semibold">{t(item.labelKey)}</span>
-            </div>
+            </button>
           );
         })}
       </div>
@@ -542,6 +580,18 @@ export default function PublicBooking() {
                   description={t('publicBooking.services.description')}
                 />
 
+                {services.length === 0 ? (
+                  <div className="rounded-2xl border border-dashed bg-muted/20 p-8 text-center sm:p-10">
+                    <CalendarDays className="mx-auto h-10 w-10 text-muted-foreground" />
+                    <h3 className="mt-4 font-bold">{t('publicBooking.states.noServices')}</h3>
+                    <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-muted-foreground">
+                      {t('publicBooking.states.noServicesDescription')}
+                    </p>
+                    <Button asChild variant="outline" className="mt-5">
+                      <Link to={`/app/${business.slug}`}>{t('publicBooking.actions.backToStore')}</Link>
+                    </Button>
+                  </div>
+                ) : (
                 <div className="grid gap-3 lg:grid-cols-2">
                   {services.map((service) => {
                     const selected = selectedServices.some(
@@ -592,8 +642,9 @@ export default function PublicBooking() {
                     );
                   })}
                 </div>
+                )}
 
-                <div className="flex justify-end border-t pt-5">
+                <div className="hidden justify-end border-t pt-5 xl:flex">
                   <Button
                     disabled={selectedServices.length === 0}
                     onClick={() => setStep(2)}
@@ -768,6 +819,7 @@ export default function PublicBooking() {
                   </div>
                 </div>
 
+                <div aria-live="polite">
                 {availabilityLoading ? (
                   <div className="rounded-2xl border p-10 text-center text-sm text-muted-foreground">
                     {t('publicBooking.states.loadingTimes')}
@@ -819,11 +871,12 @@ export default function PublicBooking() {
                     ))}
                   </div>
                 )}
+                </div>
 
                 {!availabilityLoading &&
                   !selectedClosure &&
                   availableSlots.length > 0 && (
-                    <div className="flex justify-end border-t pt-5">
+                    <div className="hidden justify-end border-t pt-5 xl:flex">
                       <Button
                         disabled={!selectedTime}
                         onClick={() => setStep(4)}
@@ -886,6 +939,7 @@ export default function PublicBooking() {
                     <div className="space-y-2 sm:col-span-2">
                       <Label>{t('publicBooking.details.fullNameRequired')}</Label>
                       <Input
+                        autoComplete="name"
                         className="h-11 rounded-xl"
                         value={customerDetails.name}
                         onChange={(event) =>
@@ -901,6 +955,8 @@ export default function PublicBooking() {
                       <Label>{t('publicBooking.details.phoneRequiredShort')}</Label>
                       <Input
                         type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
                         className="h-11 rounded-xl"
                         value={customerDetails.phone}
                         onChange={(event) =>
@@ -916,6 +972,8 @@ export default function PublicBooking() {
                       <Label>{t('publicBooking.details.email')}</Label>
                       <Input
                         type="email"
+                        inputMode="email"
+                        autoComplete="email"
                         className="h-11 rounded-xl"
                         value={customerDetails.email}
                         onChange={(event) =>
@@ -946,7 +1004,7 @@ export default function PublicBooking() {
                 </div>
 
                 <Button
-                  className="h-12 w-full rounded-xl text-base"
+                  className="hidden h-12 w-full rounded-xl text-base xl:flex"
                   disabled={isSubmitting || customerProfileLoading}
                   onClick={() => void handleBook()}
                 >
@@ -1028,8 +1086,8 @@ export default function PublicBooking() {
       </div>
 
       <div className="safe-bottom fixed inset-x-0 bottom-0 z-20 border-t bg-background/95 px-3 pt-3 shadow-[0_-8px_24px_rgba(0,0,0,0.06)] backdrop-blur xl:hidden">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4">
-          <div className="min-w-0">
+        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3">
+          <div className="min-w-0 flex-1" aria-live="polite">
             <div className="truncate text-xs text-muted-foreground">
               {selectedServices.length
                 ? selectedServices.map((service) => service.name).join(', ')
@@ -1043,12 +1101,19 @@ export default function PublicBooking() {
             </div>
           </div>
 
-          {step < 4 ? (
+          {mobilePrimaryLabel ? (
+            <Button
+              type="button"
+              className="min-h-11 max-w-[58%] shrink-0 rounded-xl px-4 text-xs sm:text-sm"
+              disabled={mobilePrimaryDisabled}
+              onClick={handleMobilePrimaryAction}
+            >
+              <span className="line-clamp-2">{mobilePrimaryLabel}</span>
+            </Button>
+          ) : (
             <Badge variant="secondary" className="shrink-0">
               {t('publicBooking.mobile.step', { step, total: 4 })}
             </Badge>
-          ) : (
-            <Badge className="shrink-0">{t('publicBooking.mobile.ready')}</Badge>
           )}
         </div>
       </div>

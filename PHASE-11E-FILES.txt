@@ -1,0 +1,29 @@
+Velliqo Phase 11E — Customer Storefront + Booking UX/UI Hardening
+
+Changed / added files:
+- package.json
+- scripts/check-customer-ux-consistency.mjs
+- src/pages/public/PublicAppLayout.tsx
+- src/pages/public/BusinessHome.tsx
+- src/pages/public/PublicBooking.tsx
+- src/pages/public/CustomerReviews.tsx
+- src/pages/customer/CustomerPortal.tsx
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+
+Highlights:
+- App-like mobile customer navigation for Store, Book, Reviews and Account/Sign in.
+- Keyboard skip link and public main-content focus target.
+- Correct mobile/desktop sticky offsets on the public storefront.
+- Booking stepper can return to completed steps without losing current selections.
+- Explicit empty state when a business has no online-bookable services.
+- Thumb-friendly fixed booking action on mobile/tablet for Services, Date/Time and Confirm steps.
+- Customer booking/profile fields include browser autocomplete and mobile input hints.
+- Customer account tabs remain reachable while scrolling and expose accessible tab semantics.
+- Review dialog is safe on small screens with reachable sticky actions.
+- New customer-ux:check regression validator and translations in EN/EL/DE/ES/TR.
+
+No Supabase migration or Edge Function is required for Phase 11E.

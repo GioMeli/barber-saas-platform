@@ -6,6 +6,8 @@ import LanguageSwitcher from '@/components/LanguageSwitcher';
 import PageMeta from '@/components/common/PageMeta';
 import {
   CalendarDays,
+  House,
+  Star,
   LogIn,
   LogOut,
   Menu,
@@ -267,6 +269,12 @@ export default function PublicAppLayout() {
   return (
     <IndustryThemeRoot industryKey={industry.key}>
     <div className="min-h-screen bg-background">
+      <a
+        href="#public-main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-background focus:px-4 focus:py-3 focus:text-sm focus:font-semibold focus:shadow-xl"
+      >
+        {t('storefront.public.accessibility.skipToContent')}
+      </a>
       <PageMeta
         title={business.online_presence?.seo_title || `${business.name} | Velliqo`}
         description={business.online_presence?.seo_description || business.description || t('storefront.public.hero.defaultTagline')}
@@ -399,7 +407,11 @@ export default function PublicAppLayout() {
         )}
       </header>
 
-      <main className={`min-h-[calc(100dvh-4rem)] min-w-0 overflow-x-clip sm:min-h-[calc(100dvh-72px)] ${!location.pathname.endsWith('/book') ? 'pb-20 md:pb-0' : ''}`}>
+      <main
+        id="public-main-content"
+        tabIndex={-1}
+        className={`min-h-[calc(100dvh-4rem)] min-w-0 overflow-x-clip sm:min-h-[calc(100dvh-72px)] ${!location.pathname.endsWith('/book') ? 'pb-20 md:pb-0' : ''}`}
+      >
         <Outlet
           context={{
             business,
@@ -411,14 +423,59 @@ export default function PublicAppLayout() {
       </main>
 
       {!location.pathname.endsWith('/book') && (
-        <div className="safe-bottom fixed bottom-0 left-0 right-0 z-30 border-t bg-background/95 p-3 shadow-[0_-8px_24px_rgba(0,0,0,0.05)] backdrop-blur md:hidden">
-          <Button asChild className="h-12 w-full rounded-xl shadow-lg">
-            <Link to={`/app/${business.slug}/book`}>
-              <CalendarDays className="mr-2 h-5 w-5" />
-              {t('storefront.public.actions.bookAppointment')}
-            </Link>
-          </Button>
-        </div>
+        <nav
+          className="safe-bottom fixed inset-x-0 bottom-0 z-30 border-t bg-background/95 px-2 pt-2 shadow-[0_-8px_24px_rgba(0,0,0,0.05)] backdrop-blur md:hidden"
+          aria-label={t('storefront.public.accessibility.mobileNavigation')}
+        >
+          <div
+            className={`mx-auto grid max-w-md items-end gap-1 ${
+              business.online_presence?.show_reviews === false ? 'grid-cols-3' : 'grid-cols-4'
+            }`}
+          >
+            <MobilePublicNavItem
+              to={`/app/${business.slug}`}
+              label={t('storefront.public.navigation.store')}
+              icon={<House className="h-5 w-5" />}
+              active={location.pathname === `/app/${business.slug}`}
+            />
+            <MobilePublicNavItem
+              to={`/app/${business.slug}/book`}
+              label={t('storefront.public.navigation.book')}
+              icon={<CalendarDays className="h-5 w-5" />}
+              active={false}
+              prominent
+            />
+            {business.online_presence?.show_reviews !== false && (
+              <MobilePublicNavItem
+                to={`/app/${business.slug}/reviews`}
+                label={t('storefront.public.navigation.reviews')}
+                icon={<Star className="h-5 w-5" />}
+                active={location.pathname.endsWith('/reviews')}
+              />
+            )}
+            {user ? (
+              <MobilePublicNavItem
+                to={`/app/${business.slug}/account`}
+                label={t('storefront.public.navigation.myAccount')}
+                icon={<UserCircle className="h-5 w-5" />}
+                active={location.pathname.includes('/account')}
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={() => openAuth('signin')}
+                className="flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-center text-muted-foreground transition hover:bg-muted hover:text-foreground"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-xl">
+                  <UserCircle className="h-5 w-5" />
+                </span>
+                <span className="max-w-full truncate text-[10px] font-semibold">
+                  {t('storefront.public.auth.signIn')}
+                </span>
+              </button>
+            )}
+          </div>
+        </nav>
       )}
 
       <Dialog open={authOpen} onOpenChange={setAuthOpen}>
@@ -681,5 +738,43 @@ function CustomerBenefit({
         <p className="mt-1 text-xs leading-5 text-white/55">{text}</p>
       </div>
     </div>
+  );
+}
+
+
+function MobilePublicNavItem({
+  to,
+  label,
+  icon,
+  active,
+  prominent = false,
+}: {
+  to: string;
+  label: string;
+  icon: React.ReactNode;
+  active: boolean;
+  prominent?: boolean;
+}) {
+  return (
+    <Link
+      to={to}
+      aria-current={active ? 'page' : undefined}
+      className={`flex min-h-[58px] min-w-0 flex-col items-center justify-center gap-1 rounded-2xl px-1 py-1.5 text-center transition ${
+        prominent
+          ? 'text-primary'
+          : active
+            ? 'bg-primary/10 text-primary'
+            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+      }`}
+    >
+      <span
+        className={`flex h-8 w-8 items-center justify-center rounded-xl ${
+          prominent ? 'bg-primary text-primary-foreground shadow-sm' : ''
+        }`}
+      >
+        {icon}
+      </span>
+      <span className="max-w-full truncate text-[10px] font-semibold">{label}</span>
+    </Link>
   );
 }

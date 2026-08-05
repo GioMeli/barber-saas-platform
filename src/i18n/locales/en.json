@@ -1628,7 +1628,9 @@
       "accessibility": {
         "openMenu": "Open navigation menu",
         "closeMenu": "Close navigation menu",
-        "signOut": "Sign out"
+        "signOut": "Sign out",
+        "skipToContent": "Skip to store content",
+        "mobileNavigation": "Customer navigation"
       },
       "install": {
         "eyebrow": "Install this business app",
@@ -1724,7 +1726,8 @@
     },
     "actions": {
       "confirm": "Confirm Appointment",
-      "confirming": "Confirming..."
+      "confirming": "Confirming...",
+      "backToStore": "Back to storefront"
     },
     "states": {
       "loadingOptions": "Loading booking options...",
@@ -1734,7 +1737,9 @@
       "noAppointmentsDescription": "Choose another date or professional to see more times.",
       "notSelected": "Not selected",
       "notAvailable": "Not available",
-      "notProvided": "Not provided"
+      "notProvided": "Not provided",
+      "noServices": "No services available for online booking",
+      "noServicesDescription": "This business has not published any bookable services yet. Return to the storefront or try again later."
     },
     "validation": {
       "namePhoneRequired": "Name and phone are required",
@@ -2120,7 +2125,8 @@
       "upcoming": "Upcoming",
       "history": "History",
       "profile": "Profile",
-      "notifications": "Notifications"
+      "notifications": "Notifications",
+      "label": "Customer account sections"
     },
     "activity": {
       "title": "Recent activity",
