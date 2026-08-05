@@ -37,7 +37,7 @@ export default function OwnerSidebar({
           <img
             src="/brand/velliqo-mark.png"
             alt="Velliqo"
-            className="h-11 w-11 rounded-2xl border border-white/10 object-cover shadow-lg"
+            className="h-11 w-11 object-contain"
           />
           <div className="min-w-0">
             <div className="text-base font-extrabold tracking-tight text-white">Velliqo</div>

@@ -13,9 +13,9 @@ const manifestPath = requireFile('public/manifest.webmanifest');
 const swPath = requireFile('public/sw.js');
 requireFile('public/offline.html');
 requireFile('public/icons/icon-192.png');
-requireFile('public/icons/icon-192-maskable.png');
+requireFile('public/icons/apple-touch-icon.png');
 requireFile('public/icons/icon-512.png');
-requireFile('public/icons/icon-512-maskable.png');
+requireFile('public/icons/favicon-32.png');
 requireFile('src/pwa/registerServiceWorker.ts');
 requireFile('src/hooks/usePWAStatus.ts');
 requireFile('src/pwa/installPromptStore.ts');
@@ -31,7 +31,7 @@ if (fs.existsSync(manifestPath)) {
   const sizes = new Set((manifest.icons ?? []).map((icon) => icon.sizes));
   if (!sizes.has('192x192')) failures.push('Manifest missing 192x192 icon');
   if (!sizes.has('512x512')) failures.push('Manifest missing 512x512 icon');
-  if (!(manifest.icons ?? []).some((icon) => icon.purpose === 'maskable')) failures.push('Manifest missing maskable icon');
+  if (!(manifest.icons ?? []).every((icon) => icon.purpose === 'any')) failures.push('Generic Velliqo manifest must use transparent any-purpose icons only');
 }
 
 if (fs.existsSync(swPath)) {

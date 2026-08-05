@@ -67,7 +67,7 @@ requireText('src/pages/staff/EmployeeDashboard.tsx', '<StaffInstallDialog', 'ins
 requireText('src/staff/trustedDevice.ts', "functions.invoke('staff-device-auth'", 'trusted-device auth Edge Function');
 requireText('src/staff/trustedDevice.ts', 'staff_register_trusted_device', 'trusted-device registration');
 requireText('src/pages/owner/Staff.tsx', 'owner-staff-sync-', 'owner realtime staff profile sync');
-requireText('api/staff-manifest.ts', "'/icons/icon-512.png'", 'valid 512 PWA icon');
+requireText('api/staff-manifest.ts', "'/icons/icon-512.png?v=2'", 'valid transparent 512 PWA icon');
 requireText('api/staff-manifest.ts', 'pwa/icon-${size}.png', 'tenant PWA icon path');
 requireText('api/staff-manifest.ts', 'tenant192', 'tenant 192 PWA icon');
 requireText('api/staff-manifest.ts', 'tenant512', 'tenant 512 PWA icon');

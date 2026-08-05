@@ -15,18 +15,18 @@
       (() => {
         const parts = window.location.pathname.split('/').filter(Boolean);
         const params = new URLSearchParams(window.location.search);
-        let manifestHref = '/manifest.webmanifest';
+        let manifestHref = '/manifest.webmanifest?v=2';
 
         if (parts[0] === 'staff' && parts[1]) {
           const employee = params.get('employee') || '';
           if (/^[a-z0-9-]{2,120}$/i.test(parts[1]) && /^[a-z0-9-]{2,120}$/i.test(employee)) {
             const employeeName = (params.get('employeeName') || '').trim().slice(0, 60);
-            const query = new URLSearchParams({ v: '8' });
+            const query = new URLSearchParams({ v: '9' });
             if (employeeName) query.set('employeeName', employeeName);
             manifestHref = `/staff-manifest/${encodeURIComponent(parts[1])}/${encodeURIComponent(employee)}.webmanifest?${query.toString()}`;
           }
         } else if (parts[0] === 'app' && parts[1] && /^[a-z0-9-]{2,120}$/i.test(parts[1])) {
-          manifestHref = `/store-manifest/${encodeURIComponent(parts[1])}.webmanifest?v=4`;
+          manifestHref = `/store-manifest/${encodeURIComponent(parts[1])}.webmanifest?v=5`;
         }
 
         const manifest = document.createElement('link');
@@ -36,8 +36,9 @@
         document.head.appendChild(manifest);
       })();
     </script>
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png" />
-    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png?v=2" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png?v=2" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png?v=2" />
     <title>Velliqo Business</title>
   </head>
   <body>

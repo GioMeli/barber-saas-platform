@@ -66,16 +66,14 @@ export default async function handler(request: any, response: any) {
         { src: tenant192, sizes: '192x192', type: 'image/png', purpose: 'any' },
         { src: tenant512, sizes: '512x512', type: 'image/png', purpose: 'any' },
         { src: businessLogo, sizes: 'any', purpose: 'any' },
-        { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-        { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-192.png?v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
       ]
     : [
-        { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
-        { src: '/icons/icon-192-maskable.png', sizes: '192x192', type: 'image/png', purpose: 'maskable' },
-        { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
-        { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        { src: '/icons/icon-192.png?v=2', sizes: '192x192', type: 'image/png', purpose: 'any' },
+        { src: '/icons/icon-512.png?v=2', sizes: '512x512', type: 'image/png', purpose: 'any' },
       ];
-  const shortcutIcon = businessLogo ? tenant192 : '/icons/icon-192.png';
+  const shortcutIcon = businessLogo ? tenant192 : '/icons/icon-192.png?v=2';
   const manifest = {
     id: `/staff/${business.slug}/app/${employeeParam}`,
     name: fullName,
