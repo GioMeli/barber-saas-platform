@@ -5,32 +5,89 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
-import { getTrainingPdfPath, TRAINING_CATEGORIES, TRAINING_GUIDES, type TrainingCategory } from '@/training/catalog';
+import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
+import {
+  getTrainingPdfPath,
+  TRAINING_CATEGORIES,
+  TRAINING_GUIDES,
+  type TrainingCategory,
+  type TrainingGuide,
+} from '@/training/catalog';
 import { cn } from '@/lib/utils';
 
 export default function Courses({ embedded = false }: { embedded?: boolean }) {
   const { t, i18n } = useTranslation();
   const [query, setQuery] = React.useState('');
   const [category, setCategory] = React.useState<TrainingCategory | 'all'>('all');
+  const [activeVideo, setActiveVideo] = React.useState<TrainingGuide | null>(null);
+
   const filtered = React.useMemo(() => TRAINING_GUIDES.filter((guide) => {
     const title = t(`training.guides.${guide.slug}.title`).toLowerCase();
     const description = t(`training.guides.${guide.slug}.description`).toLowerCase();
     return (!query.trim() || `${title} ${description}`.includes(query.trim().toLowerCase())) && (category === 'all' || guide.category === category);
   }), [category, query, t]);
 
+  const availableVideoCount = TRAINING_GUIDES.filter((guide) => Boolean(guide.videoUrl)).length;
+
   const content = (
     <div className={cn('mx-auto w-full max-w-[1440px]', embedded ? 'space-y-6' : 'px-4 py-14 sm:px-6 lg:px-8 lg:py-20')}>
       <section className={cn('overflow-hidden rounded-[2rem] border border-violet-200 bg-[radial-gradient(circle_at_top_right,_rgba(232,121,249,.24),_transparent_36%),linear-gradient(135deg,#2e1065_0%,#5b21b6_52%,#7c3aed_100%)] p-5 text-white shadow-[0_24px_80px_rgba(76,29,149,.2)] sm:p-8', embedded && 'rounded-2xl')}>
         <div className="grid gap-7 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
-          <div><div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.18em] text-violet-100"><GraduationCap className="h-4 w-4" />{t('training.publicEyebrow')}</div><h1 className="mt-5 text-3xl font-extrabold tracking-[-.04em] sm:text-5xl">{t('training.publicTitle')}</h1><p className="mt-4 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">{t('training.publicDescription')}</p><div className="mt-6 flex flex-col gap-3 sm:flex-row"><Button asChild className="h-11 rounded-xl bg-white px-5 text-violet-800 hover:bg-violet-50"><a href={getTrainingPdfPath('getting-started', i18n.language)} target="_blank" rel="noreferrer"><BookOpenCheck className="mr-2 h-4 w-4" />{t('training.startGuide')}</a></Button><Button asChild variant="outline" className="h-11 rounded-xl border-white/20 bg-white/[.06] px-5 text-white hover:bg-white/10 hover:text-white"><Link to="/demo"><PlayCircle className="mr-2 h-4 w-4" />{t('training.openDemo')}</Link></Button></div></div>
-          <div className="rounded-2xl border border-white/15 bg-black/15 p-5 backdrop-blur-sm"><div className="flex items-center gap-3"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10"><Video className="h-5 w-5" /></span><div><div className="font-extrabold">{t('training.videoLibrary')}</div><p className="mt-1 text-xs leading-5 text-white/55">{t('training.videoLibraryDescription')}</p></div></div><div className="mt-4 rounded-xl border border-white/10 bg-white/[.05] p-3 text-xs text-white/65">{t('training.videoComingSoon')}</div></div>
+          <div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[.18em] text-violet-100"><GraduationCap className="h-4 w-4" />{t('training.publicEyebrow')}</div>
+            <h1 className="mt-5 text-3xl font-extrabold tracking-[-.04em] sm:text-5xl">{t('training.publicTitle')}</h1>
+            <p className="mt-4 max-w-3xl text-sm leading-6 text-white/72 sm:text-base">{t('training.publicDescription')}</p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <Button asChild className="h-11 rounded-xl bg-white px-5 text-violet-800 hover:bg-violet-50"><a href={getTrainingPdfPath('getting-started', i18n.language)} target="_blank" rel="noreferrer"><BookOpenCheck className="mr-2 h-4 w-4" />{t('training.startGuide')}</a></Button>
+              <Button asChild variant="outline" className="h-11 rounded-xl border-white/20 bg-white/[.06] px-5 text-white hover:bg-white/10 hover:text-white"><Link to="/demo"><PlayCircle className="mr-2 h-4 w-4" />{t('training.openDemo')}</Link></Button>
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/15 bg-black/15 p-5 backdrop-blur-sm">
+            <div className="flex items-center gap-3"><span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10"><Video className="h-5 w-5" /></span><div><div className="font-extrabold">{t('training.videoLibrary')}</div><p className="mt-1 text-xs leading-5 text-white/55">{t('training.videoLibraryDescription')}</p></div></div>
+            <div className="mt-4 rounded-xl border border-white/10 bg-white/[.05] p-3 text-xs text-white/65">{availableVideoCount > 0 ? t('training.videoLibraryAvailable', { count: availableVideoCount }) : t('training.videoComingSoon')}</div>
+          </div>
         </div>
       </section>
 
-      <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5"><div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between"><div className="relative w-full lg:max-w-md"><Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('training.searchPlaceholder')} className="h-11 rounded-xl pl-10" /></div><div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1"><Filter active={category === 'all'} onClick={() => setCategory('all')}>{t('training.categories.all')}</Filter>{TRAINING_CATEGORIES.map((item) => <Filter key={item} active={category === item} onClick={() => setCategory(item)}>{t(`training.categories.${item}`)}</Filter>)}</div></div></section>
+      <section className="mt-6 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div className="relative w-full lg:max-w-md"><Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" /><Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('training.searchPlaceholder')} className="h-11 rounded-xl pl-10" /></div>
+          <div className="scrollbar-subtle flex gap-2 overflow-x-auto pb-1"><Filter active={category === 'all'} onClick={() => setCategory('all')}>{t('training.categories.all')}</Filter>{TRAINING_CATEGORIES.map((item) => <Filter key={item} active={category === item} onClick={() => setCategory(item)}>{t(`training.categories.${item}`)}</Filter>)}</div>
+        </div>
+      </section>
 
-      <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">{filtered.map((guide, index) => { const pdfPath = getTrainingPdfPath(guide.slug, i18n.language); const demoPath = guide.demoRoute || guide.route?.replace('/dashboard', '/demo') || '/demo'; return <article key={guide.slug} className="flex min-h-[360px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl"><div className="flex items-start justify-between gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><FileText className="h-5 w-5" /></span><span className="rounded-full bg-slate-100 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide text-slate-500">PDF + {t('training.videoLabel')}</span></div><div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} - {t(`training.categories.${guide.category}`)}</div><h2 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">{t(`training.guides.${guide.slug}.title`)}</h2><p className="mt-2 flex-1 text-sm leading-6 text-slate-600">{t(`training.guides.${guide.slug}.description`)}</p><div className="mt-4 flex items-center justify-between text-xs text-slate-500"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className="inline-flex items-center gap-1"><Video className="h-3.5 w-3.5" />{t('training.videoComingSoonShort')}</span></div><div className="mt-4 grid grid-cols-2 gap-2"><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div><Button asChild className="mt-2 justify-between rounded-xl bg-violet-600 hover:bg-violet-700"><Link to={demoPath}>{t('training.practiceInDemo')}<ArrowRight className="h-4 w-4" /></Link></Button></article>; })}</section>
+      <section className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {filtered.map((guide, index) => {
+          const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
+          const demoPath = guide.demoRoute || guide.route?.replace('/dashboard', '/demo') || '/demo';
+          const hasVideo = Boolean(guide.videoUrl);
+          return (
+            <article key={guide.slug} className="flex min-h-[380px] flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-xl">
+              <div className="flex items-start justify-between gap-3"><span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><FileText className="h-5 w-5" /></span><span className={cn('rounded-full px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-wide', hasVideo ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-500')}>PDF + {t('training.videoLabel')}</span></div>
+              <div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} - {t(`training.categories.${guide.category}`)}</div>
+              <h2 className="mt-2 text-lg font-extrabold tracking-tight text-slate-950">{t(`training.guides.${guide.slug}.title`)}</h2>
+              <p className="mt-2 flex-1 text-sm leading-6 text-slate-600">{t(`training.guides.${guide.slug}.description`)}</p>
+              <div className="mt-4 flex items-center justify-between gap-3 text-xs text-slate-500"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className={cn('inline-flex items-center gap-1', hasVideo && 'font-bold text-emerald-700')}><Video className="h-3.5 w-3.5" />{hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}</span></div>
+              {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-4 w-full justify-between rounded-xl bg-slate-950 text-white hover:bg-slate-800"><span className="inline-flex items-center"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</span><ArrowRight className="h-4 w-4" /></Button>}
+              <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-4')}><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
+              <Button asChild className="mt-2 justify-between rounded-xl bg-violet-600 hover:bg-violet-700"><Link to={demoPath}>{t('training.practiceInDemo')}<ArrowRight className="h-4 w-4" /></Link></Button>
+            </article>
+          );
+        })}
+      </section>
       {filtered.length === 0 && <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500">{t('training.noResults')}</div>}
+
+      {activeVideo && (
+        <TrainingVideoDialog
+          open
+          onOpenChange={(open) => { if (!open) setActiveVideo(null); }}
+          title={t(`training.guides.${activeVideo.slug}.title`)}
+          description={t(`training.guides.${activeVideo.slug}.description`)}
+          videoUrl={activeVideo.videoUrl}
+          videoProvider={activeVideo.videoProvider}
+          posterUrl={activeVideo.videoPosterUrl}
+        />
+      )}
     </div>
   );
 

@@ -3645,7 +3645,13 @@
     "videoComingSoon": "Los vídeos se añadirán aquí cuando estén disponibles. Las guías PDF ya están disponibles.",
     "videoLabel": "vídeo",
     "videoComingSoonShort": "Vídeo pronto",
-    "practiceInDemo": "Practicar en Demo"
+    "practiceInDemo": "Practicar en Demo",
+    "videoLibraryAvailable": "Ya hay {{count}} lecciones en vídeo disponibles. Se pueden añadir más sin cambiar la estructura de los cursos.",
+    "videoAvailable": "Vídeo disponible",
+    "watchVideo": "Ver vídeo",
+    "videoLesson": "Lección en vídeo",
+    "videoPlaybackHint": "Las lecciones pueden usar un archivo CDN directo, YouTube o Vimeo. Las guías PDF y la práctica en Demo siguen disponibles junto al vídeo.",
+    "openVideoExternally": "Abrir vídeo"
   },
   "discovery": {
     "search": {

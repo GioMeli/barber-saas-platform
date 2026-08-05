@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
 import { useAuth } from '@/hooks/useAuth';
 import { useTrainingProgress } from '@/hooks/useTrainingProgress';
 import {
@@ -22,6 +23,7 @@ import {
   TRAINING_CATEGORIES,
   TRAINING_GUIDES,
   type TrainingCategory,
+  type TrainingGuide,
 } from '@/training/catalog';
 import { cn } from '@/lib/utils';
 
@@ -31,6 +33,7 @@ export default function TrainingPortal() {
   const { completed, toggle, reset } = useTrainingProgress(activeBusiness?.id);
   const [query, setQuery] = React.useState('');
   const [category, setCategory] = React.useState<TrainingCategory | 'all'>('all');
+  const [activeVideo, setActiveVideo] = React.useState<TrainingGuide | null>(null);
 
   const filtered = React.useMemo(() => TRAINING_GUIDES.filter((guide) => {
     const title = t(`training.guides.${guide.slug}.title`).toLowerCase();
@@ -74,14 +77,16 @@ export default function TrainingPortal() {
         {filtered.map((guide, index) => {
           const isComplete = completed.includes(guide.slug);
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
+          const hasVideo = Boolean(guide.videoUrl);
           return (
-            <article key={guide.slug} className={cn('flex min-h-[300px] flex-col rounded-2xl border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg', isComplete ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-border')}>
+            <article key={guide.slug} className={cn('flex min-h-[330px] flex-col rounded-2xl border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg', isComplete ? 'border-emerald-300 ring-1 ring-emerald-200' : 'border-border')}>
               <div className="flex items-start justify-between gap-3"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><FileText className="h-5 w-5" /></div><button type="button" onClick={() => toggle(guide.slug)} className={cn('inline-flex h-9 items-center gap-2 rounded-xl border px-3 text-xs font-bold transition', isComplete ? 'border-emerald-200 bg-emerald-50 text-emerald-700' : 'border-border bg-background text-muted-foreground hover:text-foreground')}><span className={cn('flex h-4 w-4 items-center justify-center rounded-full border', isComplete ? 'border-emerald-600 bg-emerald-600 text-white' : 'border-current')}>{isComplete && <Check className="h-3 w-3" />}</span>{isComplete ? t('training.completed') : t('training.markComplete')}</button></div>
               <div className="mt-5 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{String(index + 1).padStart(2, '0')} · {t(`training.categories.${guide.category}`)}</div>
               <h2 className="mt-2 text-lg font-extrabold tracking-tight">{t(`training.guides.${guide.slug}.title`)}</h2>
               <p className="mt-2 flex-1 text-sm leading-6 text-muted-foreground">{t(`training.guides.${guide.slug}.description`)}</p>
-              <div className="mt-5 flex items-center justify-between text-xs text-muted-foreground"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className="inline-flex items-center gap-1"><Video className="h-3.5 w-3.5" />PDF + {t('training.videoComingSoonShort')}</span></div>
-              <div className="mt-4 grid grid-cols-2 gap-2"><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
+              <div className="mt-5 flex items-center justify-between gap-3 text-xs text-muted-foreground"><span>{t('training.minutes', { count: guide.estimatedMinutes })}</span><span className={cn('inline-flex items-center gap-1', hasVideo && 'font-bold text-emerald-700')}><Video className="h-3.5 w-3.5" />{hasVideo ? t('training.videoAvailable') : t('training.videoComingSoonShort')}</span></div>
+              {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-4 w-full justify-center rounded-xl bg-slate-950 text-white hover:bg-slate-800"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</Button>}
+              <div className={cn('grid grid-cols-2 gap-2', hasVideo ? 'mt-2' : 'mt-4')}><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
               {guide.route && <Button asChild variant="ghost" className="mt-2 justify-between rounded-xl px-3"><Link to={guide.route}>{t('training.openWorkspace')}<ArrowUpRight className="h-4 w-4" /></Link></Button>}
             </article>
           );
@@ -89,6 +94,18 @@ export default function TrainingPortal() {
       </section>
 
       {filtered.length === 0 && <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center text-sm text-muted-foreground">{t('training.noResults')}</div>}
+
+      {activeVideo && (
+        <TrainingVideoDialog
+          open
+          onOpenChange={(open) => { if (!open) setActiveVideo(null); }}
+          title={t(`training.guides.${activeVideo.slug}.title`)}
+          description={t(`training.guides.${activeVideo.slug}.description`)}
+          videoUrl={activeVideo.videoUrl}
+          videoProvider={activeVideo.videoProvider}
+          posterUrl={activeVideo.videoPosterUrl}
+        />
+      )}
     </div>
   );
 }

@@ -3645,7 +3645,13 @@
     "videoComingSoon": "Videos werden hier ergänzt, sobald sie verfügbar sind. Die PDF-Anleitungen stehen bereits bereit.",
     "videoLabel": "Video",
     "videoComingSoonShort": "Video folgt",
-    "practiceInDemo": "Im Demo üben"
+    "practiceInDemo": "Im Demo üben",
+    "videoLibraryAvailable": "{{count}} Videolektionen sind jetzt verfügbar. Weitere Lektionen können ohne Änderung der Kursstruktur ergänzt werden.",
+    "videoAvailable": "Video verfügbar",
+    "watchVideo": "Video ansehen",
+    "videoLesson": "Videolektion",
+    "videoPlaybackHint": "Videolektionen können über eine direkte CDN-Datei, YouTube oder Vimeo bereitgestellt werden. PDF-Anleitungen und Demo-Übungen bleiben zusätzlich verfügbar.",
+    "openVideoExternally": "Video öffnen"
   },
   "discovery": {
     "search": {

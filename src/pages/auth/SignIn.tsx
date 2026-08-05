@@ -72,7 +72,7 @@ export default function SignIn() {
 
           <div className="relative">
             <Link to="/" className="inline-flex items-center gap-3">
-              <img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
+              <img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
               <div><div className="font-extrabold">Velliqo</div><div className="text-[10px] uppercase tracking-[0.16em] text-white/50">Book. Manage. Grow.</div></div>
             </Link>
 
@@ -98,7 +98,7 @@ export default function SignIn() {
         <main className="relative flex h-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 lg:px-8">
           <div className="absolute right-4 top-4 z-10 sm:right-6"><LanguageSwitcher /></div>
           <div className="w-full max-w-lg">
-            <div className="mb-4 flex items-center gap-3 lg:hidden"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.business_access')}</div></div></div>
+            <div className="mb-4 flex items-center gap-3 lg:hidden"><img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.business_access')}</div></div></div>
 
             <div className="rounded-[2rem] border bg-card p-7 shadow-card sm:p-9">
               <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">{t('auth.business_login')}</div>

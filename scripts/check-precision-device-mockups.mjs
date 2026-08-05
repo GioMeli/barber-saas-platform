@@ -44,8 +44,8 @@ if (!showcase.includes('lg:absolute') || !showcase.includes('sm:grid-cols-2')) {
 }
 
 const publicPages = [experience, home, why].join('\n');
-if (!publicPages.includes('ResponsiveDeviceShowcase')) fail('precision showcase is not used on public pages');
-if (!publicPages.includes('/marketing/screens/precision/')) fail('public pages do not use device-ready captures');
+if (!publicPages.includes('ResponsiveDeviceShowcase') && !publicPages.includes('ApprovedArtwork')) fail('public pages do not use a responsive or approved device-artwork showcase');
+if (!publicPages.includes('/marketing/screens/precision/') && !publicPages.includes('/marketing/approved/')) fail('public pages do not use approved or device-ready captures');
 if (/rotate-\[|rotate\(|-rotate-/.test(publicPages)) fail('device compositions still use perspective-breaking rotations');
 if (/objectFit:\s*fit/.test(device)) fail('legacy percentage-positioned image layer remains');
 

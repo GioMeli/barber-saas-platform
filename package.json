@@ -31,7 +31,8 @@
     "staff-access:check": "node scripts/check-staff-personal-access.mjs",
     "owner-ux:check": "node scripts/check-owner-ux-consistency.mjs",
     "staff-ux:check": "node scripts/check-staff-ux-consistency.mjs",
-    "customer-ux:check": "node scripts/check-customer-ux-consistency.mjs"
+    "customer-ux:check": "node scripts/check-customer-ux-consistency.mjs",
+    "phase12:check": "node scripts/check-phase12-public-training.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",
