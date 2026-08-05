@@ -53,7 +53,7 @@ function assertTransparentPng(relative) {
 }
 
 for (const file of [
-  'public/brand/velliqo-mark.png',
+  'public/brand/velliqo-mark-transparent-v2.png',
   'public/icons/favicon-32.png',
   'public/icons/favicon-48.png',
   'public/icons/apple-touch-icon.png',
@@ -71,7 +71,7 @@ for (const marker of ['/icons/favicon-32.png?v=2', '/icons/icon-192.png?v=2', '/
   if (!index.includes(marker)) fail(`index.html missing transparent brand asset ${marker}`);
 }
 const sw = fs.readFileSync(path.join(root, 'public/sw.js'), 'utf8');
-if (!sw.includes('velliqo-pwa-v2-transparent-brand')) fail('service-worker cache version was not bumped for transparent branding');
+if (!sw.includes('velliqo-pwa-v3-transparent-header-brand')) fail('service-worker cache version was not bumped for transparent branding');
 
 for (const file of [
   'src/components/layouts/owner-shell/OwnerSidebar.tsx',
@@ -81,10 +81,27 @@ for (const file of [
   'src/components/demo/DemoOwnerLayout.tsx',
 ]) {
   const text = fs.readFileSync(path.join(root, file), 'utf8');
-  const positions = [...text.matchAll(/\/brand\/velliqo-mark\.png/g)].map((match) => match.index ?? 0);
+  const positions = [...text.matchAll(/\/brand\/velliqo-mark-transparent-v2\.png/g)].map((match) => match.index ?? 0);
   for (const position of positions) {
     const nearby = text.slice(position, position + 260);
     if (/border border-white|shadow-lg|bg-(?:black|slate|sidebar)/.test(nearby)) fail(`${file} still places the Velliqo mark on an application-owned visual plate`);
+  }
+}
+
+
+const sourceRoots = ['src', 'public', 'api'];
+for (const sourceRoot of sourceRoots) {
+  const stack = [path.join(root, sourceRoot)];
+  while (stack.length) {
+    const current = stack.pop();
+    for (const entry of fs.readdirSync(current, { withFileTypes: true })) {
+      const absolute = path.join(current, entry.name);
+      if (entry.isDirectory()) stack.push(absolute);
+      else if (/\.(?:tsx?|jsx?|html|js|webmanifest)$/.test(entry.name)) {
+        const text = fs.readFileSync(absolute, 'utf8');
+        if (text.includes('/brand/velliqo-mark.png')) fail(`${path.relative(root, absolute)} still references the cache-prone legacy marketing mark path`);
+      }
+    }
   }
 }
 
@@ -93,4 +110,4 @@ if (failures.length) {
   failures.forEach((item) => console.error(`- ${item}`));
   process.exit(1);
 }
-console.log('Phase 12B transparent Velliqo branding validation passed.');
+console.log('Phase 12C transparent public-header branding validation passed.');
