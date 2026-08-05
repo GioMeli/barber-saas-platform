@@ -3645,7 +3645,13 @@
     "videoComingSoon": "Videolar hazırlandıkça buraya eklenecektir. PDF rehberleri şimdi kullanılabilir.",
     "videoLabel": "video",
     "videoComingSoonShort": "Video yakında",
-    "practiceInDemo": "Demo’da pratik yap"
+    "practiceInDemo": "Demo’da pratik yap",
+    "videoLibraryAvailable": "Şu anda {{count}} video dersi kullanılabilir. Kurs yapısı değiştirilmeden yeni dersler eklenebilir.",
+    "videoAvailable": "Video mevcut",
+    "watchVideo": "Videoyu izle",
+    "videoLesson": "Video dersi",
+    "videoPlaybackHint": "Video dersleri doğrudan CDN dosyası, YouTube veya Vimeo kullanabilir. PDF rehberleri ve Demo pratiği videonun yanında kullanılmaya devam eder.",
+    "openVideoExternally": "Videoyu aç"
   },
   "discovery": {
     "search": {

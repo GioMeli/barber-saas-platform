@@ -96,7 +96,7 @@ export default function SignUp() {
 
             <div className="relative">
               <Link to="/" className="inline-flex items-center gap-3">
-                <img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
+                <img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover shadow-lg" />
                 <div><div className="font-extrabold">Velliqo</div><div className="text-[10px] uppercase tracking-[0.16em] text-white/50">Book. Manage. Grow.</div></div>
               </Link>
 
@@ -131,7 +131,7 @@ export default function SignUp() {
           <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-hidden lg:px-8 lg:py-4">
             <div className="w-full max-w-[500px]">
               <div className="mb-4 flex items-center justify-between lg:hidden">
-                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
+                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-cover" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
               </div>
 
               <Link to="/business-types" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:inline-flex">

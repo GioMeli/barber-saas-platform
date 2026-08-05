@@ -13,7 +13,7 @@ export default function CheckEmail() {
     <div className="relative flex min-h-screen items-center justify-center bg-gradient-to-br from-violet-50 via-white to-fuchsia-50 px-4 py-10">
       <div className="absolute right-4 top-4"><LanguageSwitcher /></div>
       <div className="w-full max-w-xl rounded-[2rem] border border-violet-100 bg-white p-7 text-center shadow-[0_30px_80px_rgba(76,29,149,.14)] sm:p-10">
-        <img src="/brand/velliqo-logo.png" alt="Velliqo" className="mx-auto h-14 w-14 rounded-2xl object-contain" />
+        <img src="/brand/velliqo-mark.png" alt="Velliqo" className="mx-auto h-14 w-14 rounded-2xl object-contain" />
         <div className="mx-auto mt-7 flex h-16 w-16 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><MailCheck className="h-8 w-8" /></div>
         <div className="mt-6 text-xs font-extrabold uppercase tracking-[0.2em] text-violet-600">{t('auth.confirm_account')}</div>
         <h1 className="mt-3 text-3xl font-extrabold tracking-tight text-slate-950">{t('auth.check_inbox')}</h1>

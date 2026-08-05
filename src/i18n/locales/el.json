@@ -3645,7 +3645,13 @@
     "videoComingSoon": "Τα εκπαιδευτικά βίντεο θα προστεθούν εδώ όταν ετοιμαστούν. Οι οδηγοί PDF είναι διαθέσιμοι τώρα.",
     "videoLabel": "βίντεο",
     "videoComingSoonShort": "Βίντεο σύντομα",
-    "practiceInDemo": "Εξάσκηση στο Demo"
+    "practiceInDemo": "Εξάσκηση στο Demo",
+    "videoLibraryAvailable": "{{count}} εκπαιδευτικά βίντεο είναι διαθέσιμα τώρα. Επιπλέον μαθήματα μπορούν να προστεθούν χωρίς αλλαγή της δομής των courses.",
+    "videoAvailable": "Διαθέσιμο βίντεο",
+    "watchVideo": "Προβολή βίντεο",
+    "videoLesson": "Εκπαιδευτικό βίντεο",
+    "videoPlaybackHint": "Τα εκπαιδευτικά βίντεο μπορούν να προέρχονται από απευθείας αρχείο CDN, YouTube ή Vimeo. Οι οδηγοί PDF και η πρακτική στο Demo παραμένουν διαθέσιμα μαζί με το βίντεο.",
+    "openVideoExternally": "Άνοιγμα βίντεο"
   },
   "discovery": {
     "search": {

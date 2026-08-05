@@ -51,7 +51,7 @@ export function MarketingHeader({ active = 'product', dark = false }: { active?:
 }
 
 export function MarketingBrand({ dark = false }: { dark?: boolean }) {
-  return <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="Velliqo home"><img src="/brand/velliqo-logo.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-contain sm:h-11 sm:w-11" /><div className="min-w-0"><div className={`text-sm font-extrabold tracking-tight sm:text-base ${dark ? 'text-white' : 'text-slate-950'}`}>Velliqo</div><div className={`truncate text-[9px] font-extrabold uppercase tracking-[.16em] sm:text-[10px] ${dark ? 'text-violet-300' : 'text-violet-600'}`}>Book. Manage. Grow.</div></div></Link>;
+  return <Link to="/" className="flex min-w-0 items-center gap-3" aria-label="Velliqo home"><img src="/brand/velliqo-mark.png" alt="Velliqo" className="h-10 w-10 rounded-xl object-contain sm:h-11 sm:w-11" /><div className="min-w-0"><div className={`text-sm font-extrabold tracking-tight sm:text-base ${dark ? 'text-white' : 'text-slate-950'}`}>Velliqo</div><div className={`truncate text-[9px] font-extrabold uppercase tracking-[.16em] sm:text-[10px] ${dark ? 'text-violet-300' : 'text-violet-600'}`}>Book. Manage. Grow.</div></div></Link>;
 }
 
 export function MarketingFooter() {

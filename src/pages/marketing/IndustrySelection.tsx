@@ -16,7 +16,7 @@ import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { VelliqoAICallout, VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
 import { DesktopDevice } from '@/components/marketing/DeviceFrame';
-import { ResponsiveDeviceShowcase } from '@/components/marketing/ResponsiveDeviceShowcase';
+import { ApprovedArtwork } from '@/components/marketing/ApprovedArtwork';
 import { DiscoverySearchBar } from '@/components/discovery/DiscoverySearchBar';
 import { useTranslation } from 'react-i18next';
 
@@ -120,14 +120,11 @@ export default function IndustrySelection() {
 function ProductStage() {
   return (
     <div className="relative mx-auto w-full max-w-[820px] py-4 lg:pb-16">
-      <ResponsiveDeviceShowcase
-        laptopImage="/marketing/screens/precision/calendar-laptop.webp"
-        laptopAlt="Velliqo owner workspace on laptop"
-        phoneImage="/marketing/screens/precision/booking-phone.webp"
-        phoneAlt="Velliqo customer booking on phone"
-        tabletImage="/marketing/screens/precision/storefront-tablet.webp"
-        tabletAlt="Velliqo storefront on tablet"
-        priority
+      <ApprovedArtwork
+        src="/marketing/approved/calendar-two-devices-transparent.png"
+        alt="Velliqo calendar on desktop and mobile"
+        loading="eager"
+        className="max-w-[800px]"
       />
     </div>
   );

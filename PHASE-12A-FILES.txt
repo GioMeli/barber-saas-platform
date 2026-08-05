@@ -1,0 +1,39 @@
+Phase 12A — Public visuals, transparent branding, Staff Portal story, Training videos
+
+Public assets
+- public/marketing/approved/* (approved supplied imagery; combined PNG backgrounds removed to alpha)
+- public/brand/velliqo-logo-transparent.png
+
+Public / marketing
+- src/components/marketing/ApprovedArtwork.tsx
+- src/components/marketing/MarketingChrome.tsx
+- src/pages/marketing/IndustrySelection.tsx
+- src/pages/marketing/WhyVelliqo.tsx
+- src/pages/marketing/Experience.tsx
+- src/pages/marketing/VelliqoAI.tsx
+- src/pages/marketing/BusinessTypeSelection.tsx
+- src/pages/marketing/Pricing.tsx
+
+Brand consistency
+- src/pages/auth/SignIn.tsx
+- src/pages/auth/SignUp.tsx
+- src/pages/auth/CheckEmail.tsx
+- src/pages/auth/EmailConfirmed.tsx
+
+Training video architecture
+- src/training/catalog.ts
+- src/components/training/TrainingVideoDialog.tsx
+- src/pages/marketing/Courses.tsx
+- src/pages/owner/TrainingPortal.tsx
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- docs/PHASE-12A-PUBLIC-VISUALS-BRANDING-TRAINING-VIDEO.md
+
+Quality gates
+- scripts/check-phase12-public-training.mjs
+- scripts/check-precision-device-mockups.mjs
+- package.json
+- .github/workflows/quality-gate.yml

@@ -62,6 +62,7 @@ jobs:
           npm run ai-multilingual:check
           npm run discovery:check
           npm run staff-access:check
+          npm run phase12:check
 
       - name: TypeScript
         run: npm run typecheck

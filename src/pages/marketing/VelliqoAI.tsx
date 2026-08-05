@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
+import { ApprovedArtwork } from '@/components/marketing/ApprovedArtwork';
 
 const capabilities = [
   { icon: BrainCircuit, title: 'Understands the active business', text: 'Answers are grounded in the current workspace, selected industry and enabled modules.' },
@@ -43,7 +44,7 @@ export default function VelliqoAI() {
           <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(124,58,237,.11),transparent)]" />
           <div className="relative mx-auto grid max-w-[1240px] items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
             <div><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-300">Control stays visible</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">A request becomes a clear, reviewable action.</h2><p className="mt-5 text-base leading-7 text-white/55">When an action requires approval, Velliqo shows what will happen before execution. Voice and chat remain open while the confirmation appears above the conversation.</p></div>
-            <div className="rounded-[2rem] border border-white/10 bg-white/[.055] p-5 shadow-[0_28px_80px_rgba(0,0,0,.24)]"><div className="flex items-center gap-3"><img src="/brand/velliqo-ai.png" alt="" className="h-11 w-11 object-contain" /><div><div className="text-sm font-extrabold">Appointment request ready</div><div className="text-xs text-white/45">Review before creating</div></div></div><div className="mt-5 rounded-2xl border border-white/10 bg-black/15 p-4 text-sm leading-6 text-white/65">Create a 45-minute appointment for Maria on Friday at 14:30 with Alex for the selected service.</div><div className="mt-4 grid grid-cols-2 gap-2"><button type="button" className="h-11 rounded-xl border border-white/10 bg-white/[.04] text-sm font-bold text-white/65">Change</button><button type="button" className="h-11 rounded-xl bg-white text-sm font-extrabold text-slate-950">Confirm appointment</button></div></div>
+            <div className="rounded-[2rem] border border-white/10 bg-white/[.055] p-5 shadow-[0_28px_80px_rgba(0,0,0,.24)]"><ApprovedArtwork src="/marketing/approved/website_extra_03_ai_laptop_transparent.webp" alt="Velliqo AI operational assistant on laptop" className="max-w-[760px]" /></div>
           </div>
         </section>
 
