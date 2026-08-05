@@ -28,7 +28,8 @@
     "customer-experience:check": "node scripts/check-premium-customer-storefront.mjs",
     "ai-multilingual:check": "node scripts/check-ai-multilingual-voice.mjs",
     "discovery:check": "node scripts/check-public-discovery-marketplace.mjs",
-    "staff-access:check": "node scripts/check-staff-personal-access.mjs"
+    "staff-access:check": "node scripts/check-staff-personal-access.mjs",
+    "owner-ux:check": "node scripts/check-owner-ux-consistency.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
@@ -13,6 +14,7 @@ import OwnerProductTour from '@/components/tour/OwnerProductTour';
 import { findOwnerNavigationItem } from './owner-shell/navigation';
 
 export default function OwnerDashboardLayout() {
+  const { t } = useTranslation();
   const { activeBusiness, profile, user } = useAuth();
   const location = useLocation();
   const activeItem = findOwnerNavigationItem(location.pathname);
@@ -27,6 +29,16 @@ export default function OwnerDashboardLayout() {
   return (
     <IndustryThemeRoot industryKey={activeBusiness?.industry_key}>
       <div className="min-h-screen bg-background" data-tour="owner-workspace">
+        <a
+          href="#owner-main-content"
+          className="fixed left-3 top-3 z-[100] -translate-y-24 rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground shadow-xl transition-transform focus:translate-y-0"
+        >
+          {t('ownerExperience.accessibility.skipToContent')}
+        </a>
+
+        <p className="sr-only" aria-live="polite" aria-atomic="true">
+          {t('ownerExperience.accessibility.pageChanged', { page: t(activeItem.labelKey) })}
+        </p>
         <aside className="fixed inset-y-0 left-0 z-40 hidden w-[264px] border-r border-sidebar-border bg-sidebar lg:block">
           <OwnerSidebar
             business={activeBusiness}
@@ -61,7 +73,12 @@ export default function OwnerDashboardLayout() {
 
           <ConnectivityBanner />
 
-          <main className="min-h-[calc(100dvh-64px)] min-w-0 overflow-x-clip px-3 py-4 pb-[calc(7rem+env(safe-area-inset-bottom))] sm:min-h-[calc(100dvh-72px)] sm:px-5 sm:py-6 lg:px-7 lg:pb-7 xl:px-8">
+          <main
+            id="owner-main-content"
+            tabIndex={-1}
+            aria-label={t(activeItem.labelKey)}
+            className="min-h-[calc(100dvh-64px)] min-w-0 overflow-x-clip px-3 py-4 pb-[calc(7rem+env(safe-area-inset-bottom))] outline-none sm:min-h-[calc(100dvh-72px)] sm:px-5 sm:py-6 lg:px-7 lg:pb-7 xl:px-8"
+          >
             <div data-tour-page={activeItem.key} className="min-w-0">
               <Outlet />
             </div>

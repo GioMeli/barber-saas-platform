@@ -513,7 +513,7 @@ export default function Customers() {
         </CardContent>
       </Card>
 
-      <div data-tour="customers-tabs" className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
+      <div data-tour="customers-tabs" className="responsive-tabs rounded-2xl border bg-card p-2 shadow-card">
         <MainTabButton
           dataTour="customers-tab-customers"
           active={activeTab === 'customers'}
@@ -912,7 +912,7 @@ export default function Customers() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent data-tour="customers-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="customers-form" className="owner-form-dialog max-h-[92vh] w-[calc(100%-1.5rem)] max-w-lg overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId
@@ -982,7 +982,7 @@ export default function Customers() {
             )}
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="owner-dialog-footer">
             <Button
               variant="outline"
               disabled={saving}
@@ -1018,7 +1018,7 @@ function MainTabButton({
       type="button"
       data-tour={dataTour}
       onClick={onClick}
-      className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+      className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
         active
           ? 'bg-primary text-primary-foreground shadow-sm'
           : 'text-muted-foreground hover:bg-muted hover:text-foreground'

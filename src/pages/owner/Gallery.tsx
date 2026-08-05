@@ -134,7 +134,7 @@ export default function Gallery() {
         <CardContent className="p-4 sm:p-5">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="relative flex-1"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" /><Input className="pl-9" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t('gallery.searchPlaceholder')} /></div>
-            <div className="flex gap-2">
+            <div className="scrollbar-subtle flex max-w-full gap-2 overflow-x-auto pb-1">
               {(['all', 'public', 'private'] as const).map((item) => <Button key={item} size="sm" variant={visibility === item ? 'default' : 'outline'} onClick={() => setVisibility(item)}>{t(`gallery.filters.${item}`)}</Button>)}
             </div>
           </div>
@@ -152,7 +152,7 @@ export default function Gallery() {
       })}</div>}
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent data-tour="gallery-form" className="max-h-[92vh] max-w-xl overflow-y-auto rounded-3xl">
+        <DialogContent data-tour="gallery-form" className="owner-form-dialog max-h-[92vh] max-w-xl overflow-y-auto rounded-3xl">
           <DialogHeader><DialogTitle>{editingId ? t('gallery.dialog.edit') : t('gallery.dialog.add')}</DialogTitle></DialogHeader>
           <div className="space-y-5 py-4">
             <div className="space-y-2"><Label>{t('gallery.fields.image')} *</Label><ImageUploader value={form.image_url} onChange={(value) => setForm((current) => ({ ...current, image_url: value }))} folder={`gallery/${businessId ?? 'unknown'}/${editingId ?? 'new'}`} /></div>
@@ -162,7 +162,7 @@ export default function Gallery() {
             <div className="space-y-2"><Label>{t('gallery.fields.order')}</Label><Input type="number" min="0" value={form.display_order} onChange={(event) => setForm((current) => ({ ...current, display_order: Number(event.target.value) }))} /></div>
             <div className="flex items-center justify-between rounded-2xl border p-4"><div><Label>{t('gallery.fields.public')}</Label><p className="mt-1 text-sm text-muted-foreground">{t('gallery.fields.publicDescription')}</p></div><Switch checked={form.is_public} onCheckedChange={(checked) => setForm((current) => ({ ...current, is_public: checked }))} /></div>
           </div>
-          <DialogFooter><Button variant="outline" disabled={saving} onClick={() => setDialogOpen(false)}>{t('common.cancel')}</Button><Button disabled={saving} onClick={() => void saveImage()}>{saving ? t('common.saving') : t('gallery.actions.save')}</Button></DialogFooter>
+          <DialogFooter className="owner-dialog-footer"><Button variant="outline" disabled={saving} onClick={() => setDialogOpen(false)}>{t('common.cancel')}</Button><Button disabled={saving} onClick={() => void saveImage()}>{saving ? t('common.saving') : t('gallery.actions.save')}</Button></DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

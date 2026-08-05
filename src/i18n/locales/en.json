@@ -3766,6 +3766,10 @@
       "chapters": {
         "workspace": "Workspace basics"
       }
+    },
+    "accessibility": {
+      "skipToContent": "Skip to main content",
+      "pageChanged": "Opened {{page}}"
     }
   }
 }

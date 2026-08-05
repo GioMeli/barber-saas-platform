@@ -43,7 +43,7 @@ export default function TrainingPortal() {
   const completionPercent = Math.round((completed.length / TRAINING_GUIDES.length) * 100);
 
   return (
-    <div className="mx-auto max-w-[1500px] space-y-6">
+    <div className="app-page pb-10">
       <section data-tour="training-overview" className="overflow-hidden rounded-[2rem] border border-violet-200 bg-[radial-gradient(circle_at_top_right,_rgba(232,121,249,.25),_transparent_35%),linear-gradient(135deg,#2e1065_0%,#5b21b6_52%,#7c3aed_100%)] p-5 text-white shadow-[0_24px_80px_rgba(76,29,149,.22)] sm:p-7 lg:p-8">
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
           <div>

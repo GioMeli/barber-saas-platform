@@ -3766,6 +3766,10 @@
       "chapters": {
         "workspace": "Conceptos básicos del espacio de trabajo"
       }
+    },
+    "accessibility": {
+      "skipToContent": "Saltar al contenido principal",
+      "pageChanged": "Se abrió {{page}}"
     }
   }
 }

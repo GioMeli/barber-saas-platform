@@ -304,7 +304,7 @@ export default function OwnerHome() {
           </p>
         </div>
 
-        <div className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto">
+        <div className="app-page-actions">
           <Button
             variant="outline"
             onClick={() => void copyStoreLink()}

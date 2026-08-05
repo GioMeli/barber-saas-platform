@@ -297,7 +297,7 @@ export default function Reports() {
             {t('reports.description')}
           </p>
         </div>
-        <div data-tour="reports-actions" className="flex flex-wrap gap-2">
+        <div data-tour="reports-actions" className="app-page-actions">
           <Button variant="outline" onClick={() => { void fetchData(); void refreshFinance(); }}>
             <RefreshCw className="mr-2 h-4 w-4" />{t('reports.actions.refresh')}
           </Button>
@@ -367,7 +367,7 @@ export default function Reports() {
             />
           </section>
 
-          <div data-tour="reports-tabs" className="scrollbar-subtle sticky top-16 z-20 -mx-1 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur print:hidden md:top-0">
+          <div data-tour="reports-tabs" className="scrollbar-subtle sticky-owner-tabs -mx-1 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur print:hidden">
             {tabs.map((tab) => (
               <button
                 key={tab.id}

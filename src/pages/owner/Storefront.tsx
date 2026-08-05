@@ -296,14 +296,14 @@ export default function Storefront() {
   }
 
   return (
-    <div className="app-page pb-28">
+    <div className="app-page pb-48 lg:pb-28">
       <header className="app-page-header">
         <div>
           <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">{t('storefront.owner.eyebrow')}</div>
           <h1 className="app-page-title">{t('storefront.owner.title')}</h1>
           <p className="app-page-description">{t('storefront.owner.description')}</p>
         </div>
-        <div className="flex flex-wrap gap-2">
+        <div className="app-page-actions">
           <Button variant="outline" onClick={() => void copyPublicLink()} disabled={!publicUrl}><Copy className="mr-2 h-4 w-4" />{t('storefront.owner.actions.copyLink')}</Button>
           <Button asChild variant="outline" disabled={!publicUrl}><a href={publicUrl || '#'} target="_blank" rel="noreferrer"><ExternalLink className="mr-2 h-4 w-4" />{t('storefront.owner.actions.openPublicPage')}</a></Button>
         </div>
@@ -343,7 +343,7 @@ export default function Storefront() {
         </Card>
       </section>
 
-      <div data-tour="storefront-sections" className="scrollbar-subtle sticky top-16 z-20 flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur md:top-0">
+      <div data-tour="storefront-sections" className="scrollbar-subtle sticky-owner-tabs flex gap-2 overflow-x-auto rounded-2xl border bg-background/95 p-2 shadow-sm backdrop-blur">
         {sections.map((section) => (
           <button key={section.id} data-tour={`storefront-section-${section.id}`} type="button" onClick={() => setActiveSection(section.id)} className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${activeSection === section.id ? 'bg-primary text-primary-foreground shadow-sm' : 'text-muted-foreground hover:bg-muted hover:text-foreground'}`}>
             {section.icon}{section.label}
@@ -542,7 +542,7 @@ export default function Storefront() {
         </div>
       )}
 
-      <div data-tour="storefront-save" className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 shadow-[0_-12px_30px_rgba(15,23,42,.08)] backdrop-blur md:left-[272px]">
+      <div data-tour="storefront-save" className="fixed inset-x-0 bottom-[calc(5.75rem+env(safe-area-inset-bottom))] z-30 border-t bg-background/95 p-3 shadow-[0_-12px_30px_rgba(15,23,42,.08)] backdrop-blur lg:bottom-0 lg:left-[264px]">
         <div className="mx-auto flex max-w-[1440px] items-center justify-between gap-4">
           <div className="min-w-0">
             <div className="text-sm font-semibold">{isDirty ? t('storefront.owner.status.unsaved') : t('storefront.owner.status.saved')}</div>

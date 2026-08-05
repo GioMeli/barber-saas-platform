@@ -516,7 +516,7 @@ export default function Products() {
         />
       </section>
 
-      <div data-tour="products-tabs" className="flex flex-wrap gap-2 rounded-2xl border bg-card p-2 shadow-card">
+      <div data-tour="products-tabs" className="responsive-tabs rounded-2xl border bg-card p-2 shadow-card">
         <InventoryTabButton
           dataTour="products-tab-products"
           active={activeTab === 'products'}
@@ -683,7 +683,7 @@ export default function Products() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent data-tour="products-form" className="max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
+        <DialogContent data-tour="products-form" className="owner-form-dialog max-h-[92vh] w-[calc(100%-1.5rem)] max-w-2xl overflow-y-auto rounded-2xl">
           <DialogHeader>
             <DialogTitle>
               {editingId
@@ -862,7 +862,7 @@ export default function Products() {
             </div>
           </div>
 
-          <DialogFooter>
+          <DialogFooter className="owner-dialog-footer">
             <Button
               variant="outline"
               disabled={saving}
@@ -1046,7 +1046,7 @@ function InventoryTabButton({
       type="button"
       data-tour={dataTour}
       onClick={onClick}
-      className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
+      className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
         active
           ? 'bg-primary text-primary-foreground shadow-sm'
           : 'text-muted-foreground hover:bg-muted hover:text-foreground'
