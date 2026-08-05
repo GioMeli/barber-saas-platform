@@ -415,6 +415,12 @@ const TOUR_STEPS: OwnerTourStep[] = [
     action: { selector: `[data-tour="marketing-tab-${tab}"]` },
   })),
   {
+    key: 'marketing-appointment-communications', chapter: 'marketing', chapterLabel: chapterLabels.marketing,
+    route: '/dashboard/marketing?tab=automations', selector: '[data-tour="marketing-appointment-communications"]',
+    title: text('marketing.automations.appointmentCommunications.title', 'Appointment communications'),
+    description: featureDescription('marketing', 'Choose confirmation and reminder channels, default language and reply-to email. These operational messages are separate from promotional campaigns.'),
+  },
+  {
     key: 'marketing-form', chapter: 'marketing', chapterLabel: chapterLabels.marketing,
     route: '/dashboard/marketing', selector: '[data-tour="marketing-campaign-form"]',
     title: text('marketing.actions.createCampaign', 'Create campaign'),
@@ -488,7 +494,7 @@ const TOUR_STEPS: OwnerTourStep[] = [
     ['branding', 'storefront.owner.sections.branding', 'Branding', 'storefront-branding', 'storefront.owner.branding.description', 'Upload the logo and cover image used throughout the customer experience.'],
     ['contact', 'storefront.owner.sections.contact', 'Contact', 'storefront-contact', 'storefront.owner.contact.description', 'Maintain customer-facing phone, email and address details.'],
     ['location', 'storefront.owner.sections.location', 'Location', 'storefront-location', 'storefront.owner.location.description', 'Configure structured address, map coordinates and directions.'],
-    ['booking', 'storefront.owner.sections.booking', 'Booking rules', 'storefront-booking', 'ownerExperience.tour.features.storefront', 'Set booking interval, notice, advance window, reminders, cancellation policy and terms.'],
+    ['booking', 'storefront.owner.sections.booking', 'Booking rules', 'storefront-booking', 'ownerExperience.tour.features.storefront', 'Set booking interval, notice, advance window, cancellation policy and terms.'],
     ['online', 'storefront.owner.sections.online', 'Online presence', 'storefront-online', 'storefront.owner.online.description', 'Manage discovery visibility, SEO and social links.'],
     ['sharing', 'storefront.owner.sections.sharing', 'Preview & sharing', 'storefront-sharing', 'storefront.owner.sharing.description', 'Preview, copy and distribute the permanent public business page and QR code.'],
   ] as const).map(([section, titleKey, titleDefault, target, descriptionKey, descriptionDefault]) => ({
@@ -501,7 +507,7 @@ const TOUR_STEPS: OwnerTourStep[] = [
     key: 'storefront-save', chapter: 'storefront', chapterLabel: chapterLabels.storefront,
     route: '/dashboard/storefront', selector: '[data-tour="storefront-save"]',
     title: text('common.save_changes', 'Save changes'),
-    description: featureDescription('storefront', 'Save only after reviewing the changed section. These values become the single source of truth for public pages, bookings and communications.'),
+    description: featureDescription('storefront', 'Save only after reviewing the changed section. These values become the single source of truth for public pages and booking rules.'),
   },
 
   // Business

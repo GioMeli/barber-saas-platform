@@ -14,6 +14,7 @@ import {
   PauseCircle,
   Plus,
   RefreshCcw,
+  Save,
   Send,
   Smartphone,
   Sparkles,
@@ -81,6 +82,15 @@ const EMPTY_CAMPAIGN = {
   scheduled_at: '',
 };
 
+const EMPTY_APPOINTMENT_COMMUNICATIONS = {
+  transactional_email_enabled: true,
+  transactional_sms_enabled: false,
+  email_reminders_enabled: true,
+  sms_reminders_enabled: false,
+  communication_locale: 'en',
+  communication_reply_to_email: '',
+};
+
 const AUTOMATION_DEFINITIONS = [
   { key: 'birthday', icon: Sparkles, delayHours: 9 * 24, deliveryReady: true },
   { key: 'win_back', icon: RefreshCcw, delayHours: 60 * 24, deliveryReady: true },
@@ -112,12 +122,19 @@ export default function Marketing() {
   const [selectedReview, setSelectedReview] = useState<any | null>(null);
   const [reviewResponse, setReviewResponse] = useState('');
   const [queueingCampaignId, setQueueingCampaignId] = useState<string | null>(null);
+  const [appointmentCommunications, setAppointmentCommunications] = useState(EMPTY_APPOINTMENT_COMMUNICATIONS);
+  const [communicationSaving, setCommunicationSaving] = useState(false);
 
   useEffect(() => {
     if (businessId) void loadMarketingWorkspace();
   }, [businessId]);
 
   useEffect(() => {
+    const requestedTab = searchParams.get('tab');
+    if (requestedTab && ['overview', 'campaigns', 'automations', 'delivery', 'reviews'].includes(requestedTab)) {
+      setActiveTab(requestedTab as MarketingTab);
+    }
+
     const action = searchParams.get('action');
     if (action === 'new') {
       openCreateCampaign();
@@ -130,7 +147,7 @@ export default function Marketing() {
     setLoading(true);
 
     try {
-      const [campaignResult, automationResult, reviewResult, postResult, customerResult, profileResult, appointmentResult] = await Promise.all([
+      const [campaignResult, automationResult, reviewResult, postResult, customerResult, profileResult, appointmentResult, communicationResult] = await Promise.all([
         supabase
           .from('marketing_campaigns')
           .select('*')
@@ -163,6 +180,11 @@ export default function Marketing() {
           .from('appointments')
           .select('customer_id, status, total_price, start_time')
           .eq('business_id', businessId),
+        supabase
+          .from('business_settings')
+          .select('transactional_email_enabled, transactional_sms_enabled, email_reminders_enabled, sms_reminders_enabled, communication_locale, communication_reply_to_email')
+          .eq('business_id', businessId)
+          .maybeSingle(),
       ]);
 
       if (campaignResult.error) throw campaignResult.error;
@@ -172,11 +194,20 @@ export default function Marketing() {
       if (customerResult.error) throw customerResult.error;
       if (profileResult.error) throw profileResult.error;
       if (appointmentResult.error) throw appointmentResult.error;
+      if (communicationResult.error) throw communicationResult.error;
 
       setCampaigns(campaignResult.data ?? []);
       setAutomations(automationResult.data ?? []);
       setReviews(reviewResult.data ?? []);
       setPosts(postResult.data ?? []);
+      setAppointmentCommunications({
+        transactional_email_enabled: communicationResult.data?.transactional_email_enabled !== false,
+        transactional_sms_enabled: communicationResult.data?.transactional_sms_enabled === true,
+        email_reminders_enabled: communicationResult.data?.email_reminders_enabled !== false,
+        sms_reminders_enabled: communicationResult.data?.sms_reminders_enabled === true,
+        communication_locale: communicationResult.data?.communication_locale ?? 'en',
+        communication_reply_to_email: communicationResult.data?.communication_reply_to_email ?? '',
+      });
 
       const appointments = appointmentResult.data ?? [];
       const profilesByCustomer = new Map(
@@ -408,6 +439,41 @@ export default function Marketing() {
     }
   };
 
+  const saveAppointmentCommunications = async () => {
+    if (!businessId) return;
+    const replyTo = appointmentCommunications.communication_reply_to_email.trim().toLowerCase();
+    if (replyTo && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(replyTo)) {
+      toast.error(t('marketing.automations.appointmentCommunications.invalidEmail'));
+      return;
+    }
+
+    setCommunicationSaving(true);
+    try {
+      const { error } = await supabase
+        .from('business_settings')
+        .upsert({
+          business_id: businessId,
+          transactional_email_enabled: appointmentCommunications.transactional_email_enabled,
+          transactional_sms_enabled: appointmentCommunications.transactional_sms_enabled,
+          email_reminders_enabled: appointmentCommunications.email_reminders_enabled,
+          sms_reminders_enabled: appointmentCommunications.sms_reminders_enabled,
+          communication_locale: appointmentCommunications.communication_locale,
+          communication_reply_to_email: replyTo || null,
+        }, { onConflict: 'business_id' });
+      if (error) throw error;
+
+      setAppointmentCommunications((current) => ({
+        ...current,
+        communication_reply_to_email: replyTo,
+      }));
+      toast.success(t('marketing.automations.appointmentCommunications.saved'));
+    } catch (error: any) {
+      toast.error(error.message || t('marketing.automations.appointmentCommunications.saveFailed'));
+    } finally {
+      setCommunicationSaving(false);
+    }
+  };
+
   const toggleAutomation = async (definition: (typeof AUTOMATION_DEFINITIONS)[number], enabled: boolean) => {
     if (!businessId) return;
     if (enabled && !definition.deliveryReady) {
@@ -629,7 +695,88 @@ export default function Marketing() {
           </Card>
         </TabsContent>
 
-        <TabsContent value="automations" className="mt-6">
+        <TabsContent value="automations" className="mt-6 space-y-5">
+          <Card data-tour="marketing-appointment-communications" className="overflow-hidden rounded-3xl border-primary/15 shadow-card">
+            <CardContent className="p-0">
+              <div className="border-b bg-[linear-gradient(135deg,hsl(var(--primary)/0.10),transparent_70%)] p-5 sm:p-6">
+                <SectionHeading
+                  icon={<CalendarClock className="h-5 w-5" />}
+                  title={t('marketing.automations.appointmentCommunications.title')}
+                  description={t('marketing.automations.appointmentCommunications.description')}
+                />
+              </div>
+              <div className="space-y-6 p-5 sm:p-6">
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <Field label={t('marketing.automations.appointmentCommunications.language')}>
+                    <Select
+                      value={appointmentCommunications.communication_locale}
+                      onValueChange={(communication_locale) => setAppointmentCommunications((current) => ({ ...current, communication_locale }))}
+                    >
+                      <SelectTrigger><SelectValue /></SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="en">English</SelectItem>
+                        <SelectItem value="el">Ελληνικά</SelectItem>
+                        <SelectItem value="tr">Türkçe</SelectItem>
+                        <SelectItem value="de">Deutsch</SelectItem>
+                        <SelectItem value="es">Español</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <p className="text-xs leading-5 text-muted-foreground">{t('marketing.automations.appointmentCommunications.languageHint')}</p>
+                  </Field>
+                  <Field label={t('marketing.automations.appointmentCommunications.replyToEmail')}>
+                    <Input
+                      type="email"
+                      autoComplete="email"
+                      value={appointmentCommunications.communication_reply_to_email}
+                      onChange={(event) => setAppointmentCommunications((current) => ({ ...current, communication_reply_to_email: event.target.value }))}
+                      placeholder={activeBusiness?.email || 'hello@business.com'}
+                    />
+                    <p className="text-xs leading-5 text-muted-foreground">{t('marketing.automations.appointmentCommunications.replyToEmailHint')}</p>
+                  </Field>
+                </div>
+
+                <div className="grid gap-4 lg:grid-cols-2">
+                  <CommunicationToggle
+                    icon={<Mail className="h-5 w-5" />}
+                    label={t('marketing.automations.appointmentCommunications.transactionalEmail')}
+                    description={t('marketing.automations.appointmentCommunications.transactionalEmailHint')}
+                    checked={appointmentCommunications.transactional_email_enabled}
+                    onChange={(transactional_email_enabled) => setAppointmentCommunications((current) => ({ ...current, transactional_email_enabled }))}
+                  />
+                  <CommunicationToggle
+                    icon={<Smartphone className="h-5 w-5" />}
+                    label={t('marketing.automations.appointmentCommunications.transactionalSms')}
+                    description={t('marketing.automations.appointmentCommunications.transactionalSmsHint')}
+                    checked={appointmentCommunications.transactional_sms_enabled}
+                    onChange={(transactional_sms_enabled) => setAppointmentCommunications((current) => ({ ...current, transactional_sms_enabled }))}
+                  />
+                  <CommunicationToggle
+                    icon={<CalendarClock className="h-5 w-5" />}
+                    label={t('marketing.automations.appointmentCommunications.emailReminders')}
+                    description={t('marketing.automations.appointmentCommunications.emailRemindersHint')}
+                    checked={appointmentCommunications.email_reminders_enabled}
+                    onChange={(email_reminders_enabled) => setAppointmentCommunications((current) => ({ ...current, email_reminders_enabled }))}
+                  />
+                  <CommunicationToggle
+                    icon={<Clock3 className="h-5 w-5" />}
+                    label={t('marketing.automations.appointmentCommunications.smsReminders')}
+                    description={t('marketing.automations.appointmentCommunications.smsRemindersHint')}
+                    checked={appointmentCommunications.sms_reminders_enabled}
+                    onChange={(sms_reminders_enabled) => setAppointmentCommunications((current) => ({ ...current, sms_reminders_enabled }))}
+                  />
+                </div>
+
+                <div className="flex flex-col gap-4 rounded-2xl border border-primary/15 bg-primary/5 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="max-w-3xl text-sm leading-6 text-muted-foreground">{t('marketing.automations.appointmentCommunications.providerNote')}</p>
+                  <Button className="shrink-0" disabled={communicationSaving} onClick={() => void saveAppointmentCommunications()}>
+                    {communicationSaving ? <RefreshCcw className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                    {communicationSaving ? t('common.saving') : t('marketing.automations.appointmentCommunications.save')}
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid gap-4 lg:grid-cols-2">
             {AUTOMATION_DEFINITIONS.map((definition) => {
               const automation = automations.find((item) => item.automation_key === definition.key);
@@ -657,7 +804,7 @@ export default function Marketing() {
               );
             })}
           </div>
-          <Card className="mt-4 rounded-3xl border-amber-200 bg-amber-50/70 shadow-none dark:border-amber-900/40 dark:bg-amber-950/20">
+          <Card className="rounded-3xl border-amber-200 bg-amber-50/70 shadow-none dark:border-amber-900/40 dark:bg-amber-950/20">
             <CardContent className="flex gap-3 p-5">
               <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
               <p className="text-sm leading-6 text-amber-950 dark:text-amber-100">{t('marketing.automations.providerNotice')}</p>
@@ -790,6 +937,21 @@ function InsightLine({ icon, text }: { icon: React.ReactNode; text: string }) {
 function WorkspaceLink({ icon, title, description, href, onClick }: { icon: React.ReactNode; title: string; description: string; href?: string; onClick?: () => void }) {
   const content = <><div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">{icon}</div><h3 className="mt-4 font-bold">{title}</h3><p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p></>;
   return href ? <Link to={href} className="rounded-2xl border p-5 transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">{content}</Link> : <button type="button" onClick={onClick} className="rounded-2xl border p-5 text-left transition hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-md">{content}</button>;
+}
+
+function CommunicationToggle({ icon, label, description, checked, onChange }: { icon: React.ReactNode; label: string; description: string; checked: boolean; onChange: (checked: boolean) => void }) {
+  return (
+    <div className="flex items-start justify-between gap-4 rounded-2xl border bg-background p-4">
+      <div className="flex min-w-0 gap-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">{icon}</div>
+        <div>
+          <div className="font-semibold">{label}</div>
+          <p className="mt-1 text-xs leading-5 text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      <Switch checked={checked} onCheckedChange={onChange} />
+    </div>
+  );
 }
 
 function Field({ label, children, className = '' }: { label: string; children: React.ReactNode; className?: string }) {
