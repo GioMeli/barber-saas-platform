@@ -41,20 +41,21 @@ function ensureMeta(id: string, name: string) {
 function staffManifestHref(business: StaffBusiness, employee: StaffEmployee) {
   const query = new URLSearchParams({
     employeeName: employee.name || 'Staff',
-    v: '8',
+    v: '10',
   });
   return `/staff-manifest/${encodeURIComponent(business.slug)}/${encodeURIComponent(employee.id)}.webmanifest?${query.toString()}`;
 }
 
 export function useStaffPWA(
   business: StaffBusiness | null | undefined,
-  employee?: StaffEmployee | null
+  employee?: StaffEmployee | null,
+  installAllowed = true
 ) {
   const status = usePWAStatus();
-  const enabled = Boolean(business?.slug && employee?.id);
+  const enabled = Boolean(installAllowed && business?.slug && employee?.id);
 
   React.useLayoutEffect(() => {
-    if (!business?.slug || !employee?.id) return;
+    if (!installAllowed || !business?.slug || !employee?.id) return;
 
     const manifest = ensureLink('app-manifest', 'manifest');
     const nextManifestHref = staffManifestHref(business, employee);
@@ -82,7 +83,7 @@ export function useStaffPWA(
       });
       document.title = previousTitle;
     };
-  }, [business?.id, business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
+  }, [installAllowed, business?.id, business?.slug, business?.name, business?.logo_url, employee?.id, employee?.name]);
 
   return { ...status, enabled };
 }

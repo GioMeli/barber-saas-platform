@@ -112,6 +112,7 @@ export default function Staff() {
   const [originalAccessEnabled, setOriginalAccessEnabled] = useState(false);
   const [originalEmail, setOriginalEmail] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [billingSummary, setBillingSummary] = useState<any>(null);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [formData, setFormData] = useState(EMPTY_FORM);
@@ -161,6 +162,7 @@ export default function Staff() {
         hoursResult,
         breaksResult,
         appointmentsResult,
+        billingResult,
       ] = await Promise.all([
           supabase
             .from('employees')
@@ -192,6 +194,7 @@ export default function Staff() {
             .eq('business_id', businessId)
             .gte('start_time', monthStartIso())
             .lt('start_time', nextMonthStartIso()),
+          (supabase as any).rpc('get_business_billing_summary', { p_business_id: businessId }),
         ]);
 
       if (staffResult.error) throw staffResult.error;
@@ -200,6 +203,7 @@ export default function Staff() {
       if (hoursResult.error) throw hoursResult.error;
       if (breaksResult.error) throw breaksResult.error;
       if (appointmentsResult.error) throw appointmentsResult.error;
+      if (billingResult.error) throw billingResult.error;
 
       setStaff(staffResult.data ?? []);
       setServices(servicesResult.data ?? []);
@@ -207,6 +211,7 @@ export default function Staff() {
       setWorkingHours(hoursResult.data ?? []);
       setStaffBreaks(breaksResult.data ?? []);
       setAppointments(appointmentsResult.data ?? []);
+      setBillingSummary(billingResult.data ?? null);
     } catch (error) {
       console.error('Error fetching staff:', error);
       toast.error(t('staff.messages.loadFailed'));
@@ -816,6 +821,10 @@ export default function Staff() {
     });
   }, [performanceByStaff, searchQuery, sortBy, staff, statusFilter]);
 
+  const staffPlanLimit = Number(billingSummary?.plan?.staff_limit || 0);
+  const staffPlanUsed = Number(billingSummary?.usage?.staff || 0);
+  const canAddStaff = staffPlanLimit <= 0 || staffPlanUsed < staffPlanLimit;
+
   return (
     <div className="app-page">
       <header className="app-page-header">
@@ -829,10 +838,13 @@ export default function Staff() {
           </p>
         </div>
 
-        <Button data-tour="staff-new-button" onClick={() => void handleOpenDialog()}>
-          <Plus className="mr-2 h-4 w-4" />
-          {t('staff.actions.add')}
-        </Button>
+        <div className="flex flex-col items-end gap-1.5">
+          <Button data-tour="staff-new-button" disabled={!canAddStaff} onClick={() => void handleOpenDialog()}>
+            <Plus className="mr-2 h-4 w-4" />
+            {t('staff.actions.add')}
+          </Button>
+          {staffPlanLimit > 0 && <div className="text-[10px] font-semibold text-muted-foreground">{t('staff.planLimit', { used: staffPlanUsed, limit: staffPlanLimit, plan: billingSummary?.plan?.name || '' })}</div>}
+        </div>
       </header>
 
       <section data-tour="staff-summary" className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -922,7 +934,7 @@ export default function Staff() {
             <p className="mt-2 max-w-sm text-sm leading-6 text-muted-foreground">
               {t('staff.empty.description')}
             </p>
-            <Button className="mt-5" onClick={() => void handleOpenDialog()}>
+            <Button className="mt-5" disabled={!canAddStaff} onClick={() => void handleOpenDialog()}>
               {t('staff.actions.add')}
             </Button>
           </CardContent>

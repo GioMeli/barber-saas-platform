@@ -1,0 +1,40 @@
+Phase 14 — Production Billing
+
+New files
+- src/billing/plans.ts
+- scripts/check-production-billing.mjs
+- docs/PHASE-14-PRODUCTION-BILLING.md
+- supabase/migrations/00051_velliqo_subscription_billing_entitlements.sql
+- supabase/functions/create_billing_portal_session/index.ts
+
+Updated files
+- package.json
+- index.html
+- api/staff-manifest.ts
+- scripts/check-staff-personal-access.mjs
+- src/components/layouts/OwnerDashboardLayout.tsx
+- src/hooks/useStaffPWA.ts
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- src/pages/admin/PlatformAdmin.tsx
+- src/pages/auth/SignUp.tsx
+- src/pages/demo/DemoModulePage.tsx
+- src/pages/marketing/BusinessTypeSelection.tsx
+- src/pages/marketing/IndustrySelection.tsx
+- src/pages/marketing/Pricing.tsx
+- src/pages/onboarding/OnboardingWizard.tsx
+- src/pages/owner/Billing.tsx
+- src/pages/owner/Reports.tsx
+- src/pages/owner/Staff.tsx
+- src/pages/staff/EmployeeDashboard.tsx
+- supabase/config.toml
+- supabase/functions/create_subscription_checkout/index.ts
+- supabase/functions/process-ai-manager-automations/index.ts
+- supabase/functions/process_appointment_notifications/index.ts
+- supabase/functions/process_marketing_deliveries/index.ts
+- supabase/functions/process_reminder_jobs/index.ts
+- supabase/functions/stripe_webhook/index.ts
+- supabase/functions/velliqo-ai-manager/index.ts

@@ -73,6 +73,7 @@ import {
 type Workspace = {
   business: any;
   employee: any;
+  entitlements?: { plan_id?: string; staff_app_install_enabled?: boolean };
   services: any[];
   appointments: any[];
   customers: any[];
@@ -154,7 +155,10 @@ export default function EmployeeDashboard() {
 
   const employeeParam = searchParams.get('employee')?.replace(/[^a-z0-9-]/gi, '').slice(0, 120) || '';
   const pwaEmployee = workspace?.employee || (employeeParam ? { id: employeeParam, name: t('staffPortal.access.staffFallbackName') } : null);
-  const pwa = useStaffPWA(workspace?.business || publicBusiness, pwaEmployee);
+  const staffAppInstallAllowed = workspace
+    ? workspace.entitlements?.staff_app_install_enabled !== false
+    : publicBusiness?.staff_app_install_enabled !== false;
+  const pwa = useStaffPWA(workspace?.business || publicBusiness, pwaEmployee, staffAppInstallAllowed);
   const trustedDeviceAvailable = Boolean(employeeParam && getTrustedDeviceCredentials(employeeParam));
 
   useEffect(() => {
@@ -266,6 +270,16 @@ export default function EmployeeDashboard() {
   };
 
   const loadPublicBusiness = async () => {
+    if (employeeParam) {
+      const { data: manifestMeta } = await staffSupabase.rpc('staff_manifest_meta', {
+        p_business_slug: slug,
+        p_employee_id: employeeParam,
+      });
+      if (manifestMeta?.id) {
+        setPublicBusiness(manifestMeta);
+        return;
+      }
+    }
     const { data } = await staffSupabase
       .from('businesses')
       .select('id,slug,name,logo_url,cover_image_url,description,address,phone,email,status')
@@ -668,7 +682,7 @@ export default function EmployeeDashboard() {
             <header className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.06] px-4 py-3 backdrop-blur-xl sm:px-5">
               <Brand business={publicBusiness} inverted />
               <div className="flex items-center gap-2">
-                {pwaEmployee && !pwa.isInstalled && (
+                {staffAppInstallAllowed && pwaEmployee && !pwa.isInstalled && (
                   <Button variant="ghost" className="hidden border border-white/10 bg-white/[0.06] text-white hover:bg-white/10 hover:text-white sm:inline-flex" onClick={() => setInstallOpen(true)}>
                     <Download className="mr-2 h-4 w-4" />{t('staffPortal.install.action')}
                   </Button>
@@ -785,7 +799,7 @@ export default function EmployeeDashboard() {
                       <div className="flex gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600" /><div><strong>{t('staffPortal.access.multiDeviceTitle')}</strong><div className="mt-1 text-emerald-800">{t('staffPortal.access.multiDeviceDescription')}</div></div></div>
                     </div>
 
-                    {pwaEmployee && !pwa.isInstalled && (
+                    {staffAppInstallAllowed && pwaEmployee && !pwa.isInstalled && (
                       <button type="button" onClick={() => setInstallOpen(true)} className="flex w-full items-center justify-between rounded-2xl border border-violet-200 bg-violet-50 px-4 py-3 text-left transition hover:bg-violet-100">
                         <span className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-600 text-white"><Download className="h-5 w-5" /></span><span><span className="block text-sm font-black text-violet-950">{t('staffPortal.install.loginCardTitle')}</span><span className="block text-xs text-violet-700">{t('staffPortal.install.loginCardDescription')}</span></span></span>
                         <span className="text-violet-700">→</span>
@@ -800,7 +814,7 @@ export default function EmployeeDashboard() {
           </div>
         </div>
 
-        {pwaEmployee && publicBusiness && (
+        {staffAppInstallAllowed && pwaEmployee && publicBusiness && (
           <StaffInstallDialog
             open={installOpen}
             onOpenChange={setInstallOpen}
@@ -846,11 +860,11 @@ export default function EmployeeDashboard() {
           <div className="flex shrink-0 items-center gap-2">
             <LanguageSwitcher compact />
             <div className="hidden items-center gap-2 md:flex">
-              {pwa.isInstalled ? (
+              {staffAppInstallAllowed && (pwa.isInstalled ? (
                 <Badge variant="secondary" className="rounded-full px-3 py-1.5"><Check className="mr-1.5 h-3.5 w-3.5" />{t('staffPortal.install.installed')}</Badge>
               ) : (
                 <Button variant="outline" size="sm" className="rounded-xl" onClick={() => setInstallOpen(true)}><Download className="mr-2 h-4 w-4" />{t('staffPortal.actions.install')}</Button>
-              )}
+              ))}
               <Button variant="outline" size="icon" onClick={() => setTrainingOpen(true)} aria-label={t('training.certification.staffTrainingTitle')}>
                 <GraduationCap className="h-4 w-4" />
               </Button>
@@ -890,7 +904,7 @@ export default function EmployeeDashboard() {
           </div>
         </section>
 
-        {!pwa.isInstalled && (
+        {staffAppInstallAllowed && !pwa.isInstalled && (
           <section className="overflow-hidden rounded-3xl border border-primary/15 bg-white shadow-xl shadow-primary/5">
             <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-[1fr_auto] lg:items-center">
               <div className="flex gap-4">
@@ -1021,7 +1035,7 @@ export default function EmployeeDashboard() {
             <SheetDescription>{t('staffPortal.mobileNav.moreDescription')}</SheetDescription>
           </SheetHeader>
           <div className="space-y-3 border-t px-5 py-5">
-            {!pwa.isInstalled && (
+            {staffAppInstallAllowed && !pwa.isInstalled && (
               <Button variant="outline" className="min-h-12 w-full justify-start rounded-xl" onClick={() => { setMobileActionsOpen(false); setInstallOpen(true); }}>
                 <Download className="mr-3 h-5 w-5" />{t('staffPortal.actions.install')}
               </Button>
@@ -1156,7 +1170,7 @@ export default function EmployeeDashboard() {
         </DialogContent>
       </Dialog>
 
-      <StaffInstallDialog
+      {staffAppInstallAllowed && <StaffInstallDialog
         open={installOpen}
         onOpenChange={setInstallOpen}
         businessName={workspace.business.name}
@@ -1165,7 +1179,7 @@ export default function EmployeeDashboard() {
         isInstalled={pwa.isInstalled}
         needsManualIOSInstall={pwa.needsManualIOSInstall}
         onInstall={pwa.install}
-      />
+      />}
 
       <StaffTrainingDialog
         open={trainingOpen}

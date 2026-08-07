@@ -634,6 +634,21 @@ Deno.serve(async (request) => {
   if (membershipError || !membership) return json({ error: 'You do not have access to this business' }, 403);
 
   const membershipRole = normalizeRole(String((membership as any).role || 'Employee'));
+
+  const { data: billingSummary, error: billingError } = await serviceClient.rpc('get_business_billing_summary', { p_business_id: businessId });
+  if (billingError) return json({ error: 'Unable to verify the Velliqo AI plan allowance' }, 503);
+  if (!billingSummary?.access_allowed) return json({ error: 'An active Velliqo subscription or trial is required' }, 402);
+  const monthlyRequestLimit = Number(billingSummary?.plan?.ai_requests_monthly || 0);
+  const monthlyTokenLimit = Number(billingSummary?.plan?.ai_tokens_monthly || 0);
+  const monthlyRequestsUsed = Number(billingSummary?.usage?.ai_requests || 0);
+  const monthlyTokensUsed = Number(billingSummary?.usage?.ai_tokens || 0);
+  if (monthlyRequestLimit > 0 && monthlyRequestsUsed >= monthlyRequestLimit) {
+    return json({ error: 'The monthly Velliqo AI request allowance for this plan has been reached', code: 'plan_ai_request_limit' }, 429);
+  }
+  if (monthlyTokenLimit > 0 && monthlyTokensUsed >= monthlyTokenLimit) {
+    return json({ error: 'The monthly Velliqo AI token allowance for this plan has been reached', code: 'plan_ai_token_limit' }, 429);
+  }
+
   const requiredCapability = REQUIRED_CAPABILITY_BY_AGENT[agent];
   const capabilities = CAPABILITIES_BY_ROLE[membershipRole] || CAPABILITIES_BY_ROLE.Employee;
   const canConfirmActions = membershipRole === 'Owner' || membershipRole === 'Manager';

@@ -65,7 +65,7 @@ export default function BusinessTypeSelection() {
                 <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search e.g. dentist, consultant, trainer..." className="h-14 rounded-2xl border-white bg-white pl-12 text-base text-slate-950 shadow-lg placeholder:text-slate-400" />
               </div>
             </div>
-            <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-semibold text-violet-100"><TrustItem text="No card required"/><TrustItem text="Guided setup"/><TrustItem text="Change settings later"/></div>
+            <div className="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-semibold text-violet-100"><TrustItem text="Secure Stripe billing"/><TrustItem text="Guided setup"/><TrustItem text="Change settings later"/></div>
           </div>
         </section>
 

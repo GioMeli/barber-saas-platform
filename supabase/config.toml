@@ -447,3 +447,6 @@ verify_jwt = false
 
 [functions.process-ai-manager-automations]
 verify_jwt = false
+
+[functions.stripe_webhook]
+verify_jwt = false

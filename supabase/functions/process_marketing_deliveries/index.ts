@@ -179,6 +179,13 @@ async function processDelivery(
     }
 
     if (delivery.channel !== 'in_app') {
+      const { data: planQuota, error: planQuotaError } = await supabase.rpc('billing_can_send_communication', { p_business_id: delivery.business_id, p_channel: delivery.channel });
+      if (planQuotaError) throw planQuotaError;
+      if (planQuota?.allowed === false) {
+        await markSkipped(delivery.id, 'plan_monthly_quota_reached');
+        return { delivery_id: delivery.id, status: 'skipped', reason: 'plan_monthly_quota_reached', used: planQuota.used, limit: planQuota.limit };
+      }
+
       const allowedToday = await withinDailyLimit(delivery, settings, dailyCountCache);
       if (!allowedToday) {
         await deferUntilTomorrow(delivery.id, 'daily_limit_reached');

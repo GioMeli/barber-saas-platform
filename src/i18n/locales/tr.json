@@ -21,7 +21,27 @@
     "add_staff_member": "+ Personel ekle",
     "almost_ready": "Neredeyse hazır!",
     "ready_desc1": "Daha sonra özelleştirebileceğiniz standart çalışma saatleri ayarlanacaktır.",
-    "ready_desc2": "Ayrıca 14 günlük ücretsiz deneme başlayacaktır."
+    "ready_desc2": "Seçtiğiniz plan 14 günlük ücretsiz deneme içerir. İptal etmediğiniz sürece denemeden sonra ücretlendirme otomatik olarak başlar.",
+    "create_business": "İşletmenizi oluşturun",
+    "plan_billing": "Plan ve faturalandırma",
+    "choose_plan": "Velliqo planınızı onaylayın",
+    "choose_plan_description": "Plan personel, AI ve iletişim limitlerini belirler. {{days}} günlük deneme etkinleşmeden önce Stripe ödeme bilgilerini güvenle toplar.",
+    "offer_code": "Özel teklif kodu",
+    "offer_code_description": "İsteğe bağlı. Sabit süreli kodlar dönem sonunda otomatik biter ve yenilenmez.",
+    "stripe_security": "Velliqo kart verisi saklamaz. Stripe ödeme yöntemini güvenli toplar; ardından {{days}} günlük ücretsiz deneme başlar.",
+    "plan_summary": "En fazla {{staff}} personel · ayda {{ai}} AI isteği",
+    "staff_plan_limit": "{{plan}}: {{used}} / {{count}} personel yeri kullanılıyor.",
+    "staff_limit_reached": "Personel limiti doldu",
+    "plan_staff_limit_error": "{{plan}} en fazla {{count}} personele izin verir. Bir personeli kaldırın veya daha yüksek plan seçin.",
+    "ready_title": "{{industry}} çalışma alanınız faturalandırmaya hazır",
+    "ready_description": "{{plan}} seçildi. Stripe ödeme bilgilerini topladıktan sonra {{days}} günlük deneme etkinleşir.",
+    "final_checkout_note": "Devam ettiğinizde güvenli Stripe sayfası açılır. Deneme yalnızca checkout tamamlandığında başlar.",
+    "activate_trial": "Faturalandırmaya devam et ve denemeyi etkinleştir",
+    "checkout_resume": "İşletme oluşturuldu ancak faturalandırma Billing sayfasından tamamlanmalı.",
+    "failed": "İşletme kurulumu tamamlanamadı",
+    "services_description": "Her hizmeti fiyat ve süreyle ekleyin. Öneriler {{industry}} alanına dayanır.",
+    "category": "Kategori",
+    "duration": "Süre (dakika)"
   },
   "dashboard": {
     "home": "Ana Sayfa",
@@ -188,7 +208,7 @@
     "benefit_storefront": "Kendi herkese açık rezervasyon sayfanız",
     "benefit_reports": "Net operasyon ve performans raporları",
     "free_trial_title": "Eksiksiz bir Velliqo deneyimi",
-    "free_trial_text": "Tüm temel işletme modülleri sade bir çalışma alanında bulunur.",
+    "free_trial_text": "Plan seçin, kurulumdan sonra faturalandırmayı güvenli şekilde ekleyin ve Velliqo’yu 14 gün ücretsiz kullanın.",
     "owner_registration": "İşletme sahibi kaydı",
     "change_business_type": "İşletme türünü değiştir",
     "owner_registration_industry": "{{industry}} için işletme sahibi kaydı",
@@ -207,7 +227,12 @@
     "owners_only": "Bu kayıt işletme sahipleri içindir. Müşteriler her işletmenin herkese açık sayfasından katılır.",
     "email_confirmed_title": "E-posta doğrulandı",
     "email_confirmed_text": "Hesabınız hazır. Güvenli giriş sayfasına yönlendiriliyorsunuz.",
-    "redirecting": "Yönlendiriliyor..."
+    "redirecting": "Yönlendiriliyor...",
+    "choose_plan": "Planınızı seçin",
+    "choose_plan_hint": "{{days}} günlük deneme seçilen planın limitlerini kullanır.",
+    "compare_plans": "Planları karşılaştır",
+    "plan_staff_limit": "En fazla {{count}} personel",
+    "billing_after_setup": "İşletme kurulumundan sonra ödeme bilgilerini Stripe ile güvenli şekilde ekleyeceksiniz. {{days}} günlük deneme başladığında ücret alınmaz."
   },
   "terminology": {
     "staff": "Personel",
@@ -886,7 +911,8 @@
         "accessReady": "Kişisel erişim hazır. Çalışan personel uygulamasından parolasız bağlantı isteyebilir.",
         "linkCopied": "Personel uygulaması bağlantısı kopyalandı"
       }
-    }
+    },
+    "planLimit": "{{plan}} · {{used}} / {{limit}} personel yeri"
   },
   "services": {
     "eyebrow": "Hizmet kataloğu",
@@ -1324,7 +1350,8 @@
     "generic": {
       "unassigned": "Atanmamış",
       "customer": "Müşteri"
-    }
+    },
+    "planUpgradeRequired": "Gelişmiş Finans, Gelir ve Ürün raporları Pro ve Premium planlarda mevcuttur."
   },
   "storefront": {
     "owner": {
@@ -2395,7 +2422,7 @@
   "billing": {
     "eyebrow": "Abonelik deneyimi",
     "title": "Faturalandırma",
-    "description": "Tüm özellikleri {{days}} gün deneyin, ardından sınırsız Profesyonel Plan ile devam edin.",
+    "description": "İşletmeniz için doğru kapasiteyi seçin. Her plan, ödeme yöntemi kaydedilmiş {{days}} günlük ücretsiz denemeyle başlar.",
     "common": {
       "yourBusiness": "işletmeniz"
     },
@@ -2406,24 +2433,29 @@
       "opening": "Açılıyor...",
       "manageBilling": "Faturalandırmayı Yönet",
       "openingCheckout": "Güvenli ödeme açılıyor...",
-      "continueProfessional": "Profesyonel ile Devam Et",
-      "manageSubscription": "Aboneliği Yönet"
+      "continueProfessional": "Seçili planı yönet",
+      "manageSubscription": "Aboneliği Yönet",
+      "changePlan": "Planı değiştir",
+      "currentPlan": "Mevcut plan",
+      "startTrial": "14 günlük denemeyi başlat",
+      "fixedTermLocked": "Sabit süreli teklif için kilitli"
     },
     "plan": {
-      "freeTrialAllFeatures": "Ücretsiz Deneme — Tüm Özellikler",
+      "freeTrialAllFeatures": "14 Günlük Plan Denemesi",
       "professional": "Profesyonel Plan",
       "mostPopular": "En Popüler",
-      "description": "İşletmenizin ihtiyaç duyduğu her şey. Özellik sınırı yok.",
+      "description": "Özellikler ve limitler deneme sırasında ve faturalama başladıktan sonra seçtiğiniz plana göre uygulanır.",
       "perMonth": "aylık",
       "cancelThroughStripe": "Stripe üzerinden istediğiniz zaman iptal",
-      "unlimitedTitle": "Sınırsız tasarım",
+      "unlimitedTitle": "Plana göre kapasite",
       "active": "Profesyonel Planınız aktif",
       "freeTrial": "{{days}} Gün Ücretsiz Deneme",
-      "trialDaysRemaining": "{{count}} deneme günü kaldı"
+      "trialDaysRemaining": "{{count}} deneme günü kaldı",
+      "trialIncluded": "{{days}} günlük ücretsiz deneme dahil"
     },
     "features": {
       "appointments": "Sınırsız randevu",
-      "staff": "Sınırsız personel profili",
+      "staff": "Plana göre personel kapasitesi",
       "services": "Sınırsız hizmet",
       "crm": "Eksiksiz müşteri CRM’i",
       "customerRecords": "Müşteri formülleri, notları ve fotoğrafları",
@@ -2441,9 +2473,9 @@
       "plan": "Plan",
       "status": "Durum",
       "featureAccess": "Özellik erişimi",
-      "allFeatures": "Tüm özellikler",
-      "usageLimits": "Kullanım sınırları",
-      "unlimited": "Sınırsız",
+      "allFeatures": "Planınıza dahil özellikler",
+      "usageLimits": "Aylık plan limitleri",
+      "unlimited": "Plana göre",
       "monthlyPrice": "Aylık fiyat"
     },
     "security": {
@@ -2476,13 +2508,15 @@
       "view": "Görüntüle"
     },
     "trial": {
-      "fullPlatform": "Tüm platform özellikleri açık",
+      "fullPlatform": "Seçtiğiniz plan deneme süresince aktiftir",
       "welcome": "{{days}} günlük deneyiminize hoş geldiniz, {{business}}",
-      "description": "Tüm özellikleri sınırsız keşfedin. Verileriniz, personeliniz, müşterileriniz ve rezervasyonlarınız hazır kalır.",
+      "description": "Seçtiğiniz plandaki özellikleri ve aylık kapasiteyi kullanın. İptal etmezseniz ücretlendirme denemeden sonra başlar.",
       "remaining": "Kalan deneme",
       "days": "{{count}} gün",
       "ends": "Deneme {{date}} tarihinde biter",
-      "started": "Deneme süreniz başladı"
+      "started": "Deneme süreniz başladı",
+      "daysRemaining": "{{days}} deneme günü kaldı",
+      "chargesOn": "İlk plan ücreti ücretsiz denemeden sonra {{date}} tarihinde alınır."
     },
     "subscriptionStatus": {
       "trialing": "Deneme",
@@ -2508,6 +2542,54 @@
       "checkoutFailed": "Stripe Checkout başlatılamadı",
       "portalUrlMissing": "Faturalandırma portalı URL’si döndürülmedi",
       "portalUnavailable": "Stripe faturalandırma portalı henüz bağlı değil"
+    },
+    "offer": {
+      "title": "Velliqo teklif kodunuz var mı?",
+      "description": "Sabit süreli teklifler seçilen planı 6 veya 12 ay gibi belirli bir süre sunabilir. Süre sonunda otomatik olarak biter ve yenilenmez.",
+      "placeholder": "Teklif kodu"
+    },
+    "usage": {
+      "staff": "Personel",
+      "aiRequests": "Bu ay AI istekleri",
+      "emails": "Bu ay e-postalar",
+      "sms": "Bu ay SMS"
+    },
+    "planFeatures": {
+      "staff": "En fazla {{count}} personel",
+      "staffApps": "Yüklenebilir kişisel Staff Apps",
+      "browserStaff": "Tarayıcıda güvenli Staff Portal (yükleme yok)",
+      "ai": "Ayda {{count}} AI isteği",
+      "email": "Ayda {{count}} e-posta",
+      "sms": "Ayda {{count}} SMS",
+      "advancedReports": "Gelişmiş raporlar ve intelligence",
+      "coreReports": "Temel işletme raporları"
+    },
+    "fixedTerm": {
+      "badge": "Sabit süreli teklif",
+      "title": "Bu abonelik otomatik yenilenmez",
+      "endsOn": "Erişim {{date}} tarihinde sona erecek ve otomatik devam etmeyecek.",
+      "noRenew": "Bu teklif sabit süresinin sonunda otomatik biter ve yenilenmez."
+    },
+    "autoRenew": {
+      "title": "Aylık otomatik yenileme",
+      "description": "Sahip Stripe üzerinden iptal, yükseltme veya düşürme yapana kadar plan aylık devam eder."
+    },
+    "payment": {
+      "saved": "Ödeme yöntemi güvence altında",
+      "required": "Ödeme yöntemi gerekli",
+      "secure": "Stripe ile güvenli"
+    },
+    "invoices": {
+      "title": "Faturalar ve makbuzlar",
+      "description": "Stripe ile senkronize faturalandırma geçmişi.",
+      "empty": "Henüz fatura yok. İlk ücretli işlemden sonra görünecektir.",
+      "open": "Faturayı aç"
+    },
+    "paymentIssue": {
+      "title": "Ödeme işlemi dikkat gerektiriyor",
+      "graceUntil": "Stripe son yenilemeyi tamamlayamadı. Ödeme kurtarma süreci devam ederken erişim {{date}} tarihine kadar açık kalır.",
+      "graceExpired": "Ödeme kurtarma ek süresi sona erdi. Faturalama çözülene kadar ücretli çalışma alanı erişimi duraklatıldı.",
+      "action": "Ödeme yöntemini güncellemek veya faturayı çözmek için Faturalamayı Yönet bölümünü açın."
     }
   },
   "posts": {
