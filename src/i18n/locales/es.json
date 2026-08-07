@@ -21,7 +21,27 @@
     "add_staff_member": "+ Añadir miembro",
     "almost_ready": "¡Casi listo!",
     "ready_desc1": "Configuraremos un horario estándar que podrás personalizar más tarde.",
-    "ready_desc2": "También comenzarás una prueba gratuita de 14 días."
+    "ready_desc2": "El plan seleccionado incluye una prueba gratuita de 14 días. La facturación comienza automáticamente después de la prueba salvo que canceles.",
+    "create_business": "Crear tu negocio",
+    "plan_billing": "Plan y facturación",
+    "choose_plan": "Confirma tu plan Velliqo",
+    "choose_plan_description": "El plan controla los límites de personal, AI y comunicaciones. Stripe recoge la facturación antes de activar la prueba de {{days}} días.",
+    "offer_code": "Código de oferta especial",
+    "offer_code_description": "Opcional. Los códigos de duración fija terminan automáticamente sin renovación.",
+    "stripe_security": "Velliqo no guarda datos de tarjetas. Stripe recoge el método de pago y después empieza la prueba gratuita de {{days}} días.",
+    "plan_summary": "Hasta {{staff}} empleados · {{ai}} solicitudes de AI/mes",
+    "staff_plan_limit": "{{plan}}: {{used}} de {{count}} plazas utilizadas.",
+    "staff_limit_reached": "Límite de personal alcanzado",
+    "plan_staff_limit_error": "{{plan}} permite hasta {{count}} empleados. Elimina uno o elige un plan superior.",
+    "ready_title": "Tu espacio {{industry}} está listo para facturación",
+    "ready_description": "{{plan}} está seleccionado. Stripe recogerá la facturación y activará la prueba de {{days}} días.",
+    "final_checkout_note": "Al continuar se abre Stripe de forma segura. La prueba empieza solo al completar el checkout.",
+    "activate_trial": "Continuar a facturación y activar prueba",
+    "checkout_resume": "El negocio se creó, pero la facturación debe completarse desde Billing.",
+    "failed": "No se pudo completar la configuración",
+    "services_description": "Añade cada servicio con precio y duración. Las sugerencias se basan en {{industry}}.",
+    "category": "Categoría",
+    "duration": "Duración (minutos)"
   },
   "dashboard": {
     "home": "Inicio",
@@ -188,7 +208,7 @@
     "benefit_storefront": "Tu propia página pública de reservas",
     "benefit_reports": "Informes operativos y de rendimiento claros",
     "free_trial_title": "Una experiencia Velliqo completa",
-    "free_trial_text": "Todos los módulos esenciales del negocio están incluidos en un espacio claro.",
+    "free_trial_text": "Elige un plan, añade la facturación de forma segura después de la configuración y usa Velliqo gratis durante 14 días.",
     "owner_registration": "Registro de propietario",
     "change_business_type": "Cambiar tipo de negocio",
     "owner_registration_industry": "Registro de propietario para {{industry}}",
@@ -207,7 +227,12 @@
     "owners_only": "Este registro es para propietarios de negocios. Los clientes se registran desde la página pública de cada negocio.",
     "email_confirmed_title": "Correo confirmado",
     "email_confirmed_text": "Tu cuenta está lista. Te estamos llevando a la página segura de inicio de sesión.",
-    "redirecting": "Redirigiendo..."
+    "redirecting": "Redirigiendo...",
+    "choose_plan": "Elige tu plan",
+    "choose_plan_hint": "La prueba de {{days}} días usa los límites del plan seleccionado.",
+    "compare_plans": "Comparar planes",
+    "plan_staff_limit": "Hasta {{count}} empleados",
+    "billing_after_setup": "Después de configurar el negocio añadirás los datos de facturación de forma segura con Stripe. No se cobra al iniciar la prueba de {{days}} días."
   },
   "terminology": {
     "staff": "Personal",
@@ -886,7 +911,8 @@
         "accessReady": "El acceso personal está listo. El empleado puede solicitar un enlace sin contraseña desde la app.",
         "linkCopied": "Enlace de la app copiado"
       }
-    }
+    },
+    "planLimit": "Plan {{plan}} · {{used}} / {{limit}} plazas"
   },
   "services": {
     "eyebrow": "Catálogo de servicios",
@@ -1324,7 +1350,8 @@
     "generic": {
       "unassigned": "Sin asignar",
       "customer": "Cliente"
-    }
+    },
+    "planUpgradeRequired": "Los informes avanzados de Finanzas, Ingresos y Productos están disponibles en Pro y Premium."
   },
   "storefront": {
     "owner": {
@@ -2395,7 +2422,7 @@
   "billing": {
     "eyebrow": "Experiencia de suscripción",
     "title": "Facturación",
-    "description": "Empieza con todas las funciones durante {{days}} días y continúa con un plan Profesional ilimitado.",
+    "description": "Elige la capacidad adecuada para tu negocio. Cada plan comienza con una prueba gratuita de {{days}} días con método de pago registrado.",
     "common": {
       "yourBusiness": "tu negocio"
     },
@@ -2406,24 +2433,29 @@
       "opening": "Abriendo...",
       "manageBilling": "Gestionar facturación",
       "openingCheckout": "Abriendo pago seguro...",
-      "continueProfessional": "Continuar con Profesional",
-      "manageSubscription": "Gestionar suscripción"
+      "continueProfessional": "Gestionar plan seleccionado",
+      "manageSubscription": "Gestionar suscripción",
+      "changePlan": "Cambiar plan",
+      "currentPlan": "Plan actual",
+      "startTrial": "Iniciar prueba de 14 días",
+      "fixedTermLocked": "Bloqueado por oferta de duración fija"
     },
     "plan": {
-      "freeTrialAllFeatures": "Prueba gratuita — Todas las funciones",
-      "professional": "Plan Profesional",
+      "freeTrialAllFeatures": "Prueba del plan de 14 días",
+      "professional": "plan seleccionado",
       "mostPopular": "Más popular",
-      "description": "Todo lo que necesita tu negocio. Sin límites de funciones.",
+      "description": "Las funciones y límites siguen el plan seleccionado durante la prueba y después de iniciar la facturación.",
       "perMonth": "al mes",
       "cancelThroughStripe": "Cancela cuando quieras mediante Stripe",
-      "unlimitedTitle": "Ilimitado por diseño",
-      "active": "Tu Plan Profesional está activo",
+      "unlimitedTitle": "Capacidad según el plan",
+      "active": "Tu plan seleccionado está activo",
       "freeTrial": "Prueba gratuita de {{days}} días",
-      "trialDaysRemaining": "Quedan {{count}} días de prueba"
+      "trialDaysRemaining": "Quedan {{count}} días de prueba",
+      "trialIncluded": "Prueba gratuita de {{days}} días incluida"
     },
     "features": {
       "appointments": "Citas ilimitadas",
-      "staff": "Perfiles de personal ilimitados",
+      "staff": "Capacidad de personal según el plan",
       "services": "Servicios ilimitados",
       "crm": "CRM completo de clientes",
       "customerRecords": "Fórmulas, notas y fotos de clientes",
@@ -2441,9 +2473,9 @@
       "plan": "Plan",
       "status": "Estado",
       "featureAccess": "Acceso a funciones",
-      "allFeatures": "Todas las funciones",
-      "usageLimits": "Límites de uso",
-      "unlimited": "Ilimitado",
+      "allFeatures": "Funciones incluidas en tu plan",
+      "usageLimits": "Límites mensuales del plan",
+      "unlimited": "Según el plan",
       "monthlyPrice": "Precio mensual"
     },
     "security": {
@@ -2467,7 +2499,7 @@
       "title": "Historial de pagos",
       "description": "Las facturas y recibos pagados aparecen automáticamente tras sincronizar Stripe.",
       "emptyTitle": "Aún no hay facturas",
-      "emptyDescription": "La primera factura aparecerá cuando comience el Plan Profesional.",
+      "emptyDescription": "La primera factura aparecerá cuando comience el plan seleccionado.",
       "invoice": "Factura",
       "date": "Fecha",
       "amount": "Importe",
@@ -2476,13 +2508,15 @@
       "view": "Ver"
     },
     "trial": {
-      "fullPlatform": "Plataforma completa desbloqueada",
+      "fullPlatform": "Tu plan seleccionado está activo durante la prueba",
       "welcome": "Bienvenido a tu prueba de {{days}} días, {{business}}",
-      "description": "Explora todas las funciones sin límites. Tus datos, equipo, clientes y reservas seguirán listos al continuar con Profesional.",
+      "description": "Usa las funciones y la capacidad mensual incluidas en tu plan. La facturación empieza después de la prueba salvo que canceles.",
       "remaining": "Prueba restante",
       "days": "{{count}} días",
       "ends": "La prueba termina el {{date}}",
-      "started": "Tu período de prueba ha comenzado"
+      "started": "Tu período de prueba ha comenzado",
+      "daysRemaining": "Quedan {{days}} días de prueba",
+      "chargesOn": "El primer cargo está previsto después de la prueba, el {{date}}."
     },
     "subscriptionStatus": {
       "trialing": "En prueba",
@@ -2501,13 +2535,61 @@
       "uncollectible": "Incobrable"
     },
     "messages": {
-      "checkoutCompleted": "El pago del Plan Profesional se completó. La suscripción se está activando.",
+      "checkoutCompleted": "El pago del plan seleccionado se completó. La suscripción se está activando.",
       "checkoutCancelled": "El pago se canceló. Tu acceso actual no cambió.",
       "loadFailed": "No se pudo cargar la información de facturación",
       "checkoutUrlMissing": "No se devolvió la URL de pago",
       "checkoutFailed": "No se pudo iniciar Stripe Checkout",
       "portalUrlMissing": "No se devolvió la URL del portal",
       "portalUnavailable": "El portal de facturación de Stripe aún no está conectado"
+    },
+    "offer": {
+      "title": "¿Tienes un código de oferta Velliqo?",
+      "description": "Las ofertas de duración fija pueden proporcionar un plan durante 6 o 12 meses. Terminan automáticamente y no se renuevan después.",
+      "placeholder": "Código de oferta"
+    },
+    "usage": {
+      "staff": "Personal",
+      "aiRequests": "Solicitudes de AI este mes",
+      "emails": "Emails este mes",
+      "sms": "SMS este mes"
+    },
+    "planFeatures": {
+      "staff": "Hasta {{count}} empleados",
+      "staffApps": "Staff Apps personales instalables",
+      "browserStaff": "Staff Portal seguro en navegador (sin instalación)",
+      "ai": "{{count}} solicitudes de AI al mes",
+      "email": "{{count}} emails al mes",
+      "sms": "{{count}} SMS al mes",
+      "advancedReports": "Informes e inteligencia avanzados",
+      "coreReports": "Informes básicos del negocio"
+    },
+    "fixedTerm": {
+      "badge": "Oferta de duración fija",
+      "title": "Esta suscripción no se renueva automáticamente",
+      "endsOn": "El acceso finalizará el {{date}} y no continuará automáticamente.",
+      "noRenew": "La oferta termina automáticamente al final del plazo y no se renueva."
+    },
+    "autoRenew": {
+      "title": "Renovación mensual automática",
+      "description": "El plan continúa cada mes hasta que el propietario lo cancele, mejore o reduzca desde Stripe."
+    },
+    "payment": {
+      "saved": "Método de pago protegido",
+      "required": "Método de pago requerido",
+      "secure": "Protegido por Stripe"
+    },
+    "invoices": {
+      "title": "Facturas y recibos",
+      "description": "Historial de facturación sincronizado con Stripe.",
+      "empty": "Aún no hay facturas. La primera aparecerá tras el primer evento de pago.",
+      "open": "Abrir factura"
+    },
+    "paymentIssue": {
+      "title": "El pago requiere atención",
+      "graceUntil": "Stripe no pudo completar la última renovación. El acceso permanece disponible durante la recuperación del pago hasta {{date}}.",
+      "graceExpired": "El período de gracia de recuperación ha terminado. El acceso de pago queda pausado hasta resolver la facturación.",
+      "action": "Abre Gestionar facturación para actualizar el método de pago o resolver la factura."
     }
   },
   "posts": {

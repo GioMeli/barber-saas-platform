@@ -50,7 +50,7 @@ requireText('src/db/staffSupabase.ts', 'autoRefreshToken: true', 'automatic staf
 requireText('src/db/staffSupabase.ts', 'velliqo.staff.auth.${employeeSessionId', 'employee-isolated staff auth storage');
 requireText('src/db/supabase.ts', 'detectSessionInUrl: !isStaffRoute', 'staff magic-link client isolation');
 requireText('src/hooks/useStaffPWA.ts', 'employee?.id', 'employee-specific manifest');
-requireText('src/hooks/useStaffPWA.ts', "v: '8'", 'staff manifest cache/version hardening');
+requireText('src/hooks/useStaffPWA.ts', "v: '10'", 'staff manifest cache/version hardening');
 requireText('src/pwa/installPromptStore.ts', 'beforeinstallprompt', 'early install prompt capture');
 requireText('src/hooks/usePWAStatus.ts', '15_000', 'install prompt timeout recovery');
 requireText('index.html', '/staff-manifest/', 'staff manifest preloaded before React');

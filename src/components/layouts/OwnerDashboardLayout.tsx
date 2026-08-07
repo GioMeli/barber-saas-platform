@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { supabase } from '@/db/supabase';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -21,10 +21,36 @@ export default function OwnerDashboardLayout() {
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
   const [isAIOpen, setIsAIOpen] = React.useState(false);
   const [isTourOpen, setIsTourOpen] = React.useState(false);
+  const [billingAccess, setBillingAccess] = React.useState<boolean | null>(null);
+
+  React.useEffect(() => {
+    if (!activeBusiness?.id) {
+      setBillingAccess(null);
+      return;
+    }
+    let cancelled = false;
+    void (supabase as any).rpc('get_business_billing_summary', { p_business_id: activeBusiness.id }).then(({ data, error }: any) => {
+      if (cancelled) return;
+      if (error) {
+        console.warn('Unable to validate billing access', error);
+        // Do not destroy an active form because of a transient network check.
+        // Database/Edge Function entitlements still protect privileged actions.
+        setBillingAccess((current) => current ?? true);
+        return;
+      }
+      setBillingAccess(Boolean(data?.access_allowed));
+    });
+    return () => { cancelled = true; };
+  }, [activeBusiness?.id]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
+
+  const isBillingRoute = location.pathname === '/dashboard/billing';
+  if (billingAccess === false && !isBillingRoute) {
+    return <Navigate to="/dashboard/billing?setup=required" replace />;
+  }
 
   return (
     <IndustryThemeRoot industryKey={activeBusiness?.industry_key}>

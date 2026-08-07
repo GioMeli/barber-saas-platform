@@ -16,6 +16,7 @@ import {
   Download,
   Euro,
   Package,
+  LockKeyhole,
   Percent,
   PieChart,
   Printer,
@@ -90,6 +91,7 @@ export default function Reports() {
 
   const [activeTab, setActiveTab] = useState<ReportTab>('executive');
   const [loading, setLoading] = useState(true);
+  const [advancedReportsEnabled, setAdvancedReportsEnabled] = useState(true);
   const [dateRange, setDateRange] = useState({
     start: format(startOfMonth(new Date()), 'yyyy-MM-dd'),
     end: format(endOfMonth(new Date()), 'yyyy-MM-dd'),
@@ -108,6 +110,13 @@ export default function Reports() {
   useEffect(() => {
     if (businessId) void fetchData();
   }, [businessId, dateRange.start, dateRange.end]);
+
+  useEffect(() => {
+    if (!businessId) return;
+    void (supabase as any).rpc('get_business_billing_summary', { p_business_id: businessId }).then(({ data }: any) => {
+      setAdvancedReportsEnabled(data?.plan?.advanced_reports_enabled !== false);
+    });
+  }, [businessId]);
 
   const fetchData = async () => {
     if (!businessId) return;
@@ -274,15 +283,15 @@ export default function Reports() {
     URL.revokeObjectURL(url);
   };
 
-  const tabs: Array<{ id: ReportTab; label: string; icon: React.ReactNode }> = [
+  const tabs: Array<{ id: ReportTab; label: string; icon: React.ReactNode; advanced?: boolean }> = [
     { id: 'executive', label: t('reports.tabs.executive'), icon: <PieChart className="h-4 w-4" /> },
-    { id: 'finance', label: t('reports.tabs.finance'), icon: <WalletCards className="h-4 w-4" /> },
-    { id: 'revenue', label: t('reports.tabs.revenue'), icon: <Euro className="h-4 w-4" /> },
+    { id: 'finance', label: t('reports.tabs.finance'), icon: <WalletCards className="h-4 w-4" />, advanced: true },
+    { id: 'revenue', label: t('reports.tabs.revenue'), icon: <Euro className="h-4 w-4" />, advanced: true },
     { id: 'appointments', label: t('reports.tabs.appointments'), icon: <CalendarDays className="h-4 w-4" /> },
     { id: 'staff', label: t('reports.tabs.staff'), icon: <UserRound className="h-4 w-4" /> },
     { id: 'services', label: t('reports.tabs.services'), icon: <Scissors className="h-4 w-4" /> },
     { id: 'customers', label: t('reports.tabs.customers'), icon: <Users className="h-4 w-4" /> },
-    { id: 'products', label: t('reports.tabs.products'), icon: <Package className="h-4 w-4" /> },
+    { id: 'products', label: t('reports.tabs.products'), icon: <Package className="h-4 w-4" />, advanced: true },
   ];
 
   return (
@@ -373,14 +382,20 @@ export default function Reports() {
                 key={tab.id}
                 type="button"
                 data-tour={`reports-tab-${tab.id}`}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => {
+                  if (tab.advanced && !advancedReportsEnabled) {
+                    toast.info(t('reports.planUpgradeRequired'));
+                    return;
+                  }
+                  setActiveTab(tab.id);
+                }}
                 className={`flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition ${
                   activeTab === tab.id
                     ? 'bg-primary text-primary-foreground shadow-sm'
                     : 'text-muted-foreground hover:bg-muted hover:text-foreground'
-                }`}
+                } ${tab.advanced && !advancedReportsEnabled ? 'opacity-55' : ''}`}
               >
-                {tab.icon}{tab.label}
+                {tab.icon}{tab.label}{tab.advanced && !advancedReportsEnabled && <LockKeyhole className="h-3.5 w-3.5" />}
               </button>
             ))}
           </div>

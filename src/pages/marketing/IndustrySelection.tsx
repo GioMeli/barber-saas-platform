@@ -52,7 +52,7 @@ export default function IndustrySelection() {
                 <Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Start your workspace <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
                 <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] px-6 text-white hover:bg-white/[.08] hover:text-white"><Link to="/velliqo-ai"><PlayCircle className="mr-2 h-4 w-4" />See Velliqo AI</Link></Button>
               </div>
-              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42"><TrustItem text="14-day free trial" dark /><TrustItem text="No card required" dark /><TrustItem text="Industry-aware setup" dark /></div>
+              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42"><TrustItem text="14-day free trial" dark /><TrustItem text="Secure Stripe billing" dark /><TrustItem text="Industry-aware setup" dark /></div>
             </div>
             <VelliqoAIPreview compact />
             </div>

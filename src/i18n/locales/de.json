@@ -21,7 +21,27 @@
     "add_staff_member": "+ Mitarbeiter hinzufügen",
     "almost_ready": "Fast fertig!",
     "ready_desc1": "Wir richten Standardarbeitszeiten ein, die Sie später anpassen können.",
-    "ready_desc2": "Sie starten außerdem eine 14-tägige kostenlose Testphase."
+    "ready_desc2": "Ihr gewählter Tarif enthält eine 14-tägige kostenlose Testphase. Danach beginnt die Abrechnung automatisch, sofern Sie nicht kündigen.",
+    "create_business": "Unternehmen erstellen",
+    "plan_billing": "Tarif & Abrechnung",
+    "choose_plan": "Velliqo-Tarif bestätigen",
+    "choose_plan_description": "Der Tarif bestimmt Mitarbeiter-, AI- und Kommunikationslimits. Zahlungsdaten werden vor Aktivierung der {{days}}-tägigen Testphase sicher erfasst.",
+    "offer_code": "Sonderangebotscode",
+    "offer_code_description": "Optional. Befristete Codes enden nach der festgelegten Laufzeit automatisch ohne Verlängerung.",
+    "stripe_security": "Velliqo speichert keine Kartendaten. Stripe erfasst die Zahlungsmethode sicher; danach startet die {{days}}-tägige kostenlose Testphase.",
+    "plan_summary": "Bis zu {{staff}} Mitarbeiter · {{ai}} AI-Anfragen/Monat",
+    "staff_plan_limit": "{{plan}}: {{used}} von {{count}} Mitarbeiterplätzen belegt.",
+    "staff_limit_reached": "Mitarbeiterlimit erreicht",
+    "plan_staff_limit_error": "{{plan}} erlaubt bis zu {{count}} Mitarbeiter. Entfernen Sie einen Mitarbeiter oder wählen Sie einen höheren Tarif.",
+    "ready_title": "Ihr {{industry}}-Workspace ist abrechnungsbereit",
+    "ready_description": "{{plan}} ist gewählt. Stripe erfasst die Zahlungsdaten und aktiviert danach die {{days}}-tägige Testphase.",
+    "final_checkout_note": "Beim Fortfahren öffnet sich Stripe sicher. Die Testphase beginnt erst nach Abschluss des Checkouts.",
+    "activate_trial": "Zur Abrechnung & Testphase aktivieren",
+    "checkout_resume": "Das Unternehmen wurde erstellt; die Abrechnung muss noch unter Billing abgeschlossen werden.",
+    "failed": "Einrichtung konnte nicht abgeschlossen werden",
+    "services_description": "Fügen Sie Leistungen mit Preis und Dauer hinzu. Vorschläge basieren auf {{industry}}.",
+    "category": "Kategorie",
+    "duration": "Dauer (Minuten)"
   },
   "dashboard": {
     "home": "Start",
@@ -188,7 +208,7 @@
     "benefit_storefront": "Ihre eigene öffentliche Buchungsseite",
     "benefit_reports": "Klare Betriebs- und Leistungsberichte",
     "free_trial_title": "Ein vollständiges Velliqo-Erlebnis",
-    "free_trial_text": "Alle zentralen Unternehmensmodule sind in einem übersichtlichen Arbeitsbereich enthalten.",
+    "free_trial_text": "Tarif wählen, Zahlungsdaten nach der Einrichtung sicher hinterlegen und Velliqo 14 Tage kostenlos nutzen.",
     "owner_registration": "Inhaberregistrierung",
     "change_business_type": "Unternehmenstyp ändern",
     "owner_registration_industry": "Inhaberregistrierung für {{industry}}",
@@ -207,7 +227,12 @@
     "owners_only": "Diese Registrierung ist für Unternehmensinhaber. Kunden registrieren sich über die öffentliche Seite des jeweiligen Unternehmens.",
     "email_confirmed_title": "E-Mail bestätigt",
     "email_confirmed_text": "Ihr Konto ist bereit. Sie werden zur sicheren Anmeldung weitergeleitet.",
-    "redirecting": "Weiterleitung..."
+    "redirecting": "Weiterleitung...",
+    "choose_plan": "Tarif wählen",
+    "choose_plan_hint": "Die {{days}}-tägige Testphase nutzt die Limits des gewählten Tarifs.",
+    "compare_plans": "Tarife vergleichen",
+    "plan_staff_limit": "Bis zu {{count}} Mitarbeiter",
+    "billing_after_setup": "Nach der Einrichtung werden die Zahlungsdaten sicher über Stripe hinterlegt. Beim Start der {{days}}-tägigen Testphase erfolgt keine Belastung."
   },
   "terminology": {
     "staff": "Mitarbeitende",
@@ -886,7 +911,8 @@
         "accessReady": "Der persönliche Zugang ist bereit. Das Teammitglied kann in der Mitarbeiter-App einen passwortlosen Link anfordern.",
         "linkCopied": "Link zur Mitarbeiter-App kopiert"
       }
-    }
+    },
+    "planLimit": "{{plan}} · {{used}} / {{limit}} Mitarbeiterplätze"
   },
   "services": {
     "eyebrow": "Dienstleistungskatalog",
@@ -1324,7 +1350,8 @@
     "generic": {
       "unassigned": "Nicht zugewiesen",
       "customer": "Kunde"
-    }
+    },
+    "planUpgradeRequired": "Erweiterte Finanz-, Umsatz- und Produktberichte sind in Pro und Premium verfügbar."
   },
   "storefront": {
     "owner": {
@@ -2395,7 +2422,7 @@
   "billing": {
     "eyebrow": "Abonnement",
     "title": "Abrechnung",
-    "description": "Starten Sie {{days}} Tage mit allen Funktionen und wechseln Sie danach zum unbegrenzten Professional-Plan.",
+    "description": "Wählen Sie die passende Kapazität für Ihr Unternehmen. Jeder Tarif startet mit einer {{days}}-tägigen kostenlosen Testphase mit hinterlegter Zahlungsmethode.",
     "common": {
       "yourBusiness": "Ihr Betrieb"
     },
@@ -2406,24 +2433,29 @@
       "opening": "Wird geöffnet...",
       "manageBilling": "Abrechnung verwalten",
       "openingCheckout": "Sicherer Checkout wird geöffnet...",
-      "continueProfessional": "Mit Professional fortfahren",
-      "manageSubscription": "Abonnement verwalten"
+      "continueProfessional": "Gewählten Tarif verwalten",
+      "manageSubscription": "Abonnement verwalten",
+      "changePlan": "Tarif wechseln",
+      "currentPlan": "Aktueller Tarif",
+      "startTrial": "14-Tage-Test starten",
+      "fixedTermLocked": "Für befristetes Angebot gesperrt"
     },
     "plan": {
-      "freeTrialAllFeatures": "Kostenlose Testphase — Alle Funktionen",
-      "professional": "Professional-Plan",
+      "freeTrialAllFeatures": "14-Tage-Tariftest",
+      "professional": "gewählter Tarif",
       "mostPopular": "Am beliebtesten",
-      "description": "Alles, was Ihr Betrieb braucht. Keine Funktionslimits.",
+      "description": "Funktionen und Limits richten sich während der Testphase und danach nach dem gewählten Tarif.",
       "perMonth": "pro Monat",
       "cancelThroughStripe": "Jederzeit über Stripe kündbar",
-      "unlimitedTitle": "Von Grund auf unbegrenzt",
-      "active": "Ihr Professional-Plan ist aktiv",
+      "unlimitedTitle": "Tarifbasierte Kapazität",
+      "active": "Ihr gewählter Tarif ist aktiv",
       "freeTrial": "{{days}} Tage kostenlos testen",
-      "trialDaysRemaining": "{{count}} Testtage verbleiben"
+      "trialDaysRemaining": "{{count}} Testtage verbleiben",
+      "trialIncluded": "{{days}} Tage kostenlose Testphase inklusive"
     },
     "features": {
       "appointments": "Unbegrenzte Termine",
-      "staff": "Unbegrenzte Mitarbeiterprofile",
+      "staff": "Teamkapazität gemäß Tarif",
       "services": "Unbegrenzte Services",
       "crm": "Vollständiges Kunden-CRM",
       "customerRecords": "Kundenformeln, Notizen und Fotos",
@@ -2441,9 +2473,9 @@
       "plan": "Plan",
       "status": "Status",
       "featureAccess": "Funktionszugriff",
-      "allFeatures": "Alle Funktionen",
-      "usageLimits": "Nutzungslimits",
-      "unlimited": "Unbegrenzt",
+      "allFeatures": "Im Tarif enthaltene Funktionen",
+      "usageLimits": "Monatliche Tariflimits",
+      "unlimited": "Gemäß Tarif",
       "monthlyPrice": "Monatspreis"
     },
     "security": {
@@ -2467,7 +2499,7 @@
       "title": "Zahlungsverlauf",
       "description": "Bezahlte Rechnungen und Belege erscheinen nach der Stripe-Synchronisierung automatisch.",
       "emptyTitle": "Noch keine Rechnungen",
-      "emptyDescription": "Die erste Rechnung erscheint nach Beginn des Professional-Plans.",
+      "emptyDescription": "Die erste Rechnung erscheint nach Beginn des gewählter Tarifs.",
       "invoice": "Rechnung",
       "date": "Datum",
       "amount": "Betrag",
@@ -2476,13 +2508,15 @@
       "view": "Anzeigen"
     },
     "trial": {
-      "fullPlatform": "Vollständige Plattform freigeschaltet",
+      "fullPlatform": "Ihr gewählter Tarif ist während der Testphase aktiv",
       "welcome": "Willkommen zu Ihrer {{days}}-tägigen Testphase, {{business}}",
-      "description": "Testen Sie alle Funktionen ohne Limits. Daten, Team, Kunden und Buchungen bleiben beim Wechsel zu Professional erhalten.",
+      "description": "Nutzen Sie die Funktionen und monatlichen Kapazitäten Ihres gewählten Tarifs. Die Abrechnung beginnt nach der Testphase, sofern Sie nicht kündigen.",
       "remaining": "Verbleibende Testzeit",
       "days": "{{count}} Tage",
       "ends": "Testphase endet am {{date}}",
-      "started": "Ihre Testphase hat begonnen"
+      "started": "Ihre Testphase hat begonnen",
+      "daysRemaining": "Noch {{days}} Testtage",
+      "chargesOn": "Die erste Tarifabbuchung erfolgt nach der Testphase am {{date}}."
     },
     "subscriptionStatus": {
       "trialing": "Testphase",
@@ -2501,13 +2535,61 @@
       "uncollectible": "Nicht einziehbar"
     },
     "messages": {
-      "checkoutCompleted": "Checkout abgeschlossen. Ihr Professional-Plan wird aktiviert.",
+      "checkoutCompleted": "Checkout abgeschlossen. Ihr gewählter Tarif wird aktiviert.",
       "checkoutCancelled": "Checkout abgebrochen. Ihr Zugriff wurde nicht geändert.",
       "loadFailed": "Abrechnungsdaten konnten nicht geladen werden",
       "checkoutUrlMissing": "Checkout-URL wurde nicht zurückgegeben",
       "checkoutFailed": "Stripe Checkout konnte nicht gestartet werden",
       "portalUrlMissing": "Portal-URL wurde nicht zurückgegeben",
       "portalUnavailable": "Das Stripe-Abrechnungsportal ist noch nicht verbunden"
+    },
+    "offer": {
+      "title": "Haben Sie einen Velliqo-Angebotscode?",
+      "description": "Befristete Angebote können einen Tarif z. B. 6 oder 12 Monate bereitstellen. Sie enden automatisch und verlängern sich danach nicht.",
+      "placeholder": "Angebotscode"
+    },
+    "usage": {
+      "staff": "Mitarbeiter",
+      "aiRequests": "AI-Anfragen diesen Monat",
+      "emails": "E-Mails diesen Monat",
+      "sms": "SMS diesen Monat"
+    },
+    "planFeatures": {
+      "staff": "Bis zu {{count}} Mitarbeiter",
+      "staffApps": "Installierbare persönliche Staff Apps",
+      "browserStaff": "Sicheres Staff Portal im Browser (keine Installation)",
+      "ai": "{{count}} AI-Anfragen pro Monat",
+      "email": "{{count}} E-Mails pro Monat",
+      "sms": "{{count}} SMS pro Monat",
+      "advancedReports": "Erweiterte Berichte und Intelligence",
+      "coreReports": "Grundlegende Geschäftsberichte"
+    },
+    "fixedTerm": {
+      "badge": "Befristetes Angebot",
+      "title": "Dieses Abonnement verlängert sich nicht automatisch",
+      "endsOn": "Der Zugang endet planmäßig am {{date}} und läuft danach nicht automatisch weiter.",
+      "noRenew": "Dieses Angebot endet automatisch und verlängert sich nicht."
+    },
+    "autoRenew": {
+      "title": "Monatliche automatische Verlängerung",
+      "description": "Der Tarif läuft monatlich weiter, bis der Inhaber ihn über Stripe kündigt, hoch- oder herunterstuft."
+    },
+    "payment": {
+      "saved": "Zahlungsmethode gesichert",
+      "required": "Zahlungsmethode erforderlich",
+      "secure": "Gesichert durch Stripe"
+    },
+    "invoices": {
+      "title": "Rechnungen & Belege",
+      "description": "Mit Stripe synchronisierter Zahlungsverlauf.",
+      "empty": "Noch keine Rechnungen. Die erste erscheint nach dem ersten kostenpflichtigen Ereignis.",
+      "open": "Rechnung öffnen"
+    },
+    "paymentIssue": {
+      "title": "Zahlung erfordert Aufmerksamkeit",
+      "graceUntil": "Stripe konnte die letzte Verlängerung nicht abschließen. Der Zugriff bleibt während der Zahlungswiederherstellung bis {{date}} verfügbar.",
+      "graceExpired": "Die Zahlungsfrist ist abgelaufen. Der kostenpflichtige Workspace bleibt gesperrt, bis die Abrechnung geklärt ist.",
+      "action": "Öffnen Sie „Abrechnung verwalten“, um die Zahlungsmethode zu aktualisieren oder die Rechnung zu klären."
     }
   },
   "posts": {

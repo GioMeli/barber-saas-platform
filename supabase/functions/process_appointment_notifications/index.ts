@@ -130,6 +130,13 @@ async function processJob(job: NotificationJob) {
       return { job_id: job.id, status: 'skipped', reason: 'sms_disabled' };
     }
 
+    const { data: quota, error: quotaError } = await supabase.rpc('billing_can_send_communication', { p_business_id: job.business_id, p_channel: job.channel });
+    if (quotaError) throw quotaError;
+    if (quota?.allowed === false) {
+      await cancelJob(job.id, `Monthly ${job.channel} allowance reached (${quota.used}/${quota.limit})`);
+      return { job_id: job.id, status: 'skipped', reason: 'plan_monthly_quota_reached', used: quota.used, limit: quota.limit };
+    }
+
     const recipients = job.recipient_type === 'customer'
       ? resolveCustomerRecipients(job.channel, customer)
       : await resolveOwnerRecipients(job.business_id, job.channel);

@@ -275,6 +275,9 @@ async function processBusiness(
   settings: AutomationSettings,
   options: { force: boolean; runType: 'manual_refresh' | 'scheduled_scan'; requestedBy?: string; requestedLanguage?: Language },
 ) {
+  const entitlement = await billingAutomationEntitlement(settings.business_id);
+  if (!entitlement.allowed) return { status: 'skipped', reason: entitlement.reason };
+
   const { data: businessData, error: businessError } = await service
     .from('businesses')
     .select('id,name,timezone,currency,industry_key,country')
@@ -475,6 +478,15 @@ async function processBusiness(
 }
 
 
+async function billingAutomationEntitlement(businessId: string) {
+  const { data, error } = await service.rpc('get_business_billing_summary', { p_business_id: businessId });
+  if (error) throw error;
+  if (!data?.access_allowed) return { allowed: false, reason: 'subscription_inactive' };
+  if (data?.plan?.ai_automations_enabled !== true) return { allowed: false, reason: 'plan_ai_automations_disabled' };
+  return { allowed: true, reason: null };
+}
+
+
 async function runOperationalAutomationScan() {
   const workerId = crypto.randomUUID();
 
@@ -552,6 +564,10 @@ async function runOperationalAutomationScan() {
 }
 
 async function processOperationalAutomationRun(run: OperationalRun): Promise<OperationalOutcome> {
+  const entitlement = await billingAutomationEntitlement(run.business_id);
+  if (!entitlement.allowed) {
+    return { status: 'skipped', summary: 'AI automations are not included in the current plan.', alertCount: 0, actionRequestIds: [], output: { reason: entitlement.reason } };
+  }
   const [ruleResult, businessResult, settingsResult] = await Promise.all([
     service
       .from('ai_automation_rules')

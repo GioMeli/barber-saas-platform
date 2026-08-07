@@ -135,6 +135,13 @@ async function processJob(job: ReminderJob) {
       return { job_id: job.id, status: 'skipped', reason: 'sms_reminders_disabled' };
     }
 
+    const { data: quota, error: quotaError } = await supabase.rpc('billing_can_send_communication', { p_business_id: job.business_id, p_channel: job.channel });
+    if (quotaError) throw quotaError;
+    if (quota?.allowed === false) {
+      await cancelJob(job.id, `Monthly ${job.channel} allowance reached (${quota.used}/${quota.limit})`);
+      return { job_id: job.id, status: 'skipped', reason: 'plan_monthly_quota_reached', used: quota.used, limit: quota.limit };
+    }
+
     const recipient = job.channel === 'email'
       ? String(customer?.email || '').trim().toLowerCase()
       : normalizePhone(customer?.phone);

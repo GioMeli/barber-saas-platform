@@ -21,7 +21,27 @@
     "add_staff_member": "+ Add Staff Member",
     "almost_ready": "Almost ready!",
     "ready_desc1": "We'll set up standard working hours (9 AM - 5 PM, Mon-Fri) which you can customize later in the dashboard.",
-    "ready_desc2": "You'll also start on a 14-day free trial of our Professional Plan (€30/month)."
+    "ready_desc2": "Your selected plan includes a 14-day free trial. Billing starts automatically after the trial unless you cancel.",
+    "create_business": "Create your business",
+    "plan_billing": "Plan & billing",
+    "choose_plan": "Confirm your Velliqo plan",
+    "choose_plan_description": "The selected plan controls staff, AI and communication capacity. Stripe billing details are collected securely before the {{days}}-day trial is activated.",
+    "offer_code": "Special offer code",
+    "offer_code_description": "Optional. Fixed-term codes can provide a plan for a defined period and automatically stop instead of renewing after that term.",
+    "stripe_security": "Velliqo never stores raw card data. Stripe securely collects the billing method, then the {{days}}-day trial starts with no immediate subscription charge.",
+    "plan_summary": "Up to {{staff}} staff · {{ai}} AI requests/month",
+    "staff_plan_limit": "{{plan}}: {{used}} of {{count}} staff places used during setup.",
+    "staff_limit_reached": "Plan staff limit reached",
+    "plan_staff_limit_error": "{{plan}} allows up to {{count}} staff members. Remove a staff member or choose a higher plan.",
+    "ready_title": "Your {{industry}} workspace is ready for billing",
+    "ready_description": "{{plan}} is selected. Secure Stripe checkout will collect billing details and then activate your {{days}}-day free trial.",
+    "final_checkout_note": "When you continue, Stripe opens securely to collect billing details. The trial begins only after checkout is completed.",
+    "activate_trial": "Continue to billing & activate trial",
+    "checkout_resume": "Your business was created, but billing setup still needs to be completed. Continue from Billing.",
+    "failed": "Failed to complete business setup",
+    "services_description": "Add each service with its customer price and duration. Suggestions are based on {{industry}}.",
+    "category": "Category",
+    "duration": "Duration (minutes)"
   },
   "dashboard": {
     "home": "Home",
@@ -188,7 +208,7 @@
     "benefit_storefront": "Your own public booking page",
     "benefit_reports": "Clear operational and performance reports",
     "free_trial_title": "One complete Velliqo experience",
-    "free_trial_text": "Every core business module is included in one clear workspace.",
+    "free_trial_text": "Choose a plan now, add billing details securely after setup and use Velliqo free for 14 days before the first automatic plan charge.",
     "owner_registration": "Owner registration",
     "change_business_type": "Change business type",
     "owner_registration_industry": "Owner registration for {{industry}}",
@@ -207,7 +227,12 @@
     "owners_only": "This registration is for business owners. Customers join through each business’s public page.",
     "email_confirmed_title": "Email confirmed",
     "email_confirmed_text": "Your account is ready. We are taking you to the secure sign-in page.",
-    "redirecting": "Redirecting..."
+    "redirecting": "Redirecting...",
+    "choose_plan": "Choose your plan",
+    "choose_plan_hint": "Your {{days}}-day trial uses the selected plan limits.",
+    "compare_plans": "Compare plans",
+    "plan_staff_limit": "Up to {{count}} staff",
+    "billing_after_setup": "After business setup you will add billing details securely with Stripe. No charge is made when the {{days}}-day trial starts."
   },
   "terminology": {
     "staff": "Staff",
@@ -886,7 +911,8 @@
         "accessReady": "Personal access is ready. The employee can request a passwordless link from the staff app.",
         "linkCopied": "Staff app link copied"
       }
-    }
+    },
+    "planLimit": "{{plan}} plan · {{used}} / {{limit}} staff places used"
   },
   "services": {
     "eyebrow": "Service catalogue",
@@ -1324,7 +1350,8 @@
     "generic": {
       "unassigned": "Unassigned",
       "customer": "Customer"
-    }
+    },
+    "planUpgradeRequired": "Advanced Finance, Revenue and Product intelligence is available on Pro and Premium."
   },
   "storefront": {
     "owner": {
@@ -2395,7 +2422,7 @@
   "billing": {
     "eyebrow": "Subscription experience",
     "title": "Billing",
-    "description": "Start with every feature for {{days}} days, then continue with one simple unlimited Professional Plan.",
+    "description": "Choose the right capacity for your business. Every plan starts with a {{days}}-day payment-method-backed free trial.",
     "common": {
       "yourBusiness": "your business"
     },
@@ -2406,24 +2433,29 @@
       "opening": "Opening...",
       "manageBilling": "Manage Billing",
       "openingCheckout": "Opening secure checkout...",
-      "continueProfessional": "Continue with Professional",
-      "manageSubscription": "Manage Subscription"
+      "continueProfessional": "Manage selected plan",
+      "manageSubscription": "Manage Subscription",
+      "changePlan": "Change plan",
+      "currentPlan": "Current plan",
+      "startTrial": "Start 14-day trial",
+      "fixedTermLocked": "Locked for fixed-term offer"
     },
     "plan": {
-      "freeTrialAllFeatures": "Free Trial — All Features",
-      "professional": "Professional Plan",
+      "freeTrialAllFeatures": "14-Day Plan Trial",
+      "professional": "selected plan",
       "mostPopular": "Most Popular",
-      "description": "Everything your business needs. No feature limits.",
+      "description": "Capacity and entitlements follow the selected plan during the trial and after billing begins.",
       "perMonth": "per month",
       "cancelThroughStripe": "Cancel anytime through Stripe",
-      "unlimitedTitle": "Unlimited by design",
-      "active": "Your Professional Plan is active",
+      "unlimitedTitle": "Plan-based capacity",
+      "active": "Your selected plan is active",
       "freeTrial": "{{days}}-Day Free Trial",
-      "trialDaysRemaining": "{{count}} trial days remaining"
+      "trialDaysRemaining": "{{count}} trial days remaining",
+      "trialIncluded": "{{days}}-day free trial included"
     },
     "features": {
       "appointments": "Unlimited appointments",
-      "staff": "Unlimited staff profiles",
+      "staff": "Staff capacity according to plan",
       "services": "Unlimited services",
       "crm": "Complete customer CRM",
       "customerRecords": "Customer formulas, notes and photos",
@@ -2441,9 +2473,9 @@
       "plan": "Plan",
       "status": "Status",
       "featureAccess": "Feature access",
-      "allFeatures": "All features",
-      "usageLimits": "Usage limits",
-      "unlimited": "Unlimited",
+      "allFeatures": "Features included in your plan",
+      "usageLimits": "Monthly plan allowances",
+      "unlimited": "According to plan",
       "monthlyPrice": "Monthly price"
     },
     "security": {
@@ -2467,7 +2499,7 @@
       "title": "Payment History",
       "description": "Every paid invoice and receipt appears here automatically after Stripe webhook synchronization.",
       "emptyTitle": "No invoices available yet",
-      "emptyDescription": "Your first invoice will appear here after the Professional Plan begins.",
+      "emptyDescription": "Your first invoice will appear here after the selected plan begins.",
       "invoice": "Invoice",
       "date": "Date",
       "amount": "Amount",
@@ -2476,13 +2508,15 @@
       "view": "View"
     },
     "trial": {
-      "fullPlatform": "Full platform unlocked",
+      "fullPlatform": "Your selected plan is active during trial",
       "welcome": "Welcome to your {{days}}-day experience, {{business}}",
-      "description": "Explore every feature without limits. Your data, staff, customers and bookings remain ready when you continue with Professional.",
+      "description": "Use the features and monthly capacity included with your selected plan. Billing begins after the trial unless you cancel.",
       "remaining": "Trial remaining",
       "days": "{{count}} days",
       "ends": "Trial ends {{date}}",
-      "started": "Your trial period has started"
+      "started": "Your trial period has started",
+      "daysRemaining": "{{days}} trial days remaining",
+      "chargesOn": "First plan charge is scheduled after the free trial on {{date}}."
     },
     "subscriptionStatus": {
       "trialing": "Trialing",
@@ -2501,13 +2535,61 @@
       "uncollectible": "Uncollectible"
     },
     "messages": {
-      "checkoutCompleted": "Your Professional Plan checkout was completed. Your subscription is being activated.",
+      "checkoutCompleted": "Your selected plan checkout was completed. Your subscription is being activated.",
       "checkoutCancelled": "Checkout was cancelled. Your current access has not changed.",
       "loadFailed": "Failed to load billing information",
       "checkoutUrlMissing": "Checkout URL was not returned",
       "checkoutFailed": "Failed to start Stripe Checkout",
       "portalUrlMissing": "Billing portal URL was not returned",
       "portalUnavailable": "The Stripe billing portal is not connected yet"
+    },
+    "offer": {
+      "title": "Have a Velliqo offer code?",
+      "description": "Fixed-term offers can provide a selected plan for a defined period such as 6 or 12 months. They stop automatically at the stated end date and do not auto-renew.",
+      "placeholder": "Offer code"
+    },
+    "usage": {
+      "staff": "Staff members",
+      "aiRequests": "AI requests this month",
+      "emails": "Emails this month",
+      "sms": "SMS this month"
+    },
+    "planFeatures": {
+      "staff": "Up to {{count}} staff members",
+      "staffApps": "Downloadable personal Staff Apps",
+      "browserStaff": "Secure browser Staff Portal (no app install)",
+      "ai": "{{count}} AI requests per month",
+      "email": "{{count}} emails per month",
+      "sms": "{{count}} SMS per month",
+      "advancedReports": "Advanced reports and intelligence",
+      "coreReports": "Core business reports"
+    },
+    "fixedTerm": {
+      "badge": "Fixed-term offer",
+      "title": "This subscription does not auto-renew",
+      "endsOn": "Access is scheduled to end on {{date}}. It will not continue as an ongoing subscription after the offer term.",
+      "noRenew": "This offer ends automatically at its fixed term and will not renew."
+    },
+    "autoRenew": {
+      "title": "Monthly auto-renewal",
+      "description": "This plan continues monthly until the owner cancels, upgrades or downgrades through secure Stripe billing controls."
+    },
+    "payment": {
+      "saved": "Billing method secured",
+      "required": "Billing method required",
+      "secure": "Secured by Stripe"
+    },
+    "invoices": {
+      "title": "Invoices & receipts",
+      "description": "Stripe-synchronised billing history for this business.",
+      "empty": "No invoices yet. Your first invoice appears when a paid billing event occurs.",
+      "open": "Open invoice"
+    },
+    "paymentIssue": {
+      "title": "Payment needs attention",
+      "graceUntil": "Stripe could not complete the latest renewal. Access remains available while payment recovery runs, through {{date}}.",
+      "graceExpired": "The payment recovery grace period has ended. Paid workspace access is paused until billing is resolved.",
+      "action": "Open Manage Billing to update the payment method or resolve the invoice."
     }
   },
   "posts": {

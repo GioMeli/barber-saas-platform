@@ -21,6 +21,7 @@ import { getIndustryConfig, isIndustryKey } from '@/config/industries';
 import { IndustryThemeRoot } from '@/theme';
 import { useTranslation } from 'react-i18next';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
+import { BILLING_PLANS, BILLING_PLAN_STORAGE_KEY, BILLING_TRIAL_DAYS, getBillingPlan, isBillingPlanId, type BillingPlanId } from '@/billing/plans';
 
 const SELECTED_INDUSTRY_STORAGE_KEY = 'velliqo.selectedIndustry';
 
@@ -34,6 +35,10 @@ export default function SignUp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const requestedIndustry = searchParams.get('industry');
+  const requestedPlan = searchParams.get('plan');
+  const storedPlan = typeof window !== 'undefined' ? window.localStorage.getItem(BILLING_PLAN_STORAGE_KEY) : null;
+  const initialPlan: BillingPlanId = isBillingPlanId(requestedPlan) ? requestedPlan : isBillingPlanId(storedPlan) ? storedPlan : 'pro';
+  const [selectedPlan, setSelectedPlan] = React.useState<BillingPlanId>(initialPlan);
   const storedIndustry = typeof window !== 'undefined'
     ? window.localStorage.getItem(SELECTED_INDUSTRY_STORAGE_KEY)
     : null;
@@ -47,6 +52,10 @@ export default function SignUp() {
   React.useEffect(() => {
     window.localStorage.setItem(SELECTED_INDUSTRY_STORAGE_KEY, industry.key);
   }, [industry.key]);
+
+  React.useEffect(() => {
+    window.localStorage.setItem(BILLING_PLAN_STORAGE_KEY, selectedPlan);
+  }, [selectedPlan]);
 
   React.useEffect(() => {
     const normalizedEmail = email.trim().toLowerCase();
@@ -70,6 +79,7 @@ export default function SignUp() {
           full_name: fullName.trim(),
           role: 'Business Owner',
           industry_key: industry.key,
+          selected_plan: selectedPlan,
         },
       },
     });
@@ -82,7 +92,7 @@ export default function SignUp() {
     }
 
     toast.success(t('auth.signup_success'));
-    navigate(`/check-email?email=${encodeURIComponent(email.trim())}&industry=${industry.key}`);
+    navigate(`/check-email?email=${encodeURIComponent(email.trim())}&industry=${industry.key}&plan=${selectedPlan}`);
   };
 
   return (
@@ -128,7 +138,7 @@ export default function SignUp() {
             </div>
           </section>
 
-          <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-hidden lg:px-8 lg:py-4">
+          <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-y-auto lg:px-8 lg:py-8">
             <div className="w-full max-w-[500px]">
               <div className="mb-4 flex items-center justify-between lg:hidden">
                 <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-mark-transparent-v2.png" alt="Velliqo" className="h-10 w-10 object-contain" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
@@ -154,7 +164,29 @@ export default function SignUp() {
                   <ProgressStep label={t('auth.step_launch')} />
                 </div>
 
-                <form onSubmit={handleSignUp} className="mt-5 space-y-3.5">
+                <div className="mt-5">
+                  <div className="mb-2 flex items-end justify-between gap-3">
+                    <div><div className="text-xs font-extrabold">{t('auth.choose_plan')}</div><div className="mt-0.5 text-[10px] text-muted-foreground">{t('auth.choose_plan_hint', { days: BILLING_TRIAL_DAYS })}</div></div>
+                    <Link to="/pricing" className="text-[10px] font-bold text-primary hover:underline">{t('auth.compare_plans')}</Link>
+                  </div>
+                  <div className="grid gap-2 sm:grid-cols-3">
+                    {BILLING_PLANS.map((plan) => {
+                      const active = selectedPlan === plan.id;
+                      return (
+                        <button key={plan.id} type="button" onClick={() => setSelectedPlan(plan.id)} className={`rounded-xl border p-3 text-left transition ${active ? 'border-primary bg-primary/8 ring-1 ring-primary' : 'bg-muted/15 hover:border-primary/35'}`} aria-pressed={active}>
+                          <div className="flex items-center justify-between gap-2"><span className="text-xs font-extrabold">{plan.name}</span>{active && <Check className="h-3.5 w-3.5 text-primary" />}</div>
+                          <div className="mt-1 text-sm font-black">€{plan.price.toFixed(2)}<span className="text-[9px] font-semibold text-muted-foreground"> / mo</span></div>
+                          <div className="mt-1 text-[9px] leading-3 text-muted-foreground">{t('auth.plan_staff_limit', { count: plan.staffLimit })}</div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10px] leading-4 text-emerald-900">
+                    <strong>{getBillingPlan(selectedPlan).name}:</strong> {t('auth.billing_after_setup', { days: BILLING_TRIAL_DAYS })}
+                  </div>
+                </div>
+
+                <form onSubmit={handleSignUp} className="mt-4 space-y-3.5">
                   <Field label={t('auth.owner_full_name')} htmlFor="fullName">
                     <Input id="fullName" type="text" placeholder={t('auth.owner_name_placeholder')} value={fullName} onChange={(event) => setFullName(event.target.value)} required autoComplete="name" className="h-10 rounded-xl" />
                   </Field>

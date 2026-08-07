@@ -21,7 +21,7 @@
           const employee = params.get('employee') || '';
           if (/^[a-z0-9-]{2,120}$/i.test(parts[1]) && /^[a-z0-9-]{2,120}$/i.test(employee)) {
             const employeeName = (params.get('employeeName') || '').trim().slice(0, 60);
-            const query = new URLSearchParams({ v: '9' });
+            const query = new URLSearchParams({ v: '10' });
             if (employeeName) query.set('employeeName', employeeName);
             manifestHref = `/staff-manifest/${encodeURIComponent(parts[1])}/${encodeURIComponent(employee)}.webmanifest?${query.toString()}`;
           }

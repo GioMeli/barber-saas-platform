@@ -1,790 +1,315 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+import {
+  ArrowRight,
+  BadgeCheck,
+  Check,
+  Clock3,
+  CreditCard,
+  ExternalLink,
+  FileText,
+  Gift,
+  Infinity as InfinityIcon,
+  ReceiptText,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  WandSparkles,
+  Zap,
+} from 'lucide-react';
 import { supabase } from '@/db/supabase';
+import { useAuth } from '@/hooks/useAuth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { toast } from 'sonner';
-import { useTranslation } from 'react-i18next';
-import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
+import { Input } from '@/components/ui/input';
+import { Progress } from '@/components/ui/progress';
+import { Separator } from '@/components/ui/separator';
 import {
-  ArrowRight,
-  CalendarDays,
-  CheckCircle2,
-  Clock3,
-  CreditCard,
-  Download,
-  ExternalLink,
-  FileText,
-  Infinity as InfinityIcon,
-  LockKeyhole,
-  ReceiptText,
-  Rocket,
-  ShieldCheck,
-  Sparkles,
-  Star,
-  Zap,
-} from 'lucide-react';
+  BILLING_PLANS,
+  BILLING_TRIAL_DAYS,
+  type BillingPlan,
+  type BillingPlanId,
+  formatPlanCurrency,
+} from '@/billing/plans';
+import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 
-const PROFESSIONAL_PRICE = 24.99;
-const TRIAL_DAYS = 14;
+type BillingSummary = {
+  subscription?: Record<string, any>;
+  plan?: Record<string, any>;
+  usage?: { staff?: number; ai_requests?: number; ai_tokens?: number; email?: number; sms?: number };
+  access_allowed?: boolean;
+  billing_required?: boolean;
+};
 
-const PROFESSIONAL_FEATURES = [
-  'appointments',
-  'staff',
-  'services',
-  'crm',
-  'customerRecords',
-  'storefront',
-  'customerBooking',
-  'reports',
-  'inventory',
-  'content',
-  'closures',
-  'notifications',
-  'stripe',
-] as const;
+const ACTIVE_STATUSES = new Set(['trialing', 'active', 'past_due']);
 
 export default function Billing() {
   const { t, i18n } = useTranslation();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const { businessMemberships } = useAuth();
   const businessId = businessMemberships[0]?.business_id;
-  const business = businessMemberships[0]?.businesses;
   const [searchParams, setSearchParams] = useSearchParams();
+  const [summary, setSummary] = React.useState<BillingSummary | null>(null);
+  const [invoices, setInvoices] = React.useState<any[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [checkoutPlan, setCheckoutPlan] = React.useState<BillingPlanId | null>(null);
+  const [portalLoading, setPortalLoading] = React.useState(false);
+  const [offerCode, setOfferCode] = React.useState('');
 
-  const [subscription, setSubscription] = useState<any>(null);
-  const [invoices, setInvoices] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [checkoutLoading, setCheckoutLoading] = useState(false);
-  const [portalLoading, setPortalLoading] = useState(false);
+  const subscription = summary?.subscription || {};
+  const currentPlan = summary?.plan || {};
+  const usage = summary?.usage || {};
+  const status = String(subscription.status || 'incomplete');
+  const hasStripeSubscription = Boolean(subscription.stripe_subscription_id);
+  const canUsePortal = Boolean(subscription.stripe_customer_id);
+  const fixedTermSubscription = subscription.billing_mode === 'fixed_term';
 
-  useEffect(() => {
-    if (businessId) void fetchData();
-  }, [businessId]);
-
-  useEffect(() => {
-    const checkoutSucceeded = searchParams.get('success') === 'true';
-    const checkoutCancelled = searchParams.get('canceled') === 'true';
-
-    if (checkoutSucceeded) {
-      toast.success(
-        t('billing.messages.checkoutCompleted')
-      );
-      setSearchParams({});
-      if (businessId) {
-        window.setTimeout(() => void fetchData(), 1200);
-      }
-    }
-
-    if (checkoutCancelled) {
-      toast.info(t('billing.messages.checkoutCancelled'));
-      setSearchParams({});
-    }
-  }, [businessId, searchParams, setSearchParams]);
-
-  const fetchData = async () => {
+  const fetchData = React.useCallback(async () => {
     if (!businessId) return;
-
     setLoading(true);
-
     try {
-      const [subscriptionResult, invoicesResult] = await Promise.all([
-        supabase
-          .from('subscriptions')
-          .select('*')
-          .eq('business_id', businessId)
-          .maybeSingle(),
-
-        (supabase as any)
-          .from('billing_invoices')
-          .select('*')
-          .eq('business_id', businessId)
-          .order('created_at', { ascending: false }),
+      const [summaryResult, invoiceResult] = await Promise.all([
+        (supabase as any).rpc('get_business_billing_summary', { p_business_id: businessId }),
+        (supabase as any).from('billing_invoices').select('*').eq('business_id', businessId).order('created_at', { ascending: false }).limit(24),
       ]);
-
-      if (subscriptionResult.error) throw subscriptionResult.error;
-
-      setSubscription(subscriptionResult.data ?? null);
-
-      if (invoicesResult.error) {
-        console.warn(
-          'Billing invoice history is not available yet:',
-          invoicesResult.error
-        );
-        setInvoices([]);
-      } else {
-        setInvoices(invoicesResult.data ?? []);
-      }
+      if (summaryResult.error) throw summaryResult.error;
+      if (invoiceResult.error) throw invoiceResult.error;
+      setSummary(summaryResult.data || {});
+      setInvoices(invoiceResult.data || []);
     } catch (error: any) {
-      console.error('Billing load error:', error);
-      toast.error(error.message || t('billing.messages.loadFailed'));
+      console.error('Billing load failed', error);
+      toast.error(error?.message || t('billing.messages.loadFailed'));
     } finally {
       setLoading(false);
     }
-  };
+  }, [businessId, t]);
 
-  const status = subscription?.status || 'trialing';
-  const isTrial = status === 'trialing';
-  const isActive = ['active', 'trialing'].includes(status);
-  const isProfessional =
-    subscription?.plan_id === 'professional' ||
-    Boolean(subscription?.stripe_subscription_id);
+  React.useEffect(() => { void fetchData(); }, [fetchData]);
 
-  const trialInfo = useMemo(() => {
-    if (!isTrial) {
-      return {
-        daysRemaining: 0,
-        progress: 100,
-        trialEnd: null as Date | null,
-      };
+  React.useEffect(() => {
+    if (searchParams.get('success') === 'true') {
+      toast.success(t('billing.messages.checkoutCompleted'));
+      setSearchParams({});
+      window.setTimeout(() => void fetchData(), 900);
+    } else if (searchParams.get('canceled') === 'true') {
+      toast.info(t('billing.messages.checkoutCancelled'));
+      setSearchParams({});
     }
+  }, [fetchData, searchParams, setSearchParams, t]);
 
-    const trialEnd = subscription?.trial_ends_at
-      ? new Date(subscription.trial_ends_at)
-      : null;
+  const trial = React.useMemo(() => {
+    const end = subscription.trial_ends_at ? new Date(subscription.trial_ends_at) : null;
+    if (!end || status !== 'trialing') return null;
+    const remainingMs = Math.max(end.getTime() - Date.now(), 0);
+    const daysRemaining = Math.ceil(remainingMs / 86_400_000);
+    const progress = Math.min(100, Math.max(0, ((BILLING_TRIAL_DAYS - daysRemaining) / BILLING_TRIAL_DAYS) * 100));
+    return { end, daysRemaining, progress };
+  }, [status, subscription.trial_ends_at]);
 
-    if (!trialEnd) {
-      return {
-        daysRemaining: TRIAL_DAYS,
-        progress: 0,
-        trialEnd: null,
-      };
-    }
-
-    const now = new Date();
-    const millisecondsRemaining = Math.max(
-      trialEnd.getTime() - now.getTime(),
-      0
-    );
-
-    const daysRemaining = Math.ceil(
-      millisecondsRemaining / (1000 * 60 * 60 * 24)
-    );
-
-    const daysUsed = Math.max(TRIAL_DAYS - daysRemaining, 0);
-    const progress = Math.min((daysUsed / TRIAL_DAYS) * 100, 100);
-
-    return {
-      daysRemaining,
-      progress,
-      trialEnd,
-    };
-  }, [isTrial, subscription?.trial_ends_at]);
-
-  const handleSubscribe = async () => {
+  const startCheckout = async (planId: BillingPlanId) => {
     if (!businessId) return;
-
-    setCheckoutLoading(true);
-
+    setCheckoutPlan(planId);
     try {
-      const { data, error } = await supabase.functions.invoke(
-        'create_subscription_checkout',
-        {
-          body: {
-            businessId,
-            planId: 'professional',
-            trialDays: TRIAL_DAYS,
-            successUrl: `${window.location.origin}/dashboard/billing?success=true`,
-            cancelUrl: `${window.location.origin}/dashboard/billing?canceled=true`,
-          },
-        }
-      );
-
+      const { data, error } = await supabase.functions.invoke('create_subscription_checkout', {
+        body: {
+          businessId,
+          planId,
+          offerCode: offerCode.trim() || undefined,
+          successUrl: `${window.location.origin}/dashboard/billing?success=true`,
+          cancelUrl: `${window.location.origin}/dashboard/billing?canceled=true`,
+        },
+      });
       if (error) throw error;
       if (!data?.url) throw new Error(t('billing.messages.checkoutUrlMissing'));
-
       window.location.assign(data.url);
     } catch (error: any) {
-      toast.error(error.message || t('billing.messages.checkoutFailed'));
-      setCheckoutLoading(false);
+      toast.error(error?.message || t('billing.messages.checkoutFailed'));
+      setCheckoutPlan(null);
     }
   };
 
-  const openBillingPortal = async () => {
+  const openPortal = async () => {
     if (!businessId) return;
-
     setPortalLoading(true);
-
     try {
-      const { data, error } = await supabase.functions.invoke(
-        'create_billing_portal_session',
-        {
-          body: {
-            businessId,
-            returnUrl: `${window.location.origin}/dashboard/billing`,
-          },
-        }
-      );
-
+      const { data, error } = await supabase.functions.invoke('create_billing_portal_session', {
+        body: { businessId, returnUrl: `${window.location.origin}/dashboard/billing` },
+      });
       if (error) throw error;
       if (!data?.url) throw new Error(t('billing.messages.portalUrlMissing'));
-
       window.location.assign(data.url);
     } catch (error: any) {
-      toast.error(
-        error.message ||
-          t('billing.messages.portalUnavailable')
-      );
+      toast.error(error?.message || t('billing.messages.portalUnavailable'));
       setPortalLoading(false);
     }
   };
 
+  if (loading) {
+    return <div className="app-page"><div className="rounded-3xl border bg-card p-16 text-center text-muted-foreground shadow-card">{t('billing.states.loading')}</div></div>;
+  }
+
   return (
-    <div className="app-page pb-10">
+    <div className="app-page space-y-7 pb-10">
       <header className="app-page-header">
         <div>
-          <div className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
-            {t('billing.eyebrow')}
-          </div>
-
+          <div className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-primary">{t('billing.eyebrow')}</div>
           <h1 className="app-page-title">{t('billing.title')}</h1>
-
-          <p className="app-page-description">
-            {t('billing.description', { days: TRIAL_DAYS })}
-          </p>
+          <p className="app-page-description">{t('billing.description', { days: BILLING_TRIAL_DAYS })}</p>
         </div>
-
-        {subscription?.stripe_customer_id && (
-          <Button
-            variant="outline"
-            disabled={portalLoading}
-            onClick={() => void openBillingPortal()}
-          >
-            <ExternalLink className="mr-2 h-4 w-4" />
-            {portalLoading ? t('billing.actions.opening') : t('billing.actions.manageBilling')}
+        {canUsePortal && (
+          <Button variant="outline" className="w-full sm:w-auto" onClick={() => void openPortal()} disabled={portalLoading}>
+            <ExternalLink className="mr-2 h-4 w-4" />{portalLoading ? t('billing.actions.opening') : t('billing.actions.manageBilling')}
           </Button>
         )}
       </header>
 
-      {loading ? (
-        <div className="rounded-2xl border bg-card p-16 text-center text-muted-foreground shadow-card">
-          {t('billing.states.loading')}
-        </div>
-      ) : (
-        <>
-          {isTrial && (
-            <TrialWelcomeBanner
-              businessName={business?.name || t('billing.common.yourBusiness')}
-              daysRemaining={trialInfo.daysRemaining}
-              progress={trialInfo.progress}
-              trialEnd={trialInfo.trialEnd}
-            />
-          )}
+      <StatusPanel
+        status={status}
+        planName={currentPlan.name || subscription.plan_id || '—'}
+        trial={trial}
+        subscription={subscription}
+        locale={locale}
+        t={t}
+      />
 
-          <section data-tour="billing-plan" className="grid gap-6 xl:grid-cols-[minmax(0,1.25fr)_minmax(320px,0.75fr)]">
-            <Card className="relative overflow-hidden rounded-3xl border-primary/20 bg-gradient-to-br from-primary/15 via-card to-card shadow-card">
-              <div className="pointer-events-none absolute -right-20 -top-20 h-72 w-72 rounded-full bg-primary/10 blur-3xl" />
+      <section className="grid gap-4 lg:grid-cols-4">
+        <UsageCard icon={<Users className="h-5 w-5" />} label={t('billing.usage.staff')} used={Number(usage.staff || 0)} limit={Number(currentPlan.staff_limit || 0)} />
+        <UsageCard icon={<WandSparkles className="h-5 w-5" />} label={t('billing.usage.aiRequests')} used={Number(usage.ai_requests || 0)} limit={Number(currentPlan.ai_requests_monthly || 0)} />
+        <UsageCard icon={<FileText className="h-5 w-5" />} label={t('billing.usage.emails')} used={Number(usage.email || 0)} limit={Number(currentPlan.email_monthly || 0)} />
+        <UsageCard icon={<Zap className="h-5 w-5" />} label={t('billing.usage.sms')} used={Number(usage.sms || 0)} limit={Number(currentPlan.sms_monthly || 0)} />
+      </section>
 
-              <CardContent className="relative p-6 sm:p-8">
-                <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge variant={isActive ? 'default' : 'secondary'}>
-                        {isTrial
-                          ? t('billing.plan.freeTrialAllFeatures')
-                          : isProfessional
-                            ? t('billing.plan.professional')
-                            : t(`billing.subscriptionStatus.${status || 'trialing'}`, { defaultValue: status })}
-                      </Badge>
-
-                      <Badge
-                        variant="outline"
-                        className="border-emerald-200 bg-emerald-50 text-emerald-700"
-                      >
-                        {t('billing.plan.mostPopular')}
-                      </Badge>
-                    </div>
-
-                    <div className="mt-5 flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-sm">
-                        <Sparkles className="h-6 w-6" />
-                      </div>
-
-                      <div>
-                        <h2 className="text-3xl font-bold">
-                          {t('billing.plan.professional')}
-                        </h2>
-                        <p className="mt-1 text-sm text-muted-foreground">
-                          {t('billing.plan.description')}
-                        </p>
-                      </div>
-                    </div>
-
-                    <div className="mt-7 flex flex-wrap items-end gap-3">
-                      <div className="text-5xl font-extrabold tracking-tight">
-                        {formatBillingCurrency(PROFESSIONAL_PRICE, locale)}
-                      </div>
-
-                      <div className="pb-1 text-sm font-medium text-muted-foreground">
-                        {t('billing.plan.perMonth')}
-                        <div className="text-xs">
-                          {t('billing.plan.cancelThroughStripe')}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-3xl border border-primary/20 bg-background/80 text-primary shadow-sm backdrop-blur">
-                    <Rocket className="h-9 w-9" />
-                  </div>
-                </div>
-
-                <div className="mt-8 rounded-2xl border bg-background/70 p-5 backdrop-blur">
-                  <div className="flex items-center gap-2">
-                    <InfinityIcon className="h-5 w-5 text-primary" />
-                    <h3 className="font-bold">{t('billing.plan.unlimitedTitle')}</h3>
-                  </div>
-
-                  <div className="mt-4 grid gap-3 sm:grid-cols-2">
-                    {PROFESSIONAL_FEATURES.map((feature) => (
-                      <div
-                        key={feature}
-                        className="flex items-start gap-2 text-sm"
-                      >
-                        <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
-                        <span>{t(`billing.features.${feature}`)}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
-                  {!subscription?.stripe_subscription_id ? (
-                    <Button
-                      size="lg"
-                      className="h-12 px-6"
-                      disabled={checkoutLoading}
-                      onClick={() => void handleSubscribe()}
-                    >
-                      {checkoutLoading ? (
-                        t('billing.actions.openingCheckout')
-                      ) : (
-                        <>
-                          {t('billing.actions.continueProfessional')}
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </>
-                      )}
-                    </Button>
-                  ) : (
-                    <Button
-                      size="lg"
-                      className="h-12 px-6"
-                      disabled={portalLoading}
-                      onClick={() => void openBillingPortal()}
-                    >
-                      <CreditCard className="mr-2 h-4 w-4" />
-                      {t('billing.actions.manageSubscription')}
-                    </Button>
-                  )}
-
-                  <div className="text-sm text-muted-foreground">
-                    {isTrial
-                      ? t('billing.plan.trialDaysRemaining', { count: trialInfo.daysRemaining })
-                      : t('billing.plan.active')}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <div className="space-y-6">
-              <Card className="rounded-2xl shadow-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Star className="h-5 w-5 text-primary" />
-                    {t('billing.currentAccess.title')}
-                  </CardTitle>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <BillingLine
-                    label={t('billing.currentAccess.plan')}
-                    value={
-                      isTrial
-                        ? t('billing.plan.freeTrial', { days: TRIAL_DAYS })
-                        : t('billing.plan.professional')
-                    }
-                  />
-                  <BillingLine
-                    label={t('billing.currentAccess.status')}
-                    value={t(`billing.subscriptionStatus.${status || 'trialing'}`, { defaultValue: status })}
-                  />
-                  <BillingLine
-                    label={t('billing.currentAccess.featureAccess')}
-                    value={t('billing.currentAccess.allFeatures')}
-                  />
-                  <BillingLine
-                    label={t('billing.currentAccess.usageLimits')}
-                    value={t('billing.currentAccess.unlimited')}
-                  />
-                  <BillingLine
-                    label={t('billing.currentAccess.monthlyPrice')}
-                    value={formatBillingCurrency(PROFESSIONAL_PRICE, locale)}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card className="rounded-2xl shadow-card">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <ShieldCheck className="h-5 w-5 text-primary" />
-                    {t('billing.security.title')}
-                  </CardTitle>
-                </CardHeader>
-
-                <CardContent className="space-y-4 text-sm leading-6 text-muted-foreground">
-                  <SecurityLine
-                    icon={<LockKeyhole className="h-4 w-4" />}
-                    text={t('billing.security.cardDetails')}
-                  />
-                  <SecurityLine
-                    icon={<CreditCard className="h-4 w-4" />}
-                    text={t('billing.security.paymentMethod')}
-                  />
-                  <SecurityLine
-                    icon={<CalendarDays className="h-4 w-4" />}
-                    text={t('billing.security.cancelAnytime')}
-                  />
-                </CardContent>
-              </Card>
-
-              <Card className="rounded-2xl shadow-card">
-                <CardHeader>
-                  <CardTitle>{t('billing.statusCard.title')}</CardTitle>
-                </CardHeader>
-
-                <CardContent className="space-y-4">
-                  <BillingLine
-                    label={t('billing.statusCard.billingCycle')}
-                    value={t('billing.statusCard.monthly')}
-                  />
-                  <BillingLine
-                    label={
-                      isTrial
-                        ? t('billing.statusCard.trialEnds')
-                        : t('billing.statusCard.nextBillingDate')
-                    }
-                    value={
-                      isTrial && subscription?.trial_ends_at
-                        ? formatBillingDate(subscription.trial_ends_at, locale)
-                        : subscription?.current_period_end
-                          ? formatBillingDate(subscription.current_period_end, locale)
-                          : t('common.notAvailable')
-                    }
-                  />
-                  <BillingLine
-                    label={t('billing.statusCard.paymentProvider')}
-                    value="Stripe"
-                  />
-                  <BillingLine
-                    label={t('billing.statusCard.autoRenewal')}
-                    value={
-                      subscription?.cancel_at_period_end
-                        ? t('billing.statusCard.endsThisPeriod')
-                        : t('billing.statusCard.enabled')
-                    }
-                  />
-                </CardContent>
-              </Card>
-            </div>
-          </section>
-
-          <section data-tour="billing-history" className="space-y-4">
+      {(!hasStripeSubscription || !ACTIVE_STATUSES.has(status)) && (
+        <Card className="overflow-hidden rounded-3xl border-primary/20 bg-gradient-to-r from-primary/10 via-card to-violet-500/5 shadow-card">
+          <CardContent className="grid gap-5 p-6 lg:grid-cols-[1fr_320px] lg:items-center">
             <div>
-              <h2 className="section-heading">{t('billing.history.title')}</h2>
-              <p className="mt-1 text-sm text-muted-foreground">
-                {t('billing.history.description')}
-              </p>
+              <div className="flex items-center gap-2 text-sm font-extrabold"><Gift className="h-5 w-5 text-primary" />{t('billing.offer.title')}</div>
+              <p className="mt-2 text-sm leading-6 text-muted-foreground">{t('billing.offer.description')}</p>
             </div>
-
-            <Card className="overflow-hidden rounded-2xl shadow-card">
-              <CardContent className="p-0">
-                {invoices.length === 0 ? (
-                  <div className="flex min-h-[280px] flex-col items-center justify-center p-10 text-center">
-                    <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-muted">
-                      <ReceiptText className="h-8 w-8 text-muted-foreground" />
-                    </div>
-
-                    <h3 className="mt-4 font-bold">
-                      {t('billing.history.emptyTitle')}
-                    </h3>
-
-                    <p className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">
-                      {t('billing.history.emptyDescription')}
-                    </p>
-                  </div>
-                ) : (
-                  <>
-                    <div className="hidden overflow-x-auto md:block">
-                      <table className="w-full min-w-[760px] text-sm">
-                        <thead className="bg-muted/40 text-left text-xs uppercase tracking-wide text-muted-foreground">
-                          <tr>
-                            <th className="px-5 py-3">{t('billing.history.invoice')}</th>
-                            <th className="px-5 py-3">{t('billing.history.date')}</th>
-                            <th className="px-5 py-3">{t('billing.history.amount')}</th>
-                            <th className="px-5 py-3">{t('billing.history.status')}</th>
-                            <th className="px-5 py-3 text-right">
-                              {t('billing.history.documents')}
-                            </th>
-                          </tr>
-                        </thead>
-
-                        <tbody className="divide-y">
-                          {invoices.map((invoice) => (
-                            <tr
-                              key={invoice.id}
-                              className="hover:bg-muted/25"
-                            >
-                              <td className="px-5 py-4 font-semibold">
-                                {invoice.invoice_number ||
-                                  invoice.stripe_invoice_id}
-                              </td>
-
-                              <td className="px-5 py-4">
-                                {formatBillingDate(invoice.paid_at || invoice.created_at, locale)}
-                              </td>
-
-                              <td className="px-5 py-4 font-bold">
-                                {formatBillingCurrency(Number(invoice.amount_paid || invoice.amount_due || 0) / 100, locale)}
-                              </td>
-
-                              <td className="px-5 py-4">
-                                <Badge
-                                  variant={
-                                    invoice.status === 'paid'
-                                      ? 'default'
-                                      : 'secondary'
-                                  }
-                                  className="capitalize"
-                                >
-                                  {t(`billing.invoiceStatus.${invoice.status}`, { defaultValue: invoice.status })}
-                                </Badge>
-                              </td>
-
-                              <td className="px-5 py-4">
-                                <InvoiceActions invoice={invoice} />
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <div className="divide-y md:hidden">
-                      {invoices.map((invoice) => (
-                        <div
-                          key={invoice.id}
-                          className="space-y-4 p-5"
-                        >
-                          <div className="flex items-start justify-between gap-4">
-                            <div>
-                              <div className="font-semibold">
-                                {invoice.invoice_number ||
-                                  invoice.stripe_invoice_id}
-                              </div>
-                              <div className="mt-1 text-sm text-muted-foreground">
-                                {formatBillingDate(invoice.paid_at || invoice.created_at, locale)}
-                              </div>
-                            </div>
-
-                            <Badge
-                              variant={
-                                invoice.status === 'paid'
-                                  ? 'default'
-                                  : 'secondary'
-                              }
-                              className="capitalize"
-                            >
-                              {t(`billing.invoiceStatus.${invoice.status}`, { defaultValue: invoice.status })}
-                            </Badge>
-                          </div>
-
-                          <div className="flex items-center justify-between rounded-xl bg-muted/35 p-4">
-                            <span className="text-sm text-muted-foreground">
-                              {t('billing.history.amount')}
-                            </span>
-                            <span className="text-lg font-bold">
-                              {formatBillingCurrency(Number(invoice.amount_paid || invoice.amount_due || 0) / 100, locale)}
-                            </span>
-                          </div>
-
-                          <InvoiceActions invoice={invoice} mobile />
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                )}
-              </CardContent>
-            </Card>
-          </section>
-        </>
+            <div className="flex gap-2">
+              <Input value={offerCode} onChange={(event) => setOfferCode(event.target.value.toUpperCase())} placeholder={t('billing.offer.placeholder')} className="h-11 uppercase" />
+            </div>
+          </CardContent>
+        </Card>
       )}
+
+      <section data-tour="billing-plan" className="grid gap-5 xl:grid-cols-3">
+        {BILLING_PLANS.map((plan) => (
+          <PlanCard
+            key={plan.id}
+            plan={plan}
+            locale={locale}
+            current={subscription.plan_id === plan.id && ACTIVE_STATUSES.has(status)}
+            checkoutLoading={checkoutPlan === plan.id}
+            anyCheckoutLoading={Boolean(checkoutPlan)}
+            hasActiveSubscription={hasStripeSubscription && ACTIVE_STATUSES.has(status)}
+            fixedTermSubscription={fixedTermSubscription}
+            onCheckout={() => void startCheckout(plan.id)}
+            onPortal={() => void openPortal()}
+            t={t}
+          />
+        ))}
+      </section>
+
+      <Card className="rounded-3xl shadow-card">
+        <CardHeader className="flex-row items-center justify-between gap-4">
+          <div><CardTitle className="flex items-center gap-2"><ReceiptText className="h-5 w-5 text-primary" />{t('billing.invoices.title')}</CardTitle><p className="mt-1 text-sm text-muted-foreground">{t('billing.invoices.description')}</p></div>
+        </CardHeader>
+        <CardContent>
+          {invoices.length === 0 ? (
+            <div className="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">{t('billing.invoices.empty')}</div>
+          ) : (
+            <div className="space-y-2">
+              {invoices.map((invoice) => (
+                <div key={invoice.id} className="flex flex-col gap-3 rounded-2xl border p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="min-w-0">
+                    <div className="flex flex-wrap items-center gap-2"><span className="font-bold">{invoice.invoice_number || invoice.stripe_invoice_id}</span><Badge variant="outline">{invoice.status}</Badge></div>
+                    <div className="mt-1 text-xs text-muted-foreground">{new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(invoice.created_at))}</div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="font-extrabold">{formatMinorCurrency(invoice.amount_due, invoice.currency, locale)}</div>
+                    {invoice.hosted_invoice_url && <Button asChild size="sm" variant="outline"><a href={invoice.hosted_invoice_url} target="_blank" rel="noreferrer">{t('billing.invoices.open')}<ExternalLink className="ml-2 h-3.5 w-3.5" /></a></Button>}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 }
 
-function TrialWelcomeBanner({
-  businessName,
-  daysRemaining,
-  progress,
-  trialEnd,
-}: {
-  businessName: string;
-  daysRemaining: number;
-  progress: number;
-  trialEnd: Date | null;
-}) {
-  const { t, i18n } = useTranslation();
-  const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
+function StatusPanel({ status, planName, trial, subscription, locale, t }: any) {
+  const fixedTerm = subscription.billing_mode === 'fixed_term';
+  const end = subscription.fixed_term_ends_at ? new Date(subscription.fixed_term_ends_at) : null;
+  const graceEnd = subscription.grace_until ? new Date(subscription.grace_until) : null;
+  const graceActive = Boolean(graceEnd && graceEnd.getTime() > Date.now());
   return (
-    <Card className="overflow-hidden rounded-3xl border-blue-200 bg-gradient-to-r from-blue-50 via-card to-amber-50 shadow-card">
-      <CardContent className="p-5 sm:p-6">
-        <div className="grid gap-5 lg:grid-cols-[1fr_280px] lg:items-center">
-          <div className="flex items-start gap-4">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-blue-100 text-blue-700">
-              <Zap className="h-6 w-6" />
-            </div>
-
-            <div>
-              <Badge className="bg-blue-100 text-blue-700 hover:bg-blue-100">
-                {t('billing.trial.fullPlatform')}
-              </Badge>
-
-              <h2 className="mt-3 text-xl font-bold">
-                {t('billing.trial.welcome', { days: TRIAL_DAYS, business: businessName })}
-              </h2>
-
-              <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-                {t('billing.trial.description')}
-              </p>
-            </div>
+    <Card className="overflow-hidden rounded-3xl border-primary/15 shadow-card">
+      <CardContent className="grid gap-6 p-6 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Badge className="capitalize">{status.replaceAll('_', ' ')}</Badge>
+            <Badge variant="outline">{planName}</Badge>
+            {fixedTerm && <Badge className="border-amber-200 bg-amber-50 text-amber-800 hover:bg-amber-50"><Clock3 className="mr-1 h-3.5 w-3.5" />{t('billing.fixedTerm.badge')}</Badge>}
           </div>
-
-          <div className="rounded-2xl border bg-background/80 p-4 backdrop-blur">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <div className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-                  {t('billing.trial.remaining')}
-                </div>
-                <div className="mt-1 text-2xl font-bold">
-                  {t('billing.trial.days', { count: daysRemaining })}
-                </div>
-              </div>
-
-              <Clock3 className="h-6 w-6 text-primary" />
+          {trial ? (
+            <div className="mt-5 max-w-2xl">
+              <div className="flex items-end justify-between gap-3"><div><div className="text-2xl font-extrabold">{t('billing.trial.daysRemaining', { days: trial.daysRemaining })}</div><div className="mt-1 text-sm text-muted-foreground">{t('billing.trial.chargesOn', { date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(trial.end) })}</div></div><span className="text-sm font-bold text-primary">{Math.round(trial.progress)}%</span></div>
+              <Progress value={trial.progress} className="mt-4 h-2" />
             </div>
-
-            <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-muted">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${Math.max(0, Math.min(progress, 100))}%` }}
-              />
-            </div>
-
-            <div className="mt-2 text-xs text-muted-foreground">
-              {trialEnd
-                ? t('billing.trial.ends', { date: formatBillingDate(trialEnd.toISOString(), locale) })
-                : t('billing.trial.started')}
-            </div>
-          </div>
+          ) : status === 'past_due' ? (
+            <div className="mt-4"><div className="text-xl font-extrabold text-amber-700">{t('billing.paymentIssue.title')}</div><p className="mt-1 text-sm leading-6 text-muted-foreground">{graceActive && graceEnd ? t('billing.paymentIssue.graceUntil', { date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(graceEnd) }) : t('billing.paymentIssue.graceExpired')}</p><p className="mt-2 text-xs font-semibold text-amber-700">{t('billing.paymentIssue.action')}</p></div>
+          ) : fixedTerm ? (
+            <div className="mt-4"><div className="text-xl font-extrabold">{t('billing.fixedTerm.title')}</div><p className="mt-1 text-sm leading-6 text-muted-foreground">{end ? t('billing.fixedTerm.endsOn', { date: new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(end) }) : t('billing.fixedTerm.noRenew')}</p></div>
+          ) : (
+            <div className="mt-4"><div className="text-xl font-extrabold">{t('billing.autoRenew.title')}</div><p className="mt-1 text-sm text-muted-foreground">{t('billing.autoRenew.description')}</p></div>
+          )}
+        </div>
+        <div className="grid grid-cols-2 gap-3 text-center">
+          <div className="rounded-2xl bg-muted/40 px-5 py-4"><CreditCard className="mx-auto h-5 w-5 text-primary" /><div className="mt-2 text-xs font-bold">{subscription.payment_method_collected ? t('billing.payment.saved') : t('billing.payment.required')}</div></div>
+          <div className="rounded-2xl bg-muted/40 px-5 py-4"><ShieldCheck className="mx-auto h-5 w-5 text-primary" /><div className="mt-2 text-xs font-bold">{t('billing.payment.secure')}</div></div>
         </div>
       </CardContent>
     </Card>
   );
 }
 
-function InvoiceActions({
-  invoice,
-  mobile = false,
-}: {
-  invoice: any;
-  mobile?: boolean;
-}) {
-  const { t } = useTranslation();
+function UsageCard({ icon, label, used, limit }: { icon: React.ReactNode; label: string; used: number; limit: number }) {
+  const percent = limit > 0 ? Math.min(100, (used / limit) * 100) : 0;
+  return <Card className="rounded-2xl shadow-sm"><CardContent className="p-5"><div className="flex items-center justify-between gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{icon}</div><div className="text-sm font-extrabold">{used.toLocaleString()} / {limit.toLocaleString()}</div></div><div className="mt-4 text-sm font-semibold text-muted-foreground">{label}</div><Progress value={percent} className="mt-3 h-1.5" /></CardContent></Card>;
+}
+
+function PlanCard({ plan, locale, current, checkoutLoading, anyCheckoutLoading, hasActiveSubscription, fixedTermSubscription, onCheckout, onPortal, t }: { plan: BillingPlan; locale: string; current: boolean; checkoutLoading: boolean; anyCheckoutLoading: boolean; hasActiveSubscription: boolean; fixedTermSubscription: boolean; onCheckout: () => void; onPortal: () => void; t: any }) {
+  const benefits = [
+    t('billing.planFeatures.staff', { count: plan.staffLimit }),
+    plan.staffAppInstall ? t('billing.planFeatures.staffApps') : t('billing.planFeatures.browserStaff'),
+    t('billing.planFeatures.ai', { count: plan.aiRequestsMonthly.toLocaleString() }),
+    t('billing.planFeatures.email', { count: plan.emailMonthly.toLocaleString() }),
+    t('billing.planFeatures.sms', { count: plan.smsMonthly.toLocaleString() }),
+    plan.advancedReports ? t('billing.planFeatures.advancedReports') : t('billing.planFeatures.coreReports'),
+  ];
   return (
-    <div
-      className={`flex gap-2 ${
-        mobile ? 'grid grid-cols-2' : 'justify-end'
-      }`}
-    >
-      {invoice.hosted_invoice_url && (
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className={mobile ? 'w-full' : ''}
-        >
-          <a
-            href={invoice.hosted_invoice_url}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <FileText className="mr-2 h-4 w-4" />
-            {t('billing.history.view')}
-          </a>
+    <Card className={`relative overflow-hidden rounded-3xl transition ${plan.highlighted ? 'border-primary/40 shadow-xl shadow-primary/10' : 'shadow-card'} ${current ? 'ring-2 ring-primary' : ''}`}>
+      {plan.highlighted && <div className="bg-primary px-4 py-2 text-center text-xs font-extrabold uppercase tracking-[0.14em] text-primary-foreground">{t('billing.plan.mostPopular')}</div>}
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between gap-3"><div><div className="text-xl font-extrabold">{plan.name}</div><p className="mt-2 min-h-12 text-sm leading-6 text-muted-foreground">{plan.description}</p></div>{current && <BadgeCheck className="h-6 w-6 text-primary" />}</div>
+        <div className="mt-5 flex items-end gap-2"><span className="text-4xl font-black tracking-tight">{formatPlanCurrency(plan.price, locale)}</span><span className="pb-1 text-sm font-semibold text-muted-foreground">{t('billing.plan.perMonth')}</span></div>
+        <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-700"><Sparkles className="h-4 w-4" />{t('billing.plan.trialIncluded', { days: BILLING_TRIAL_DAYS })}</div>
+        <Separator className="my-5" />
+        <div className="space-y-3">{benefits.map((item) => <div key={item} className="flex items-start gap-2.5 text-sm"><div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Check className="h-3 w-3" /></div><span>{item}</span></div>)}</div>
+        <Button className="mt-6 h-11 w-full rounded-xl" variant={current ? 'outline' : plan.highlighted ? 'default' : 'secondary'} disabled={anyCheckoutLoading || (fixedTermSubscription && hasActiveSubscription && !current)} onClick={hasActiveSubscription ? onPortal : onCheckout}>
+          {current ? t('billing.actions.currentPlan') : fixedTermSubscription && hasActiveSubscription ? t('billing.actions.fixedTermLocked') : hasActiveSubscription ? t('billing.actions.changePlan') : checkoutLoading ? t('billing.actions.openingCheckout') : t('billing.actions.startTrial')} {!current && !checkoutLoading && !(fixedTermSubscription && hasActiveSubscription) && <ArrowRight className="ml-2 h-4 w-4" />}
         </Button>
-      )}
-
-      {invoice.invoice_pdf_url && (
-        <Button
-          asChild
-          variant="outline"
-          size="sm"
-          className={mobile ? 'w-full' : ''}
-        >
-          <a
-            href={invoice.invoice_pdf_url}
-            target="_blank"
-            rel="noreferrer"
-          >
-            <Download className="mr-2 h-4 w-4" />
-            PDF
-          </a>
-        </Button>
-      )}
-    </div>
+      </CardContent>
+    </Card>
   );
 }
 
-function SecurityLine({
-  icon,
-  text,
-}: {
-  icon: React.ReactNode;
-  text: string;
-}) {
-  return (
-    <div className="flex items-start gap-3 rounded-xl bg-muted/30 p-4">
-      <div className="mt-0.5 text-primary">{icon}</div>
-      <div>{text}</div>
-    </div>
-  );
-}
-
-function BillingLine({
-  label,
-  value,
-}: {
-  label: string;
-  value: string;
-}) {
-  return (
-    <div className="flex items-center justify-between gap-4 border-b pb-4 last:border-0 last:pb-0">
-      <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-right font-semibold">{value}</span>
-    </div>
-  );
-}
-
-function formatBillingDate(value: string, locale: string) {
-  return new Intl.DateTimeFormat(locale, {
-    day: '2-digit',
-    month: 'short',
-    year: 'numeric',
-  }).format(new Date(value));
-}
-
-function formatBillingCurrency(value: number, locale: string) {
-  return new Intl.NumberFormat(locale, { style: 'currency', currency: 'EUR' }).format(value);
+function formatMinorCurrency(value: number, currency: string, locale: string) {
+  return new Intl.NumberFormat(locale, { style: 'currency', currency: String(currency || 'EUR').toUpperCase() }).format(Number(value || 0) / 100);
 }
