@@ -35,6 +35,10 @@ requireText('supabase/functions/create_subscription_checkout/index.ts', 'stripe.
 requireText('supabase/functions/create_billing_portal_session/index.ts', 'stripe.billingPortal.sessions.create', 'Stripe Billing Portal session exists');
 requireText('supabase/functions/create_billing_portal_session/index.ts', 'STRIPE_PORTAL_CONFIGURATION_ID', 'Normal portal configuration supported');
 requireText('supabase/functions/create_billing_portal_session/index.ts', 'STRIPE_PORTAL_FIXED_CONFIGURATION_ID', 'Fixed-term portal configuration supported');
+requireText('supabase/functions/reconcile_subscription_checkout/index.ts', 'stripe.checkout.sessions.retrieve', 'Checkout return reconciliation retrieves Stripe session');
+requireText('supabase/functions/reconcile_subscription_checkout/index.ts', 'payment_method_collected: true', 'Checkout reconciliation unlocks payment-backed trial');
+requireText('src/pages/owner/Billing.tsx', "functions.invoke('reconcile_subscription_checkout'", 'Billing return performs authenticated reconciliation');
+requireText('src/components/layouts/OwnerDashboardLayout.tsx', 'velliqo:billing-updated', 'Owner shell revalidates access after billing sync');
 
 // Webhook integrity, subscription sync, fixed-term cancellation and payment recovery.
 const webhook = 'supabase/functions/stripe_webhook/index.ts';
