@@ -271,3 +271,7 @@ After sandbox validation:
 ## Taxes / VAT
 
 Billing is technically ready to collect billing addresses and tax IDs, but enabling automated tax collection is a commercial/legal configuration decision. Before live sales, confirm VAT/tax obligations, Stripe Tax registrations/settings, invoice company details and prices (tax inclusive/exclusive) with the appropriate accountant/tax adviser for the Velliqo selling entity.
+
+## Checkout return reconciliation hardening
+
+Phase 14A adds an authenticated `reconcile_subscription_checkout` Edge Function and short post-Checkout polling. Stripe webhooks remain the lifecycle source of truth, but the Checkout return path can now recover a successfully completed Stripe subscription if webhook delivery is delayed. The Owner shell also revalidates billing access after the reconciliation event, so a successful 14-day trial unlocks the workspace without a hard refresh.

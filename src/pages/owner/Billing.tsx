@@ -58,6 +58,7 @@ export default function Billing() {
   const [checkoutPlan, setCheckoutPlan] = React.useState<BillingPlanId | null>(null);
   const [portalLoading, setPortalLoading] = React.useState(false);
   const [offerCode, setOfferCode] = React.useState('');
+  const reconciliationAttemptRef = React.useRef<string | null>(null);
 
   const subscription = summary?.subscription || {};
   const currentPlan = summary?.plan || {};
@@ -79,9 +80,11 @@ export default function Billing() {
       if (invoiceResult.error) throw invoiceResult.error;
       setSummary(summaryResult.data || {});
       setInvoices(invoiceResult.data || []);
+      return summaryResult.data || {};
     } catch (error: any) {
       console.error('Billing load failed', error);
       toast.error(error?.message || t('billing.messages.loadFailed'));
+      return null;
     } finally {
       setLoading(false);
     }
@@ -89,16 +92,52 @@ export default function Billing() {
 
   React.useEffect(() => { void fetchData(); }, [fetchData]);
 
+  const reconcileCheckout = React.useCallback(async () => {
+    if (!businessId) return false;
+    const { error } = await supabase.functions.invoke('reconcile_subscription_checkout', {
+      body: { businessId },
+    });
+    if (error) {
+      console.warn('Checkout reconciliation is still pending', error);
+      return false;
+    }
+
+    for (let attempt = 0; attempt < 12; attempt += 1) {
+      const refreshed = await fetchData();
+      const refreshedStatus = String(refreshed?.subscription?.status || '');
+      if (ACTIVE_STATUSES.has(refreshedStatus)) {
+        window.dispatchEvent(new Event('velliqo:billing-updated'));
+        return true;
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 1250));
+    }
+    return false;
+  }, [businessId, fetchData]);
+
   React.useEffect(() => {
     if (searchParams.get('success') === 'true') {
       toast.success(t('billing.messages.checkoutCompleted'));
-      setSearchParams({});
-      window.setTimeout(() => void fetchData(), 900);
-    } else if (searchParams.get('canceled') === 'true') {
+      let cancelled = false;
+      void reconcileCheckout().finally(() => {
+        if (!cancelled) setSearchParams({});
+      });
+      return () => { cancelled = true; };
+    }
+    if (searchParams.get('canceled') === 'true') {
       toast.info(t('billing.messages.checkoutCancelled'));
       setSearchParams({});
     }
-  }, [fetchData, searchParams, setSearchParams, t]);
+  }, [reconcileCheckout, searchParams, setSearchParams, t]);
+
+  React.useEffect(() => {
+    const pendingSessionId = String(subscription.stripe_checkout_session_id || '').trim();
+    if (!businessId || status !== 'incomplete' || !pendingSessionId) return;
+    if (reconciliationAttemptRef.current === pendingSessionId) return;
+    reconciliationAttemptRef.current = pendingSessionId;
+    // Self-heal checkouts completed before this hardening shipped, or any return
+    // where the success query parameter was lost before the Stripe webhook synced.
+    void reconcileCheckout();
+  }, [businessId, reconcileCheckout, status, subscription.stripe_checkout_session_id]);
 
   const trial = React.useMemo(() => {
     const end = subscription.trial_ends_at ? new Date(subscription.trial_ends_at) : null;

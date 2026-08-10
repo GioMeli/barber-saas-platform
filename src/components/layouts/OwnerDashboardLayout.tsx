@@ -23,25 +23,50 @@ export default function OwnerDashboardLayout() {
   const [isTourOpen, setIsTourOpen] = React.useState(false);
   const [billingAccess, setBillingAccess] = React.useState<boolean | null>(null);
 
-  React.useEffect(() => {
+  const validateBillingAccess = React.useCallback(async () => {
     if (!activeBusiness?.id) {
       setBillingAccess(null);
-      return;
+      return false;
     }
-    let cancelled = false;
-    void (supabase as any).rpc('get_business_billing_summary', { p_business_id: activeBusiness.id }).then(({ data, error }: any) => {
-      if (cancelled) return;
-      if (error) {
-        console.warn('Unable to validate billing access', error);
-        // Do not destroy an active form because of a transient network check.
-        // Database/Edge Function entitlements still protect privileged actions.
-        setBillingAccess((current) => current ?? true);
-        return;
-      }
-      setBillingAccess(Boolean(data?.access_allowed));
-    });
-    return () => { cancelled = true; };
+    const { data, error } = await (supabase as any).rpc('get_business_billing_summary', { p_business_id: activeBusiness.id });
+    if (error) {
+      console.warn('Unable to validate billing access', error);
+      // Do not destroy an active form because of a transient network check.
+      // Database/Edge Function entitlements still protect privileged actions.
+      setBillingAccess((current) => current ?? true);
+      return false;
+    }
+    const allowed = Boolean(data?.access_allowed);
+    setBillingAccess(allowed);
+    return allowed;
   }, [activeBusiness?.id]);
+
+  React.useEffect(() => {
+    let cancelled = false;
+    void validateBillingAccess();
+
+    const revalidate = () => { if (!cancelled) void validateBillingAccess(); };
+    const onVisibility = () => { if (document.visibilityState === 'visible') revalidate(); };
+    window.addEventListener('velliqo:billing-updated', revalidate);
+    window.addEventListener('focus', revalidate);
+    document.addEventListener('visibilitychange', onVisibility);
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener('velliqo:billing-updated', revalidate);
+      window.removeEventListener('focus', revalidate);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [validateBillingAccess]);
+
+  React.useEffect(() => {
+    if (!activeBusiness?.id || billingAccess !== false || location.pathname !== '/dashboard/billing') return;
+    // Stripe webhook delivery is asynchronous. While the owner is on Billing,
+    // revalidate briefly so access unlocks automatically as soon as the trial or
+    // subscription is synchronized, without requiring a hard refresh.
+    const interval = window.setInterval(() => { void validateBillingAccess(); }, 2000);
+    return () => window.clearInterval(interval);
+  }, [activeBusiness?.id, billingAccess, location.pathname, validateBillingAccess]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
