@@ -21,11 +21,17 @@ requireText('src/billing/plans.ts', "staffAppInstall: false", 'Standard installa
 // Signup/onboarding must capture the selected plan and route through Stripe before trial activation.
 requireText('src/pages/auth/SignUp.tsx', 'BILLING_PLANS.map', 'Signup plan selector');
 requireText('src/pages/auth/SignUp.tsx', 'selected_plan: selectedPlan', 'Signup persists selected plan');
+requireText('src/pages/auth/SignUp.tsx', "lg:h-[100dvh] lg:min-h-0 lg:overflow-hidden", 'Signup desktop shell is viewport-contained');
+requireText('src/pages/auth/SignUp.tsx', 'lg:max-h-[calc(100dvh-24px)]', 'Signup form fits the desktop viewport');
+requireText('src/pages/auth/SignUp.tsx', 'to="/business-types"', 'Signup keeps business-type return control visible');
 requireText('src/pages/onboarding/OnboardingWizard.tsx', "rpc('initialize_business_billing'", 'Onboarding billing bootstrap');
 requireText('src/pages/onboarding/OnboardingWizard.tsx', "functions.invoke('create_subscription_checkout'", 'Onboarding secure Stripe Checkout');
 
 // Stripe checkout must collect payment details before trial and support fixed non-renewing offers.
 requireText('supabase/functions/create_subscription_checkout/index.ts', "payment_method_collection: 'always'", 'Checkout always collects payment method');
+requireText('supabase/functions/create_subscription_checkout/index.ts', 'custom_text:', 'Checkout includes professional customer-facing billing copy');
+requireText('supabase/functions/create_subscription_checkout/index.ts', 'after_expiration: { recovery:', 'Checkout supports secure expired-session recovery');
+requireText('supabase/functions/create_subscription_checkout/index.ts', 'locale: checkoutLocale', 'Checkout follows the Velliqo interface language');
 requireText('supabase/functions/create_subscription_checkout/index.ts', 'subscriptionData.trial_period_days = trialDays', 'Checkout sets trial period');
 requireText('supabase/functions/create_subscription_checkout/index.ts', "rpc('reserve_billing_offer_code'", 'Offer code is atomically reserved');
 requireText('supabase/functions/create_subscription_checkout/index.ts', "duration: 'forever'", 'Offer discount spans fixed Stripe term');
@@ -42,7 +48,9 @@ requireText('src/components/layouts/OwnerDashboardLayout.tsx', 'velliqo:billing-
 
 // Webhook integrity, subscription sync, fixed-term cancellation and payment recovery.
 const webhook = 'supabase/functions/stripe_webhook/index.ts';
-requireText(webhook, 'stripe.webhooks.constructEvent', 'Stripe webhook signature validation');
+requireText(webhook, 'Stripe.createSubtleCryptoProvider()', 'Stripe webhook uses Deno Web Crypto provider');
+requireText(webhook, 'stripe.webhooks.constructEventAsync', 'Stripe webhook signature validation uses async raw-body verification');
+requireText(webhook, 'STRIPE_WEBHOOK_SECRET_PREVIOUS', 'Webhook secret rotation is supported without downtime');
 requireText(webhook, "case 'checkout.session.completed'", 'Checkout completion webhook');
 requireText(webhook, "case 'checkout.session.expired'", 'Checkout expiration webhook');
 requireText(webhook, "case 'customer.subscription.updated'", 'Subscription update webhook');

@@ -4,7 +4,8 @@ import Stripe from 'npm:stripe@19.1.0';
 const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? '';
-const STRIPE_WEBHOOK_SECRET = Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '';
+const STRIPE_WEBHOOK_SECRET = (Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '').trim();
+const STRIPE_WEBHOOK_SECRET_PREVIOUS = (Deno.env.get('STRIPE_WEBHOOK_SECRET_PREVIOUS') ?? '').trim();
 const PAYMENT_GRACE_DAYS = 7;
 
 const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
@@ -28,13 +29,21 @@ Deno.serve(async (request) => {
   if (!signature) return new Response('Missing Stripe signature', { status: 400 });
 
   const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2025-08-27.basil' });
+  // Supabase Edge Functions run on Deno. Stripe's async verifier with the
+  // Web Crypto provider is the supported verification path in this runtime.
+  // The body must remain the exact raw UTF-8 payload received from Stripe.
+  const cryptoProvider = Stripe.createSubtleCryptoProvider();
   const rawBody = await request.text();
 
   let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, STRIPE_WEBHOOK_SECRET);
+    event = await verifyStripeEvent({ stripe, rawBody, signature, cryptoProvider });
   } catch (error) {
-    console.error('Stripe signature verification failed', error);
+    console.error('Stripe signature verification failed', {
+      message: errorMessage(error),
+      hasPrimarySecret: Boolean(STRIPE_WEBHOOK_SECRET),
+      hasPreviousSecret: Boolean(STRIPE_WEBHOOK_SECRET_PREVIOUS),
+    });
     return new Response('Invalid Stripe signature', { status: 400 });
   }
 
@@ -102,6 +111,37 @@ Deno.serve(async (request) => {
     return new Response('Stripe webhook processing failed', { status: 500 });
   }
 });
+
+async function verifyStripeEvent({
+  stripe,
+  rawBody,
+  signature,
+  cryptoProvider,
+}: {
+  stripe: Stripe;
+  rawBody: string;
+  signature: string;
+  cryptoProvider: ReturnType<typeof Stripe.createSubtleCryptoProvider>;
+}): Promise<Stripe.Event> {
+  const secrets = [STRIPE_WEBHOOK_SECRET, STRIPE_WEBHOOK_SECRET_PREVIOUS].filter(Boolean);
+  let lastError: unknown = new Error('No Stripe webhook signing secret is configured');
+
+  for (const secret of secrets) {
+    try {
+      return await stripe.webhooks.constructEventAsync(
+        rawBody,
+        signature,
+        secret,
+        undefined,
+        cryptoProvider,
+      );
+    } catch (error) {
+      lastError = error;
+    }
+  }
+
+  throw lastError;
+}
 
 async function handleCheckoutCompleted(stripe: Stripe, session: Stripe.Checkout.Session) {
   if (session.mode !== 'subscription' || !session.subscription) return;
