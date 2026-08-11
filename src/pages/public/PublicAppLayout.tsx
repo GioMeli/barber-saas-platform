@@ -24,6 +24,8 @@ import { Button } from '@/components/ui/button';
 import { IndustryThemeRoot } from '@/theme';
 import { getIndustryConfig } from '@/config/industries';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { useTranslation } from 'react-i18next';
 import { useStorePWA } from '@/hooks/useStorePWA';
@@ -161,6 +163,11 @@ export default function PublicAppLayout() {
       return;
     }
 
+    if (authMode === 'signup' && phone.trim() && !isLikelyE164(phone)) {
+      toast.error(t('common.invalidInternationalPhone'));
+      return;
+    }
+
     if (authMode === 'signup' && !name.trim()) {
       toast.error(t('storefront.public.validation.fullNameRequired'));
       return;
@@ -187,7 +194,7 @@ export default function PublicAppLayout() {
         if (error) throw error;
 
         if (data.session) {
-          const joined = await joinCurrentBusiness(phone.trim() || null);
+          const joined = await joinCurrentBusiness(phone.trim() ? normalizeE164(phone) : null);
           if (!joined) return;
 
           toast.success(t('storefront.public.messages.accountCreated'));
@@ -205,7 +212,7 @@ export default function PublicAppLayout() {
 
         if (error) throw error;
 
-        const joined = await joinCurrentBusiness(phone.trim() || null);
+        const joined = await joinCurrentBusiness(phone.trim() ? normalizeE164(phone) : null);
         if (!joined) return;
 
         toast.success(t('storefront.public.messages.signedIn'));
@@ -629,14 +636,12 @@ export default function PublicAppLayout() {
 
                     <div className="space-y-2">
                       <Label htmlFor="customer_phone">{t('storefront.public.auth.phone')}</Label>
-                      <Input
+                      <InternationalPhoneInput
                         id="customer_phone"
-                        type="tel"
-                        autoComplete="tel"
-                        className="h-12 rounded-xl"
-                        placeholder="+357..."
                         value={phone}
-                        onChange={(event) => setPhone(event.target.value)}
+                        onChange={setPhone}
+                        defaultCountry={business?.country}
+                        autoComplete="tel"
                       />
                     </div>
                   </>

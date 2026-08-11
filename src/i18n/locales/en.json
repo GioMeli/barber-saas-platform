@@ -110,7 +110,8 @@
     "notAvailable": "Not available",
     "refresh": "Refresh",
     "close": "Close",
-    "next": "Next"
+    "next": "Next",
+    "invalidInternationalPhone": "Enter a valid international phone number including country code."
   },
   "language": {
     "label": "Language",
@@ -1707,7 +1708,8 @@
       "selectDate": "Select a date",
       "browseAvailability": "Browse real availability for the next days.",
       "specificDate": "Or choose a specific date",
-      "continue": "Continue to Your Details"
+      "continue": "Continue to Your Details",
+      "availableTimes": "Available times"
     },
     "timeGroups": {
       "morning": "Morning",
@@ -1772,7 +1774,8 @@
     },
     "validation": {
       "namePhoneRequired": "Name and phone are required",
-      "completeSteps": "Please complete all booking steps."
+      "completeSteps": "Please complete all booking steps.",
+      "internationalPhone": "Enter a valid international phone number including country code."
     },
     "messages": {
       "loadOptionsFailed": "Unable to load booking options.",

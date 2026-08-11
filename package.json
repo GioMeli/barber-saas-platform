@@ -38,7 +38,8 @@
     "phase12d:check": "node scripts/check-phase12d-premium-learning-business-types.mjs",
     "training-certification:check": "node scripts/check-training-certification.mjs",
     "communications:check": "node scripts/check-production-communications.mjs",
-    "billing:check": "node scripts/check-production-billing.mjs"
+    "billing:check": "node scripts/check-production-billing.mjs",
+    "phase14c:check": "node scripts/check-phase14c-launch-ops.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",

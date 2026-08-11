@@ -110,7 +110,8 @@
     "notAvailable": "Kullanılamıyor",
     "refresh": "Yenile",
     "close": "Kapat",
-    "next": "İleri"
+    "next": "İleri",
+    "invalidInternationalPhone": "Ülke kodu dahil geçerli bir uluslararası telefon numarası girin."
   },
   "language": {
     "label": "Dil",
@@ -1707,7 +1708,8 @@
       "selectDate": "Tarih seçin",
       "browseAvailability": "Önümüzdeki günlerin gerçek uygunluğunu görüntüleyin.",
       "specificDate": "Veya belirli bir tarih seçin",
-      "continue": "Bilgilerinize devam edin"
+      "continue": "Bilgilerinize devam edin",
+      "availableTimes": "Uygun saatler"
     },
     "timeGroups": {
       "morning": "Sabah",
@@ -1772,7 +1774,8 @@
     },
     "validation": {
       "namePhoneRequired": "Ad ve telefon zorunludur",
-      "completeSteps": "Lütfen tüm rezervasyon adımlarını tamamlayın."
+      "completeSteps": "Lütfen tüm rezervasyon adımlarını tamamlayın.",
+      "internationalPhone": "Ülke kodu dahil geçerli bir uluslararası telefon numarası girin."
     },
     "messages": {
       "loadOptionsFailed": "Rezervasyon seçenekleri yüklenemedi.",

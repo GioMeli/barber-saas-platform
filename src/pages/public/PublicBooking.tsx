@@ -24,10 +24,13 @@ import {
   Sparkles,
   UserRound,
 } from 'lucide-react';
-import { addDays, format, isSameDay, parseISO, startOfToday } from 'date-fns';
+import { addDays, format, startOfToday } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import { ServiceThumbnail } from '@/components/storefront/ServiceThumbnail';
+import { Calendar } from '@/components/ui/calendar';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 
 type StoreContext = {
   business: any;
@@ -62,7 +65,6 @@ export default function PublicBooking() {
   const [selectedDate, setSelectedDate] = useState(
     format(startOfToday(), 'yyyy-MM-dd')
   );
-  const [dateWindowStart, setDateWindowStart] = useState(startOfToday());
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [availableSlots, setAvailableSlots] = useState<string[]>([]);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
@@ -241,11 +243,6 @@ export default function PublicBooking() {
     0
   );
 
-  const visibleDates = useMemo(
-    () => Array.from({ length: 7 }, (_, index) => addDays(dateWindowStart, index)),
-    [dateWindowStart]
-  );
-
   const estimatedEndTime = useMemo(() => {
     if (!selectedTime || totalDuration <= 0) return null;
 
@@ -302,6 +299,11 @@ export default function PublicBooking() {
       return;
     }
 
+    if (!isLikelyE164(customerDetails.phone)) {
+      toast.error(t('publicBooking.validation.internationalPhone', { defaultValue: 'Enter a valid international phone number including country code.' }));
+      return;
+    }
+
     if (!selectedDate || !selectedTime || selectedServices.length === 0) {
       toast.error(t('publicBooking.validation.completeSteps'));
       return;
@@ -318,7 +320,7 @@ export default function PublicBooking() {
         p_local_time: selectedTime,
         p_customer_name: customerDetails.name.trim(),
         p_customer_email: customerDetails.email.trim() || null,
-        p_customer_phone: customerDetails.phone.trim(),
+        p_customer_phone: normalizeE164(customerDetails.phone),
         p_notes: customerDetails.notes.trim() || null,
       });
 
@@ -731,95 +733,51 @@ export default function PublicBooking() {
                   description={t('publicBooking.dateTime.description')}
                 />
 
-                <div className="rounded-2xl border bg-muted/15 p-4">
-                  <div className="flex items-center justify-between gap-3">
-                    <div>
-                      <div className="text-sm font-semibold">{t('publicBooking.dateTime.selectDate')}</div>
-                      <div className="mt-1 text-xs text-muted-foreground">
-                        {t('publicBooking.dateTime.browseAvailability')}
-                      </div>
+                <div className="grid gap-5 lg:grid-cols-[minmax(300px,0.82fr)_minmax(0,1.18fr)]">
+                  <div className="overflow-hidden rounded-[26px] border bg-gradient-to-b from-background to-muted/20 p-3 shadow-sm sm:p-5">
+                    <div className="mb-4 px-1">
+                      <div className="text-sm font-bold">{t('publicBooking.dateTime.selectDate')}</div>
+                      <div className="mt-1 text-xs leading-5 text-muted-foreground">{t('publicBooking.dateTime.browseAvailability')}</div>
                     </div>
-
-                    <div className="flex gap-2">
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant="outline"
-                        className="h-9 w-9 rounded-xl"
-                        disabled={isSameDay(dateWindowStart, startOfToday())}
-                        onClick={() =>
-                          setDateWindowStart((current) =>
-                            addDays(current, -7) < startOfToday()
-                              ? startOfToday()
-                              : addDays(current, -7)
-                          )
-                        }
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        size="icon"
-                        variant="outline"
-                        className="h-9 w-9 rounded-xl"
-                        onClick={() =>
-                          setDateWindowStart((current) => addDays(current, 7))
-                        }
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="scrollbar-subtle mt-4 flex gap-2 overflow-x-auto pb-1">
-                    {visibleDates.map((date) => {
-                      const value = format(date, 'yyyy-MM-dd');
-                      const active = selectedDate === value;
-
-                      return (
-                        <button
-                          key={value}
-                          type="button"
-                          onClick={() => setSelectedDate(value)}
-                          className={`min-w-[82px] rounded-2xl border px-3 py-3 text-center transition ${
-                            active
-                              ? 'border-primary bg-primary text-primary-foreground shadow-sm'
-                              : 'bg-card hover:border-primary/40'
-                          }`}
-                        >
-                          <div className={`text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
-                            {new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(date)}
-                          </div>
-                          <div className="mt-1 text-lg font-bold">
-                            {format(date, 'd')}
-                          </div>
-                          <div className={`mt-1 text-xs ${active ? 'text-primary-foreground/75' : 'text-muted-foreground'}`}>
-                            {new Intl.DateTimeFormat(locale, { month: 'short' }).format(date)}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  <div className="mt-4 max-w-xs space-y-2">
-                    <Label className="text-xs text-muted-foreground">
-                      {t('publicBooking.dateTime.specificDate')}
-                    </Label>
-                    <Input
-                      type="date"
-                      min={format(new Date(), 'yyyy-MM-dd')}
-                      className="h-10 rounded-xl"
-                      value={selectedDate}
-                      onChange={(event) => {
-                        const nextDate = event.target.value;
-                        setSelectedDate(nextDate);
-                        setDateWindowStart(parseISO(nextDate));
+                    <Calendar
+                      mode="single"
+                      selected={selectedDate ? new Date(`${selectedDate}T12:00:00`) : undefined}
+                      onSelect={(date) => {
+                        if (!date) return;
+                        setSelectedDate(format(date, 'yyyy-MM-dd'));
+                      }}
+                      disabled={(date) => {
+                        const value = format(date, 'yyyy-MM-dd');
+                        const maxDays = Number(business?.business_settings?.max_booking_period || 60);
+                        const min = format(startOfToday(), 'yyyy-MM-dd');
+                        const max = format(addDays(startOfToday(), maxDays), 'yyyy-MM-dd');
+                        const closure = closures.some((item) => value >= item.start_date && value <= item.end_date);
+                        return value < min || value > max || closure;
+                      }}
+                      className="mx-auto w-full [--cell-size:2.6rem] sm:[--cell-size:2.9rem]"
+                      classNames={{
+                        month: 'flex w-full flex-col gap-4',
+                        table: 'w-full border-collapse',
+                        week: 'mt-2 flex w-full',
+                        day: 'group/day relative aspect-square h-full flex-1 select-none p-0 text-center',
+                        weekday: 'text-muted-foreground flex-1 select-none rounded-md text-[0.75rem] font-semibold uppercase',
                       }}
                     />
+                    <div className="mt-4 flex items-center justify-between rounded-2xl bg-background px-4 py-3 text-sm shadow-sm ring-1 ring-border/60">
+                      <span className="text-muted-foreground">{t('publicBooking.dateTime.specificDate')}</span>
+                      <span className="font-bold">{new Intl.DateTimeFormat(locale, { weekday: 'short', day: 'numeric', month: 'short' }).format(new Date(`${selectedDate}T12:00:00`))}</span>
+                    </div>
                   </div>
-                </div>
 
-                <div aria-live="polite">
+                  <div className="rounded-[26px] border bg-background p-4 shadow-sm sm:p-5">
+                    <div className="mb-4 flex items-start justify-between gap-3 border-b pb-4">
+                      <div>
+                        <div className="text-sm font-bold">{t('publicBooking.dateTime.availableTimes')}</div>
+                        <div className="mt-1 text-xs text-muted-foreground">{new Intl.DateTimeFormat(locale, { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date(`${selectedDate}T12:00:00`))}</div>
+                      </div>
+                      <Badge variant="outline" className="rounded-full">{availableSlots.length}</Badge>
+                    </div>
+                    <div aria-live="polite">
                 {availabilityLoading ? (
                   <div className="rounded-2xl border p-10 text-center text-sm text-muted-foreground">
                     {t('publicBooking.states.loadingTimes')}
@@ -871,6 +829,8 @@ export default function PublicBooking() {
                     ))}
                   </div>
                 )}
+                    </div>
+                  </div>
                 </div>
 
                 {!availabilityLoading &&
@@ -920,16 +880,12 @@ export default function PublicBooking() {
                     {!customerDetails.phone && (
                       <div className="space-y-2">
                         <Label>{t('publicBooking.details.phoneRequired')}</Label>
-                        <Input
-                          type="tel"
-                          className="h-11 rounded-xl"
+                        <InternationalPhoneInput
                           value={customerDetails.phone}
-                          onChange={(event) =>
-                            setCustomerDetails({
-                              ...customerDetails,
-                              phone: event.target.value,
-                            })
-                          }
+                          onChange={(phone) => setCustomerDetails({ ...customerDetails, phone })}
+                          defaultCountry={business.country}
+                          autoComplete="tel"
+                          required
                         />
                       </div>
                     )}
@@ -953,19 +909,13 @@ export default function PublicBooking() {
 
                     <div className="space-y-2">
                       <Label>{t('publicBooking.details.phoneRequiredShort')}</Label>
-                      <Input
-                        type="tel"
-                        inputMode="tel"
-                        autoComplete="tel"
-                        className="h-11 rounded-xl"
-                        value={customerDetails.phone}
-                        onChange={(event) =>
-                          setCustomerDetails({
-                            ...customerDetails,
-                            phone: event.target.value,
-                          })
-                        }
-                      />
+                      <InternationalPhoneInput
+                          value={customerDetails.phone}
+                          onChange={(phone) => setCustomerDetails({ ...customerDetails, phone })}
+                          defaultCountry={business.country}
+                          autoComplete="tel"
+                          required
+                        />
                     </div>
 
                     <div className="space-y-2">

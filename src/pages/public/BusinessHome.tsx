@@ -94,6 +94,26 @@ export default function BusinessHome() {
     if (business?.id) void fetchStorefrontData();
   }, [business?.id, user?.id]);
 
+  useEffect(() => {
+    const items = Array.from(document.querySelectorAll<HTMLElement>('.storefront-reveal'));
+    if (!items.length) return;
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || !('IntersectionObserver' in window)) {
+      items.forEach((item) => item.classList.add('is-visible'));
+      return;
+    }
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          (entry.target as HTMLElement).classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, [loading, reviews.length, services.length, staff.length]);
+
   const fetchStorefrontData = async () => {
     if (!business?.id) return;
     setLoading(true);
@@ -187,7 +207,7 @@ export default function BusinessHome() {
     );
     setReviews(
       reviewsResult.status === 'fulfilled' && !reviewsResult.value.error
-        ? (reviewsResult.value.data ?? []).slice(0, 6)
+        ? (reviewsResult.value.data ?? [])
         : []
     );
 
@@ -281,7 +301,7 @@ export default function BusinessHome() {
   };
 
   return (
-    <div className="pb-24 md:pb-0">
+    <div className="storefront-premium pb-24 md:pb-0">
       <section className="relative overflow-hidden bg-zinc-950 text-white">
         {coverImage && (
           <img
@@ -290,10 +310,12 @@ export default function BusinessHome() {
             className="absolute inset-0 h-full w-full object-cover opacity-50"
           />
         )}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/75 to-black/35" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/80 to-violet-950/45" />
+        <div className="storefront-orb absolute -right-20 -top-24 h-80 w-80 rounded-full bg-violet-500/30 blur-3xl" />
+        <div className="storefront-orb storefront-orb-delay absolute -bottom-32 left-[35%] h-72 w-72 rounded-full bg-fuchsia-400/15 blur-3xl" />
 
-        <div className="relative mx-auto grid min-h-[390px] max-w-7xl items-center gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1.25fr_0.75fr] lg:py-12">
-          <div className="max-w-3xl">
+        <div className="relative mx-auto grid min-h-[440px] max-w-7xl items-center gap-8 px-4 py-12 sm:px-6 lg:grid-cols-[1.18fr_0.82fr] lg:py-16">
+          <div className="storefront-reveal max-w-3xl">
             <div className="flex flex-wrap items-center gap-2">
               <Badge className="border-white/15 bg-white/10 text-white hover:bg-white/15">
                 <Sparkles className="mr-1.5 h-3.5 w-3.5" />
@@ -321,11 +343,11 @@ export default function BusinessHome() {
                 <img
                   src={business.logo_url}
                   alt={business.name}
-                  className="h-16 w-16 rounded-2xl border border-white/20 object-cover shadow-xl"
+                  className="h-20 w-20 rounded-[24px] border border-white/25 bg-white/10 object-cover shadow-2xl ring-1 ring-white/10"
                 />
               )}
               <div>
-                <h1 className="text-3xl font-extrabold tracking-tight sm:text-5xl">
+                <h1 className="text-4xl font-black tracking-[-0.035em] sm:text-6xl">
                   {business.name}
                 </h1>
                 {(business.city || fullAddress) && (
@@ -393,8 +415,8 @@ export default function BusinessHome() {
             )}
           </div>
 
-          <div className="hidden lg:block">
-            <div className="rounded-3xl border border-white/15 bg-black/25 p-5 backdrop-blur-xl">
+          <div className="storefront-reveal storefront-reveal-delay hidden lg:block">
+            <div className="rounded-[30px] border border-white/15 bg-white/[0.08] p-5 shadow-2xl backdrop-blur-2xl">
               <div className="text-xs font-semibold uppercase tracking-[0.18em] text-white/55">
                 {t('storefront.public.hero.quickAccess')}
               </div>
@@ -482,6 +504,28 @@ export default function BusinessHome() {
       <main className="mx-auto max-w-7xl space-y-10 px-4 py-8 sm:px-6">
         <StoreInstallPrompt business={business} />
 
+        {presence.show_reviews !== false && reviewSummary && reviews.length > 0 && (
+          <section className="storefront-reveal overflow-hidden rounded-[30px] border bg-gradient-to-br from-card via-card to-primary/[0.06] shadow-sm">
+            <div className="grid gap-6 p-5 sm:p-7 lg:grid-cols-[0.34fr_0.66fr] lg:items-center">
+              <div className="rounded-[24px] bg-slate-950 p-5 text-white shadow-xl">
+                <div className="text-xs font-bold uppercase tracking-[.18em] text-white/55">{t('storefront.public.navigation.reviews')}</div>
+                <div className="mt-3 flex items-end gap-2"><span className="text-5xl font-black tracking-tight">{reviewSummary.average.toFixed(1)}</span><span className="pb-1 text-sm text-white/55">/ 5</span></div>
+                <div className="mt-3 flex gap-1 text-amber-400">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className={`h-4 w-4 ${index < Math.round(reviewSummary.average) ? 'fill-current' : 'text-white/25'}`} />)}</div>
+                <div className="mt-3 text-xs text-white/60">{t('storefront.public.hero.reviewCount', { count: reviewSummary.count })}</div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                {reviews.slice(0, 2).map((review) => (
+                  <button key={review.id} type="button" onClick={() => scrollToSection('reviews')} className="group rounded-[22px] border bg-background/80 p-4 text-left transition duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+                    <div className="flex gap-0.5 text-amber-500">{Array.from({ length: 5 }).map((_, index) => <Star key={index} className={`h-3.5 w-3.5 ${index < review.rating ? 'fill-current' : 'text-muted'}`} />)}</div>
+                    <p className="mt-3 line-clamp-3 text-sm font-medium leading-6">“{review.comment || review.title || t('storefront.public.sections.reviews.defaultTitle')}”</p>
+                    <div className="mt-3 text-xs font-bold text-muted-foreground">{review.customer_display_name || t('storefront.public.sections.reviews.verifiedCustomer')}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         <section id="services" className="scroll-mt-28 sm:scroll-mt-32">
           <CompactHeading
             icon={<Scissors className="h-5 w-5" />}
@@ -494,7 +538,7 @@ export default function BusinessHome() {
           ) : services.length === 0 ? (
             <EmptyState text={t('storefront.public.sections.services.empty')} />
           ) : (
-            <Card className="overflow-hidden rounded-2xl shadow-sm">
+            <Card className="storefront-reveal overflow-hidden rounded-[28px] border-border/70 shadow-sm">
               <CardContent className="p-0">
                 <div className="divide-y">
                   {services.map((service) => (
@@ -553,7 +597,7 @@ export default function BusinessHome() {
               {staff.map((member) => (
                 <Card
                   key={member.id}
-                  className="min-w-[250px] max-w-[280px] snap-start rounded-2xl shadow-sm"
+                  className="storefront-reveal min-w-[250px] max-w-[280px] snap-start rounded-[26px] border-border/70 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl"
                 >
                   <CardContent className="p-4">
                     <div className="flex items-center gap-3">
@@ -696,7 +740,7 @@ export default function BusinessHome() {
           ) : (
             <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
               {reviews.slice(0, 3).map((review) => (
-                <Card key={review.id} className="rounded-2xl shadow-sm">
+                <Card key={review.id} className="storefront-reveal rounded-[26px] border-border/70 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-xl">
                   <CardContent className="p-5">
                     <div className="flex gap-0.5 text-amber-500">
                       {Array.from({ length: 5 }).map((_, index) => (
