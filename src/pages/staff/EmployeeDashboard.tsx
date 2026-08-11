@@ -17,6 +17,8 @@ import { StaffTrainingDialog } from '@/components/training/StaffTrainingDialog';
 import { getTrustedDeviceCredentials, registerTrustedDevice, revokeTrustedDevice, trustedDeviceSignIn } from '@/staff/trustedDevice';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/components/ui/input-otp';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -1138,7 +1140,7 @@ export default function EmployeeDashboard() {
 
             <div className="grid gap-4 sm:grid-cols-2">
               <Field label={t('staffPortal.create.customerName')}><Input value={createForm.customer_name} onChange={(event) => setCreateForm({ ...createForm, customer_name: event.target.value })} /></Field>
-              <Field label={t('staffPortal.create.customerPhone')}><Input type="tel" value={createForm.customer_phone} onChange={(event) => setCreateForm({ ...createForm, customer_phone: event.target.value })} /></Field>
+              <Field label={t('staffPortal.create.customerPhone')}><InternationalPhoneInput value={createForm.customer_phone} onChange={(phone) => setCreateForm({ ...createForm, customer_phone: phone })} defaultCountry={workspace?.business?.country} /></Field>
               <div className="sm:col-span-2"><Field label={t('staffPortal.create.customerEmail')}><Input type="email" value={createForm.customer_email} onChange={(event) => setCreateForm({ ...createForm, customer_email: event.target.value })} /></Field></div>
             </div>
 

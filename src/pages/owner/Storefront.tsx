@@ -5,6 +5,8 @@ import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
@@ -425,7 +427,7 @@ export default function Storefront() {
           <CardContent className="space-y-7 p-5 sm:p-7">
             <SectionHeader icon={<Phone className="h-5 w-5" />} title={t('storefront.owner.contact.title')} description={t('storefront.owner.contact.description')} />
             <div className="grid gap-5 sm:grid-cols-2">
-              <Field label={t('storefront.owner.contact.publicPhone')} hint={t('storefront.owner.contact.phoneHint')}><Input type="tel" value={form.phone} onChange={(event) => update('phone', event.target.value)} placeholder="+357..." /></Field>
+              <Field label={t('storefront.owner.contact.publicPhone')} hint={t('storefront.owner.contact.phoneHint')}><InternationalPhoneInput value={form.phone} onChange={(phone) => update('phone', phone)} defaultCountry={form.country || business?.country} /></Field>
               <Field label={t('storefront.owner.contact.publicEmail')} hint={t('storefront.owner.contact.emailHint')}><Input type="email" value={form.email} onChange={(event) => update('email', event.target.value)} placeholder="hello@business.com" /></Field>
             </div>
           </CardContent>

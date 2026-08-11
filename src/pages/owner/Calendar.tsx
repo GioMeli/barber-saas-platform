@@ -7,6 +7,8 @@ import OutlookCalendarView from '@/components/calendar/OutlookCalendarView';
 import { OwnerAppointmentDetailsSheet } from '@/components/appointments/OwnerAppointmentDetailsSheet';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Textarea } from '@/components/ui/textarea';
@@ -1054,16 +1056,10 @@ export default function Calendar() {
 
                     <div className="space-y-2">
                       <Label>{t('calendar.labels.phone')}</Label>
-                      <Input
-                        className="h-11 rounded-xl"
-                        type="tel"
+                      <InternationalPhoneInput
                         value={newCustomer.phone}
-                        onChange={(event) =>
-                          setNewCustomer({
-                            ...newCustomer,
-                            phone: event.target.value,
-                          })
-                        }
+                        onChange={(phone) => setNewCustomer({ ...newCustomer, phone })}
+                        defaultCountry={business?.country}
                       />
                     </div>
 

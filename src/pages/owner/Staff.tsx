@@ -5,6 +5,8 @@ import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import {
   Dialog,
@@ -441,6 +443,11 @@ export default function Staff() {
       }
     }
 
+    if (formData.phone.trim() && !isLikelyE164(formData.phone)) {
+      toast.error(t('common.invalidInternationalPhone'));
+      return false;
+    }
+
     if (formData.personal_access_enabled && !formData.email.trim()) {
       toast.error(t('staff.personalAccess.validation.emailRequired'));
       return false;
@@ -468,7 +475,7 @@ export default function Staff() {
         business_id: businessId,
         name: formData.name.trim(),
         email: formData.email.trim() || null,
-        phone: formData.phone.trim() || null,
+        phone: formData.phone.trim() ? normalizeE164(formData.phone) : null,
         photo_url: formData.photo_url || null,
         bio: formData.bio.trim() || null,
         is_active: formData.is_active,
@@ -1147,13 +1154,9 @@ export default function Staff() {
                 </Field>
 
                 <Field label={t('staff.fields.phone')}>
-                  <Input
-                    className="h-11 rounded-xl"
-                    type="tel"
+                  <InternationalPhoneInput
                     value={formData.phone}
-                    onChange={(event) =>
-                      setFormData({ ...formData, phone: event.target.value })
-                    }
+                    onChange={(phone) => setFormData({ ...formData, phone })}
                   />
                 </Field>
 

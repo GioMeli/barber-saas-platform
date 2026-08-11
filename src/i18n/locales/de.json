@@ -110,7 +110,8 @@
     "notAvailable": "Nicht verfügbar",
     "refresh": "Aktualisieren",
     "close": "Schließen",
-    "next": "Weiter"
+    "next": "Weiter",
+    "invalidInternationalPhone": "Geben Sie eine gültige internationale Telefonnummer mit Ländervorwahl ein."
   },
   "language": {
     "label": "Sprache",
@@ -1707,7 +1708,8 @@
       "selectDate": "Datum auswählen",
       "browseAvailability": "Sehen Sie die echte Verfügbarkeit der nächsten Tage.",
       "specificDate": "Oder ein bestimmtes Datum auswählen",
-      "continue": "Weiter zu Ihren Daten"
+      "continue": "Weiter zu Ihren Daten",
+      "availableTimes": "Verfügbare Zeiten"
     },
     "timeGroups": {
       "morning": "Vormittag",
@@ -1772,7 +1774,8 @@
     },
     "validation": {
       "namePhoneRequired": "Name und Telefonnummer sind erforderlich",
-      "completeSteps": "Bitte schließen Sie alle Buchungsschritte ab."
+      "completeSteps": "Bitte schließen Sie alle Buchungsschritte ab.",
+      "internationalPhone": "Geben Sie eine gültige internationale Telefonnummer mit Ländervorwahl ein."
     },
     "messages": {
       "loadOptionsFailed": "Buchungsoptionen konnten nicht geladen werden.",

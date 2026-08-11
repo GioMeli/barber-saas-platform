@@ -110,7 +110,8 @@
     "notAvailable": "No disponible",
     "refresh": "Actualizar",
     "close": "Cerrar",
-    "next": "Siguiente"
+    "next": "Siguiente",
+    "invalidInternationalPhone": "Introduce un número de teléfono internacional válido con código de país."
   },
   "language": {
     "label": "Idioma",
@@ -1707,7 +1708,8 @@
       "selectDate": "Selecciona una fecha",
       "browseAvailability": "Consulta la disponibilidad real de los próximos días.",
       "specificDate": "O elige una fecha concreta",
-      "continue": "Continuar a tus datos"
+      "continue": "Continuar a tus datos",
+      "availableTimes": "Horas disponibles"
     },
     "timeGroups": {
       "morning": "Mañana",
@@ -1772,7 +1774,8 @@
     },
     "validation": {
       "namePhoneRequired": "El nombre y el teléfono son obligatorios",
-      "completeSteps": "Completa todos los pasos de la reserva."
+      "completeSteps": "Completa todos los pasos de la reserva.",
+      "internationalPhone": "Introduce un número de teléfono internacional válido con código de país."
     },
     "messages": {
       "loadOptionsFailed": "No se pudieron cargar las opciones de reserva.",

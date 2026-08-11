@@ -5,6 +5,8 @@ import { staffSupabase } from '@/db/staffSupabase';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
@@ -152,7 +154,7 @@ export function StaffProfileSheet({ open, onOpenChange, business, employee, onSa
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label>{t('staffPortal.profile.phone')}</Label>
-              <Input value={phone} maxLength={60} onChange={(event) => setPhone(event.target.value)} className="h-11 rounded-xl" />
+              <InternationalPhoneInput value={phone} onChange={setPhone} />
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label>{t('staffPortal.profile.bio')}</Label>

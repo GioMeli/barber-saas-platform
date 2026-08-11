@@ -6,6 +6,8 @@ import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import {
   Table,
@@ -312,6 +314,11 @@ export default function Customers() {
       return;
     }
 
+    if (formData.phone.trim() && !isLikelyE164(formData.phone)) {
+      toast.error(t('common.invalidInternationalPhone'));
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -319,7 +326,7 @@ export default function Customers() {
         business_id: businessId,
         full_name: formData.full_name.trim(),
         email: formData.email.trim().toLowerCase() || null,
-        phone: formData.phone.trim() || null,
+        phone: formData.phone.trim() ? normalizeE164(formData.phone) : null,
         notes: formData.notes.trim() || null,
         updated_at: new Date().toISOString(),
       };
@@ -951,14 +958,10 @@ export default function Customers() {
 
             <div className="grid gap-2">
               <Label htmlFor="phone">{t('customers.form.phone')}</Label>
-              <Input
+              <InternationalPhoneInput
                 id="phone"
-                type="tel"
-                className="h-11 rounded-xl"
                 value={formData.phone}
-                onChange={(event) =>
-                  setFormData({ ...formData, phone: event.target.value })
-                }
+                onChange={(phone) => setFormData({ ...formData, phone })}
               />
             </div>
 

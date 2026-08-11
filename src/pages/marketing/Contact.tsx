@@ -13,6 +13,8 @@ import {
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Textarea } from '@/components/ui/textarea';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 
@@ -167,7 +169,7 @@ export default function Contact() {
                   <Input value={form.businessName} onChange={updateField('businessName')} placeholder="Your business" autoComplete="organization" className="h-12 rounded-xl" />
                 </FormField>
                 <FormField label="Phone">
-                  <Input type="tel" value={form.phone} onChange={updateField('phone')} placeholder="Optional contact number" autoComplete="tel" className="h-12 rounded-xl" />
+                  <InternationalPhoneInput value={form.phone} onChange={(phone) => setForm((current) => ({ ...current, phone }))} />
                 </FormField>
               </div>
 

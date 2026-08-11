@@ -396,3 +396,25 @@
     height: 38px;
   }
 }
+
+/* Premium public storefront motion. Motion is intentionally subtle and disabled
+   for visitors who prefer reduced motion. */
+@keyframes storefrontOrbFloat {
+  0%, 100% { transform: translate3d(0,0,0) scale(1); }
+  50% { transform: translate3d(-18px,16px,0) scale(1.06); }
+}
+.storefront-reveal {
+  opacity: 0;
+  transform: translateY(18px) scale(.992);
+  transition: opacity .62s cubic-bezier(.2,.8,.2,1), transform .62s cubic-bezier(.2,.8,.2,1), box-shadow .3s ease, border-color .3s ease;
+}
+.storefront-reveal.is-visible { opacity: 1; transform: translateY(0) scale(1); }
+.storefront-reveal-delay { transition-delay: .12s; }
+.storefront-orb { animation: storefrontOrbFloat 10s ease-in-out infinite; }
+.storefront-orb-delay { animation-delay: -4s; }
+.storefront-premium section { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  .storefront-reveal { opacity: 1 !important; transform: none !important; transition: none !important; }
+  .storefront-orb { animation: none !important; transform: none !important; }
+  .storefront-premium * { scroll-behavior: auto !important; }
+}

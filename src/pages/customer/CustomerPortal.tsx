@@ -5,6 +5,8 @@ import { supabase } from '@/db/supabase';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
+import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import {
@@ -227,6 +229,11 @@ export default function CustomerPortal() {
       return;
     }
 
+    if (profileForm.phone.trim() && !isLikelyE164(profileForm.phone)) {
+      toast.error(t('common.invalidInternationalPhone'));
+      return;
+    }
+
     setSavingProfile(true);
 
     try {
@@ -234,7 +241,7 @@ export default function CustomerPortal() {
         .from('customer_business_profiles')
         .update({
           display_name: profileForm.display_name.trim(),
-          phone: profileForm.phone.trim() || null,
+          phone: profileForm.phone.trim() ? normalizeE164(profileForm.phone) : null,
           email: profileForm.email.trim().toLowerCase() || null,
           birth_date: profileForm.birth_date || null,
           marketing_consent: profileForm.marketing_consent,
@@ -940,22 +947,11 @@ function ProfilePanel({
 
             <div className="space-y-2">
               <Label>{t('customerPortal.profile.phone')}</Label>
-              <div className="relative">
-                <Phone className="pointer-events-none absolute left-3 top-3.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  className="h-11 rounded-xl pl-10"
-                  value={profileForm.phone}
-                  onChange={(event) =>
-                    setProfileForm((current) => ({
-                      ...current,
-                      phone: event.target.value,
-                    }))
-                  }
-                />
-              </div>
+              <InternationalPhoneInput
+                value={profileForm.phone}
+                onChange={(phone) => setProfileForm((current) => ({ ...current, phone }))}
+                autoComplete="tel"
+              />
             </div>
 
             <div className="space-y-2">
