@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
+import { normalizeLanguage } from '@/i18n/config';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { getIndustryConfig, isIndustryKey } from '@/config/industries';
 import { MODULE_REGISTRY } from '@/config/modules';
@@ -26,7 +27,7 @@ const SELECTED_INDUSTRY_STORAGE_KEY = 'velliqo.selectedIndustry';
 
 export default function OnboardingWizard() {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const industry = useMemo(() => {
     const metadataIndustry = user?.user_metadata?.industry_key;
     const emailScopedIndustry = typeof window !== 'undefined' && user?.email
@@ -134,6 +135,7 @@ export default function OnboardingWizard() {
           offerCode: offerCode.trim().toUpperCase() || undefined,
           successUrl: `${window.location.origin}/dashboard/billing?success=true`,
           cancelUrl: `${window.location.origin}/dashboard/billing?canceled=true`,
+          locale: normalizeLanguage(i18n.resolvedLanguage),
         },
       });
 

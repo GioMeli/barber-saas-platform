@@ -159,6 +159,7 @@ export default function Billing() {
           offerCode: offerCode.trim() || undefined,
           successUrl: `${window.location.origin}/dashboard/billing?success=true`,
           cancelUrl: `${window.location.origin}/dashboard/billing?canceled=true`,
+          locale: normalizeLanguage(i18n.resolvedLanguage),
         },
       });
       if (error) throw error;
@@ -175,7 +176,7 @@ export default function Billing() {
     setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke('create_billing_portal_session', {
-        body: { businessId, returnUrl: `${window.location.origin}/dashboard/billing` },
+        body: { businessId, returnUrl: `${window.location.origin}/dashboard/billing`, locale: normalizeLanguage(i18n.resolvedLanguage) },
       });
       if (error) throw error;
       if (!data?.url) throw new Error(t('billing.messages.portalUrlMissing'));

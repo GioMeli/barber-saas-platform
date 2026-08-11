@@ -15,6 +15,15 @@ const corsHeaders = {
 };
 
 type PlanId = 'standard' | 'pro' | 'premium';
+type CheckoutLocale = 'en' | 'el' | 'de' | 'es' | 'tr';
+
+const CHECKOUT_COPY: Record<CheckoutLocale, { trial: (days: number) => string; fixed: (months: number) => string; recurring: string; after: string }> = {
+  en: { trial: (days) => `No charge today. Your selected plan starts automatically after the ${days}-day free trial unless you cancel first.`, fixed: (months) => `This is a fixed-term Velliqo offer for ${months} month${months === 1 ? '' : 's'}. It stops automatically at the stated end date and does not auto-renew.`, recurring: 'Your Velliqo plan renews monthly until you cancel or change it from Billing.', after: 'Your secure billing setup is complete. You will return to Velliqo automatically.' },
+  el: { trial: (days) => `Δεν υπάρχει χρέωση σήμερα. Το επιλεγμένο πλάνο ξεκινά αυτόματα μετά τη δωρεάν δοκιμή ${days} ημερών, εκτός αν το ακυρώσετε νωρίτερα.`, fixed: (months) => `Αυτή είναι προσφορά Velliqo ορισμένης διάρκειας ${months} μηνών. Σταματά αυτόματα στην ημερομηνία λήξης και δεν ανανεώνεται αυτόματα.`, recurring: 'Το πλάνο Velliqo ανανεώνεται μηνιαία μέχρι να το ακυρώσετε ή να το αλλάξετε από το Billing.', after: 'Η ασφαλής ρύθμιση χρέωσης ολοκληρώθηκε. Θα επιστρέψετε αυτόματα στο Velliqo.' },
+  de: { trial: (days) => `Heute erfolgt keine Belastung. Der gewählte Tarif startet nach der ${days}-tägigen kostenlosen Testphase automatisch, sofern Sie vorher nicht kündigen.`, fixed: (months) => `Dies ist ein befristetes Velliqo-Angebot für ${months} Monat${months === 1 ? '' : 'e'}. Es endet automatisch zum angegebenen Enddatum und verlängert sich nicht automatisch.`, recurring: 'Ihr Velliqo-Tarif verlängert sich monatlich, bis Sie ihn unter Billing kündigen oder ändern.', after: 'Die sichere Abrechnungseinrichtung ist abgeschlossen. Sie kehren automatisch zu Velliqo zurück.' },
+  es: { trial: (days) => `No se realiza ningún cargo hoy. El plan seleccionado comenzará automáticamente tras la prueba gratuita de ${days} días, salvo que lo canceles antes.`, fixed: (months) => `Esta es una oferta Velliqo de duración fija de ${months} mes${months === 1 ? '' : 'es'}. Finaliza automáticamente en la fecha indicada y no se renueva.`, recurring: 'Tu plan Velliqo se renueva mensualmente hasta que lo canceles o cambies desde Billing.', after: 'La configuración de facturación segura se ha completado. Volverás automáticamente a Velliqo.' },
+  tr: { trial: (days) => `Bugün ücret alınmaz. Seçtiğiniz plan, daha önce iptal etmediğiniz sürece ${days} günlük ücretsiz deneme sonrasında otomatik olarak başlar.`, fixed: (months) => `Bu, ${months} aylık sabit süreli bir Velliqo teklifidir. Belirtilen bitiş tarihinde otomatik olarak sona erer ve otomatik yenilenmez.`, recurring: 'Velliqo planınız, Billing üzerinden iptal edene veya değiştirene kadar aylık olarak yenilenir.', after: 'Güvenli faturalandırma kurulumu tamamlandı. Otomatik olarak Velliqo’ya döneceksiniz.' },
+};
 const PRICE_ENV: Record<PlanId, string> = {
   standard: 'STRIPE_PRICE_STANDARD',
   pro: 'STRIPE_PRICE_PRO',
@@ -51,6 +60,7 @@ Deno.serve(async (request) => {
     const offerCode = String(body.offerCode ?? '').trim().toUpperCase();
     const successUrl = safeReturnUrl(body.successUrl, '/dashboard/billing?success=true');
     const cancelUrl = safeReturnUrl(body.cancelUrl, '/dashboard/billing?canceled=true');
+    const checkoutLocale = normalizeCheckoutLocale(body.locale);
 
     if (!businessId || !['standard', 'pro', 'premium'].includes(planId)) {
       return json({ error: 'A valid business and plan are required' }, 400);
@@ -181,10 +191,24 @@ Deno.serve(async (request) => {
     };
     if (trialDays > 0) subscriptionData.trial_period_days = trialDays;
 
+    const checkoutCopy = CHECKOUT_COPY[checkoutLocale];
+    const fixedTermMonths = offer ? Number(offer.duration_months || 0) : 0;
+    const submitMessage = offer
+      ? checkoutCopy.fixed(fixedTermMonths)
+      : trialDays > 0
+        ? checkoutCopy.trial(trialDays)
+        : checkoutCopy.recurring;
+
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',
       customer: customerId,
       client_reference_id: businessId,
+      locale: checkoutLocale,
+      custom_text: {
+        submit: { message: submitMessage },
+        after_submit: { message: checkoutCopy.after },
+      },
+      after_expiration: { recovery: { enabled: true, allow_promotion_codes: false } },
       line_items: [{ price: priceId, quantity: 1 }],
       payment_method_collection: 'always',
       billing_address_collection: 'required',
@@ -246,6 +270,11 @@ Deno.serve(async (request) => {
     return json({ error: error instanceof Error ? error.message : 'Unable to start secure checkout' }, 500);
   }
 });
+
+function normalizeCheckoutLocale(value: unknown): CheckoutLocale {
+  const base = String(value ?? 'en').trim().toLowerCase().split('-')[0];
+  return ['en', 'el', 'de', 'es', 'tr'].includes(base) ? base as CheckoutLocale : 'en';
+}
 
 function safeReturnUrl(value: unknown, fallbackPath: string) {
   const fallback = `${APP_PUBLIC_URL}${fallbackPath}`;

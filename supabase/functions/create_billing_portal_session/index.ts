@@ -35,6 +35,7 @@ Deno.serve(async (request) => {
 
     const body = await request.json();
     const businessId = String(body.businessId ?? '').trim();
+    const locale = normalizeStripeLocale(body.locale);
     if (!businessId) return json({ error: 'Business is required' }, 400);
 
     const { data: owner } = await admin
@@ -57,6 +58,7 @@ Deno.serve(async (request) => {
       customer: subscription.stripe_customer_id,
       return_url: safeReturnUrl(body.returnUrl),
       ...(configuration ? { configuration } : {}),
+      locale,
     });
     return json({ url: session.url });
   } catch (error) {
@@ -64,6 +66,11 @@ Deno.serve(async (request) => {
     return json({ error: error instanceof Error ? error.message : 'Unable to open billing portal' }, 500);
   }
 });
+
+function normalizeStripeLocale(value: unknown): 'en' | 'el' | 'de' | 'es' | 'tr' {
+  const base = String(value ?? 'en').trim().toLowerCase().split('-')[0];
+  return ['en', 'el', 'de', 'es', 'tr'].includes(base) ? base as 'en' | 'el' | 'de' | 'es' | 'tr' : 'en';
+}
 
 function safeReturnUrl(value: unknown) {
   const fallback = `${APP_PUBLIC_URL}/dashboard/billing`;

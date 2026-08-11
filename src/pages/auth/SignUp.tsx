@@ -97,9 +97,9 @@ export default function SignUp() {
 
   return (
     <IndustryThemeRoot industryKey={industry.key}>
-      <div className="relative min-h-screen bg-background lg:h-screen lg:overflow-hidden">
-        <div className="absolute right-4 top-4 z-20"><LanguageSwitcher /></div>
-        <div className="grid min-h-screen lg:h-full lg:min-h-0 lg:grid-cols-[1.04fr_0.96fr]">
+      <div className="relative min-h-screen bg-background lg:h-[100dvh] lg:min-h-0 lg:overflow-hidden">
+        <div className="absolute right-4 top-4 z-20 hidden lg:block"><LanguageSwitcher /></div>
+        <div className="grid min-h-screen lg:h-[100dvh] lg:min-h-0 lg:grid-cols-[1.04fr_0.96fr]">
           <section className="relative hidden overflow-hidden bg-zinc-950 px-8 py-6 text-white lg:flex lg:flex-col lg:justify-between xl:px-12 xl:py-8">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.30),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(99,102,241,0.18),transparent_30%)]" />
             <div className="absolute inset-0 opacity-[0.06] [background-image:linear-gradient(rgba(255,255,255,.14)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.14)_1px,transparent_1px)] [background-size:40px_40px]" />
@@ -138,84 +138,90 @@ export default function SignUp() {
             </div>
           </section>
 
-          <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-full lg:min-h-0 lg:overflow-y-auto lg:px-8 lg:py-8">
-            <div className="w-full max-w-[500px]">
-              <div className="mb-4 flex items-center justify-between lg:hidden">
-                <Link to="/" className="flex items-center gap-3"><img src="/brand/velliqo-mark-transparent-v2.png" alt="Velliqo" className="h-10 w-10 object-contain" /><div><div className="font-extrabold">Velliqo</div><div className="text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
+          <main className="flex min-h-screen items-center justify-center px-4 py-5 sm:px-6 lg:h-[100dvh] lg:min-h-0 lg:overflow-hidden lg:px-8 lg:py-3">
+            <div className="w-full max-w-[520px] lg:flex lg:max-h-[calc(100dvh-24px)] lg:flex-col lg:justify-center">
+              <div className="mb-4 flex items-center justify-between gap-3 lg:hidden">
+                <Link to="/" className="flex min-w-0 items-center gap-3"><img src="/brand/velliqo-mark-transparent-v2.png" alt="Velliqo" className="h-10 w-10 shrink-0 object-contain" /><div className="min-w-0"><div className="font-extrabold">Velliqo</div><div className="truncate text-xs text-muted-foreground">{t('auth.owner_registration')}</div></div></Link>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  <Link to="/business-types" className="inline-flex h-10 w-10 items-center justify-center rounded-xl border bg-card text-muted-foreground shadow-sm transition hover:text-foreground" aria-label={t('auth.change_business_type')} title={t('auth.change_business_type')}>
+                    <ArrowLeft className="h-4 w-4" />
+                  </Link>
+                  <LanguageSwitcher />
+                </div>
               </div>
 
-              <Link to="/business-types" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:inline-flex">
+              <Link to="/business-types" className="mb-3 hidden items-center gap-2 text-xs font-semibold text-muted-foreground transition hover:text-foreground lg:mb-2 lg:inline-flex">
                 <ArrowLeft className="h-4 w-4" /> {t('auth.change_business_type')}
               </Link>
 
-              <div className="rounded-3xl border bg-card p-5 shadow-card sm:p-6">
+              <div className="rounded-3xl border bg-card p-5 shadow-card sm:p-6 lg:rounded-[22px] lg:p-4">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">{t('auth.owner_registration_industry', { industry: industry.shortName })}</div>
-                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight">{t('auth.create_business_account')}</h2>
-                    <p className="mt-2 text-xs leading-5 text-muted-foreground">{t('auth.account_first')}</p>
+                    <h2 className="mt-2 text-2xl font-extrabold tracking-tight lg:mt-1 lg:text-xl">{t('auth.create_business_account')}</h2>
+                    <p className="mt-2 text-xs leading-5 text-muted-foreground lg:mt-1 lg:leading-4">{t('auth.account_first')}</p>
                   </div>
                   <div className="hidden h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-xl sm:flex">{industry.icon}</div>
                 </div>
 
-                <div className="mt-4 grid grid-cols-3 gap-2">
+                <div className="mt-4 grid grid-cols-3 gap-2 lg:mt-3 lg:gap-1.5">
                   <ProgressStep label={t('auth.step_account')} active />
                   <ProgressStep label={t('auth.step_business')} />
                   <ProgressStep label={t('auth.step_launch')} />
                 </div>
 
-                <div className="mt-5">
+                <div className="mt-5 lg:mt-3">
                   <div className="mb-2 flex items-end justify-between gap-3">
                     <div><div className="text-xs font-extrabold">{t('auth.choose_plan')}</div><div className="mt-0.5 text-[10px] text-muted-foreground">{t('auth.choose_plan_hint', { days: BILLING_TRIAL_DAYS })}</div></div>
                     <Link to="/pricing" className="text-[10px] font-bold text-primary hover:underline">{t('auth.compare_plans')}</Link>
                   </div>
-                  <div className="grid gap-2 sm:grid-cols-3">
+                  <div className="grid gap-2 sm:grid-cols-3 lg:gap-1.5">
                     {BILLING_PLANS.map((plan) => {
                       const active = selectedPlan === plan.id;
                       return (
-                        <button key={plan.id} type="button" onClick={() => setSelectedPlan(plan.id)} className={`rounded-xl border p-3 text-left transition ${active ? 'border-primary bg-primary/8 ring-1 ring-primary' : 'bg-muted/15 hover:border-primary/35'}`} aria-pressed={active}>
+                        <button key={plan.id} type="button" onClick={() => setSelectedPlan(plan.id)} className={`rounded-xl border p-3 text-left transition lg:p-2.5 ${active ? 'border-primary bg-primary/8 ring-1 ring-primary' : 'bg-muted/15 hover:border-primary/35'}`} aria-pressed={active}>
                           <div className="flex items-center justify-between gap-2"><span className="text-xs font-extrabold">{plan.name}</span>{active && <Check className="h-3.5 w-3.5 text-primary" />}</div>
-                          <div className="mt-1 text-sm font-black">€{plan.price.toFixed(2)}<span className="text-[9px] font-semibold text-muted-foreground"> / mo</span></div>
-                          <div className="mt-1 text-[9px] leading-3 text-muted-foreground">{t('auth.plan_staff_limit', { count: plan.staffLimit })}</div>
+                          <div className="mt-1 text-sm font-black lg:mt-0.5">€{plan.price.toFixed(2)}<span className="text-[9px] font-semibold text-muted-foreground"> / mo</span></div>
+                          <div className="mt-1 text-[9px] leading-3 text-muted-foreground lg:mt-0.5">{t('auth.plan_staff_limit', { count: plan.staffLimit })}</div>
                         </button>
                       );
                     })}
                   </div>
-                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10px] leading-4 text-emerald-900">
+                  <div className="mt-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10px] leading-4 text-emerald-900 lg:mt-1.5 lg:py-1.5">
                     <strong>{getBillingPlan(selectedPlan).name}:</strong> {t('auth.billing_after_setup', { days: BILLING_TRIAL_DAYS })}
                   </div>
                 </div>
 
-                <form onSubmit={handleSignUp} className="mt-4 space-y-3.5">
+                <form onSubmit={handleSignUp} className="mt-4 space-y-3.5 lg:mt-3 lg:space-y-2">
                   <Field label={t('auth.owner_full_name')} htmlFor="fullName">
-                    <Input id="fullName" type="text" placeholder={t('auth.owner_name_placeholder')} value={fullName} onChange={(event) => setFullName(event.target.value)} required autoComplete="name" className="h-10 rounded-xl" />
+                    <Input id="fullName" type="text" placeholder={t('auth.owner_name_placeholder')} value={fullName} onChange={(event) => setFullName(event.target.value)} required autoComplete="name" className="h-10 rounded-xl lg:h-9" />
                   </Field>
 
                   <Field label={t('auth.business_email')} htmlFor="email">
-                    <Input id="email" type="email" placeholder="owner@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" className="h-10 rounded-xl" />
+                    <Input id="email" type="email" placeholder="owner@example.com" value={email} onChange={(event) => setEmail(event.target.value)} required autoComplete="email" className="h-10 rounded-xl lg:h-9" />
                   </Field>
 
                   <Field label={t('auth.create_password')} htmlFor="password">
                     <div className="relative">
-                      <Input id="password" type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={6} autoComplete="new-password" className="h-10 rounded-xl pr-11" />
+                      <Input id="password" type={showPassword ? 'text' : 'password'} value={password} onChange={(event) => setPassword(event.target.value)} required minLength={6} autoComplete="new-password" className="h-10 rounded-xl pr-11 lg:h-9" />
                       <button type="button" className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground" onClick={() => setShowPassword((current) => !current)} aria-label={showPassword ? t('auth.hide_password') : t('auth.show_password')}>
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                       </button>
                     </div>
                   </Field>
 
-                  <Button type="submit" className="h-11 w-full rounded-xl" disabled={loading}>{loading ? t('auth.creating_account') : t('auth.create_owner_account')}</Button>
+                  <Button type="submit" className="h-11 w-full rounded-xl lg:h-10" disabled={loading}>{loading ? t('auth.creating_account') : t('auth.create_owner_account')}</Button>
                 </form>
 
-                <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-muted/40 p-3">
+                <div className="mt-4 flex items-start gap-2.5 rounded-xl bg-muted/40 p-3 lg:mt-2 lg:p-2.5">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
                   <p className="text-[11px] leading-4 text-muted-foreground">{t('auth.guided_onboarding_privacy')}</p>
                 </div>
 
-                <div className="mt-4 text-center text-xs"><span className="text-muted-foreground">{t('auth.already_owner')} </span><Link to="/sign-in" className="font-bold text-primary hover:text-primary/80">{t('auth.business_login')}</Link></div>
+                <div className="mt-4 text-center text-xs lg:mt-2"><span className="text-muted-foreground">{t('auth.already_owner')} </span><Link to="/sign-in" className="font-bold text-primary hover:text-primary/80">{t('auth.business_login')}</Link></div>
               </div>
 
-              <p className="mt-3 text-center text-[10px] leading-4 text-muted-foreground">{t('auth.owners_only')}</p>
+              <p className="mt-3 text-center text-[10px] leading-4 text-muted-foreground lg:mt-1.5">{t('auth.owners_only')}</p>
             </div>
           </main>
         </div>
@@ -225,7 +231,7 @@ export default function SignUp() {
 }
 
 function Field({ label, htmlFor, children }: { label: string; htmlFor: string; children: React.ReactNode }) {
-  return <div className="space-y-1.5"><Label htmlFor={htmlFor} className="text-xs font-semibold">{label}</Label>{children}</div>;
+  return <div className="space-y-1.5 lg:space-y-1"><Label htmlFor={htmlFor} className="text-xs font-semibold">{label}</Label>{children}</div>;
 }
 
 function Benefit({ icon, text }: { icon: React.ReactNode; text: string }) {
@@ -233,5 +239,5 @@ function Benefit({ icon, text }: { icon: React.ReactNode; text: string }) {
 }
 
 function ProgressStep({ label, active = false }: { label: string; active?: boolean }) {
-  return <div className={`rounded-xl border px-2 py-2 text-center text-[10px] font-bold ${active ? 'border-primary bg-primary/10 text-foreground' : 'bg-muted/20 text-muted-foreground'}`}><div className={`mx-auto mb-1 flex h-5 w-5 items-center justify-center rounded-full ${active ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>{active ? <Check className="h-3 w-3" /> : ''}</div>{label}</div>;
+  return <div className={`rounded-xl border px-2 py-2 text-center text-[10px] font-bold lg:py-1.5 ${active ? 'border-primary bg-primary/10 text-foreground' : 'bg-muted/20 text-muted-foreground'}`}><div className={`mx-auto mb-1 flex h-5 w-5 items-center justify-center rounded-full lg:mb-0.5 lg:h-4 lg:w-4 ${active ? 'bg-primary text-primary-foreground' : 'bg-muted'}`}>{active ? <Check className="h-3 w-3" /> : ''}</div>{label}</div>;
 }

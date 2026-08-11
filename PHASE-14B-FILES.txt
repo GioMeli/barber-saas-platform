@@ -1,0 +1,8 @@
+src/pages/auth/SignUp.tsx
+src/pages/onboarding/OnboardingWizard.tsx
+src/pages/owner/Billing.tsx
+supabase/functions/create_subscription_checkout/index.ts
+supabase/functions/create_billing_portal_session/index.ts
+supabase/functions/stripe_webhook/index.ts
+scripts/check-production-billing.mjs
+docs/PHASE-14B-BILLING-POLISH-WEBHOOK-HARDENING.md
