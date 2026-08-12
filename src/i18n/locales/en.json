@@ -2549,7 +2549,15 @@
     "offer": {
       "title": "Have a Velliqo offer code?",
       "description": "Fixed-term offers can provide a selected plan for a defined period such as 6 or 12 months. They stop automatically at the stated end date and do not auto-renew.",
-      "placeholder": "Offer code"
+      "placeholder": "Offer code",
+      "invalid": "This offer code is invalid or unavailable.",
+      "applied": "Offer applied to the {{plan}} plan.",
+      "lockedToPlan": "This offer is valid only for the {{plan}} plan.",
+      "checking": "Checking…",
+      "apply": "Apply",
+      "preview": "{{plan}} · {{months}} months · {{percent}}% discount · {{trial}} trial days",
+      "otherPlanLocked": "Offer locked to another plan",
+      "useOffer": "Continue with offer"
     },
     "usage": {
       "staff": "Staff members",
@@ -3868,7 +3876,10 @@
         "service": "Service",
         "category": "Category",
         "industry": "Business type"
-      }
+      },
+      "searchAnyLocation": "Search “{{location}}”",
+      "searchAnyLocationHint": "Use any city, district, neighbourhood or area. Results update automatically.",
+      "liveResults": "Live results · no Search button needed"
     },
     "page": {
       "eyebrow": "Velliqo marketplace",
@@ -3986,6 +3997,59 @@
     "accessibility": {
       "skipToContent": "Skip to main content",
       "pageChanged": "Opened {{page}}"
+    }
+  },
+  "support": {
+    "button": "Help",
+    "open": "Open Velliqo Help",
+    "eyebrow": "Owner support",
+    "title": "How can we help?",
+    "description": "Use Velliqo AI, email our support team or open an urgent tracked request without leaving your workspace.",
+    "close": "Close help",
+    "ai": {
+      "title": "AI Assistant",
+      "description": "Get instant guidance from Velliqo AI."
+    },
+    "email": {
+      "title": "Email support"
+    },
+    "urgent": {
+      "title": "Urgent Request",
+      "description": "Send a tracked message to Velliqo Support."
+    },
+    "newRequest": {
+      "title": "Create urgent request",
+      "description": "Your request is sent directly to the Velliqo Admin inbox.",
+      "subject": "Subject",
+      "message": "Describe what happened, what you expected and what you need help with.",
+      "send": "Send urgent request"
+    },
+    "requests": {
+      "title": "Your requests",
+      "description": "Track replies and status in real time.",
+      "empty": "You have no support requests yet.",
+      "back": "All requests"
+    },
+    "conversation": {
+      "you": "You",
+      "admin": "Velliqo Support",
+      "reply": "Write a reply…",
+      "closed": "This request is closed. Create a new request if you need more help."
+    },
+    "status": {
+      "sent": "Sent",
+      "pending": "Pending",
+      "completed": "Completed",
+      "cancelled": "Cancelled"
+    },
+    "loading": "Loading support requests…",
+    "sending": "Sending…",
+    "requestCreated": "Your support request was sent.",
+    "securityNote": "Support conversations are private to your business and the Velliqo Platform Admin.",
+    "errors": {
+      "load": "Unable to load support requests",
+      "create": "Unable to create support request",
+      "reply": "Unable to send reply"
     }
   }
 }

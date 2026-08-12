@@ -108,6 +108,17 @@ const TOUR_STEPS: OwnerTourStep[] = [
     description: text('ownerExperience.tour.steps.notifications.description', 'Notifications surface appointments, customer activity, AI alerts and automation events.'),
   },
   {
+    key: 'workspace-help', chapter: 'workspace', chapterLabel: chapterLabels.workspace,
+    route: '/dashboard', selector: '[data-tour="help-center"]',
+    title: text('support.title', 'How can we help?'),
+    description: text('support.description', 'Use Velliqo AI, email support or open a tracked urgent request directly from your workspace.'),
+    details: [
+      text('support.ai.title', 'AI Assistant'),
+      text('support.email.title', 'Email support'),
+      text('support.urgent.title', 'Urgent Request'),
+    ],
+  },
+  {
     key: 'workspace-ai', chapter: 'workspace', chapterLabel: chapterLabels.workspace,
     route: '/dashboard', selector: '[data-tour="desktop-ai"]',
     title: text('ownerExperience.tour.steps.aiAssistant.title', 'Talk to Velliqo AI anywhere'),

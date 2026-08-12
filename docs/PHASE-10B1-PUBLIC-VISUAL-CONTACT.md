@@ -37,7 +37,7 @@ Route:
 
 Displayed contact details:
 
-- Email: `georgeau791926@gmail.com`
+- Email: `support@velliqo.com`
 - Phone: `+357 96 211 102`
 - Region: `Nicosia, Cyprus`
 

@@ -58,6 +58,8 @@ export default function Billing() {
   const [checkoutPlan, setCheckoutPlan] = React.useState<BillingPlanId | null>(null);
   const [portalLoading, setPortalLoading] = React.useState(false);
   const [offerCode, setOfferCode] = React.useState('');
+  const [offerPreview, setOfferPreview] = React.useState<any | null>(null);
+  const [offerLoading, setOfferLoading] = React.useState(false);
   const reconciliationAttemptRef = React.useRef<string | null>(null);
 
   const subscription = summary?.subscription || {};
@@ -148,8 +150,22 @@ export default function Billing() {
     return { end, daysRemaining, progress };
   }, [status, subscription.trial_ends_at]);
 
+  const applyOfferCode = async () => {
+    if (!businessId || !offerCode.trim()) return;
+    setOfferLoading(true);
+    const { data, error } = await (supabase as any).rpc('preview_billing_offer_code', { p_code: offerCode.trim().toUpperCase(), p_business_id: businessId });
+    setOfferLoading(false);
+    if (error) { setOfferPreview(null); return toast.error(error.message || t('billing.offer.invalid')); }
+    setOfferPreview(data || null);
+    toast.success(t('billing.offer.applied', { plan: String(data?.plan_id || '').toUpperCase() }));
+  };
+
   const startCheckout = async (planId: BillingPlanId) => {
     if (!businessId) return;
+    if (offerPreview?.plan_id && offerPreview.plan_id !== planId) {
+      toast.info(t('billing.offer.lockedToPlan', { plan: String(offerPreview.plan_id).toUpperCase() }));
+      return;
+    }
     setCheckoutPlan(planId);
     try {
       const { data, error } = await supabase.functions.invoke('create_subscription_checkout', {
@@ -229,8 +245,12 @@ export default function Billing() {
               <div className="flex items-center gap-2 text-sm font-extrabold"><Gift className="h-5 w-5 text-primary" />{t('billing.offer.title')}</div>
               <p className="mt-2 text-sm leading-6 text-muted-foreground">{t('billing.offer.description')}</p>
             </div>
-            <div className="flex gap-2">
-              <Input value={offerCode} onChange={(event) => setOfferCode(event.target.value.toUpperCase())} placeholder={t('billing.offer.placeholder')} className="h-11 uppercase" />
+            <div className="space-y-2">
+              <div className="flex gap-2">
+                <Input value={offerCode} onChange={(event) => { setOfferCode(event.target.value.toUpperCase()); setOfferPreview(null); }} placeholder={t('billing.offer.placeholder')} className="h-11 uppercase" />
+                <Button type="button" variant="outline" className="h-11 shrink-0" onClick={() => void applyOfferCode()} disabled={offerLoading || !offerCode.trim()}>{offerLoading ? t('billing.offer.checking') : t('billing.offer.apply')}</Button>
+              </div>
+              {offerPreview && <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-xs font-semibold text-emerald-800">{t('billing.offer.preview', { plan: String(offerPreview.plan_id).toUpperCase(), months: offerPreview.duration_months, percent: Number(offerPreview.percent_off || 0), trial: Number(offerPreview.trial_days || 0) })}</div>}
             </div>
           </CardContent>
         </Card>
@@ -249,6 +269,7 @@ export default function Billing() {
             fixedTermSubscription={fixedTermSubscription}
             onCheckout={() => void startCheckout(plan.id)}
             onPortal={() => void openPortal()}
+            offerRequiredPlan={offerPreview?.plan_id || null}
             t={t}
           />
         ))}
@@ -324,7 +345,7 @@ function UsageCard({ icon, label, used, limit }: { icon: React.ReactNode; label:
   return <Card className="rounded-2xl shadow-sm"><CardContent className="p-5"><div className="flex items-center justify-between gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">{icon}</div><div className="text-sm font-extrabold">{used.toLocaleString()} / {limit.toLocaleString()}</div></div><div className="mt-4 text-sm font-semibold text-muted-foreground">{label}</div><Progress value={percent} className="mt-3 h-1.5" /></CardContent></Card>;
 }
 
-function PlanCard({ plan, locale, current, checkoutLoading, anyCheckoutLoading, hasActiveSubscription, fixedTermSubscription, onCheckout, onPortal, t }: { plan: BillingPlan; locale: string; current: boolean; checkoutLoading: boolean; anyCheckoutLoading: boolean; hasActiveSubscription: boolean; fixedTermSubscription: boolean; onCheckout: () => void; onPortal: () => void; t: any }) {
+function PlanCard({ plan, locale, current, checkoutLoading, anyCheckoutLoading, hasActiveSubscription, fixedTermSubscription, onCheckout, onPortal, offerRequiredPlan, t }: { plan: BillingPlan; locale: string; current: boolean; checkoutLoading: boolean; anyCheckoutLoading: boolean; hasActiveSubscription: boolean; fixedTermSubscription: boolean; onCheckout: () => void; onPortal: () => void; offerRequiredPlan?: string | null; t: any }) {
   const benefits = [
     t('billing.planFeatures.staff', { count: plan.staffLimit }),
     plan.staffAppInstall ? t('billing.planFeatures.staffApps') : t('billing.planFeatures.browserStaff'),
@@ -342,8 +363,8 @@ function PlanCard({ plan, locale, current, checkoutLoading, anyCheckoutLoading, 
         <div className="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-700"><Sparkles className="h-4 w-4" />{t('billing.plan.trialIncluded', { days: BILLING_TRIAL_DAYS })}</div>
         <Separator className="my-5" />
         <div className="space-y-3">{benefits.map((item) => <div key={item} className="flex items-start gap-2.5 text-sm"><div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary"><Check className="h-3 w-3" /></div><span>{item}</span></div>)}</div>
-        <Button className="mt-6 h-11 w-full rounded-xl" variant={current ? 'outline' : plan.highlighted ? 'default' : 'secondary'} disabled={anyCheckoutLoading || (fixedTermSubscription && hasActiveSubscription && !current)} onClick={hasActiveSubscription ? onPortal : onCheckout}>
-          {current ? t('billing.actions.currentPlan') : fixedTermSubscription && hasActiveSubscription ? t('billing.actions.fixedTermLocked') : hasActiveSubscription ? t('billing.actions.changePlan') : checkoutLoading ? t('billing.actions.openingCheckout') : t('billing.actions.startTrial')} {!current && !checkoutLoading && !(fixedTermSubscription && hasActiveSubscription) && <ArrowRight className="ml-2 h-4 w-4" />}
+        <Button className="mt-6 h-11 w-full rounded-xl" variant={current ? 'outline' : plan.highlighted ? 'default' : 'secondary'} disabled={anyCheckoutLoading || (fixedTermSubscription && hasActiveSubscription && !current) || (!hasActiveSubscription && Boolean(offerRequiredPlan) && offerRequiredPlan !== plan.id)} onClick={hasActiveSubscription ? onPortal : onCheckout}>
+          {current ? t('billing.actions.currentPlan') : fixedTermSubscription && hasActiveSubscription ? t('billing.actions.fixedTermLocked') : hasActiveSubscription ? t('billing.actions.changePlan') : offerRequiredPlan && offerRequiredPlan !== plan.id ? t('billing.offer.otherPlanLocked') : checkoutLoading ? t('billing.actions.openingCheckout') : offerRequiredPlan === plan.id ? t('billing.offer.useOffer') : t('billing.actions.startTrial')} {!current && !checkoutLoading && !(fixedTermSubscription && hasActiveSubscription) && <ArrowRight className="ml-2 h-4 w-4" />}
         </Button>
       </CardContent>
     </Card>

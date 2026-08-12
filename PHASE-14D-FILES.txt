@@ -1,0 +1,26 @@
+Phase 14D — Admin Control Plane, Owner Support, Live Discovery & Offer Hardening
+
+New files
+- supabase/migrations/00053_velliqo_support_control_plane_and_discovery_live_search.sql
+- src/components/support/OwnerHelpCenter.tsx
+- scripts/check-phase14d-admin-support-discovery.mjs
+- docs/PHASE-14D-ADMIN-SUPPORT-DISCOVERY-OFFERS.md
+
+Updated files
+- src/pages/admin/PlatformAdmin.tsx
+- src/pages/owner/Billing.tsx
+- src/components/layouts/OwnerDashboardLayout.tsx
+- src/components/layouts/owner-shell/OwnerTopBar.tsx
+- src/components/dashboard/OwnerNotificationCenter.tsx
+- src/components/tour/OwnerProductTour.tsx
+- src/components/discovery/DiscoverySearchBar.tsx
+- src/pages/marketing/DiscoverBusinesses.tsx
+- src/pages/marketing/Contact.tsx
+- src/i18n/locales/en.json
+- src/i18n/locales/el.json
+- src/i18n/locales/de.json
+- src/i18n/locales/es.json
+- src/i18n/locales/tr.json
+- scripts/check-public-visual-contact.mjs
+- docs/PHASE-10B1-PUBLIC-VISUAL-CONTACT.md
+- package.json

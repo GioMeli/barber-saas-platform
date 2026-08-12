@@ -2549,7 +2549,15 @@
     "offer": {
       "title": "Velliqo teklif kodunuz var mı?",
       "description": "Sabit süreli teklifler seçilen planı 6 veya 12 ay gibi belirli bir süre sunabilir. Süre sonunda otomatik olarak biter ve yenilenmez.",
-      "placeholder": "Teklif kodu"
+      "placeholder": "Teklif kodu",
+      "invalid": "Bu teklif kodu geçersiz veya kullanılamıyor.",
+      "applied": "Teklif {{plan}} planına uygulandı.",
+      "lockedToPlan": "Bu teklif yalnızca {{plan}} planı için geçerlidir.",
+      "checking": "Kontrol ediliyor…",
+      "apply": "Uygula",
+      "preview": "{{plan}} · {{months}} ay · %{{percent}} indirim · {{trial}} deneme günü",
+      "otherPlanLocked": "Teklif başka bir plana bağlı",
+      "useOffer": "Teklifle devam et"
     },
     "usage": {
       "staff": "Personel",
@@ -3868,7 +3876,10 @@
         "service": "Hizmet",
         "category": "Kategori",
         "industry": "İşletme türü"
-      }
+      },
+      "searchAnyLocation": "“{{location}}” ara",
+      "searchAnyLocationHint": "Herhangi bir şehir, ilçe, mahalle veya bölgeyi kullanın. Sonuçlar otomatik güncellenir.",
+      "liveResults": "Canlı sonuçlar · Arama düğmesi gerekmez"
     },
     "page": {
       "eyebrow": "Velliqo marketplace",
@@ -3986,6 +3997,59 @@
     "accessibility": {
       "skipToContent": "Ana içeriğe geç",
       "pageChanged": "{{page}} sayfası açıldı"
+    }
+  },
+  "support": {
+    "button": "Yardım",
+    "open": "Velliqo Yardımı Aç",
+    "eyebrow": "İşletme sahibi desteği",
+    "title": "Nasıl yardımcı olabiliriz?",
+    "description": "Çalışma alanından ayrılmadan Velliqo AI kullanın, destek ekibine e-posta gönderin veya takip edilen acil bir talep açın.",
+    "close": "Yardımı kapat",
+    "ai": {
+      "title": "AI Assistant",
+      "description": "Velliqo AI ile anında yardım alın."
+    },
+    "email": {
+      "title": "E-posta desteği"
+    },
+    "urgent": {
+      "title": "Acil Talep",
+      "description": "Velliqo Support ekibine takip edilen bir mesaj gönderin."
+    },
+    "newRequest": {
+      "title": "Acil talep oluştur",
+      "description": "Talebiniz doğrudan Velliqo Admin gelen kutusuna gönderilir.",
+      "subject": "Konu",
+      "message": "Ne olduğunu, ne beklediğinizi ve hangi konuda yardıma ihtiyacınız olduğunu açıklayın.",
+      "send": "Acil talep gönder"
+    },
+    "requests": {
+      "title": "Talepleriniz",
+      "description": "Yanıtları ve durumu gerçek zamanlı takip edin.",
+      "empty": "Henüz destek talebiniz yok.",
+      "back": "Tüm talepler"
+    },
+    "conversation": {
+      "you": "Siz",
+      "admin": "Velliqo Support",
+      "reply": "Yanıt yazın…",
+      "closed": "Bu talep kapatıldı. Daha fazla yardıma ihtiyacınız varsa yeni bir talep oluşturun."
+    },
+    "status": {
+      "sent": "Gönderildi",
+      "pending": "Beklemede",
+      "completed": "Tamamlandı",
+      "cancelled": "İptal edildi"
+    },
+    "loading": "Destek talepleri yükleniyor…",
+    "sending": "Gönderiliyor…",
+    "requestCreated": "Destek talebiniz gönderildi.",
+    "securityNote": "Destek konuşmaları yalnızca işletmeniz ve Velliqo Platform Admin tarafından görülebilir.",
+    "errors": {
+      "load": "Destek talepleri yüklenemedi",
+      "create": "Destek talebi oluşturulamadı",
+      "reply": "Yanıt gönderilemedi"
     }
   }
 }

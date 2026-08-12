@@ -70,7 +70,7 @@ export default function DiscoverBusinesses() {
       mapSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     });
   }, []);
-  const handleSearch = (nextFilters: DiscoveryFilters) => navigate(buildDiscoveryUrl(nextFilters));
+  const handleSearch = React.useCallback((nextFilters: DiscoveryFilters) => navigate(buildDiscoveryUrl(nextFilters), { replace: true }), [navigate]);
   const hasSpecificSearch = Boolean(filters.business.trim() || filters.location.trim() || filters.coordinates);
 
   return (

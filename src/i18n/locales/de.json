@@ -2549,7 +2549,15 @@
     "offer": {
       "title": "Haben Sie einen Velliqo-Angebotscode?",
       "description": "Befristete Angebote können einen Tarif z. B. 6 oder 12 Monate bereitstellen. Sie enden automatisch und verlängern sich danach nicht.",
-      "placeholder": "Angebotscode"
+      "placeholder": "Angebotscode",
+      "invalid": "Dieser Angebotscode ist ungültig oder nicht verfügbar.",
+      "applied": "Das Angebot wurde auf den Tarif {{plan}} angewendet.",
+      "lockedToPlan": "Dieses Angebot gilt nur für den Tarif {{plan}}.",
+      "checking": "Prüfen…",
+      "apply": "Anwenden",
+      "preview": "{{plan}} · {{months}} Monate · {{percent}} % Rabatt · {{trial}} Testtage",
+      "otherPlanLocked": "Angebot ist an einen anderen Tarif gebunden",
+      "useOffer": "Mit Angebot fortfahren"
     },
     "usage": {
       "staff": "Mitarbeiter",
@@ -3868,7 +3876,10 @@
         "service": "Dienstleistung",
         "category": "Kategorie",
         "industry": "Unternehmenstyp"
-      }
+      },
+      "searchAnyLocation": "„{{location}}“ suchen",
+      "searchAnyLocationHint": "Beliebige Stadt, Region, Nachbarschaft oder Gegend verwenden. Ergebnisse aktualisieren sich automatisch.",
+      "liveResults": "Live-Ergebnisse · keine Suche-Taste nötig"
     },
     "page": {
       "eyebrow": "Velliqo Marketplace",
@@ -3986,6 +3997,59 @@
     "accessibility": {
       "skipToContent": "Zum Hauptinhalt springen",
       "pageChanged": "{{page}} geöffnet"
+    }
+  },
+  "support": {
+    "button": "Hilfe",
+    "open": "Velliqo-Hilfe öffnen",
+    "eyebrow": "Support für Inhaber",
+    "title": "Wie können wir helfen?",
+    "description": "Nutzen Sie Velliqo AI, schreiben Sie unserem Support oder öffnen Sie eine dringende nachverfolgbare Anfrage direkt im Workspace.",
+    "close": "Hilfe schließen",
+    "ai": {
+      "title": "AI Assistant",
+      "description": "Sofortige Hilfe durch Velliqo AI."
+    },
+    "email": {
+      "title": "E-Mail-Support"
+    },
+    "urgent": {
+      "title": "Dringende Anfrage",
+      "description": "Senden Sie eine nachverfolgbare Nachricht an Velliqo Support."
+    },
+    "newRequest": {
+      "title": "Dringende Anfrage erstellen",
+      "description": "Die Anfrage wird direkt an den Velliqo-Admin gesendet.",
+      "subject": "Betreff",
+      "message": "Beschreiben Sie, was passiert ist, was Sie erwartet haben und wobei Sie Hilfe benötigen.",
+      "send": "Dringende Anfrage senden"
+    },
+    "requests": {
+      "title": "Ihre Anfragen",
+      "description": "Antworten und Status in Echtzeit verfolgen.",
+      "empty": "Noch keine Support-Anfragen.",
+      "back": "Alle Anfragen"
+    },
+    "conversation": {
+      "you": "Sie",
+      "admin": "Velliqo Support",
+      "reply": "Antwort schreiben…",
+      "closed": "Diese Anfrage ist geschlossen. Erstellen Sie bei weiterem Bedarf eine neue Anfrage."
+    },
+    "status": {
+      "sent": "Gesendet",
+      "pending": "Ausstehend",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert"
+    },
+    "loading": "Support-Anfragen werden geladen…",
+    "sending": "Wird gesendet…",
+    "requestCreated": "Ihre Support-Anfrage wurde gesendet.",
+    "securityNote": "Support-Unterhaltungen sind nur für Ihr Unternehmen und den Velliqo Platform Admin sichtbar.",
+    "errors": {
+      "load": "Support-Anfragen konnten nicht geladen werden",
+      "create": "Support-Anfrage konnte nicht erstellt werden",
+      "reply": "Antwort konnte nicht gesendet werden"
     }
   }
 }

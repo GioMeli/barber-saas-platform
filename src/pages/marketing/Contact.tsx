@@ -18,7 +18,7 @@ import { isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Textarea } from '@/components/ui/textarea';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 
-const CONTACT_EMAIL = 'georgeau791926@gmail.com';
+const CONTACT_EMAIL = 'support@velliqo.com';
 const CONTACT_PHONE_DISPLAY = '+357 96 211 102';
 const CONTACT_PHONE_HREF = '+35796211102';
 const CONTACT_REGION = 'Nicosia, Cyprus';

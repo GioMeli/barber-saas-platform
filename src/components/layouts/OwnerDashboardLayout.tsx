@@ -11,6 +11,7 @@ import OwnerMobileNavigation from './owner-shell/OwnerMobileNavigation';
 import ConnectivityBanner from '@/components/pwa/ConnectivityBanner';
 import OwnerAIAssistantDrawer from '@/components/ai/OwnerAIAssistantDrawer';
 import OwnerProductTour from '@/components/tour/OwnerProductTour';
+import OwnerHelpCenter from '@/components/support/OwnerHelpCenter';
 import { findOwnerNavigationItem } from './owner-shell/navigation';
 
 export default function OwnerDashboardLayout() {
@@ -21,6 +22,8 @@ export default function OwnerDashboardLayout() {
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
   const [isAIOpen, setIsAIOpen] = React.useState(false);
   const [isTourOpen, setIsTourOpen] = React.useState(false);
+  const [isHelpOpen, setIsHelpOpen] = React.useState(false);
+  const [supportRequestId, setSupportRequestId] = React.useState<string | null>(null);
   const [billingAccess, setBillingAccess] = React.useState<boolean | null>(null);
 
   const validateBillingAccess = React.useCallback(async () => {
@@ -120,6 +123,8 @@ export default function OwnerDashboardLayout() {
             onOpenMobileMenu={() => setIsMobileOpen(true)}
             onOpenAI={() => setIsAIOpen(true)}
             onStartTour={() => setIsTourOpen(true)}
+            onOpenHelp={() => { setSupportRequestId(null); setIsHelpOpen(true); }}
+            onOpenSupportRequest={(requestId) => { setSupportRequestId(requestId || null); setIsHelpOpen(true); }}
           />
 
           <ConnectivityBanner />
@@ -142,6 +147,17 @@ export default function OwnerDashboardLayout() {
           open={isAIOpen}
           onOpenChange={setIsAIOpen}
           businessId={activeBusiness?.id}
+        />
+
+
+        <OwnerHelpCenter
+          businessId={activeBusiness?.id}
+          businessName={activeBusiness?.name}
+          open={isHelpOpen}
+          onOpenChange={setIsHelpOpen}
+          onOpenAI={() => setIsAIOpen(true)}
+          initialRequestId={supportRequestId}
+          onInitialRequestHandled={() => setSupportRequestId(null)}
         />
 
         <OwnerProductTour
