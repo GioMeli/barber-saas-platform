@@ -36,7 +36,7 @@ if (!app.includes("import Contact from './pages/marketing/Contact'")) fail('Cont
 if (!app.includes('path="/contact"')) fail('/contact route is missing');
 if (!chrome.includes("{ key: 'contact', label: 'Contact', to: '/contact' }")) fail('shared marketing navigation does not expose Contact');
 
-for (const value of ['georgeau791926@gmail.com', '+357 96 211 102', 'Nicosia, Cyprus']) {
+for (const value of ['support@velliqo.com', '+357 96 211 102', 'Nicosia, Cyprus']) {
   if (!contact.includes(value)) fail(`contact detail not found: ${value}`);
 }
 if (!contact.includes('mailto:')) fail('mailto draft delivery is missing');

@@ -39,7 +39,8 @@
     "training-certification:check": "node scripts/check-training-certification.mjs",
     "communications:check": "node scripts/check-production-communications.mjs",
     "billing:check": "node scripts/check-production-billing.mjs",
-    "phase14c:check": "node scripts/check-phase14c-launch-ops.mjs"
+    "phase14c:check": "node scripts/check-phase14c-launch-ops.mjs",
+    "phase14d:check": "node scripts/check-phase14d-admin-support-discovery.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",

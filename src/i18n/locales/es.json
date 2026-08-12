@@ -2549,7 +2549,15 @@
     "offer": {
       "title": "¿Tienes un código de oferta Velliqo?",
       "description": "Las ofertas de duración fija pueden proporcionar un plan durante 6 o 12 meses. Terminan automáticamente y no se renuevan después.",
-      "placeholder": "Código de oferta"
+      "placeholder": "Código de oferta",
+      "invalid": "Este código de oferta no es válido o no está disponible.",
+      "applied": "La oferta se aplicó al plan {{plan}}.",
+      "lockedToPlan": "Esta oferta solo es válida para el plan {{plan}}.",
+      "checking": "Comprobando…",
+      "apply": "Aplicar",
+      "preview": "{{plan}} · {{months}} meses · {{percent}}% de descuento · {{trial}} días de prueba",
+      "otherPlanLocked": "La oferta está vinculada a otro plan",
+      "useOffer": "Continuar con la oferta"
     },
     "usage": {
       "staff": "Personal",
@@ -3868,7 +3876,10 @@
         "service": "Servicio",
         "category": "Categoría",
         "industry": "Tipo de negocio"
-      }
+      },
+      "searchAnyLocation": "Buscar “{{location}}”",
+      "searchAnyLocationHint": "Usa cualquier ciudad, distrito, barrio o zona. Los resultados se actualizan automáticamente.",
+      "liveResults": "Resultados en vivo · sin botón Buscar"
     },
     "page": {
       "eyebrow": "Marketplace Velliqo",
@@ -3986,6 +3997,59 @@
     "accessibility": {
       "skipToContent": "Saltar al contenido principal",
       "pageChanged": "Se abrió {{page}}"
+    }
+  },
+  "support": {
+    "button": "Ayuda",
+    "open": "Abrir Ayuda de Velliqo",
+    "eyebrow": "Soporte para propietarios",
+    "title": "¿Cómo podemos ayudarte?",
+    "description": "Usa Velliqo AI, escribe a soporte o abre una solicitud urgente con seguimiento sin salir de tu espacio de trabajo.",
+    "close": "Cerrar ayuda",
+    "ai": {
+      "title": "AI Assistant",
+      "description": "Obtén ayuda inmediata de Velliqo AI."
+    },
+    "email": {
+      "title": "Soporte por email"
+    },
+    "urgent": {
+      "title": "Solicitud urgente",
+      "description": "Envía un mensaje con seguimiento a Velliqo Support."
+    },
+    "newRequest": {
+      "title": "Crear solicitud urgente",
+      "description": "La solicitud llega directamente al buzón del Velliqo Admin.",
+      "subject": "Asunto",
+      "message": "Describe qué ocurrió, qué esperabas y qué ayuda necesitas.",
+      "send": "Enviar solicitud urgente"
+    },
+    "requests": {
+      "title": "Tus solicitudes",
+      "description": "Sigue respuestas y estado en tiempo real.",
+      "empty": "Aún no tienes solicitudes de soporte.",
+      "back": "Todas las solicitudes"
+    },
+    "conversation": {
+      "you": "Tú",
+      "admin": "Velliqo Support",
+      "reply": "Escribe una respuesta…",
+      "closed": "Esta solicitud está cerrada. Crea una nueva si necesitas más ayuda."
+    },
+    "status": {
+      "sent": "Enviado",
+      "pending": "Pendiente",
+      "completed": "Completado",
+      "cancelled": "Cancelado"
+    },
+    "loading": "Cargando solicitudes…",
+    "sending": "Enviando…",
+    "requestCreated": "Tu solicitud de soporte fue enviada.",
+    "securityNote": "Las conversaciones de soporte son privadas para tu negocio y el Velliqo Platform Admin.",
+    "errors": {
+      "load": "No se pudieron cargar las solicitudes",
+      "create": "No se pudo crear la solicitud",
+      "reply": "No se pudo enviar la respuesta"
     }
   }
 }

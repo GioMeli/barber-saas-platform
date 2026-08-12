@@ -1,5 +1,5 @@
 import { useLocation } from 'react-router-dom';
-import { BookOpenCheck, Menu } from 'lucide-react';
+import { BookOpenCheck, CircleHelp, Menu } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import LanguageSwitcher from '@/components/LanguageSwitcher';
@@ -15,6 +15,8 @@ type OwnerTopBarProps = {
   onOpenMobileMenu: () => void;
   onOpenAI: () => void;
   onStartTour: () => void;
+  onOpenHelp: () => void;
+  onOpenSupportRequest: (requestId?: string) => void;
 };
 
 export default function OwnerTopBar({
@@ -23,6 +25,8 @@ export default function OwnerTopBar({
   onOpenMobileMenu,
   onOpenAI,
   onStartTour,
+  onOpenHelp,
+  onOpenSupportRequest,
 }: OwnerTopBarProps) {
   const { t } = useTranslation();
   const location = useLocation();
@@ -43,31 +47,32 @@ export default function OwnerTopBar({
         </Button>
 
         <div className="min-w-0 flex-1">
-          <div className="truncate text-sm font-extrabold sm:text-base">
-            {t(activeItem.labelKey)}
-          </div>
-          <div className="hidden truncate text-xs text-muted-foreground sm:block">
-            {businessName || t('navigation.my_business')}
-          </div>
+          <div className="truncate text-sm font-extrabold sm:text-base">{t(activeItem.labelKey)}</div>
+          <div className="hidden truncate text-xs text-muted-foreground sm:block">{businessName || t('navigation.my_business')}</div>
         </div>
 
-        <div className="hidden md:block">
-          <OwnerCommandPalette />
-        </div>
-
-        <div data-tour="quick-add">
-          <OwnerQuickAdd />
-        </div>
+        <div className="hidden md:block"><OwnerCommandPalette /></div>
+        <div data-tour="quick-add"><OwnerQuickAdd /></div>
 
         {businessId && (
           <div data-tour="notifications">
-            <OwnerNotificationCenter businessId={businessId} variant="icon" />
+            <OwnerNotificationCenter businessId={businessId} variant="icon" onOpenSupportRequest={onOpenSupportRequest} />
           </div>
         )}
 
-        <div className="hidden sm:block">
-          <PWAStatusCenter />
-        </div>
+        <div className="hidden sm:block"><PWAStatusCenter /></div>
+
+        <Button
+          type="button"
+          variant="outline"
+          data-tour="help-center"
+          className="h-10 shrink-0 gap-2 rounded-xl bg-card/80 px-2.5 font-bold shadow-sm sm:px-3"
+          aria-label={t('support.open')}
+          onClick={onOpenHelp}
+        >
+          <CircleHelp className="h-4 w-4 text-violet-600" />
+          <span className="hidden xl:inline">{t('support.button')}</span>
+        </Button>
 
         <Button
           type="button"
@@ -78,29 +83,16 @@ export default function OwnerTopBar({
           aria-label={t('navigation.open_ai')}
           onClick={onOpenAI}
         >
-          <img
-            src="/brand/velliqo-ai.png"
-            alt=""
-            aria-hidden="true"
-            className="h-7 w-7 rounded-lg object-cover mix-blend-screen"
-          />
+          <img src="/brand/velliqo-ai.png" alt="" aria-hidden="true" className="h-7 w-7 rounded-lg object-cover mix-blend-screen" />
           <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-fuchsia-400 shadow-[0_0_8px_rgba(232,121,249,.9)]" />
         </Button>
 
-        <Button
-          type="button"
-          variant="outline"
-          data-tour="tour-button"
-          className="hidden h-10 shrink-0 items-center gap-2 rounded-xl bg-card/80 px-3 font-bold shadow-sm lg:inline-flex"
-          onClick={onStartTour}
-        >
+        <Button type="button" variant="outline" data-tour="tour-button" className="hidden h-10 shrink-0 items-center gap-2 rounded-xl bg-card/80 px-3 font-bold shadow-sm lg:inline-flex" onClick={onStartTour}>
           <BookOpenCheck className="h-4 w-4 text-violet-600" />
           {t('ownerExperience.tour.button')}
         </Button>
 
-        <div data-tour="language" className="hidden lg:block">
-          <LanguageSwitcher compact />
-        </div>
+        <div data-tour="language" className="hidden lg:block"><LanguageSwitcher compact /></div>
       </div>
     </header>
   );

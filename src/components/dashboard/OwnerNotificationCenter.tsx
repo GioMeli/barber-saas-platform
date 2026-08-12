@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Bell, Bot, CalendarDays, CheckCheck, Sparkles, UserPlus, X } from 'lucide-react';
+import { Bell, Bot, CalendarDays, CheckCheck, Headphones, Megaphone, Sparkles, UserPlus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/db/supabase';
@@ -14,7 +14,7 @@ type OwnerNotification = {
   user_id: string;
   title: string;
   message: string;
-  type: 'new_appointment' | 'new_customer' | 'ai_briefing' | 'ai_alert';
+  type: 'new_appointment' | 'new_customer' | 'ai_briefing' | 'ai_alert' | 'platform_announcement' | 'support_reply' | 'support_status';
   is_read: boolean;
   created_at: string;
   metadata?: Record<string, unknown> | null;
@@ -24,12 +24,14 @@ type Props = {
   businessId: string;
   onUnreadCountChange?: (count: number) => void;
   variant?: 'default' | 'icon';
+  onOpenSupportRequest?: (requestId?: string) => void;
 };
 
 export default function OwnerNotificationCenter({
   businessId,
   onUnreadCountChange,
   variant = 'default',
+  onOpenSupportRequest,
 }: Props) {
   const { t, i18n } = useTranslation();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
@@ -83,7 +85,7 @@ export default function OwnerNotificationCenter({
       .from('notifications')
       .select('id, business_id, user_id, title, message, type, is_read, created_at, metadata')
       .eq('business_id', businessId)
-      .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert'])
+      .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert', 'platform_announcement', 'support_reply', 'support_status'])
       .order('created_at', { ascending: false })
       .limit(30);
 
@@ -137,6 +139,17 @@ export default function OwnerNotificationCenter({
     if (error) {
       void fetchNotifications();
       toast.error(t('notifications.errors.mark_all'));
+    }
+  };
+
+  const isDynamic = (type: OwnerNotification['type']) => type.startsWith('ai_') || ['platform_announcement', 'support_reply', 'support_status'].includes(type);
+
+  const handleNotificationClick = async (notification: OwnerNotification) => {
+    await markRead(notification.id);
+    if (notification.type === 'support_reply' || notification.type === 'support_status') {
+      const requestId = typeof notification.metadata?.request_id === 'string' ? notification.metadata.request_id : undefined;
+      setOpen(false);
+      onOpenSupportRequest?.(requestId);
     }
   };
 
@@ -219,7 +232,7 @@ export default function OwnerNotificationCenter({
               <button
                 key={notification.id}
                 type="button"
-                onClick={() => void markRead(notification.id)}
+                onClick={() => void handleNotificationClick(notification)}
                 className={`flex w-full gap-3 border-b px-5 py-4 text-left transition last:border-b-0 hover:bg-muted/50 ${
                   notification.is_read ? 'bg-card' : 'bg-primary/[0.06]'
                 }`}
@@ -232,7 +245,11 @@ export default function OwnerNotificationCenter({
                         ? 'bg-emerald-100 text-emerald-700'
                         : notification.type === 'ai_alert'
                           ? 'bg-amber-100 text-amber-700'
-                          : 'bg-violet-100 text-violet-700'
+                          : notification.type === 'platform_announcement'
+                            ? 'bg-fuchsia-100 text-fuchsia-700'
+                            : notification.type === 'support_reply' || notification.type === 'support_status'
+                              ? 'bg-cyan-100 text-cyan-700'
+                              : 'bg-violet-100 text-violet-700'
                   }`}
                 >
                   {notification.type === 'new_appointment' ? (
@@ -241,6 +258,10 @@ export default function OwnerNotificationCenter({
                     <UserPlus className="h-4 w-4" />
                   ) : notification.type === 'ai_alert' ? (
                     <Sparkles className="h-4 w-4" />
+                  ) : notification.type === 'platform_announcement' ? (
+                    <Megaphone className="h-4 w-4" />
+                  ) : notification.type === 'support_reply' || notification.type === 'support_status' ? (
+                    <Headphones className="h-4 w-4" />
                   ) : (
                     <Bot className="h-4 w-4" />
                   )}
@@ -249,7 +270,7 @@ export default function OwnerNotificationCenter({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <div className="truncate text-sm font-bold">
-                      {notification.type.startsWith('ai_')
+                      {isDynamic(notification.type)
                         ? notification.title
                         : t(`notifications.types.${notification.type}.title`)}
                     </div>
@@ -258,7 +279,7 @@ export default function OwnerNotificationCenter({
                     )}
                   </div>
                   <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                    {notification.type.startsWith('ai_')
+                    {isDynamic(notification.type)
                       ? notification.message
                       : t(`notifications.types.${notification.type}.message`)}
                   </p>
