@@ -110,6 +110,64 @@ type OwnerCostRow = {
   estimated_contribution_eur: number;
 };
 
+type FinancialSummary = {
+  period?: { from?: string; to?: string; month_fraction?: number };
+  actual_paid_revenue_eur?: number;
+  paid_invoice_count?: number;
+  current_mrr_eur?: number;
+  ai_requests?: number;
+  ai_tokens?: number;
+  ai_cost_eur?: number;
+  email_count?: number;
+  email_cost_eur?: number;
+  sms_count?: number;
+  sms_cost_eur?: number;
+  payment_cost_eur?: number;
+  fixed_infrastructure_cost_eur?: number;
+  total_operating_cost_eur?: number;
+  estimated_operating_contribution_eur?: number;
+  operating_margin_percent?: number;
+};
+
+type FinancialOwnerRow = {
+  business_id: string;
+  business_name: string;
+  owner_name?: string | null;
+  owner_email?: string | null;
+  plan_id?: string | null;
+  subscription_status?: string | null;
+  paid_revenue_eur: number;
+  paid_invoice_count: number;
+  ai_requests: number;
+  ai_tokens: number;
+  ai_cost_eur: number;
+  email_count: number;
+  email_cost_eur: number;
+  sms_count: number;
+  sms_cost_eur: number;
+  payment_cost_eur: number;
+  allocated_infrastructure_cost_eur: number;
+  total_cost_eur: number;
+  estimated_contribution_eur: number;
+  margin_percent: number;
+};
+
+type AIUsageRow = {
+  created_at: string;
+  business_id: string;
+  business_name: string;
+  owner_email?: string | null;
+  plan_id?: string | null;
+  agent_key: string;
+  provider?: string | null;
+  model?: string | null;
+  input_tokens: number;
+  output_tokens: number;
+  total_tokens: number;
+  estimated_cost_eur: number;
+  success: boolean;
+};
+
 type SupportRequest = {
   id: string;
   business_id: string;
@@ -131,6 +189,12 @@ export default function PlatformAdmin() {
   const [dashboard, setDashboard] = React.useState<Dashboard>({});
   const [businesses, setBusinesses] = React.useState<BusinessRow[]>([]);
   const [ownerCosts, setOwnerCosts] = React.useState<OwnerCostRow[]>([]);
+  const [financialSummary, setFinancialSummary] = React.useState<FinancialSummary>({});
+  const [financialOwners, setFinancialOwners] = React.useState<FinancialOwnerRow[]>([]);
+  const [aiUsageRows, setAiUsageRows] = React.useState<AIUsageRow[]>([]);
+  const [economicsBusy, setEconomicsBusy] = React.useState(false);
+  const [economicsFrom, setEconomicsFrom] = React.useState(() => firstDayOfCurrentMonth());
+  const [economicsTo, setEconomicsTo] = React.useState(() => todayDateInput());
   const [offers, setOffers] = React.useState<any[]>([]);
   const [redemptions, setRedemptions] = React.useState<any[]>([]);
   const [requests, setRequests] = React.useState<SupportRequest[]>([]);
@@ -179,7 +243,29 @@ export default function PlatformAdmin() {
     } finally { setBusy(false); }
   }, []);
 
+  const loadEconomics = React.useCallback(async () => {
+    if (profile?.role !== 'Platform Admin') return;
+    const from = startOfDateInput(economicsFrom);
+    const to = endExclusiveOfDateInput(economicsTo);
+    if (!from || !to || from >= to) return toast.error('Choose a valid financial reporting period.');
+    setEconomicsBusy(true);
+    try {
+      const [summaryResult, ownersResult, aiResult] = await Promise.all([
+        (supabase as any).rpc('platform_admin_financial_summary', { p_from: from.toISOString(), p_to: to.toISOString() }),
+        (supabase as any).rpc('platform_admin_financial_owner_rows', { p_from: from.toISOString(), p_to: to.toISOString() }),
+        (supabase as any).rpc('platform_admin_ai_usage_rows', { p_from: from.toISOString(), p_to: to.toISOString() }),
+      ]);
+      for (const result of [summaryResult, ownersResult, aiResult]) if (result.error) throw result.error;
+      setFinancialSummary(summaryResult.data || {});
+      setFinancialOwners(ownersResult.data || []);
+      setAiUsageRows(aiResult.data || []);
+    } catch (error: any) {
+      toast.error(error?.message || 'Unable to load platform economics');
+    } finally { setEconomicsBusy(false); }
+  }, [economicsFrom, economicsTo, profile?.role]);
+
   React.useEffect(() => { if (profile?.role === 'Platform Admin') void load(); }, [load, profile?.role]);
+  React.useEffect(() => { if (profile?.role === 'Platform Admin') void loadEconomics(); }, [loadEconomics, profile?.role]);
 
   React.useEffect(() => {
     if (profile?.role !== 'Platform Admin') return;
@@ -207,6 +293,18 @@ export default function PlatformAdmin() {
   const unreadRequests = requests.filter((request) => request.admin_unread).length;
   const selectedRequest = requests.find((request) => request.id === selectedRequestId) ?? null;
   const selectedRequestBusiness = selectedRequest ? businesses.find((item) => item.business_id === selectedRequest.business_id) : null;
+  const aiProviderBreakdown = React.useMemo(() => {
+    const grouped = new Map<string, { provider: string; model: string; requests: number; tokens: number; cost: number }>();
+    for (const row of aiUsageRows) {
+      const provider = row.provider || 'unknown';
+      const model = row.model || 'unspecified';
+      const key = `${provider}::${model}`;
+      const current = grouped.get(key) || { provider, model, requests: 0, tokens: 0, cost: 0 };
+      current.requests += 1; current.tokens += Number(row.total_tokens || 0); current.cost += Number(row.estimated_cost_eur || 0);
+      grouped.set(key, current);
+    }
+    return Array.from(grouped.values()).sort((a,b) => b.cost-a.cost);
+  }, [aiUsageRows]);
 
   async function loadRequestMessages(requestId: string) {
     const { data, error } = await (supabase as any).from('platform_support_messages').select('*').eq('request_id', requestId).order('created_at', { ascending: true });
@@ -327,6 +425,24 @@ export default function PlatformAdmin() {
 
   const exportBusinesses = () => downloadCsv('velliqo-owners.csv', filteredBusinesses.map((row) => ({ business: row.business_name, slug: row.slug, status: row.status, owner: row.owner_name, owner_email: row.owner_email, plan: row.plan_id, subscription_status: row.subscription_status, billing_mode: row.billing_mode, staff: row.staff_count, customers: row.customer_count, appointments: row.appointment_count, ai_requests: row.ai_requests_period, ai_tokens: row.ai_tokens_period, ai_cost_eur: row.ai_cost_period, emails: row.email_period, sms: row.sms_period })));
   const exportOwnerCosts = () => downloadCsv('velliqo-owner-costs.csv', ownerCosts);
+  const exportPlatformEconomics = () => downloadCsv(`velliqo-platform-economics-${economicsFrom}-to-${economicsTo}.csv`, [
+    { metric: 'Actual paid revenue', value: financialSummary.actual_paid_revenue_eur || 0, unit: 'EUR' },
+    { metric: 'Current MRR', value: financialSummary.current_mrr_eur || 0, unit: 'EUR/month' },
+    { metric: 'AI requests', value: financialSummary.ai_requests || 0, unit: 'requests' },
+    { metric: 'AI tokens', value: financialSummary.ai_tokens || 0, unit: 'tokens' },
+    { metric: 'AI provider cost', value: financialSummary.ai_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Email messages', value: financialSummary.email_count || 0, unit: 'messages' },
+    { metric: 'Email cost', value: financialSummary.email_cost_eur || 0, unit: 'EUR' },
+    { metric: 'SMS messages', value: financialSummary.sms_count || 0, unit: 'messages' },
+    { metric: 'SMS cost', value: financialSummary.sms_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Payment processing cost', value: financialSummary.payment_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Infrastructure cost', value: financialSummary.fixed_infrastructure_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Total operating cost', value: financialSummary.total_operating_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Estimated operating contribution', value: financialSummary.estimated_operating_contribution_eur || 0, unit: 'EUR' },
+    { metric: 'Operating margin', value: financialSummary.operating_margin_percent || 0, unit: '%' },
+  ]);
+  const exportFinancialOwners = () => downloadCsv(`velliqo-owner-profitability-${economicsFrom}-to-${economicsTo}.csv`, financialOwners);
+  const exportAiLedger = () => downloadCsv(`velliqo-ai-cost-ledger-${economicsFrom}-to-${economicsTo}.csv`, aiUsageRows);
 
   return (
     <div className="min-h-screen bg-[#f6f5fb] p-3 sm:p-5 lg:p-8">
@@ -341,6 +457,7 @@ export default function PlatformAdmin() {
         <Tabs defaultValue="overview" className="space-y-5">
           <div className="overflow-x-auto pb-1"><TabsList className="h-auto min-w-max rounded-2xl bg-white p-1.5 shadow-sm">
             <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="economics">Economics</TabsTrigger>
             <TabsTrigger value="owners">Owners</TabsTrigger>
             <TabsTrigger value="owner-costs">Owner costs</TabsTrigger>
             <TabsTrigger value="requests" className="gap-2">Requests{unreadRequests > 0 && <span className="rounded-full bg-red-600 px-2 py-0.5 text-[10px] font-black text-white">{unreadRequests}</span>}</TabsTrigger>
@@ -363,6 +480,32 @@ export default function PlatformAdmin() {
               <Card className="rounded-3xl"><CardHeader><CardTitle>Subscriptions & usage</CardTitle></CardHeader><CardContent className="grid gap-4 sm:grid-cols-3"><PlanTile name="Standard" value={dashboard.subscriptions?.standard || 0} price="€29.99" /><PlanTile name="Pro" value={dashboard.subscriptions?.pro || 0} price="€49.99" featured /><PlanTile name="Premium" value={dashboard.subscriptions?.premium || 0} price="€89.99" /><Usage icon={<Mail />} label="Emails" value={dashboard.usage?.emails || 0} /><Usage icon={<MessageSquareText />} label="SMS" value={dashboard.usage?.sms || 0} /><Usage icon={<CreditCard />} label="Webhook errors" value={dashboard.delivery_health?.stripe_webhook_errors || 0} /></CardContent></Card>
               <Card className="rounded-3xl"><CardHeader><CardTitle>Operations health</CardTitle></CardHeader><CardContent className="space-y-3"><StatusLine label="Trialing" value={dashboard.subscriptions?.trialing || 0} /><StatusLine label="Active" value={dashboard.subscriptions?.active || 0} /><StatusLine label="Past due" value={dashboard.subscriptions?.past_due || 0} /><StatusLine label="Delivery failures" value={dashboard.delivery_health?.failed || 0} /></CardContent></Card>
             </div>
+          </TabsContent>
+
+          <TabsContent value="economics" className="space-y-5">
+            <div className="rounded-3xl border bg-white p-4 shadow-sm sm:p-5">
+              <div className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+                <div><h2 className="text-xl font-black">Velliqo economics & AI cost intelligence</h2><p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">Actual paid Stripe revenue for the selected period, recorded AI provider spend and your configured communication, payment and infrastructure costs. This is operational contribution reporting, not statutory accounting profit.</p></div>
+                <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-[150px_150px_auto]"><Field label="From"><Input type="date" value={economicsFrom} onChange={(e)=>setEconomicsFrom(e.target.value)} /></Field><Field label="To"><Input type="date" value={economicsTo} onChange={(e)=>setEconomicsTo(e.target.value)} /></Field><div className="flex items-end"><Button className="w-full" onClick={()=>void loadEconomics()} disabled={economicsBusy}><RefreshCw className={cn('mr-2 h-4 w-4',economicsBusy&&'animate-spin')} />Refresh</Button></div></div>
+              </div>
+              <div className="mt-4 flex flex-wrap gap-2"><Button variant="outline" onClick={exportPlatformEconomics}><Download className="mr-2 h-4 w-4" />Platform summary CSV</Button><Button variant="outline" onClick={exportFinancialOwners}><Download className="mr-2 h-4 w-4" />Owner profitability CSV</Button><Button variant="outline" onClick={exportAiLedger}><Download className="mr-2 h-4 w-4" />AI ledger CSV</Button></div>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
+              <Metric icon={<CircleDollarSign />} label="Paid revenue" value={eur.format(financialSummary.actual_paid_revenue_eur || 0)} hint={`${integer.format(financialSummary.paid_invoice_count || 0)} paid invoices`} />
+              <Metric icon={<CreditCard />} label="Current MRR" value={eur.format(financialSummary.current_mrr_eur || 0)} />
+              <Metric icon={<WalletCards />} label="Operating cost" value={eur.format(financialSummary.total_operating_cost_eur || 0)} />
+              <Metric icon={<Activity />} label="Contribution" value={eur.format(financialSummary.estimated_operating_contribution_eur || 0)} />
+              <Metric icon={<BadgePercent />} label="Margin" value={`${Number(financialSummary.operating_margin_percent || 0).toFixed(1)}%`} />
+              <Metric icon={<Bot />} label="AI spend" value={eur.format(financialSummary.ai_cost_eur || 0)} hint={`${integer.format(financialSummary.ai_requests || 0)} requests`} />
+            </div>
+
+            <div className="grid gap-5 xl:grid-cols-[1fr_1fr]">
+              <Card className="rounded-3xl"><CardHeader><CardTitle>Platform cost breakdown</CardTitle></CardHeader><CardContent className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3"><CostTile label="AI provider" value={Number(financialSummary.ai_cost_eur||0)} hint={`${integer.format(financialSummary.ai_tokens||0)} tokens`} /><CostTile label="Email" value={Number(financialSummary.email_cost_eur||0)} hint={`${integer.format(financialSummary.email_count||0)} messages`} /><CostTile label="SMS" value={Number(financialSummary.sms_cost_eur||0)} hint={`${integer.format(financialSummary.sms_count||0)} messages`} /><CostTile label="Payments" value={Number(financialSummary.payment_cost_eur||0)} /><CostTile label="Infrastructure" value={Number(financialSummary.fixed_infrastructure_cost_eur||0)} /><CostTile label="Total cost" value={Number(financialSummary.total_operating_cost_eur||0)} featured /></CardContent></Card>
+              <Card className="rounded-3xl"><CardHeader><CardTitle>Velliqo AI provider/model spend</CardTitle><p className="text-sm text-muted-foreground">Every recorded AI usage event in the selected period, grouped by provider and model.</p></CardHeader><CardContent className="space-y-2">{aiProviderBreakdown.length===0?<div className="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">No AI usage in this period.</div>:aiProviderBreakdown.slice(0,12).map((item)=><div key={`${item.provider}-${item.model}`} className="grid gap-2 rounded-2xl border p-3 sm:grid-cols-[1fr_auto_auto] sm:items-center"><div><div className="font-bold">{item.provider}</div><div className="text-xs text-muted-foreground">{item.model}</div></div><div className="text-xs text-muted-foreground">{integer.format(item.requests)} requests · {integer.format(item.tokens)} tokens</div><div className="font-black">{eur.format(item.cost)}</div></div>)}</CardContent></Card>
+            </div>
+
+            <Card className="rounded-3xl"><CardHeader><CardTitle>Owner profitability for selected period</CardTitle><p className="text-sm text-muted-foreground">Actual paid invoice revenue and attributable operational cost per tenant. Fixed infrastructure is allocated across active businesses for the selected period.</p></CardHeader><CardContent className="overflow-x-auto"><table className="w-full min-w-[980px] text-sm"><thead><tr className="border-b text-left text-xs uppercase tracking-wide text-muted-foreground"><th className="px-3 py-3">Business</th><th className="px-3 py-3">Plan</th><th className="px-3 py-3 text-right">Revenue</th><th className="px-3 py-3 text-right">AI</th><th className="px-3 py-3 text-right">Email/SMS</th><th className="px-3 py-3 text-right">Payments</th><th className="px-3 py-3 text-right">Infra</th><th className="px-3 py-3 text-right">Total cost</th><th className="px-3 py-3 text-right">Contribution</th><th className="px-3 py-3 text-right">Margin</th></tr></thead><tbody>{financialOwners.map((row)=><tr key={row.business_id} className="border-b last:border-0"><td className="px-3 py-3"><div className="font-bold">{row.business_name}</div><div className="text-xs text-muted-foreground">{row.owner_email||'—'}</div></td><td className="px-3 py-3 uppercase">{row.plan_id||'—'}</td><td className="px-3 py-3 text-right font-semibold">{eur.format(Number(row.paid_revenue_eur||0))}</td><td className="px-3 py-3 text-right">{eur.format(Number(row.ai_cost_eur||0))}</td><td className="px-3 py-3 text-right">{eur.format(Number(row.email_cost_eur||0)+Number(row.sms_cost_eur||0))}</td><td className="px-3 py-3 text-right">{eur.format(Number(row.payment_cost_eur||0))}</td><td className="px-3 py-3 text-right">{eur.format(Number(row.allocated_infrastructure_cost_eur||0))}</td><td className="px-3 py-3 text-right font-semibold">{eur.format(Number(row.total_cost_eur||0))}</td><td className={cn('px-3 py-3 text-right font-black',Number(row.estimated_contribution_eur||0)>=0?'text-emerald-700':'text-red-600')}>{eur.format(Number(row.estimated_contribution_eur||0))}</td><td className="px-3 py-3 text-right">{Number(row.margin_percent||0).toFixed(1)}%</td></tr>)}</tbody></table>{financialOwners.length===0&&<div className="p-10 text-center text-sm text-muted-foreground">No owner financial activity in this period.</div>}</CardContent></Card>
           </TabsContent>
 
           <TabsContent value="owners" className="space-y-4">
@@ -411,4 +554,8 @@ function Field({ label,children }: { label:string; children:React.ReactNode }) {
 function RequestBadge({ status }: { status: SupportRequest['status'] }) { const classes={sent:'border-blue-200 bg-blue-50 text-blue-700',pending:'border-amber-200 bg-amber-50 text-amber-800',completed:'border-emerald-200 bg-emerald-50 text-emerald-700',cancelled:'border-slate-200 bg-slate-100 text-slate-600'};return <Badge variant="outline" className={cn('capitalize',classes[status])}>{status}</Badge>; }
 function offerState(offer:any,redeemed:number){const now=Date.now();if(!offer.active)return{label:'Disabled',className:'bg-slate-500'};if(offer.starts_at&&new Date(offer.starts_at).getTime()>now)return{label:'Upcoming',className:'bg-blue-600'};if(offer.expires_at&&new Date(offer.expires_at).getTime()<=now)return{label:'Expired',className:'bg-slate-500'};if(offer.max_redemptions&&redeemed>=offer.max_redemptions)return{label:'Exhausted',className:'bg-slate-500'};return{label:'Active',className:'bg-emerald-600'};}
 function dateOnly(value:string){return new Intl.DateTimeFormat('en-IE',{dateStyle:'medium'}).format(new Date(value));}
+function todayDateInput(){return new Date().toISOString().slice(0,10);}
+function firstDayOfCurrentMonth(){const d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-01`;}
+function startOfDateInput(value:string){if(!value)return null;const d=new Date(`${value}T00:00:00`);return Number.isNaN(d.getTime())?null:d;}
+function endExclusiveOfDateInput(value:string){const d=startOfDateInput(value);if(!d)return null;d.setDate(d.getDate()+1);return d;}
 function downloadCsv(filename:string,rows:Record<string,any>[]){if(!rows.length)return toast.info('There is no data to export.');const keys=Array.from(new Set(rows.flatMap((row)=>Object.keys(row))));const escape=(value:unknown)=>`"${String(value??'').replace(/"/g,'""')}"`;const csv=[keys.map(escape).join(','),...rows.map((row)=>keys.map((key)=>escape(row[key])).join(','))].join('\r\n');const blob=new Blob([`\ufeff${csv}`],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(blob);const anchor=document.createElement('a');anchor.href=url;anchor.download=filename;anchor.click();URL.revokeObjectURL(url);}

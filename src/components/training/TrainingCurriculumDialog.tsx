@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Circle, ShieldCheck } from 'lucide-react';
+import { ArrowUpRight, Check, ChevronLeft, ChevronRight, Circle, PlayCircle, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
@@ -14,6 +14,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { TrainingLessonVisual } from './TrainingLessonVisual';
 import type { getLocalizedTrainingLesson } from '@/training/curriculum';
 import { cn } from '@/lib/utils';
+import VideoPlayer from '@/components/ui/video';
+import { getTrainingVideoForLesson } from '@/training/catalog';
 
 type LocalizedLesson = ReturnType<typeof getLocalizedTrainingLesson>;
 
@@ -48,6 +50,7 @@ export function TrainingCurriculumDialog({
 
   if (!selected) return null;
   const selectedComplete = completedLessonIds.includes(selected.id);
+  const relatedVideo = getTrainingVideoForLesson(selected.id);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -136,6 +139,20 @@ export function TrainingCurriculumDialog({
                   )}
                 </div>
               </section>
+
+              {relatedVideo && (
+                <section className="overflow-hidden rounded-3xl border border-violet-200 bg-[linear-gradient(135deg,#0f172a,#2e1065)] p-3 shadow-[0_20px_55px_rgba(76,29,149,.14)] sm:p-4">
+                  <div className="mb-3 flex items-start gap-3 px-1 text-white">
+                    <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white/10"><PlayCircle className="h-4 w-4" /></span>
+                    <div>
+                      <div className="text-[10px] font-black uppercase tracking-[.16em] text-violet-200">{t('training.relatedFeatureVideo')}</div>
+                      <div className="mt-1 text-sm font-black">{t(`training.videos.${relatedVideo.titleKey}`)}</div>
+                      <p className="mt-1 text-xs leading-5 text-white/60">{t(`training.videos.${relatedVideo.descriptionKey}`)}</p>
+                    </div>
+                  </div>
+                  <VideoPlayer key={`${selected.id}-${relatedVideo.url}`} src={relatedVideo.url} controls aspectRatio="16:9" className="overflow-hidden rounded-2xl" />
+                </section>
+              )}
 
               <section className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_320px]">
                 <div className="rounded-3xl border border-slate-200 bg-slate-50/70 p-5 sm:p-6">

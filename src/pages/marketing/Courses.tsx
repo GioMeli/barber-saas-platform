@@ -6,11 +6,12 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { TrainingCourseVisual } from '@/components/training/TrainingCourseVisual';
-import { TrainingVideoDialog } from '@/components/training/TrainingVideoDialog';
+import { TrainingVideoLibraryDialog } from '@/components/training/TrainingVideoLibraryDialog';
 import { TrainingCurriculumDialog } from '@/components/training/TrainingCurriculumDialog';
 import { getTrainingLessonsForGuide } from '@/training/curriculum';
 import {
   getTrainingPdfPath,
+  getTrainingVideosForGuide,
   TRAINING_CATEGORIES,
   TRAINING_GUIDES,
   type TrainingCategory,
@@ -31,7 +32,7 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
     return (!query.trim() || `${title} ${description}`.includes(query.trim().toLowerCase())) && (category === 'all' || guide.category === category);
   }), [category, query, t]);
 
-  const availableVideoCount = TRAINING_GUIDES.filter((guide) => Boolean(guide.videoUrl)).length;
+  const availableVideoCount = TRAINING_GUIDES.reduce((count, guide) => count + getTrainingVideosForGuide(guide.slug, 'public').length, 0);
 
   const content = (
     <div className={cn('mx-auto w-full max-w-[1440px]', embedded ? 'space-y-6' : 'px-4 py-14 sm:px-6 lg:px-8 lg:py-20')}>
@@ -64,7 +65,8 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
         {filtered.map((guide, index) => {
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
           const demoPath = guide.demoRoute || guide.route?.replace('/dashboard', '/demo') || '/demo';
-          const hasVideo = Boolean(guide.videoUrl);
+          const videos = getTrainingVideosForGuide(guide.slug, 'public');
+          const hasVideo = videos.length > 0;
           const lessons = getTrainingLessonsForGuide('owner', guide.slug, i18n.language);
           return (
             <article key={guide.slug} className="group relative flex min-h-[430px] flex-col overflow-hidden rounded-[1.75rem] border border-slate-200/90 bg-white p-3 shadow-[0_18px_55px_rgba(15,23,42,.09)] ring-1 ring-slate-950/[.025] transition duration-300 hover:-translate-y-1 hover:border-violet-300 hover:shadow-[0_26px_70px_rgba(76,29,149,.16)]">
@@ -107,14 +109,11 @@ export default function Courses({ embedded = false }: { embedded?: boolean }) {
       )}
 
       {activeVideo && (
-        <TrainingVideoDialog
+        <TrainingVideoLibraryDialog
           open
           onOpenChange={(open) => { if (!open) setActiveVideo(null); }}
-          title={t(`training.guides.${activeVideo.slug}.title`)}
-          description={t(`training.guides.${activeVideo.slug}.description`)}
-          videoUrl={activeVideo.videoUrl}
-          videoProvider={activeVideo.videoProvider}
-          posterUrl={activeVideo.videoPosterUrl}
+          courseTitle={t(`training.guides.${activeVideo.slug}.title`)}
+          videos={getTrainingVideosForGuide(activeVideo.slug, 'public')}
         />
       )}
     </div>
