@@ -22,10 +22,17 @@ const workflow = read('.github/workflows/quality-gate.yml');
 for (const token of ['data-training-course-visual', "h-36", 'CATEGORY_STYLES', 'GUIDE_ICONS']) {
   if (!trainingVisual.includes(token)) fail(`training visual missing ${token}`);
 }
+const hasLegacyVideoWiring = (source) =>
+  source.includes('guide.videoUrl') && source.includes('TrainingVideoDialog');
+const hasVideoLibraryWiring = (source) =>
+  source.includes('TrainingVideoLibraryDialog')
+  && source.includes('getTrainingVideosForGuide')
+  && (source.includes('training.watchVideo') || source.includes('training.watchVideos'));
+
 for (const source of [publicCourses, ownerTraining]) {
   if (!source.includes('TrainingCourseVisual')) fail('a training surface is not using the premium shared visual');
   if (!source.includes('rounded-[1.75rem]') || !source.includes('shadow-[')) fail('a training surface is missing premium card depth/shape');
-  if (!source.includes('guide.videoUrl') || !source.includes('TrainingVideoDialog')) fail('training video functionality was lost');
+  if (!hasLegacyVideoWiring(source) && !hasVideoLibraryWiring(source)) fail('training video functionality was lost');
   if (!source.includes('getTrainingPdfPath')) fail('training PDF functionality was lost');
 }
 if (!ownerTraining.includes('useCertifiedTrainingProgress') || !ownerTraining.includes('setLessonCompleted')) fail('certified owner lesson completion tracking was lost');
