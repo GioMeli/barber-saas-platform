@@ -4,6 +4,7 @@ const read = (path) => fs.readFileSync(path, 'utf8');
 const catalog = read('src/training/catalog.ts');
 const library = read('src/components/training/TrainingCertificationLibrary.tsx');
 const curriculum = read('src/components/training/TrainingCurriculumDialog.tsx');
+const videoLibraryDialog = read('src/components/training/TrainingVideoLibraryDialog.tsx');
 const courses = read('src/pages/marketing/Courses.tsx');
 const admin = read('src/pages/admin/PlatformAdmin.tsx');
 const migration = read('supabase/migrations/00054_velliqo_training_video_financial_intelligence.sql');
@@ -21,6 +22,7 @@ const checks = [
   ['course video playlists', courses.includes('TrainingVideoLibraryDialog') && courses.includes("getTrainingVideosForGuide(guide.slug, 'public')")],
   ['owner and staff video playlists', library.includes('TrainingVideoLibraryDialog') && library.includes("audience === 'staff' ? 'staff' : 'owner'")],
   ['feature-level videos inside curriculum', curriculum.includes('getTrainingVideoForLesson') && curriculum.includes('relatedFeatureVideo')],
+  ['desktop video library fits viewport without unnecessary scrolling', videoLibraryDialog.includes('lg:h-[96dvh]') && videoLibraryDialog.includes('lg:max-w-[860px]') && videoLibraryDialog.includes('lg:hidden')],
   ['admin economics tab', admin.includes('value="economics"') && admin.includes('Velliqo economics & AI cost intelligence')],
   ['platform economics CSV', admin.includes('exportPlatformEconomics')],
   ['owner profitability CSV', admin.includes('exportFinancialOwners')],

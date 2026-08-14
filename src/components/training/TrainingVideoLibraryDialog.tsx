@@ -38,17 +38,17 @@ export function TrainingVideoLibraryDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="grid h-[94dvh] w-[97vw] max-w-[1460px] grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden p-0">
-        <DialogHeader className="border-b bg-white px-5 py-4 pr-14 sm:px-7 sm:py-5">
+      <DialogContent className="grid h-[94dvh] w-[97vw] max-w-[1460px] grid-rows-[auto_minmax(0,1fr)] gap-0 overflow-hidden p-0 lg:h-[96dvh]">
+        <DialogHeader className="border-b bg-white px-5 py-4 pr-14 sm:px-7 sm:py-5 lg:px-6 lg:py-3">
           <div className="inline-flex w-fit items-center gap-2 rounded-full bg-violet-100 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-700">
             <ListVideo className="h-3.5 w-3.5" />
             {t('training.videoLibrary')}
           </div>
-          <DialogTitle className="mt-2 text-xl font-black tracking-tight sm:text-2xl">{courseTitle}</DialogTitle>
-          <DialogDescription>{t('training.videoLibraryReadyDescription', { count: videos.length })}</DialogDescription>
+          <DialogTitle className="mt-2 text-xl font-black tracking-tight sm:text-2xl lg:mt-1 lg:text-xl">{courseTitle}</DialogTitle>
+          <DialogDescription className="lg:text-xs">{t('training.videoLibraryReadyDescription', { count: videos.length })}</DialogDescription>
         </DialogHeader>
 
-        <div className="grid min-h-0 lg:grid-cols-[330px_minmax(0,1fr)]">
+        <div className="grid min-h-0 lg:grid-cols-[300px_minmax(0,1fr)]">
           <aside className="min-h-0 border-b bg-slate-50 lg:border-b-0 lg:border-r">
             <ScrollArea className="h-full">
               <div className="space-y-2 p-3 sm:p-4">
@@ -79,14 +79,21 @@ export function TrainingVideoLibraryDialog({
           </aside>
 
           <ScrollArea className="min-h-0 bg-white">
-            <div className="mx-auto max-w-6xl space-y-5 p-4 sm:p-6 lg:p-8">
-              <div>
-                <div className="text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{t('training.videoLesson')}</div>
-                <h2 className="mt-2 text-2xl font-black tracking-[-.03em] text-slate-950">{title}</h2>
-                <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-600">{description}</p>
+            <div className="mx-auto max-w-6xl space-y-5 p-4 sm:p-6 lg:h-full lg:max-w-none lg:space-y-3 lg:p-5">
+              <div className="lg:flex lg:items-end lg:justify-between lg:gap-5">
+                <div className="min-w-0">
+                  <div className="text-[10px] font-extrabold uppercase tracking-[.16em] text-violet-600">{t('training.videoLesson')}</div>
+                  <h2 className="mt-2 text-2xl font-black tracking-[-.03em] text-slate-950 lg:mt-1 lg:text-xl">{title}</h2>
+                  <p className="mt-2 max-w-4xl text-sm leading-6 text-slate-600 lg:mt-1 lg:text-xs lg:leading-5">{description}</p>
+                </div>
+                <Button asChild variant="outline" size="sm" className="hidden shrink-0 rounded-xl border-violet-200 bg-white lg:inline-flex">
+                  <a href={selected.url} target="_blank" rel="noreferrer">
+                    {t('training.openVideoExternally')} <ExternalLink className="ml-2 h-4 w-4" />
+                  </a>
+                </Button>
               </div>
 
-              <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950 p-2 shadow-[0_24px_70px_rgba(15,23,42,.24)] sm:p-4">
+              <div className="overflow-hidden rounded-[1.5rem] border border-slate-800 bg-slate-950 p-2 shadow-[0_24px_70px_rgba(15,23,42,.24)] sm:p-4 lg:mx-auto lg:w-full lg:max-w-[860px] lg:p-3">
                 {provider === 'direct' ? (
                   <VideoPlayer key={selected.url} src={selected.url} poster={selected.posterUrl || undefined} controls aspectRatio="16:9" className="overflow-hidden rounded-xl" />
                 ) : (
@@ -104,7 +111,7 @@ export function TrainingVideoLibraryDialog({
                 )}
               </div>
 
-              <div className="flex flex-col gap-3 rounded-2xl border border-violet-100 bg-violet-50/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex flex-col gap-3 rounded-2xl border border-violet-100 bg-violet-50/60 p-4 sm:flex-row sm:items-center sm:justify-between lg:hidden">
                 <p className="text-xs leading-5 text-violet-900/75">{t('training.storagePlaybackHint')}</p>
                 <Button asChild variant="outline" className="shrink-0 rounded-xl border-violet-200 bg-white">
                   <a href={selected.url} target="_blank" rel="noreferrer">
