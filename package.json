@@ -40,7 +40,8 @@
     "communications:check": "node scripts/check-production-communications.mjs",
     "billing:check": "node scripts/check-production-billing.mjs",
     "phase14c:check": "node scripts/check-phase14c-launch-ops.mjs",
-    "phase14d:check": "node scripts/check-phase14d-admin-support-discovery.mjs"
+    "phase14d:check": "node scripts/check-phase14d-admin-support-discovery.mjs",
+    "phase14e:check": "node scripts/check-phase14e-training-admin-economics.mjs"
   },
   "dependencies": {
     "@emnapi/core": "1.11.3",

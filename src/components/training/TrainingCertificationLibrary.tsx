@@ -14,7 +14,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { TrainingCourseVisual } from './TrainingCourseVisual';
-import { TrainingVideoDialog } from './TrainingVideoDialog';
+import { TrainingVideoLibraryDialog } from './TrainingVideoLibraryDialog';
 import { TrainingCurriculumDialog } from './TrainingCurriculumDialog';
 import { TrainingQuizDialog } from './TrainingQuizDialog';
 import { TrainingCertificateCard } from './TrainingCertificateCard';
@@ -28,6 +28,7 @@ import {
 import { buildTrainingQuiz } from '@/training/quiz';
 import {
   getTrainingPdfPath,
+  getTrainingVideosForGuide,
   TRAINING_CATEGORIES,
   TRAINING_GUIDES,
   type TrainingCategory,
@@ -147,7 +148,8 @@ export function TrainingCertificationLibrary({
           const completedCount = lessons.filter((lesson) => progress.completedLessonIds.includes(lesson.id)).length;
           const courseComplete = lessons.length > 0 && completedCount === lessons.length;
           const pdfPath = getTrainingPdfPath(guide.slug, i18n.language);
-          const hasVideo = Boolean(guide.videoUrl);
+          const videos = getTrainingVideosForGuide(guide.slug, audience === 'staff' ? 'staff' : 'owner');
+          const hasVideo = videos.length > 0;
           return (
             <article key={guide.slug} className={cn('group relative flex min-h-[450px] flex-col overflow-hidden rounded-[1.75rem] border bg-card p-3 shadow-[0_16px_48px_rgba(15,23,42,.08)] ring-1 ring-foreground/[.025] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_65px_rgba(76,29,149,.14)]', courseComplete ? 'border-emerald-300 ring-emerald-200/80' : 'border-border hover:border-violet-300')}>
               <TrainingCourseVisual
@@ -172,9 +174,9 @@ export function TrainingCertificationLibrary({
                 <Button type="button" className="mt-5 w-full justify-between rounded-xl bg-violet-700 hover:bg-violet-800" onClick={() => setActiveGuide(guide)}>
                   <span className="inline-flex items-center"><GraduationCap className="mr-2 h-4 w-4" />{t('training.certification.openCourse')}</span><ArrowUpRight className="h-4 w-4" />
                 </Button>
+                {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-2 w-full justify-center rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideos', { count: videos.length })}</Button>}
                 {audience === 'owner' && (
                   <>
-                    {hasVideo && <Button type="button" onClick={() => setActiveVideo(guide)} className="mt-2 w-full justify-center rounded-xl bg-slate-950 text-white shadow-sm hover:bg-slate-800"><PlayCircle className="mr-2 h-4 w-4" />{t('training.watchVideo')}</Button>}
                     <div className="mt-2 grid grid-cols-2 gap-2"><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} target="_blank" rel="noreferrer"><FileText className="mr-2 h-4 w-4" />{t('training.openPdf')}</a></Button><Button asChild variant="outline" className="rounded-xl"><a href={pdfPath} download><Download className="mr-2 h-4 w-4" />{t('training.download')}</a></Button></div>
                     {guide.route && <Button asChild variant="ghost" className="mt-2 justify-between rounded-xl px-3"><Link to={guide.route}>{t('training.openWorkspace')}<ArrowUpRight className="h-4 w-4" /></Link></Button>}
                   </>
@@ -200,14 +202,11 @@ export function TrainingCertificationLibrary({
       )}
 
       {activeVideo && (
-        <TrainingVideoDialog
+        <TrainingVideoLibraryDialog
           open
           onOpenChange={(open) => { if (!open) setActiveVideo(null); }}
-          title={t(`training.guides.${activeVideo.slug}.title`)}
-          description={t(`training.guides.${activeVideo.slug}.description`)}
-          videoUrl={activeVideo.videoUrl}
-          videoProvider={activeVideo.videoProvider}
-          posterUrl={activeVideo.videoPosterUrl}
+          courseTitle={t(`training.guides.${activeVideo.slug}.title`)}
+          videos={getTrainingVideosForGuide(activeVideo.slug, audience === 'staff' ? 'staff' : 'owner')}
         />
       )}
 

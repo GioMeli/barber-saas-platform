@@ -51,8 +51,20 @@ if (!chrome.includes('/brand/velliqo-mark-transparent-v2.png')) fail('public mar
 for (const token of ['videoUrl?: string | null', 'videoProvider?: TrainingVideoProvider', 'videoPosterUrl?: string | null', 'detectTrainingVideoProvider', 'buildTrainingVideoEmbedUrl']) {
   if (!catalog.includes(token)) fail(`training video catalog architecture missing ${token}`);
 }
+const hasLegacyVideoWiring = (source) =>
+  source.includes('TrainingVideoDialog')
+  && source.includes('training.watchVideo')
+  && source.includes('guide.videoUrl');
+
+const hasVideoLibraryWiring = (source) =>
+  source.includes('TrainingVideoLibraryDialog')
+  && source.includes('getTrainingVideosForGuide')
+  && (source.includes('training.watchVideo') || source.includes('training.watchVideos'));
+
 for (const source of [publicCourses, ownerTraining]) {
-  if (!source.includes('TrainingVideoDialog') || !source.includes('training.watchVideo') || !source.includes('guide.videoUrl')) fail('training course UI is not wired to optional video lessons');
+  if (!hasLegacyVideoWiring(source) && !hasVideoLibraryWiring(source)) {
+    fail('training course UI is not wired to optional video lessons');
+  }
 }
 if (!videoDialog.includes("provider === 'direct'") || !videoDialog.includes('<iframe') || !videoDialog.includes('VideoPlayer')) fail('training video player does not support direct and embedded providers');
 if (!exists('docs/PHASE-12A-PUBLIC-VISUALS-BRANDING-TRAINING-VIDEO.md')) fail('Phase 12A implementation guide is missing');
