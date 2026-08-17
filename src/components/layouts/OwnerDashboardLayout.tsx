@@ -12,6 +12,7 @@ import ConnectivityBanner from '@/components/pwa/ConnectivityBanner';
 import OwnerAIAssistantDrawer from '@/components/ai/OwnerAIAssistantDrawer';
 import OwnerProductTour from '@/components/tour/OwnerProductTour';
 import OwnerHelpCenter from '@/components/support/OwnerHelpCenter';
+import OwnerQuotaLimitAlert from '@/components/billing/OwnerQuotaLimitAlert';
 import { findOwnerNavigationItem } from './owner-shell/navigation';
 
 export default function OwnerDashboardLayout() {
@@ -159,6 +160,8 @@ export default function OwnerDashboardLayout() {
           initialRequestId={supportRequestId}
           onInitialRequestHandled={() => setSupportRequestId(null)}
         />
+
+        <OwnerQuotaLimitAlert businessId={activeBusiness?.id} />
 
         <OwnerProductTour
           open={isTourOpen}

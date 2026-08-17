@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { Bell, Bot, CalendarDays, CheckCheck, Headphones, Megaphone, Sparkles, UserPlus, X } from 'lucide-react';
+import { Bell, Bot, CalendarDays, CheckCheck, Headphones, Megaphone, Puzzle, Sparkles, UserPlus, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/db/supabase';
@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
 import { cn } from '@/lib/utils';
+import { useNavigate } from 'react-router-dom';
 
 type OwnerNotification = {
   id: string;
@@ -14,7 +15,7 @@ type OwnerNotification = {
   user_id: string;
   title: string;
   message: string;
-  type: 'new_appointment' | 'new_customer' | 'ai_briefing' | 'ai_alert' | 'platform_announcement' | 'support_reply' | 'support_status';
+  type: 'new_appointment' | 'new_customer' | 'ai_briefing' | 'ai_alert' | 'platform_announcement' | 'support_reply' | 'support_status' | 'billing_quota';
   is_read: boolean;
   created_at: string;
   metadata?: Record<string, unknown> | null;
@@ -34,6 +35,7 @@ export default function OwnerNotificationCenter({
   onOpenSupportRequest,
 }: Props) {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const locale = LANGUAGE_TO_LOCALE[normalizeLanguage(i18n.resolvedLanguage)];
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -85,7 +87,7 @@ export default function OwnerNotificationCenter({
       .from('notifications')
       .select('id, business_id, user_id, title, message, type, is_read, created_at, metadata')
       .eq('business_id', businessId)
-      .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert', 'platform_announcement', 'support_reply', 'support_status'])
+      .in('type', ['new_appointment', 'new_customer', 'ai_briefing', 'ai_alert', 'platform_announcement', 'support_reply', 'support_status', 'billing_quota'])
       .order('created_at', { ascending: false })
       .limit(30);
 
@@ -143,9 +145,19 @@ export default function OwnerNotificationCenter({
   };
 
   const isDynamic = (type: OwnerNotification['type']) => type.startsWith('ai_') || ['platform_announcement', 'support_reply', 'support_status'].includes(type);
+  const quotaCopy = (notification: OwnerNotification) => {
+    const quotaType = typeof notification.metadata?.quota_type === 'string' ? notification.metadata.quota_type : 'sms';
+    const typeLabel = t(`addons.quota.types.${quotaType}`, { defaultValue: quotaType.replaceAll('_', ' ') });
+    return { title: t('addons.quota.title'), message: t('addons.quota.description', { type: typeLabel }) };
+  };
 
   const handleNotificationClick = async (notification: OwnerNotification) => {
     await markRead(notification.id);
+    if (notification.type === 'billing_quota') {
+      setOpen(false);
+      navigate('/dashboard/addons');
+      return;
+    }
     if (notification.type === 'support_reply' || notification.type === 'support_status') {
       const requestId = typeof notification.metadata?.request_id === 'string' ? notification.metadata.request_id : undefined;
       setOpen(false);
@@ -249,6 +261,8 @@ export default function OwnerNotificationCenter({
                             ? 'bg-fuchsia-100 text-fuchsia-700'
                             : notification.type === 'support_reply' || notification.type === 'support_status'
                               ? 'bg-cyan-100 text-cyan-700'
+                              : notification.type === 'billing_quota'
+                                ? 'bg-amber-100 text-amber-700'
                               : 'bg-violet-100 text-violet-700'
                   }`}
                 >
@@ -262,6 +276,8 @@ export default function OwnerNotificationCenter({
                     <Megaphone className="h-4 w-4" />
                   ) : notification.type === 'support_reply' || notification.type === 'support_status' ? (
                     <Headphones className="h-4 w-4" />
+                  ) : notification.type === 'billing_quota' ? (
+                    <Puzzle className="h-4 w-4" />
                   ) : (
                     <Bot className="h-4 w-4" />
                   )}
@@ -270,18 +286,22 @@ export default function OwnerNotificationCenter({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
                     <div className="truncate text-sm font-bold">
-                      {isDynamic(notification.type)
-                        ? notification.title
-                        : t(`notifications.types.${notification.type}.title`)}
+                      {notification.type === 'billing_quota'
+                        ? quotaCopy(notification).title
+                        : isDynamic(notification.type)
+                          ? notification.title
+                          : t(`notifications.types.${notification.type}.title`)}
                     </div>
                     {!notification.is_read && (
                       <span className="h-2 w-2 shrink-0 rounded-full bg-primary" />
                     )}
                   </div>
                   <p className="mt-1 text-sm leading-5 text-muted-foreground">
-                    {isDynamic(notification.type)
-                      ? notification.message
-                      : t(`notifications.types.${notification.type}.message`)}
+                    {notification.type === 'billing_quota'
+                      ? quotaCopy(notification).message
+                      : isDynamic(notification.type)
+                        ? notification.message
+                        : t(`notifications.types.${notification.type}.message`)}
                   </p>
                   <div className="mt-2 text-[11px] font-medium text-muted-foreground">
                     {formatNotificationTime(notification.created_at, locale, t)}

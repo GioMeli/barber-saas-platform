@@ -12,11 +12,13 @@ const requireText = (file, needle, label = `${file}: ${needle}`) => {
 
 // Launch plans and commercial terms.
 const plans = read('src/billing/plans.ts');
-for (const [id, price] of [['standard', '29.99'], ['pro', '49.99'], ['premium', '89.99']]) {
+for (const [id, price] of [['standard', '34.99'], ['pro', '59.99'], ['premium', '100.99']]) {
   checks.push([plans.includes(`id: '${id}'`) && plans.includes(`price: ${price}`), `${id} plan price €${price}`]);
 }
 requireText('src/billing/plans.ts', 'export const BILLING_TRIAL_DAYS = 14', '14-day launch trial');
 requireText('src/billing/plans.ts', "staffAppInstall: false", 'Standard installable Staff App disabled');
+requireText('src/billing/plans.ts', "name: 'Professional'", 'Pro tier is presented as Professional');
+checks.push([/id: 'premium'[\s\S]*?smsMonthly: 250/.test(plans), 'Premium includes 250 SMS per billing period']);
 
 // Signup/onboarding must capture the selected plan and route through Stripe before trial activation.
 requireText('src/pages/auth/SignUp.tsx', 'BILLING_PLANS.map', 'Signup plan selector');
@@ -29,6 +31,7 @@ requireText('src/pages/onboarding/OnboardingWizard.tsx', "functions.invoke('crea
 
 // Stripe checkout must collect payment details before trial and support fixed non-renewing offers.
 requireText('supabase/functions/create_subscription_checkout/index.ts', "payment_method_collection: 'always'", 'Checkout always collects payment method');
+requireText('supabase/functions/create_subscription_checkout/index.ts', "tax_behavior !== 'inclusive'", 'Plan checkout enforces VAT-inclusive Stripe prices');
 requireText('supabase/functions/create_subscription_checkout/index.ts', 'custom_text:', 'Checkout includes professional customer-facing billing copy');
 requireText('supabase/functions/create_subscription_checkout/index.ts', 'after_expiration: { recovery:', 'Checkout supports secure expired-session recovery');
 requireText('supabase/functions/create_subscription_checkout/index.ts', 'locale: checkoutLocale', 'Checkout follows the Velliqo interface language');
@@ -43,6 +46,7 @@ requireText('supabase/functions/create_billing_portal_session/index.ts', 'STRIPE
 requireText('supabase/functions/create_billing_portal_session/index.ts', 'STRIPE_PORTAL_FIXED_CONFIGURATION_ID', 'Fixed-term portal configuration supported');
 requireText('supabase/functions/reconcile_subscription_checkout/index.ts', 'stripe.checkout.sessions.retrieve', 'Checkout return reconciliation retrieves Stripe session');
 requireText('supabase/functions/reconcile_subscription_checkout/index.ts', 'payment_method_collected: true', 'Checkout reconciliation unlocks payment-backed trial');
+requireText('supabase/functions/reconcile_subscription_checkout/index.ts', 'unitAmount: 10099', 'Checkout reconciliation uses revised Premium amount');
 requireText('src/pages/owner/Billing.tsx', "functions.invoke('reconcile_subscription_checkout'", 'Billing return performs authenticated reconciliation');
 requireText('src/components/layouts/OwnerDashboardLayout.tsx', 'velliqo:billing-updated', 'Owner shell revalidates access after billing sync');
 
@@ -79,6 +83,24 @@ requireText('supabase/functions/process-ai-manager-automations/index.ts', 'billi
 for (const file of ['process_appointment_notifications', 'process_reminder_jobs', 'process_marketing_deliveries']) {
   requireText(`supabase/functions/${file}/index.ts`, "rpc('billing_can_send_communication'", `${file} communication quota`);
 }
+
+
+// Phase 15A add-ons, POS and quota expansion.
+const addonMigration = 'supabase/migrations/00055_velliqo_addons_vat_localization_pos.sql';
+requireText(addonMigration, "('sms_100','sms'", '100 SMS add-on exists');
+requireText(addonMigration, "('sms_1000','sms'", '1,000 SMS add-on exists');
+requireText(addonMigration, "('email_1000','email'", 'Email add-on exists');
+requireText(addonMigration, "('ai_100','ai'", 'AI request add-on exists');
+requireText(addonMigration, "('pos_suite','pos'", 'POS subscription add-on exists');
+requireText(addonMigration, 'get_business_addon_allowances', 'Effective add-on allowance calculation exists');
+requireText(addonMigration, 'billing_create_quota_alert', 'Quota exhaustion notifications are persisted');
+requireText(addonMigration, 'business_payment_accounts', 'Owner payment provider connection state exists');
+requireText('src/pages/owner/Addons.tsx', "functions.invoke('create_addon_checkout'", 'Owner Addons checkout is wired');
+requireText('src/components/billing/OwnerQuotaLimitAlert.tsx', 'owner_check_quota_alerts', 'Owner quota popup is wired');
+requireText('src/pages/owner/PosSuite.tsx', 'processing_fees_paid_by_owner', 'POS states merchant processing fees are Owner-paid');
+requireText('src/pages/owner/PosSuite.tsx', 'posWorkspace.nativeNote', 'POS UI discloses native Tap to Pay requirement');
+requireText('supabase/functions/create_addon_checkout/index.ts', "tax_behavior: 'inclusive'", 'Add-on checkout uses VAT-inclusive price data');
+requireText('supabase/functions/stripe_webhook/index.ts', 'cancelRecurringAddonsForBusiness', 'Base plan cancellation also stops recurring add-ons');
 
 // Product surfaces must reflect the launch model, not legacy pricing/card claims.
 const pricing = read('src/pages/marketing/Pricing.tsx');

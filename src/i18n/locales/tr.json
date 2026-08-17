@@ -156,7 +156,9 @@
     "mobile_appointment": "Randevu",
     "more": "Daha fazla",
     "training": "Eğitim",
-    "courses": "Kurslar"
+    "courses": "Kurslar",
+    "addons": "Eklentiler",
+    "pos": "POS"
   },
   "system": {
     "loading": "Yükleniyor...",
@@ -1352,7 +1354,7 @@
       "unassigned": "Atanmamış",
       "customer": "Müşteri"
     },
-    "planUpgradeRequired": "Gelişmiş Finans, Gelir ve Ürün raporları Pro ve Premium planlarda mevcuttur."
+    "planUpgradeRequired": "Gelişmiş Finans, Gelir ve Ürün raporları Professional ve Premium planlarda mevcuttur."
   },
   "storefront": {
     "owner": {
@@ -4021,7 +4023,7 @@
         "storefront": "Kimlik, iletişim, rezervasyon kuralları, harita, SEO, sosyal bağlantılar ve görünürlük için tek kaynağı yönetin.",
         "business": "Uygunluğu ve günlük operasyonu etkileyen kapanışları ve işletme düzeyi kontrolleri yönetin.",
         "reports": "Gelir, randevu, çalışan performansı, iptaller, hizmetler ve eğilimleri analiz edin.",
-        "billing": "Abonelik, faturalar ve ödeme kontrollerini inceleyin. Standard, Pro ve Premium hakları burada uygulanacaktır.",
+        "billing": "Abonelik, faturalar ve ödeme kontrollerini inceleyin. Standard, Professional ve Premium hakları burada uygulanacaktır.",
         "ai": "Sohbetler, briefingler, uyarılar, öneriler ve onaylı işlemler için tam Velliqo AI çalışma alanını açın.",
         "training": "Önemli Velliqo süreçleri için yapılandırılmış kursları, PDF rehberleri ve gelecekteki videoları açın."
       },
@@ -4089,6 +4091,1335 @@
       "load": "Destek talepleri yüklenemedi",
       "create": "Destek talebi oluşturulamadı",
       "reply": "Yanıt gönderilemedi"
+    }
+  },
+  "marketingSite": {
+    "chrome": {
+      "product": "Ürün",
+      "ai": "Velliqo AI",
+      "demo": "Demo",
+      "courses": "Kurslar",
+      "experience": "Deneyim",
+      "why": "Neden Velliqo?",
+      "pricing": "Fiyatlandırma",
+      "businessTypes": "İşletme türleri",
+      "contact": "İletişim",
+      "businessLogin": "İşletme girişi",
+      "startFree": "Ücretsiz başla",
+      "login": "Giriş",
+      "openNavigation": "Menüyü aç",
+      "closeNavigation": "Menüyü kapat",
+      "homeLabel": "Velliqo ana sayfa",
+      "tagline": "Rezervasyon. Yönetim. Büyüme.",
+      "footerDescription": "Randevu ve hizmet işletmeleri için Velliqo AI destekli premium operasyon platformu.",
+      "explore": "Keşfet",
+      "productExperience": "Ürün deneyimi",
+      "access": "Erişim",
+      "copyright": "© 2026 Velliqo. Modern hizmet operasyonları için geliştirildi."
+    },
+    "pages": {
+      "pricing": {
+        "badge": "Gerçek operasyon kapasitesine göre planlar",
+        "title": "İşletmene uygun Velliqo kapasitesini seç.",
+        "description": "Tüm planlar {{days}} günlük ücretsiz deneme ile başlar. Fatura bilgileri güvenli şekilde baştan eklenir ve seçtiğin aylık plan, değiştirmediğin veya iptal etmediğin sürece otomatik yenilenir.",
+        "vat": "Uygulanabildiği yerlerde KDV dahildir. Stripe vergi uygulamasını müşterinin fatura konumuna göre hesaplar.",
+        "mostPopular": "En popüler",
+        "perMonth": "/ ay",
+        "trialLine": "{{days}} gün ücretsiz · deneme öncesi fatura bilgileri",
+        "staff": "En fazla {{count}} personel",
+        "personalApps": "Kişisel indirilebilir Staff Apps",
+        "browserPortal": "Güvenli tarayıcı Staff Portal",
+        "ai": "Ayda {{count}} Velliqo AI isteği",
+        "email": "Ayda {{count}} e-posta iletişimi",
+        "sms": "Ayda {{count}} SMS iletişimi",
+        "advancedReports": "Gelişmiş raporlama ve iş zekâsı",
+        "coreReports": "Temel işletme raporları",
+        "aiAutomations": "AI operasyon otomasyonları",
+        "aiChat": "Kontrollü aylık limitli AI sohbeti",
+        "start": "{{plan}} ile ücretsiz başla",
+        "plans": {
+          "standard": {
+            "name": "Standard",
+            "description": "Tek profesyonel çalışma alanı isteyen küçük ekipler için temel operasyonlar."
+          },
+          "pro": {
+            "name": "Professional",
+            "description": "Büyüyen randevu ve hizmet işletmeleri için eksiksiz operasyon planı."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Daha büyük ekipler için daha yüksek kapasite, AI ve iletişim kotası."
+          }
+        },
+        "billingEyebrow": "Faturalama nasıl çalışır",
+        "billingTitle": "Kayıttan sonra sürpriz aktivasyon yok.",
+        "billingText": "Ödeme yöntemi deneme etkinleşmeden önce Stripe üzerinden alınır; böylece işletme 14. günden sonra hangi planın başlayacağını net olarak bilir.",
+        "steps": [
+          {
+            "title": "Planını seç",
+            "text": "İşletme hesabını oluştururken Standard, Professional veya Premium seç."
+          },
+          {
+            "title": "Fatura bilgilerini ekle",
+            "text": "Stripe ödeme yöntemini güvenli şekilde saklar. Velliqo ham kart bilgilerini hiçbir zaman saklamaz."
+          },
+          {
+            "title": "14 gün ücretsiz kullan",
+            "text": "Seçilen plan ve özellik limitleri deneme boyunca abonelik ücreti olmadan aktiftir."
+          },
+          {
+            "title": "Otomatik devam et",
+            "text": "Denemeden sonra plan, iptal etmediğin veya yükseltip düşürmediğin sürece aylık yenilenir."
+          }
+        ],
+        "fixedTitle": "Sabit süreli teklifler farklıdır:",
+        "fixedText": "bir Velliqo teklif kodu altı veya on iki aylık bir plan süresi tanımlayabilir. Bu abonelikler otomatik olarak sona erecek şekilde planlanır ve teklif dönemi sonrasında sessizce devam eden aylık aboneliğe dönüşmez.",
+        "questionsTitle": "Faturalama soruları",
+        "questionsText": "Owner ödeme kontrollerini, faturalara erişimi ve yenileme davranışını her zaman doğrudan yönetir.",
+        "faqs": [
+          {
+            "q": "14 günlük ücretsiz deneme nasıl çalışır?",
+            "a": "Bir plan seç, işletmeni oluştur ve Stripe üzerinden fatura bilgilerini ekle. Kart güvenli şekilde kaydedilir ancak deneme başladığında ücret alınmaz. Önceden iptal etmezsen Stripe 14 gün sonunda seçilen aylık planı otomatik tahsil eder."
+          },
+          {
+            "q": "Yükseltme, düşürme veya iptal yapabilir miyim?",
+            "a": "Evet. Faturalama kontrolleri owner’ın ödeme yöntemini, faturaları, abonelik değişikliklerini ve iptali yönetmesine izin verir. Normal aylık planlar değiştirilene veya iptal edilene kadar yenilenir."
+          },
+          {
+            "q": "Staff Apps konusunda fark nedir?",
+            "a": "Standard güvenli tarayıcı Staff Portal içerir ancak kişisel indirilebilir Staff Apps içermez. Professional ve Premium uygun ekip üyeleri için kurulabilir Staff Apps içerir."
+          },
+          {
+            "q": "Velliqo AI ve iletişim neden plana göre sınırlıdır?",
+            "a": "AI üretimi, e-posta ve SMS gerçek kullanım maliyetleri oluşturur. Net aylık kotalar fiyatları öngörülebilir tutar ve Professional ile Premium’a daha yüksek kapasite sağlar."
+          },
+          {
+            "q": "Özel teklif kodları nasıl çalışır?",
+            "a": "Bazı davet veya promosyon kodları seçilen planı altı ya da on iki ay gibi sabit süreyle ve isteğe bağlı indirimle sağlayabilir. Sabit süreli teklifler yenilenmez ve belirtilen bitiş tarihinde otomatik sona erer."
+          },
+          {
+            "q": "Müşteri kart ödemelerinin işlem ücretleri dahil mi?",
+            "a": "Bu fiyatlar Velliqo SaaS aboneliğini kapsar. Velliqo POS ile kart işlem ücretleri doğrudan bağlı ödeme sağlayıcısı tarafından owner’a yansıtılır; Velliqo bu ücretleri üstlenmez."
+          }
+        ],
+        "ctaTitle": "Planını seç, işletmeni kur ve 14 günlük denemeni etkinleştir.",
+        "ctaText": "Ödeme yöntemin Stripe tarafından güvenli şekilde yönetilir ve plan daha sonra Owner Billing alanından yönetilebilir.",
+        "ctaButton": "Professional ile başla"
+      },
+      "businessTypes": {
+        "eyebrow": "Çalışma alanı yapılandırması",
+        "title": "İşletmene göre oluşturulmuş çalışma alanını bul.",
+        "description": "En yakın eşleşmeyi seç. Velliqo kayıt öncesinde uygun terminoloji, başlangıç hizmetleri ve önerilen modülleri hazırlar.",
+        "search": "Ara, örn. diş hekimi, danışman, antrenör...",
+        "trust": [
+          "Güvenli Stripe faturalama",
+          "Rehberli kurulum",
+          "Ayarları sonra değiştir"
+        ],
+        "explore": "İşletme türlerini keşfet",
+        "matches": "{{count}} özelleştirilmiş çalışma alanı aramanla eşleşiyor.",
+        "count": "{{count}} işletme türü",
+        "tailored": "Özelleştirilmiş çalışma alanı",
+        "select": "Seç ve devam et",
+        "guided": "Rehberli kurulum",
+        "noneTitle": "İşletme türü bulunamadı",
+        "noneText": "Daha geniş bir terim dene veya en yakın hizmet işletmesini seç. Kurulum sırasında terminoloji, hizmetler ve modüller özelleştirilebilir.",
+        "clear": "Aramayı temizle",
+        "fallbackTitle": "Tam eşleşme bulamadın mı?",
+        "fallbackText": "En yakın hizmet işletmesini seç. Kurulum sırasında hizmetleri, kategorileri ve ekip terminolojisini yeniden adlandırabilirsin.",
+        "categories": {
+          "beauty_personal_care": {
+            "name": "Güzellik ve Kişisel Bakım",
+            "description": "Saç, güzellik, bakım, spa ve estetik."
+          },
+          "health_wellness": {
+            "name": "Sağlık ve Wellness",
+            "description": "Klinikler ve randevulu sağlık hizmetleri."
+          },
+          "fitness": {
+            "name": "Fitness ve Hareket",
+            "description": "Antrenman, dersler, stüdyolar ve üyelikler."
+          },
+          "pet_services": {
+            "name": "Evcil Hayvan Hizmetleri",
+            "description": "Bakım, kuaför, veteriner ve eğitim."
+          },
+          "automotive": {
+            "name": "Otomotiv Hizmetleri",
+            "description": "Araç bakımı, servis ve atölye randevuları."
+          },
+          "home_services": {
+            "name": "Ev ve Saha Hizmetleri",
+            "description": "Mobil ekipler ve planlı mülk hizmetleri."
+          },
+          "professional_services": {
+            "name": "Profesyonel Hizmetler",
+            "description": "Danışmanlık, hukuk, finans ve gayrimenkul."
+          },
+          "education": {
+            "name": "Eğitim ve Öğretim",
+            "description": "Dersler, okullar, eğitmenler ve programlar."
+          },
+          "creative_services": {
+            "name": "Yaratıcı Hizmetler",
+            "description": "Stüdyolar, sanatçılar ve prodüksiyon profesyonelleri."
+          },
+          "events": {
+            "name": "Etkinlikler ve Mekânlar",
+            "description": "Planlama, danışmanlık ve mekân rezervasyonları."
+          }
+        },
+        "industries": {
+          "appointment_service_business": {
+            "name": "Hizmet İşletmesi",
+            "description": "Hizmet İşletmesi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "hair_salon": {
+            "name": "Kuaför Salonu",
+            "description": "Kuaför Salonu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "barber_shop": {
+            "name": "Berber",
+            "description": "Berber için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "beauty_studio": {
+            "name": "Güzellik Stüdyosu",
+            "description": "Güzellik Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "nail_salon": {
+            "name": "Tırnak Salonu",
+            "description": "Tırnak Salonu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "spa": {
+            "name": "Spa",
+            "description": "Spa için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "massage_center": {
+            "name": "Masaj Merkezi",
+            "description": "Masaj Merkezi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "wellness_center": {
+            "name": "Wellness Merkezi",
+            "description": "Wellness Merkezi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "aesthetic_clinic": {
+            "name": "Estetik Kliniği",
+            "description": "Estetik Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "tattoo_studio": {
+            "name": "Dövme Stüdyosu",
+            "description": "Dövme Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "physiotherapy": {
+            "name": "Fizyoterapi Kliniği",
+            "description": "Fizyoterapi Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "chiropractic": {
+            "name": "Kayropraktik Kliniği",
+            "description": "Kayropraktik Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "nutritionist": {
+            "name": "Beslenme Danışmanlığı",
+            "description": "Beslenme Danışmanlığı için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "psychology_practice": {
+            "name": "Psikoloji Kliniği",
+            "description": "Psikoloji Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "speech_therapy": {
+            "name": "Dil ve Konuşma Terapisi",
+            "description": "Dil ve Konuşma Terapisi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "dental_clinic": {
+            "name": "Diş Kliniği",
+            "description": "Diş Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "medical_practice": {
+            "name": "Özel Muayenehane",
+            "description": "Özel Muayenehane için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "personal_training": {
+            "name": "Kişisel Antrenman Stüdyosu",
+            "description": "Kişisel Antrenman Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "gym_studio": {
+            "name": "Spor Salonu",
+            "description": "Spor Salonu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "pilates_studio": {
+            "name": "Pilates Stüdyosu",
+            "description": "Pilates Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "yoga_studio": {
+            "name": "Yoga Stüdyosu",
+            "description": "Yoga Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "dance_studio": {
+            "name": "Dans Stüdyosu",
+            "description": "Dans Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "pet_grooming": {
+            "name": "Evcil Hayvan Bakımı",
+            "description": "Evcil Hayvan Bakımı için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "veterinary_clinic": {
+            "name": "Veteriner Kliniği",
+            "description": "Veteriner Kliniği için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "dog_training": {
+            "name": "Köpek Eğitimi",
+            "description": "Köpek Eğitimi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "car_wash": {
+            "name": "Oto Yıkama",
+            "description": "Oto Yıkama için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "car_detailing": {
+            "name": "Oto Detaylandırma",
+            "description": "Oto Detaylandırma için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "mechanic": {
+            "name": "Oto Servisi",
+            "description": "Oto Servisi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "tyre_shop": {
+            "name": "Lastik Servisi",
+            "description": "Lastik Servisi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "cleaning_company": {
+            "name": "Temizlik Şirketi",
+            "description": "Temizlik Şirketi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "electrician": {
+            "name": "Elektrik Hizmetleri",
+            "description": "Elektrik Hizmetleri için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "plumber": {
+            "name": "Tesisat Hizmetleri",
+            "description": "Tesisat Hizmetleri için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "hvac": {
+            "name": "HVAC Hizmetleri",
+            "description": "HVAC Hizmetleri için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "pest_control": {
+            "name": "Haşere Kontrolü",
+            "description": "Haşere Kontrolü için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "law_firm": {
+            "name": "Hukuk Bürosu",
+            "description": "Hukuk Bürosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "accounting_firm": {
+            "name": "Muhasebe Bürosu",
+            "description": "Muhasebe Bürosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "consultancy": {
+            "name": "Danışmanlık",
+            "description": "Danışmanlık için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "financial_advisor": {
+            "name": "Finansal Danışmanlık",
+            "description": "Finansal Danışmanlık için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "real_estate": {
+            "name": "Emlak Ofisi",
+            "description": "Emlak Ofisi için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "tutoring": {
+            "name": "Özel Ders",
+            "description": "Özel Ders için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "language_school": {
+            "name": "Dil Okulu",
+            "description": "Dil Okulu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "music_school": {
+            "name": "Müzik Okulu",
+            "description": "Müzik Okulu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "driving_school": {
+            "name": "Sürücü Kursu",
+            "description": "Sürücü Kursu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "photography_studio": {
+            "name": "Fotoğraf Stüdyosu",
+            "description": "Fotoğraf Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "videography_studio": {
+            "name": "Video Stüdyosu",
+            "description": "Video Stüdyosu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "wedding_planner": {
+            "name": "Düğün Planlama",
+            "description": "Düğün Planlama için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "event_planner": {
+            "name": "Etkinlik Planlama",
+            "description": "Etkinlik Planlama için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          },
+          "venue_booking": {
+            "name": "Mekân Rezervasyonu",
+            "description": "Mekân Rezervasyonu için randevu ve hizmetlerin düzenli çevrimiçi yönetimi."
+          }
+        }
+      },
+      "why": {
+        "heroBadge": "İşletmeler neden Velliqo’yu seçiyor",
+        "heroTitle": "Daha az operasyon karmaşası. Her iş gününde daha fazla güven.",
+        "heroText": "Velliqo dağınık araçları ve manuel koordinasyonu tek bir tutarlı işletme çalışma alanında birleştirir; ekibin karmaşık yazılıma uyum sağlamasını istemez.",
+        "start": "Ücretsiz başla",
+        "pricing": "Fiyatları gör",
+        "artTitle": "Gerçek operasyonlara göre tasarlandı",
+        "artText": "Amacı olan yazılım.",
+        "trust": [
+          {
+            "title": "Koordinasyon süresini azalt",
+            "text": "Günlük işi tek ortak sistemde tut."
+          },
+          {
+            "title": "Her cihazdan çalış",
+            "text": "Desktop derinliği, mobil netlik."
+          },
+          {
+            "title": "Çalışma alanına güven",
+            "text": "Net erişim ve ayrılmış işletme verileri."
+          },
+          {
+            "title": "Rehberlikle başla",
+            "text": "Yapılandırma işletme türüne göre ilerler."
+          }
+        ],
+        "diffEyebrow": "Fark",
+        "diffTitle": "Tek bir operasyon deneyimi olarak tasarlandı.",
+        "diffText": "Velliqo ayrı bir rezervasyon aracı eklemek yerine müşteri yolculuğunu ekibin arka plandaki çalışmasıyla bağlar.",
+        "reasons": [
+          {
+            "title": "Tek doğruluk kaynağı",
+            "text": "Randevular, müşteriler, hizmetler, personel ve raporlar aynı operasyon verisini kullanır."
+          },
+          {
+            "title": "Tüm ekip için",
+            "text": "Owner görünürlüğü korur, profesyoneller senkron Staff Portal ile çalışır."
+          },
+          {
+            "title": "Müşteriye dönük kalite",
+            "text": "Rezervasyon deneyimi işletmenin profesyonelliğini yansıtır."
+          },
+          {
+            "title": "Faydalı iş zekâsı",
+            "text": "Raporlar günlük aktiviteye bağlı gerçek kararlara odaklanır."
+          },
+          {
+            "title": "Ölçekten önce güvenlik",
+            "text": "Production launch izinler, RLS, billing ve security readiness’e bağlıdır."
+          },
+          {
+            "title": "Şeffaf ürün ilişkisi",
+            "text": "Net fiyatlandırma ve mevcut özelliklerin dürüst anlatımı."
+          }
+        ],
+        "adoptEyebrow": "Kolay benimseme için",
+        "adoptTitle": "Premium daha kolay hissettirmeli, daha karmaşık değil.",
+        "adoptText": "Kaliteli bir platform güveni netlikle kazanır: tutarlı gezinme, tanıdık planlama, rehberli kurulum ve responsive tasarım.",
+        "adoptLines": [
+          {
+            "title": "Net günlük öncelikler",
+            "text": "Dashboard şimdi dikkat gerektirenleri gösterir."
+          },
+          {
+            "title": "Kişisel Staff Portal",
+            "text": "Profesyoneller kendi program ve aksiyonlarını güvenli senkron alanda görür."
+          },
+          {
+            "title": "Tutarlı terminoloji",
+            "text": "Etiketler temel deneyimi değiştirmeden işletmeye uyarlanır."
+          },
+          {
+            "title": "Kademeli derinlik",
+            "text": "Yeni kullanıcılar basit başlar, gelişmiş özellikler ihtiyaç olduğunda erişilebilir."
+          }
+        ],
+        "faqEyebrow": "Sorular yanıtlandı",
+        "faqTitle": "Dikkatli bir işletme sahibinin sorması gerekenler.",
+        "faqText": "Güven, kayıt veya ödeme öncesinde pratik soruların doğrudan yanıtlanmasıyla başlar.",
+        "faqs": [
+          {
+            "q": "Velliqo sadece salonlar için mi?",
+            "a": "Hayır. Birçok sektörde randevu ve hizmet işletmeleri için tasarlanmıştır."
+          },
+          {
+            "q": "Personelim için öğrenmesi zor mu?",
+            "a": "Tanıdık akışlar, Tour, Training Portal, PDF rehberleri ve videolar eğitim süresini azaltır."
+          },
+          {
+            "q": "Müşteriler app indirmeden rezervasyon yapabilir mi?",
+            "a": "Evet. Her işletmenin her cihazdan kullanılabilen halka açık web deneyimi vardır."
+          },
+          {
+            "q": "Walk-in ve telefon rezervasyonlarını tutabilir miyim?",
+            "a": "Evet. Owner ve yetkili personel dashboard üzerinden doğrudan randevu oluşturabilir."
+          },
+          {
+            "q": "Birden fazla personelle çalışır mı?",
+            "a": "Evet. Ekip programları, uygunluk, müşteri atama ve işletme görünürlüğü desteklenir."
+          },
+          {
+            "q": "Staff Portal nedir?",
+            "a": "Yetkili profesyoneller için owner workspace ile senkron, işletme kontrollü kişisel çalışma alanıdır."
+          },
+          {
+            "q": "Verilerimi ne korur?",
+            "a": "Velliqo multi-tenant ayrım, rol izinleri ve production güvenlik kontrolleri kullanır."
+          },
+          {
+            "q": "Uygun değilse çıkabilir miyim?",
+            "a": "Aylık abonelikler iptal edilebilir; sabit süreli teklifler belirtilen tarihte sona erer."
+          },
+          {
+            "q": "Velliqo gelişmeye devam edecek mi?",
+            "a": "Evet. Amaç sürdürülebilir şekilde gelişen tek bir platformdur."
+          }
+        ],
+        "values": [
+          {
+            "title": "Dürüst yanıtlar",
+            "text": "Özellikler açıkça anlatılır ve gelecekteki işler hazırmış gibi gösterilmez."
+          },
+          {
+            "title": "Sorumlu launch",
+            "text": "Ticari launch security, billing, monitoring ve legal readiness’e bağlıdır."
+          },
+          {
+            "title": "Uzun vadeli kalite",
+            "text": "Bakım kolaylığı, tutarlılık ve gerçek destek için tasarlanmıştır."
+          }
+        ],
+        "ctaTitle": "Velliqo’nun işletmenin mevcut çalışma şekline nasıl uyduğunu gör.",
+        "ctaText": "İşletme türünü seç, deneyimi keşfet ve rehberli kurulumla başla.",
+        "ctaButton": "İşletme türlerini keşfet"
+      },
+      "experience": {
+        "badge": "Tek platform. Birbirine bağlı dört deneyim.",
+        "title": "Velliqo’nun owner, staff ve customer journey’yi nasıl bağladığını gör.",
+        "text": "Her rol odaklı bir deneyim alırken işletme verileri tek multi-tenant sistemde senkron kalır.",
+        "trust": [
+          "Halka açık sayfa otomatik oluşturulur",
+          "Yetkili profesyoneller için kişisel Staff Portal",
+          "Desktop, tablet ve mobil hazır",
+          "Ayrı web sitesi oluşturucu gerekmez"
+        ],
+        "ownerEyebrow": "Owner deneyimi",
+        "ownerTitle": "Tüm işletmeyi yönetmek için özel komuta merkezin.",
+        "ownerText": "Randevular, insanlar, performans, iletişim ve yayınlama tek sakin operasyon sisteminde birleşir.",
+        "ownerCards": [
+          {
+            "title": "Takvim kontrolü",
+            "text": "Randevu, gecikme ve ekip uygunluğunu tek görünümden planla."
+          },
+          {
+            "title": "Müşteri zekâsı",
+            "text": "Müşteri profili, geçmiş ve aktiviteyi işletmeye bağlı tut."
+          },
+          {
+            "title": "İşletme raporları",
+            "text": "Gelir, rezervasyon, tamamlanma ve büyümeyi manuel tablolar olmadan izle."
+          },
+          {
+            "title": "İçerik yayınlama",
+            "text": "Duyuru, teklif, ürün ve galeri güncellemeleri yayınla."
+          }
+        ],
+        "staffEyebrow": "Staff deneyimi",
+        "staffTitle": "Her yetkili profesyonel için odaklı kişisel çalışma alanı.",
+        "staffText": "Staff yalnızca ihtiyacı olan program, randevu, profil ve aksiyonları görür ve owner workspace ile senkron kalır.",
+        "staffCards": [
+          {
+            "title": "Odaklı kişisel alan",
+            "text": "Her profesyonel kendi programını, randevularını ve sorumluluklarını görür."
+          },
+          {
+            "title": "Canlı owner senkronizasyonu",
+            "text": "Değişiklikler aynı işletme verisine gerçek zamanlı bağlı kalır."
+          },
+          {
+            "title": "Güvenli staff erişimi",
+            "text": "Onaylı email ve trusted-device oturumları owner kontrolündedir."
+          },
+          {
+            "title": "Uygun planlarda kişisel Staff App",
+            "text": "Uygun planlar workspace’i desktop veya mobile kurmayı sağlar."
+          }
+        ],
+        "customerEyebrow": "Customer deneyimi",
+        "customerTitle": "Keşiften onaylı rezervasyona güvenli bir yolculuk.",
+        "customerText": "Müşteriler işletmeyi anlar, yorumları görür, hizmet seçer ve app indirmeden rezervasyon yapar.",
+        "customerCards": [
+          {
+            "title": "Hizmetleri net seç",
+            "text": "Hizmet, fiyat ve uygunluk premium responsive düzende sunulur."
+          },
+          {
+            "title": "Doğru profesyoneli ayırt",
+            "text": "Staff ve tarih seçildikten sonra yalnız uygun saatler görünür."
+          },
+          {
+            "title": "İşletme aktivitesini takip et",
+            "text": "Duyuru, teklif, kapanış ve güncellemeler halka açık deneyimde görünür."
+          },
+          {
+            "title": "Gerçek yorumlara güven",
+            "text": "Yayınlanan yorumlar ve rating doğrudan storefront’ta gösterilir."
+          }
+        ],
+        "publicEyebrow": "Halka açık görünüm",
+        "publicTitle": "Her Velliqo workspace ile profesyonel bir customer page oluşur.",
+        "publicText": "Storefront, booking, hizmetler, ekip, galeri, yorumlar ve işletme bilgileri owner verileriyle bağlı kalır.",
+        "publicCards": [
+          {
+            "title": "Kalıcı halka açık sayfa",
+            "text": "Her workspace müşteriler ve discovery için paylaşılabilir bir hedef alır."
+          },
+          {
+            "title": "Hizmetler ve online booking",
+            "text": "Ziyaretçiler hizmet bulur, profesyonel seçer ve her cihazdan rezervasyon yapar."
+          },
+          {
+            "title": "Haberler ve duyurular",
+            "text": "Müşteriler teklifler, kapanışlar, etkinlikler ve önemli güncellemeleri görür."
+          },
+          {
+            "title": "Ürünler, ekip ve galeri",
+            "text": "Ürünleri, profesyonelleri, fotoğrafları ve işletme karakterini tek yerde göster."
+          }
+        ],
+        "ctaTitle": "Kullanan her kişiye göre şekillenen tek operasyon sistemi.",
+        "ctaText": "Velliqo’yu keşfet, işletme türünü seç ve rehberli kurulumla başla.",
+        "cta": "Ücretsiz başla"
+      },
+      "ai": {
+        "badge": "Velliqo AI",
+        "title": "Yardım ettiği işletmeyi anlayan operasyonel AI asistanı.",
+        "text": "Mevcut Velliqo workspace’inden ayrılmadan soru sor, insight incele, doğal konuş ve korumalı aksiyonlar hazırla.",
+        "cta": "Ücretsiz başla",
+        "secondary": "Deneyimi gör",
+        "trust": [
+          "Tenant-izole veriler",
+          "Görünür onaylar",
+          "Sektöre uyarlanmış dil"
+        ],
+        "sectionEyebrow": "Operasyon zekâsı",
+        "sectionTitle": "Aynı işletme bağlamında çalışan AI.",
+        "sectionText": "Velliqo AI tenant sınırları, izinler, gözden geçirilebilir aksiyonlar ve owner’ın canlı operasyon verileri etrafında tasarlanır.",
+        "features": [
+          {
+            "title": "Aktif işletmeyi anlar",
+            "text": "Yanıtlar mevcut workspace, sektör ve etkin modüllere dayanır."
+          },
+          {
+            "title": "Metin sohbetleri",
+            "text": "Owners birden fazla rapor açmadan doğal dilde operasyon soruları sorabilir."
+          },
+          {
+            "title": "Sesli sohbetler",
+            "text": "Mobil veya desktop’tan konuş ve aynı işletme bağlamında devam et."
+          },
+          {
+            "title": "Gözden geçirilebilir aksiyonlar",
+            "text": "Randevu, müşteri, kampanya, post ve operasyon aksiyonlarını ortak Action Engine ile hazırla."
+          },
+          {
+            "title": "İzin farkındalığı",
+            "text": "Asistan Velliqo ile aynı tenant sınırlarını, rol izinlerini ve onayları kullanır."
+          },
+          {
+            "title": "Owner kontrollü otonomi",
+            "text": "Öneriler, taslaklar ve düşük riskli otomasyonlar yapılandırılabilir ve denetlenebilir kalır."
+          }
+        ],
+        "bottomTitle": "Sohbeti işin yanında tut.",
+        "bottomText": "Desktop owner geniş sidebar’dan Velliqo AI açar; mobilde hızlı erişim alt navigasyonda kalır.",
+        "bottomCta": "Velliqo’yu keşfet"
+      },
+      "contact": {
+        "badge": "Velliqo ile iletişim",
+        "title": "İşletmenin sırada neye ihtiyacı olduğunu bize anlat.",
+        "text": "Platform, onboarding, fiyatlandırma, entegrasyonlar veya en uygun Velliqo kurulumu hakkında sor.",
+        "emailBtn": "Velliqo’ya email gönder",
+        "callBtn": "{{phone}} ara",
+        "labels": {
+          "email": "Email",
+          "phone": "Telefon",
+          "region": "Bölge"
+        },
+        "startTitle": "Net bir taleple başla.",
+        "startText": "Form email uygulamanda hazırlanmış bir taslak açar; göndermeden önce inceleyebilirsin.",
+        "responseTitle": "Yanıt kanalı",
+        "responseText": "Yanıtlar verdiğin email adresine gönderilir.",
+        "controlTitle": "Kontrol sende",
+        "controlText": "Form otomatik göndermez; inceleyebileceğin bir taslak oluşturur.",
+        "planning": "Workspace mi planlıyorsun?",
+        "exploreTitle": "Bize ulaşmadan önce platformu keşfet.",
+        "exploreText": "Owner workspace, customer booking ve Velliqo AI’ın birlikte nasıl çalıştığını gör.",
+        "exploreBtn": "Ürün deneyimini gör",
+        "formEyebrow": "Email taslak formu",
+        "formTitle": "Velliqo’ya mesajını hazırla.",
+        "formText": "Zorunlu alanlar işaretlidir. Email uygulaman bilgiler yerleştirilmiş şekilde açılır.",
+        "fields": {
+          "fullName": "Ad soyad",
+          "email": "Email",
+          "businessName": "İşletme adı",
+          "phone": "Telefon",
+          "businessType": "İşletme türü",
+          "subject": "Konu",
+          "message": "Mesaj"
+        },
+        "placeholders": {
+          "fullName": "Adın ve soyadın",
+          "email": "you@business.com",
+          "businessName": "İşletmen",
+          "businessType": "En yakın işletme türünü seç",
+          "subject": "Ne hakkında konuşmak istersin?",
+          "message": "Mevcut iş akışını, ekibini ve Velliqo’nun nasıl yardımcı olmasını istediğini anlat."
+        },
+        "review": "Mesaj email uygulamanda açılır ve orada onaylayana kadar gönderilmez.",
+        "openDraft": "Email taslağını aç",
+        "draftOpened": "Email uygulaman şimdi {{email}} adresine hazırlanmış bir taslak göstermeli.",
+        "mail": {
+          "defaultSubject": "Velliqo web sitesi talebi",
+          "heading": "Velliqo web sitesi talebi",
+          "name": "Ad",
+          "email": "Email",
+          "business": "İşletme",
+          "phone": "Telefon",
+          "type": "İşletme türü",
+          "notProvided": "Belirtilmedi",
+          "notSelected": "Seçilmedi",
+          "message": "Mesaj",
+          "footer": "Velliqo iletişim sayfasından gönderildi."
+        },
+        "types": [
+          "Güzellik ve kişisel bakım",
+          "Sağlık ve wellness",
+          "Fitness",
+          "Evcil hayvan hizmetleri",
+          "Otomotiv hizmetleri",
+          "Ev hizmetleri",
+          "Profesyonel hizmetler",
+          "Eğitim",
+          "Yaratıcı hizmetler",
+          "Etkinlikler",
+          "Diğer randevu tabanlı işletme"
+        ]
+      },
+      "product": {
+        "badge": "Velliqo AI destekli premium operasyonlar",
+        "title": "Hizmet işletmenizin büyüyebileceği operasyon platformu.",
+        "text": "Randevuları, müşterileri, ekibi, hizmetleri, storefront’u, ödemeleri, raporları ve akıllı desteği tek Velliqo çalışma alanında birleştirin.",
+        "start": "Çalışma alanını başlat",
+        "seeAi": "Velliqo AI’ı gör",
+        "trust": [
+          "14 günlük ücretsiz deneme",
+          "Güvenli Stripe faturalandırması",
+          "Sektöre uygun kurulum"
+        ],
+        "industries": [
+          "Güzellik & kişisel bakım",
+          "Sağlık & wellness",
+          "Fitness",
+          "Evcil hayvan hizmetleri",
+          "Otomotiv",
+          "Ev hizmetleri",
+          "Profesyonel hizmetler",
+          "Eğitim",
+          "Yaratıcı hizmetler",
+          "Etkinlikler"
+        ],
+        "trustFeatures": [
+          {
+            "title": "Tenant izole çalışma alanları",
+            "text": "Her işletme kendi korumalı veri sınırı içinde çalışır."
+          },
+          {
+            "title": "Tek bağlantılı akış",
+            "text": "Bilgi planlama, CRM, raporlama ve AI arasında akar."
+          },
+          {
+            "title": "Günlük ekipler için",
+            "text": "Owner ve profesyoneller işleri için gereken bağlamı görür."
+          },
+          {
+            "title": "Büyümeye hazır",
+            "text": "Abonelikler, satışlar ve isteğe bağlı ödeme akışları büyümeye uyum sağlar."
+          }
+        ],
+        "productEyebrow": "Tek koordineli ürün",
+        "productTitle": "Dağınık araçlardan profesyonel bir işletim sistemine geçin.",
+        "productText": "Velliqo owner, ekip ve müşterinin günlük işini ayrı sistemler yerine tek yerde bağlar.",
+        "benefits": [
+          {
+            "title": "Net kalan planlama",
+            "text": "Gerçek randevu operasyonları için günlük, haftalık ve aylık görünümler."
+          },
+          {
+            "title": "Müşteri ve ekip birlikte",
+            "text": "Profiller, uygunluk, geçmiş ve günlük sorumluluklar tek çalışma alanında."
+          },
+          {
+            "title": "Karar destekleyen raporlar",
+            "text": "Randevu, gelir, sadakat, hizmet ve ekip performansını anlayın."
+          },
+          {
+            "title": "Premium online görünüm",
+            "text": "Müşterilere keşfetmek, güvenmek ve rezervasyon yapmak için şık bir alan verin."
+          }
+        ],
+        "deviceEyebrow": "Her cihaz için",
+        "deviceTitle": "Sakin owner workspace. Şık müşteri deneyimi.",
+        "deviceText": "Ürün ön masadan sahadaki telefona uyum sağlar ve müşterilere tutarlı bir rezervasyon deneyimi sunar.",
+        "deviceLines": [
+          {
+            "title": "Owner operasyonları",
+            "text": "Takvim, müşteriler, ekip, hizmetler, satış, finans ve AI tek navigasyonda."
+          },
+          {
+            "title": "Müşteri yolculuğu",
+            "text": "Keşif, hizmet ve profesyonel seçimi, rezervasyon ve hesap erişimi."
+          },
+          {
+            "title": "Responsive temel",
+            "text": "Mobil, tablet ve desktop düzenleri sadece küçültülmez, göreve göre tasarlanır."
+          }
+        ],
+        "explore": "Tüm deneyimi keşfet",
+        "intelEyebrow": "Pratik iş zekâsı",
+        "intelTitle": "Ne olduğunu ve sırada neye dikkat edilmesi gerektiğini bilin.",
+        "intelText": "Raporlar operasyon metriklerini günlük bağlamla birleştirir. Velliqo AI kalıpları yorumlamaya ve incelenebilir aksiyonlar hazırlamaya yardım eder.",
+        "intelLines": [
+          {
+            "title": "Gelir ve randevu performansı",
+            "text": "Operasyon workspace’inden çıkmadan trendleri izleyin."
+          },
+          {
+            "title": "Müşteri tutma sinyalleri",
+            "text": "Normal döngüsünün dışına çıkan düzenli müşterileri belirleyin."
+          },
+          {
+            "title": "Ekip ve hizmet görünürlüğü",
+            "text": "Kullanımı, talebi ve iş gününün yapısını anlayın."
+          }
+        ],
+        "ctaEyebrow": "Yeni işletim sisteminiz",
+        "ctaTitle": "İşletme ve her müşteri için premium deneyim oluşturun.",
+        "ctaText": "İşletme türünü seçin ve hizmetler, ekip ve günlük operasyonlar için yönlendirmeli kuruluma başlayın.",
+        "ctaStart": "Ücretsiz başla",
+        "ctaPricing": "Fiyatları gör",
+        "calendarAlt": "Desktop ve mobilde Velliqo takvimi",
+        "reportsAlt": "Desktop Velliqo raporlama workspace’i"
+      }
+    },
+    "aiPreview": {
+      "manager": "Yönetici workspace’i",
+      "live": "Canlı ürün önizlemesi",
+      "askArea": "Alana göre sor",
+      "notNow": "Şimdi değil",
+      "review": "Taslağı incele",
+      "placeholder": "Gününüz, müşteriler, program veya stok hakkında sorun…",
+      "speak": "Velliqo AI ile konuş",
+      "send": "Mesaj gönder",
+      "scenarios": [
+        {
+          "id": "schedule",
+          "label": "Program",
+          "industry": "Fizyoterapi",
+          "prompt": "Yarının boşluklarını bul ve en iyi nasıl dolduracağımı öner.",
+          "response": "İki uygun boşluk buldum: 11:30–12:15 ve 16:00–17:00. Öğleden sonraki boşluk düzenli takip randevusu alan üç müşteriyle eşleşiyor.",
+          "actionTitle": "Yeniden aktivasyon hazırlığı",
+          "actionDetail": "3 uygun müşteri için taslak oluştur. Onay olmadan hiçbir şey gönderilmez."
+        },
+        {
+          "id": "customers",
+          "label": "Müşteriler",
+          "industry": "Pet grooming",
+          "prompt": "Son 90 günde hangi düzenli müşteriler geri dönmedi?",
+          "response": "Yedi düzenli müşteri normal ziyaret döngüsünün dışında. Dördü 6–8 haftada bir rezervasyon yapıyordu ve pazarlama izni var.",
+          "actionTitle": "Müşteri segmenti oluştur",
+          "actionDetail": "4 uygun müşteri için yeniden aktivasyon kitlesi ve kampanya taslağı hazırla."
+        },
+        {
+          "id": "stock",
+          "label": "Stok",
+          "industry": "Araç detaylandırma",
+          "prompt": "Hafta sonundan önce neyi stoklamalıyım?",
+          "response": "Üç ürün minimum seviyenin altında. İç temizlik ürünü sonraki beş hizmete göre en yüksek öncelikte.",
+          "actionTitle": "Stok listesi hazırla",
+          "actionDetail": "Üç ürünü ve önerilen miktarları incelenebilir listeye ekle."
+        }
+      ],
+      "calloutBadge": "Günlük operasyonlara entegre AI",
+      "calloutTitle": "Sor. İncele. Harekete geç—workspace’ten ayrılmadan.",
+      "calloutText": "Velliqo AI mevcut işletme bağlamıyla çalışır, izinleri tanır ve incelenebilir aksiyonlar hazırlar.",
+      "bullets": [
+        "Gerçek workspace verilerinden günlük briefing",
+        "Aynı assistant içinde ses ve metin",
+        "Korunan aksiyonlar öncesi incelenebilir onaylar",
+        "Hizmet işletmelerine sektör dili"
+      ],
+      "explore": "Velliqo AI’ı keşfet",
+      "start": "Çalışma alanını başlat"
+    }
+  },
+  "addons": {
+    "title": "Eklentiler",
+    "eyebrow": "Ek kapasite ve ödemeler",
+    "description": "Velliqo planınıza ek aylık kapasite ekleyin veya POS Suite’i etkinleştirin.",
+    "refresh": "Yenile",
+    "loading": "Eklentiler yükleniyor...",
+    "allowances": {
+      "ai": "AI istekleri",
+      "email": "E-postalar",
+      "sms": "SMS"
+    },
+    "boosters": {
+      "title": "Kapasite paketleri",
+      "description": "Mevcut fatura dönemi için tek seferlik satın alın veya her ay otomatik yenileyin."
+    },
+    "modes": {
+      "cycle": "Bu fatura dönemi",
+      "recurring": "Her ay"
+    },
+    "categories": {
+      "sms": {
+        "title": "SMS paketleri",
+        "description": "Onay, hatırlatma ve izinli kampanyalar için ek SMS."
+      },
+      "email": {
+        "title": "E-posta paketleri",
+        "description": "İşlemsel ve pazarlama e-postaları için ek kapasite."
+      },
+      "ai": {
+        "title": "Velliqo AI paketleri",
+        "description": "Maliyet kontrolü için ek token limitiyle ek AI istekleri."
+      }
+    },
+    "price": {
+      "cycle": "tek seferlik · bu dönem sonuna kadar",
+      "monthly": "aylık · her ay yenilenir"
+    },
+    "aiTokens": "ek AI token",
+    "buy": {
+      "action": "Eklenti satın al",
+      "opening": "Checkout açılıyor...",
+      "unavailable": "Bu modda kullanılamaz"
+    },
+    "active": {
+      "title": "Aktif eklentiler",
+      "empty": "Bu işletme için henüz aktif eklenti yok.",
+      "badge": "Aktif",
+      "cancel": "Aylık eklentiyi iptal et",
+      "canceling": "Planlanıyor…",
+      "endsAtPeriodEnd": "faturalama dönemi sonunda biter",
+      "statuses": {
+        "pending": "Beklemede",
+        "active": "Aktif",
+        "past_due": "Ödeme gecikmiş",
+        "canceled": "İptal edildi",
+        "expired": "Süresi doldu"
+      }
+    },
+    "messages": {
+      "loadFailed": "Eklentiler yüklenemedi",
+      "purchaseProcessing": "Satın alma senkronize ediliyor.",
+      "purchaseCancelled": "Eklenti checkout iptal edildi.",
+      "checkoutMissing": "Checkout URL döndürülmedi",
+      "checkoutFailed": "Checkout başlatılamadı",
+      "cancelScheduled": "Aylık eklenti mevcut faturalama döneminin sonunda sona erecek.",
+      "cancelFailed": "Bu eklenti iptal edilemedi."
+    },
+    "quota": {
+      "title": "Aylık limit doldu",
+      "description": "{{type}} limitiniz tamamen kullanıldı. Dönem sonuna kadar ek kapasite satın alın veya aylık paket ekleyin.",
+      "later": "Daha sonra",
+      "buy": "Eklentileri görüntüle",
+      "types": {
+        "sms": "SMS",
+        "email": "e-posta",
+        "ai_requests": "Velliqo AI istekleri",
+        "ai_tokens": "Velliqo AI tokenları"
+      }
+    },
+    "pos": {
+      "badge": "Aylık eklenti",
+      "title": "Velliqo POS Suite",
+      "description": "Kart işlem ücretleri doğrudan işletme sahibi tarafından ödeme sağlayıcısına ödenirken ödemeleri Velliqo’ya bağlayın.",
+      "perMonth": "/ ay · uygulanabildiğinde KDV dahil",
+      "feeNotice": "Kart ve banka ücretleri bağlı ödeme sağlayıcısı tarafından doğrudan owner’a tahsil edilir. Velliqo bu ücretleri üstlenmez.",
+      "subscribe": "POS Suite’i etkinleştir",
+      "active": "POS Suite aktif",
+      "tapToPayTechnical": "Tap to Pay, uyumlu yerel iOS, Android veya React Native ödeme uygulamasında Stripe Terminal gerektirir. Velliqo web/PWA abonelik, ödeme akışları ve raporlamayı yönetir; yerel aktivasyon ödeme sağlayıcısı cutover aşamasında tamamlanır.",
+      "features": {
+        "tapToPay": "Uyumlu telefondan Tap to Pay",
+        "appointmentPayments": "Randevulara bağlı POS",
+        "onlinePayments": "Online ödemeler",
+        "deposits": "Ön ödemeler",
+        "noShowCharges": "No-show ücretleri",
+        "cancellationCharges": "İptal ücretleri",
+        "tips": "Bahşişler",
+        "refunds": "İadeler",
+        "paymentLinks": "Ödeme linkleri",
+        "dailyClose": "Gün sonu kapanışı",
+        "paymentHistory": "Ödeme geçmişi",
+        "walletLoyalty": "Müşteri cüzdanı veya sadakat bakiyesi",
+        "aiFinancialAnalysis": "AI finansal analiz",
+        "paymentReports": "Ödeme raporları"
+      }
+    },
+    "catalog": {
+      "sms_100": {
+        "name": "100 SMS",
+        "description": "100 ek SMS mesajı"
+      },
+      "sms_250": {
+        "name": "250 SMS",
+        "description": "250 ek SMS mesajı"
+      },
+      "sms_500": {
+        "name": "500 SMS",
+        "description": "500 ek SMS mesajı"
+      },
+      "sms_1000": {
+        "name": "1.000 SMS",
+        "description": "1.000 ek SMS mesajı"
+      },
+      "email_1000": {
+        "name": "1.000 e-posta",
+        "description": "1.000 ek işlemsel veya pazarlama e-postası"
+      },
+      "email_5000": {
+        "name": "5.000 e-posta",
+        "description": "5.000 ek işlemsel veya pazarlama e-postası"
+      },
+      "email_10000": {
+        "name": "10.000 e-posta",
+        "description": "10.000 ek işlemsel veya pazarlama e-postası"
+      },
+      "ai_100": {
+        "name": "100 AI isteği",
+        "description": "350K ek token ile 100 ek AI isteği"
+      },
+      "ai_500": {
+        "name": "500 AI isteği",
+        "description": "1,75M ek token ile 500 ek AI isteği"
+      },
+      "ai_1000": {
+        "name": "1.000 AI isteği",
+        "description": "3,5M ek token ile 1.000 ek AI isteği"
+      },
+      "pos_suite": {
+        "name": "Velliqo POS Suite",
+        "description": "Bağlı ödemeler ve POS çalışma alanı"
+      }
+    }
+  },
+  "demoChrome": {
+    "ownerWorkspace": "Demo owner workspace",
+    "ownerDemo": "owner demo workspace",
+    "search": "Demo workspace’te ara",
+    "addAppointment": "Demo randevu ekle",
+    "notifications": "Demo bildirimleri",
+    "modeTitle": "Demo modu:",
+    "modeText": "aksiyonlar yalnızca bu tarayıcı oturumunda çalışır. Production verisi okunmaz veya kaydedilmez.",
+    "reset": "Sıfırla",
+    "exit": "Demodan çık",
+    "sampleOwner": "Örnek owner hesabı",
+    "physio": "Fizyoterapi demosu",
+    "pet": "Pet grooming demosu",
+    "car": "Araç detailing demosu",
+    "workspaceNavigation": "Workspace navigasyonu",
+    "courses": "Kurslar",
+    "home": "Ana sayfa",
+    "appointment": "Randevu",
+    "more": "Daha fazla"
+  },
+  "posWorkspace": {
+    "title": "POS Suite",
+    "eyebrow": "Bağlantılı ödeme workspace’i",
+    "description": "Velliqo’dan randevu bağlantılı ödemeleri ve ödeme raporlarını yönetin. Provider işlemleri merchant onboarding sonrasında açılır.",
+    "inactiveTitle": "Velliqo POS Suite’i etkinleştir",
+    "inactiveText": "Bağlantılı ödeme workspace’ini açmak için Add-ons üzerinden abone olun.",
+    "openAddons": "Add-ons’u aç",
+    "statusTitle": "Ödeme sağlayıcısı",
+    "notConnected": "Merchant hesabı bağlı değil",
+    "ready": "Ödemelere hazır",
+    "providerText": "Kart işlem ücretleri ödeme sağlayıcısı tarafından doğrudan işletmenize yansıtılır. Velliqo merchant ücretlerini üstlenmez.",
+    "cutover": "Güvenli provider onboarding Live Stripe/Terminal cutover sırasında tamamlanır.",
+    "features": "Dahil özellikler",
+    "history": "Ödeme geçmişi",
+    "daily": "Gün sonu",
+    "wallet": "Wallet & loyalty",
+    "reports": "Ödeme raporları",
+    "noTransactions": "Henüz kayıtlı ödeme aktivitesi yok.",
+    "todaySales": "Bugün kayıtlı satış",
+    "tips": "Kayıtlı bahşiş",
+    "transactions": "İşlemler",
+    "providerFees": "Provider ücretleri",
+    "providerFeesValue": "Doğrudan owner öder",
+    "nativeNote": "Tap to Pay, Stripe Terminal kullanan uyumlu native iOS, Android veya React Native client gerektirir; Velliqo web/PWA abonelik, randevu, ledger ve raporlamayı koordine eder."
+  },
+  "demoPage": {
+    "eyebrow": "Etkileşimli owner demosu",
+    "goodDay": "İyi günler",
+    "modules": {
+      "home": [
+        "İyi günler",
+        "Bugünkü operasyonu, ekip iş yükünü ve işletme faaliyetini izleyin."
+      ],
+      "calendar": [
+        "Takvim",
+        "Randevuları, uygunluğu ve çalışma gününü inceleyin."
+      ],
+      "sales": [
+        "Satışlar",
+        "Örnek checkout çalıştırın ve tamamlanan demo işlemlerini inceleyin."
+      ],
+      "finance": [
+        "Finans",
+        "Gelir, gider ve operasyon performansını inceleyin."
+      ],
+      "customers": [
+        "Müşteriler",
+        "Örnek müşteri profillerini ve geçmişini inceleyin."
+      ],
+      "staff": [
+        "Personel",
+        "Ekip rolleri, uygunluk ve kullanım oranını inceleyin."
+      ],
+      "services": [
+        "Hizmetler",
+        "Hizmet adlarını, süreyi, fiyatları ve uygunluk etkisini yönetin."
+      ],
+      "products": [
+        "Ürünler",
+        "Stok seviyelerini inceleyin ve yerel stok ayarı deneyin."
+      ],
+      "marketing": [
+        "Pazarlama",
+        "Kampanya taslaklarını, kitleleri ve gönderim kontrollerini inceleyin."
+      ],
+      "posts": [
+        "Gönderiler",
+        "Genel duyurular ve müşteri güncellemeleri oluşturun."
+      ],
+      "gallery": [
+        "Galeri",
+        "Genel görsellerin ve son çalışmaların nasıl düzenlendiğini görün."
+      ],
+      "storefront": [
+        "Storefront",
+        "Herkese açık işletme profilini ve rezervasyon deneyimini önizleyin."
+      ],
+      "business": [
+        "İşletme",
+        "İşletme bilgileri, iletişim ve kapanışları inceleyin."
+      ],
+      "reports": [
+        "Raporlar",
+        "Gelir, randevu, müşteri ve hizmet performansını inceleyin."
+      ],
+      "billing": [
+        "Faturalama",
+        "Abonelik alanını ve fatura geçmişini inceleyin."
+      ],
+      "ai": [
+        "Velliqo AI",
+        "Operasyon soruları sorun ve korumalı işlem onaylarını inceleyin."
+      ]
+    },
+    "actions": {
+      "calendar": "Yeni randevu",
+      "customers": "Müşteri ekle",
+      "staff": "Ekip üyesi ekle",
+      "services": "Hizmet ekle",
+      "products": "Stok ayarla",
+      "sales": "Yeni satış",
+      "marketing": "Kampanya oluştur",
+      "posts": "Gönderi oluştur",
+      "gallery": "Görsel ekle"
+    },
+    "common": {
+      "enabled": "Etkin",
+      "disabled": "Devre dışı",
+      "active": "Aktif",
+      "published": "Yayında",
+      "configured": "Yapılandırıldı",
+      "allowed": "İzin verildi",
+      "notConnected": "Bağlı değil",
+      "time": "Saat",
+      "appointments": "Randevular",
+      "revenue": "Gelir",
+      "expenses": "Giderler",
+      "netResult": "Net sonuç",
+      "transactions": "İşlemler",
+      "customer": "Müşteri",
+      "contact": "İletişim",
+      "lastVisit": "Son ziyaret",
+      "visits": "Ziyaretler",
+      "lifetimeValue": "Yaşam boyu değer",
+      "hours": "Saatler",
+      "utilisation": "Kullanım",
+      "threshold": "Eşik",
+      "stock": "Stok",
+      "units": "birim",
+      "retailPrice": "Perakende fiyat",
+      "audience": "Kitle",
+      "customers": "müşteri",
+      "created": "Oluşturuldu",
+      "businessName": "İşletme adı",
+      "industry": "Sektör",
+      "region": "Bölge",
+      "timezone": "Saat dilimi",
+      "onlineBooking": "Online rezervasyon",
+      "businessClosures": "İşletme kapanışları",
+      "noneConfigured": "Yapılandırılmadı",
+      "guestBookings": "Misafir rezervasyonları",
+      "defaultCurrency": "Varsayılan para birimi",
+      "completionRate": "Tamamlanma oranı",
+      "newCustomers": "Yeni müşteriler",
+      "currentPlan": "Mevcut plan",
+      "perMonth": "/ ay",
+      "invoices": "Faturalar",
+      "paid": "Ödendi",
+      "cancel": "İptal",
+      "apply": "Demoda uygula",
+      "day": "Gün"
+    },
+    "home": {
+      "todayAppointments": "Bugünkü randevular",
+      "expectedRevenue": "Beklenen gelir",
+      "activeCustomers": "Aktif müşteriler",
+      "teamUtilisation": "Ekip kullanım oranı",
+      "todaySchedule": "Bugünün programı",
+      "todayScheduleSub": "Saate göre örnek randevular",
+      "briefing": "Velliqo AI briefing",
+      "briefingSub": "Örnek verilerle yerel önizleme",
+      "businessIntelligence": "İş zekâsı",
+      "health": "İşletme sağlığı",
+      "healthSub": "Demo puanı",
+      "healthText": "Sağlıklı kapasite ve düzenli müşteri faaliyeti."
+    },
+    "calendar": {
+      "week": "Haftalık program",
+      "weekSub": "Randevular bu yerel demoda açılıp incelenebilir",
+      "professional": "Profesyonel {{count}}",
+      "confirmed": "Onaylı randevu",
+      "session": "Mevcut demo oturumu"
+    },
+    "sales": {
+      "recent": "Son satışlar",
+      "recentSub": "Yerel demo makbuzları",
+      "checkout": "Checkout özeti",
+      "checkoutSub": "Hiçbir ödeme sağlayıcısına bağlanılmaz",
+      "selectedService": "Seçilen hizmet",
+      "subtotal": "Ara toplam",
+      "total": "Toplam"
+    },
+    "finance": {
+      "cashFlow": "Nakit akışı önizlemesi",
+      "cashFlowSub": "Son yedi demo günü"
+    },
+    "customers": {
+      "directory": "Müşteri dizini",
+      "directorySub": "Yalnızca örnek profiller"
+    },
+    "products": {
+      "inventory": "Envanter",
+      "inventorySub": "Düşük stok kuralları yerel olarak gösterilir"
+    },
+    "marketing": {
+      "campaigns": "Kampanyalar ve otomasyonlar",
+      "campaignsSub": "Demo modunda gönderim kapalıdır",
+      "controls": "İletişim kontrolleri",
+      "controlsSub": "İşlemsel ve promosyon gönderimi",
+      "appointmentEmail": "Randevu e-postası",
+      "emailReminders": "E-posta hatırlatmaları",
+      "smsProvider": "SMS sağlayıcısı",
+      "rules": [
+        "Promosyon gönderiminden önce onay kontrol edilir",
+        "Randevu iletişimleri Automations bölümünde yönetilir",
+        "Demo modunda e-posta veya SMS sağlayıcısı çağrılmaz"
+      ]
+    },
+    "posts": {
+      "title": "Müşteri gönderileri",
+      "subtitle": "Genel güncellemeler, teklifler ve kapanış bildirimleri"
+    },
+    "gallery": {
+      "title": "Herkese açık galeri",
+      "subtitle": "Bu demo oturumunda {{count}} görsel"
+    },
+    "storefront": {
+      "preview": "Herkese açık storefront önizlemesi",
+      "previewSub": "Müşterilerin rezervasyondan önce gördüğü",
+      "hero": "Profesyonel hizmetler, gerçek uygunluk ve kolay rezervasyon deneyimi.",
+      "book": "Randevu al",
+      "controls": "Storefront ve rezervasyon kontrolleri",
+      "controlsSub": "İşletme profili, genel görünüm ve rezervasyon kuralları",
+      "publicPage": "Herkese açık sayfa",
+      "bookingRules": "Rezervasyon kuralları",
+      "servicesVisible": "Görünen hizmetler",
+      "galleryImages": "Galeri görselleri"
+    },
+    "business": {
+      "profile": "İşletme profili",
+      "profileSub": "Örnek işletme bilgileri",
+      "operations": "Operasyon kontrolleri",
+      "operationsSub": "Kapanış ve rezervasyon yapılandırması"
+    },
+    "reports": {
+      "trend": "Gelir trendi",
+      "trendSub": "Örnek raporlama dönemi"
+    },
+    "billing": {
+      "title": "Velliqo Professional",
+      "subtitle": "Demo aboneliği",
+      "professional": "Professional",
+      "historySub": "Örnek faturalama geçmişi"
+    },
+    "ai": {
+      "initial": "{{business}} için yardımcı olmaya hazırım. Randevular, müşteriler, stok veya kampanyaları sorun.",
+      "conversation": "Velliqo AI konuşması",
+      "conversationSub": "Metin ve ses aynı izin modelini kullanır",
+      "placeholder": "Velliqo AI’a sor...",
+      "permissions": "İzinler",
+      "permissionsSub": "Korumalı işlem sınırları",
+      "read": "İşletme verilerini oku",
+      "readValue": "Örnek verilerde izinli",
+      "draft": "Taslak oluştur",
+      "draftValue": "Onay gerekli",
+      "campaign": "Kampanya gönder",
+      "demoDisabled": "Demoda devre dışı",
+      "delete": "Kayıtları sil",
+      "confirmTitle": "Demo işlemini onayla",
+      "confirmText": "Bu onay owner workspace gibi çalışır ancak işlem yerel kalır ve kaydedilmez.",
+      "prepared": "Hazırlanan işlem:",
+      "preparedText": "İsteğinize göre incelenebilir taslak oluştur.",
+      "confirmed": "Onaylandı. Demo taslağı yerel olarak oluşturuldu ve veritabanına yazılmadı."
+    },
+    "dialog": {
+      "appointmentTitle": "Demo randevu oluştur",
+      "appointmentText": "Formu owner gibi doldurun. Randevu yalnızca bu oturumda var olur.",
+      "customerTitle": "Demo müşteri ekle",
+      "customerText": "Bu örnek profil Supabase’e gönderilmez.",
+      "staffTitle": "Demo ekip üyesi ekle",
+      "staffText": "Ekip üyesi yalnızca bu demo oturumundadır.",
+      "serviceTitle": "Demo hizmet ekle",
+      "serviceText": "Hizmet production veritabanına kaydedilmez.",
+      "demoCustomer": "Demo müşteri",
+      "demoService": "Yeni demo hizmet",
+      "sampleValue": "Örnek değer",
+      "minutes": "45 dakika",
+      "additional": "Ek bilgi",
+      "safety": "Veritabanı isteği yapılmayacaktır."
     }
   }
 }

@@ -17,12 +17,12 @@ const corsHeaders = {
 type PlanId = 'standard' | 'pro' | 'premium';
 type CheckoutLocale = 'en' | 'el' | 'de' | 'es' | 'tr';
 
-const CHECKOUT_COPY: Record<CheckoutLocale, { trial: (days: number) => string; fixed: (months: number) => string; recurring: string; after: string }> = {
-  en: { trial: (days) => `No charge today. Your selected plan starts automatically after the ${days}-day free trial unless you cancel first.`, fixed: (months) => `This is a fixed-term Velliqo offer for ${months} month${months === 1 ? '' : 's'}. It stops automatically at the stated end date and does not auto-renew.`, recurring: 'Your Velliqo plan renews monthly until you cancel or change it from Billing.', after: 'Your secure billing setup is complete. You will return to Velliqo automatically.' },
-  el: { trial: (days) => `Δεν υπάρχει χρέωση σήμερα. Το επιλεγμένο πλάνο ξεκινά αυτόματα μετά τη δωρεάν δοκιμή ${days} ημερών, εκτός αν το ακυρώσετε νωρίτερα.`, fixed: (months) => `Αυτή είναι προσφορά Velliqo ορισμένης διάρκειας ${months} μηνών. Σταματά αυτόματα στην ημερομηνία λήξης και δεν ανανεώνεται αυτόματα.`, recurring: 'Το πλάνο Velliqo ανανεώνεται μηνιαία μέχρι να το ακυρώσετε ή να το αλλάξετε από το Billing.', after: 'Η ασφαλής ρύθμιση χρέωσης ολοκληρώθηκε. Θα επιστρέψετε αυτόματα στο Velliqo.' },
-  de: { trial: (days) => `Heute erfolgt keine Belastung. Der gewählte Tarif startet nach der ${days}-tägigen kostenlosen Testphase automatisch, sofern Sie vorher nicht kündigen.`, fixed: (months) => `Dies ist ein befristetes Velliqo-Angebot für ${months} Monat${months === 1 ? '' : 'e'}. Es endet automatisch zum angegebenen Enddatum und verlängert sich nicht automatisch.`, recurring: 'Ihr Velliqo-Tarif verlängert sich monatlich, bis Sie ihn unter Billing kündigen oder ändern.', after: 'Die sichere Abrechnungseinrichtung ist abgeschlossen. Sie kehren automatisch zu Velliqo zurück.' },
-  es: { trial: (days) => `No se realiza ningún cargo hoy. El plan seleccionado comenzará automáticamente tras la prueba gratuita de ${days} días, salvo que lo canceles antes.`, fixed: (months) => `Esta es una oferta Velliqo de duración fija de ${months} mes${months === 1 ? '' : 'es'}. Finaliza automáticamente en la fecha indicada y no se renueva.`, recurring: 'Tu plan Velliqo se renueva mensualmente hasta que lo canceles o cambies desde Billing.', after: 'La configuración de facturación segura se ha completado. Volverás automáticamente a Velliqo.' },
-  tr: { trial: (days) => `Bugün ücret alınmaz. Seçtiğiniz plan, daha önce iptal etmediğiniz sürece ${days} günlük ücretsiz deneme sonrasında otomatik olarak başlar.`, fixed: (months) => `Bu, ${months} aylık sabit süreli bir Velliqo teklifidir. Belirtilen bitiş tarihinde otomatik olarak sona erer ve otomatik yenilenmez.`, recurring: 'Velliqo planınız, Billing üzerinden iptal edene veya değiştirene kadar aylık olarak yenilenir.', after: 'Güvenli faturalandırma kurulumu tamamlandı. Otomatik olarak Velliqo’ya döneceksiniz.' },
+const CHECKOUT_COPY: Record<CheckoutLocale, { trial: (days: number) => string; fixed: (months: number) => string; recurring: string; vat: string; after: string }> = {
+  en: { trial: (days) => `No charge today. Your selected plan starts automatically after the ${days}-day free trial unless you cancel first.`, fixed: (months) => `This is a fixed-term Velliqo offer for ${months} month${months === 1 ? '' : 's'}. It stops automatically at the stated end date and does not auto-renew.`, recurring: 'Your Velliqo plan renews monthly until you cancel or change it from Billing.', vat: 'The displayed Velliqo price is VAT-inclusive where tax applies; Stripe calculates the tax treatment from your billing details.', after: 'Your secure billing setup is complete. You will return to Velliqo automatically.' },
+  el: { trial: (days) => `Δεν υπάρχει χρέωση σήμερα. Το επιλεγμένο πλάνο ξεκινά αυτόματα μετά τη δωρεάν δοκιμή ${days} ημερών, εκτός αν το ακυρώσετε νωρίτερα.`, fixed: (months) => `Αυτή είναι προσφορά Velliqo ορισμένης διάρκειας ${months} μηνών. Σταματά αυτόματα στην ημερομηνία λήξης και δεν ανανεώνεται αυτόματα.`, recurring: 'Το πλάνο Velliqo ανανεώνεται μηνιαία μέχρι να το ακυρώσετε ή να το αλλάξετε από το Billing.', vat: 'Η εμφανιζόμενη τιμή Velliqo περιλαμβάνει ΦΠΑ όπου εφαρμόζεται· το Stripe υπολογίζει τη φορολογική μεταχείριση από τα στοιχεία χρέωσης.', after: 'Η ασφαλής ρύθμιση χρέωσης ολοκληρώθηκε. Θα επιστρέψετε αυτόματα στο Velliqo.' },
+  de: { trial: (days) => `Heute erfolgt keine Belastung. Der gewählte Tarif startet nach der ${days}-tägigen kostenlosen Testphase automatisch, sofern Sie vorher nicht kündigen.`, fixed: (months) => `Dies ist ein befristetes Velliqo-Angebot für ${months} Monat${months === 1 ? '' : 'e'}. Es endet automatisch zum angegebenen Enddatum und verlängert sich nicht automatisch.`, recurring: 'Ihr Velliqo-Tarif verlängert sich monatlich, bis Sie ihn unter Billing kündigen oder ändern.', vat: 'Der angezeigte Velliqo-Preis enthält die MwSt., sofern sie anfällt; Stripe bestimmt die steuerliche Behandlung anhand Ihrer Rechnungsdaten.', after: 'Die sichere Abrechnungseinrichtung ist abgeschlossen. Sie kehren automatisch zu Velliqo zurück.' },
+  es: { trial: (days) => `No se realiza ningún cargo hoy. El plan seleccionado comenzará automáticamente tras la prueba gratuita de ${days} días, salvo que lo canceles antes.`, fixed: (months) => `Esta es una oferta Velliqo de duración fija de ${months} mes${months === 1 ? '' : 'es'}. Finaliza automáticamente en la fecha indicada y no se renueva.`, recurring: 'Tu plan Velliqo se renueva mensualmente hasta que lo canceles o cambies desde Billing.', vat: 'El precio Velliqo mostrado incluye IVA cuando corresponde; Stripe calcula el tratamiento fiscal con tus datos de facturación.', after: 'La configuración de facturación segura se ha completado. Volverás automáticamente a Velliqo.' },
+  tr: { trial: (days) => `Bugün ücret alınmaz. Seçtiğiniz plan, daha önce iptal etmediğiniz sürece ${days} günlük ücretsiz deneme sonrasında otomatik olarak başlar.`, fixed: (months) => `Bu, ${months} aylık sabit süreli bir Velliqo teklifidir. Belirtilen bitiş tarihinde otomatik olarak sona erer ve otomatik yenilenmez.`, recurring: 'Velliqo planınız, Billing üzerinden iptal edene veya değiştirene kadar aylık olarak yenilenir.', vat: 'Gösterilen Velliqo fiyatına uygulanabildiğinde KDV dahildir; vergi uygulamasını fatura bilgilerinize göre Stripe hesaplar.', after: 'Güvenli faturalandırma kurulumu tamamlandı. Otomatik olarak Velliqo’ya döneceksiniz.' },
 };
 const PRICE_ENV: Record<PlanId, string> = {
   standard: 'STRIPE_PRICE_STANDARD',
@@ -85,6 +85,15 @@ Deno.serve(async (request) => {
 
     const priceId = Deno.env.get(PRICE_ENV[planId]) ?? '';
     if (!priceId) return json({ error: `Stripe price is not configured for ${planId}` }, 503);
+    const configuredPrice = await stripe.prices.retrieve(priceId);
+    if (configuredPrice.unit_amount !== Number(plan.monthly_price_cents) || String(configuredPrice.currency).toLowerCase() !== 'eur' || configuredPrice.recurring?.interval !== 'month') {
+      console.error('Stripe plan price does not match the Velliqo catalogue', { planId, priceId, stripeAmount: configuredPrice.unit_amount, databaseAmount: plan.monthly_price_cents, currency: configuredPrice.currency, interval: configuredPrice.recurring?.interval });
+      return json({ error: 'Stripe pricing is not synchronized with the current Velliqo plan catalogue' }, 503);
+    }
+    if (configuredPrice.tax_behavior !== 'inclusive') {
+      console.error('Stripe plan price must use VAT-inclusive tax behavior', { planId, priceId, taxBehavior: configuredPrice.tax_behavior });
+      return json({ error: 'Stripe pricing must be configured as VAT-inclusive before checkout can start' }, 503);
+    }
 
     const { data: business, error: businessError } = await admin
       .from('businesses')
@@ -193,11 +202,11 @@ Deno.serve(async (request) => {
 
     const checkoutCopy = CHECKOUT_COPY[checkoutLocale];
     const fixedTermMonths = offer ? Number(offer.duration_months || 0) : 0;
-    const submitMessage = offer
+    const submitMessage = `${offer
       ? checkoutCopy.fixed(fixedTermMonths)
       : trialDays > 0
         ? checkoutCopy.trial(trialDays)
-        : checkoutCopy.recurring;
+        : checkoutCopy.recurring} ${checkoutCopy.vat}`;
 
     const sessionParams: Stripe.Checkout.SessionCreateParams = {
       mode: 'subscription',

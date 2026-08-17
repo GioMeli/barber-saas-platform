@@ -12,25 +12,29 @@ import {
   Workflow,
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 import { VelliqoAICallout, VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
 import { DesktopDevice } from '@/components/marketing/DeviceFrame';
 import { ApprovedArtwork } from '@/components/marketing/ApprovedArtwork';
 import { DiscoverySearchBar } from '@/components/discovery/DiscoverySearchBar';
-import { useTranslation } from 'react-i18next';
 
-const productBenefits = [
-  { icon: CalendarDays, title: 'Scheduling that stays clear', text: 'Daily, weekly and monthly views designed for real appointment operations.' },
-  { icon: Users, title: 'Customers and teams together', text: 'Keep profiles, availability, history and daily responsibilities in one workspace.' },
-  { icon: BarChart3, title: 'Reports that support decisions', text: 'Understand appointments, revenue, retention, services and team performance.' },
-  { icon: Store, title: 'A premium online presence', text: 'Give customers a polished place to discover, trust and book your business.' },
-];
+type CopyCard = { title: string; text: string };
 
-const industries = ['Beauty & personal care', 'Health & wellness', 'Fitness', 'Pet services', 'Automotive', 'Home services', 'Professional services', 'Education', 'Creative services', 'Events'];
+const benefitIcons = [CalendarDays, Users, BarChart3, Store];
+const trustIcons = [ShieldCheck, Workflow, Users, CreditCard];
 
 export default function IndustrySelection() {
   const { t } = useTranslation();
+  const copy = t('marketingSite.pages.product', { returnObjects: true }) as any;
+  const benefits = (copy.benefits || []) as CopyCard[];
+  const industries = (copy.industries || []) as string[];
+  const trustFeatures = (copy.trustFeatures || []) as CopyCard[];
+  const deviceLines = (copy.deviceLines || []) as CopyCard[];
+  const intelLines = (copy.intelLines || []) as CopyCard[];
+  const trust = (copy.trust || []) as string[];
+
   return (
     <div className="min-h-screen overflow-x-hidden bg-[#f7f7fb] text-slate-950">
       <MarketingHeader active="product" />
@@ -44,17 +48,17 @@ export default function IndustrySelection() {
               <DiscoverySearchBar variant="hero" />
             </div>
             <div className="grid items-center gap-12 lg:grid-cols-[.75fr_1.25fr]">
-            <div className="max-w-2xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-extrabold text-violet-200"><Sparkles className="h-4 w-4" />Premium operations, powered by Velliqo AI</div>
-              <h1 className="mt-7 text-4xl font-extrabold leading-[1.01] tracking-[-.06em] sm:text-5xl lg:text-[4.45rem]">The operating platform your service business can grow into.</h1>
-              <p className="mt-6 max-w-xl text-base leading-7 text-white/60 sm:text-lg">Bring appointments, customers, staff, services, storefronts, payments, reporting and intelligent assistance into one coordinated Velliqo workspace.</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Start your workspace <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
-                <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] px-6 text-white hover:bg-white/[.08] hover:text-white"><Link to="/velliqo-ai"><PlayCircle className="mr-2 h-4 w-4" />See Velliqo AI</Link></Button>
+              <div className="max-w-2xl">
+                <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-extrabold text-violet-200"><Sparkles className="h-4 w-4" />{copy.badge}</div>
+                <h1 className="mt-7 text-4xl font-extrabold leading-[1.01] tracking-[-.06em] sm:text-5xl lg:text-[4.45rem]">{copy.title}</h1>
+                <p className="mt-6 max-w-xl text-base leading-7 text-white/60 sm:text-lg">{copy.text}</p>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">{copy.start}<ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+                  <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] px-6 text-white hover:bg-white/[.08] hover:text-white"><Link to="/velliqo-ai"><PlayCircle className="mr-2 h-4 w-4" />{copy.seeAi}</Link></Button>
+                </div>
+                <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42">{trust.map((item) => <TrustItem key={item} text={item} dark />)}</div>
               </div>
-              <div className="mt-7 flex flex-wrap gap-x-6 gap-y-3 text-xs font-bold text-white/42"><TrustItem text="14-day free trial" dark /><TrustItem text="Secure Stripe billing" dark /><TrustItem text="Industry-aware setup" dark /></div>
-            </div>
-            <VelliqoAIPreview compact />
+              <VelliqoAIPreview compact />
             </div>
           </div>
         </section>
@@ -67,29 +71,26 @@ export default function IndustrySelection() {
 
         <section className="border-b border-slate-200 bg-white">
           <div className="mx-auto grid max-w-[1440px] gap-4 px-4 py-8 sm:grid-cols-2 sm:px-6 lg:grid-cols-4 lg:px-8">
-            <TrustFeature icon={<ShieldCheck className="h-5 w-5" />} title="Tenant-isolated workspaces" text="Each business operates inside its own protected data boundary." />
-            <TrustFeature icon={<Workflow className="h-5 w-5" />} title="One connected workflow" text="Information moves across scheduling, CRM, reporting and AI." />
-            <TrustFeature icon={<Users className="h-5 w-5" />} title="Built for daily teams" text="Owners and professionals see the context needed for their work." />
-            <TrustFeature icon={<CreditCard className="h-5 w-5" />} title="Ready for business growth" text="Subscriptions, sales and optional payment workflows fit the roadmap." />
+            {trustFeatures.map((item, index) => { const Icon = trustIcons[index] || ShieldCheck; return <TrustFeature key={item.title} icon={<Icon className="h-5 w-5" />} title={item.title} text={item.text} />; })}
           </div>
         </section>
 
         <section id="product" className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-          <SectionHeading eyebrow="One coordinated product" title="Move from scattered tools to one professional operating system." text="Velliqo connects the daily work of the owner, team and customer instead of forcing the business to manage separate systems." centered />
+          <SectionHeading eyebrow={copy.productEyebrow} title={copy.productTitle} text={copy.productText} centered />
           <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {productBenefits.map(({ icon: Icon, title, text }) => <article key={title} className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_16px_55px_rgba(15,23,42,.055)] transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-[0_24px_75px_rgba(76,29,149,.12)]"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700 transition group-hover:bg-violet-600 group-hover:text-white"><Icon className="h-5 w-5" /></div><h3 className="mt-5 text-lg font-extrabold tracking-tight">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></article>)}
+            {benefits.map((item, index) => { const Icon = benefitIcons[index] || Sparkles; return <article key={item.title} className="group rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_16px_55px_rgba(15,23,42,.055)] transition duration-300 hover:-translate-y-1 hover:border-violet-200 hover:shadow-[0_24px_75px_rgba(76,29,149,.12)]"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700 transition group-hover:bg-violet-600 group-hover:text-white"><Icon className="h-5 w-5" /></div><h3 className="mt-5 text-lg font-extrabold tracking-tight">{item.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{item.text}</p></article>; })}
           </div>
         </section>
 
         <section className="overflow-hidden border-y border-slate-200 bg-[#eeebff]">
           <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[1.08fr_.92fr] lg:px-8 lg:py-28">
-            <ProductStage />
+            <ProductStage alt={copy.calendarAlt} />
             <div className="max-w-xl">
-              <div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">Built for every device</div>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-[-.045em] sm:text-4xl">A calm owner workspace. A polished customer experience.</h2>
-              <p className="mt-5 text-base leading-7 text-slate-600">The product adapts from the front desk to a phone in the field, while customers receive a consistent booking experience that reflects the quality of the business.</p>
-              <div className="mt-7 space-y-4"><FeatureLine title="Owner operations" text="Calendar, customers, team, services, sales, finance and AI in one navigation system." /><FeatureLine title="Customer journey" text="Discovery, service selection, professional selection, booking and account access." /><FeatureLine title="Responsive foundation" text="Mobile, tablet and desktop layouts designed around the task—not merely scaled down." /></div>
-              <Button asChild size="lg" className="mt-8 h-12 rounded-xl bg-violet-600 px-6 hover:bg-violet-700"><Link to="/experience">Explore the full experience <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+              <div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">{copy.deviceEyebrow}</div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-.045em] sm:text-4xl">{copy.deviceTitle}</h2>
+              <p className="mt-5 text-base leading-7 text-slate-600">{copy.deviceText}</p>
+              <div className="mt-7 space-y-4">{deviceLines.map((item) => <FeatureLine key={item.title} title={item.title} text={item.text} />)}</div>
+              <Button asChild size="lg" className="mt-8 h-12 rounded-xl bg-violet-600 px-6 hover:bg-violet-700"><Link to="/experience">{copy.explore}<ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
             </div>
           </div>
         </section>
@@ -99,17 +100,17 @@ export default function IndustrySelection() {
         <section className="bg-white">
           <div className="mx-auto grid max-w-[1440px] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-28">
             <div>
-              <div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">Business intelligence that stays practical</div>
-              <h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">Know what is happening—and what deserves attention next.</h2>
-              <p className="mt-5 text-base leading-7 text-slate-600">Reports combine operational metrics with daily context. Velliqo AI then helps the owner interpret patterns and prepare reviewable actions.</p>
-              <div className="mt-7 space-y-4"><FeatureLine title="Revenue and appointment performance" text="Track trends without leaving the operational workspace." /><FeatureLine title="Customer retention signals" text="Identify regular customers who may be slipping outside their normal cycle." /><FeatureLine title="Staff and service visibility" text="Understand utilisation, demand and the shape of the working day." /></div>
+              <div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">{copy.intelEyebrow}</div>
+              <h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">{copy.intelTitle}</h2>
+              <p className="mt-5 text-base leading-7 text-slate-600">{copy.intelText}</p>
+              <div className="mt-7 space-y-4">{intelLines.map((item) => <FeatureLine key={item.title} title={item.title} text={item.text} />)}</div>
             </div>
-            <div className="relative mx-auto w-full max-w-[720px] rounded-[2rem] bg-gradient-to-br from-violet-100 to-white p-5 shadow-[0_30px_95px_rgba(15,23,42,.12)]"><DesktopDevice image="/marketing/screens/precision/reports-desktop.webp" alt="Velliqo reporting workspace on desktop" fit="fill" /></div>
+            <div className="relative mx-auto w-full max-w-[720px] rounded-[2rem] bg-gradient-to-br from-violet-100 to-white p-5 shadow-[0_30px_95px_rgba(15,23,42,.12)]"><DesktopDevice image="/marketing/screens/precision/reports-desktop.webp" alt={copy.reportsAlt} fit="fill" /></div>
           </div>
         </section>
 
         <section className="border-t border-slate-200 bg-gradient-to-br from-violet-700 to-fuchsia-600 text-white">
-          <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20"><div className="text-xs font-extrabold uppercase tracking-[.22em] text-white/55">Your next operating system</div><h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">Create a premium experience for the business and every customer it serves.</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70">Choose your business type and begin a guided setup prepared for your services, team and daily operations.</p><div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-violet-800 hover:bg-white/90"><Link to="/business-types">Start free <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/25 bg-white/[.06] px-6 text-white hover:bg-white/[.12] hover:text-white"><Link to="/pricing">View pricing</Link></Button></div></div>
+          <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20"><div className="text-xs font-extrabold uppercase tracking-[.22em] text-white/55">{copy.ctaEyebrow}</div><h2 className="mt-4 text-3xl font-extrabold tracking-tight sm:text-4xl">{copy.ctaTitle}</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70">{copy.ctaText}</p><div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-violet-800 hover:bg-white/90"><Link to="/business-types">{copy.ctaStart}<ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/25 bg-white/[.06] px-6 text-white hover:bg-white/[.12] hover:text-white"><Link to="/pricing">{copy.ctaPricing}</Link></Button></div></div>
         </section>
       </main>
       <MarketingFooter />
@@ -117,22 +118,8 @@ export default function IndustrySelection() {
   );
 }
 
-function ProductStage() {
-  return (
-    <div className="relative mx-auto w-full max-w-[820px] py-4 lg:pb-16">
-      <ApprovedArtwork
-        src="/marketing/approved/calendar-two-devices-transparent.png"
-        alt="Velliqo calendar on desktop and mobile"
-        loading="eager"
-        className="max-w-[800px]"
-      />
-    </div>
-  );
-}
-
-function SectionHeading({ eyebrow, title, text, centered = false }: { eyebrow: string; title: string; text: string; centered?: boolean }) {
-  return <div className={centered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">{eyebrow}</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">{title}</h2><p className="mt-4 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">{text}</p></div>;
-}
+function ProductStage({ alt }: { alt: string }) { return <div className="relative mx-auto w-full max-w-[820px] py-4 lg:pb-16"><ApprovedArtwork src="/marketing/approved/calendar-two-devices-transparent.png" alt={alt} loading="eager" className="max-w-[800px]" /></div>; }
+function SectionHeading({ eyebrow, title, text, centered = false }: { eyebrow: string; title: string; text: string; centered?: boolean }) { return <div className={centered ? 'mx-auto max-w-3xl text-center' : 'max-w-3xl'}><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">{eyebrow}</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">{title}</h2><p className="mt-4 text-sm leading-6 text-slate-600 sm:text-base sm:leading-7">{text}</p></div>; }
 function TrustItem({ text, dark = false }: { text: string; dark?: boolean }) { return <span className={`inline-flex items-center gap-2 ${dark ? 'text-white/50' : 'text-slate-600'}`}><span className={`flex h-5 w-5 items-center justify-center rounded-full ${dark ? 'bg-emerald-400/15 text-emerald-300' : 'bg-emerald-100 text-emerald-700'}`}><Check className="h-3 w-3" /></span>{text}</span>; }
 function TrustFeature({ icon, title, text }: { icon: React.ReactNode; title: string; text: string }) { return <div className="rounded-2xl border border-slate-200 bg-[#fbfaff] p-5"><div className="text-violet-600">{icon}</div><h3 className="mt-3 text-sm font-extrabold">{title}</h3><p className="mt-1 text-xs leading-5 text-slate-500">{text}</p></div>; }
 function FeatureLine({ title, text }: { title: string; text: string }) { return <div className="flex gap-3"><span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-violet-100 text-violet-700"><Check className="h-3.5 w-3.5" /></span><div><div className="text-sm font-extrabold text-slate-900">{title}</div><p className="mt-1 text-sm leading-6 text-slate-600">{text}</p></div></div>; }

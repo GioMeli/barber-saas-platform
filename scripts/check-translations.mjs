@@ -7,9 +7,10 @@ const localeDir = path.join(root, 'src', 'i18n', 'locales');
 const supportedLanguages = ['en', 'el', 'de', 'es', 'tr'];
 
 function flatten(value, prefix = '', result = new Map()) {
+  if (prefix && value && typeof value === 'object') result.set(prefix, value);
   for (const [key, entry] of Object.entries(value)) {
     const next = prefix ? `${prefix}.${key}` : key;
-    if (entry && typeof entry === 'object' && !Array.isArray(entry)) {
+    if (entry && typeof entry === 'object') {
       flatten(entry, next, result);
     } else {
       result.set(next, entry);
@@ -76,7 +77,7 @@ if (missingUsedKeys.length) {
 }
 
 for (const [language, entries] of localeMaps) {
-  const empty = [...entries.entries()].filter(([, value]) => typeof value !== 'string' || value.trim() === '');
+  const empty = [...entries.entries()].filter(([, value]) => typeof value === 'string' ? value.trim() === '' : value == null || (Array.isArray(value) ? value.length === 0 : typeof value === 'object' ? Object.keys(value).length === 0 : true));
   if (empty.length) {
     failed = true;
     console.error(`\n${language.toUpperCase()} has empty or non-string values (${empty.length}):`);

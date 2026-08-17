@@ -35,6 +35,8 @@ import CustomerProfile from './pages/owner/CustomerProfile';
 import Calendar from './pages/owner/Calendar';
 import Reports from './pages/owner/Reports';
 import Billing from './pages/owner/Billing';
+import Addons from './pages/owner/Addons';
+import PosSuite from './pages/owner/PosSuite';
 import Products from './pages/owner/Products';
 import Sales from './pages/owner/Sales';
 import Finance from './pages/owner/Finance';
@@ -115,6 +117,8 @@ function App() {
           <Route path="storefront" element={<Storefront />} />
           <Route path="business" element={<Business />} />
           <Route path="billing" element={<Billing />} />
+          <Route path="addons" element={<Addons />} />
+          <Route path="pos" element={<PosSuite />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<Navigate to="/dashboard/storefront" replace />} />
           <Route path="ai" element={<AIHub />} />

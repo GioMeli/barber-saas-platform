@@ -156,7 +156,9 @@
     "mobile_appointment": "Appointment",
     "more": "More",
     "training": "Training",
-    "courses": "Courses"
+    "courses": "Courses",
+    "addons": "Add-ons",
+    "pos": "POS"
   },
   "system": {
     "loading": "Loading...",
@@ -1352,7 +1354,7 @@
       "unassigned": "Unassigned",
       "customer": "Customer"
     },
-    "planUpgradeRequired": "Advanced Finance, Revenue and Product intelligence is available on Pro and Premium."
+    "planUpgradeRequired": "Advanced Finance, Revenue and Product intelligence is available on Professional and Premium."
   },
   "storefront": {
     "owner": {
@@ -4021,7 +4023,7 @@
         "storefront": "Manage the single source of truth for business identity, contact details, booking rules, map, SEO, social links and public visibility.",
         "business": "Manage operational closures and business-level controls that affect availability and daily operations.",
         "reports": "Analyse revenue, appointments, staff performance, cancellations, services and other business trends.",
-        "billing": "Review the current subscription, invoices and billing controls. Final Standard, Pro and Premium entitlements will be enforced here.",
+        "billing": "Review the current subscription, invoices and billing controls. Final Standard, Professional and Premium entitlements will be enforced here.",
         "ai": "Open the full Velliqo AI workspace for conversations, briefings, alerts, recommendations and confirmed operational actions.",
         "training": "Open structured courses, PDF guides and future training videos for every important Velliqo workflow."
       },
@@ -4089,6 +4091,1335 @@
       "load": "Unable to load support requests",
       "create": "Unable to create support request",
       "reply": "Unable to send reply"
+    }
+  },
+  "marketingSite": {
+    "chrome": {
+      "product": "Product",
+      "ai": "Velliqo AI",
+      "demo": "Demo",
+      "courses": "Courses",
+      "experience": "Experience",
+      "why": "Why Velliqo?",
+      "pricing": "Pricing",
+      "businessTypes": "Business types",
+      "contact": "Contact",
+      "businessLogin": "Business login",
+      "startFree": "Start free",
+      "login": "Login",
+      "openNavigation": "Open navigation",
+      "closeNavigation": "Close navigation",
+      "homeLabel": "Velliqo home",
+      "tagline": "Book. Manage. Grow.",
+      "footerDescription": "A premium operating platform for appointment-based and service businesses, powered by Velliqo AI.",
+      "explore": "Explore",
+      "productExperience": "Product experience",
+      "access": "Access",
+      "copyright": "© 2026 Velliqo. Built for modern service operations."
+    },
+    "pages": {
+      "pricing": {
+        "badge": "Plans built around real operating capacity",
+        "title": "Choose the Velliqo capacity that fits your business.",
+        "description": "All plans start with a {{days}}-day free trial. Billing details are added securely up front, then your selected monthly plan renews automatically unless you change or cancel it.",
+        "vat": "VAT included where applicable. Stripe calculates the tax treatment from the customer billing location.",
+        "mostPopular": "Most popular",
+        "perMonth": "/ month",
+        "trialLine": "{{days}} days free · billing details added before trial",
+        "staff": "Up to {{count}} staff members",
+        "personalApps": "Personal downloadable Staff Apps",
+        "browserPortal": "Secure browser Staff Portal",
+        "ai": "{{count}} Velliqo AI requests / month",
+        "email": "{{count}} email communications / month",
+        "sms": "{{count}} SMS communications / month",
+        "advancedReports": "Advanced reporting and intelligence",
+        "coreReports": "Core business reports",
+        "aiAutomations": "AI operational automations",
+        "aiChat": "AI chat with controlled monthly allowance",
+        "start": "Start {{plan}} free",
+        "plans": {
+          "standard": {
+            "name": "Standard",
+            "description": "Core operations for small teams that want one professional workspace."
+          },
+          "pro": {
+            "name": "Professional",
+            "description": "The complete operating plan for growing appointment-based and service businesses."
+          },
+          "premium": {
+            "name": "Premium",
+            "description": "Higher capacity, AI allowance and communication volume for larger teams."
+          }
+        },
+        "billingEyebrow": "How billing works",
+        "billingTitle": "No surprise activation after signup.",
+        "billingText": "The payment method is collected through Stripe before the trial is activated, so the business knows exactly which plan will start after day 14.",
+        "steps": [
+          {
+            "title": "Choose your plan",
+            "text": "Select Standard, Professional or Premium while creating the business account."
+          },
+          {
+            "title": "Add billing details",
+            "text": "Stripe securely stores the payment method. Velliqo never stores raw card details."
+          },
+          {
+            "title": "Use 14 days free",
+            "text": "The selected plan and its feature limits are active during the trial with no subscription charge."
+          },
+          {
+            "title": "Continue automatically",
+            "text": "After the trial, the selected plan renews monthly unless you cancel, upgrade or downgrade."
+          }
+        ],
+        "fixedTitle": "Fixed-term offers are different:",
+        "fixedText": "a Velliqo offer code can define a six- or twelve-month plan term. Those subscriptions are scheduled to stop automatically and do not silently become an ongoing monthly subscription after the stated offer period.",
+        "questionsTitle": "Billing questions",
+        "questionsText": "The owner always retains direct billing controls, invoice access and clear visibility of renewal behaviour.",
+        "faqs": [
+          {
+            "q": "How does the 14-day free trial work?",
+            "a": "Choose a plan, create your business and add billing details through Stripe. Your card is saved securely but you are not charged when the trial starts. Unless you cancel first, Stripe automatically charges the selected monthly plan after the 14-day trial."
+          },
+          {
+            "q": "Can I upgrade, downgrade or cancel?",
+            "a": "Yes. Billing controls let the business owner manage the payment method, invoices, subscription changes and cancellation. Normal monthly plans continue renewing until you cancel or change them."
+          },
+          {
+            "q": "What is different about Staff Apps?",
+            "a": "Standard includes the secure browser Staff Portal but not downloadable personal Staff Apps. Professional and Premium include installable Staff Apps for eligible team members."
+          },
+          {
+            "q": "Why are Velliqo AI and communications limited by plan?",
+            "a": "AI generation, email and SMS create real usage costs. Clear monthly allowances keep pricing predictable while giving larger businesses higher capacity on Professional and Premium."
+          },
+          {
+            "q": "How do special offer codes work?",
+            "a": "Some invitation or promotion codes can grant a selected plan for a fixed period such as six or twelve months, with an optional discount. Fixed-term offers are explicitly non-renewing and stop automatically at their stated end date."
+          },
+          {
+            "q": "Are payment processing fees for customer sales included?",
+            "a": "The subscription prices cover the Velliqo SaaS service. With Velliqo POS, card-processing fees are charged directly to the business owner by the connected payment provider and are not absorbed by Velliqo."
+          }
+        ],
+        "ctaTitle": "Choose your plan, set up the business and activate your 14-day trial.",
+        "ctaText": "Your billing method is handled securely by Stripe and the plan can be managed later from the Owner Billing workspace.",
+        "ctaButton": "Start with Professional"
+      },
+      "businessTypes": {
+        "eyebrow": "Workspace configuration",
+        "title": "Find the workspace built around your business.",
+        "description": "Choose the closest match. Velliqo prepares relevant terminology, starter services and recommended modules before registration.",
+        "search": "Search e.g. dentist, consultant, trainer...",
+        "trust": [
+          "Secure Stripe billing",
+          "Guided setup",
+          "Change settings later"
+        ],
+        "explore": "Explore business types",
+        "matches": "{{count}} tailored workspaces match your search.",
+        "count": "{{count}} business types",
+        "tailored": "Tailored workspace",
+        "select": "Select and continue",
+        "guided": "Guided setup",
+        "noneTitle": "No business type found",
+        "noneText": "Try a broader term or choose the closest service business. You can customize terminology, services and modules during setup.",
+        "clear": "Clear search",
+        "fallbackTitle": "Cannot find an exact match?",
+        "fallbackText": "Choose the closest service business. You will be able to rename services, categories and team terminology during setup.",
+        "categories": {
+          "beauty_personal_care": {
+            "name": "Beauty & Personal Care",
+            "description": "Hair, beauty, grooming, spa and aesthetics."
+          },
+          "health_wellness": {
+            "name": "Health & Wellness",
+            "description": "Clinics and appointment-based care providers."
+          },
+          "fitness": {
+            "name": "Fitness & Movement",
+            "description": "Training, classes, studios and memberships."
+          },
+          "pet_services": {
+            "name": "Pet Services",
+            "description": "Pet care, grooming, veterinary and training."
+          },
+          "automotive": {
+            "name": "Automotive Services",
+            "description": "Vehicle care, maintenance and workshop bookings."
+          },
+          "home_services": {
+            "name": "Home & Field Services",
+            "description": "Mobile teams and scheduled property services."
+          },
+          "professional_services": {
+            "name": "Professional Services",
+            "description": "Advisory, legal, finance and property services."
+          },
+          "education": {
+            "name": "Education & Training",
+            "description": "Lessons, schools, instructors and class schedules."
+          },
+          "creative_services": {
+            "name": "Creative Services",
+            "description": "Studios, artists and production professionals."
+          },
+          "events": {
+            "name": "Events & Venues",
+            "description": "Planning, consultations and venue reservations."
+          }
+        },
+        "industries": {
+          "appointment_service_business": {
+            "name": "Service Business",
+            "description": "A general appointment-based or service business."
+          },
+          "hair_salon": {
+            "name": "Hair Salon",
+            "description": "Hair styling, colouring and salon services."
+          },
+          "barber_shop": {
+            "name": "Barber Shop",
+            "description": "Cuts, grooming and barbering services."
+          },
+          "beauty_studio": {
+            "name": "Beauty Studio",
+            "description": "Skincare, lashes and cosmetic services."
+          },
+          "nail_salon": {
+            "name": "Nail Salon",
+            "description": "Manicure, pedicure and nail-art services."
+          },
+          "spa": {
+            "name": "Spa",
+            "description": "Relaxation, body treatments and spa experiences."
+          },
+          "massage_center": {
+            "name": "Massage Center",
+            "description": "Therapeutic and relaxation massage."
+          },
+          "wellness_center": {
+            "name": "Wellness Center",
+            "description": "Integrated wellness and personal care."
+          },
+          "aesthetic_clinic": {
+            "name": "Aesthetic Clinic",
+            "description": "Non-surgical aesthetic services."
+          },
+          "tattoo_studio": {
+            "name": "Tattoo Studio",
+            "description": "Consultations, sessions and aftercare."
+          },
+          "physiotherapy": {
+            "name": "Physiotherapy Practice",
+            "description": "Assessments and rehabilitation sessions."
+          },
+          "chiropractic": {
+            "name": "Chiropractic Clinic",
+            "description": "Chiropractic consultations and care."
+          },
+          "nutritionist": {
+            "name": "Nutrition Practice",
+            "description": "Nutrition consultations and follow-ups."
+          },
+          "psychology_practice": {
+            "name": "Psychology Practice",
+            "description": "Private consultations and therapy sessions."
+          },
+          "speech_therapy": {
+            "name": "Speech Therapy Practice",
+            "description": "Assessments and speech therapy sessions."
+          },
+          "dental_clinic": {
+            "name": "Dental Clinic",
+            "description": "Dental appointments and treatment scheduling."
+          },
+          "medical_practice": {
+            "name": "Private Medical Practice",
+            "description": "Private consultations and clinic scheduling."
+          },
+          "personal_training": {
+            "name": "Personal Training Studio",
+            "description": "Personal coaching and fitness sessions."
+          },
+          "gym_studio": {
+            "name": "Gym Studio",
+            "description": "Memberships, classes and trainer sessions."
+          },
+          "pilates_studio": {
+            "name": "Pilates Studio",
+            "description": "Private and group Pilates sessions."
+          },
+          "yoga_studio": {
+            "name": "Yoga Studio",
+            "description": "Yoga classes and private sessions."
+          },
+          "dance_studio": {
+            "name": "Dance Studio",
+            "description": "Dance lessons and class scheduling."
+          },
+          "pet_grooming": {
+            "name": "Pet Grooming",
+            "description": "Professional pet grooming appointments."
+          },
+          "veterinary_clinic": {
+            "name": "Veterinary Clinic",
+            "description": "Pet consultations and clinic scheduling."
+          },
+          "dog_training": {
+            "name": "Dog Training",
+            "description": "Private and group dog training sessions."
+          },
+          "car_wash": {
+            "name": "Car Wash",
+            "description": "Vehicle cleaning bookings."
+          },
+          "car_detailing": {
+            "name": "Car Detailing",
+            "description": "Professional vehicle detailing."
+          },
+          "mechanic": {
+            "name": "Mechanic Workshop",
+            "description": "Repairs, servicing and workshop bookings."
+          },
+          "tyre_shop": {
+            "name": "Tyre Shop",
+            "description": "Tyre fitting and maintenance appointments."
+          },
+          "cleaning_company": {
+            "name": "Cleaning Company",
+            "description": "Residential and commercial cleaning schedules."
+          },
+          "electrician": {
+            "name": "Electrical Services",
+            "description": "Scheduled electrical work and site visits."
+          },
+          "plumber": {
+            "name": "Plumbing Services",
+            "description": "Plumbing appointments and field jobs."
+          },
+          "hvac": {
+            "name": "HVAC Services",
+            "description": "Heating and cooling service visits."
+          },
+          "pest_control": {
+            "name": "Pest Control",
+            "description": "Inspection and treatment scheduling."
+          },
+          "law_firm": {
+            "name": "Law Firm",
+            "description": "Client consultations and case appointments."
+          },
+          "accounting_firm": {
+            "name": "Accounting Firm",
+            "description": "Accounting consultations and client meetings."
+          },
+          "consultancy": {
+            "name": "Consultancy",
+            "description": "Advisory sessions and project meetings."
+          },
+          "financial_advisor": {
+            "name": "Financial Advisory",
+            "description": "Financial consultations and review meetings."
+          },
+          "real_estate": {
+            "name": "Real Estate Office",
+            "description": "Viewings, valuations and client meetings."
+          },
+          "tutoring": {
+            "name": "Tutoring Service",
+            "description": "Private and group tutoring sessions."
+          },
+          "language_school": {
+            "name": "Language School",
+            "description": "Language classes and private lessons."
+          },
+          "music_school": {
+            "name": "Music School",
+            "description": "Music lessons and studio schedules."
+          },
+          "driving_school": {
+            "name": "Driving School",
+            "description": "Driving lessons and instructor scheduling."
+          },
+          "photography_studio": {
+            "name": "Photography Studio",
+            "description": "Photo sessions and studio bookings."
+          },
+          "videography_studio": {
+            "name": "Videography Studio",
+            "description": "Video production consultations and shoots."
+          },
+          "wedding_planner": {
+            "name": "Wedding Planner",
+            "description": "Wedding planning consultations and milestones."
+          },
+          "event_planner": {
+            "name": "Event Planner",
+            "description": "Event consultations and project scheduling."
+          },
+          "venue_booking": {
+            "name": "Venue Booking",
+            "description": "Venue tours, reservations and event dates."
+          }
+        }
+      },
+      "why": {
+        "heroBadge": "Why businesses choose Velliqo",
+        "heroTitle": "Less operational noise. More confidence in every working day.",
+        "heroText": "Velliqo replaces fragmented tools and manual coordination with one coherent business workspace—without forcing your team to adapt to complicated software.",
+        "start": "Start free",
+        "pricing": "See pricing",
+        "artTitle": "Built around real operations",
+        "artText": "Not software for software’s sake.",
+        "trust": [
+          {
+            "title": "Save coordination time",
+            "text": "Keep daily work in one shared system."
+          },
+          {
+            "title": "Work across devices",
+            "text": "Desktop depth with mobile clarity."
+          },
+          {
+            "title": "Trust the workspace",
+            "text": "Clear access and separated business data."
+          },
+          {
+            "title": "Start with guidance",
+            "text": "Configuration follows your business type."
+          }
+        ],
+        "diffEyebrow": "The difference",
+        "diffTitle": "Designed as one operating experience.",
+        "diffText": "Velliqo does not aim to add another isolated booking tool. It connects the customer journey with the work your team performs behind the scenes.",
+        "reasons": [
+          {
+            "title": "One source of truth",
+            "text": "Appointments, customers, services, staff and reports use the same operational information."
+          },
+          {
+            "title": "Built for the full team",
+            "text": "Owners gain visibility while professionals work from a focused personal Staff Portal synchronized with the business in real time."
+          },
+          {
+            "title": "Customer-facing quality",
+            "text": "Your booking experience should reflect the professionalism of your real business."
+          },
+          {
+            "title": "Useful business intelligence",
+            "text": "Reports focus on decisions, not decorative charts disconnected from daily activity."
+          },
+          {
+            "title": "Security before scale",
+            "text": "Production launch is tied to permissions, RLS, billing and security readiness."
+          },
+          {
+            "title": "Transparent product relationship",
+            "text": "Clear pricing, visible roadmap status and no claim that unfinished features are already available."
+          }
+        ],
+        "adoptEyebrow": "Built for adoption",
+        "adoptTitle": "Premium should feel easier—not more complicated.",
+        "adoptText": "A high-quality platform earns trust through clarity. Velliqo uses consistent navigation, familiar scheduling patterns, guided setup and responsive layouts, while each professional receives a focused Staff Portal instead of the full owner administration workspace.",
+        "adoptLines": [
+          {
+            "title": "Clear daily priorities",
+            "text": "The dashboard surfaces what requires attention now."
+          },
+          {
+            "title": "Personal Staff Portal",
+            "text": "Professionals see their own schedule and daily actions in a secure workspace that stays synchronized with the owner."
+          },
+          {
+            "title": "Consistent terminology",
+            "text": "Labels adapt to the selected business without changing the core experience."
+          },
+          {
+            "title": "Progressive depth",
+            "text": "New users can begin simply while advanced capabilities remain available when needed."
+          }
+        ],
+        "faqEyebrow": "Questions answered",
+        "faqTitle": "What a careful business owner should ask.",
+        "faqText": "Trust starts when practical concerns are answered directly, before registration or payment.",
+        "faqs": [
+          {
+            "q": "Is Velliqo only for salons?",
+            "a": "No. Velliqo is designed for appointment-based and service businesses across beauty, wellness, fitness, professional services, education, pets, automotive and other industries."
+          },
+          {
+            "q": "Will it be difficult for my staff to learn?",
+            "a": "The product follows familiar daily workflows. The guided Tour, Training Portal, PDF guides and course videos reduce training time."
+          },
+          {
+            "q": "Can customers book without downloading an app?",
+            "a": "Yes. Each business has a public web experience where customers can view information and book from desktop, tablet or mobile."
+          },
+          {
+            "q": "Can I keep walk-ins and phone bookings?",
+            "a": "Yes. Owners and authorised staff can create appointments directly from the dashboard alongside online bookings."
+          },
+          {
+            "q": "Does it work for more than one staff member?",
+            "a": "Yes. Team schedules, staff availability, customer assignment and business-level visibility are supported."
+          },
+          {
+            "q": "What is the Staff Portal?",
+            "a": "It is a personal business-controlled workspace for each authorised professional, synchronized with the owner workspace and installable on eligible plans."
+          },
+          {
+            "q": "What protects my business data?",
+            "a": "Velliqo uses a multi-tenant architecture with tenant separation, role permissions and production security controls."
+          },
+          {
+            "q": "Can I leave if the platform is not right for me?",
+            "a": "Monthly subscriptions can be cancelled, while fixed-term offers end automatically on their stated date."
+          },
+          {
+            "q": "Will Velliqo keep improving?",
+            "a": "Yes. The goal is one evolving platform with maintainable improvements to the core experience."
+          }
+        ],
+        "values": [
+          {
+            "title": "Honest answers",
+            "text": "Capabilities are described clearly and future items are not presented as already available."
+          },
+          {
+            "title": "Responsible launch",
+            "text": "Commercial launch depends on security, billing, monitoring and legal readiness."
+          },
+          {
+            "title": "Long-term product quality",
+            "text": "The platform is built for maintainability, consistency and real customer support."
+          }
+        ],
+        "ctaTitle": "See how Velliqo can fit the way your business already works.",
+        "ctaText": "Choose your business type, explore the experience and start with a guided setup.",
+        "ctaButton": "Explore business types"
+      },
+      "experience": {
+        "badge": "One platform. Four connected experiences.",
+        "title": "See how Velliqo connects the owner, staff and customer journey.",
+        "text": "Every role receives a focused experience while the underlying business data stays synchronized in one multi-tenant operating system.",
+        "trust": [
+          "Public page created automatically",
+          "Personal Staff Portal for authorised professionals",
+          "Desktop, tablet and mobile ready",
+          "No separate website builder required"
+        ],
+        "ownerEyebrow": "Owner experience",
+        "ownerTitle": "Your private command centre for running the entire business.",
+        "ownerText": "Appointments, people, performance, communications and publishing come together in one calm operational system.",
+        "ownerCards": [
+          {
+            "title": "Calendar control",
+            "text": "Plan appointments, delays and team availability from one operational view."
+          },
+          {
+            "title": "Customer intelligence",
+            "text": "Keep customer profiles, history and activity connected to the business."
+          },
+          {
+            "title": "Business reporting",
+            "text": "Follow revenue, bookings, completion rates and growth without manual spreadsheets."
+          },
+          {
+            "title": "Content publishing",
+            "text": "Publish announcements, offers, products and gallery updates."
+          }
+        ],
+        "staffEyebrow": "Staff experience",
+        "staffTitle": "A focused personal workspace for every authorised professional.",
+        "staffText": "Staff see only the schedule, appointments, profile and actions they need while remaining synchronized with the owner workspace.",
+        "staffCards": [
+          {
+            "title": "A focused personal workspace",
+            "text": "Each professional sees their own schedule, appointments and daily responsibilities."
+          },
+          {
+            "title": "Live owner synchronization",
+            "text": "Changes remain connected to the same business data in real time."
+          },
+          {
+            "title": "Secure staff access",
+            "text": "Approved email access and trusted-device sessions remain controlled by the business owner."
+          },
+          {
+            "title": "Personal Staff App on eligible plans",
+            "text": "Eligible plans allow staff to install their personal workspace on desktop or mobile."
+          }
+        ],
+        "customerEyebrow": "Customer experience",
+        "customerTitle": "A confident journey from discovery to confirmed booking.",
+        "customerText": "Customers can understand the business, view social proof, choose a service and complete a booking without downloading an app.",
+        "customerCards": [
+          {
+            "title": "Choose services clearly",
+            "text": "Services, pricing and availability are presented in a premium responsive layout."
+          },
+          {
+            "title": "Book the right professional",
+            "text": "Customers can choose staff, date and then see only available appointment times."
+          },
+          {
+            "title": "Follow business activity",
+            "text": "Announcements, offers, closures and updates remain visible in the public experience."
+          },
+          {
+            "title": "Trust real reviews",
+            "text": "Published reviews and the business rating are surfaced directly on the storefront."
+          }
+        ],
+        "publicEyebrow": "Public presence",
+        "publicTitle": "A polished customer page is created with every Velliqo workspace.",
+        "publicText": "Your storefront, booking flow, services, team, gallery, reviews and business information stay connected to the same owner-managed data.",
+        "publicCards": [
+          {
+            "title": "A permanent public page",
+            "text": "Every workspace receives a shareable destination for customers and discovery."
+          },
+          {
+            "title": "Services and online booking",
+            "text": "Visitors can discover services, choose a professional and book from any device."
+          },
+          {
+            "title": "News and announcements",
+            "text": "Customers can follow offers, closures, events and important updates."
+          },
+          {
+            "title": "Products, team and gallery",
+            "text": "Present products, professionals, photos and the personality of the business in one place."
+          }
+        ],
+        "ctaTitle": "One operating system, shaped for every person who uses it.",
+        "ctaText": "Explore Velliqo, choose the closest business type and start with a guided setup.",
+        "cta": "Start free"
+      },
+      "ai": {
+        "badge": "Velliqo AI",
+        "title": "An operational AI assistant that understands the business it is helping.",
+        "text": "Ask questions, review insights, speak naturally and prepare protected actions without leaving the current Velliqo workspace.",
+        "cta": "Start free",
+        "secondary": "See the experience",
+        "trust": [
+          "Tenant-isolated data",
+          "Visible confirmations",
+          "Industry-aware language"
+        ],
+        "sectionEyebrow": "Operational intelligence",
+        "sectionTitle": "AI that works inside the same business context.",
+        "sectionText": "Velliqo AI is designed around tenant boundaries, permissions, reviewable actions and the live operational data already available to the owner.",
+        "features": [
+          {
+            "title": "Understands the active business",
+            "text": "Answers are grounded in the current workspace, selected industry and enabled modules."
+          },
+          {
+            "title": "Text conversations",
+            "text": "Owners can ask operational questions in natural language without navigating through multiple reports."
+          },
+          {
+            "title": "Voice conversations",
+            "text": "Speak from mobile or desktop and continue in the same business context."
+          },
+          {
+            "title": "Reviewable actions",
+            "text": "Prepare appointment, customer, campaign, post and operational actions through the shared Action Engine."
+          },
+          {
+            "title": "Permission-aware",
+            "text": "The assistant uses the same tenant boundaries, role permissions and confirmations as the rest of Velliqo."
+          },
+          {
+            "title": "Owner-controlled autonomy",
+            "text": "Recommendations, drafts and low-risk automations remain configurable and auditable."
+          }
+        ],
+        "bottomTitle": "Keep the conversation close to the work.",
+        "bottomText": "Desktop owners can open Velliqo AI in a wide sidebar, while mobile users keep quick AI access inside the bottom navigation.",
+        "bottomCta": "Explore Velliqo"
+      },
+      "contact": {
+        "badge": "Contact Velliqo",
+        "title": "Tell us what your business needs next.",
+        "text": "Ask about the platform, onboarding, pricing, integrations or the best Velliqo setup for your appointment-based business.",
+        "emailBtn": "Email Velliqo",
+        "callBtn": "Call {{phone}}",
+        "labels": {
+          "email": "Email",
+          "phone": "Phone",
+          "region": "Region"
+        },
+        "startTitle": "Start with a clear enquiry.",
+        "startText": "The form opens a prepared email draft in your email application. You can review the message and attachments before sending it.",
+        "responseTitle": "Response channel",
+        "responseText": "Replies are sent to the email address you provide.",
+        "controlTitle": "You stay in control",
+        "controlText": "The form does not send automatically; it creates a reviewable email draft.",
+        "planning": "Planning a workspace?",
+        "exploreTitle": "Explore the platform before contacting us.",
+        "exploreText": "See how the owner workspace, customer booking and Velliqo AI work together.",
+        "exploreBtn": "View product experience",
+        "formEyebrow": "Email draft form",
+        "formTitle": "Prepare your message to Velliqo.",
+        "formText": "Required fields are marked. Your email application will open with the details already placed in the draft.",
+        "fields": {
+          "fullName": "Full name",
+          "email": "Email",
+          "businessName": "Business name",
+          "phone": "Phone",
+          "businessType": "Business type",
+          "subject": "Subject",
+          "message": "Message"
+        },
+        "placeholders": {
+          "fullName": "Your full name",
+          "email": "you@business.com",
+          "businessName": "Your business",
+          "businessType": "Select the closest business type",
+          "subject": "What would you like to discuss?",
+          "message": "Tell us about your current workflow, team and what you would like Velliqo to help with."
+        },
+        "review": "The message opens in your configured email application and is not sent until you approve it there.",
+        "openDraft": "Open email draft",
+        "draftOpened": "Your email application should now show a prepared draft addressed to {{email}}.",
+        "mail": {
+          "defaultSubject": "Velliqo website enquiry",
+          "heading": "Velliqo website enquiry",
+          "name": "Name",
+          "email": "Email",
+          "business": "Business name",
+          "phone": "Phone",
+          "type": "Business type",
+          "notProvided": "Not provided",
+          "notSelected": "Not selected",
+          "message": "Message",
+          "footer": "Sent from the Velliqo contact page."
+        },
+        "types": [
+          "Beauty & personal care",
+          "Health & wellness",
+          "Fitness",
+          "Pet services",
+          "Automotive services",
+          "Home services",
+          "Professional services",
+          "Education",
+          "Creative services",
+          "Events",
+          "Other appointment-based business"
+        ]
+      },
+      "product": {
+        "badge": "Premium operations, powered by Velliqo AI",
+        "title": "The operating platform your service business can grow into.",
+        "text": "Bring appointments, customers, staff, services, storefronts, payments, reporting and intelligent assistance into one coordinated Velliqo workspace.",
+        "start": "Start your workspace",
+        "seeAi": "See Velliqo AI",
+        "trust": [
+          "14-day free trial",
+          "Secure Stripe billing",
+          "Industry-aware setup"
+        ],
+        "industries": [
+          "Beauty & personal care",
+          "Health & wellness",
+          "Fitness",
+          "Pet services",
+          "Automotive",
+          "Home services",
+          "Professional services",
+          "Education",
+          "Creative services",
+          "Events"
+        ],
+        "trustFeatures": [
+          {
+            "title": "Tenant-isolated workspaces",
+            "text": "Each business operates inside its own protected data boundary."
+          },
+          {
+            "title": "One connected workflow",
+            "text": "Information moves across scheduling, CRM, reporting and AI."
+          },
+          {
+            "title": "Built for daily teams",
+            "text": "Owners and professionals see the context needed for their work."
+          },
+          {
+            "title": "Ready for business growth",
+            "text": "Subscriptions, sales and optional payment workflows fit the roadmap."
+          }
+        ],
+        "productEyebrow": "One coordinated product",
+        "productTitle": "Move from scattered tools to one professional operating system.",
+        "productText": "Velliqo connects the daily work of the owner, team and customer instead of forcing the business to manage separate systems.",
+        "benefits": [
+          {
+            "title": "Scheduling that stays clear",
+            "text": "Daily, weekly and monthly views designed for real appointment operations."
+          },
+          {
+            "title": "Customers and teams together",
+            "text": "Keep profiles, availability, history and daily responsibilities in one workspace."
+          },
+          {
+            "title": "Reports that support decisions",
+            "text": "Understand appointments, revenue, retention, services and team performance."
+          },
+          {
+            "title": "A premium online presence",
+            "text": "Give customers a polished place to discover, trust and book your business."
+          }
+        ],
+        "deviceEyebrow": "Built for every device",
+        "deviceTitle": "A calm owner workspace. A polished customer experience.",
+        "deviceText": "The product adapts from the front desk to a phone in the field, while customers receive a consistent booking experience that reflects the quality of the business.",
+        "deviceLines": [
+          {
+            "title": "Owner operations",
+            "text": "Calendar, customers, team, services, sales, finance and AI in one navigation system."
+          },
+          {
+            "title": "Customer journey",
+            "text": "Discovery, service selection, professional selection, booking and account access."
+          },
+          {
+            "title": "Responsive foundation",
+            "text": "Mobile, tablet and desktop layouts designed around the task—not merely scaled down."
+          }
+        ],
+        "explore": "Explore the full experience",
+        "intelEyebrow": "Business intelligence that stays practical",
+        "intelTitle": "Know what is happening—and what deserves attention next.",
+        "intelText": "Reports combine operational metrics with daily context. Velliqo AI then helps the owner interpret patterns and prepare reviewable actions.",
+        "intelLines": [
+          {
+            "title": "Revenue and appointment performance",
+            "text": "Track trends without leaving the operational workspace."
+          },
+          {
+            "title": "Customer retention signals",
+            "text": "Identify regular customers who may be slipping outside their normal cycle."
+          },
+          {
+            "title": "Staff and service visibility",
+            "text": "Understand utilisation, demand and the shape of the working day."
+          }
+        ],
+        "ctaEyebrow": "Your next operating system",
+        "ctaTitle": "Create a premium experience for the business and every customer it serves.",
+        "ctaText": "Choose your business type and begin a guided setup prepared for your services, team and daily operations.",
+        "ctaStart": "Start free",
+        "ctaPricing": "View pricing",
+        "calendarAlt": "Velliqo calendar on desktop and mobile",
+        "reportsAlt": "Velliqo reporting workspace on desktop"
+      }
+    },
+    "aiPreview": {
+      "manager": "Manager workspace",
+      "live": "Live product preview",
+      "askArea": "Ask by area",
+      "notNow": "Not now",
+      "review": "Review draft",
+      "placeholder": "Ask about your day, customers, schedule or stock…",
+      "speak": "Speak to Velliqo AI",
+      "send": "Send message",
+      "scenarios": [
+        {
+          "id": "schedule",
+          "label": "Schedule",
+          "industry": "Physiotherapy",
+          "prompt": "Find tomorrow’s gaps and suggest the best way to fill them.",
+          "response": "I found two useful openings: 11:30–12:15 and 16:00–17:00. The afternoon gap matches three returning customers who usually book follow-up sessions.",
+          "actionTitle": "Prepare reactivation outreach",
+          "actionDetail": "Create a draft for 3 suitable customers. Nothing will be sent without approval."
+        },
+        {
+          "id": "customers",
+          "label": "Customers",
+          "industry": "Pet grooming",
+          "prompt": "Which regular customers have not returned in the last 90 days?",
+          "response": "Seven regular customers are now outside their normal visit cycle. Four previously booked every 6–8 weeks and have consented to marketing messages.",
+          "actionTitle": "Create customer segment",
+          "actionDetail": "Prepare a reactivation audience and campaign draft for the 4 eligible customers."
+        },
+        {
+          "id": "stock",
+          "label": "Inventory",
+          "industry": "Car detailing",
+          "prompt": "What should I restock before the weekend?",
+          "response": "Three products are below their minimum level. Interior cleaner is the highest priority based on the next five booked services.",
+          "actionTitle": "Prepare restock checklist",
+          "actionDetail": "Add the three products and suggested quantities to a reviewable checklist."
+        }
+      ],
+      "calloutBadge": "AI built into daily operations",
+      "calloutTitle": "Ask. Review. Act—without leaving your workspace.",
+      "calloutText": "Velliqo AI works with the current business context, recognises permissions and prepares reviewable actions. Owners can speak or type while confirmations remain visible and controlled.",
+      "bullets": [
+        "Daily briefings based on real workspace data",
+        "Voice and text conversations in the same assistant",
+        "Reviewable confirmations before protected actions",
+        "Industry-aware language for service businesses"
+      ],
+      "explore": "Explore Velliqo AI",
+      "start": "Start your workspace"
+    }
+  },
+  "addons": {
+    "title": "Add-ons",
+    "eyebrow": "Extra capacity & payments",
+    "description": "Extend your current Velliqo plan with extra monthly capacity or activate the POS Suite.",
+    "refresh": "Refresh",
+    "loading": "Loading add-ons...",
+    "allowances": {
+      "ai": "AI requests",
+      "email": "Emails",
+      "sms": "SMS"
+    },
+    "boosters": {
+      "title": "Capacity boosters",
+      "description": "Buy a one-time booster for the current billing cycle or keep the same extra capacity renewing every month."
+    },
+    "modes": {
+      "cycle": "This billing cycle",
+      "recurring": "Every month"
+    },
+    "categories": {
+      "sms": {
+        "title": "SMS packs",
+        "description": "Extra SMS capacity for confirmations, reminders and approved campaigns."
+      },
+      "email": {
+        "title": "Email packs",
+        "description": "Extra transactional and marketing email capacity."
+      },
+      "ai": {
+        "title": "Velliqo AI packs",
+        "description": "Extra AI requests with an additional token allowance to keep provider costs controlled."
+      }
+    },
+    "price": {
+      "cycle": "one-time · valid until this billing cycle ends",
+      "monthly": "per month · renews monthly"
+    },
+    "aiTokens": "extra AI tokens",
+    "buy": {
+      "action": "Buy add-on",
+      "opening": "Opening checkout...",
+      "unavailable": "Not available in this mode"
+    },
+    "active": {
+      "title": "Active add-ons",
+      "empty": "No add-ons are active for this business yet.",
+      "badge": "Active",
+      "cancel": "Cancel monthly add-on",
+      "canceling": "Scheduling…",
+      "endsAtPeriodEnd": "ends at billing-period end",
+      "statuses": {
+        "pending": "Pending",
+        "active": "Active",
+        "past_due": "Past due",
+        "canceled": "Cancelled",
+        "expired": "Expired"
+      }
+    },
+    "messages": {
+      "loadFailed": "Unable to load add-ons",
+      "purchaseProcessing": "Your add-on purchase is being synchronized.",
+      "purchaseCancelled": "Add-on checkout was cancelled.",
+      "checkoutMissing": "Checkout URL was not returned",
+      "checkoutFailed": "Unable to start add-on checkout",
+      "cancelScheduled": "Monthly add-on will stop at the end of the current billing period.",
+      "cancelFailed": "Unable to cancel this add-on."
+    },
+    "quota": {
+      "title": "Monthly allowance reached",
+      "description": "Your {{type}} allowance is fully used. Buy extra capacity to continue until the end of the billing cycle, or add a recurring monthly pack.",
+      "later": "Later",
+      "buy": "View add-ons",
+      "types": {
+        "sms": "SMS",
+        "email": "email",
+        "ai_requests": "Velliqo AI requests",
+        "ai_tokens": "Velliqo AI tokens"
+      }
+    },
+    "pos": {
+      "badge": "Monthly add-on",
+      "title": "Velliqo POS Suite",
+      "description": "Turn Velliqo into a connected payment workspace while the merchant pays card-processing fees directly to the payment provider.",
+      "perMonth": "/ month · VAT included where applicable",
+      "feeNotice": "Card processing and banking fees are charged directly to the owner by the connected payment provider. Velliqo does not absorb those fees.",
+      "subscribe": "Activate POS Suite",
+      "active": "POS Suite active",
+      "tapToPayTechnical": "Tap to Pay requires Stripe Terminal in a compatible native iOS, Android or React Native payment app. The Velliqo web/PWA manages the POS subscription, connected-payment workflows and reporting; native Tap to Pay activation is completed during the payment-provider cutover.",
+      "features": {
+        "tapToPay": "Tap to Pay from a compatible phone",
+        "appointmentPayments": "POS linked to appointments",
+        "onlinePayments": "Online payments",
+        "deposits": "Deposits",
+        "noShowCharges": "No-show charges",
+        "cancellationCharges": "Cancellation charges",
+        "tips": "Tips",
+        "refunds": "Refunds",
+        "paymentLinks": "Payment links",
+        "dailyClose": "Daily closing",
+        "paymentHistory": "Payment history",
+        "walletLoyalty": "Customer wallet or loyalty balance",
+        "aiFinancialAnalysis": "AI financial analysis",
+        "paymentReports": "Payment reports"
+      }
+    },
+    "catalog": {
+      "sms_100": {
+        "name": "100 SMS",
+        "description": "100 additional SMS messages"
+      },
+      "sms_250": {
+        "name": "250 SMS",
+        "description": "250 additional SMS messages"
+      },
+      "sms_500": {
+        "name": "500 SMS",
+        "description": "500 additional SMS messages"
+      },
+      "sms_1000": {
+        "name": "1,000 SMS",
+        "description": "1,000 additional SMS messages"
+      },
+      "email_1000": {
+        "name": "1,000 emails",
+        "description": "1,000 additional transactional or marketing emails"
+      },
+      "email_5000": {
+        "name": "5,000 emails",
+        "description": "5,000 additional transactional or marketing emails"
+      },
+      "email_10000": {
+        "name": "10,000 emails",
+        "description": "10,000 additional transactional or marketing emails"
+      },
+      "ai_100": {
+        "name": "100 AI requests",
+        "description": "100 additional AI requests with 350K extra token allowance"
+      },
+      "ai_500": {
+        "name": "500 AI requests",
+        "description": "500 additional AI requests with 1.75M extra token allowance"
+      },
+      "ai_1000": {
+        "name": "1,000 AI requests",
+        "description": "1,000 additional AI requests with 3.5M extra token allowance"
+      },
+      "pos_suite": {
+        "name": "Velliqo POS Suite",
+        "description": "Connected payments and POS operating suite"
+      }
+    }
+  },
+  "demoChrome": {
+    "ownerWorkspace": "Demo owner workspace",
+    "ownerDemo": "owner demo workspace",
+    "search": "Search demo workspace",
+    "addAppointment": "Add demo appointment",
+    "notifications": "Demo notifications",
+    "modeTitle": "Demo mode:",
+    "modeText": "actions work only in this browser session. Nothing is read from or saved to the production database.",
+    "reset": "Reset",
+    "exit": "Exit demo",
+    "sampleOwner": "Sample owner account",
+    "physio": "Physiotherapy demo",
+    "pet": "Pet grooming demo",
+    "car": "Car detailing demo",
+    "workspaceNavigation": "Workspace navigation",
+    "courses": "Courses",
+    "home": "Home",
+    "appointment": "Appointment",
+    "more": "More"
+  },
+  "posWorkspace": {
+    "title": "POS Suite",
+    "eyebrow": "Connected payments workspace",
+    "description": "Operate appointment-linked payments and payment reporting from Velliqo. Provider-dependent payment execution becomes available after merchant onboarding.",
+    "inactiveTitle": "Activate Velliqo POS Suite",
+    "inactiveText": "Subscribe from Add-ons to unlock the connected POS workspace for this business.",
+    "openAddons": "Open Add-ons",
+    "statusTitle": "Payment provider",
+    "notConnected": "Merchant account not connected",
+    "ready": "Ready for payments",
+    "providerText": "Card-processing fees are charged directly by the payment provider to your business. Velliqo does not absorb merchant processing fees.",
+    "cutover": "Secure payment-provider onboarding is completed during the Live Stripe/Terminal cutover.",
+    "features": "Included capabilities",
+    "history": "Payment history",
+    "daily": "Daily close",
+    "wallet": "Wallet & loyalty",
+    "reports": "Payment reports",
+    "noTransactions": "No recorded payment activity yet.",
+    "todaySales": "Today recorded sales",
+    "tips": "Tips recorded",
+    "transactions": "Transactions",
+    "providerFees": "Provider fees",
+    "providerFeesValue": "Paid directly by owner",
+    "nativeNote": "Tap to Pay requires a compatible native iOS, Android or React Native Stripe Terminal client; the Velliqo web/PWA coordinates the subscription, appointments, ledger and reporting."
+  },
+  "demoPage": {
+    "eyebrow": "Interactive owner demo",
+    "goodDay": "Good day",
+    "modules": {
+      "home": [
+        "Good day",
+        "Monitor today's operation, team workload and business activity."
+      ],
+      "calendar": [
+        "Calendar",
+        "Review appointments, availability and the working day."
+      ],
+      "sales": [
+        "Sales",
+        "Run a sample checkout and review completed demo transactions."
+      ],
+      "finance": [
+        "Finance",
+        "Explore revenue, expenses and operating performance."
+      ],
+      "customers": [
+        "Customers",
+        "Review sample customer profiles and relationship history."
+      ],
+      "staff": [
+        "Staff",
+        "Explore team roles, availability and utilisation."
+      ],
+      "services": [
+        "Services",
+        "Manage service names, duration, pricing and availability impact."
+      ],
+      "products": [
+        "Products",
+        "Inspect inventory levels and try a local stock adjustment."
+      ],
+      "marketing": [
+        "Marketing",
+        "Explore campaign drafts, audiences and delivery controls."
+      ],
+      "posts": [
+        "Posts",
+        "Create public announcements and customer updates."
+      ],
+      "gallery": [
+        "Gallery",
+        "Preview how owners organise public images and recent work."
+      ],
+      "storefront": [
+        "Storefront",
+        "Preview the public business profile and booking experience."
+      ],
+      "business": [
+        "Business",
+        "Review business details, contact information and closures."
+      ],
+      "reports": [
+        "Reports",
+        "Explore revenue, appointments, customers and service performance."
+      ],
+      "billing": [
+        "Billing",
+        "Review the subscription workspace and invoice history."
+      ],
+      "ai": [
+        "Velliqo AI",
+        "Ask operational questions and review protected action confirmations."
+      ]
+    },
+    "actions": {
+      "calendar": "New appointment",
+      "customers": "Add customer",
+      "staff": "Add team member",
+      "services": "Add service",
+      "products": "Adjust stock",
+      "sales": "New sale",
+      "marketing": "Create campaign",
+      "posts": "Create post",
+      "gallery": "Add image"
+    },
+    "common": {
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "active": "Active",
+      "published": "Published",
+      "configured": "Configured",
+      "allowed": "Allowed",
+      "notConnected": "Not connected",
+      "time": "Time",
+      "appointments": "Appointments",
+      "revenue": "Revenue",
+      "expenses": "Expenses",
+      "netResult": "Net result",
+      "transactions": "Transactions",
+      "customer": "Customer",
+      "contact": "Contact",
+      "lastVisit": "Last visit",
+      "visits": "Visits",
+      "lifetimeValue": "Lifetime value",
+      "hours": "Hours",
+      "utilisation": "Utilisation",
+      "threshold": "Threshold",
+      "stock": "Stock",
+      "units": "units",
+      "retailPrice": "Retail price",
+      "audience": "Audience",
+      "customers": "customers",
+      "created": "Created",
+      "businessName": "Business name",
+      "industry": "Industry",
+      "region": "Region",
+      "timezone": "Timezone",
+      "onlineBooking": "Online booking",
+      "businessClosures": "Business closures",
+      "noneConfigured": "None configured",
+      "guestBookings": "Guest bookings",
+      "defaultCurrency": "Default currency",
+      "completionRate": "Completion rate",
+      "newCustomers": "New customers",
+      "currentPlan": "Current plan",
+      "perMonth": "/ month",
+      "invoices": "Invoices",
+      "paid": "Paid",
+      "cancel": "Cancel",
+      "apply": "Apply in demo",
+      "day": "Day"
+    },
+    "home": {
+      "todayAppointments": "Today's appointments",
+      "expectedRevenue": "Expected revenue",
+      "activeCustomers": "Active customers",
+      "teamUtilisation": "Team utilisation",
+      "todaySchedule": "Today's schedule",
+      "todayScheduleSub": "Sample appointments grouped by time",
+      "briefing": "Velliqo AI briefing",
+      "briefingSub": "A local preview built from sample data",
+      "businessIntelligence": "Business intelligence",
+      "health": "Business health",
+      "healthSub": "Demo score",
+      "healthText": "Healthy capacity and consistent customer activity."
+    },
+    "calendar": {
+      "week": "Week schedule",
+      "weekSub": "Appointments can be opened and reviewed in this local demo",
+      "professional": "Professional {{count}}",
+      "confirmed": "Confirmed appointment",
+      "session": "Current demo session"
+    },
+    "sales": {
+      "recent": "Recent sales",
+      "recentSub": "Local demo receipts",
+      "checkout": "Checkout summary",
+      "checkoutSub": "No payment provider is contacted",
+      "selectedService": "Selected service",
+      "subtotal": "Subtotal",
+      "total": "Total"
+    },
+    "finance": {
+      "cashFlow": "Cash-flow preview",
+      "cashFlowSub": "Last seven demo days"
+    },
+    "customers": {
+      "directory": "Customer directory",
+      "directorySub": "Sample profiles only"
+    },
+    "products": {
+      "inventory": "Inventory",
+      "inventorySub": "Low-stock rules are demonstrated locally"
+    },
+    "marketing": {
+      "campaigns": "Campaigns & automations",
+      "campaignsSub": "Sending is disabled in demo mode",
+      "controls": "Communication controls",
+      "controlsSub": "Transactional and promotional delivery",
+      "appointmentEmail": "Appointment email",
+      "emailReminders": "Email reminders",
+      "smsProvider": "SMS provider",
+      "rules": [
+        "Consent is checked before promotional delivery",
+        "Appointment communications are managed in Automations",
+        "No email or SMS provider is called in demo mode"
+      ]
+    },
+    "posts": {
+      "title": "Customer posts",
+      "subtitle": "Public updates, offers and closure notices"
+    },
+    "gallery": {
+      "title": "Public gallery",
+      "subtitle": "{{count}} images in this demo session"
+    },
+    "storefront": {
+      "preview": "Public storefront preview",
+      "previewSub": "What customers see before booking",
+      "hero": "Professional services, real availability and a simple booking experience.",
+      "book": "Book appointment",
+      "controls": "Storefront & booking controls",
+      "controlsSub": "Business profile, public presence and booking rules",
+      "publicPage": "Public page",
+      "bookingRules": "Booking rules",
+      "servicesVisible": "Services visible",
+      "galleryImages": "Gallery images"
+    },
+    "business": {
+      "profile": "Business profile",
+      "profileSub": "Sample business information",
+      "operations": "Operational controls",
+      "operationsSub": "Closures and booking configuration"
+    },
+    "reports": {
+      "trend": "Revenue trend",
+      "trendSub": "Sample reporting period"
+    },
+    "billing": {
+      "title": "Velliqo Professional",
+      "subtitle": "Demo subscription",
+      "professional": "Professional",
+      "historySub": "Example billing history"
+    },
+    "ai": {
+      "initial": "I am ready to help with {{business}}. Ask about appointments, customers, stock or campaigns.",
+      "conversation": "Velliqo AI conversation",
+      "conversationSub": "Text and voice use the same permission model",
+      "placeholder": "Ask Velliqo AI...",
+      "permissions": "Permissions",
+      "permissionsSub": "Protected action boundaries",
+      "read": "Read business data",
+      "readValue": "Allowed in sample data",
+      "draft": "Create draft",
+      "draftValue": "Confirmation required",
+      "campaign": "Send campaign",
+      "demoDisabled": "Disabled in demo",
+      "delete": "Delete records",
+      "confirmTitle": "Confirm demo action",
+      "confirmText": "This confirmation behaves like the owner workspace, but the action remains local and is not saved.",
+      "prepared": "Prepared action:",
+      "preparedText": "Create a reviewable draft based on your request.",
+      "confirmed": "Confirmed. The demo draft was created locally and was not written to the database."
+    },
+    "dialog": {
+      "appointmentTitle": "Create demo appointment",
+      "appointmentText": "Complete the form as an owner would. The appointment will exist only in this session.",
+      "customerTitle": "Add demo customer",
+      "customerText": "This sample profile is never sent to Supabase.",
+      "staffTitle": "Add demo team member",
+      "staffText": "The team member is local to this demo session.",
+      "serviceTitle": "Add demo service",
+      "serviceText": "The service is not stored in the production database.",
+      "demoCustomer": "Demo customer",
+      "demoService": "New demo service",
+      "sampleValue": "Sample value",
+      "minutes": "45 minutes",
+      "additional": "Additional information",
+      "safety": "No database request will be made."
     }
   }
 }

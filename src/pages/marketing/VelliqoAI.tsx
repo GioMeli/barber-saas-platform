@@ -1,58 +1,13 @@
-import { ArrowRight, AudioLines, BrainCircuit, Check, LockKeyhole, MessageSquareText, ShieldCheck, Sparkles, WandSparkles } from 'lucide-react';
+import { ArrowRight, Bot, LockKeyhole, MessageSquareText, Mic2, ShieldCheck, Sparkles, WandSparkles } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
-import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
-import { VelliqoAIPreview } from '@/components/marketing/VelliqoAIPreview';
 import { ApprovedArtwork } from '@/components/marketing/ApprovedArtwork';
+import { MarketingFooter, MarketingHeader } from '@/components/marketing/MarketingChrome';
 
-const capabilities = [
-  { icon: BrainCircuit, title: 'Understands the active business', text: 'Answers are grounded in the current workspace, selected industry and enabled modules.' },
-  { icon: MessageSquareText, title: 'Text conversations', text: 'Owners can ask operational questions in natural language without navigating through multiple reports.' },
-  { icon: AudioLines, title: 'Voice conversations', text: 'Speak from mobile or desktop, interrupt spoken responses and continue in the same context.' },
-  { icon: WandSparkles, title: 'Reviewable actions', text: 'Prepare appointment, customer, campaign, post and operational actions through the shared Action Engine.' },
-  { icon: ShieldCheck, title: 'Permission-aware', text: 'The assistant uses the same tenant boundaries, role permissions and confirmations as the rest of Velliqo.' },
-  { icon: LockKeyhole, title: 'Owner-controlled autonomy', text: 'Recommendations, drafts and low-risk automations remain configurable and auditable.' },
-];
-
-export default function VelliqoAI() {
-  return (
-    <div className="min-h-screen overflow-x-hidden bg-[#0d0b18] text-white">
-      <MarketingHeader active="ai" dark />
-      <main>
-        <section className="relative overflow-hidden border-b border-white/10">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_12%,rgba(124,58,237,.31),transparent_32%),radial-gradient(circle_at_88%_24%,rgba(217,70,239,.18),transparent_28%),linear-gradient(180deg,#0d0b18_0%,#100d21_100%)]" />
-          <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[.72fr_1.28fr] lg:px-8 lg:py-24">
-            <div className="max-w-xl">
-              <div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-extrabold text-violet-200"><Sparkles className="h-4 w-4" />The intelligent layer inside Velliqo</div>
-              <h1 className="mt-7 text-4xl font-extrabold leading-[1.02] tracking-[-.055em] sm:text-5xl lg:text-6xl">An AI manager that works where your business runs.</h1>
-              <p className="mt-6 text-base leading-7 text-white/60 sm:text-lg">Ask about the day, identify opportunities, prepare protected actions and continue by voice or text—without leaving the operational workspace.</p>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">Start with Velliqo AI <ArrowRight className="ml-2 h-4 w-4" /></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] px-6 text-white hover:bg-white/[.08] hover:text-white"><Link to="/experience">See the full platform</Link></Button></div>
-              <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs font-bold text-white/45">{['Tenant-isolated data', 'Visible confirmations', 'Industry-aware language'].map((item) => <span key={item} className="inline-flex items-center gap-2"><Check className="h-3.5 w-3.5 text-emerald-400" />{item}</span>)}</div>
-            </div>
-            <VelliqoAIPreview />
-          </div>
-        </section>
-
-        <section className="bg-white text-slate-950">
-          <div className="mx-auto max-w-[1440px] px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-            <div className="mx-auto max-w-3xl text-center"><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">Designed for real operations</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">AI should reduce steps—not add another dashboard.</h2><p className="mt-4 text-base leading-7 text-slate-600">Velliqo AI is embedded into the same business context, permissions and action system used by the owner workspace.</p></div>
-            <div className="mt-12 grid gap-5 md:grid-cols-2 xl:grid-cols-3">{capabilities.map(({ icon: Icon, title, text }) => <article key={title} className="rounded-3xl border border-slate-200 bg-[#fbfaff] p-6 shadow-[0_18px_60px_rgba(76,29,149,.07)]"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><Icon className="h-5 w-5" /></div><h3 className="mt-5 text-lg font-extrabold">{title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{text}</p></article>)}</div>
-          </div>
-        </section>
-
-        <section className="relative overflow-hidden border-y border-white/10 bg-[#100d21]">
-          <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent,rgba(124,58,237,.11),transparent)]" />
-          <div className="relative mx-auto grid max-w-[1240px] items-center gap-10 px-4 py-20 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
-            <div><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-300">Control stays visible</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">A request becomes a clear, reviewable action.</h2><p className="mt-5 text-base leading-7 text-white/55">When an action requires approval, Velliqo shows what will happen before execution. Voice and chat remain open while the confirmation appears above the conversation.</p></div>
-            <div className="rounded-[2rem] border border-white/10 bg-white/[.055] p-5 shadow-[0_28px_80px_rgba(0,0,0,.24)]"><ApprovedArtwork src="/marketing/approved/website_extra_03_ai_laptop_transparent.webp" alt="Velliqo AI operational assistant on laptop" className="max-w-[760px]" /></div>
-          </div>
-        </section>
-
-        <section className="bg-gradient-to-br from-violet-700 to-fuchsia-600">
-          <div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20"><h2 className="text-3xl font-extrabold tracking-tight sm:text-4xl">Put Velliqo AI at the centre of your working day.</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70">Choose your business type and create a workspace prepared for the way your team delivers services.</p><Button asChild size="lg" className="mt-7 h-12 rounded-xl bg-white px-6 text-violet-800 hover:bg-white/90"><Link to="/business-types">Start free <ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div>
-        </section>
-      </main>
-      <MarketingFooter />
-    </div>
-  );
-}
+const icons=[Bot,MessageSquareText,Mic2,WandSparkles,LockKeyhole,ShieldCheck];
+export default function VelliqoAI(){const {t}=useTranslation(); const features=t('marketingSite.pages.ai.features',{returnObjects:true}) as Array<{title:string;text:string}>; const trust=t('marketingSite.pages.ai.trust',{returnObjects:true}) as string[]; return <div className="min-h-screen overflow-x-hidden bg-[#f7f7fc] text-slate-950"><MarketingHeader active="ai" dark/><main>
+<section className="relative overflow-hidden bg-[#0d0b18] text-white"><div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_10%,rgba(124,58,237,.38),transparent_32%),radial-gradient(circle_at_86%_8%,rgba(217,70,239,.22),transparent_28%)]"/><div className="relative mx-auto grid max-w-[1340px] items-center gap-12 px-4 py-20 sm:px-6 lg:grid-cols-[.85fr_1.15fr] lg:px-8 lg:py-28"><div><div className="inline-flex items-center gap-2 rounded-full border border-violet-300/20 bg-violet-400/10 px-3 py-1.5 text-xs font-extrabold text-violet-200"><Sparkles className="h-4 w-4"/>{t('marketingSite.pages.ai.badge')}</div><h1 className="mt-7 text-4xl font-extrabold leading-[1.02] tracking-[-.05em] sm:text-5xl lg:text-6xl">{t('marketingSite.pages.ai.title')}</h1><p className="mt-6 max-w-xl text-base leading-7 text-white/62 sm:text-lg">{t('marketingSite.pages.ai.text')}</p><div className="mt-8 flex flex-col gap-3 sm:flex-row"><Button asChild size="lg" className="h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/business-types">{t('marketingSite.pages.ai.cta')}<ArrowRight className="ml-2 h-4 w-4"/></Link></Button><Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-white/15 bg-white/[.04] text-white hover:bg-white/[.08]"><Link to="/experience">{t('marketingSite.pages.ai.secondary')}</Link></Button></div><div className="mt-8 flex flex-wrap gap-2">{trust.map(x=><span key={x} className="rounded-full border border-white/10 bg-white/[.055] px-3 py-1.5 text-xs font-bold text-white/60">{x}</span>)}</div></div><div className="rounded-[2rem] border border-white/10 bg-white/[.045] p-5 shadow-[0_40px_120px_rgba(0,0,0,.4)]"><ApprovedArtwork src="/marketing/approved/velliqo-ai-laptop-transparent.png" alt="Velliqo AI" loading="eager" className="max-w-[800px]"/></div></div></section>
+<section className="mx-auto max-w-[1340px] px-4 py-20 sm:px-6 lg:px-8 lg:py-28"><div className="mx-auto max-w-3xl text-center"><div className="text-xs font-extrabold uppercase tracking-[.22em] text-violet-600">{t('marketingSite.pages.ai.sectionEyebrow')}</div><h2 className="mt-4 text-3xl font-extrabold tracking-[-.04em] sm:text-4xl">{t('marketingSite.pages.ai.sectionTitle')}</h2><p className="mt-4 text-sm leading-6 text-slate-600 sm:text-base">{t('marketingSite.pages.ai.sectionText')}</p></div><div className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">{features.map((f,i)=>{const Icon=icons[i]||Sparkles;return <article key={f.title} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_14px_45px_rgba(15,23,42,.055)]"><div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700"><Icon className="h-5 w-5"/></div><h3 className="mt-5 text-lg font-extrabold">{f.title}</h3><p className="mt-2 text-sm leading-6 text-slate-600">{f.text}</p></article>})}</div></section>
+<section className="bg-slate-950 text-white"><div className="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 lg:py-20"><Sparkles className="mx-auto h-9 w-9 text-violet-300"/><h2 className="mt-5 text-3xl font-extrabold sm:text-4xl">{t('marketingSite.pages.ai.bottomTitle')}</h2><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-white/70">{t('marketingSite.pages.ai.bottomText')}</p><Button asChild size="lg" className="mt-7 h-12 rounded-xl bg-white px-6 text-slate-950 hover:bg-white/90"><Link to="/experience">{t('marketingSite.pages.ai.bottomCta')}<ArrowRight className="ml-2 h-4 w-4"/></Link></Button></div></section>
+</main><MarketingFooter/></div>}

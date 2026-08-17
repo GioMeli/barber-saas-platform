@@ -13,9 +13,9 @@ const admin = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
 });
 
 const PRICE_TO_PLAN = new Map<string, { planId: string; unitAmount: number }>([
-  [Deno.env.get('STRIPE_PRICE_STANDARD') ?? '', { planId: 'standard', unitAmount: 2999 }],
-  [Deno.env.get('STRIPE_PRICE_PRO') ?? '', { planId: 'pro', unitAmount: 4999 }],
-  [Deno.env.get('STRIPE_PRICE_PREMIUM') ?? '', { planId: 'premium', unitAmount: 8999 }],
+  [Deno.env.get('STRIPE_PRICE_STANDARD') ?? '', { planId: 'standard', unitAmount: 3499 }],
+  [Deno.env.get('STRIPE_PRICE_PRO') ?? '', { planId: 'pro', unitAmount: 5999 }],
+  [Deno.env.get('STRIPE_PRICE_PREMIUM') ?? '', { planId: 'premium', unitAmount: 10099 }],
 ].filter(([priceId]) => Boolean(priceId)) as Array<[string, { planId: string; unitAmount: number }]>);
 
 Deno.serve(async (request) => {
@@ -79,9 +79,17 @@ Deno.serve(async (request) => {
         break;
       case 'customer.subscription.created':
       case 'customer.subscription.updated':
-      case 'customer.subscription.deleted':
-        await syncSubscription(event.data.object as Stripe.Subscription);
+      case 'customer.subscription.deleted': {
+        const subscription = event.data.object as Stripe.Subscription;
+        if (String(subscription.metadata?.velliqo_addon || '') === 'true') await syncAddonSubscription(subscription);
+        else {
+          await syncSubscription(subscription);
+          if (event.type === 'customer.subscription.deleted' || subscription.status === 'canceled') {
+            await cancelRecurringAddonsForBusiness(stripe, subscription);
+          }
+        }
         break;
+      }
       case 'invoice.created':
       case 'invoice.finalized':
       case 'invoice.paid':
@@ -144,6 +152,10 @@ async function verifyStripeEvent({
 }
 
 async function handleCheckoutCompleted(stripe: Stripe, session: Stripe.Checkout.Session) {
+  if (String(session.metadata?.velliqo_addon || '') === 'true') {
+    await handleAddonCheckoutCompleted(stripe, session);
+    return;
+  }
   if (session.mode !== 'subscription' || !session.subscription) return;
 
   const subscriptionId = idOf(session.subscription);
@@ -204,7 +216,75 @@ async function handleCheckoutCompleted(stripe: Stripe, session: Stripe.Checkout.
   }
 }
 
+
+async function handleAddonCheckoutCompleted(stripe: Stripe, session: Stripe.Checkout.Session) {
+  const businessId = String(session.metadata?.business_id || '').trim();
+  const addonId = String(session.metadata?.addon_id || '').trim();
+  const purchaseMode = String(session.metadata?.purchase_mode || '').trim();
+  if (!businessId || !addonId) throw new Error('Add-on checkout is missing metadata');
+
+  const { data: mainSubscription } = await admin.from('subscriptions').select('current_period_end,stripe_customer_id').eq('business_id', businessId).maybeSingle();
+  const now = new Date();
+  if (purchaseMode === 'cycle') {
+    if (session.payment_status !== 'paid') return;
+    const end = mainSubscription?.current_period_end ? new Date(mainSubscription.current_period_end) : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + 1, 1));
+    await admin.from('business_addon_entitlements').update({
+      status: 'active', starts_at: now.toISOString(), ends_at: end.toISOString(),
+      stripe_customer_id: idOf(session.customer) || mainSubscription?.stripe_customer_id || null, updated_at: now.toISOString(),
+    }).eq('stripe_checkout_session_id', session.id);
+    return;
+  }
+
+  if (session.mode === 'subscription' && session.subscription) {
+    const subscription = await stripe.subscriptions.retrieve(idOf(session.subscription));
+    await syncAddonSubscription(subscription);
+    await admin.from('business_addon_entitlements').update({
+      stripe_subscription_id: subscription.id, stripe_customer_id: idOf(subscription.customer) || null, updated_at: now.toISOString(),
+    }).eq('stripe_checkout_session_id', session.id);
+  }
+}
+
+async function syncAddonSubscription(subscription: Stripe.Subscription) {
+  const businessId = String(subscription.metadata?.business_id || '').trim();
+  const addonId = String(subscription.metadata?.addon_id || '').trim();
+  if (!businessId || !addonId) throw new Error(`Unable to map add-on subscription ${subscription.id}`);
+  const start = subscriptionPeriod(subscription, 'start');
+  const end = subscriptionPeriod(subscription, 'end');
+  const mappedStatus = subscription.status === 'active' || subscription.status === 'trialing' ? 'active'
+    : subscription.status === 'past_due' ? 'past_due'
+    : subscription.status === 'canceled' ? 'canceled' : 'pending';
+  await admin.from('business_addon_entitlements').upsert({
+    business_id: businessId, addon_id: addonId, purchase_mode: 'recurring', status: mappedStatus,
+    units: Number(subscription.metadata?.units || 0), token_units: Number(subscription.metadata?.token_units || 0),
+    stripe_subscription_id: subscription.id, stripe_customer_id: idOf(subscription.customer) || null,
+    starts_at: timestamp(start), ends_at: timestamp(end),
+    cancel_at_period_end: Boolean((subscription as any).cancel_at_period_end), updated_at: new Date().toISOString(),
+  }, { onConflict: 'stripe_subscription_id' });
+}
+
+
+async function cancelRecurringAddonsForBusiness(stripe: Stripe, mainSubscription: Stripe.Subscription) {
+  const businessId = await resolveBusinessIdForSubscription(mainSubscription);
+  if (!businessId) return;
+  const { data: rows } = await admin.from('business_addon_entitlements')
+    .select('id,stripe_subscription_id,status')
+    .eq('business_id', businessId)
+    .eq('purchase_mode', 'recurring')
+    .in('status', ['pending','active','past_due']);
+  for (const row of rows || []) {
+    if (row.stripe_subscription_id) {
+      try { await stripe.subscriptions.cancel(row.stripe_subscription_id, { prorate: false }); }
+      catch (error) { console.warn('Unable to cancel add-on after main plan ended', row.stripe_subscription_id, errorMessage(error)); }
+    }
+    await admin.from('business_addon_entitlements').update({ status: 'canceled', ends_at: new Date().toISOString(), cancel_at_period_end: false, updated_at: new Date().toISOString() }).eq('id', row.id);
+  }
+}
+
 async function handleCheckoutExpired(session: Stripe.Checkout.Session) {
+  if (String(session.metadata?.velliqo_addon || '') === 'true') {
+    await admin.from('business_addon_entitlements').update({ status: 'expired', updated_at: new Date().toISOString() }).eq('stripe_checkout_session_id', session.id).eq('status', 'pending');
+    return;
+  }
   const businessId = String(session.metadata?.business_id || '').trim();
   if (businessId) {
     await admin.from('subscriptions').update({
@@ -282,6 +362,35 @@ async function syncSubscription(subscription: Stripe.Subscription) {
 
 async function syncInvoice(invoice: Stripe.Invoice, eventType: string) {
   const subscriptionId = invoiceSubscriptionId(invoice);
+  const oneTimeAddonId = String(invoice.metadata?.addon_id || '').trim();
+  const oneTimeAddonBusinessId = String(invoice.metadata?.business_id || '').trim();
+  if (String(invoice.metadata?.velliqo_addon || '') === 'true' && oneTimeAddonId && oneTimeAddonBusinessId) {
+    const paidAt = numberOrNull((invoice as any).status_transitions?.paid_at);
+    await admin.from('billing_invoices').upsert({
+      business_id: oneTimeAddonBusinessId, stripe_invoice_id: invoice.id, stripe_customer_id: idOf(invoice.customer) || null,
+      stripe_subscription_id: null, invoice_number: invoice.number || null, status: invoice.status || 'draft',
+      currency: String(invoice.currency || 'eur').toLowerCase(), amount_due: Number(invoice.amount_due || 0), amount_paid: Number(invoice.amount_paid || 0),
+      amount_remaining: Number(invoice.amount_remaining || 0), hosted_invoice_url: invoice.hosted_invoice_url || null, invoice_pdf_url: invoice.invoice_pdf || null,
+      period_start: timestamp(numberOrNull((invoice as any).period_start)), period_end: timestamp(numberOrNull((invoice as any).period_end)), paid_at: timestamp(paidAt),
+      invoice_kind: 'addon', addon_id: oneTimeAddonId, updated_at: new Date().toISOString(),
+    }, { onConflict: 'stripe_invoice_id' });
+    return;
+  }
+  if (subscriptionId) {
+    const { data: addonEntitlement } = await admin.from('business_addon_entitlements').select('business_id,addon_id').eq('stripe_subscription_id', subscriptionId).maybeSingle();
+    if (addonEntitlement?.business_id) {
+      const paidAt = numberOrNull((invoice as any).status_transitions?.paid_at);
+      await admin.from('billing_invoices').upsert({
+        business_id: addonEntitlement.business_id, stripe_invoice_id: invoice.id, stripe_customer_id: idOf(invoice.customer) || null,
+        stripe_subscription_id: subscriptionId, invoice_number: invoice.number || null, status: invoice.status || 'draft',
+        currency: String(invoice.currency || 'eur').toLowerCase(), amount_due: Number(invoice.amount_due || 0), amount_paid: Number(invoice.amount_paid || 0),
+        amount_remaining: Number(invoice.amount_remaining || 0), hosted_invoice_url: invoice.hosted_invoice_url || null, invoice_pdf_url: invoice.invoice_pdf || null,
+        period_start: timestamp(numberOrNull((invoice as any).period_start)), period_end: timestamp(numberOrNull((invoice as any).period_end)), paid_at: timestamp(paidAt),
+        invoice_kind: 'addon', addon_id: addonEntitlement.addon_id, updated_at: new Date().toISOString(),
+      }, { onConflict: 'stripe_invoice_id' });
+      return;
+    }
+  }
   const customerId = idOf(invoice.customer);
   const businessId = await resolveBusinessIdForInvoice(invoice, subscriptionId, customerId);
   if (!businessId) {
