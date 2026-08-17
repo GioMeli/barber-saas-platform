@@ -39,11 +39,12 @@ for (const page of [home, why, experience, aiPage]) {
   if (!page.includes('/marketing/approved/')) fail('a core public product page is not using approved imagery');
 }
 
-for (const token of ['Personal Staff Portal', 'Staff Portal', 'staff-page-two-devices-transparent.png']) {
-  if (!why.includes(token) && !experience.includes(token)) fail(`Staff Portal public story missing ${token}`);
-}
-if (!why.includes('What is the Staff Portal?')) fail('Why Velliqo FAQ does not explain the Staff Portal');
-if (!experience.includes('id="staff"') || !experience.includes('downloadable personal Staff Apps')) fail('Experience does not explain the Staff Portal and plan-controlled Staff Apps');
+if (!why.includes('staff-page-two-devices-transparent.png') || !experience.includes('staff-page-two-devices-transparent.png')) fail('Staff Portal approved artwork is missing from the public story');
+if (!why.includes('marketingSite.pages.why.adoptText') || !experience.includes('marketingSite.pages.experience.staffText')) fail('Staff Portal public story is not wired to translated copy');
+const enTranslations = JSON.parse(read('src/i18n/locales/en.json'));
+const whyFaqs = enTranslations.marketingSite?.pages?.why?.faqs || [];
+if (!whyFaqs.some((faq) => /Staff Portal/i.test(String(faq?.q || '')))) fail('Why Velliqo FAQ does not explain the Staff Portal');
+if (!experience.includes('marketingSite.pages.experience.staffCards')) fail('Experience does not explain the Staff Portal through translated feature cards');
 
 if (!exists('public/brand/velliqo-logo-transparent.png')) fail('transparent full Velliqo logo is missing');
 if (!chrome.includes('/brand/velliqo-mark-transparent-v2.png')) fail('public marketing chrome does not use the transparent Velliqo mark');

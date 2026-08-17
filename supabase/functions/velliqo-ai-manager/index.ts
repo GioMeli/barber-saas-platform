@@ -638,14 +638,16 @@ Deno.serve(async (request) => {
   const { data: billingSummary, error: billingError } = await serviceClient.rpc('get_business_billing_summary', { p_business_id: businessId });
   if (billingError) return json({ error: 'Unable to verify the Velliqo AI plan allowance' }, 503);
   if (!billingSummary?.access_allowed) return json({ error: 'An active Velliqo subscription or trial is required' }, 402);
-  const monthlyRequestLimit = Number(billingSummary?.plan?.ai_requests_monthly || 0);
-  const monthlyTokenLimit = Number(billingSummary?.plan?.ai_tokens_monthly || 0);
+  const monthlyRequestLimit = Number(billingSummary?.effective_limits?.ai_requests ?? billingSummary?.plan?.ai_requests_monthly ?? 0);
+  const monthlyTokenLimit = Number(billingSummary?.effective_limits?.ai_tokens ?? billingSummary?.plan?.ai_tokens_monthly ?? 0);
   const monthlyRequestsUsed = Number(billingSummary?.usage?.ai_requests || 0);
   const monthlyTokensUsed = Number(billingSummary?.usage?.ai_tokens || 0);
   if (monthlyRequestLimit > 0 && monthlyRequestsUsed >= monthlyRequestLimit) {
+    await createQuotaAlert(serviceClient, businessId, 'ai_requests', monthlyRequestsUsed, monthlyRequestLimit, billingSummary);
     return json({ error: 'The monthly Velliqo AI request allowance for this plan has been reached', code: 'plan_ai_request_limit' }, 429);
   }
   if (monthlyTokenLimit > 0 && monthlyTokensUsed >= monthlyTokenLimit) {
+    await createQuotaAlert(serviceClient, businessId, 'ai_tokens', monthlyTokensUsed, monthlyTokenLimit, billingSummary);
     return json({ error: 'The monthly Velliqo AI token allowance for this plan has been reached', code: 'plan_ai_token_limit' }, 429);
   }
 
@@ -2366,6 +2368,28 @@ function corsHeaders() {
     'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
+}
+
+async function createQuotaAlert(
+  serviceClient: any,
+  businessId: string,
+  quotaType: 'ai_requests' | 'ai_tokens',
+  used: number,
+  limit: number,
+  billingSummary: any,
+) {
+  try {
+    await serviceClient.rpc('billing_create_quota_alert', {
+      p_business_id: businessId,
+      p_quota_type: quotaType,
+      p_used: Math.max(0, Math.floor(used)),
+      p_limit: Math.max(0, Math.floor(limit)),
+      p_period_start: billingSummary?.usage_period?.start || new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString(),
+      p_period_end: billingSummary?.usage_period?.end || null,
+    });
+  } catch (error) {
+    console.warn('Unable to create billing quota alert', error);
+  }
 }
 
 function json(body: unknown, status = 200) {

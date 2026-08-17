@@ -22,6 +22,7 @@ import {
   Settings2,
   ShieldCheck,
   Store,
+  Trash2,
   Users,
   WalletCards,
   X,
@@ -113,8 +114,12 @@ type OwnerCostRow = {
 type FinancialSummary = {
   period?: { from?: string; to?: string; month_fraction?: number };
   actual_paid_revenue_eur?: number;
+  plan_paid_revenue_eur?: number;
+  addon_paid_revenue_eur?: number;
   paid_invoice_count?: number;
   current_mrr_eur?: number;
+  plan_mrr_eur?: number;
+  addon_mrr_eur?: number;
   ai_requests?: number;
   ai_tokens?: number;
   ai_cost_eur?: number;
@@ -124,6 +129,8 @@ type FinancialSummary = {
   sms_cost_eur?: number;
   payment_cost_eur?: number;
   fixed_infrastructure_cost_eur?: number;
+  fixed_cost_items_monthly_eur?: number;
+  fixed_cost_items?: FixedCostItem[];
   total_operating_cost_eur?: number;
   estimated_operating_contribution_eur?: number;
   operating_margin_percent?: number;
@@ -168,6 +175,15 @@ type AIUsageRow = {
   success: boolean;
 };
 
+type FixedCostItem = {
+  id: string;
+  name: string;
+  category: 'infrastructure'|'email'|'sms'|'ai'|'monitoring'|'domain'|'support'|'legal'|'other';
+  monthly_cost_eur: number;
+  notes?: string | null;
+  active: boolean;
+};
+
 type SupportRequest = {
   id: string;
   business_id: string;
@@ -210,12 +226,14 @@ export default function PlatformAdmin() {
   const [adminReply, setAdminReply] = React.useState('');
   const [broadcastForm, setBroadcastForm] = React.useState({ title: '', message: '', severity: 'info' });
   const [costs, setCosts] = React.useState({ fixed: '0', email: '0', sms: '0', percent: '0', fixedFee: '0' });
+  const [fixedCostItems, setFixedCostItems] = React.useState<FixedCostItem[]>([]);
+  const [costItemForm, setCostItemForm] = React.useState({ name: '', category: 'infrastructure', monthly: '', notes: '' });
   const [form, setForm] = React.useState({ code: '', description: '', plan_id: 'pro' as BillingPlanId, duration_months: '6', percent_off: '0', trial_days: '14', max_redemptions: '', starts_at: '', expires_at: '' });
 
   const load = React.useCallback(async () => {
     setBusy(true);
     try {
-      const [dashboardResult, businessResult, costsResult, offerResult, redemptionResult, requestResult, broadcastResult, auditResult] = await Promise.all([
+      const [dashboardResult, businessResult, costsResult, offerResult, redemptionResult, requestResult, broadcastResult, auditResult, fixedCostResult] = await Promise.all([
         (supabase as any).rpc('platform_admin_dashboard'),
         (supabase as any).rpc('platform_admin_business_rows', { p_search: null }),
         (supabase as any).rpc('platform_admin_owner_cost_rows'),
@@ -224,8 +242,9 @@ export default function PlatformAdmin() {
         (supabase as any).from('platform_support_requests').select('*').order('last_message_at', { ascending: false }).limit(250),
         (supabase as any).from('platform_broadcasts').select('*').order('created_at', { ascending: false }).limit(100),
         (supabase as any).from('platform_admin_audit_logs').select('*').order('created_at', { ascending: false }).limit(150),
+        (supabase as any).from('platform_fixed_cost_items').select('*').order('category').order('name'),
       ]);
-      for (const result of [dashboardResult, businessResult, costsResult, offerResult, redemptionResult, requestResult, broadcastResult, auditResult]) if (result.error) throw result.error;
+      for (const result of [dashboardResult, businessResult, costsResult, offerResult, redemptionResult, requestResult, broadcastResult, auditResult, fixedCostResult]) if (result.error) throw result.error;
       const nextDashboard = dashboardResult.data || {};
       setDashboard(nextDashboard);
       setBusinesses(businessResult.data || []);
@@ -236,6 +255,7 @@ export default function PlatformAdmin() {
       setRequests(requestResult.data || []);
       setBroadcasts(broadcastResult.data || []);
       setAudit(auditResult.data || []);
+      setFixedCostItems(fixedCostResult.data || []);
       const model = nextDashboard.cost_model || {};
       setCosts({ fixed: String(model.fixed_monthly_cost_eur ?? 0), email: String(model.email_unit_cost_eur ?? 0), sms: String(model.sms_unit_cost_eur ?? 0), percent: String(model.payment_fee_percent ?? 0), fixedFee: String(model.payment_fee_fixed_eur ?? 0) });
     } catch (error: any) {
@@ -423,11 +443,43 @@ export default function PlatformAdmin() {
     await load();
   };
 
+  const addFixedCostItem = async () => {
+    const name = costItemForm.name.trim();
+    const monthly = Number(costItemForm.monthly || 0);
+    if (name.length < 2 || !Number.isFinite(monthly) || monthly < 0) return toast.error('Enter a valid recurring cost name and monthly amount.');
+    setBusy(true);
+    const { error } = await (supabase as any).from('platform_fixed_cost_items').insert({ name, category: costItemForm.category, monthly_cost_eur: monthly, notes: costItemForm.notes.trim() || null, active: true });
+    setBusy(false);
+    if (error) return toast.error(error.message);
+    setCostItemForm({ name: '', category: 'infrastructure', monthly: '', notes: '' });
+    toast.success('Recurring platform cost added');
+    await Promise.all([load(), loadEconomics()]);
+  };
+
+  const toggleFixedCostItem = async (item: FixedCostItem) => {
+    const { error } = await (supabase as any).from('platform_fixed_cost_items').update({ active: !item.active, updated_at: new Date().toISOString() }).eq('id', item.id);
+    if (error) return toast.error(error.message);
+    await Promise.all([load(), loadEconomics()]);
+  };
+
+  const deleteFixedCostItem = async (item: FixedCostItem) => {
+    if (!window.confirm(`Delete recurring cost “${item.name}”?`)) return;
+    const { error } = await (supabase as any).from('platform_fixed_cost_items').delete().eq('id', item.id);
+    if (error) return toast.error(error.message);
+    await Promise.all([load(), loadEconomics()]);
+  };
+
+  const exportFixedCosts = () => downloadCsv('velliqo-fixed-cost-ledger.csv', fixedCostItems.map((item) => ({ name: item.name, category: item.category, monthly_cost_eur: item.monthly_cost_eur, active: item.active, notes: item.notes || '' })));
+
   const exportBusinesses = () => downloadCsv('velliqo-owners.csv', filteredBusinesses.map((row) => ({ business: row.business_name, slug: row.slug, status: row.status, owner: row.owner_name, owner_email: row.owner_email, plan: row.plan_id, subscription_status: row.subscription_status, billing_mode: row.billing_mode, staff: row.staff_count, customers: row.customer_count, appointments: row.appointment_count, ai_requests: row.ai_requests_period, ai_tokens: row.ai_tokens_period, ai_cost_eur: row.ai_cost_period, emails: row.email_period, sms: row.sms_period })));
   const exportOwnerCosts = () => downloadCsv('velliqo-owner-costs.csv', ownerCosts);
   const exportPlatformEconomics = () => downloadCsv(`velliqo-platform-economics-${economicsFrom}-to-${economicsTo}.csv`, [
     { metric: 'Actual paid revenue', value: financialSummary.actual_paid_revenue_eur || 0, unit: 'EUR' },
+    { metric: 'Plan paid revenue', value: financialSummary.plan_paid_revenue_eur || 0, unit: 'EUR' },
+    { metric: 'Add-on paid revenue', value: financialSummary.addon_paid_revenue_eur || 0, unit: 'EUR' },
     { metric: 'Current MRR', value: financialSummary.current_mrr_eur || 0, unit: 'EUR/month' },
+    { metric: 'Plan MRR', value: financialSummary.plan_mrr_eur || 0, unit: 'EUR/month' },
+    { metric: 'Add-on MRR', value: financialSummary.addon_mrr_eur || 0, unit: 'EUR/month' },
     { metric: 'AI requests', value: financialSummary.ai_requests || 0, unit: 'requests' },
     { metric: 'AI tokens', value: financialSummary.ai_tokens || 0, unit: 'tokens' },
     { metric: 'AI provider cost', value: financialSummary.ai_cost_eur || 0, unit: 'EUR' },
@@ -436,7 +488,8 @@ export default function PlatformAdmin() {
     { metric: 'SMS messages', value: financialSummary.sms_count || 0, unit: 'messages' },
     { metric: 'SMS cost', value: financialSummary.sms_cost_eur || 0, unit: 'EUR' },
     { metric: 'Payment processing cost', value: financialSummary.payment_cost_eur || 0, unit: 'EUR' },
-    { metric: 'Infrastructure cost', value: financialSummary.fixed_infrastructure_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Infrastructure / recurring fixed cost', value: financialSummary.fixed_infrastructure_cost_eur || 0, unit: 'EUR' },
+    { metric: 'Configured fixed cost items', value: financialSummary.fixed_cost_items_monthly_eur || 0, unit: 'EUR/month' },
     { metric: 'Total operating cost', value: financialSummary.total_operating_cost_eur || 0, unit: 'EUR' },
     { metric: 'Estimated operating contribution', value: financialSummary.estimated_operating_contribution_eur || 0, unit: 'EUR' },
     { metric: 'Operating margin', value: financialSummary.operating_margin_percent || 0, unit: '%' },
@@ -477,7 +530,7 @@ export default function PlatformAdmin() {
               <Metric icon={<Bot />} label="AI requests" value={integer.format(dashboard.usage?.ai_requests || 0)} hint={`${integer.format(dashboard.usage?.ai_tokens || 0)} tokens`} />
             </div>
             <div className="grid gap-5 xl:grid-cols-[1.2fr_.8fr]">
-              <Card className="rounded-3xl"><CardHeader><CardTitle>Subscriptions & usage</CardTitle></CardHeader><CardContent className="grid gap-4 sm:grid-cols-3"><PlanTile name="Standard" value={dashboard.subscriptions?.standard || 0} price="€29.99" /><PlanTile name="Pro" value={dashboard.subscriptions?.pro || 0} price="€49.99" featured /><PlanTile name="Premium" value={dashboard.subscriptions?.premium || 0} price="€89.99" /><Usage icon={<Mail />} label="Emails" value={dashboard.usage?.emails || 0} /><Usage icon={<MessageSquareText />} label="SMS" value={dashboard.usage?.sms || 0} /><Usage icon={<CreditCard />} label="Webhook errors" value={dashboard.delivery_health?.stripe_webhook_errors || 0} /></CardContent></Card>
+              <Card className="rounded-3xl"><CardHeader><CardTitle>Subscriptions & usage</CardTitle></CardHeader><CardContent className="grid gap-4 sm:grid-cols-3"><PlanTile name="Standard" value={dashboard.subscriptions?.standard || 0} price="€34.99" /><PlanTile name="Professional" value={dashboard.subscriptions?.pro || 0} price="€59.99" featured /><PlanTile name="Premium" value={dashboard.subscriptions?.premium || 0} price="€100.99" /><Usage icon={<Mail />} label="Emails" value={dashboard.usage?.emails || 0} /><Usage icon={<MessageSquareText />} label="SMS" value={dashboard.usage?.sms || 0} /><Usage icon={<CreditCard />} label="Webhook errors" value={dashboard.delivery_health?.stripe_webhook_errors || 0} /></CardContent></Card>
               <Card className="rounded-3xl"><CardHeader><CardTitle>Operations health</CardTitle></CardHeader><CardContent className="space-y-3"><StatusLine label="Trialing" value={dashboard.subscriptions?.trialing || 0} /><StatusLine label="Active" value={dashboard.subscriptions?.active || 0} /><StatusLine label="Past due" value={dashboard.subscriptions?.past_due || 0} /><StatusLine label="Delivery failures" value={dashboard.delivery_health?.failed || 0} /></CardContent></Card>
             </div>
           </TabsContent>
@@ -488,16 +541,23 @@ export default function PlatformAdmin() {
                 <div><h2 className="text-xl font-black">Velliqo economics & AI cost intelligence</h2><p className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">Actual paid Stripe revenue for the selected period, recorded AI provider spend and your configured communication, payment and infrastructure costs. This is operational contribution reporting, not statutory accounting profit.</p></div>
                 <div className="grid gap-2 sm:grid-cols-2 xl:grid-cols-[150px_150px_auto]"><Field label="From"><Input type="date" value={economicsFrom} onChange={(e)=>setEconomicsFrom(e.target.value)} /></Field><Field label="To"><Input type="date" value={economicsTo} onChange={(e)=>setEconomicsTo(e.target.value)} /></Field><div className="flex items-end"><Button className="w-full" onClick={()=>void loadEconomics()} disabled={economicsBusy}><RefreshCw className={cn('mr-2 h-4 w-4',economicsBusy&&'animate-spin')} />Refresh</Button></div></div>
               </div>
-              <div className="mt-4 flex flex-wrap gap-2"><Button variant="outline" onClick={exportPlatformEconomics}><Download className="mr-2 h-4 w-4" />Platform summary CSV</Button><Button variant="outline" onClick={exportFinancialOwners}><Download className="mr-2 h-4 w-4" />Owner profitability CSV</Button><Button variant="outline" onClick={exportAiLedger}><Download className="mr-2 h-4 w-4" />AI ledger CSV</Button></div>
+              <div className="mt-4 flex flex-wrap gap-2"><Button variant="outline" onClick={exportPlatformEconomics}><Download className="mr-2 h-4 w-4" />Platform summary CSV</Button><Button variant="outline" onClick={exportFinancialOwners}><Download className="mr-2 h-4 w-4" />Owner profitability CSV</Button><Button variant="outline" onClick={exportAiLedger}><Download className="mr-2 h-4 w-4" />AI ledger CSV</Button><Button variant="outline" onClick={exportFixedCosts}><Download className="mr-2 h-4 w-4" />Fixed costs CSV</Button></div>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-6">
-              <Metric icon={<CircleDollarSign />} label="Paid revenue" value={eur.format(financialSummary.actual_paid_revenue_eur || 0)} hint={`${integer.format(financialSummary.paid_invoice_count || 0)} paid invoices`} />
-              <Metric icon={<CreditCard />} label="Current MRR" value={eur.format(financialSummary.current_mrr_eur || 0)} />
+              <Metric icon={<CircleDollarSign />} label="Paid revenue" value={eur.format(financialSummary.actual_paid_revenue_eur || 0)} hint={`Plans ${eur.format(financialSummary.plan_paid_revenue_eur || 0)} · Add-ons ${eur.format(financialSummary.addon_paid_revenue_eur || 0)}`} />
+              <Metric icon={<CreditCard />} label="Current MRR" value={eur.format(financialSummary.current_mrr_eur || 0)} hint={`Plans ${eur.format(financialSummary.plan_mrr_eur || 0)} · Add-ons ${eur.format(financialSummary.addon_mrr_eur || 0)}`} />
               <Metric icon={<WalletCards />} label="Operating cost" value={eur.format(financialSummary.total_operating_cost_eur || 0)} />
               <Metric icon={<Activity />} label="Contribution" value={eur.format(financialSummary.estimated_operating_contribution_eur || 0)} />
               <Metric icon={<BadgePercent />} label="Margin" value={`${Number(financialSummary.operating_margin_percent || 0).toFixed(1)}%`} />
               <Metric icon={<Bot />} label="AI spend" value={eur.format(financialSummary.ai_cost_eur || 0)} hint={`${integer.format(financialSummary.ai_requests || 0)} requests`} />
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <CostTile label="Plan revenue" value={Number(financialSummary.plan_paid_revenue_eur||0)} hint="Paid plan invoices in selected period" />
+              <CostTile label="Add-on revenue" value={Number(financialSummary.addon_paid_revenue_eur||0)} hint="Paid quota/POS add-on invoices" />
+              <CostTile label="Plan MRR" value={Number(financialSummary.plan_mrr_eur||0)} hint="Current recurring plan value" />
+              <CostTile label="Add-on MRR" value={Number(financialSummary.addon_mrr_eur||0)} hint="Current recurring add-on value" />
             </div>
 
             <div className="grid gap-5 xl:grid-cols-[1fr_1fr]">
@@ -532,7 +592,9 @@ export default function PlatformAdmin() {
             <Card className="rounded-3xl"><CardHeader><CardTitle>Offer codes</CardTitle></CardHeader><CardContent><div className="space-y-3">{offers.length===0?<div className="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">No offer codes created yet.</div>:offers.map((offer)=>{const redeemed=redemptions.filter((item)=>item.offer_code_id===offer.id&&item.status==='redeemed').length;const state=offerState(offer,redeemed);return <div key={offer.id} className="grid gap-3 rounded-2xl border p-4 lg:grid-cols-[1fr_auto_auto] lg:items-center"><div><div className="flex flex-wrap items-center gap-2"><span className="font-black tracking-wide">{offer.code}</span><Badge variant="outline">{String(offer.plan_id).toUpperCase()}</Badge><Badge className={state.className}>{state.label}</Badge></div><p className="mt-1 text-xs text-muted-foreground">{offer.duration_months} months access · {Number(offer.percent_off)}% off · {offer.trial_days} trial days · {redeemed}{offer.max_redemptions?` / ${offer.max_redemptions}`:''} redeemed</p><p className="mt-1 text-xs text-muted-foreground">Redeem window: {offer.starts_at?dateOnly(offer.starts_at):'Immediately'} → {offer.expires_at?dateOnly(offer.expires_at):'No code expiry'}</p></div><div className="text-sm font-bold text-amber-700">No auto-renew</div><Button size="sm" variant="outline" onClick={()=>void toggleOffer(offer)}>{offer.active?'Disable':'Enable'}</Button></div>})}</div></CardContent></Card>
           </TabsContent>
 
-          <TabsContent value="costs"><Card className="max-w-5xl rounded-3xl"><CardHeader><CardTitle>Platform cost model</CardTitle><p className="text-sm leading-6 text-muted-foreground">Enter the real unit/provider costs you pay. Owner-cost reporting then attributes AI directly and applies these unit/shared values per tenant. This remains an operational estimate rather than statutory accounting profit.</p></CardHeader><CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"><Field label="Fixed infrastructure €/month"><Input type="number" min="0" step="0.01" value={costs.fixed} onChange={(e)=>setCosts({...costs,fixed:e.target.value})} /></Field><Field label="Email cost €/message"><Input type="number" min="0" step="0.000001" value={costs.email} onChange={(e)=>setCosts({...costs,email:e.target.value})} /></Field><Field label="SMS cost €/message"><Input type="number" min="0" step="0.000001" value={costs.sms} onChange={(e)=>setCosts({...costs,sms:e.target.value})} /></Field><Field label="Payment fee %"><Input type="number" min="0" step="0.001" value={costs.percent} onChange={(e)=>setCosts({...costs,percent:e.target.value})} /></Field><Field label="Payment fixed fee €"><Input type="number" min="0" step="0.0001" value={costs.fixedFee} onChange={(e)=>setCosts({...costs,fixedFee:e.target.value})} /></Field><div className="flex items-end"><Button className="w-full" onClick={()=>void saveCosts()} disabled={busy}>Save cost model</Button></div></CardContent></Card></TabsContent>
+          <TabsContent value="costs" className="space-y-5"><Card className="max-w-5xl rounded-3xl"><CardHeader><CardTitle>Platform cost model</CardTitle><p className="text-sm leading-6 text-muted-foreground">Enter unit/provider costs and any remaining shared monthly amount. Detailed recurring services can be listed separately below. Economics and Owner profitability include both.</p></CardHeader><CardContent className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"><Field label="Other shared fixed €/month"><Input type="number" min="0" step="0.01" value={costs.fixed} onChange={(e)=>setCosts({...costs,fixed:e.target.value})} /></Field><Field label="Email cost €/message"><Input type="number" min="0" step="0.000001" value={costs.email} onChange={(e)=>setCosts({...costs,email:e.target.value})} /></Field><Field label="SMS cost €/message"><Input type="number" min="0" step="0.000001" value={costs.sms} onChange={(e)=>setCosts({...costs,sms:e.target.value})} /></Field><Field label="Payment fee %"><Input type="number" min="0" step="0.001" value={costs.percent} onChange={(e)=>setCosts({...costs,percent:e.target.value})} /></Field><Field label="Payment fixed fee €"><Input type="number" min="0" step="0.0001" value={costs.fixedFee} onChange={(e)=>setCosts({...costs,fixedFee:e.target.value})} /></Field><div className="flex items-end"><Button className="w-full" onClick={()=>void saveCosts()} disabled={busy}>Save unit cost model</Button></div></CardContent></Card>
+            <Card className="rounded-3xl"><CardHeader><div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"><div><CardTitle>Recurring platform cost ledger</CardTitle><p className="mt-1 text-sm text-muted-foreground">Track Supabase, Vercel, Resend, domains, monitoring, support, legal tools and any other recurring Velliqo cost separately.</p></div><Button variant="outline" onClick={exportFixedCosts}><Download className="mr-2 h-4 w-4" />Export CSV</Button></div></CardHeader><CardContent className="space-y-5"><div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1fr_180px_160px_1.3fr_auto]"><Field label="Cost name"><Input value={costItemForm.name} onChange={(e)=>setCostItemForm({...costItemForm,name:e.target.value})} placeholder="Supabase Pro" /></Field><Field label="Category"><Select value={costItemForm.category} onValueChange={(value)=>setCostItemForm({...costItemForm,category:value})}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent>{['infrastructure','email','sms','ai','monitoring','domain','support','legal','other'].map((value)=><SelectItem key={value} value={value} className="capitalize">{value}</SelectItem>)}</SelectContent></Select></Field><Field label="€/month"><Input type="number" min="0" step="0.01" value={costItemForm.monthly} onChange={(e)=>setCostItemForm({...costItemForm,monthly:e.target.value})} /></Field><Field label="Notes"><Input value={costItemForm.notes} onChange={(e)=>setCostItemForm({...costItemForm,notes:e.target.value})} placeholder="Optional provider/contract note" /></Field><div className="flex items-end"><Button className="w-full" onClick={()=>void addFixedCostItem()} disabled={busy}>Add cost</Button></div></div><div className="space-y-2">{fixedCostItems.length===0?<div className="rounded-2xl border border-dashed p-8 text-center text-sm text-muted-foreground">No recurring cost lines yet.</div>:fixedCostItems.map((item)=><div key={item.id} className="grid gap-3 rounded-2xl border p-4 sm:grid-cols-[1fr_auto_auto] sm:items-center"><div><div className="flex flex-wrap items-center gap-2"><span className="font-black">{item.name}</span><Badge variant="outline" className="capitalize">{item.category}</Badge>{!item.active&&<Badge variant="outline">Paused</Badge>}</div><div className="mt-1 text-xs text-muted-foreground">{item.notes || 'Recurring platform expense'}</div></div><div className="font-black">{eur.format(Number(item.monthly_cost_eur||0))}/month</div><div className="flex gap-2"><Button size="sm" variant="outline" onClick={()=>void toggleFixedCostItem(item)}>{item.active?'Pause':'Activate'}</Button><Button size="icon" variant="outline" className="h-9 w-9 text-red-600" onClick={()=>void deleteFixedCostItem(item)} aria-label="Delete cost"><Trash2 className="h-4 w-4" /></Button></div></div>)}</div></CardContent></Card>
+          </TabsContent>
 
           <TabsContent value="audit"><Card className="rounded-3xl"><CardHeader><CardTitle>Admin audit trail</CardTitle><p className="text-sm text-muted-foreground">Recent protected corrections, support status changes and platform actions.</p></CardHeader><CardContent className="space-y-2">{audit.length===0?<div className="p-8 text-center text-sm text-muted-foreground">No admin audit events yet.</div>:audit.map((item)=><div key={item.id} className="grid gap-2 rounded-2xl border p-4 sm:grid-cols-[180px_1fr_auto] sm:items-center"><div className="text-xs text-muted-foreground">{new Intl.DateTimeFormat('en-IE',{dateStyle:'medium',timeStyle:'short'}).format(new Date(item.created_at))}</div><div><div className="font-bold">{item.action}</div><div className="text-xs text-muted-foreground">{item.target_type || 'platform'} · {item.target_id || '—'}</div></div>{item.business_id&&<Button size="sm" variant="outline" onClick={()=>{const row=businesses.find((b)=>b.business_id===item.business_id);if(row)void openSupport(row);}}>Open Owner</Button>}</div>)}</CardContent></Card></TabsContent>
         </Tabs>

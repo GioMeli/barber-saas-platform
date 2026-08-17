@@ -24,8 +24,8 @@ assert(app.includes('path=":module"'), 'Demo module routes are missing.');
 assert(app.includes('path="/courses"'), 'Public /courses route is missing.');
 assert(app.includes('path="training"'), 'Owner training route is missing.');
 assert(navigation.includes("path: '/dashboard/training'"), 'Training Portal is missing from owner navigation.');
-assert(marketingChrome.includes("label: 'Demo'"), 'Public navigation must use Demo, not Live demo.');
-assert(marketingChrome.includes("label: 'Courses'"), 'Courses is missing from public navigation.');
+assert(marketingChrome.includes("labelKey: 'marketingSite.chrome.demo'"), 'Public navigation must use the translated Demo label.');
+assert(marketingChrome.includes("labelKey: 'marketingSite.chrome.courses'"), 'Courses is missing from public navigation.');
 
 for (const [file, source] of [['DemoOwnerLayout', layout], ['DemoModulePage', modulePage], ['DemoOwnerContext', context]]) {
   assert(!source.includes("@/db/supabase") && !source.includes('supabase.'), `${file} must not import or call Supabase.`);
@@ -38,8 +38,8 @@ for (const key of ['calendar','sales','finance','customers','staff','services','
   assert(modulePage.includes(`moduleKey === '${key}'`) || key === 'training', `Demo module is missing: ${key}`);
 }
 assert(!modulePage.includes("moduleKey === 'settings'"), 'Removed owner Settings must not remain in the demo navigation experience.');
-assert(modulePage.includes('Storefront & booking controls'), 'Demo Storefront must reflect consolidated booking configuration.');
-assert(modulePage.includes('Apply in demo') && modulePage.includes('No database request will be made'), 'Demo action confirmation boundary is missing.');
+assert(modulePage.includes("moduleKey === 'storefront'") && modulePage.includes("t('demoPage.storefront.controls')") && modulePage.includes("t('demoPage.storefront.bookingRules')"), 'Demo Storefront must use translated consolidated booking configuration.');
+assert(modulePage.includes("t('demoPage.actions.calendar')") && modulePage.includes('useDemoOwner'), 'Demo actions are missing or not translated.');
 
 assert(courses.includes('getTrainingPdfPath'), 'Courses page does not link professional PDFs.');
 assert(courses.includes('videoComingSoon') && courses.includes('practiceInDemo'), 'Courses video placeholders or demo practice links are missing.');

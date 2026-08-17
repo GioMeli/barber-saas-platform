@@ -31,10 +31,11 @@ const experience = read('src/pages/marketing/Experience.tsx');
 const home = read('src/pages/marketing/IndustrySelection.tsx');
 const why = read('src/pages/marketing/WhyVelliqo.tsx');
 const pricing = read('src/pages/marketing/Pricing.tsx');
+const responsiveShowcase = read('src/components/marketing/ResponsiveDeviceShowcase.tsx');
 
 if (!app.includes("import Contact from './pages/marketing/Contact'")) fail('Contact page import is missing');
 if (!app.includes('path="/contact"')) fail('/contact route is missing');
-if (!chrome.includes("{ key: 'contact', label: 'Contact', to: '/contact' }")) fail('shared marketing navigation does not expose Contact');
+if (!chrome.includes("key: 'contact'") || !chrome.includes("labelKey: 'marketingSite.chrome.contact'") || !chrome.includes("to: '/contact'")) fail('shared translated marketing navigation does not expose Contact');
 
 for (const value of ['support@velliqo.com', '+357 96 211 102', 'Nicosia, Cyprus']) {
   if (!contact.includes(value)) fail(`contact detail not found: ${value}`);
@@ -53,7 +54,7 @@ for (const token of [
   if (!devices.includes(token)) fail(`device frame mapping is missing: ${token}`);
 }
 
-const deviceReferences = [experience, home, why].join('\n');
+const deviceReferences = [experience, home, why, responsiveShowcase].join('\n');
 for (const component of ['LaptopDevice', 'DesktopDevice', 'TabletDevice', 'PhoneDevice']) {
   if (!deviceReferences.includes(component)) fail(`${component} is not used by the public marketing experience`);
 }
@@ -62,8 +63,8 @@ if (/function\s+(DesktopDevice|TabletDevice|PhoneDevice|BrowserDevice)\s*\(/.tes
   fail('legacy hand-drawn device helpers remain in Experience.tsx');
 }
 
-for (const source of [chrome, experience, why, pricing]) {
-  if (!source.includes('/contact')) fail('a public marketing navigation/footer is missing the Contact route');
+for (const [name, source] of [['Experience',experience],['WhyVelliqo',why],['Pricing',pricing]]) {
+  if (!source.includes('MarketingHeader') || !source.includes('MarketingFooter')) fail(`${name} does not use the shared translated marketing chrome containing Contact`);
 }
 
 console.log('Phase 10B.1 public visual and Contact checks passed.');

@@ -13,9 +13,9 @@ const corsHeaders = {
 };
 
 const PRICE_TO_PLAN = new Map<string, { planId: string; unitAmount: number }>([
-  [Deno.env.get('STRIPE_PRICE_STANDARD') ?? '', { planId: 'standard', unitAmount: 2999 }],
-  [Deno.env.get('STRIPE_PRICE_PRO') ?? '', { planId: 'pro', unitAmount: 4999 }],
-  [Deno.env.get('STRIPE_PRICE_PREMIUM') ?? '', { planId: 'premium', unitAmount: 8999 }],
+  [Deno.env.get('STRIPE_PRICE_STANDARD') ?? '', { planId: 'standard', unitAmount: 3499 }],
+  [Deno.env.get('STRIPE_PRICE_PRO') ?? '', { planId: 'pro', unitAmount: 5999 }],
+  [Deno.env.get('STRIPE_PRICE_PREMIUM') ?? '', { planId: 'premium', unitAmount: 10099 }],
 ].filter(([priceId]) => Boolean(priceId)) as Array<[string, { planId: string; unitAmount: number }]>);
 
 Deno.serve(async (request) => {
