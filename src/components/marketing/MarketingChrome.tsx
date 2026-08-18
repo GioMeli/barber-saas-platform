@@ -36,9 +36,9 @@ export function MarketingHeader({ active = 'product', dark = false }: { active?:
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <LanguageSwitcher compact appearance={dark ? 'glass' : 'default'} />
           <Button asChild variant="ghost" className={`hidden rounded-xl lg:inline-flex ${dark ? 'text-white hover:bg-white/10 hover:text-white' : ''}`}><Link to="/sign-in">{t('marketingSite.chrome.businessLogin')}</Link></Button>
           <Button asChild className="hidden rounded-xl bg-violet-600 px-5 hover:bg-violet-500 lg:inline-flex"><Link to="/business-types">{t('marketingSite.chrome.startFree')}</Link></Button>
+          <LanguageSwitcher mode="panel" iconOnly appearance={dark ? 'glass' : 'minimal'} />
           <Button type="button" variant="ghost" size="icon" className={`rounded-xl 2xl:hidden ${dark ? 'text-white hover:bg-white/10 hover:text-white' : ''}`} onClick={() => setMenuOpen((current) => !current)} aria-label={menuOpen ? t('marketingSite.chrome.closeNavigation') : t('marketingSite.chrome.openNavigation')}>{menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}</Button>
         </div>
       </div>

@@ -29,6 +29,8 @@ interface LanguageSwitcherProps {
   className?: string;
   appearance?: 'default' | 'glass' | 'sidebar' | 'minimal';
   align?: 'start' | 'center' | 'end';
+  mode?: 'responsive' | 'panel';
+  iconOnly?: boolean;
 }
 
 const triggerStyles: Record<NonNullable<LanguageSwitcherProps['appearance']>, string> = {
@@ -47,26 +49,30 @@ export default function LanguageSwitcher({
   className,
   appearance = 'default',
   align = 'end',
+  mode = 'responsive',
+  iconOnly = false,
 }: LanguageSwitcherProps) {
   const { i18n, t } = useTranslation();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [panelOpen, setPanelOpen] = React.useState(false);
   const currentLanguage = normalizeLanguage(i18n.resolvedLanguage ?? i18n.language);
   const selectedLanguage = LANGUAGE_OPTIONS.find((language) => language.code === currentLanguage)
     ?? LANGUAGE_OPTIONS[0];
 
   const changeLanguage = async (language: SupportedLanguage) => {
     await i18n.changeLanguage(language);
-    setMobileOpen(false);
+    setPanelOpen(false);
   };
 
   const triggerClassName = cn(
     'inline-flex h-10 shrink-0 items-center justify-center gap-2 rounded-xl border px-3 text-sm font-semibold outline-none transition duration-150',
     'focus-visible:ring-2 focus-visible:ring-primary/30 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
     triggerStyles[appearance],
-    compact ? 'w-10 px-0 sm:w-auto sm:px-3' : 'min-w-10',
+    iconOnly ? 'w-10 px-0' : compact ? 'w-10 px-0 sm:w-auto sm:px-3' : 'min-w-10',
   );
 
-  const triggerContent = (
+  const triggerContent = iconOnly ? (
+    <Languages aria-hidden="true" className="h-[18px] w-[18px]" />
+  ) : (
     <>
       <LanguageFlag code={selectedLanguage.code} />
       <span className={cn('max-w-[7.5rem] truncate', compact && 'hidden sm:inline')}>
@@ -79,15 +85,39 @@ export default function LanguageSwitcher({
     </>
   );
 
+  const trigger = (
+    <button
+      type="button"
+      className={triggerClassName}
+      aria-label={`${t('language.change')}: ${selectedLanguage.nativeLabel}`}
+      title={selectedLanguage.nativeLabel}
+    >
+      {triggerContent}
+    </button>
+  );
+
+  if (mode === 'panel') {
+    return (
+      <div className={cn('inline-flex shrink-0', className)}>
+        <Sheet open={panelOpen} onOpenChange={setPanelOpen}>
+          <SheetTrigger asChild>{trigger}</SheetTrigger>
+          <LanguagePanel
+            currentLanguage={currentLanguage}
+            onChange={changeLanguage}
+            title={t('language.choose')}
+            description={t('language.choose_description')}
+            label={t('language.label')}
+          />
+        </Sheet>
+      </div>
+    );
+  }
+
   return (
     <div className={cn('inline-flex shrink-0', className)}>
       <div className="hidden sm:block">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button type="button" className={triggerClassName} aria-label={t('language.change')}>
-              {triggerContent}
-            </button>
-          </DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>{trigger}</DropdownMenuTrigger>
           <DropdownMenuContent
             align={align}
             sideOffset={8}
@@ -98,34 +128,14 @@ export default function LanguageSwitcher({
               {t('language.label')}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {LANGUAGE_OPTIONS.map((language) => {
-              const active = language.code === currentLanguage;
-              return (
-                <DropdownMenuItem
-                  key={language.code}
-                  onSelect={() => void changeLanguage(language.code)}
-                  className="my-0.5 min-h-11 cursor-pointer rounded-xl px-2.5"
-                >
-                  <LanguageFlag code={language.code} />
-                  <span className="flex-1 font-medium">{language.nativeLabel}</span>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-                    {language.code}
-                  </span>
-                  {active && <Check className="h-4 w-4 text-primary" aria-hidden="true" />}
-                </DropdownMenuItem>
-              );
-            })}
+            <LanguageOptions currentLanguage={currentLanguage} onChange={changeLanguage} />
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
 
       <div className="sm:hidden">
-        <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetTrigger asChild>
-            <button type="button" className={triggerClassName} aria-label={t('language.change')}>
-              {triggerContent}
-            </button>
-          </SheetTrigger>
+        <Sheet open={panelOpen} onOpenChange={setPanelOpen}>
+          <SheetTrigger asChild>{trigger}</SheetTrigger>
           <SheetContent
             side="bottom"
             className="safe-bottom max-h-[82vh] rounded-t-[28px] border-x-0 border-b-0 px-4 pb-6 pt-5"
@@ -139,31 +149,12 @@ export default function LanguageSwitcher({
               {LANGUAGE_OPTIONS.map((language) => {
                 const active = language.code === currentLanguage;
                 return (
-                  <button
+                  <LanguageOptionButton
                     key={language.code}
-                    type="button"
-                    role="option"
-                    aria-selected={active}
-                    onClick={() => void changeLanguage(language.code)}
-                    className={cn(
-                      'flex min-h-14 w-full items-center gap-3 rounded-2xl border px-4 text-left outline-none transition',
-                      'focus-visible:ring-2 focus-visible:ring-primary/30',
-                      active
-                        ? 'border-primary/35 bg-primary/10 text-foreground'
-                        : 'border-border/70 bg-card hover:bg-accent',
-                    )}
-                  >
-                    <LanguageFlag code={language.code} className="h-6 w-8" />
-                    <span className="flex-1 font-semibold">{language.nativeLabel}</span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                      {language.code}
-                    </span>
-                    {active && (
-                      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                        <Check className="h-4 w-4" aria-hidden="true" />
-                      </span>
-                    )}
-                  </button>
+                    language={language}
+                    active={active}
+                    onChange={changeLanguage}
+                  />
                 );
               })}
             </div>
@@ -171,6 +162,112 @@ export default function LanguageSwitcher({
         </Sheet>
       </div>
     </div>
+  );
+}
+
+function LanguagePanel({
+  currentLanguage,
+  onChange,
+  title,
+  description,
+  label,
+}: {
+  currentLanguage: SupportedLanguage;
+  onChange: (language: SupportedLanguage) => Promise<void>;
+  title: string;
+  description: string;
+  label: string;
+}) {
+  return (
+    <SheetContent side="right" className="w-[88vw] max-w-[360px] border-slate-200 bg-white px-5 pb-6 pt-6 sm:max-w-[380px]">
+      <div className="mb-6 flex h-11 w-11 items-center justify-center rounded-2xl bg-violet-100 text-violet-700">
+        <Languages className="h-5 w-5" aria-hidden="true" />
+      </div>
+      <SheetHeader className="pr-10 text-left">
+        <SheetTitle className="text-xl font-extrabold tracking-tight">{title}</SheetTitle>
+        <SheetDescription className="leading-6">{description}</SheetDescription>
+      </SheetHeader>
+      <div className="mt-6 grid gap-2" role="listbox" aria-label={label}>
+        {LANGUAGE_OPTIONS.map((language) => {
+          const active = language.code === currentLanguage;
+          return (
+            <LanguageOptionButton
+              key={language.code}
+              language={language}
+              active={active}
+              onChange={onChange}
+            />
+          );
+        })}
+      </div>
+    </SheetContent>
+  );
+}
+
+function LanguageOptions({
+  currentLanguage,
+  onChange,
+}: {
+  currentLanguage: SupportedLanguage;
+  onChange: (language: SupportedLanguage) => Promise<void>;
+}) {
+  return (
+    <>
+      {LANGUAGE_OPTIONS.map((language) => {
+        const active = language.code === currentLanguage;
+        return (
+          <DropdownMenuItem
+            key={language.code}
+            onSelect={() => void onChange(language.code)}
+            className="my-0.5 min-h-11 cursor-pointer rounded-xl px-2.5"
+          >
+            <LanguageFlag code={language.code} />
+            <span className="flex-1 font-medium">{language.nativeLabel}</span>
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              {language.code}
+            </span>
+            {active && <Check className="h-4 w-4 text-primary" aria-hidden="true" />}
+          </DropdownMenuItem>
+        );
+      })}
+    </>
+  );
+}
+
+function LanguageOptionButton({
+  language,
+  active,
+  onChange,
+}: {
+  language: (typeof LANGUAGE_OPTIONS)[number];
+  active: boolean;
+  onChange: (language: SupportedLanguage) => Promise<void>;
+}) {
+  return (
+    <button
+      type="button"
+      role="option"
+      aria-selected={active}
+      onClick={() => void onChange(language.code)}
+      className={cn(
+        'flex min-h-14 w-full items-center gap-3 rounded-2xl border px-4 text-left outline-none transition',
+        'focus-visible:ring-2 focus-visible:ring-primary/30',
+        active
+          ? 'border-violet-300 bg-violet-50 text-slate-950 shadow-sm'
+          : 'border-slate-200 bg-white text-slate-800 hover:border-violet-200 hover:bg-violet-50/50',
+      )}
+    >
+      <LanguageFlag code={language.code} className="h-6 w-8" />
+      <span className="flex-1 font-semibold">{language.nativeLabel}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+        {language.code}
+      </span>
+      {active && (
+        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-violet-600 text-white">
+          <Check className="h-4 w-4" aria-hidden="true" />
+        </span>
+      )}
+    </button>
   );
 }
 
