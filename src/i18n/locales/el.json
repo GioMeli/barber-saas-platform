@@ -3112,8 +3112,11 @@
       "voidReasonRequired": "Απαιτείται αιτιολογία για την ακύρωση",
       "voided": "Η πώληση ακυρώθηκε και το απόθεμα επανήλθε",
       "voidError": "Αποτυχία ακύρωσης της πώλησης",
-      "popupBlocked": "Επιτρέψτε τα αναδυόμενα παράθυρα για εκτύπωση της απόδειξης"
-    }
+      "popupBlocked": "Επιτρέψτε τα αναδυόμενα παράθυρα για εκτύπωση της απόδειξης",
+      "providerPaymentRequired": "Οι πληρωμές με κάρτα και online πρέπει να ολοκληρώνονται μέσω της ασφαλούς ροής πληρωμών του Velliqo."
+    },
+    "providerPaymentsLocked": "Η ολοκλήρωση πληρωμών με κάρτα και online είναι προσωρινά κλειδωμένη μέχρι να ενεργοποιηθεί η ασφαλής ροή πληρωμών μέσω παρόχου. Η σύνδεση merchant account είναι διαθέσιμη τώρα.",
+    "openPosSetup": "Άνοιγμα ρύθμισης POS"
   },
   "finance": {
     "eyebrow": "Οικονομική λειτουργία",
@@ -5164,7 +5167,25 @@
     "transactions": "Συναλλαγές",
     "providerFees": "Προμήθειες παρόχου",
     "providerFeesValue": "Πληρώνονται απευθείας από τον owner",
-    "nativeNote": "Το Tap to Pay απαιτεί συμβατό native iOS, Android ή React Native client με Stripe Terminal· το Velliqo web/PWA συντονίζει συνδρομή, ραντεβού, ledger και αναφορές."
+    "nativeNote": "Το Tap to Pay απαιτεί συμβατό native iOS, Android ή React Native client με Stripe Terminal· το Velliqo web/PWA συντονίζει συνδρομή, ραντεβού, ledger και αναφορές.",
+    "pending": "Η σύνδεση είναι σε εξέλιξη",
+    "restricted": "Απαιτείται ενέργεια",
+    "connectStripe": "Σύνδεση Stripe",
+    "continueSetup": "Συνέχιση ρύθμισης Stripe",
+    "refreshStatus": "Ανανέωση κατάστασης",
+    "openStripe": "Άνοιγμα Stripe",
+    "restrictedText": "Το Stripe χρειάζεται επιπλέον στοιχεία πριν ενεργοποιηθούν οι πληρωμές. Εκκρεμούν {{count}} απαίτηση/απαιτήσεις.",
+    "pendingVerification": "{{count}} στοιχείο/στοιχεία επαληθεύονται από το Stripe.",
+    "lastSynced": "Τελευταίος συγχρονισμός: {{date}}",
+    "secureFlowLocked": "Το merchant onboarding είναι πλέον προστατευμένο και λειτουργικό. Οι πληρωμές με κάρτα και online παραμένουν κλειδωμένες μέχρι να ενεργοποιηθεί η ασφαλής ροή πληρωμών μέσω παρόχου.",
+    "secureFlowReadyNext": "Το Stripe merchant onboarding είναι έτοιμο. Οι πληρωμές με κάρτα και online παραμένουν κλειδωμένες μέχρι να ενεργοποιηθούν PaymentIntents και ολοκλήρωση μέσω επιβεβαιωμένου webhook.",
+    "messages": {
+      "ready": "Ο Stripe merchant λογαριασμός είναι έτοιμος για πληρωμές.",
+      "statusRefreshed": "Η κατάσταση του Stripe λογαριασμού ανανεώθηκε.",
+      "refreshFailed": "Δεν ήταν δυνατή η ανανέωση της κατάστασης Stripe.",
+      "onboardingFailed": "Δεν ήταν δυνατή η έναρξη του Stripe onboarding.",
+      "noOnboardingLink": "Δεν απαιτείται επιπλέον βήμα Stripe onboarding αυτή τη στιγμή."
+    }
   },
   "demoPage": {
     "eyebrow": "Διαδραστικό demo owner",

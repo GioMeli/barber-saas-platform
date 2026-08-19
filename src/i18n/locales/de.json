@@ -3112,8 +3112,11 @@
       "voidReasonRequired": "Für die Stornierung ist ein Grund erforderlich",
       "voided": "Verkauf storniert und Produktbestand wiederhergestellt",
       "voidError": "Verkauf konnte nicht storniert werden",
-      "popupBlocked": "Pop-ups zum Drucken des Belegs zulassen"
-    }
+      "popupBlocked": "Pop-ups zum Drucken des Belegs zulassen",
+      "providerPaymentRequired": "Karten- und Online-Zahlungen müssen über den sicheren Velliqo-Zahlungsfluss abgeschlossen werden."
+    },
+    "providerPaymentsLocked": "Der Abschluss von Karten- und Online-Zahlungen ist vorübergehend gesperrt, bis der sichere providergestützte Zahlungsfluss aktiviert ist. Das Händler-Onboarding ist bereits verfügbar.",
+    "openPosSetup": "POS-Einrichtung öffnen"
   },
   "finance": {
     "eyebrow": "Finanzbetrieb",
@@ -5164,7 +5167,25 @@
     "transactions": "Transaktionen",
     "providerFees": "Provider-Gebühren",
     "providerFeesValue": "Direkt vom Owner bezahlt",
-    "nativeNote": "Tap to Pay erfordert einen kompatiblen nativen iOS-, Android- oder React-Native-Client mit Stripe Terminal; Web/PWA koordiniert Abo, Termine, Ledger und Berichte."
+    "nativeNote": "Tap to Pay erfordert einen kompatiblen nativen iOS-, Android- oder React-Native-Client mit Stripe Terminal; Web/PWA koordiniert Abo, Termine, Ledger und Berichte.",
+    "pending": "Onboarding läuft",
+    "restricted": "Aktion erforderlich",
+    "connectStripe": "Stripe verbinden",
+    "continueSetup": "Stripe-Einrichtung fortsetzen",
+    "refreshStatus": "Status aktualisieren",
+    "openStripe": "Stripe öffnen",
+    "restrictedText": "Stripe benötigt zusätzliche Angaben, bevor Zahlungen aktiviert werden können. Aktuell sind {{count}} Anforderung(en) offen.",
+    "pendingVerification": "{{count}} Element(e) werden von Stripe geprüft.",
+    "lastSynced": "Zuletzt synchronisiert: {{date}}",
+    "secureFlowLocked": "Das Händler-Onboarding ist jetzt geschützt und funktionsfähig. Karten- und Online-Checkout bleiben gesperrt, bis der providergestützte Zahlungsfluss aktiviert ist.",
+    "secureFlowReadyNext": "Das Stripe-Händler-Onboarding ist bereit. Karten- und Online-Checkout bleiben gesperrt, bis providergestützte PaymentIntents und webhook-bestätigte Abschlüsse aktiviert sind.",
+    "messages": {
+      "ready": "Das Stripe-Händlerkonto ist für Zahlungen bereit.",
+      "statusRefreshed": "Der Stripe-Kontostatus wurde aktualisiert.",
+      "refreshFailed": "Der Stripe-Kontostatus konnte nicht aktualisiert werden.",
+      "onboardingFailed": "Das Stripe-Onboarding konnte nicht gestartet werden.",
+      "noOnboardingLink": "Derzeit ist kein weiterer Stripe-Onboarding-Schritt erforderlich."
+    }
   },
   "demoPage": {
     "eyebrow": "Interaktive Owner-Demo",

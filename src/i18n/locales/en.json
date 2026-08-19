@@ -3112,8 +3112,11 @@
       "voidReasonRequired": "A reason is required to void a sale",
       "voided": "Sale voided and product stock restored",
       "voidError": "Failed to void the sale",
-      "popupBlocked": "Allow pop-ups to print the receipt"
-    }
+      "popupBlocked": "Allow pop-ups to print the receipt",
+      "providerPaymentRequired": "Card and online payments must be completed through the secure Velliqo payment flow."
+    },
+    "providerPaymentsLocked": "Card and online payment completion is temporarily locked until the secure provider-backed payment flow is enabled. Merchant onboarding is available now.",
+    "openPosSetup": "Open POS setup"
   },
   "finance": {
     "eyebrow": "Financial operations",
@@ -5164,7 +5167,25 @@
     "transactions": "Transactions",
     "providerFees": "Provider fees",
     "providerFeesValue": "Paid directly by owner",
-    "nativeNote": "Tap to Pay requires a compatible native iOS, Android or React Native Stripe Terminal client; the Velliqo web/PWA coordinates the subscription, appointments, ledger and reporting."
+    "nativeNote": "Tap to Pay requires a compatible native iOS, Android or React Native Stripe Terminal client; the Velliqo web/PWA coordinates the subscription, appointments, ledger and reporting.",
+    "pending": "Onboarding in progress",
+    "restricted": "Action required",
+    "connectStripe": "Connect Stripe",
+    "continueSetup": "Continue Stripe setup",
+    "refreshStatus": "Refresh status",
+    "openStripe": "Open Stripe",
+    "restrictedText": "Stripe requires additional information before payments can be enabled. {{count}} requirement(s) are currently due.",
+    "pendingVerification": "{{count}} item(s) are being verified by Stripe.",
+    "lastSynced": "Last synced: {{date}}",
+    "secureFlowLocked": "Merchant onboarding is now protected and operational. Card and online checkout remains locked until the provider-backed payment flow is enabled.",
+    "secureFlowReadyNext": "Stripe merchant onboarding is ready. Card and online checkout remains locked until provider-backed PaymentIntents and webhook-confirmed completion are enabled.",
+    "messages": {
+      "ready": "Stripe merchant account is ready for payments.",
+      "statusRefreshed": "Stripe account status refreshed.",
+      "refreshFailed": "Unable to refresh Stripe account status.",
+      "onboardingFailed": "Unable to start Stripe onboarding.",
+      "noOnboardingLink": "No additional Stripe onboarding step is required right now."
+    }
   },
   "demoPage": {
     "eyebrow": "Interactive owner demo",

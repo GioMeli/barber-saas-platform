@@ -1,0 +1,20 @@
+Phase 15B.1 changed/new files
+
+package.json
+PHASE-15B1-FILES.txt
+scripts/check-phase15b1-pos-merchant-foundation.mjs
+docs/PHASE-15B1-POS-MERCHANT-FOUNDATION.md
+src/pages/owner/PosSuite.tsx
+src/pages/owner/Sales.tsx
+src/components/LanguageSwitcher.tsx
+src/components/marketing/MarketingChrome.tsx
+src/i18n/locales/en.json
+src/i18n/locales/el.json
+src/i18n/locales/de.json
+src/i18n/locales/es.json
+src/i18n/locales/tr.json
+supabase/config.toml
+supabase/functions/.env.example
+supabase/functions/pos_merchant_account/index.ts
+supabase/functions/stripe_webhook/index.ts
+supabase/migrations/00056_velliqo_pos_merchant_foundation.sql
