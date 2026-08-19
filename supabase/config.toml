@@ -450,3 +450,6 @@ verify_jwt = false
 
 [functions.stripe_webhook]
 verify_jwt = false
+[functions.pos_merchant_account]
+verify_jwt = true
+

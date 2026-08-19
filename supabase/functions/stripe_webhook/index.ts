@@ -5,6 +5,9 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '';
 const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? '';
 const STRIPE_WEBHOOK_SECRET = (Deno.env.get('STRIPE_WEBHOOK_SECRET') ?? '').trim();
+// Stripe creates a different signing secret for a Connect event destination
+// scoped to connected accounts, even when it points to the same HTTPS URL.
+const STRIPE_CONNECT_WEBHOOK_SECRET = (Deno.env.get('STRIPE_CONNECT_WEBHOOK_SECRET') ?? '').trim();
 const STRIPE_WEBHOOK_SECRET_PREVIOUS = (Deno.env.get('STRIPE_WEBHOOK_SECRET_PREVIOUS') ?? '').trim();
 const PAYMENT_GRACE_DAYS = 7;
 
@@ -42,6 +45,7 @@ Deno.serve(async (request) => {
     console.error('Stripe signature verification failed', {
       message: errorMessage(error),
       hasPrimarySecret: Boolean(STRIPE_WEBHOOK_SECRET),
+      hasConnectSecret: Boolean(STRIPE_CONNECT_WEBHOOK_SECRET),
       hasPreviousSecret: Boolean(STRIPE_WEBHOOK_SECRET_PREVIOUS),
     });
     return new Response('Invalid Stripe signature', { status: 400 });
@@ -98,6 +102,9 @@ Deno.serve(async (request) => {
       case 'invoice.marked_uncollectible':
         await syncInvoice(event.data.object as Stripe.Invoice, event.type);
         break;
+      case 'account.updated':
+        await syncConnectedPaymentAccount(event.data.object as Stripe.Account);
+        break;
       default:
         break;
     }
@@ -131,7 +138,11 @@ async function verifyStripeEvent({
   signature: string;
   cryptoProvider: ReturnType<typeof Stripe.createSubtleCryptoProvider>;
 }): Promise<Stripe.Event> {
-  const secrets = [STRIPE_WEBHOOK_SECRET, STRIPE_WEBHOOK_SECRET_PREVIOUS].filter(Boolean);
+  const secrets = [
+    STRIPE_WEBHOOK_SECRET,
+    STRIPE_CONNECT_WEBHOOK_SECRET,
+    STRIPE_WEBHOOK_SECRET_PREVIOUS,
+  ].filter(Boolean);
   let lastError: unknown = new Error('No Stripe webhook signing secret is configured');
 
   for (const secret of secrets) {
@@ -441,6 +452,66 @@ async function syncInvoice(invoice: Stripe.Invoice, eventType: string) {
   } else if (eventType === 'invoice.marked_uncollectible') {
     await admin.from('subscriptions').update({ last_payment_status: 'uncollectible', updated_at: new Date().toISOString() }).eq('business_id', businessId);
   }
+}
+
+async function syncConnectedPaymentAccount(account: Stripe.Account) {
+  const metadataBusinessId = String(account.metadata?.velliqo_business_id || '').trim();
+  let businessId = metadataBusinessId;
+
+  if (!businessId) {
+    const { data } = await admin.from('business_payment_accounts')
+      .select('business_id')
+      .eq('provider', 'stripe')
+      .eq('provider_account_id', account.id)
+      .maybeSingle();
+    businessId = data?.business_id || '';
+  }
+
+  if (!businessId) {
+    console.warn(`Skipping connected account ${account.id}: no Velliqo business mapping found`);
+    return;
+  }
+
+  const { data: existing } = await admin.from('business_payment_accounts')
+    .select('connected_at,onboarding_started_at')
+    .eq('business_id', businessId)
+    .maybeSingle();
+
+  const requirements = account.requirements as any;
+  const currentlyDue = requirements?.currently_due ?? [];
+  const eventuallyDue = requirements?.eventually_due ?? [];
+  const pastDue = requirements?.past_due ?? [];
+  const pendingVerification = requirements?.pending_verification ?? [];
+  const disabledReason = requirements?.disabled_reason ?? null;
+  const ready = account.charges_enabled === true && account.payouts_enabled === true;
+  const onboardingStatus = ready ? 'ready' : (disabledReason || pastDue.length > 0 ? 'restricted' : 'pending');
+  const now = new Date().toISOString();
+  const feesPayer = account.controller?.fees?.payer;
+
+  const { error } = await admin.from('business_payment_accounts').upsert({
+    business_id: businessId,
+    provider: 'stripe',
+    provider_account_id: account.id,
+    account_type: account.type || 'standard',
+    onboarding_status: onboardingStatus,
+    charges_enabled: Boolean(account.charges_enabled),
+    payouts_enabled: Boolean(account.payouts_enabled),
+    details_submitted: Boolean(account.details_submitted),
+    processing_fees_paid_by_owner: feesPayer === 'account' || account.type === 'standard',
+    country: account.country || null,
+    default_currency: account.default_currency || null,
+    disabled_reason: disabledReason,
+    requirements_currently_due: currentlyDue,
+    requirements_eventually_due: eventuallyDue,
+    requirements_past_due: pastDue,
+    requirements_pending_verification: pendingVerification,
+    onboarding_started_at: existing?.onboarding_started_at || now,
+    connected_at: ready ? (existing?.connected_at || now) : (existing?.connected_at || null),
+    last_synced_at: now,
+    updated_at: now,
+  }, { onConflict: 'business_id' });
+
+  if (error) throw error;
 }
 
 async function resolveBusinessIdForSubscription(subscription: Stripe.Subscription) {

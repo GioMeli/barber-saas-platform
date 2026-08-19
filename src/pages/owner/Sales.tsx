@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import type { ComponentType } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/hooks/useAuth';
 import { LANGUAGE_TO_LOCALE, normalizeLanguage } from '@/i18n/config';
@@ -552,6 +552,11 @@ export default function Sales() {
       return;
     }
 
+    if (paymentMethod === 'card' || paymentMethod === 'online') {
+      toast.error(t('sales.messages.providerPaymentRequired'));
+      return;
+    }
+
     setSaving(true);
 
     try {
@@ -1037,8 +1042,12 @@ export default function Sales() {
                   options={PAYMENT_METHODS.map((method) => ({
                     value: method,
                     label: t(`sales.paymentMethods.${method}`),
+                    disabled: method === 'card' || method === 'online',
                   }))}
                 />
+                <div className="rounded-xl border border-violet-200 bg-violet-50 p-3 text-xs leading-5 text-violet-950">
+                  {t('sales.providerPaymentsLocked')} <Link className="font-extrabold underline underline-offset-2" to="/dashboard/pos">{t('sales.openPosSetup')}</Link>
+                </div>
                 <div>
                   <Label htmlFor="payment-reference">
                     {t('sales.fields.paymentReference')}
@@ -1065,7 +1074,7 @@ export default function Sales() {
 
               <Button
                 className="h-12 w-full rounded-xl text-base font-bold"
-                disabled={saving || cart.length === 0 || total <= 0 || migrationMissing}
+                disabled={saving || cart.length === 0 || total <= 0 || migrationMissing || paymentMethod === 'card' || paymentMethod === 'online'}
                 onClick={() => void completeCheckout()}
               >
                 {saving ? (
@@ -1579,7 +1588,7 @@ function FieldSelect({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  options: Array<{ value: string; label: string }>;
+  options: Array<{ value: string; label: string; disabled?: boolean }>;
   placeholder?: string;
 }) {
   return (
@@ -1592,7 +1601,7 @@ function FieldSelect({
       >
         {placeholder != null && <option value="">{placeholder}</option>}
         {options.map((option) => (
-          <option key={option.value} value={option.value}>
+          <option key={option.value} value={option.value} disabled={option.disabled}>
             {option.label}
           </option>
         ))}

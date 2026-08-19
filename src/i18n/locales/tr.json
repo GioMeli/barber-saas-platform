@@ -3112,8 +3112,11 @@
       "voidReasonRequired": "Satışı iptal etmek için neden gerekli",
       "voided": "Satış iptal edildi ve ürün stoğu geri yüklendi",
       "voidError": "Satış iptal edilemedi",
-      "popupBlocked": "Fişi yazdırmak için açılır pencerelere izin verin"
-    }
+      "popupBlocked": "Fişi yazdırmak için açılır pencerelere izin verin",
+      "providerPaymentRequired": "Kart ve online ödemeler güvenli Velliqo ödeme akışı üzerinden tamamlanmalıdır."
+    },
+    "providerPaymentsLocked": "Kart ve online ödeme tamamlama, güvenli sağlayıcı destekli ödeme akışı etkinleştirilene kadar geçici olarak kilitlidir. İşletme hesabı onboarding işlemi şu anda kullanılabilir.",
+    "openPosSetup": "POS kurulumunu aç"
   },
   "finance": {
     "eyebrow": "Finansal operasyon",
@@ -5164,7 +5167,25 @@
     "transactions": "İşlemler",
     "providerFees": "Provider ücretleri",
     "providerFeesValue": "Doğrudan owner öder",
-    "nativeNote": "Tap to Pay, Stripe Terminal kullanan uyumlu native iOS, Android veya React Native client gerektirir; Velliqo web/PWA abonelik, randevu, ledger ve raporlamayı koordine eder."
+    "nativeNote": "Tap to Pay, Stripe Terminal kullanan uyumlu native iOS, Android veya React Native client gerektirir; Velliqo web/PWA abonelik, randevu, ledger ve raporlamayı koordine eder.",
+    "pending": "Onboarding devam ediyor",
+    "restricted": "İşlem gerekli",
+    "connectStripe": "Stripe bağla",
+    "continueSetup": "Stripe kurulumuna devam et",
+    "refreshStatus": "Durumu yenile",
+    "openStripe": "Stripe’ı aç",
+    "restrictedText": "Ödemeler etkinleştirilmeden önce Stripe ek bilgi istiyor. Şu anda {{count}} gereksinim bekliyor.",
+    "pendingVerification": "{{count}} öğe Stripe tarafından doğrulanıyor.",
+    "lastSynced": "Son senkronizasyon: {{date}}",
+    "secureFlowLocked": "İşletme onboarding süreci artık korumalı ve çalışır durumda. Kart ve online ödeme, sağlayıcı destekli güvenli ödeme akışı etkinleştirilene kadar kilitli kalır.",
+    "secureFlowReadyNext": "Stripe işletme onboarding süreci hazır. Kart ve online ödeme, sağlayıcı destekli PaymentIntent ve webhook onaylı tamamlama etkinleştirilene kadar kilitli kalır.",
+    "messages": {
+      "ready": "Stripe işletme hesabı ödemeler için hazır.",
+      "statusRefreshed": "Stripe hesap durumu yenilendi.",
+      "refreshFailed": "Stripe hesap durumu yenilenemedi.",
+      "onboardingFailed": "Stripe onboarding başlatılamadı.",
+      "noOnboardingLink": "Şu anda ek bir Stripe onboarding adımı gerekmiyor."
+    }
   },
   "demoPage": {
     "eyebrow": "Etkileşimli owner demosu",

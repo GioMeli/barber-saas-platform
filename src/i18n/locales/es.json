@@ -3112,8 +3112,11 @@
       "voidReasonRequired": "Se requiere un motivo para anular la venta",
       "voided": "Venta anulada y stock restaurado",
       "voidError": "No se pudo anular la venta",
-      "popupBlocked": "Permite ventanas emergentes para imprimir el recibo"
-    }
+      "popupBlocked": "Permite ventanas emergentes para imprimir el recibo",
+      "providerPaymentRequired": "Los pagos con tarjeta y online deben completarse mediante el flujo de pago seguro de Velliqo."
+    },
+    "providerPaymentsLocked": "La finalización de pagos con tarjeta y online está bloqueada temporalmente hasta que se active el flujo seguro respaldado por el proveedor. El onboarding del comercio ya está disponible.",
+    "openPosSetup": "Abrir configuración POS"
   },
   "finance": {
     "eyebrow": "Operación financiera",
@@ -5164,7 +5167,25 @@
     "transactions": "Transacciones",
     "providerFees": "Comisiones del proveedor",
     "providerFeesValue": "Pagadas directamente por el owner",
-    "nativeNote": "Tap to Pay requiere un cliente nativo compatible iOS, Android o React Native con Stripe Terminal; la web/PWA coordina suscripción, citas, ledger e informes."
+    "nativeNote": "Tap to Pay requiere un cliente nativo compatible iOS, Android o React Native con Stripe Terminal; la web/PWA coordina suscripción, citas, ledger e informes.",
+    "pending": "Onboarding en curso",
+    "restricted": "Acción requerida",
+    "connectStripe": "Conectar Stripe",
+    "continueSetup": "Continuar configuración de Stripe",
+    "refreshStatus": "Actualizar estado",
+    "openStripe": "Abrir Stripe",
+    "restrictedText": "Stripe necesita información adicional antes de habilitar los pagos. Actualmente hay {{count}} requisito(s) pendiente(s).",
+    "pendingVerification": "Stripe está verificando {{count}} elemento(s).",
+    "lastSynced": "Última sincronización: {{date}}",
+    "secureFlowLocked": "El onboarding del comercio ya está protegido y operativo. Los pagos con tarjeta y online permanecen bloqueados hasta activar el flujo respaldado por el proveedor.",
+    "secureFlowReadyNext": "El onboarding del comercio en Stripe está listo. Los pagos con tarjeta y online permanecen bloqueados hasta activar PaymentIntents respaldados por el proveedor y la confirmación mediante webhook.",
+    "messages": {
+      "ready": "La cuenta comercial de Stripe está lista para recibir pagos.",
+      "statusRefreshed": "El estado de la cuenta de Stripe se ha actualizado.",
+      "refreshFailed": "No se pudo actualizar el estado de la cuenta de Stripe.",
+      "onboardingFailed": "No se pudo iniciar el onboarding de Stripe.",
+      "noOnboardingLink": "No se requiere ningún paso adicional de onboarding de Stripe en este momento."
+    }
   },
   "demoPage": {
     "eyebrow": "Demo interactiva del owner",
