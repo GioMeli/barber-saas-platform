@@ -8,6 +8,14 @@ const STRIPE_SECRET_KEY = Deno.env.get('STRIPE_SECRET_KEY') ?? '';
 const APP_PUBLIC_URL = (Deno.env.get('APP_PUBLIC_URL') ?? 'https://velliqo.com').replace(/\/$/, '');
 const STRIPE_CONNECT_DEFAULT_COUNTRY = Deno.env.get('STRIPE_CONNECT_DEFAULT_COUNTRY') ?? '';
 
+// New Connect platforms created in current Stripe environments must create
+// connected accounts through Accounts v2. We still retrieve the resulting v2
+// Account through the v1 compatibility endpoint because the rest of Velliqo's
+// Phase 15B.1 status cache uses the stable v1 Account projection
+// (charges_enabled, payouts_enabled and requirements arrays). Stripe documents
+// that v2 Account IDs can be passed to Accounts v1 endpoints for this purpose.
+const STRIPE_V2_API_VERSION = '2026-07-29.preview';
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -21,6 +29,17 @@ type PaymentAccountRow = {
   provider_account_id: string | null;
   onboarding_started_at?: string | null;
   connected_at?: string | null;
+};
+
+type StripeV2Account = {
+  id: string;
+  object?: string;
+  closed?: boolean | null;
+};
+
+type StripeV2AccountLink = {
+  url: string;
+  expires_at: string;
 };
 
 Deno.serve(async (request) => {
@@ -78,52 +97,76 @@ Deno.serve(async (request) => {
     let account: Stripe.Account;
 
     if (storedAccount?.provider_account_id) {
-      account = await stripe.accounts.retrieve(storedAccount.provider_account_id);
-      if ((account as Stripe.Account & { deleted?: boolean }).deleted) {
-        return json({ error: 'The connected Stripe account is no longer available. Contact Velliqo support.' }, 409);
-      }
+      account = await retrieveAccountCompat(stripe, storedAccount.provider_account_id);
     } else if (action === 'start_onboarding') {
       const storedCountry = normalizeCountry(business.country);
       if (String(business.country || '').trim() && !storedCountry) {
         return json({ error: 'Business country must be stored as a valid ISO-2 country code before Stripe onboarding.' }, 422);
       }
-      const country = storedCountry || normalizeCountry(STRIPE_CONNECT_DEFAULT_COUNTRY) || undefined;
-      const merchantEmail = validEmail(business.email) ? business.email : (validEmail(authData.user.email) ? authData.user.email : undefined);
-      const storefrontUrl = `${APP_PUBLIC_URL}/app/${encodeURIComponent(String(business.slug || ''))}`;
+      const country = storedCountry || normalizeCountry(STRIPE_CONNECT_DEFAULT_COUNTRY);
+      if (!country) {
+        return json({ error: 'A valid business country is required before Stripe onboarding.' }, 422);
+      }
 
-      account = await stripe.accounts.create({
-        controller: {
-          fees: { payer: 'account' },
-          losses: { payments: 'stripe' },
-          requirement_collection: 'stripe',
-          stripe_dashboard: { type: 'full' },
+      const merchantEmail = validEmail(business.email)
+        ? String(business.email).trim()
+        : (validEmail(authData.user.email) ? String(authData.user.email).trim() : '');
+      if (!merchantEmail) {
+        return json({ error: 'A valid owner or business email is required before Stripe onboarding.' }, 422);
+      }
+
+      const storefrontUrl = `${APP_PUBLIC_URL}/app/${encodeURIComponent(String(business.slug || ''))}`;
+      const currency = normalizeCurrency(business.currency);
+
+      const createdV2 = await stripeV2Request<StripeV2Account>('/v2/core/accounts', {
+        method: 'POST',
+        idempotencyKey: `velliqo-connect-account-v2-${businessId}`,
+        body: {
+          contact_email: merchantEmail,
+          display_name: String(business.name || '').slice(0, 100) || 'Velliqo business',
+          dashboard: 'full',
+          identity: {
+            country: country.toLowerCase(),
+          },
+          configuration: {
+            merchant: {
+              capabilities: {
+                card_payments: { requested: true },
+              },
+            },
+          },
+          defaults: {
+            ...(currency ? { currency } : {}),
+            profile: {
+              business_url: storefrontUrl,
+              product_description: 'Appointment and service payments processed through Velliqo.',
+            },
+            responsibilities: {
+              fees_collector: 'stripe',
+              losses_collector: 'stripe',
+            },
+          },
+          metadata: {
+            velliqo_business_id: businessId,
+            velliqo_owner_user_id: authData.user.id,
+          },
+          include: ['configuration.merchant', 'defaults', 'identity', 'requirements'],
         },
-        ...(country ? { country } : {}),
-        ...(merchantEmail ? { email: merchantEmail } : {}),
-        business_profile: {
-          name: String(business.name || '').slice(0, 100) || undefined,
-          url: storefrontUrl,
-          ...(validEmail(business.email) ? { support_email: business.email } : {}),
-          product_description: 'Appointment and service payments processed through Velliqo.',
-        },
-        metadata: {
-          velliqo_business_id: businessId,
-          velliqo_owner_user_id: authData.user.id,
-        },
-      }, {
-        idempotencyKey: `velliqo-connect-account-${businessId}`,
       });
 
       const now = new Date().toISOString();
       const { error: createStoreError } = await admin.from('business_payment_accounts').upsert({
         business_id: businessId,
         provider: 'stripe',
-        provider_account_id: account.id,
+        provider_account_id: createdV2.id,
+        account_type: 'accounts_v2',
         onboarding_status: 'pending',
         onboarding_started_at: storedAccount?.onboarding_started_at || now,
         updated_at: now,
       }, { onConflict: 'business_id' });
       if (createStoreError) throw createStoreError;
+
+      account = await retrieveAccountCompat(stripe, createdV2.id);
     } else {
       return json({ account: null, status: 'not_started' });
     }
@@ -134,28 +177,84 @@ Deno.serve(async (request) => {
       return json({ account: synced, status: synced.onboarding_status });
     }
 
-    const accountLink = await stripe.accountLinks.create({
-      account: account.id,
-      refresh_url: `${APP_PUBLIC_URL}/dashboard/pos?stripe=refresh`,
-      return_url: `${APP_PUBLIC_URL}/dashboard/pos?stripe=return`,
-      type: 'account_onboarding',
+    const accountLink = await stripeV2Request<StripeV2AccountLink>('/v2/core/account_links', {
+      method: 'POST',
+      body: {
+        account: account.id,
+        use_case: {
+          type: 'account_onboarding',
+          account_onboarding: {
+            collection_options: { fields: 'eventually_due' },
+            configurations: ['merchant'],
+            refresh_url: `${APP_PUBLIC_URL}/dashboard/pos?stripe=refresh`,
+            return_url: `${APP_PUBLIC_URL}/dashboard/pos?stripe=return`,
+          },
+        },
+      },
     });
 
     return json({
       account: synced,
       status: synced.onboarding_status,
       onboardingUrl: accountLink.url,
-      expiresAt: new Date(accountLink.expires_at * 1000).toISOString(),
+      expiresAt: accountLink.expires_at,
     });
   } catch (error) {
     console.error('pos_merchant_account failed', error);
-    const stripeError = error as { code?: string; type?: string; message?: string };
-    if (stripeError?.code === 'account_invalid' || stripeError?.type === 'StripePermissionError') {
-      return json({ error: 'Stripe Connect is not enabled or configured for this Velliqo Stripe account.' }, 409);
+    const stripeError = error as { code?: string; type?: string; message?: string; status?: number };
+    if (
+      stripeError?.code === 'account_invalid'
+      || stripeError?.code === 'platform_registration_required'
+      || stripeError?.code === 'connect_profile_not_submitted'
+      || stripeError?.code === 'connect_identity_not_verified'
+      || stripeError?.code === 'account_create_activation_required'
+      || stripeError?.code === 'accounts_v2_access_blocked'
+      || stripeError?.type === 'StripePermissionError'
+    ) {
+      return json({ error: 'Stripe Connect is not fully enabled or verified for this Velliqo Stripe account.' }, 409);
     }
     return json({ error: error instanceof Error ? error.message : 'Unable to manage merchant onboarding' }, 500);
   }
 });
+
+async function retrieveAccountCompat(stripe: Stripe, accountId: string) {
+  const account = await stripe.accounts.retrieve(accountId);
+  if ((account as Stripe.Account & { deleted?: boolean }).deleted) {
+    throw Object.assign(new Error('The connected Stripe account is no longer available. Contact Velliqo support.'), { code: 'account_invalid' });
+  }
+  return account as Stripe.Account;
+}
+
+async function stripeV2Request<T>(
+  path: string,
+  options: { method: 'POST' | 'GET'; body?: Record<string, unknown>; idempotencyKey?: string },
+): Promise<T> {
+  const headers: Record<string, string> = {
+    Authorization: `Bearer ${STRIPE_SECRET_KEY}`,
+    'Stripe-Version': STRIPE_V2_API_VERSION,
+    'Content-Type': 'application/json',
+  };
+  if (options.idempotencyKey) headers['Idempotency-Key'] = options.idempotencyKey;
+
+  const response = await fetch(`https://api.stripe.com${path}`, {
+    method: options.method,
+    headers,
+    ...(options.body ? { body: JSON.stringify(options.body) } : {}),
+  });
+
+  const payload = await response.json().catch(() => ({})) as Record<string, any>;
+  if (!response.ok) {
+    const stripeError = payload?.error || payload;
+    const message = String(stripeError?.message || `Stripe request failed with HTTP ${response.status}`);
+    throw Object.assign(new Error(message), {
+      code: stripeError?.code,
+      type: stripeError?.type,
+      status: response.status,
+      requestId: response.headers.get('request-id') || response.headers.get('Request-Id') || undefined,
+    });
+  }
+  return payload as T;
+}
 
 async function syncPaymentAccount(
   admin: ReturnType<typeof createClient>,
@@ -179,7 +278,7 @@ async function syncPaymentAccount(
     business_id: businessId,
     provider: 'stripe',
     provider_account_id: account.id,
-    account_type: account.type || 'standard',
+    account_type: 'accounts_v2',
     onboarding_status: status,
     charges_enabled: Boolean(account.charges_enabled),
     payouts_enabled: Boolean(account.payouts_enabled),
@@ -217,6 +316,11 @@ function normalizeCountry(value: unknown) {
     'united arab emirates': 'AE', uae: 'AE', india: 'IN',
   };
   return aliases[raw.toLowerCase()] || '';
+}
+
+function normalizeCurrency(value: unknown) {
+  const raw = String(value ?? '').trim().toLowerCase();
+  return /^[a-z]{3}$/.test(raw) ? raw : '';
 }
 
 function validEmail(value: unknown): value is string {
