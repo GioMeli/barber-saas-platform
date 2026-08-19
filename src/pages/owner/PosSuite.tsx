@@ -96,7 +96,7 @@ export default function PosSuite() {
       }
       return data;
     } catch (error: any) {
-      toast.error(error?.message || t('posWorkspace.messages.refreshFailed'));
+      toast.error(await getFunctionErrorMessage(error, t('posWorkspace.messages.refreshFailed')));
       return null;
     } finally {
       setMerchantBusy(null);
@@ -119,7 +119,7 @@ export default function PosSuite() {
       if (data?.status === 'ready') toast.success(t('posWorkspace.messages.ready'));
       else toast.info(t('posWorkspace.messages.noOnboardingLink'));
     } catch (error: any) {
-      toast.error(error?.message || t('posWorkspace.messages.onboardingFailed'));
+      toast.error(await getFunctionErrorMessage(error, t('posWorkspace.messages.onboardingFailed')));
     } finally {
       setMerchantBusy(null);
     }
@@ -206,6 +206,19 @@ export default function PosSuite() {
       </div>
     </section>
   </div>;
+}
+
+async function getFunctionErrorMessage(error: any, fallback: string) {
+  try {
+    if (error?.context && typeof error.context.json === 'function') {
+      const payload = await error.context.json();
+      if (payload?.error) return String(payload.error);
+      if (payload?.message) return String(payload.message);
+    }
+  } catch {
+    // Keep the original Supabase error/fallback if the response body is unavailable.
+  }
+  return String(error?.message || fallback);
 }
 
 function StatusBadge({status,t}:{status:string;t:any}) {

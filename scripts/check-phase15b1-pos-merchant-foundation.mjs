@@ -21,15 +21,20 @@ has(migration, 'Stripe-backed payments must be refunded', 'Provider-backed trans
 const merchantFn = 'supabase/functions/pos_merchant_account/index.ts';
 has(merchantFn, ".eq('role', 'Owner')", 'Merchant onboarding Edge Function is Owner-only');
 has(merchantFn, 'get_business_addon_allowances', 'Merchant onboarding requires the active POS entitlement');
-has(merchantFn, "fees: { payer: 'account' }", 'Connected business pays Stripe processing fees');
-has(merchantFn, "losses: { payments: 'stripe' }", 'Stripe is configured to carry connected-account payment losses');
-has(merchantFn, "stripe_dashboard: { type: 'full' }", 'Connected business receives a full Stripe Dashboard');
-has(merchantFn, 'idempotencyKey: `velliqo-connect-account-${businessId}`', 'Connected account creation is idempotent per tenant');
-has(merchantFn, 'stripe.accountLinks.create', 'Stripe-hosted onboarding link is generated server-side');
+has(merchantFn, "'/v2/core/accounts'", 'New connected accounts are created through Stripe Accounts v2');
+has(merchantFn, "fees_collector: 'stripe'", 'Connected business pays Stripe processing fees');
+has(merchantFn, "losses_collector: 'stripe'", 'Stripe carries connected-account payment losses');
+has(merchantFn, "dashboard: 'full'", 'Connected business receives a full Stripe Dashboard');
+has(merchantFn, "Idempotency-Key", 'Accounts v2 creation uses a Stripe idempotency key');
+has(merchantFn, 'velliqo-connect-account-v2-${businessId}', 'Connected account idempotency is tenant-scoped');
+has(merchantFn, "'/v2/core/account_links'", 'Stripe-hosted onboarding link is generated with Account Links v2');
+has(merchantFn, "configurations: ['merchant']", 'Onboarding targets the merchant configuration');
+has(merchantFn, "collection_options: { fields: 'eventually_due' }", 'Onboarding collects eventually-due requirements up front');
 has(merchantFn, "action === 'refresh_status'", 'Merchant verification status can be refreshed securely');
 has(merchantFn, 'account.charges_enabled === true && account.payouts_enabled === true', 'Ready status requires both charges and payouts');
+has(merchantFn, 'stripe.accounts.retrieve(accountId)', 'Accounts v1 compatibility projection is used only for status caching');
 
-has('supabase/functions/stripe_webhook/index.ts', "case 'account.updated':", 'Stripe webhook listens for connected-account updates');
+has('supabase/functions/stripe_webhook/index.ts', "case 'account.updated':", 'Stripe webhook listens for connected-account compatibility updates');
 has('supabase/functions/stripe_webhook/index.ts', 'syncConnectedPaymentAccount', 'Connected-account webhook changes are synchronized to tenant state');
 has('supabase/config.toml', '[functions.pos_merchant_account]', 'Merchant Edge Function is registered');
 has('supabase/config.toml', 'verify_jwt = true', 'JWT verification remains enabled for authenticated merchant management');
@@ -37,6 +42,7 @@ has('supabase/config.toml', 'verify_jwt = true', 'JWT verification remains enabl
 has('src/pages/owner/PosSuite.tsx', "functions.invoke('pos_merchant_account'", 'POS workspace invokes protected merchant onboarding');
 has('src/pages/owner/PosSuite.tsx', "action: 'start_onboarding'", 'Owner can start/continue Stripe onboarding');
 has('src/pages/owner/PosSuite.tsx', "action: 'refresh_status'", 'Owner can refresh merchant status');
+has('src/pages/owner/PosSuite.tsx', 'getFunctionErrorMessage', 'POS surfaces the real Edge Function error body');
 has('src/pages/owner/PosSuite.tsx', 'posWorkspace.secureFlowLocked', 'POS clearly separates onboarding from payment execution');
 has('src/pages/owner/Sales.tsx', "paymentMethod === 'card' || paymentMethod === 'online'", 'Sales UI blocks provider methods until real payment orchestration exists');
 has('src/pages/owner/Sales.tsx', 'disabled: method === \'card\' || method === \'online\'', 'Card/online options are disabled in the manual payment selector');
