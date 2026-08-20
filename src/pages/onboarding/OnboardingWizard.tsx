@@ -5,7 +5,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { InternationalPhoneInput } from '@/components/inputs/InternationalPhoneInput';
-import { isLikelyE164, normalizeE164 } from '@/lib/phone';
+import { DIAL_OPTIONS, countryFlag, isLikelyE164, normalizeE164 } from '@/lib/phone';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
@@ -26,6 +26,41 @@ import {
 } from '@/billing/plans';
 
 const SELECTED_INDUSTRY_STORAGE_KEY = 'velliqo.selectedIndustry';
+
+const BUSINESS_COUNTRIES = [
+  ...DIAL_OPTIONS.filter((option) => option.iso !== 'US').map((option) => ({ iso: option.iso, name: option.country })),
+  { iso: 'CA', name: 'Canada' },
+  { iso: 'US', name: 'United States' },
+].filter((option, index, all) => all.findIndex((candidate) => candidate.iso === option.iso) === index)
+  .sort((a, b) => a.name.localeCompare(b.name));
+
+const CURRENCY_OPTIONS = [
+  'EUR', 'GBP', 'USD', 'TRY', 'CHF', 'CAD', 'AUD', 'NZD', 'AED', 'SEK', 'NOK', 'DKK',
+  'PLN', 'CZK', 'HUF', 'RON', 'BGN', 'HRK', 'ISK', 'ILS', 'SAR', 'QAR', 'BHD', 'KWD',
+  'JPY', 'SGD', 'HKD', 'KRW', 'INR', 'ZAR', 'MXN', 'BRL', 'ARS', 'CLP', 'COP', 'PEN', 'UYU',
+];
+
+const EURO_COUNTRIES = new Set(['CY','GR','DE','FR','ES','IT','PT','NL','BE','LU','AT','IE','MT','EE','LV','LT','SK','SI','FI']);
+
+function suggestedCurrencyForCountry(country: string) {
+  const code = String(country || '').toUpperCase();
+  if (EURO_COUNTRIES.has(code)) return 'EUR';
+  const mapping: Record<string, string> = {
+    GB: 'GBP', US: 'USD', CA: 'CAD', TR: 'TRY', CH: 'CHF', AU: 'AUD', NZ: 'NZD', AE: 'AED',
+    SE: 'SEK', NO: 'NOK', DK: 'DKK', PL: 'PLN', CZ: 'CZK', HU: 'HUF', RO: 'RON', BG: 'BGN',
+    IS: 'ISK', IL: 'ILS', SA: 'SAR', QA: 'QAR', BH: 'BHD', KW: 'KWD', JP: 'JPY', SG: 'SGD',
+    HK: 'HKD', KR: 'KRW', IN: 'INR', ZA: 'ZAR', MX: 'MXN', BR: 'BRL', AR: 'ARS', CL: 'CLP',
+    CO: 'COP', PE: 'PEN', UY: 'UYU',
+  };
+  return mapping[code] || '';
+}
+
+function browserCountry() {
+  if (typeof navigator === 'undefined') return '';
+  const region = String(navigator.language || '').split('-')[1]?.toUpperCase() || '';
+  return BUSINESS_COUNTRIES.some((option) => option.iso === region) ? region : '';
+}
+
 
 export default function OnboardingWizard() {
   const { user } = useAuth();
@@ -49,7 +84,15 @@ export default function OnboardingWizard() {
   const [loading, setLoading] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<BillingPlanId>(initialPlan);
   const [offerCode, setOfferCode] = useState(() => typeof window !== 'undefined' ? window.localStorage.getItem(BILLING_OFFER_STORAGE_KEY) || '' : '');
-  const [businessData, setBusinessData] = useState({ name: '', phone: '', address: '', slug: '', timezone: Intl.DateTimeFormat().resolvedOptions().timeZone });
+  const [businessData, setBusinessData] = useState(() => {
+    const country = browserCountry();
+    return {
+      name: '', phone: '', address: '', slug: '',
+      country,
+      currency: suggestedCurrencyForCountry(country),
+      timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    };
+  });
   const [services, setServices] = useState(() => industry.defaultServices.map((service) => ({ name: service.name, category: service.category, price: String(service.price), duration: String(service.duration) })));
   const [staff, setStaff] = useState([{ name: user?.user_metadata?.full_name || 'Owner', email: user?.email || '' }]);
 
@@ -74,6 +117,14 @@ export default function OnboardingWizard() {
 
   const completeOnboarding = async () => {
     if (!user) return;
+    if (!/^[A-Z]{2}$/.test(String(businessData.country || '').toUpperCase())) {
+      toast.error(t('onboarding.country_required'));
+      return;
+    }
+    if (!/^[A-Z]{3}$/.test(String(businessData.currency || '').toUpperCase())) {
+      toast.error(t('onboarding.currency_required'));
+      return;
+    }
     if (!isLikelyE164(businessData.phone)) {
       toast.error(t('common.invalidInternationalPhone'));
       return;
@@ -92,7 +143,10 @@ export default function OnboardingWizard() {
       const slug = (businessData.slug || businessData.name).toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
       const { data: business, error: businessError } = await supabase.from('businesses').insert({
         name: businessData.name.trim(), slug, phone: normalizeE164(businessData.phone),
-        address: businessData.address.trim() || null, timezone: businessData.timezone,
+        address: businessData.address.trim() || null,
+        country: businessData.country.toUpperCase(),
+        currency: businessData.currency.toUpperCase(),
+        timezone: businessData.timezone,
         email: user.email, industry_key: industry.key,
       }).select().single();
       if (businessError) throw businessError;
@@ -193,7 +247,7 @@ export default function OnboardingWizard() {
               <div className="space-y-6 py-2"><div className="text-center"><div className="text-4xl">{industry.icon}</div><h2 className="mt-4 text-2xl font-bold">{t('onboarding.ready_title', { industry: industry.name })}</h2><p className="mx-auto mt-3 max-w-xl text-muted-foreground">{t('onboarding.ready_description', { plan: plan.name, days: BILLING_TRIAL_DAYS })}</p></div><div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">{industry.defaultModules.map((moduleKey) => { const module = MODULE_REGISTRY[moduleKey]; return <div key={moduleKey} className="rounded-xl border bg-muted/20 p-3"><div className="text-sm font-bold">{module.name}</div><div className="mt-1 text-xs text-muted-foreground">{module.description}</div></div>; })}</div><div className="rounded-2xl border bg-card p-5"><div className="flex items-center justify-between gap-4"><div><div className="text-sm font-bold">{plan.name}</div><div className="mt-1 text-xs text-muted-foreground">€{plan.price.toFixed(2)} / month · {BILLING_TRIAL_DAYS} days free</div></div><CreditCard className="h-6 w-6 text-primary" /></div><p className="mt-3 text-xs leading-5 text-muted-foreground">{t('onboarding.final_checkout_note')}</p></div></div>
             )}
 
-            <div className="mt-10 flex justify-between gap-3"><Button variant="outline" onClick={handlePrev} disabled={step === 1 || loading}>{t('onboarding.back')}</Button>{step < 5 ? <Button onClick={handleNext} disabled={(step === 1 && !businessData.name.trim()) || loading}>{t('onboarding.next')}</Button> : <Button onClick={completeOnboarding} disabled={loading}>{loading ? t('onboarding.creating') : t('onboarding.activate_trial')}</Button>}</div>
+            <div className="mt-10 flex justify-between gap-3"><Button variant="outline" onClick={handlePrev} disabled={step === 1 || loading}>{t('onboarding.back')}</Button>{step < 5 ? <Button onClick={handleNext} disabled={(step === 1 && (!businessData.name.trim() || !businessData.country || !businessData.currency)) || loading}>{t('onboarding.next')}</Button> : <Button onClick={completeOnboarding} disabled={loading}>{loading ? t('onboarding.creating') : t('onboarding.activate_trial')}</Button>}</div>
           </div>
         </div>
       </div>
@@ -201,7 +255,7 @@ export default function OnboardingWizard() {
   );
 }
 
-function BusinessStep({ t, businessData, setBusinessData }: any) { return <div className="space-y-4"><h2 className="text-xl font-bold">{t('onboarding.title')}</h2><Field label={t('onboarding.business_name')}><Input value={businessData.name} onChange={(e) => setBusinessData({ ...businessData, name: e.target.value })} /></Field><Field label={t('onboarding.slug')}><Input value={businessData.slug} onChange={(e) => setBusinessData({ ...businessData, slug: e.target.value })} placeholder="my-business" /></Field><div className="grid gap-4 sm:grid-cols-2"><Field label={t('onboarding.phone')}><InternationalPhoneInput value={businessData.phone} onChange={(phone) => setBusinessData({ ...businessData, phone })} defaultCountry={typeof navigator !== 'undefined' ? navigator.language.split('-')[1] : undefined} required /></Field><Field label={t('onboarding.address')}><Input value={businessData.address} onChange={(e) => setBusinessData({ ...businessData, address: e.target.value })} /></Field></div></div>; }
+function BusinessStep({ t, businessData, setBusinessData }: any) { return <div className="space-y-4"><h2 className="text-xl font-bold">{t('onboarding.title')}</h2><Field label={t('onboarding.business_name')}><Input value={businessData.name} onChange={(e) => setBusinessData({ ...businessData, name: e.target.value })} /></Field><Field label={t('onboarding.slug')}><Input value={businessData.slug} onChange={(e) => setBusinessData({ ...businessData, slug: e.target.value })} placeholder="my-business" /></Field><div className="grid gap-4 sm:grid-cols-2"><Field label={t('onboarding.phone')}><InternationalPhoneInput value={businessData.phone} onChange={(phone) => setBusinessData({ ...businessData, phone })} defaultCountry={businessData.country || (typeof navigator !== 'undefined' ? navigator.language.split('-')[1] : undefined)} required /></Field><Field label={t('onboarding.address')}><Input value={businessData.address} onChange={(e) => setBusinessData({ ...businessData, address: e.target.value })} /></Field></div><div className="grid gap-4 sm:grid-cols-3"><Field label={t('onboarding.country')}><select className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20" value={businessData.country} onChange={(e) => { const country = e.target.value; setBusinessData({ ...businessData, country, currency: suggestedCurrencyForCountry(country) || businessData.currency }); }}><option value="">{t('onboarding.select_country')}</option>{BUSINESS_COUNTRIES.map((option) => <option key={option.iso} value={option.iso}>{countryFlag(option.iso)} {option.name}</option>)}</select></Field><Field label={t('onboarding.currency')}><select className="h-11 w-full rounded-xl border border-input bg-background px-3 text-sm shadow-sm outline-none transition focus:border-ring focus:ring-2 focus:ring-ring/20" value={businessData.currency} onChange={(e) => setBusinessData({ ...businessData, currency: e.target.value })}><option value="">—</option>{CURRENCY_OPTIONS.map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></Field><Field label={t('onboarding.timezone')}><Input value={businessData.timezone} onChange={(e) => setBusinessData({ ...businessData, timezone: e.target.value })} /></Field></div></div>; }
 function ServicesStep({ t, industry, services, setServices }: any) { return <div className="space-y-5"><div className="rounded-2xl border border-primary/15 bg-primary/5 p-4"><div className="flex items-start gap-3"><div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary"><Sparkles className="h-5 w-5" /></div><div><h2 className="text-xl font-bold">{t('onboarding.add_services')}</h2><p className="mt-1 text-sm leading-6 text-muted-foreground">{t('onboarding.services_description', { industry: industry.name })}</p></div></div></div>{services.map((service: any, index: number) => <div key={index} className="rounded-2xl border p-4"><div className="grid gap-4 md:grid-cols-2"><ServiceField label={t('onboarding.service_name')} icon={<Sparkles className="h-4 w-4" />}><Input value={service.name} onChange={(e) => setServices((current: any[]) => current.map((item, i) => i === index ? { ...item, name: e.target.value } : item))} /></ServiceField><ServiceField label={t('onboarding.category')} icon={<Layers3 className="h-4 w-4" />}><Input value={service.category} onChange={(e) => setServices((current: any[]) => current.map((item, i) => i === index ? { ...item, category: e.target.value } : item))} /></ServiceField><ServiceField label={t('onboarding.price')} icon={<Euro className="h-4 w-4" />}><Input type="number" min="0" step="0.01" value={service.price} onChange={(e) => setServices((current: any[]) => current.map((item, i) => i === index ? { ...item, price: e.target.value } : item))} /></ServiceField><ServiceField label={t('onboarding.duration')} icon={<Clock3 className="h-4 w-4" />}><Input type="number" min="5" step="5" value={service.duration} onChange={(e) => setServices((current: any[]) => current.map((item, i) => i === index ? { ...item, duration: e.target.value } : item))} /></ServiceField></div></div>)}<Button variant="outline" type="button" onClick={() => setServices((current: any[]) => [...current, { name: '', category: industry.defaultCategory, price: '0', duration: '30' }])}>{t('onboarding.add_another_service')}</Button></div>; }
 function StaffStep({ t, staff, setStaff, plan, nonOwnerStaffCount }: any) { const atLimit = nonOwnerStaffCount >= plan.staffLimit; return <div className="space-y-4"><div className="flex items-start justify-between gap-4"><div><h2 className="text-xl font-bold">{t('onboarding.add_staff')}</h2><p className="mt-1 text-sm text-muted-foreground">{t('onboarding.staff_plan_limit', { plan: plan.name, used: nonOwnerStaffCount, count: plan.staffLimit })}</p></div><Users className="h-6 w-6 text-primary" /></div>{staff.map((member: any, index: number) => <div key={index} className="grid gap-2 sm:grid-cols-2"><Input placeholder={t('onboarding.name')} value={member.name} onChange={(e) => setStaff((current: any[]) => current.map((item, i) => i === index ? { ...item, name: e.target.value } : item))} /><Input type="email" placeholder={t('onboarding.email_optional')} value={member.email} onChange={(e) => setStaff((current: any[]) => current.map((item, i) => i === index ? { ...item, email: e.target.value } : item))} /></div>)}<Button variant="outline" type="button" disabled={atLimit} onClick={() => setStaff((current: any[]) => [...current, { name: '', email: '' }])}>{atLimit ? t('onboarding.staff_limit_reached') : t('onboarding.add_staff_member')}</Button></div>; }
 function PlanOption({ plan, selected, onSelect, t }: any) { return <button type="button" onClick={onSelect} className={`rounded-2xl border p-5 text-left transition ${selected ? 'border-primary bg-primary/5 ring-2 ring-primary/20' : 'hover:border-primary/30'}`}><div className="flex items-center justify-between"><span className="font-extrabold">{plan.name}</span>{selected && <span className="flex h-6 w-6 items-center justify-center rounded-full bg-primary text-primary-foreground"><Check className="h-3.5 w-3.5" /></span>}</div><div className="mt-2 text-2xl font-black">€{plan.price.toFixed(2)}<span className="text-xs font-semibold text-muted-foreground"> / mo</span></div><div className="mt-3 text-xs leading-5 text-muted-foreground">{t('onboarding.plan_summary', { staff: plan.staffLimit, ai: plan.aiRequestsMonthly })}</div></button>; }

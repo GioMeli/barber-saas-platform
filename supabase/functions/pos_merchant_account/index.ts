@@ -96,14 +96,20 @@ Deno.serve(async (request) => {
     const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2025-08-27.basil' });
     let account: Stripe.Account;
 
+    const storedCountry = normalizeCountry(business.country);
+    if (String(business.country || '').trim() && !storedCountry) {
+      return json({ error: 'Business country must be stored as a valid ISO-2 country code before Stripe onboarding.' }, 422);
+    }
+    const requestedCountry = storedCountry || normalizeCountry(STRIPE_CONNECT_DEFAULT_COUNTRY);
+
     if (storedAccount?.provider_account_id) {
       account = await retrieveAccountCompat(stripe, storedAccount.provider_account_id);
-    } else if (action === 'start_onboarding') {
-      const storedCountry = normalizeCountry(business.country);
-      if (String(business.country || '').trim() && !storedCountry) {
-        return json({ error: 'Business country must be stored as a valid ISO-2 country code before Stripe onboarding.' }, 422);
+      const connectedCountry = normalizeCountry(account.country);
+      if (action === 'start_onboarding' && requestedCountry && connectedCountry && connectedCountry !== requestedCountry) {
+        return json({ error: `Stripe merchant country (${connectedCountry}) does not match the Velliqo business country (${requestedCountry}). Reset the unfinished merchant onboarding before continuing.` }, 409);
       }
-      const country = storedCountry || normalizeCountry(STRIPE_CONNECT_DEFAULT_COUNTRY);
+    } else if (action === 'start_onboarding') {
+      const country = requestedCountry;
       if (!country) {
         return json({ error: 'A valid business country is required before Stripe onboarding.' }, 422);
       }
@@ -120,7 +126,7 @@ Deno.serve(async (request) => {
 
       const createdV2 = await stripeV2Request<StripeV2Account>('/v2/core/accounts', {
         method: 'POST',
-        idempotencyKey: `velliqo-connect-account-v2-${businessId}`,
+        idempotencyKey: `velliqo-connect-account-v2-${businessId}-${country.toLowerCase()}`,
         body: {
           contact_email: merchantEmail,
           display_name: String(business.name || '').slice(0, 100) || 'Velliqo business',
