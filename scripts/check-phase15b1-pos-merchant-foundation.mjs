@@ -26,13 +26,21 @@ has(merchantFn, "fees_collector: 'stripe'", 'Connected business pays Stripe proc
 has(merchantFn, "losses_collector: 'stripe'", 'Stripe carries connected-account payment losses');
 has(merchantFn, "dashboard: 'full'", 'Connected business receives a full Stripe Dashboard');
 has(merchantFn, "Idempotency-Key", 'Accounts v2 creation uses a Stripe idempotency key');
-has(merchantFn, 'velliqo-connect-account-v2-${businessId}', 'Connected account idempotency is tenant-scoped');
+has(merchantFn, 'velliqo-connect-account-v2-${businessId}-${country.toLowerCase()}', 'Connected account idempotency is tenant-and-country scoped');
+has(merchantFn, 'does not match the Velliqo business country', 'Existing connected-account country mismatches are blocked');
 has(merchantFn, "'/v2/core/account_links'", 'Stripe-hosted onboarding link is generated with Account Links v2');
 has(merchantFn, "configurations: ['merchant']", 'Onboarding targets the merchant configuration');
 has(merchantFn, "collection_options: { fields: 'eventually_due' }", 'Onboarding collects eventually-due requirements up front');
 has(merchantFn, "action === 'refresh_status'", 'Merchant verification status can be refreshed securely');
 has(merchantFn, 'account.charges_enabled === true && account.payouts_enabled === true', 'Ready status requires both charges and payouts');
 has(merchantFn, 'stripe.accounts.retrieve(accountId)', 'Accounts v1 compatibility projection is used only for status caching');
+
+
+const countryMigration = 'supabase/migrations/00057_velliqo_business_country_currency_hardening.sql';
+has(countryMigration, 'alter column country drop default', 'New businesses no longer silently default to the United States');
+has(countryMigration, 'alter column currency drop default', 'New businesses no longer silently default to USD');
+has('src/pages/onboarding/OnboardingWizard.tsx', 'country: businessData.country.toUpperCase()', 'Onboarding persists the legal business country');
+has('src/pages/onboarding/OnboardingWizard.tsx', 'currency: businessData.currency.toUpperCase()', 'Onboarding persists the business currency');
 
 has('supabase/functions/stripe_webhook/index.ts', "case 'account.updated':", 'Stripe webhook listens for connected-account compatibility updates');
 has('supabase/functions/stripe_webhook/index.ts', 'syncConnectedPaymentAccount', 'Connected-account webhook changes are synchronized to tenant state');
